@@ -281,6 +281,20 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvfiremodule.lo effectvfiremodule.o : effectvfiremodule.c \
+	effectvfiremodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h fire.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h
+effectvfiremodule_auto.lo effectvfiremodule_auto.o : \
+	effectvfiremodule_auto.c effectvfiremodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvfiremodule.xpm
 
 info-am:
 info: info-am

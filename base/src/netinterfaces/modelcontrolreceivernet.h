@@ -46,13 +46,13 @@ public:
 
 	void changeEditGraph( const std::string& graphID, const std::string& snapID );
 
-	void newControllValueSet( const std::string& graphID, const std::string& newSnapName );
+	void newControlValueSet( const std::string& graphID, const std::string& newSnapName );
 
-	void renameControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName );
+	void renameControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName );
 
-	void copyControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName );
+	void copyControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName );
 
-	void deleteControllValueSet( const std::string& graphID, const std::string& snapID );
+	void deleteControlValueSet( const std::string& graphID, const std::string& snapID );
 
 	void setInputValue( int moduleID, int inputIndex, const utils::Buffer& buf );
 

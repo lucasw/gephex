@@ -3,23 +3,18 @@
 
 #include <string>
 
-#include "utils/structreader.h"
-#include "utils/autoptr.h"
-
 namespace gui
-{
-
-  typedef utils::AutoPtr<utils::StructReader> StructReaderPtr;
-
+{  
   struct GuiConfig
   {
+    GuiConfig();
+    
+    std::string media_path;
     std::string ipcType;
     std::string ipcLocator;
     int port;
-    StructReaderPtr sr;
+    std::string engine_binary;
   };
-
-  GuiConfig createGuiConfig();
 }
 
 #endif

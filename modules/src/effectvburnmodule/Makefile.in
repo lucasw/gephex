@@ -281,6 +281,20 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvburnmodule.lo effectvburnmodule.o : effectvburnmodule.c \
+	effectvburnmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h burn.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h
+effectvburnmodule_auto.lo effectvburnmodule_auto.o : \
+	effectvburnmodule_auto.c effectvburnmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvburnmodule.xpm
 
 info-am:
 info: info-am

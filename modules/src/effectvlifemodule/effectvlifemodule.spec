@@ -6,6 +6,7 @@ mod_effectvlifemodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvlifemodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
 
 #include <sys/ioctl.h>
 #include <sys/time.h>
@@ -22,16 +23,17 @@ public:
   {
     static const int NAME_LENGTH = 64;
     char name[NAME_LENGTH] = "";
-    unsigned char axes = 2;
+    unsigned char axes    = 2;
     unsigned char buttons = 2;
 
     ioctl(m_handle, JSIOCGVERSION, &m_version);
     ioctl(m_handle, JSIOCGAXES, &axes);
     ioctl(m_handle, JSIOCGBUTTONS, &buttons);
     ioctl(m_handle, JSIOCGNAME(NAME_LENGTH), name);
+
     m_name        = std::string(name, NAME_LENGTH);
-    m_num_axes    = std::min(32,(int) axes);
-    m_num_buttons = std::min(32,(int) buttons);
+    m_num_axes    = std::min(32, static_cast<int>(axes));
+    m_num_buttons = std::min(32, static_cast<int>(buttons));
 
     m_state.axes    = std::vector<int>(m_num_axes);
     m_state.buttons = std::vector<bool>(m_num_buttons);
@@ -112,7 +114,7 @@ public:
       }
     return m_state;
   }
-		
+
 private:
   LinuxJoystickDriverImpl* m_driver;
   int m_handle;
@@ -121,33 +123,41 @@ private:
   int m_version;
   std::string m_name;
   JoystickState m_state;
-
 };
 
 
 LinuxJoystickDriverImpl::LinuxJoystickDriverImpl()
 {
-  const std::string prfx1="/dev/input/";
-  const std::string prfx2="/dev/";
+  const std::string prfx1 = "/dev/input/";
+  const std::string prfx2 = "/dev/";
   int fd;
   fd = open((prfx1+"js0").c_str(), O_RDONLY);
   
   if (fd < 0)
     {
-      fd = open((prfx2+"js1").c_str(), O_RDONLY);
+      fd = open((prfx2+"js0").c_str(), O_RDONLY);
       if (fd < 0)
         {
-          throw std::runtime_error("Could not find joystick device");
+          std::cerr << ("Could not find joystick device");
+          m_prefix = prfx1;
         }
-      m_prefix = prfx2;
+      else
+        m_prefix = prfx2;
     }
   else
     {
       m_prefix = prfx1;
     }
 
-  ioctl(fd, JSIOCGVERSION, &m_version);
-  close(fd);
+  if (fd < 0)
+    {
+      m_version = 0x010000;
+    }
+  else
+    {
+      ioctl(fd, JSIOCGVERSION, &m_version);
+      close(fd);
+    }
 }
 
 LinuxJoystickDriverImpl::~LinuxJoystickDriverImpl()
@@ -156,7 +166,7 @@ LinuxJoystickDriverImpl::~LinuxJoystickDriverImpl()
 
 JoystickDriverImpl::CenterMode LinuxJoystickDriverImpl::center_mode() const
 {
-  if (m_version > 0x010000)
+  if (m_version >= 0x010000)
     return ZERO_CENTER;
   else
     return FLOATING_CENTER;

@@ -14,6 +14,7 @@ class IControlValueReceiver;
 class IModuleStatisticsReceiver;
 
 namespace utils {
+  class ILogger;
   class Buffer;
 }
 
@@ -28,7 +29,8 @@ namespace renderer
   class RuntimeSystem
   {
   public:
-    RuntimeSystem (const IModuleFactory&, const ITypeFactory& );
+    RuntimeSystem(const IModuleFactory&, const ITypeFactory&,
+				  utils::AutoPtr<utils::ILogger>& logger);
     virtual ~RuntimeSystem ();
 
     virtual void connect(int m1,int outputIndex,int m2,int inputIndex);
@@ -63,6 +65,7 @@ namespace renderer
 
     const IModuleFactory& moduleFactory;
     const ITypeFactory& typeFactory;
+	utils::AutoPtr<utils::ILogger>& m_logger;
   };
 
 } // end of namespace renderer

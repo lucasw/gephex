@@ -1,9 +1,32 @@
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #ifndef INCLUDED_VJMAINWINDOW_H
 #define INCLUDED_VJMAINWINDOW_H
 
 #include <map>
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 #include <qmainwindow.h>
 
@@ -34,6 +57,7 @@ namespace gui
   class DllSelectorDialog;  
   class LogWindow;  
   class KeyboardManager;
+  struct GuiConfig;
 
   class VJMainWindow : public QMainWindow, public IRendererStatusReceiver
     {
@@ -44,11 +68,9 @@ namespace gui
 
 
       VJMainWindow(QWidget* parent, const char* name,
-		   const std::string& ipcType,
-		   const std::string& locator, int port,
-		   StructReaderPtr& config);
+                   const GuiConfig& config);		   
 
-      ~VJMainWindow();
+      virtual ~VJMainWindow();
 
       virtual void started(  );
       virtual void stopped(  );
@@ -60,8 +82,8 @@ namespace gui
       void renderedGraphChangedSignal( const std::string& graphID );
 	
       public slots:
-	void connectToEngine(void);
-      void disconnectFromEngine(void);
+	void connectToEngine();
+      void disconnectFromEngine();
 	
       void startStop();
       void displayStatusText(const std::string& s);
@@ -71,16 +93,19 @@ namespace gui
       void displayErrorMessage(const std::string& text);
 
       void setCaption(const std::string&);
+      void newGraph();
 
 
-      private slots:
-	void pollNetwork();
-      void setRendererState(bool state);
-      void setKeyGrabState(bool state);
+    private slots:
+	  void quitSlot();
+	  void pollNetwork();
+      void setRendererState();
+      //      void setKeyGrabState(bool state);
       void shutDown();
       void synchronize();
-	  void aboutSlot();
-	  void dll_selector_closed();
+      void aboutSlot();
+	  void changesSlot();
+      void dll_selector_closed();
 	
     private:
       void createActions(void);
@@ -100,13 +125,15 @@ namespace gui
       QAction* quitAction;
       QAction* showPlugInManagerAction;
       
+      QAction* newGraphAction;
       QAction* rendererStateAction;
       QAction* connectToEngineAction;
       QAction* disConnectToEngineAction;
       QAction* synchronizeEngineAction;
       QAction* shutDownEngineAction;
-      QAction* keyGrabStateAction;
+      //      QAction* keyGrabStateAction;
 	  QAction* aboutAction;
+	  QAction* changesAction;
       
       // widgets
       QWidget* centralWidget;
@@ -119,7 +146,7 @@ namespace gui
 
       LogWindow* logWindow;
 
-      EngineWrapper* engineWrapper;
+      std::auto_ptr<EngineWrapper> engineWrapper;
 
       bool running;
       bool connected;	
@@ -133,6 +160,7 @@ namespace gui
 	    KEYGRAB_ON, KEYGRAB_OFF};
 	
       QPopupMenu* effectMenue;
+      QPopupMenu* graphMenue;
       PicSwitch* switcher;
 
       PropertyView* propertyView;
@@ -144,7 +172,7 @@ namespace gui
 
       DllSelectorDialog* m_dllSelector;
 
-      StructReaderPtr m_config;
+      const GuiConfig& m_config;
 
       KeyboardManager* m_kbManager;
     };

@@ -194,9 +194,9 @@ void update(void* instance)
 
   assert(len >= 0);
 
-  if (len == 0)
-    s_log(2,"nothing to read!");
-  else
+  /*  if (len == 0)
+      s_log(2,"nothing to read!");
+      else*/
     {
       double* samples;
       

@@ -12,28 +12,39 @@ INCLUDES= \
 
 noinst_LIBRARIES = libmodel.a
 
-libmodel_a_SOURCES = model.cpp \
-                     model.h \
-                     graph.cpp \
-                     graphnode.cpp \
-                     graphconnection.cpp \
-                     controllvalueset.cpp \
-                     graphfilesystem.cpp \
-                     graphserial.cpp \
-                     controllvalueset.h \
-                     graphconnection.h \
-                     graphfilesystem.h \
-                     graph.h \
-                     graphnode.h \
-                     graphserial.h \
-                     specmap.h
+libmodel_a_SOURCES = \
+	model.cpp \
+        model.h \
+        graph.cpp \
+        graphnode.cpp \
+        graphconnection.cpp \
+        controllvalueset.cpp \
+        graphfilesystem.cpp \
+        graphserial.cpp \
+	graphparser.cpp \
+        controllvalueset.h \
+        graphconnection.h \
+        graphfilesystem.h \
+        graph.h \
+        graphnode.h \
+        graphserial.h \
+        specmap.h \
+	graphparser.h
 
 noinst_HEADERS = model.h
 
 TESTS=modeltest
 
 check_PROGRAMS = modeltest
-modeltest_SOURCES = testmain.cpp
-modeltest_LDFLAGS = -L$(libdir) -L../../../base/src/TestFramework -L../../../base/src/utils
+modeltest_SOURCES = \
+	testmain.cpp \
+	graphparsertest.cpp \
+	graphparsertest.h
+
+modeltest_LDFLAGS = \
+	-L$(libdir) \
+	-L../../../base/src/TestFramework \
+	-L../../../base/src/utils
+
 modeltest_LDADD = -ltestframework libmodel.a -lutils
 

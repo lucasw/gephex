@@ -6,6 +6,7 @@ mod_effectvburnmodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvburnmodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

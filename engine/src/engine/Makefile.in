@@ -114,15 +114,15 @@ include_HEADERS =  	dllmodule.h 	dlltype.h 	dllutils.h
 AM_CPPFLAGS =  	-DINST_INSTALL_PREFIX=\"$(prefix)\" 	-I @srcdir@/.. 	-I @srcdir@/../renderer 	-I @srcdir@/../model 	-I @srcdir@/../dllloader 	-I @srcdir@/../../../base/src 	-I @builddir@/../../../base/src/interfaces 	-I @builddir@/../../../base/src 	-I @srcdir@/../../../base/src/interfaces 	-I @srcdir@/../../../base/src/netinterfaces 	-I @builddir@/../../../base/src/netinterfaces 	-I @srcdir@/../../../base/src/net 	-I @srcdir@/../../../base/src/utils 	-I @srcdir@/../../../util/include
 
 
-bin_PROGRAMS = gephex-engine
+bin_PROGRAMS = gephex-engine-real
 
-gephex_engine_SOURCES =  	main.cpp 	scheduler.cpp 	netlogger.cpp 	netlogger.h 	scheduler.h 	engineconfig.cpp 	engineconfig.h 	controller.h 	controller.cpp         bufferedsender.h         bufferedsender.cpp
-
-
-gephex_engine_LDADD =  	-ldllloader 	-lmodel 	-lrenderer 	-lgphxnetwork 	-lnetinterfaces 	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS) 	-L@builddir@/../dllloader 	-L@builddir@/../model 	-L@builddir@/../renderer 	-L$(libdir) 	-L@builddir@/../../../base/src/TestFramework 	-L@builddir@/../../../base/src/utils 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L/sw/lib
+gephex_engine_real_SOURCES =  	main.cpp 	scheduler.cpp 	netlogger.cpp 	netlogger.h 	scheduler.h 	engineconfig.cpp 	engineconfig.h 	controller.h 	controller.cpp         bufferedsender.h         bufferedsender.cpp
 
 
-gephex_engine_DEPENDENCIES =  	@builddir@/../dllloader/libdllloader.a 	@builddir@/../model/libmodel.a 	@builddir@/../renderer/librenderer.a 	@top_builddir@/base/src/net/libgphxnetwork.a 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a 	@top_builddir@/base/src/utils/libutils.a
+gephex_engine_real_LDADD =  	-ldllloader 	-lmodel 	-lrenderer 	-lgphxnetwork 	-lnetinterfaces 	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS) 	-L@builddir@/../dllloader 	-L@builddir@/../model 	-L@builddir@/../renderer 	-L$(libdir) 	-L@builddir@/../../../base/src/TestFramework 	-L@builddir@/../../../base/src/utils 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L/sw/lib
+
+
+gephex_engine_real_DEPENDENCIES =  	@builddir@/../dllloader/libdllloader.a 	@builddir@/../model/libmodel.a 	@builddir@/../renderer/librenderer.a 	@top_builddir@/base/src/net/libgphxnetwork.a 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a 	@top_builddir@/base/src/utils/libutils.a
 
 
 TESTS = enginetest
@@ -140,7 +140,7 @@ enginetest_DEPENDENCIES =  	@top_builddir@/base/src/TestFramework/libtestframewo
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  gephex-engine$(EXEEXT)
+bin_PROGRAMS =  gephex-engine-real$(EXEEXT)
 check_PROGRAMS =  enginetest$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
@@ -153,10 +153,10 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-gephex_engine_OBJECTS =  main.$(OBJEXT) scheduler.$(OBJEXT) \
+gephex_engine_real_OBJECTS =  main.$(OBJEXT) scheduler.$(OBJEXT) \
 netlogger.$(OBJEXT) engineconfig.$(OBJEXT) controller.$(OBJEXT) \
 bufferedsender.$(OBJEXT)
-gephex_engine_LDFLAGS = 
+gephex_engine_real_LDFLAGS = 
 enginetest_OBJECTS =  testmain.$(OBJEXT) schedulertest.$(OBJEXT) \
 scheduler.$(OBJEXT)
 enginetest_LDFLAGS = 
@@ -179,8 +179,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(gephex_engine_SOURCES) $(enginetest_SOURCES)
-OBJECTS = $(gephex_engine_OBJECTS) $(enginetest_OBJECTS)
+SOURCES = $(gephex_engine_real_SOURCES) $(enginetest_SOURCES)
+OBJECTS = $(gephex_engine_real_OBJECTS) $(enginetest_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -271,9 +271,9 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-gephex-engine$(EXEEXT): $(gephex_engine_OBJECTS) $(gephex_engine_DEPENDENCIES)
-	@rm -f gephex-engine$(EXEEXT)
-	$(CXXLINK) $(gephex_engine_LDFLAGS) $(gephex_engine_OBJECTS) $(gephex_engine_LDADD) $(LIBS)
+gephex-engine-real$(EXEEXT): $(gephex_engine_real_OBJECTS) $(gephex_engine_real_DEPENDENCIES)
+	@rm -f gephex-engine-real$(EXEEXT)
+	$(CXXLINK) $(gephex_engine_real_LDFLAGS) $(gephex_engine_real_OBJECTS) $(gephex_engine_real_LDADD) $(LIBS)
 
 enginetest$(EXEEXT): $(enginetest_OBJECTS) $(enginetest_DEPENDENCIES)
 	@rm -f enginetest$(EXEEXT)
@@ -428,17 +428,16 @@ controller.o: controller.cpp controller.h \
 	../../../base/src/interfaces/itypeclassinfosender.h \
 	../../../base/src/interfaces/itypeclasssender.h \
 	../../../base/src/interfaces/itypeclassnamesender.h scheduler.h \
-	engineconfig.h ../../../base/src/utils/structreader.h \
-	bufferedsender.h ../../../config.h \
+	engineconfig.h bufferedsender.h ../../../config.h \
 	../../../base/src/net/domainserversocket.h netlogger.h \
 	../../../base/src/utils/ilogger.h \
 	../../../base/src/utils/filesystem.h
-engineconfig.o: engineconfig.cpp engineconfig.h \
-	../../../base/src/utils/structreader.h ../../../config.h \
-	../../../base/src/utils/filesystem.h \
-	../../../base/src/utils/autoptr.h
-main.o: main.cpp ../../../config.h engineconfig.h \
-	../../../base/src/utils/structreader.h controller.h \
+engineconfig.o: engineconfig.cpp engineconfig.h ../../../config.h \
+	../../../base/src/utils/configfile.h \
+	../../../base/src/utils/autoptr.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/filesystem.h
+main.o: main.cpp ../../../config.h engineconfig.h controller.h \
 	../../../base/src/interfaces/ienginecontrolreceiver.h \
 	../../../base/src/interfaces/itypeclassnamereceiver.h \
 	../../../base/src/interfaces/imoduleclassnamereceiver.h \

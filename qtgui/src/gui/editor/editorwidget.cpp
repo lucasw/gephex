@@ -23,17 +23,18 @@ namespace gui
 
   typedef std::map<std::string, std::string> ParamMap;
 
-EditorWidget::EditorWidget(QWidget* parent, const char* name,
-			   GraphModel& graphModel,
-			   IModelControlReceiver& model,
-			   ControlModel& controlModel,
-			   ModuleClassView& base,
-			   //ModuleClassTabView& extendedBase,
-			   ControlValueDispatcher& dispatcher,
-			   IModuleStatisticsSender& mss,
-			   IModelStatusSender& msts,
-			   KeyboardManager& kbManager,
-			   IErrorReceiver& log)
+  EditorWidget::EditorWidget(QWidget* parent, const char* name,
+			     GraphModel& graphModel,
+			     IModelControlReceiver& model,
+			     ControlModel& controlModel,
+			     ModuleClassView& base,
+				 const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
+			     IModuleStatisticsSender& mss,
+			     IModelStatusSender& msts,
+			     KeyboardManager* kbManager,
+			     IErrorReceiver& log,
+			     const std::string& media_path)
+
   : QSplitter(Vertical,parent,name)
 {
   //  this->resize(400,400);
@@ -41,7 +42,8 @@ EditorWidget::EditorWidget(QWidget* parent, const char* name,
   GraphEditorWindow* geWindow = new GraphEditorWindow(this,"graph",0,
 						      graphModel,base,
 						      dispatcher,model,
-						      kbManager, log);
+						      kbManager, log,
+						      media_path);
 
   graphEditor = geWindow->graphEditor();
 
@@ -70,8 +72,10 @@ EditorWidget::EditorWidget(QWidget* parent, const char* name,
 	  this,SLOT(newEditGraphSlot(const std::string&,const std::string&)));
 
   ControlEditorWindow* ceWindow = new ControlEditorWindow(this,"control",0,
-							  controlModel,model,
-							  dispatcher);
+							  controlModel,
+							  model,
+							  dispatcher,
+							  media_path);
 
   ceWindow->parentWidget()->move(0,210);
   ceWindow->move(0,210);

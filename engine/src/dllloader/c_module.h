@@ -20,9 +20,12 @@ class CModule : public IModule
 public:
   CModule(void* instance,CModuleVTable&,
 	  const CModuleAttributes& attributes,const ITypeFactory&,
-	  const std::vector<ITypePtr>& defaultInputTypes);
+	  const std::vector<ITypePtr>& defaultInputTypes,
+	  const std::string& module_class_name);
 
   virtual ~CModule();
+
+  std::string module_class_name() const;
 
   virtual const std::vector<IInputPtr>& getInputs() const;
 
@@ -33,8 +36,6 @@ public:
   virtual void update();
 
   virtual bool isDeterministic() const;
-
-  virtual void parseInput(const char*,int);
 
   //void setData(const IInput*/*,const IType**/);
 
@@ -51,6 +52,8 @@ private:
   UpdateStrategyPtr us;
 
   std::list<IInput*> m_deps;
+
+  std::string m_module_class_name;
 
   //CModule(const CModule&);
 

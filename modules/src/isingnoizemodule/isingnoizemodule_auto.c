@@ -20,19 +20,19 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=temp const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=4 } ";
+    return "input_spec { type=typ_NumberType id=border_growth const=true strong_dependency=true default=4 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=8 } ";
+    return "input_spec { type=typ_NumberType id=spont_growth const=true strong_dependency=true default=8 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=640 } ";
+    return "input_spec { type=typ_NumberType id=outx const=true strong_dependency=true default=640 } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=480 } ";
+    return "input_spec { type=typ_NumberType id=outy const=true strong_dependency=true default=480 } ";
   break;
  }
  return 0;
@@ -40,7 +40,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Isingnoize] group=[Sources] inputs=[5 Temperature{lower_bound=[0] widget_type=[unboundednumber_selector] higher_bound=[6] help=[Relative temperature] } Bordergrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[16] hidden=[true] } Spontaneousgrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[48] hidden=[true] } outx{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } outy{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Isingnoize] group=[Sources] inputs=[5 Temperature{lower_bound=[0] widget_type=[unboundednumber_selector] higher_bound=[6] help=[Relative temperature] } Bordergrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[16] hidden=[true] } Spontaneousgrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[48] hidden=[true] } outx{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } outy{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(isingnoizemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

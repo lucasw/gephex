@@ -71,7 +71,7 @@ namespace gui
     {
       QPopupMenu *popme = new QPopupMenu(0, "TopPop");
 
-      popme->insertItem("New Graph",NEW_GRAPH);
+      popme->insertItem("New Graph", NEW_GRAPH);
       //popme->insertItem("New Folder",NEW_FOLDER);
 
       /*if (!(m_mask & DENY_RENAME))
@@ -92,19 +92,30 @@ namespace gui
             bool retry=true;
             while(retry)
               {
-                const std::string newName = AskForStringDialog::open(0, "New Graph",
-                                                                     "Enter a name");
+                const std::string 
+                  newName = AskForStringDialog::open(0, "New Graph",
+                                                     "Enter a name");
                 if (checkNamePolicy(newName))
                   {
-                    m_model.newGraph(m_path + "/" + newName);
-                    retry=false;
+                    std::string name("");
+                    if (m_path != "")
+                      name = m_path + "/";
+                    name += newName;
+                    m_model.newGraph(name);
+                    retry = false;
                   }
                 else
                   {
-                    switch (QMessageBox::warning (0,"ungueltiger Name",
-                                                  "Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
-                                                  QMessageBox::Retry | QMessageBox::Default,
-                                                  QMessageBox::Abort | QMessageBox::Escape))
+                    switch (QMessageBox::warning (0,"invalid name",
+                                                  "A name must be between 1 "
+                                                  "and 20 characters long."
+                                                  "It must not contain "
+                                                  "spaces or special "
+                                                  "characters",
+                                                  QMessageBox::Retry 
+                                                  | QMessageBox::Default,
+                                                  QMessageBox::Abort
+                                                  | QMessageBox::Escape))
                       {
                       case QMessageBox::Abort: retry=false; break;            
                       case QMessageBox::Retry: break;            
@@ -189,7 +200,10 @@ namespace gui
 	      const std::string& path,
 	      const std::string& graphName,
 	      IModelControlReceiver& model)
-      :      m_graphID(graphID),m_path(path), m_graphName(graphName), m_model(model),
+      :      m_graphID(graphID),
+             m_path(path),
+             m_graphName(graphName),
+             m_model(model),
 	     m_numberOfSnaps(0) {}
 
     virtual ~GraphItem() {}
@@ -260,7 +274,7 @@ namespace gui
 	  {
 	    std::string newName = AskForStringDialog::open(0, "New Snapshot",
 							   "Enter a name");
-	    m_model.newControllValueSet(m_graphID, newName);
+	    m_model.newControlValueSet(m_graphID, newName);
 	  }
 	  break;
 	case SAVE_GRAPH:
@@ -328,9 +342,8 @@ namespace gui
   
   private:
     std::string m_graphID;
-    std::string m_graphName;
     std::string m_path;
-
+    std::string m_graphName;
 
     IModelControlReceiver& m_model;
 
@@ -434,11 +447,11 @@ namespace gui
 	    std::string 
 	      newName = AskForStringDialog::open(0, "Rename Snapshot",
 						 "Enter new name");
-	    m_model.renameControllValueSet(m_graphID, m_snapID, newName);
+	    m_model.renameControlValueSet(m_graphID, m_snapID, newName);
 	  } break;
 	case KILL_SNAPSHOT:
 	  {
-	    m_model.deleteControllValueSet(m_graphID, m_snapID);
+	    m_model.deleteControlValueSet(m_graphID, m_snapID);
 	  } break;
 	case COPY_SNAPSHOT:
 	  {
@@ -446,7 +459,7 @@ namespace gui
 	      newName = AskForStringDialog::open(0, "Copy Snapshot",
 						 "Enter a name for the copy");
 
-	    m_model.copyControllValueSet(m_graphID, m_snapID, newName);
+	    m_model.copyControlValueSet(m_graphID, m_snapID, newName);
 	  } break;
 	default:
 	  assert(!"MIST!");
@@ -507,13 +520,12 @@ namespace gui
     std::vector<std::string> cols;
     cols.push_back("Name");
     cols.push_back("Status");
-    m_treeView = new TreeView(parent,"Graphen",cols);
+    m_treeView = new TreeView(parent, "Graphs", cols);
     m_treeView->insertItem(*m_topItem,0);	
   }
 
   GraphNameView::~GraphNameView()
   {
-    //    fprintf(stderr, "Dtor GraphNameView\n");
   }
 
   QObject* GraphNameView::signalObject()

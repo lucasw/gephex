@@ -26,19 +26,22 @@
 #include <iosfwd>
 #include "specmap.h"
 
+namespace utils
+{
+  class ILogger;
+}
+
 namespace model
 {
   class Graph;
   class GraphNode;
   class GraphConnection;
   
-  std::ostream& operator<< (std::ostream& s, const GraphNode& node);
-  std::ostream& operator<<(std::ostream& s, const GraphConnection&);
-
   std::ostream& operator<<(std::ostream& s, const model::Graph&);
-  std::istream& deserializeGraph (std::istream& s, model::Graph&,
-				  const SpecMap& specMap,
-				  bool noDummy = true);
+  std::istream& deserializeGraph(std::istream& s, model::Graph&,
+                                 const SpecMap& specMap,
+                                 utils::ILogger& logger,
+                                 bool noDummy = true);
 }
 
 #endif

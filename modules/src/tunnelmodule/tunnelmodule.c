@@ -129,7 +129,7 @@ void update(void* instance)
 	origin.y = (inst->in_pos->y*(radius*1.5) - radius*0.75);
 	origin.z = (inst->in_t->number*(-2000.)) +1000.;
 	
-	rot_angle = ((inst->in_rot->number/360) * 2* M_PI) - M_PI;
+	rot_angle = ((inst->in_rot->number/180) * M_PI) - M_PI;
 	cosa = cos(rot_angle);
 	sina = sin(rot_angle);
 	

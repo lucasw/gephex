@@ -15,15 +15,15 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_stringtokenizermodule] number_of_inputs=[2] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_stringtokenizermodule] number_of_inputs=[2] number_of_outputs=[2] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_StringType id=string const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=entry const=true strong_dependency=true default=1 } ";
   break;
  }
  return 0;
@@ -31,7 +31,10 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_StringType } ";
+    return "output_spec { type=typ_NumberType id=len } ";
+  break;
+  case 1:
+    return "output_spec { type=typ_StringType id=token } ";
   break;
  }
  return 0;
@@ -84,6 +87,9 @@ int setOutput(void* instance,int index, void* typePointer)
  InstancePtr inst = (InstancePtr) instance;
  switch(index) {
   case 0:
+   inst->out_len = (NumberType* ) typePointer;
+  break;
+  case 1:
    inst->out_token = (StringType* ) typePointer;
   break;
  } //switch(index) 
@@ -92,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Stringtokenizer] group=[Textprocessing] inputs=[2 Inputstring{widget_type=[file_selector] } Entry{lower_bound=[1] widget_type=[number_selector] step_size=[1] higher_bound=[1000] } ] outputs=[1 extracted Token ] type=xpm } ";
+  static const char* INFO = "info { name=[Stringtokenizer] group=[Textprocessing] inputs=[2 Inputstring{widget_type=[file_selector] } Entry{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1000] display_format=[fixed] } ] outputs=[2 Number_of_Tokens extracted_Token ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(stringtokenizermodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -3,57 +3,57 @@
 namespace model
 {
 
-  ControllValueSet::ControllValueSet(const std::string& id,
-				     const std::string& name)
+  ControlValueSet::ControlValueSet(const std::string& id,
+                                   const std::string& name)
     : m_id(id), m_name(name) {}
 
-  std::string ControllValueSet::getID() const
+  std::string ControlValueSet::getID() const
   {
     return m_id;
   }
 
-  std::string ControllValueSet::getName() const
+  std::string ControlValueSet::getName() const
   {
     return m_name;
   }
 
-  void ControllValueSet::setName(const std::string& name)
+  void ControlValueSet::setName(const std::string& name)
   {
     m_name = name;
   }
 
-  ControllValueSet::~ControllValueSet()
+  ControlValueSet::~ControlValueSet()
   {
   }
 
-  void ControllValueSet::setControlValue(int nodeID,int inputIndex,
-					 const utils::Buffer& value)
+  void ControlValueSet::setControlValue(int nodeID,int inputIndex,
+                                        const utils::Buffer& value)
   {
-    values[std::make_pair(nodeID,inputIndex)]=value;
+    values[std::make_pair(nodeID,inputIndex)] = value;
   }
 
-  void ControllValueSet::deleteControllValue(int nodeID,int inputIndex)
+  void ControlValueSet::deleteControlValue(int nodeID,int inputIndex)
   {
-    std::map<std::pair<int,int>,utils::Buffer>::iterator
-      it=values.find(std::make_pair(nodeID,inputIndex));
+    ControlMap::iterator it = values.find(std::make_pair(nodeID, inputIndex));
 
-    if (it!=values.end())
+    if (it != values.end())
       {
 	values.erase(it);
       }
   }
 
-  ControllValueSet::const_iterator ControllValueSet::begin() const
+  ControlValueSet::const_iterator ControlValueSet::begin() const
   {
     return values.begin();
   }
 
-  ControllValueSet::const_iterator ControllValueSet::end() const
+  ControlValueSet::const_iterator ControlValueSet::end() const
   {
     return values.end();
   }
 
-  ControllValueSet::const_iterator ControllValueSet::find(std::pair<int,int> pair) const
+  ControlValueSet::const_iterator
+  ControlValueSet::find(const Control& pair) const
   {
     return values.find(pair);
   }

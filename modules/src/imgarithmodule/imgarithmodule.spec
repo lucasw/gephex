@@ -74,7 +74,7 @@ outputs
 {
     result
     {
-        name = Ergebnis
+        name = Result
         type = typ_FrameBufferType
     }
 }

@@ -163,7 +163,7 @@ void ModelControlReceiverNet::changeEditGraph( const std::string& graphID, const
 
 }
 
-void ModelControlReceiverNet::newControllValueSet( const std::string& graphID, const std::string& newSnapName )
+void ModelControlReceiverNet::newControlValueSet( const std::string& graphID, const std::string& newSnapName )
 {
 	utils::Buffer temp_buf_(32);
 	utils::OBufferStream bs(temp_buf_);
@@ -174,7 +174,7 @@ void ModelControlReceiverNet::newControllValueSet( const std::string& graphID, c
 
 }
 
-void ModelControlReceiverNet::renameControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName )
+void ModelControlReceiverNet::renameControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName )
 {
 	utils::Buffer temp_buf_(48);
 	utils::OBufferStream bs(temp_buf_);
@@ -185,7 +185,7 @@ void ModelControlReceiverNet::renameControllValueSet( const std::string& graphID
 
 }
 
-void ModelControlReceiverNet::copyControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName )
+void ModelControlReceiverNet::copyControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName )
 {
 	utils::Buffer temp_buf_(48);
 	utils::OBufferStream bs(temp_buf_);
@@ -196,7 +196,7 @@ void ModelControlReceiverNet::copyControllValueSet( const std::string& graphID, 
 
 }
 
-void ModelControlReceiverNet::deleteControllValueSet( const std::string& graphID, const std::string& snapID )
+void ModelControlReceiverNet::deleteControlValueSet( const std::string& graphID, const std::string& snapID )
 {
 	utils::Buffer temp_buf_(32);
 	utils::OBufferStream bs(temp_buf_);

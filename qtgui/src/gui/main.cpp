@@ -1,77 +1,115 @@
+
+#include <iostream>
+
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <qsound.h>
+#include <qpixmap.h>
 
 #ifdef OS_WIN32
 #include <qwindowsstyle.h>
+#include <memory>
+typedef QWindowsStyle GePhexStyle;
 #else
-#if QT_VERSION < 300
 #include <qmotifstyle.h>
-#endif
-#endif
-
-#if defined(OS_WIN32)
-static const char* INTRO_PATH = "../data/intro.wav";
-#elif defined(OS_POSIX)
-//TODO: prefix!
-static const char* INTRO_PATH = "../share/gephex/sounds/intro.wav";
+typedef QMotifStyle GePhexStyle;
 #endif
 
 #include "ownstyle.h"
-#include "vjmainwindow.h"
 #include "guiconfig.h"
-#include <iostream>
+#include "vjmainwindow.h"
+
+//---------------------------------------------------------------------
+
+static const char* logo_data[] = { 
+"40 40 8 1",
+"# c #000200",
+"a c #8e908d",
+"b c #970d17",
+". c #9ea09d",
+"c c #c0121d",
+"d c #e5171d",
+"e c #eb2121",
+"f c #ff0000",
+"........................................",
+"#######################################.",
+"#######################################.",
+"#######################################a",
+"#######################################a",
+"##########bbbbbbbbbbbbbbbbbb###########a",
+"##########bbbbbbbbbbbbbbbbbb###########a",
+"##########bbbbbccccccccccccc###########a",
+"##########bbbccddddddddddddd###########a",
+"##########bbbcdddddddddddddd###########a",
+"##########bbcddeeeeeeeeeeeed###########a",
+"####bbbbbb######dddeee######ccbbbb#####a",
+"####bbbbbb######ccddee######cbbbbb#####a",
+"####bbbbbc######bbcdee######bbbbbc#####a",
+"####bbbccd######bbcdee######bbbccd#####a",
+"####bbbcdd######bbcdde######bbbcdd#####a",
+"####bbcdde######bbcdde######bbcdde#####a",
+"####bbcddedcbbbbbbcdeedcbbbbbbcdee#####a",
+"####bbcddedcbbbbbbcdeedcbbbbbbcdee#####a",
+"####bbcddeddccccccddeeddccccccddee#####a",
+"####bbcdeeeddddddddeeeeddddddddeee#####a",
+"####bbcdeeeeeeeeeeeeffeeeeeeeeeeee#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffffffffffffffffffffffffe#####a",
+"####bbcdeffeeeeeeeeefffeeeeeeeeeee#####a",
+"####bbcdee######dddeef######dddeee#####a",
+"####bbcdde######ccddee######ccddee#####a",
+"####bbcdde######bbcdee######bbcdee#####a",
+"####bbcdde######bbcdee######bbcdee#####a",
+"####bbcdde######bbcdde######bbcdde#####a",
+"####bbcddd######bbcddd######bbcddd#####a",
+"#######################################a",
+"#######################################a",
+"#######################################a",
+"#######################################a",
+".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"};
+
+
+//---------------------------------------------------------------------
 
 int main( int argc, char** argv )
 {
   QApplication app( argc, argv );
 
-#if (QT_VERSION < 300) && defined(OS_WIN32)
-  app.setStyle( new gui::OwnStyle<QWindowsStyle>() );
-
-#elif (QT_VERSION < 300) && !defined(OS_WIN32)
-	
-  app.setStyle( new gui::OwnStyle<QMotifStyle>() );
-#endif
-
+  app.setStyle( new gui::OwnStyle<GePhexStyle>() );
+  
   try
     {
-      gui::GuiConfig config = gui::createGuiConfig();
+      gui::GuiConfig config;
 
-      gui::VJMainWindow *mainWin = new gui::VJMainWindow(0,
-							 "HauptFenster",
-							 config.ipcType,
-							 config.ipcLocator,
-							 config.port,
-							 config.sr);
-    
-      app.connect(mainWin,SIGNAL(quitSignal(void)), &app,SLOT(quit(void)));
-      app.setMainWidget(mainWin);
-      mainWin->resize(640, 480);
-      mainWin->show();
+      gui::VJMainWindow mainWin ( 0, "GePhex main window", config );
 
-    /*  if (QSound::available())
-	QSound::play(INTRO_PATH);
-      else
-	std::cerr << "KEIN SOUND!!!" << std::endl;*/
+      mainWin.setIcon(QPixmap(logo_data));
 
-      mainWin->connectToEngine();
+      app.connect(&mainWin, SIGNAL(quitSignal(void)), &app, SLOT(quit(void)));
+      app.setMainWidget(&mainWin);
+
+      mainWin.resize(640, 480);
+      mainWin.show();    
+
+      mainWin.connectToEngine();
 
       int ret = app.exec();
-    
+      
       return ret;
-
     }
   catch (std::runtime_error& e)
     {
-      std::cerr << "Fehler: " << e.what() << std::endl;
-	  QMessageBox::critical(0,"Schlimmer Fehler", e.what());
-      //      getchar();   
+      std::cerr << "Error: " << e.what() << std::endl;
+      QMessageBox::critical(0, "Fatal Error", e.what());
     }
 
 }
 
+//---------------------------------------------------------------------

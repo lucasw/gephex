@@ -20,31 +20,31 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=/dev/video0 } ";
+    return "input_spec { type=typ_StringType id=devicefile const=true strong_dependency=true default=/dev/video0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=x_size const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=y_size const=true strong_dependency=true default=0 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=brightness const=true strong_dependency=true default=0.5 } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=hue const=true strong_dependency=true default=0.5 } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=colour const=true strong_dependency=true default=0.5 } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=contrast const=true strong_dependency=true default=0.5 } ";
   break;
   case 7:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=whiteness const=true strong_dependency=true default=0.5 } ";
   break;
   case 8:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=drops const=true strong_dependency=true default=1 } ";
   break;
  }
  return 0;
@@ -52,7 +52,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;

@@ -281,6 +281,20 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvsparkmodule.lo effectvsparkmodule.o : effectvsparkmodule.c \
+	effectvsparkmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h spark.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h
+effectvsparkmodule_auto.lo effectvsparkmodule_auto.o : \
+	effectvsparkmodule_auto.c effectvsparkmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvsparkmodule.xpm
 
 info-am:
 info: info-am

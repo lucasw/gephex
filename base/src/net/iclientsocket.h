@@ -35,7 +35,7 @@ namespace net
      * @param remoteHost the hostname of the remote host
      *        (for example "10.10.0.1" or "www.google.de")
      * @param remotePort the port on which the connection is
-     *        requested
+     *        requested	 
      * @return a new Socket that represents the connection
      */
     virtual ISocket* connect(const std::string& remoteHost,

@@ -326,7 +326,8 @@ runtimesystem.o: runtimesystem.cpp runtimesystem.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	modulefactory.h ../../../base/src/utils/buffer.h \
-	../../../base/src/utils/timing.h
+	../../../base/src/utils/timing.h \
+	../../../base/src/utils/ilogger.h
 typefactory.o: typefactory.cpp typefactory.h \
 	../../../base/src/interfaces/itypefactory.h \
 	../../../base/src/utils/autoptr.h \

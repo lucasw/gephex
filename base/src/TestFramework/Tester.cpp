@@ -28,7 +28,7 @@ void TesterStream::performTest(LeafTest& lt)
 	{
 		lt.pre();
 	}
-	catch (std::runtime_error& e)
+	catch (std::exception& e)
 	{
 		(*m_s) << spaces <<"FAIL at pre(): " << e.what() << std::endl;
 		lt.post(); //TODO
@@ -38,7 +38,7 @@ void TesterStream::performTest(LeafTest& lt)
 	{
 		lt.run();
 	}
-	catch (std::runtime_error& e)
+	catch (std::exception& e)
 	{
 		(*m_s) << spaces <<"FAIL at run(): " << e.what() << std::endl;
 		lt.post(); //TODO
@@ -48,7 +48,7 @@ void TesterStream::performTest(LeafTest& lt)
 	{
 		lt.post();
 	}
-	catch (std::runtime_error& e)
+	catch (std::exception& e)
 	{
 		(*m_s) << spaces <<"FAIL at post(): " << e.what() << std::endl;
 		return;

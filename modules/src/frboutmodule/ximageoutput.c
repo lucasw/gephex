@@ -10,6 +10,7 @@
 
 #include "outputdriver.h"
 
+#include "x11stuff.h"
 #include "libscale.h"
 
 #define EPS 0.0001
@@ -30,12 +31,12 @@ struct DriverInstance {
 
 static void print_visual(XVisualInfo* vinfo)
 {
-  printf("Visual %i: {\n", vinfo->visualid);
+  printf("Visual %li: {\n", vinfo->visualid);
   printf("\tDepth\t\t: %i\n", vinfo->depth);
   printf("\tclass\t\t: %i\n", vinfo->class);
-  printf("\tred_mask\t\t: %.8x\n", vinfo->red_mask);
-  printf("\tgreen_mask\t\t: %.8x\n", vinfo->green_mask);
-  printf("\tblue_mask\t\t: %.8x\n", vinfo->blue_mask);
+  printf("\tred_mask\t\t: %.8lx\n", vinfo->red_mask);
+  printf("\tgreen_mask\t\t: %.8lx\n", vinfo->green_mask);
+  printf("\tblue_mask\t\t: %.8lx\n", vinfo->blue_mask);
   printf("\tcolormap_size\t\t: %.8x\n", vinfo->colormap_size);
   printf("\tbits_per_rgb\t\t: %i\n", vinfo->bits_per_rgb);
   printf("}\n");
@@ -43,10 +44,11 @@ static void print_visual(XVisualInfo* vinfo)
 
 /* find the best visual  
  */  
-static int find_best_visual(Display* dpy,
-                            XVisualInfo* chosen_vis)
+static int find_best_visual_bpp(Display* dpy,
+                                XVisualInfo* chosen_vis,
+                                int bpp)
 {  
-  int err = 0, n = 0;
+  int n = 0;
   int mask = VisualScreenMask | VisualDepthMask | VisualClassMask;
   //    | VisualRedMaskMask | VisualGreenMaskMask | VisualBlueMaskMask;
   //    | VisualBitsPerRGBMask;
@@ -55,7 +57,7 @@ static int find_best_visual(Display* dpy,
   XVisualInfo*  vinfos;
 
   vinfo_templ.screen     = DefaultScreen(dpy);
-  vinfo_templ.depth      = 24;
+  vinfo_templ.depth      = bpp;
   vinfo_templ.class      = TrueColor;
   //  vinfo_templ.red_mask   = 0x000000ff;
   //  vinfo_templ.green_mask = 0x0000ff00;
@@ -63,32 +65,57 @@ static int find_best_visual(Display* dpy,
   //  vinfo_templ.bits_per_rgb  = 8;
   
   vinfos = XGetVisualInfo(dpy, mask, &vinfo_templ, &n);
-  /*  for (i = 0; i < n; ++i)
+  /*for (i = 0; i < n; ++i)
     {
       print_visual(vinfos + i);
     }
-  printf("-----------------------------------------------------\n");
-  getchar();*/
-
+    printf("-----------------------------------------------------\n");*/
+  //  getchar();
 
   if (vinfos == 0)
-    return 1;
-  else
     {
+      return 1;
+    }
+  else
+    {      
       *chosen_vis = *vinfos;
       XFree(vinfos);
+      return 0;
     }
-  
-  return err;  
-}  
+}
 
+static int find_best_visual(Display* dpy,
+                            XVisualInfo* chosen_vis)
+{ 
+  if (find_best_visual_bpp(dpy, chosen_vis, 24) == 0)
+    return 0;
+  else
+    return find_best_visual_bpp(dpy, chosen_vis, 16);
+}
 
+static void convert_to_16_inplace(unsigned char* frb,
+                                  int width, int height)
+{
+  const unsigned char* src = frb;
+  uint_16* dst = (uint_16*) frb;
+  int i;
+
+  for (i = width*height; i != 0; --i)
+    {
+      unsigned char b = src[0] >> 3;
+      unsigned char g = src[1] >> 2;
+      unsigned char r = src[2] >> 3;
+      src += 4;
+
+      *(dst++) = (r << 11) | (g << 5) | b;
+    }
+}
 
 static struct DriverInstance* 
 XImage_new_instance(const char* server_name,
                     int xpos, int ypos,
                     int width, int height,
-                    char* error_text, int buflen);
+                    char* error_text, int text_len);
 
 static void XImage_destroy(struct DriverInstance* sh);
 
@@ -100,10 +127,13 @@ static int  XImage_blit(struct DriverInstance* sh,
                         const unsigned char* fb,
                         int width, int height,
                         struct blit_params* params,
-                        char* error_text, int buflen);
+                        char* error_text, int text_len);
 
 static int XImage_window_pos(struct DriverInstance* self, int* xpos,
                              int* ypos, char* error_text, int text_len);
+
+static int XImage_frame(struct DriverInstance* self, int frame_visible,
+                     char* error_text, int text_len);
 
 struct OutputDriver* XImage_get_driver()
 {
@@ -117,7 +147,7 @@ struct OutputDriver* XImage_get_driver()
   drv->resize        = XImage_resize;
   drv->blit          = XImage_blit;
   drv->window_pos    = XImage_window_pos;
-  drv->frame         = 0;
+  drv->frame         = XImage_frame;
   drv->always_on_top = 0;
   drv->to_monitor    = 0;
 
@@ -132,15 +162,22 @@ static struct DriverInstance*
 XImage_new_instance(const char* server_name,
                     int xpos, int ypos,
                     int width, int height,
-                    char* error_text, int buflen)
+                    char* error_text, int text_len)
 {
   struct DriverInstance* sh = (struct DriverInstance*) malloc(sizeof(*sh));
   int screen;
 
-  sh->display = XOpenDisplay(server_name);
+  const char* server_name_ptr;
+  if (strcmp(server_name,"default")==0)
+    server_name_ptr=0; // use the DISPLAY environment variable
+  else
+    server_name_ptr=server_name; // use the userdefined display
+  
+  sh->display = XOpenDisplay(server_name_ptr);
+  
   if (sh->display == NULL)
     {
-      snprintf(error_text, buflen,
+      snprintf(error_text, text_len,
                "Cannot connect to X server %s", server_name);
       return 0;
     }
@@ -206,7 +243,7 @@ static int XImage_blit(struct DriverInstance* sh,
                        const unsigned char* fb,
                        int width, int height,
                        struct blit_params* params,
-                       char* error_text, int buflen)
+                       char* error_text, int text_len)
 {
   XVisualInfo vis;
   unsigned char* framebuffer;
@@ -268,29 +305,38 @@ static int XImage_blit(struct DriverInstance* sh,
 
   // now create an XImage using the framebuffers pixel data
   err = find_best_visual(sh->display, &vis);
-  img = XCreateImage(sh->display,
-                     vis.visual,
-                     DefaultDepth(sh->display,
-                                  DefaultScreen(sh->display)),
-                     ZPixmap,
-                     0,
-                     framebuffer,
-                     sh->width,
-                     sh->height,
-                     32,
-                     0);
-
-  if (img == 0)
+  if (err)
     {
-      snprintf(error_text, buflen, "Could not create XImage!");
+      snprintf(error_text, text_len, "Could not find matching visual\n"
+               "XServer must be set up at 24 bit depth or 16 bit depth");
       return 0;
     }
 
-  // ... blit it to screen
-  XPutImage(sh->display, sh->win, sh->gc, img, 0, 0, 0, 0,
-            sh->width, sh->height);
+  if (vis.depth == 16)
+    convert_to_16_inplace(framebuffer, sh->width, sh->height);
 
-  XFree(img);
+    img = XCreateImage(sh->display,
+                       vis.visual,
+                       vis.depth,
+                       ZPixmap,
+                       0,
+                       framebuffer,
+                       sh->width,
+                       sh->height,
+                       32,
+                       0);
+
+    if (img == 0)
+      {
+        snprintf(error_text, text_len, "Could not create XImage!");
+        return 0;
+      }
+
+    // ... blit it to screen
+    XPutImage(sh->display, sh->win, sh->gc, img, 0, 0, 0, 0,
+              sh->width, sh->height);
+
+    XFree(img);
 
   // and finally make sure the xserver performs the blitting
   //  XFlush(sh->display);
@@ -306,4 +352,15 @@ static int XImage_window_pos(struct DriverInstance* self, int* xpos,
   *xpos = attribs.x;
   *ypos = attribs.y;
   return 1;
+}
+
+
+static int XImage_frame(struct DriverInstance* self,
+                      int frame_visible,
+                      char* error_text, int text_len)
+{
+  //  printf("frame = %i\n", frame_visible);
+  return x11_win_frame(frame_visible != 0,
+                       self->display,
+                       self->win);
 }

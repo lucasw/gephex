@@ -2,7 +2,6 @@
 #define INCLUDED_ENGINECONFIG_H
 
 #include <string>
-#include "structreader.h"
 
 namespace engine
 {
@@ -10,17 +9,15 @@ namespace engine
     {    
     public:
       EngineConfig();
-      utils::StructReader sr;
-      std::string graphDir;      
+      std::string media_path;
+      std::string graph_path;
       std::string ipcType;
       std::string ipcUnixNodePrefix;
-      std::string moduleDirs;
-      std::string typeDirs;
+      std::string module_path;
+      std::string type_path;
       int rendererInterval;
       int netInterval;      
       int port;
-    private:
-      utils::StructReader readConfigFile();
     };
 }
 

@@ -20,25 +20,25 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=zoom const=true strong_dependency=true default=1 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_PositionType const=true strong_dependency=true default=[0.5 0.5] } ";
+    return "input_spec { type=typ_PositionType id=disp const=true strong_dependency=true default=[0.5 0.5] } ";
   break;
   case 3:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=texture const=true strong_dependency=true  } ";
   break;
   case 4:
-    return "input_spec { type=typ_FrameBufferType const=false strong_dependency=false  } ";
+    return "input_spec { type=typ_FrameBufferType id=background const=false strong_dependency=false  } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=copy_background const=true strong_dependency=true default=1 } ";
   break;
   case 6:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=regular } ";
+    return "input_spec { type=typ_StringType id=routine const=true strong_dependency=true default=regular } ";
   break;
  }
  return 0;
@@ -46,7 +46,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;
@@ -122,7 +122,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Rotozoom] group=[Effects] inputs=[7 Zoom{lower_bound=[0] widget_type=[number_selector] step_size=[0.04] higher_bound=[4] } Rotation{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[360] } Translation Texture Background{help=[The background image] } Copy_Background{widget_type=[radio_button] false_value=[0] true_value=[1] hidden=[true] help=[Should backgound be copied or modified?] } Mode{widget_type=[combo_box] values=[regular,poly] hidden=[true] help=[regular is stable, poly is faster] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Rotozoom] group=[Effects] inputs=[7 Zoom{lower_bound=[0] widget_type=[number_selector] step_size=[0.04] higher_bound=[4] } Rotation{lower_bound=[-180] widget_type=[number_selector] step_size=[1] higher_bound=[180] } Translation Texture Background{help=[The background image] } Copy_Background{widget_type=[radio_button] false_value=[0] true_value=[1] hidden=[true] help=[Should background be copied or modified?] } Mode{widget_type=[combo_box] values=[regular,poly] hidden=[true] help=[regular is stable, poly is faster] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(rotozoommodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

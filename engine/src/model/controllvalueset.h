@@ -8,24 +8,25 @@
 namespace model
 {
 
-  class ControllValueSet 
+  class ControlValueSet 
     {
     public: 
       typedef int NodeID;
       typedef int InputIndex;
       typedef std::pair<NodeID,InputIndex> Control;
+      typedef std::map<Control, utils::Buffer> ControlMap;
 
-      typedef std::map<Control,utils::Buffer>::const_iterator const_iterator;
+      typedef ControlMap::const_iterator const_iterator;
 
       /**
        * Create a new control value set for a graph
        */
-      ControllValueSet(const std::string& id, const std::string& name);
+      ControlValueSet(const std::string& id, const std::string& name);
 
       /**
        * destroys the set
        */
-      ~ControllValueSet();
+      ~ControlValueSet();
 
       /**
        * get the unique ID of the control-value set
@@ -45,13 +46,13 @@ namespace model
       /**
        * add or change the value for the control
        */
-      void setControlValue(NodeID nodeID,InputIndex inputIndex,
+      void setControlValue(NodeID nodeID, InputIndex inputIndex,
 			   const utils::Buffer& value);
 
       /**
        * Removes the control-value pair from the set
        */
-      void deleteControllValue(NodeID nodeID,InputIndex inputIndex);
+      void deleteControlValue(NodeID nodeID, InputIndex inputIndex);
 
       /**
        * get the iterator of the first control - value pair
@@ -67,7 +68,7 @@ namespace model
        * Get the control - value pair or the end() iterator if not found
        * /param key a pair of NodeID and InputIndex
        */
-      const_iterator find(Control key) const;
+      const_iterator find(const Control& key) const;
 	
     private:
       /**
@@ -83,7 +84,7 @@ namespace model
       /**
        * the stored values
        */
-      std::map<Control,utils::Buffer> values;
+      ControlMap values;
     };
 
 }

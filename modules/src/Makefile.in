@@ -106,21 +106,21 @@ VERSION = @VERSION@
 
 libdir = @libdir@/gephex/modules
 
-@EFFECTV_TRUE@EFFECTV_DIRS = 	libeffectv 	effecttvedgemodule 	effectvfiremodule 	effectvlensmodule 	effectvpuzzlemodule 	effectvlifemodule 	effectvagingmodule 	effectvburnmodule 	effectvdotmodule 	effectvsparkmodule 	effectvcyclemodule 	effectvquarkmodule
-
-@HAVE_SDL_TRUE@SDL_DIRS = joystickmodule
+@EFFECTV_TRUE@EFFECTV_DIRS = 	libeffectv 	effecttvedgemodule 	effectvagingmodule 	effectvburnmodule 	effectvcyclemodule 	effectvdotmodule 	effectvfiremodule 	effectvlensmodule 	effectvlifemodule 	effectvpuzzlemodule 	effectvquarkmodule 	effectvsparkmodule 
 
 @HAVE_SDL_TRUE@@HAVE_SDL_TTF_TRUE@SDL_TTF_DIRS = sdlfontmodule
 
+@HAVE_JOYSTICK_TRUE@JOYSTICK_DIRS = joystickmodule
+
 @HAVE_PNG_TRUE@PNG_DIRS = imagewritermodule
 
-@HAVE_ASOUNDLIB_OR_OSS_TRUE@AUDIO_DIRS = audiooutmodule audioinmodule
+@HAVE_ASOUNDLIB_OR_OSS_TRUE@AUDIO_DIRS = audioinmodule audiooutmodule
 
 @HAVE_OSS_TRUE@OSS_DIRS = midiinmodule
 
-@WITH_V4L_TRUE@V4L_DIRS = v4lmodule
+@HAVE_V4L_TRUE@V4L_DIRS = v4lmodule
 
-SUBDIRS = libgrid 	libmidi 	libscale 	numarithmodule         audioaddmodule         audiospecmodule         audioenergymodule         audiowavegenmodule         audiovismodule         audiobdmodule 	audiosynthmodule 	bwmodule 	resultmodule 	numbermodule 	numenvmodule 	numlfomodule 	xfademodule 	plasma 	rotozoommodule 	imagebuffermodule 	blurmodule 	tunnelmodule 	planemodule 	signalgenmodules 	staticcolormodule 	functions 	numposmodule 	posnummodule 	flashmodule         imgarithmodule 	ifsgenmodule 	ifsxfadermodule 	netcontrolmodule 	doepfermodule 	fpsmodule 	ifsmodule 	isingnoizemodule 	flipflopmodule 	diffmodule 	number2color 	overlaymodule 	color2number 	gradnormmodule 	twolayermodule 	rangeconvertmodule         frboutmodule 	frbinmodule 	stringtokenizermodule         pixelizemodule $(EFFECTV_DIRS) $(SDL_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
+SUBDIRS = libgrid 	libmidi 	libscale 	audioaddmodule 	audiobdmodule 	audioenergymodule 	audiospecmodule 	audiosynthmodule 	audiovismodule 	audiowavegenmodule 	blurmodule 	bwmodule 	color2number 	diffmodule 	doepfermodule 	flashmodule 	flipflopmodule 	fpsmodule 	frbinmodule 	frboutmodule 	functions 	gradnormmodule 	ifsgenmodule 	ifsmodule 	ifsxfadermodule 	imagebuffermodule 	imgarithmodule 	isingnoizemodule 	netcontrolmodule 	numarithmodule 	number2color 	numbermodule 	numenvmodule 	numlfomodule 	numposmodule 	overlaymodule 	pixelizemodule 	planemodule 	plasma 	posnummodule 	rangeconvertmodule 	resultmodule 	rotozoommodule 	signalgenmodules 	staticcolormodule 	stringtokenizermodule 	tunnelmodule 	twolayermodule 	xfademodule $(EFFECTV_DIRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -132,22 +132,22 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DIST_SUBDIRS =  libgrid libmidi libscale numarithmodule audioaddmodule \
-audiospecmodule audioenergymodule audiowavegenmodule audiovismodule \
-audiobdmodule audiosynthmodule bwmodule resultmodule numbermodule \
-numenvmodule numlfomodule xfademodule plasma rotozoommodule \
-imagebuffermodule blurmodule tunnelmodule planemodule signalgenmodules \
-staticcolormodule functions numposmodule posnummodule flashmodule \
-imgarithmodule ifsgenmodule ifsxfadermodule netcontrolmodule \
-doepfermodule fpsmodule ifsmodule isingnoizemodule flipflopmodule \
-diffmodule number2color overlaymodule color2number gradnormmodule \
-twolayermodule rangeconvertmodule frboutmodule frbinmodule \
-stringtokenizermodule pixelizemodule libeffectv effecttvedgemodule \
-effectvfiremodule effectvlensmodule effectvpuzzlemodule \
-effectvlifemodule effectvagingmodule effectvburnmodule effectvdotmodule \
-effectvsparkmodule effectvcyclemodule effectvquarkmodule joystickmodule \
-sdlfontmodule v4lmodule imagewritermodule audiooutmodule audioinmodule \
-midiinmodule
+DIST_SUBDIRS =  libgrid libmidi libscale audioaddmodule audiobdmodule \
+audioenergymodule audiospecmodule audiosynthmodule audiovismodule \
+audiowavegenmodule blurmodule bwmodule color2number diffmodule \
+doepfermodule flashmodule flipflopmodule fpsmodule frbinmodule \
+frboutmodule functions gradnormmodule ifsgenmodule ifsmodule \
+ifsxfadermodule imagebuffermodule imgarithmodule isingnoizemodule \
+netcontrolmodule numarithmodule number2color numbermodule numenvmodule \
+numlfomodule numposmodule overlaymodule pixelizemodule planemodule \
+plasma posnummodule rangeconvertmodule resultmodule rotozoommodule \
+signalgenmodules staticcolormodule stringtokenizermodule tunnelmodule \
+twolayermodule xfademodule libeffectv effecttvedgemodule \
+effectvagingmodule effectvburnmodule effectvcyclemodule \
+effectvdotmodule effectvfiremodule effectvlensmodule effectvlifemodule \
+effectvpuzzlemodule effectvquarkmodule effectvsparkmodule \
+joystickmodule sdlfontmodule v4lmodule imagewritermodule audioinmodule \
+audiooutmodule midiinmodule
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 

@@ -1,5 +1,7 @@
 #include "taggertest.h"
 
+#include <sstream>
+
 #include "isender.h"
 #include "itaginterpreter.h"
 #include "tagger.h"
@@ -10,20 +12,15 @@
 #include "utils/buffer.h"
 #include "utils/bufferutils.h"
 
-namespace net {
-  typedef Tagger<std::string, StringTagUtil> Tagger_;
-  typedef ITagInterpreter<std::string> ITagInterpreter_;
-}
-
 namespace tagger_test {
 class TestSender : public net::ISender
 {
 public:
   TestSender() : m_buf(0) {}
 
-  void setTagger(net::Tagger_& _tg)
+  void setListener(net::IDataListener& l)
   {
-    tg = &_tg;
+    m_listener = &l;
   }
 
   virtual ~TestSender()
@@ -59,8 +56,7 @@ public:
 	tg->dataReceived(lastPacket);
 	}*/
 
-    tg->dataReceived(buf);
-
+    m_listener->dataReceived(buf);
 
     return buf.getLen();
   }
@@ -69,19 +65,20 @@ public:
   int m_len;
 
 private:
-  net::Tagger_* tg;
+  net::IDataListener* m_listener;
 };
 
-class TestInterpreter : public net::ITagInterpreter_
+template <typename Tag>
+class TestInterpreter : public net::ITagInterpreter<Tag>
 {
 public:
-  TestInterpreter() : m_command(), m_data(0), m_len(0) {}
+  TestInterpreter() : m_data(0), m_len(0) {}
   virtual ~TestInterpreter()
   {
     delete[] m_data;
   }
 
-  virtual void dataReceived(const std::string& command,
+  virtual void dataReceived(const Tag& tag,
 			    const utils::Buffer& buf)
   {
     if (m_data != 0)
@@ -89,13 +86,13 @@ public:
 
     m_data = new unsigned char[buf.getLen()];
 
-    m_command = command;
+    m_tag = tag;
     
     memcpy(m_data,buf.getPtr(),buf.getLen());
     m_len = buf.getLen();
   }
 
-  std::string m_command;
+  Tag m_tag;
   unsigned char* m_data;
   int m_len;
 };
@@ -111,24 +108,39 @@ std::string TaggerTest::getDescription() const
   return "";
 }
 
-void TaggerTest::pre() throw(std::runtime_error)
+template <class Tag, class TagUtil>
+static void test_tagutil(const Tag& t)
 {
+  TagUtil u;
+  utils::Buffer b1;
+  utils::Buffer b2;
+  u.attachTag(b1, t, utils::Buffer());
+  
+  Tag v;
+  u.removeTag(b2, v, b1);
 
+  if (t != v)
+    {
+      std::ostringstream os;
+      os << "Tag corrupt: '" << t << "' != '" << v << "'";
+      throw std::runtime_error(os.str().c_str());
+    }
 }
 
-void TaggerTest::run() throw(std::runtime_error)
+template <class Tag, class TagUtil>
+static void test_tagger(const Tag& t)
 {
   tagger_test::TestSender sender;
-  tagger_test::TestInterpreter tip;
-  net::Tagger_ tg(tip);
+  tagger_test::TestInterpreter<Tag> tip;
+  net::Tagger<Tag, TagUtil> tg(tip);
 
   tg.registerSender(sender);
-  sender.setTagger(tg);
+  sender.setListener(tg);
 
   for (int len = 0; len < 4098; ++len)
     {
       unsigned char* data = createRandomBlock(len);
-      tg.setTag("1111");
+      tg.setTag(t);
       tg.send(utils::Buffer(data,len));
 	
       if (!compareBlocks(data,len,tip.m_data,tip.m_len))
@@ -147,6 +159,20 @@ void TaggerTest::run() throw(std::runtime_error)
 	}
 
     }
+}
+
+void TaggerTest::pre() throw(std::runtime_error)
+{
+
+}
+
+void TaggerTest::run() throw(std::runtime_error)
+{
+  test_tagutil<std::string, net::StringTagUtil>("harr harr horr");
+  test_tagutil<uint_32, net::UInt32TagUtil>(192837465);
+
+  test_tagger<std::string, net::StringTagUtil>("1111");
+  test_tagger<uint_32, net::UInt32TagUtil>(1111);
 }
 
 void TaggerTest::post() throw(std::runtime_error)

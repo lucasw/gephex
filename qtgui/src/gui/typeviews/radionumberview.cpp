@@ -10,7 +10,7 @@
 
 
 /**
-* RadioButton: mögliceh true/false -Werte können mittels 
+* RadioButton: mögliche true/false -Werte können mittels 
 * true_value= bzw. false_value= aus dem Modul übergeben werden. 
 */
 namespace gui
@@ -25,7 +25,7 @@ namespace gui
     RadioNumberView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params),
         m_setCheckedCalled(false),
-        m_isChecked(0), m_value(-1)
+        m_isChecked(0)
     {
       utils::StructReader sr(params);
       
@@ -52,14 +52,19 @@ namespace gui
       double raw;
       is >> raw;
 		
-      if (fabs(raw - m_value) > 0.0001)
-        {
-          m_value = raw;
+	  bool checked = fabs(raw - m_trueVal) < fabs(raw - m_falseVal);
+      if (checked != m_isChecked)
+        {          
           m_setCheckedCalled = true;
-          if(fabs(raw - m_falseVal) < fabs(raw - m_trueVal))
-            m_radio->setChecked(false);
-          else
+		  m_isChecked = checked;
+          if(checked)
+		  {
             m_radio->setChecked(true);
+		  }
+          else
+		  {		
+            m_radio->setChecked(false);
+		  }
         }
     }
 		
@@ -75,9 +80,9 @@ void radiobuttonChanged(int)
           else
             os << m_falseVal;
 
-          os.flush();
+		  m_isChecked = !m_isChecked;
 
-          m_isChecked = !m_isChecked;
+          os.flush();          
 
           utils::Buffer
             b (reinterpret_cast<const unsigned char*>(os.str().c_str()),
@@ -93,8 +98,7 @@ void radiobuttonChanged(int)
   private:
     QRadioButton* m_radio;
     bool m_setCheckedCalled;
-    bool m_isChecked;
-    double m_value;
+    bool m_isChecked;    
     double m_falseVal;
     double m_trueVal;
 

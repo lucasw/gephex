@@ -29,8 +29,9 @@ class NodeProperty : public IPropertyDescription
 public:
   NodeProperty(const ModuleInfo& _info, 
 	       std::vector<utils::AutoPtr<InputPlugWidget> >& ins,
-	       ControlValueDispatcher& dispatcher,
-	       IModelControlReceiver&);
+               const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
+	       IModelControlReceiver&,
+	       const std::string& media_path);
   
   virtual ~NodeProperty();  
 
@@ -46,7 +47,8 @@ private:
   std::list<PropertyEntry> m_entries;
   std::list<std::list<const IWidgetConstructor*> > m_ctorsList;
 
-  void addProperty(InputPlugWidget& in, ControlValueDispatcher&,
+  void addProperty(InputPlugWidget& in,
+                   const utils::AutoPtr<ControlValueDispatcher>&,
 		   IModelControlReceiver&);
 
 

@@ -29,26 +29,7 @@ Thanks to the EffecTV people for their cool effects!
 Important note:
 ---------------
 
- Graphs that have been created with 0.0.4alpha can not be loaded with
- 0.0.4alpha2 (due to merges of modules, see NEWS).
+ Graphs that have been created with 0.0.4beta2 cannot be opened.
+ The graph format has changed. 
 
- To convert them, you can try the following:
-   1. cd into your graph dir (for example $HOME/.gephex/graphs)
-   2. try the following seds:
-    * sed -i s/mod_invertmodule/mod_imgarithmodule/g *
-    * sed -i s/mod_imgsubmodule/mod_imgarithmodule/g *
-    * sed -i s/mod_imgaddmodule/mod_imgarithmodule/g *
-    * sed -i s/mod_submodule/mod_numarithmodule/g *
-    * sed -i s/mod_addmodule/mod_numarithmodule/g *
-    * sed -i s/mod_x11outmodule/mod_frboutmodule/g *
-    * sed -i s/mod_gdioutmodule/mod_frboutmodule/g *
-    * sed -i s/mod_sdloutmodule/mod_frboutmodule/g *
-    * sed -i s/mod_bmpmodule/mod_frbinmodule/g *
-    * sed -i s/mod_avifileSource/mod_frbinmodule/g *
-   3. try to load the graphs and ignore the error messages
-   4. manually adapt them ("Bild Output" modules should be deleted
-      and inserted again for example)
-   5. save the graphs
-
-
-For documentation, please have a look at http://gephex.sf.net.
+For documentation, please have a look at http://www.gephex.org.

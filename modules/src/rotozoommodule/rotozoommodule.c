@@ -240,7 +240,7 @@ void calc_parameters(void* instance, double* theta, double* zoom,
   int xsize_out = inst->in_texture->xsize;
   int ysize_out = inst->in_texture->ysize;
 
-  *theta = (M_PI * (double) trim_double(inst->in_rot->number,0,360)) / 180;
+  *theta = (M_PI * inst->in_rot->number) / 180;
   *zoom =  trim_double(inst->in_zoom->number,0.001,4);
 
   *transpx= (int) ((3*xsize_out*trim_double(inst->in_disp->x,0,1))

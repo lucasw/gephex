@@ -16,12 +16,12 @@
 #include <algorithm> 
 #endif
 
+#include "convertbin.h"
 #include "utils/buffer.h"
 #include "basic_types.h"
 
-//TODO: alles plattformabhängig ab hier
-// man muesste die endianess und das padding von Header
-// durch den compiler berücksichtigen...
+//TODO: padding of the header structure is not taken into account
+// the header is stored in little endian format
 
 static const unsigned int MAX_PACKET_LEN = 1024000;
 namespace net
@@ -35,7 +35,7 @@ namespace net
     : m_sender(0), m_listener(0),
       bufferBegin(new unsigned char[BUFFER_SIZE]),
       bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE),
-	  m_silent_mode(false)
+      m_silent_mode(false)
   {
   }
 
@@ -43,7 +43,7 @@ namespace net
     : m_sender(0), m_listener(&dl),
       bufferBegin(new unsigned char[BUFFER_SIZE]),
       bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE),
-	  m_silent_mode(false)
+      m_silent_mode(false)
   {
   }
 
@@ -62,50 +62,114 @@ namespace net
     m_sender = sender;
   }
 
-  namespace {
+  namespace
+  {
+    /**
+     * Calculates a simple checksum from the header data.
+     */
+    uint_32 check_sum(uint_32 packetLen, uint_32 version, uint_32 dataLen)
+    {
+      return (packetLen << 13) + (version << 17) + (dataLen << 11);
+    }
+
+
     struct Header
     {
+      explicit Header(int data_len)
+        : packetLen(data_len + sizeof(Header)), version(PROT_VERSION),
+          dataLen(data_len), 
+          checkSum(check_sum(packetLen, version, data_len))
+      {
+      }
+
+      /**
+       * "Casts" the header from raw memory in a standard conforming
+       * and platform independent way.
+       * The memory is assumed to contain the header in little endian
+       * format without padding.
+       * (Simply casting leads to bus errors on sparc32 when access is
+       *  not properly aligned)
+       */
+      explicit Header(const unsigned char* raw_data)
+      {
+        packetLen = convert_uint32_from_le(raw_data + 0);
+        version   = convert_uint32_from_le(raw_data + 4);
+        dataLen   = convert_uint32_from_le(raw_data + 8);
+        checkSum  = convert_uint32_from_le(raw_data + 12);
+      }
+
+      /**
+       * Checks wether the checksum in the header matches and
+       * if the header data is consistent.
+       */
+      bool ok() const
+      {
+        return (version == PROT_VERSION &&
+                packetLen <= MAX_PACKET_LEN &&
+                packetLen == dataLen + sizeof(Header) &&
+                checkSum == check_sum(packetLen, version, dataLen));
+      }
+
+      /**
+       * "Casts" the header to a raw representation in little endian
+       * format.
+       */
+      utils::Buffer to_raw() const
+      {
+        unsigned char raw[sizeof(Header)];
+        convert_uint32_to_le(packetLen, raw + 0);
+        convert_uint32_to_le(version,   raw + 4);
+        convert_uint32_to_le(dataLen,   raw + 8);
+        convert_uint32_to_le(checkSum,  raw + 12);
+
+        return utils::Buffer(raw, sizeof(raw));
+      }
+
       uint_32 packetLen;
       uint_32 version;
       uint_32 dataLen;
       uint_32 checkSum;
     };
-  }
 
-  static uint_32 check_sum(const Header& h)
-  {
-    return (h.packetLen << 13) + (h.version << 17) + (h.dataLen << 11);
+
+    // tries to find a valid header somwhere inside data
+    int try_sync(const unsigned char* data, int data_len)
+    {
+      for (unsigned int i = 0; i < data_len - sizeof(Header); ++i)
+        {
+          Header test_header(data+i);
+          if (test_header.ok())
+            return i;
+        }
+      return -1;
+    }
   }
 
   int Protocol::send(const utils::Buffer& buf)
   {
-	  Header header;
-	  
-	  header.packetLen = sizeof(header) + buf.getLen();
-	  header.version = PROT_VERSION;
-	  header.dataLen = buf.getLen();
-	  header.checkSum = check_sum(header);
-	  
-	  if (m_sender)
-	  {
-		  try {
-		  int len = m_sender->send(utils::Buffer(reinterpret_cast<unsigned char*>(&header),
-			  sizeof(header)) + buf);
-		  m_silent_mode = false;
-		  return len;
-		  }
-		  catch (std::exception& e)
-		  {
-			  if (!m_silent_mode)
-			  {
-			    std::cerr << "protocol.cpp: send threw " << e.what() << "\n";
-			    std::cerr << "silent mode turned on\n";
-				m_silent_mode = true;
-			  }			  
-		  }
-		  
-	  }
-		  return 0;
+    // TODO: if buf.getLen()+sizeof(Header) > MAX_PACKET_LEN 
+    // split the buffer in multiple packets each smaller than
+    // MAX_PACKET_LEN
+    Header header(buf.getLen());
+
+    if (m_sender)
+      {
+        try {
+          int len = m_sender->send(header.to_raw() + buf);
+          m_silent_mode = false;
+          return len;
+        }
+        catch (std::exception& e)
+          {
+            if (!m_silent_mode)
+              {
+                std::cerr << "protocol.cpp: send threw " << e.what() << "\n";
+                std::cerr << "silent mode turned on\n";
+                m_silent_mode = true;
+              }
+          }  
+      }
+    return 0;
   }
 
   void Protocol::read(const unsigned char*& dataPos,
@@ -141,26 +205,6 @@ namespace net
     bytesLeft -= bytesToRead;
   }
 
-  static bool header_ok(const Header& header)
-  {
-    return (header.version == PROT_VERSION &&
-	    header.packetLen <= MAX_PACKET_LEN &&
-	    header.packetLen == header.dataLen + sizeof(Header) &&
-	    header.checkSum == check_sum(header));
-  }
-
-  // tries to find a valid header somwhere inside data
-  static int try_sync(const unsigned char* data, int data_len)
-  {
-    for (unsigned int i = 0; i < data_len - sizeof(Header); ++i)
-      {
-	const Header* test_header = reinterpret_cast<const Header*>(data+i);
-	if (header_ok(*test_header))
-	  return i;
-      }
-    return -1;
-  }
-
   void Protocol::dataReceived(const utils::Buffer& buf)
   {
     const unsigned char* dataBegin = buf.getPtr();
@@ -170,8 +214,6 @@ namespace net
     const unsigned char* dataPos = dataBegin;
 
     int bytesLeft = len;
-
-    Header* header = 0;
 
     while(dataPos < dataEnd) // noch weitere daten da
       {
@@ -197,23 +239,25 @@ namespace net
 	else // nach header
 	  {
 	    // bufferbegin kann sich bei read aendern!
-	    header = reinterpret_cast<Header *>(bufferBegin);
+	    Header header(bufferBegin);
 
 	    // check if header is valid
-	    if (!header_ok(*header))
+	    if (!header.ok())
 	      {
 		fprintf(stderr, "protocol.cpp: out of sync!\n");
 		fprintf(stderr, "pl = %i, dl = %i\n",
-			header->packetLen,
-			header->dataLen);
+			header.packetLen,
+			header.dataLen);
 		fprintf(stderr, "Trying to resync protocol...\n");
 
-		// Syncing will not work if the header is partly in this data packet
-		// and partly in the next.
-        int syncPoint = try_sync(dataPos, dataEnd - dataPos);
+		// Syncing will not work if the header is partly in this data 
+                // packet and partly in the next.
+                int syncPoint = try_sync(dataPos, dataEnd - dataPos);
 		if (syncPoint == -1)
 		  {
-		    fprintf(stderr, "Skipping %i bytes\n", dataEnd - dataPos);
+		    fprintf(stderr,
+                            "Skipping whole packet (%i bytes)\n",
+                            dataEnd - dataPos);
 		    bufferPos = bufferBegin;
 		    return;
 		  }
@@ -225,12 +269,12 @@ namespace net
 		    bufferPos  = bufferBegin + sizeof(Header);
             
 		    memcpy(bufferBegin, dataPos, sizeof(Header));
-            dataPos += sizeof(Header);
+                    dataPos += sizeof(Header);
 		    
-		    header = reinterpret_cast<Header*>(bufferBegin);
+		    header = Header(bufferBegin);
 		    fprintf(stderr, "pl = %i, dl = %i\n",
-			    header->packetLen,
-			    header->dataLen);
+			    header.packetLen,
+			    header.dataLen);
 
 		    if (bytesLeft == 0)
 		      return;
@@ -238,32 +282,28 @@ namespace net
 	      }
 
 	    if (static_cast<uint_32>(bufferPos-bufferBegin+bytesLeft)
-		< header->packetLen) 
+		< header.packetLen) 
 	      { // Paket nicht ganz da
 		// lesen sovielwie geht
 		read(dataPos,dataEnd,bytesLeft,bytesLeft);
 		assert(dataPos == dataEnd); // alles gelesen
-		// bufferbegin kann sich bei read aendern!
-		header = reinterpret_cast<Header *>(bufferBegin);
 	      }
-	    else // ganzes Paket da
-	      {
+	    else // ganzes Paket da	      
+              {
 		// ganzes paket lesen
-		read(dataPos,dataEnd,header->packetLen-(bufferPos-bufferBegin),
+		read(dataPos, dataEnd,
+                     header.packetLen-(bufferPos-bufferBegin),
 		     bytesLeft);
 	      
-		// bufferbegin header kann sich bei read aendern!
-		header = reinterpret_cast<Header *>(bufferBegin);
-
 		bufferPos = bufferBegin;
 				
 		// Paket parsen
-		if (header->version == PROT_VERSION && m_listener != 0)
+		if (header.version == PROT_VERSION && m_listener != 0)
 		  {
                     try {
                       m_listener->dataReceived(utils::Buffer(bufferBegin
                                                              +sizeof(Header),
-                                                             header->packetLen
+                                                             header.packetLen
                                                              -sizeof(Header)));
                     }
                     catch (std::exception& e)
@@ -272,17 +312,12 @@ namespace net
                                 "protocol.cpp, dataReceived of listener "
                                 "throwed: %s\n", e.what()); 
                       }
-                    catch(...)
-                      {
-                        fprintf(stderr, 
-                                "protocol.cpp, dataReceived of listener "
-                                "throwed: unknown exception\n");
-                      }
 		  }
-		else if (header->version != PROT_VERSION)
+		else if (header.version != PROT_VERSION)
 		  {
-		    fprintf(stderr, "protocol.cpp: ignoring wrong header version %i\n",
-				    header->version);
+		    fprintf(stderr,
+                            "protocol.cpp: ignoring wrong header version %i\n",
+                            header.version);
 		  }
 	      }
 

@@ -20,13 +20,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=lhs const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=rhs const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=x+y } ";
+    return "input_spec { type=typ_StringType id=op const=true strong_dependency=true default=x+y } ";
   break;
  }
  return 0;
@@ -34,7 +34,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=r } ";
   break;
  }
  return 0;
@@ -98,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Calculon] group=[Number] inputs=[3 x{widget_type=[unboundednumber_selector] } y{widget_type=[unboundednumber_selector] } Operation{widget_type=[combo_box] values=[x+y,x-y,x*y,x/y,x%y,x^y,max(x;y),min(x;y),exp(x),ln(x),sin(x),|x|,x,y] hidden=[true] } ] outputs=[1 Result ] type=xpm } ";
+  static const char* INFO = "info { name=[Calculon] group=[Number] inputs=[3 x{widget_type=[unboundednumber_selector] } y{widget_type=[unboundednumber_selector] } Operation{widget_type=[combo_box] values=[x+y,x-y,x*y,x/y,x%y,x^y,max(x;y),min(x;y),exp(x),ln(x),sin(x),|x|,x,y,floor(x),ceil(x),round(x)] hidden=[true] } ] outputs=[1 Result ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(numarithmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

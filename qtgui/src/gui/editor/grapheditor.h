@@ -17,6 +17,8 @@
 #include "guimodel/icontrolconnectview.h"
 #include "guimodel/point.h"
 
+#include "utils/autoptr.h"
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -49,62 +51,17 @@ namespace gui
 		      public IModelStatusReceiver
   {
     Q_OBJECT
-  private:
-    std::map<int,NodeWidget*> nodes;
-    
-    typedef std::map<std::pair<int, int>,ConnectionWidget*> ConnectionMap;
-    ConnectionMap connections;
-
-    std::pair<int,int> selectedConnectionPair;
-    
-    QPainter mainPainter;
-
-    QPoint oldLineFrom;
-    QPoint oldLineTo;
-
-    QPoint clickedPos;
-    std::string currentModuleClassName;
-
-    // moegliche aktionen der popup menues
-    enum {NODEWIDGET_KILL,NODEWIDGET_TIMING,NODEWIDGET_PROPERTIES};
-    enum {PLUGWIDGET_CONNECT_TO_CONTROL,PLUGWIDGET_REMOVE_CONTROL,
-	  PLUGWIDGET_HIDE_INPUT, PLUGWIDGET_DISCONNECT};
-    enum {CONNECTIONWIDGET_KILL};
-
-    // der node bzw der input fuer den ein popup menue geoeffnet wurde:
-    NodeWidget* currentNode;
-    InputPlugWidget* currentInput;  
-
-    GraphModel* m_controller;
-    std::vector<QPixmap> nodePixmaps; 
-
-    const InputPlugWidget* getInputPlugByPos(const QPoint& to) const;
-    const OutputPlugWidget* getOutputPlugByPos(const QPoint& to) const;
-
-    std::map<const InputPlugWidget*,bool> hasControl;
-
-    std::map<const PlugWidget*,int> numConnections;
-
-    const IModuleInfoBaseStation* infos;
-
-    ControlValueDispatcher& dispatcher;
-
-    IModelControlReceiver& model;
-
-    KeyboardManager& m_kbManager;
-
-    IErrorReceiver& m_log;
-    bool m_drawmoduleinfo;
 
   public:
     typedef std::map<std::string, std::string> ParamMap;
     GraphEditor(QWidget* parent, const char* name, WFlags fl,
 		GraphModel& contr,
 		const IModuleInfoBaseStation&,
-		ControlValueDispatcher& dispatcher_,
+		const utils::AutoPtr<ControlValueDispatcher>& dispatcher_,
 		IModelControlReceiver&,
-		KeyboardManager& kbManager,
-		IErrorReceiver& log);
+		KeyboardManager* kbManager,
+		IErrorReceiver& log,
+		const std::string& media_path);
 
     ~GraphEditor();
 	
@@ -190,6 +147,57 @@ void beginLineDraw();
 
 private slots:
 void displayTimings();
+
+  private:
+    std::map<int, NodeWidget*> nodes;
+    
+    typedef std::map<std::pair<int, int>, ConnectionWidget*> ConnectionMap;
+    ConnectionMap connections;
+
+    std::pair<int, int> selectedConnectionPair;
+    
+    QPainter mainPainter;
+
+    QPoint oldLineFrom;
+    QPoint oldLineTo;
+
+    QPoint clickedPos;
+    std::string currentModuleClassName;
+
+    // moegliche aktionen der popup menues
+    enum {NODEWIDGET_KILL,NODEWIDGET_TIMING,NODEWIDGET_PROPERTIES};
+    enum {PLUGWIDGET_CONNECT_TO_CONTROL,PLUGWIDGET_REMOVE_CONTROL,
+	  PLUGWIDGET_HIDE_INPUT, PLUGWIDGET_DISCONNECT};
+    enum {CONNECTIONWIDGET_KILL};
+
+    // der node bzw der input fuer den ein popup menue geoeffnet wurde:
+    NodeWidget* currentNode;
+    InputPlugWidget* currentInput;  
+
+    GraphModel* m_controller;
+    std::vector<QPixmap> nodePixmaps; 
+
+    const InputPlugWidget* getInputPlugByPos(const QPoint& to) const;
+    const OutputPlugWidget* getOutputPlugByPos(const QPoint& to) const;
+
+    std::map<const InputPlugWidget*,bool> hasControl;
+
+    std::map<const PlugWidget*,int> numConnections;
+
+    const IModuleInfoBaseStation* infos;
+
+    utils::AutoPtr<ControlValueDispatcher> dispatcher;
+
+    IModelControlReceiver& model;
+
+    KeyboardManager* m_kbManager;
+
+    IErrorReceiver& m_log;
+    bool m_drawmoduleinfo;
+
+    int m_property_id;
+
+    std::string m_media_path;
   };
 
 } // end of namespace gui

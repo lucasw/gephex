@@ -20,16 +20,16 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=device const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_AudioType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_AudioType id=audio const=true strong_dependency=true  } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=200 } ";
+    return "input_spec { type=typ_NumberType id=latency const=true strong_dependency=true default=200 } ";
   break;
   case 3:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
   break;
  }
  return 0;

@@ -214,7 +214,7 @@ int AlsaOutDriver::write(const unsigned char* data, int num_samples)
   if (err == -EPIPE) // buffer underrun
     {
       // just restart the device
-      printf("restarting device\n");
+      //      printf("restarting device\n");
       int e = snd_pcm_prepare(m_impl->handle);
       if (e < 0)
         {
@@ -227,7 +227,7 @@ int AlsaOutDriver::write(const unsigned char* data, int num_samples)
     }
   else if (err == -EAGAIN) // nothing to read
     {
-      printf("could not write (EAGAIN)\n");
+      //printf("could not write (EAGAIN)\n");
       return 0;
     }
   else if (err < 0)

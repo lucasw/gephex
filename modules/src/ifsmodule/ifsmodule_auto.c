@@ -20,22 +20,22 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=x_size const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=y_size const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=10000 } ";
+    return "input_spec { type=typ_NumberType id=num_dot const=true strong_dependency=true default=10000 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.2 } ";
+    return "input_spec { type=typ_NumberType id=amount const=true strong_dependency=true default=0.2 } ";
   break;
   case 4:
-    return "input_spec { type=typ_IfsType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_IfsType id=ifs const=true strong_dependency=true  } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=5 } ";
+    return "input_spec { type=typ_NumberType id=num_rec const=true strong_dependency=true default=5 } ";
   break;
  }
  return 0;
@@ -43,7 +43,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=out } ";
   break;
  }
  return 0;

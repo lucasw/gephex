@@ -281,6 +281,20 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvdotmodule.lo effectvdotmodule.o : effectvdotmodule.c \
+	effectvdotmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h dot.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h heart.inc
+effectvdotmodule_auto.lo effectvdotmodule_auto.o : \
+	effectvdotmodule_auto.c effectvdotmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvdotmodule.xpm
 
 info-am:
 info: info-am

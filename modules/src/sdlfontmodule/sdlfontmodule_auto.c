@@ -20,34 +20,34 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=horizontal_scroll } ";
+    return "input_spec { type=typ_StringType id=scroll const=true strong_dependency=true default=horizontal_scroll } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType id=effect_time const=true strong_dependency=true  } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=options const=true strong_dependency=true default=0 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=24 } ";
+    return "input_spec { type=typ_NumberType id=point_size const=true strong_dependency=true default=24 } ";
   break;
   case 4:
-    return "input_spec { type=typ_PositionType const=true strong_dependency=true default=[0.0 1.0] } ";
+    return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[0.0 1.0] } ";
   break;
   case 5:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_StringType id=font const=true strong_dependency=true  } ";
   break;
   case 6:
-    return "input_spec { type=typ_RGBType const=true strong_dependency=true default=[0.7 0.3 0.1] } ";
+    return "input_spec { type=typ_RGBType id=color const=true strong_dependency=true default=[0.7 0.3 0.1] } ";
   break;
   case 7:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 8:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=NIX } ";
+    return "input_spec { type=typ_StringType id=text_ const=true strong_dependency=true default=NIX } ";
   break;
   case 9:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=patch const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -55,7 +55,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;

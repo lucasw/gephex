@@ -26,8 +26,6 @@ VideoDevice::VideoDevice(const std::string& deviceFileName, logT log2_)
    m_colour(-1),
    m_contrast(-1),
    m_whiteness(-1)
-
-
 {
  
   // try to open the video device file
@@ -257,8 +255,22 @@ void VideoDevice::grabImage(Frame& frame, bool drop) throw (std::runtime_error)
   videoMMap.height = initFrame.ySize;
   videoMMap.format =  initFrame.type;
   int errorCode=0;
-  if (!drop)
-    {
+
+  //TODO: select, check wether driver supports it!
+  
+  fd_set readfds;
+  struct timeval tv;
+  tv.tv_sec = 0;
+  tv.tv_usec = 0;
+  FD_SET(fd, &readfds);
+  select(fd+1, &readfds, 0, 0, &tv);
+  bool driver_ready = FD_ISSET(fd, &readfds);
+  
+  if (!driver_ready)
+    std::cout << "SELECT -> no data\n";
+
+  if (!drop && driver_ready)
+    {      
       errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
       if(errorCode==-1)
 	{

@@ -106,7 +106,9 @@ VERSION = @VERSION@
 
 includedir = @includedir@/gephex
 
-SUBDIRS = cpuinfo 	libgeo 	libjoystick         joystick_net_midi 	misc # idlc
+@HAVE_JOYSTICK_TRUE@JOYSTICK_DIRS = 	libjoystick         joystick_net_midi
+
+SUBDIRS = cpuinfo 	libgeo 	misc $(JOYSTICK_DIRS) # idlc
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -118,6 +120,7 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
+DIST_SUBDIRS =  cpuinfo libgeo misc libjoystick joystick_net_midi
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
@@ -232,7 +235,7 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-	for subdir in $(SUBDIRS); do \
+	for subdir in $(DIST_SUBDIRS); do \
 	  if test "$$subdir" = .; then :; else \
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \

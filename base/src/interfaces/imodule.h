@@ -216,6 +216,8 @@ public:
 	int getID() const { return m_id; }
 	void setID(int id) { m_id = id; }
 
+	virtual std::string module_class_name() const = 0;
+
 	/**
 	 * Gibt alle Inputs des Moduls zurück.
 	 * @return std::vector mit den Inputs. 
@@ -259,12 +261,6 @@ public:
 	 *         false sonst.
 	 */
     virtual bool isDeterministic() const = 0;
-
-	/**
-	* DEPRECATED!!
-	* @deprecated
-	*/ 
-    virtual void parseInput(const char*,int) = 0;
 
 private:
 	int m_id;

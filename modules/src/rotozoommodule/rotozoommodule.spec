@@ -33,8 +33,8 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = 0
-        higher_bound      = 360
+        lower_bound       = -180
+        higher_bound      = 180
         step_size         = 1
         default           = 0
     }
@@ -76,7 +76,7 @@ inputs
         true_value        = 1
         false_value       = 0
         default           = 1
-        help              = Should backgound be copied or modified?
+        help              = Should background be copied or modified?
     }
 
     routine

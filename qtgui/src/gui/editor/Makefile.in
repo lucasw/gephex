@@ -287,20 +287,22 @@ distdir: $(DISTFILES)
 	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
 controleditor.o: controleditor.cpp controleditor.h \
 	../../guimodel/icontrolview.h ../../guimodel/point.h \
+	../../../../base/src/utils/autoptr.h \
 	../../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../guimodel/controlmodel.h \
 	../../../../base/src/interfaces/imoduledatareceiver.h \
-	../../../../base/src/utils/autoptr.h \
 	../../guimodel/controlvaluedispatcher.h \
 	../../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../../base/src/utils/buffer.h ../typeviewfactory.h \
 	../controlwidget.h
 controleditor_moc.o: controleditor_moc.cpp controleditor.h \
-	../../guimodel/icontrolview.h ../../guimodel/point.h
+	../../guimodel/icontrolview.h ../../guimodel/point.h \
+	../../../../base/src/utils/autoptr.h
 controleditorwindow.o: controleditorwindow.cpp controleditorwindow.h \
-	controleditor.h ../../guimodel/icontrolview.h \
-	../../guimodel/point.h
-editorwidget.o: editorwidget.cpp editorwidget.h grapheditor.h \
+	../../../../base/src/utils/autoptr.h controleditor.h \
+	../../guimodel/icontrolview.h ../../guimodel/point.h
+editorwidget.o: editorwidget.cpp editorwidget.h \
+	../../../../base/src/utils/autoptr.h grapheditor.h \
 	../../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	../../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../guimodel/igraphview.h \
@@ -308,39 +310,41 @@ editorwidget.o: editorwidget.cpp editorwidget.h grapheditor.h \
 	grapheditorwindow.h controleditor.h \
 	../../guimodel/icontrolview.h controleditorwindow.h \
 	../moduleclassview.h ../imoduleinfobasestation.h \
-	../../guimodel/imoduleclassview.h \
-	../../../../base/src/utils/autoptr.h \
-	../../guimodel/graphmodel.h \
+	../../guimodel/imoduleclassview.h ../../guimodel/graphmodel.h \
 	../../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
 	../../../../base/src/interfaces/imoduledatareceiver.h \
 	../../guimodel/controlmodel.h \
 	../../../../base/src/interfaces/imodulestatisticssender.h \
 	../../../../base/src/interfaces/imodelstatussender.h
-editorwidget_moc.o: editorwidget_moc.cpp editorwidget.h
+editorwidget_moc.o: editorwidget_moc.cpp editorwidget.h \
+	../../../../base/src/utils/autoptr.h
 grapheditor.o: grapheditor.cpp grapheditor.h \
 	../../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	../../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../guimodel/igraphview.h \
 	../../guimodel/icontrolconnectview.h ../../guimodel/point.h \
+	../../../../base/src/utils/autoptr.h \
 	../../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../../base/src/interfaces/ierrorreceiver.h \
 	../../guimodel/graphmodel.h \
 	../../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
 	../../../../base/src/interfaces/imoduledatareceiver.h \
-	../imoduleinfobasestation.h ../nodewidget.h \
-	../../../../base/src/utils/autoptr.h ../inputplugwidget.h \
-	../plugwidget.h ../outputplugwidget.h ../modulebutton.h \
-	../connectionwidget.h ../base/keyboardmanager.h ../node.xpm \
-	../inplugfree.xpm ../inplugbusy.xpm ../outplugfree.xpm \
-	../outplugbusy.xpm ../../../../base/src/utils/buffer.h
+	../../guimodel/controlvaluedispatcher.h \
+	../../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../../base/src/utils/buffer.h ../imoduleinfobasestation.h \
+	../nodewidget.h ../inputplugwidget.h ../plugwidget.h \
+	../outputplugwidget.h ../modulebutton.h ../connectionwidget.h \
+	../base/keyboardmanager.h ../node.xpm ../inplugfree.xpm \
+	../inplugbusy.xpm ../outplugfree.xpm ../outplugbusy.xpm
 grapheditor_moc.o: grapheditor_moc.cpp grapheditor.h \
 	../../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	../../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../guimodel/igraphview.h \
-	../../guimodel/icontrolconnectview.h ../../guimodel/point.h
+	../../guimodel/icontrolconnectview.h ../../guimodel/point.h \
+	../../../../base/src/utils/autoptr.h
 grapheditorwindow.o: grapheditorwindow.cpp grapheditorwindow.h \
-	grapheditor.h \
+	../../../../base/src/utils/autoptr.h grapheditor.h \
 	../../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	../../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../guimodel/igraphview.h \

@@ -10,6 +10,8 @@
 #include "guimodel/icontrolview.h"
 #include "guimodel/point.h"
 
+#include "utils/autoptr.h"
+
 namespace utils {
   class Buffer;
 }
@@ -36,7 +38,8 @@ namespace gui
 
     ControlEditor(QWidget* parent, const char* name, WFlags fl,
 		  ControlModel& cModel, IModelControlReceiver& model,
-		  ControlValueDispatcher& disp);
+		  const utils::AutoPtr<ControlValueDispatcher>& disp,
+		  const std::string& media_path);
 
     virtual ~ControlEditor();
 
@@ -90,7 +93,7 @@ void widgetTypeSelected(int);
     std::map<int,std::string> id2Identifier;
     ControlWidget* currentControl;
 
-    ControlValueDispatcher* m_controlValueDispatcher;
+	utils::AutoPtr<ControlValueDispatcher> m_controlValueDispatcher;
   };
 
 } // end of namespace gui

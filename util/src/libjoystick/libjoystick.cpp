@@ -17,7 +17,7 @@
 #include "win32joystickdriver.h"
 #endif
 
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) && defined(HAVE_LINUX_JOYSTICK_H)
 #include "linuxjoystickdriver.h"
 #endif
 
@@ -36,13 +36,13 @@ JoystickDriver::JoystickDriver(const std::string& driver_name)
     }
   else
 #endif
-#if defined(OS_LINUX)
+    /*#if defined(OS_LINUX) && defined(HAVE_LINUX_JOYSTICK_H)
   if (driver_name == "default")
     {
       m_impl = new LinuxJoystickDriverImpl();
     }
-  else
-#endif
+    else
+    #endif*/
 #if defined(HAVE_SDL)
     if (driver_name == "sdl" || driver_name == "default")
       {

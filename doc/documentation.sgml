@@ -74,6 +74,7 @@
 <copyright><year>2002</year>
     <year>2003</year>
 <holder>Martin Bayer</holder>
+<holder>Georg Seidel</holder>
 </copyright>
 
   <abstract>
@@ -1146,19 +1147,41 @@ To enable additional functionality the shared library must export some of the th
     <sect2>
       <title>Pluc the skeleton generator</title>
 
-<para>The c-api design allows module developers to write their plugins in almost any programming language. This is archieved by a very lowlevel interface between host and plugin.</para>
+<para>
+The c-api design allows module developers to write their plugins in almost
+any programming language.
+This is achieved by a very lowlevel interface between host and plugin.
+</para>
 
-<para>Many module functions a very simple and have just some lines of code. We want to implement a module that outputs the maximum of its both number inputs. In c++ this would be a one liner:</para>
+<para>
+Many module functions are very simple and have just some lines of code.
+We want to implement a module that outputs the maximum of its both number
+inputs. In c++ this would be a one-liner:
+</para>
 <programlisting>
 double output1,input1,input2;
 output1 = std::max(input1,input2)
 </programlisting>
-<para>But the effort needed to export this piece of code via the c-api interface is huge. This is the reason why the pluc.py stub generator exists.</para>
+<para>
+But the effort needed to export this piece of code via the c-api interface
+is huge. This is the reason why the pluc.py stub generator exists.
+</para>
 
-<para>The idea of pluc is that many properties of a module are described in an abstract fashon in a spec file. Pluc can generate from this file:</para>
-<para>The files needed for the buildsystem like automake and the visual studio are generated.</para>
-<para>convinience layer to abstract from the c-api</para>
-<para>A minimum skeleton code for the module implementation. This can be used as a basis for implemention the function.</para>
+<para>
+The idea of pluc is that many properties of a module are described in an 
+abstract fashion in a spec file. Pluc can generate from this file:
+/para>
+<para>
+The files needed for the buildsystem like automake and the visual studio 
+are generated.
+</para>
+<para>
+convinience layer to abstract from the c-api
+</para>
+<para>
+A minimum skeleton code for the module implementation.
+This can be used as a basis for implemention the function.
+</para>
 
 <para>sample invocations of pluc</para>
 <screen>
@@ -1167,10 +1190,63 @@ pluc.py am testmodule.spec
 pluc.py skel testmodule.spec 
 </screen>
 
-<sect3>
-  <title>Syntax and semantic of the spec file</title>
+<sect3> <title>Syntax and semantics of the spec file</title>
 
-<para></para>
+<para>
+A spec file consists of three parts. Each part is an identifier
+followed by a block enclosed in curly braces.
+The first part contains global settings that determine the behaviour of the
+whole module.
+The second part contains settings for all inputs of the module.
+The third part contains settings for all outputs of the module.
+</para>
+
+<sect4> <title>Global settings</title>
+
+<para>
+The global settings begin with a unique name for the module, by
+convention prefixed with "mod_". To stick with the example from above
+we choose "mod_max".
+</para>
+
+<table><title>Mandatory settings</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>name</entry><entry>STRING</entry></row>
+<row><entry>deterministic</entry><entry>BOOL</entry></row>
+<row><entry>group</entry><entry>STRING</entry></row>
+<row><entry>xpm</entry><entry>FILENAME</entry></row>
+<row><entry>author</entry><entry>STRING</entry></row>
+<row><entry>version</entry><entry>STRING</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+<literal>name</literal> is the name that is visible to the user.
+<literal>deterministic</literal> specifies if the module produces the
+same output whenever the input is the same. This is for example not true
+for a module that produces random numbers.
+<literal>group</literal> allows to group several effects.
+<literal>xpm</literal> is the name of a xpm file that is used as an icon
+for this module.
+<para>
+The following settings are optional:
+</para>
+<itemizedlist>
+<listitem><para>enablePatching: BOOL</para></listitem>
+</itemizedlist>
+</sect4>
+
+<sect4> <title>Input settings</title>
+<para>
+</para>
+</sect4>
+
+<sect4> <title>Output settings</title>
+<para>
+</para>
+</sect4>
 
 </sect3>
 
@@ -1192,18 +1268,5 @@ pluc.py skel testmodule.spec
 
   </sect1>
 </chapter>
-
-<chapter> <title>Old text describing GePhex</title>
-<para>GePhex is a modular video effect framework. It is written in C++. Supported operating systems are Win32 and Linux, but ports to the BSD operating systems are planned. We use a client server architecture to separate the graphical user interface (client) from the core application (server). Client and server communicate via TCP. The GUI is based on QT. The core uses an OpenGl plugin for video output. Different plugins (as a GDI output under windows or an SDL output under Linux) exist, too. Even more outputs (for example aalib for video or an output to control lighting hardware) are planned.</para>
-
-<para>A new video effect is created by editing a data flow graph. The graph nodes consist of effect modules and interactive control widgets. The effect modules are plugins realized as shared libraries. There are simple effects like plasma, invert, video sources and picture sources. The control widgets are used to change parameters of these effects. These nodes are connected via strong typed data "pipes". The data types that can be used are plugins as well.</para>
-
-<para>Audio input and processing can also be realized with plugins. Possible usage is a beat detector for music. We plan to support a wide range of input devices like joysticks, midi devices.</para>
-
-<para>When finished, we intend GePhex to be highly interactive. The user we have in mind is some kind of a video jockey.<para>
-</para>
-</chapter>
-
-
 </book>
 

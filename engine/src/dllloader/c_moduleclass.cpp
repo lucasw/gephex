@@ -18,16 +18,20 @@
 }*/
 
 CModuleClass::CModuleClass(const CModuleFunctionTable& ftab_,
-			   const CModuleAttributes& attr_)
+			   const CModuleAttributes& attr_,
+			   const std::string& name)
   : functionTable(new CModuleFunctionTable(ftab_)), 
   attributes(new CModuleAttributes(attr_)), 
-  defaultInputValues(attr_.inputs.size())
+  defaultInputValues(attr_.inputs.size()),
+  m_name(name)
 {
 }
 
 IModuleClass* CModuleClass::clone() const
 {
-  CModuleClass* newClass = new CModuleClass(*this->functionTable,*this->attributes);
+  CModuleClass* newClass = new CModuleClass(*this->functionTable,
+	  *this->attributes,
+	  this->m_name);
   newClass->defaultInputValues = defaultInputValues;
   return newClass;
 }
@@ -56,7 +60,7 @@ IModule* CModuleClass::buildInstance(const ITypeFactory& tFactory) const
 #if (ENGINE_VERBOSITY > 0)
       std::cout << "Creating default values for inputs" << std::endl;
 #endif
-      for (int i = 0; i < defaultInputValues.size(); ++i)
+      for (unsigned int i = 0; i < defaultInputValues.size(); ++i)
 	{
 
 	  ITypePtr tmp(tFactory.buildNew(attributes->inputs[i]));
@@ -67,13 +71,14 @@ IModule* CModuleClass::buildInstance(const ITypeFactory& tFactory) const
 	      {
 		//throw std::runtime_error("Type conversion of default"
 		//			 "inputs not implemented yet");
-			tmp->convert(*tmp, *attr);
+                
+                // can throw
+		tmp->convert(*tmp, *attr);
 	      }
-
-	    defaultInputValues[i] = tmp;	    
+	    defaultInputValues[i] = tmp;
 	}
     }
 
   return new CModule(instance,*functionTable,*attributes,
-		     tFactory,defaultInputValues);
+		     tFactory,defaultInputValues, m_name);
 }

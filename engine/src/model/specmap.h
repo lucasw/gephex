@@ -10,7 +10,7 @@ class IModuleClassSpec;
 
 namespace model
 {
-	typedef std::map<std::string, utils::AutoPtr<IModuleClassSpec> > SpecMap;
+  typedef std::map<std::string, utils::AutoPtr<IModuleClassSpec> > SpecMap;
 }
 
 #endif

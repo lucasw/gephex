@@ -81,7 +81,7 @@ inputs
        hidden             = true
        default            = 640
        widget_type        = number_selector
-       lower_bound        = 0
+       lower_bound        = 1
        higher_bound       = 1024
        step_size          = 1
        display_format     = fixed
@@ -98,7 +98,7 @@ inputs
        hidden             = true
        default            = 480
        widget_type        = number_selector
-       lower_bound        = 0
+       lower_bound        = 1
        higher_bound       = 1024
        step_size          = 1
        display_format     = fixed

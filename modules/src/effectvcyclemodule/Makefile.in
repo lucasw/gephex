@@ -281,6 +281,18 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvcyclemodule.lo effectvcyclemodule.o : effectvcyclemodule.c \
+	effectvcyclemodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../libeffectv/libeffectv.h cycle.c ../libeffectv/EffecTV.h \
+	../libeffectv/utils.h
+effectvcyclemodule_auto.lo effectvcyclemodule_auto.o : \
+	effectvcyclemodule_auto.c effectvcyclemodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../engine/src/engine/dllutils.h effectvcyclemodule.xpm
 
 info-am:
 info: info-am

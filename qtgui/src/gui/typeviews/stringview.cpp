@@ -1,14 +1,13 @@
 #include "stringview.h"
 
+#include <iostream>
 #include <sstream>
+
+#include <qvalidator.h>
+#include <qlineedit.h>
 
 #include <utils/structreader.h>
 #include <utils/buffer.h>
-
-#include <qvalidator.h>
-
-#include <qlineedit.h>
-
 
 namespace gui
 {
@@ -31,7 +30,24 @@ namespace gui
 		
     virtual void valueChange(const utils::Buffer& newValue)
     {
-      std::string doof = reinterpret_cast<const char*>(newValue.getPtr());
+      int len = newValue.getLen();
+      const char* raw;
+      if (len <= 0)
+        {
+          raw = "";
+          len = 1;
+        }
+      else
+        {
+          raw = reinterpret_cast<const char*>(newValue.getPtr());
+        }
+
+      if (raw[len-1] != 0)
+        {
+          std::cout << "ignoring string with missing termination\n";
+          return;
+        }
+      std::string doof( raw, len );
 
       m_lineEdit->setText(doof.c_str());
     }

@@ -6,6 +6,7 @@ mod_effectvagingmodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvagingmodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }
@@ -25,7 +26,7 @@ outputs
 {
     r
     {
-		name = Image
-		type = typ_FrameBufferType
+        name = Image
+        type = typ_FrameBufferType
     }
 }

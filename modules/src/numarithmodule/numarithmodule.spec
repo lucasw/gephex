@@ -40,7 +40,7 @@ inputs
     strong_dependency = true
     hidden            = true
     widget_type       = combo_box
-    values            = x+y,x-y,x*y,x/y,x%y,x^y,max(x;y),min(x;y),exp(x),ln(x),sin(x),|x|,x,y
+    values            = x+y,x-y,x*y,x/y,x%y,x^y,max(x;y),min(x;y),exp(x),ln(x),sin(x),|x|,x,y,floor(x),ceil(x),round(x)
     default           = x+y
     }
 }

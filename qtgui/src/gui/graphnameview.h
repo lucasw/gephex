@@ -86,15 +86,15 @@ namespace gui
 
   private:
 
-	TreeViewItem* getFolder(const std::string& path);
+    TreeViewItem* getFolder(const std::string& path);
 
     typedef utils::AutoPtr<GraphItem> GraphItemPtr;
-	typedef utils::AutoPtr<FolderItem> FolderItemPtr;
+    typedef utils::AutoPtr<FolderItem> FolderItemPtr;
     typedef utils::AutoPtr<SnapItem> SnapItemPtr;
 
     typedef std::map<std::string,GraphItemPtr> GraphMap;
-	typedef std::map<std::string,FolderItemPtr> FolderMap;
-	typedef std::map<std::string,std::string> FolderNameMap;
+    typedef std::map<std::string,FolderItemPtr> FolderMap;
+    typedef std::map<std::string,std::string> FolderNameMap;
     typedef std::map<std::pair<std::string,std::string>,SnapItemPtr> SnapMap;
 
     TreeView* m_treeView;

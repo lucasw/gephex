@@ -15,7 +15,8 @@ libgphxnetwork_a_SOURCES = \
 		fdsocket.cpp \
 		socketadaptor.cpp \
 		domainserversocket.cpp \
-		domainclientsocket.cpp
+		domainclientsocket.cpp \
+		convertbin.cpp
 
 noinst_HEADERS = \
 		protocol.h \
@@ -44,7 +45,8 @@ noinst_HEADERS = \
 		tcpsockettest.h \
 		tagdispatchertest.h \
 		taggertest.h \
-		domainsockettest.h
+		domainsockettest.h \
+		convertbin.h
 
 INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
 

@@ -20,13 +20,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=channel const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=button_group const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_MidiType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_MidiType id=midi const=true strong_dependency=true  } ";
   break;
  }
  return 0;
@@ -34,16 +34,16 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_1 } ";
   break;
   case 1:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_2 } ";
   break;
   case 2:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_3 } ";
   break;
   case 3:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_4 } ";
   break;
  }
  return 0;

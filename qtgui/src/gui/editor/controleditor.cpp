@@ -21,11 +21,12 @@ namespace gui
   ControlEditor::ControlEditor(QWidget* parent, const char* name, WFlags fl,
 			       ControlModel& cModel, 
 			       IModelControlReceiver& model,
-			       ControlValueDispatcher& disp)
+				   const utils::AutoPtr<ControlValueDispatcher>& disp,
+			       const std::string& media_path)
     : QWidget(parent,name,fl),  m_controller(&cModel), 
-    m_model(&model), m_factory(new TypeViewFactory()),
+    m_model(&model), m_factory(new TypeViewFactory(media_path)),
     currentNodeID(-1), currentInputIndex(-1), currentWidgetType(""),
-    currentControl(0), m_controlValueDispatcher(&disp)
+    currentControl(0), m_controlValueDispatcher(disp)
   {
   }
 

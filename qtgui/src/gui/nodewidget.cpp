@@ -185,10 +185,11 @@ namespace gui
   NodeWidget::NodeWidget(QWidget* parent,const char* name,
 			 WFlags fl,int _id,const ModuleInfo& _info,
 			 const std::vector<QPixmap>& picz,
-			 ControlValueDispatcher& dispatcher, 
+			 const utils::AutoPtr<ControlValueDispatcher>& dispatcher, 
 			 IModelControlReceiver& mcr,
-			 KeyboardManager& kbManager,
-			 IErrorReceiver& log)
+			 KeyboardManager* kbManager,
+			 IErrorReceiver& log,
+			 const std::string& media_path)
     : QWidget(parent,name,fl), id(_id), pictures(picz), dragMode(false),
       m_time(0), m_kbManager(kbManager), m_log(log)
   {
@@ -211,11 +212,14 @@ namespace gui
       {
 	utils::StructReader sr(_info.getInputs()[i].params);
 
-	std::string keys = sr.getStringValue("keys", "");
-	std::string toggle_keys = sr.getStringValue("toggle_keys", "");
+        if (m_kbManager)
+          {
+            std::string keys = sr.getStringValue("keys", "");
+            std::string toggle_keys = sr.getStringValue("toggle_keys", "");
 
-	insertKeyListeners(m_keyListeners, keys, toggle_keys, m_kbManager,
-			   id, i, mcr, m_log);
+            insertKeyListeners(m_keyListeners, keys, toggle_keys, *m_kbManager,
+                               id, i, mcr, m_log);
+          }
 
 	bool inPropertyDialog = sr.getBoolValue("hidden", false);
 		
@@ -300,12 +304,14 @@ namespace gui
       utils::AutoPtr<IPropertyDescription>(new NodeProperty(_info,
 							    inputs,
 							    dispatcher,
-							    mcr));
+							    mcr,
+							    media_path));
   }
 
   NodeWidget::~NodeWidget()     
   {
-    removeKeyListeners(m_keyListeners, m_kbManager);
+    if (m_kbManager)
+      removeKeyListeners(m_keyListeners, *m_kbManager);
     delete m_icon;
   }
 

@@ -37,13 +37,13 @@ namespace utils {
 #if defined(OS_POSIX)
 #if defined(OS_CYGWIN)
     timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = millis*1000;
+    tv.tv_sec = millis/1000;
+    tv.tv_usec = (millis%1000)*1000;
     select(0,0,0,0,&tv);
 #else
     timespec tspec;
-    tspec.tv_sec = 0;
-    tspec.tv_nsec = millis*1000*1000;
+    tspec.tv_sec = millis / 1000;
+    tspec.tv_nsec = (millis%1000) *1000*1000;
     nanosleep(&tspec,0);
 #endif
 #elif defined(OS_WIN32)

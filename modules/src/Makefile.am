@@ -4,20 +4,19 @@ if EFFECTV
 EFFECTV_DIRS = \
 	libeffectv \
 	effecttvedgemodule \
-	effectvfiremodule \
-	effectvlensmodule \
-	effectvpuzzlemodule \
-	effectvlifemodule \
 	effectvagingmodule \
 	effectvburnmodule \
-	effectvdotmodule \
-	effectvsparkmodule \
 	effectvcyclemodule \
-	effectvquarkmodule
+	effectvdotmodule \
+	effectvfiremodule \
+	effectvlensmodule \
+	effectvlifemodule \
+	effectvpuzzlemodule \
+	effectvquarkmodule \
+	effectvsparkmodule 
 endif
 
 if HAVE_SDL
-SDL_DIRS = joystickmodule
 
 if HAVE_SDL_TTF
 SDL_TTF_DIRS = sdlfontmodule
@@ -25,19 +24,23 @@ endif
 
 endif
 
+if HAVE_JOYSTICK
+JOYSTICK_DIRS = joystickmodule
+endif
+
 if HAVE_PNG
 PNG_DIRS = imagewritermodule
 endif
 
 if HAVE_ASOUNDLIB_OR_OSS
-AUDIO_DIRS = audiooutmodule audioinmodule
+AUDIO_DIRS = audioinmodule audiooutmodule
 endif
 
 if HAVE_OSS
 OSS_DIRS = midiinmodule
 endif
 
-if WITH_V4L
+if HAVE_V4L
 V4L_DIRS = v4lmodule
 endif
 
@@ -45,52 +48,52 @@ endif
 SUBDIRS = libgrid \
 	libmidi \
 	libscale \
-	numarithmodule \
-        audioaddmodule \
-        audiospecmodule \
-        audioenergymodule \
-        audiowavegenmodule \
-        audiovismodule \
-        audiobdmodule \
+	audioaddmodule \
+	audiobdmodule \
+	audioenergymodule \
+	audiospecmodule \
 	audiosynthmodule \
+	audiovismodule \
+	audiowavegenmodule \
+	blurmodule \
 	bwmodule \
-	resultmodule \
+	color2number \
+	diffmodule \
+	doepfermodule \
+	flashmodule \
+	flipflopmodule \
+	fpsmodule \
+	frbinmodule \
+	frboutmodule \
+	functions \
+	gradnormmodule \
+	ifsgenmodule \
+	ifsmodule \
+	ifsxfadermodule \
+	imagebuffermodule \
+	imgarithmodule \
+	isingnoizemodule \
+	netcontrolmodule \
+	numarithmodule \
+	number2color \
 	numbermodule \
 	numenvmodule \
 	numlfomodule \
-	xfademodule \
-	plasma \
-	rotozoommodule \
-	imagebuffermodule \
-	blurmodule \
-	tunnelmodule \
+	numposmodule \
+	overlaymodule \
+	pixelizemodule \
 	planemodule \
+	plasma \
+	posnummodule \
+	rangeconvertmodule \
+	resultmodule \
+	rotozoommodule \
 	signalgenmodules \
 	staticcolormodule \
-	functions \
-	numposmodule \
-	posnummodule \
-	flashmodule \
-        imgarithmodule \
-	ifsgenmodule \
-	ifsxfadermodule \
-	netcontrolmodule \
-	doepfermodule \
-	fpsmodule \
-	ifsmodule \
-	isingnoizemodule \
-	flipflopmodule \
-	diffmodule \
-	number2color \
-	overlaymodule \
-	color2number \
-	gradnormmodule \
-	twolayermodule \
-	rangeconvertmodule \
-        frboutmodule \
-	frbinmodule \
 	stringtokenizermodule \
-        pixelizemodule $(EFFECTV_DIRS) $(SDL_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
+	tunnelmodule \
+	twolayermodule \
+	xfademodule $(EFFECTV_DIRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
 
 
 

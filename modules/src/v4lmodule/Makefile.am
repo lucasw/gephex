@@ -17,6 +17,7 @@ v4lmodule_la_SOURCES = 	v4lmodule_auto.c \
 			colorconv.h \
 			colorconv.cpp \
 			v4lmodule.h \
+			videodev.h \
 			v4lmodule.spec \
 			v4lmodule.xpm
 

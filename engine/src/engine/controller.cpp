@@ -66,20 +66,15 @@ namespace engine
                    net::Protocol& protocol,
                    PortDispatcher& portDispatcher, int port);
 
-
-
-
 #if defined(OS_WIN32)
-  const std::string MODULE_ENDING = ".dll";
-  const std::string TYPE_ENDING = ".dll";
+  static const char* MODULE_ENDING = ".dll";
+  static const char* TYPE_ENDING   = ".dll";
 #elif defined(OS_POSIX)
-  const std::string MODULE_ENDING = ".so";
-  const std::string TYPE_ENDING = ".so";
+  static const char* MODULE_ENDING = ".so";
+  static const char* TYPE_ENDING   = ".so";
 #else
 #error "unknown OS"
 #endif
-
-
 
   std::vector<std::string> getFilesInDir(const std::string& dirName,
 					 const std::string& ending)
@@ -118,7 +113,7 @@ namespace engine
   Controller::Controller(const EngineConfig& config_)
     : config(config_),
       m_finished(false),
-      m_port(config.port),      
+      m_port(config.port),
       tagger1(modelControlSender),      
       tagger2(rendererControlSender),        
       tagger3(engineControlSender),
@@ -152,7 +147,7 @@ namespace engine
 
       logger(new engine::NetLogger(errorReceiver)),
 
-      pModel(config.graphDir, logger),
+      pModel(config.graph_path, logger),
       pRenderer(logger),
       pDllLoader(logger),
       first_time(true)
@@ -255,33 +250,34 @@ namespace engine
     scheduler.addTask(pRenderer,rendererInterval);
 
 	
-    // load stuff
-    std::cout << "Loading stuff...\n";
-    std::vector<std::string> modules = getFilesInDir(config.moduleDirs,
+    // load stuff    
+    std::vector<std::string> modules = getFilesInDir(config.module_path,
                                                      MODULE_ENDING);
 	
-    std::vector<std::string> types = getFilesInDir(config.typeDirs,
+    std::vector<std::string> types = getFilesInDir(config.type_path,
                                                    TYPE_ENDING);
 	
-    std::cout << "Reading dlls...\n";
+    std::cout << "Reading dlls...";
+    std::cout.flush();
     pDllLoader.readDlls(modules, types);
-    std::cout << "...done\n";
+    std::cout << "   done\n";
 	
-    std::cout << "Reading graphs...\n";
+    std::cout << "Reading graphs...";
+    std::cout.flush();
     pModel.updateFileSystem();
-    std::cout << "...done\n";
+    std::cout << "   done\n";
 	
     try 
       {
-        pModel.newGraphWithID("default","_default_");
-        pModel.newControllValueSetWithID("_default_", "default", "_default_");
+        pModel.newGraphWithID("default", "_default_", false);
+        pModel.newControlValueSetWithID("_default_", "default", "_default_");
         pModel.changeRenderedGraph("_default_", "_default_");
         pModel.changeEditGraph("_default_", "_default_");
       }
     catch (std::exception& e)
       {
         logger->error("Could not create default graph", e.what());
-      }					 
+      }
   }
 	
   Controller::~Controller()
@@ -432,9 +428,10 @@ namespace engine
           int max_size = 20000;
           int bytes_left = m_buffered_sender->len();
           int len = min_(bytes_left, max_size);
-
-          m_socket->send(m_buffered_sender->consume(len));
-        }
+          
+          if (len > 0)
+            m_socket->send(m_buffered_sender->consume(len));
+	  }
 
       // now receive data
       utils::Buffer b;

@@ -110,6 +110,8 @@ PLUC = python @top_srcdir@/modules/pluc.py
 
 lib_LTLIBRARIES = frboutmodule.la
 
+@HAVE_X11_TRUE@X11_sOOURCES = 	ximageoutput.c 	xshmoutput.c 	ximageoutput.h 	xshmoutput.h 	x11stuff.h 	x11stuff.c
+
 @HAVE_AALIB_TRUE@AALIB_sOURCES = 	aaoutput.c 	aaoutput.h
 @HAVE_AALIB_TRUE@AALIB_lDFLAGS = -laa
 
@@ -117,9 +119,9 @@ lib_LTLIBRARIES = frboutmodule.la
 
 # hier muss mal jemand gucken wegen HAVE_GL oder sowatt...:/
 @HAVE_GLX_TRUE@GLLIBS = -lGL
-@HAVE_GLX_TRUE@GL_sOURCES =         gloutput.h 	gloutput.c 	glutil.h 	glxutil.c
+@HAVE_GLX_TRUE@GL_sOURCES =         gloutput.h 	gloutput.cpp 	glutil.h 	glxutil.c
 
-frboutmodule_la_SOURCES =          frboutmodule_auto.c         frboutmodule.c         frboutmodule.h         frboutmodule.spec         frboutmodule.xpm         outputdriver.h 	ximageoutput.h 	ximageoutput.c 	adjustutil.h 	adjustutil.c 	xshmoutput.h 	xshmoutput.c $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
+frboutmodule_la_SOURCES =          frboutmodule_auto.c         frboutmodule.c         frboutmodule.h         frboutmodule.spec         frboutmodule.xpm         outputdriver.h $(X11_sOOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
 
 
 frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale
@@ -127,7 +129,7 @@ frboutmodule_la_LIBADD = -lscale -lX11 -lXext $(AALIB_lDFLAGS) @SDL_LD_FLAGS@ $(
 
 frboutmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
 
-INCLUDES = -I@srcdir@/../../../engine/src/engine            -I@srcdir@/../../../util/include 		   -I@srcdir@/../libscale            -I@srcdir@/../../../types/src/stringtype            -I@srcdir@/../../../types/src/framebuffertype            -I@srcdir@/../../../types/src/numbertype @SDL_CFLAGS@
+INCLUDES = -I@srcdir@/../../../engine/src/engine 	   -I@srcdir@/../../../util/include 	   -I@srcdir@/../libscale            -I@srcdir@/../../../types/src/stringtype            -I@srcdir@/../../../types/src/framebuffertype            -I@srcdir@/../../../types/src/numbertype @SDL_CFLAGS@
 
 
 DISTCLEANFILES = frboutmodule.h frboutmodule_auto.c
@@ -145,65 +147,115 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@adjustutil.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@adjustutil.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo sdloutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@adjustutil.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@adjustutil.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@sdloutput.lo
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@adjustutil.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@sdloutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@adjustutil.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo gloutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@adjustutil.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo \
-@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@sdloutput.lo
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@adjustutil.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
-@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@x11stuff.lo
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@sdloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@sdloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@sdloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@x11stuff.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@sdloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_TRUE@@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo \
+@HAVE_X11_FALSE@@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@glxutil.lo
+CXXFLAGS = @CXXFLAGS@
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -221,7 +273,7 @@ OBJECTS = $(frboutmodule_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .obj .s
+.SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps modules/src/frboutmodule/Makefile
 
@@ -301,6 +353,12 @@ maintainer-clean-libtool:
 
 frboutmodule.la: $(frboutmodule_la_OBJECTS) $(frboutmodule_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(frboutmodule_la_LDFLAGS) $(frboutmodule_la_OBJECTS) $(frboutmodule_la_LIBADD) $(LIBS)
+.cpp.o:
+	$(CXXCOMPILE) -c $<
+.cpp.obj:
+	$(CXXCOMPILE) -c `cygpath -w $<`
+.cpp.lo:
+	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -348,15 +406,13 @@ distdir: $(DISTFILES)
 	done
 aaoutput.lo aaoutput.o : aaoutput.c aaoutput.h outputdriver.h \
 	../../../util/include/basic_types.h
-adjustutil.lo adjustutil.o : adjustutil.c adjustutil.h \
-	../../../util/include/basic_types.h
 frboutmodule.lo frboutmodule.o : frboutmodule.c frboutmodule.h \
 	../../../engine/src/engine/dllmodule.h \
 	../../../types/src/stringtype/stringtype.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
 	../../../util/include/basic_types.h ../../../config.h \
 	../../../types/src/numbertype/numbertype.h outputdriver.h \
-	ximageoutput.h xshmoutput.h aaoutput.h sdloutput.h gloutput.h
+	ximageoutput.h xshmoutput.h sdloutput.h gloutput.h aaoutput.h
 frboutmodule_auto.lo frboutmodule_auto.o : frboutmodule_auto.c \
 	frboutmodule.h ../../../engine/src/engine/dllmodule.h \
 	../../../types/src/stringtype/stringtype.h \
@@ -364,9 +420,10 @@ frboutmodule_auto.lo frboutmodule_auto.o : frboutmodule_auto.c \
 	../../../util/include/basic_types.h ../../../config.h \
 	../../../types/src/numbertype/numbertype.h \
 	../../../engine/src/engine/dllutils.h frboutmodule.xpm
-gloutput.lo gloutput.o : gloutput.c gloutput.h ../../../config.h \
-	glutil.h ../../../types/src/framebuffertype/framebuffertype.h \
-	../../../util/include/basic_types.h outputdriver.h
+gloutput.lo gloutput.o : gloutput.cpp gloutput.h glutil.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	outputdriver.h
 glxutil.lo glxutil.o : glxutil.c glutil.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
 	../../../util/include/basic_types.h ../../../config.h
@@ -374,11 +431,13 @@ sdloutput.lo sdloutput.o : sdloutput.c sdloutput.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
 	../../../util/include/basic_types.h ../../../config.h \
 	outputdriver.h
+x11stuff.lo x11stuff.o : x11stuff.c x11stuff.h
 ximageoutput.lo ximageoutput.o : ximageoutput.c ximageoutput.h \
-	outputdriver.h ../libscale/libscale.h \
+	outputdriver.h x11stuff.h ../libscale/libscale.h \
 	../../../util/include/basic_types.h
 xshmoutput.lo xshmoutput.o : xshmoutput.c xshmoutput.h outputdriver.h \
-	../libscale/libscale.h ../../../util/include/basic_types.h
+	x11stuff.h ../libscale/libscale.h \
+	../../../util/include/basic_types.h
 
 info-am:
 info: info-am

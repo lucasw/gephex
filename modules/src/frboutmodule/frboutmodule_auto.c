@@ -20,34 +20,34 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=in const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=2 } ";
+    return "input_spec { type=typ_NumberType id=options const=true strong_dependency=true default=2 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=xsize const=true strong_dependency=true default=0 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=480 } ";
+    return "input_spec { type=typ_NumberType id=ysize const=true strong_dependency=true default=480 } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=brightness const=true strong_dependency=true default=0.5 } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=contrast const=true strong_dependency=true default=1 } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=gamma const=true strong_dependency=true default=1 } ";
   break;
   case 7:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=monitor const=true strong_dependency=true default=0 } ";
   break;
   case 8:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
   break;
   case 9:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=:0.0 } ";
+    return "input_spec { type=typ_StringType id=server const=true strong_dependency=true default=default } ";
   break;
  }
  return 0;
@@ -147,7 +147,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Frame,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[Bestimmt auf welchem Monitor der Output angezeigt wird] } OutputDriver{widget_type=[combo_box] values=[default,GDI,XImage,XShm,SDL,GL,aalib] hidden=[true] } Xserver{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is SERVER_HOSTNAME:XSERVER:SCREEN] } ] outputs=[0] type=xpm } ";
+  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Frame,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[Bestimmt auf welchem Monitor der Output angezeigt wird] } OutputDriver{widget_type=[combo_box] values=[default,GDI,XImage,XShm,SDL,GL,aalib] hidden=[true] } Display{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is default or SERVER_HOSTNAME:XSERVER:SCREEN] } ] outputs=[0] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(frboutmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

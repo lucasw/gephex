@@ -48,7 +48,7 @@ namespace gui
     utils::AutoPtr<IPropertyDescription> m_properties;
     double m_time;
 
-    KeyboardManager& m_kbManager;
+    KeyboardManager* m_kbManager;
 
     typedef std::list<utils::AutoPtr<IKeyListener> > KeyListenerList;
     KeyListenerList m_keyListeners;
@@ -85,9 +85,11 @@ namespace gui
     NodeWidget(QWidget* parent,const char* name, WFlags fl,
 	       int id,const ModuleInfo& _info, 
 	       const std::vector<QPixmap>& picz,
-	       ControlValueDispatcher&, IModelControlReceiver&,
-	       KeyboardManager& kbManager,
-		   IErrorReceiver& log);
+		   const utils::AutoPtr<ControlValueDispatcher>&,
+		   IModelControlReceiver&,
+	       KeyboardManager* kbManager,
+           IErrorReceiver& log,
+	       const std::string& media_path);
     ~NodeWidget();
 
     std::vector<OutputPlugWidget*> getOutputs() const;

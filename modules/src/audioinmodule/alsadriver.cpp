@@ -172,7 +172,7 @@ int AlsaDriver::read(unsigned char* data, int num_samples)
     {
       int e;
       // just restart the device
-      printf("restarting device\n");
+      //printf("restarting device\n");
       e = snd_pcm_prepare(m_impl->handle);
       if (e < 0)
         {
@@ -185,7 +185,7 @@ int AlsaDriver::read(unsigned char* data, int num_samples)
     }
   else if (err == -EAGAIN) // nothing to read
     {
-      printf("nothing to read\n");
+      //printf("nothing to read\n");
       return 0;
     }
   else if (err < 0)

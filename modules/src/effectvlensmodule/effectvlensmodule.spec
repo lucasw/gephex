@@ -6,6 +6,7 @@ mod_effectvlensmodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvlensmodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

@@ -166,7 +166,7 @@ namespace dllloader
 	memcpy(m_data+info.length()+1,data+size,len-size);
       }
 
-    return utils::Buffer(m_data,m_len);
+    return utils::Buffer(m_data, m_len, true);
   }
 
 }

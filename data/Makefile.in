@@ -22,7 +22,6 @@ exec_prefix = @exec_prefix@
 bindir = @bindir@
 sbindir = @sbindir@
 libexecdir = @libexecdir@
-datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
@@ -105,17 +104,20 @@ STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
 
-icondir = $(prefix)/share/gephex/icons
+datadir = $(prefix)/share/gephex/
+icondir = $(prefix)/share/gephex/icon
+
 icon_DATA = gephex-gui.xpm gephex-engine.xpm
+data_DATA = gephex.conf.default
+bin_SCRIPTS = gephex-wrapper
 
-#sounddir = $(prefix)/share/gephex/sounds
-#sound_DATA = intro.wav
-
-EXTRA_DIST = $(icon_DATA) #$(sound_DATA)
+EXTRA_DIST = $(icon_DATA) gephex-wrapper.template gephex.conf.default.template
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
-DATA =  $(icon_DATA)
+SCRIPTS =  $(bin_SCRIPTS)
+
+DATA =  $(data_DATA) $(icon_DATA)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -133,6 +135,44 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	done
+
+install-dataDATA: $(data_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(datadir)
+	@list='$(data_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(datadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(datadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(datadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(datadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-dataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(data_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(datadir)/$$p; \
+	done
 
 install-iconDATA: $(icon_DATA)
 	@$(NORMAL_INSTALL)
@@ -179,23 +219,26 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am:
+install-exec-am: install-binSCRIPTS
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-exec: install-exec-am
 
-install-data-am: install-iconDATA
+install-data-am: install-dataDATA install-iconDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-iconDATA
+uninstall-am: uninstall-binSCRIPTS uninstall-dataDATA uninstall-iconDATA
 uninstall: uninstall-am
-all-am: Makefile $(DATA)
+all-am: Makefile $(SCRIPTS) $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(icondir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) \
+		$(DESTDIR)$(icondir)
 
 
 mostlyclean-generic:
@@ -226,13 +269,26 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-iconDATA install-iconDATA tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
+.PHONY: uninstall-binSCRIPTS install-binSCRIPTS uninstall-dataDATA \
+install-dataDATA uninstall-iconDATA install-iconDATA tags distdir \
+info-am info dvi-am dvi check check-am installcheck-am installcheck \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
 mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+gephex.conf.default: gephex.conf.default.template
+	cat gephex.conf.default.template | sed s:__PREFIX__:$(prefix):g - > gephex.conf.default
+
+gephex-wrapper: gephex-wrapper.template	
+	cat gephex-wrapper.template | sed s:__PREFIX__:$(prefix):g - > gephex-wrapper
+install-exec-hook:
+	chmod ug+x $(bindir)/gephex-wrapper
+	rm -rf $(bindir)/gephex-engine
+	rm -rf $(bindir)/gephex-gui
+	ln -s $(bindir)/gephex-wrapper $(bindir)/gephex-engine
+	ln -s $(bindir)/gephex-wrapper $(bindir)/gephex-gui
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1,7 +1,10 @@
-SUBDIRS= base editor typeviews
+SUBDIRS= base editor typeviews dialogs
 
 AM_CPPFLAGS = \
+	-DINST_INSTALL_PREFIX=\"$(prefix)\" \
 	-I $(srcdir)/.. \
+	-I $(srcdir)/dialogs \
+	-I @builddir@/dialogs \
 	-I $(srcdir)/../.. \
 	-I $(srcdir)/../../../util/include \
 	-I @builddir@/../../../util/include \
@@ -12,57 +15,55 @@ AM_CPPFLAGS = \
 	-I $(srcdir)/../../../base/src/netinterfaces \
 	$(QT_CXXFLAGS)
 
-bin_PROGRAMS = gephex-gui
+bin_PROGRAMS = gephex-gui-real
 
 CPP_FILES = \
-	nodewidget.cpp \
 	connectionwidget.cpp \
-	main.cpp \
-	vjmainwindow.cpp \
 	controlwidget.cpp \
-	moduleclassview.cpp \
-	propertywidget.cpp \
-	picswitch.cpp \
-	nodeproperty.cpp \
-	propertywidgetconstructor.cpp \
-	hidebuttonconstructor.cpp \
-	hidebutton.cpp \
-	plugwidget.cpp \
-	inputplugwidget.cpp \
-	outputplugwidget.cpp \
-	dllselectordialog.cpp \
 	graphnameview.cpp \
-	modulebutton.cpp \
 	guiconfig.cpp \
+	hidebutton.cpp \
+	hidebuttonconstructor.cpp \
+	inputplugwidget.cpp \
+	main.cpp \
+	modulebutton.cpp \
+	moduleclassview.cpp \
+	nodeproperty.cpp \
+	nodewidget.cpp \
+	outputplugwidget.cpp \
+	picswitch.cpp \
+	plugwidget.cpp \
+	propertywidget.cpp \
+	propertywidgetconstructor.cpp \
 	typeview.cpp \
 	typeviewfactory.cpp \
-	aboutdialog.cpp
+	vjmainwindow.cpp
+
 
 MOCED_FILES = \
-	dllselectordialog_moc.cpp \
-	plugwidget_moc.cpp \
-	outputplugwidget_moc.cpp \
-	inputplugwidget_moc.cpp \
-	moduleclassview_moc.cpp \
-	propertywidget_moc.cpp \
-	vjmainwindow_moc.cpp \
 	controlwidget_moc.cpp \
 	graphnameview_moc.cpp \
-	picswitch_moc.cpp \
 	hidebutton_moc.cpp \
-	nodewidget_moc.cpp \
+	inputplugwidget_moc.cpp \
 	modulebutton_moc.cpp \
-	typeview_moc.cpp
+	moduleclassview_moc.cpp \
+	nodewidget_moc.cpp \
+	outputplugwidget_moc.cpp \
+	picswitch_moc.cpp \
+	plugwidget_moc.cpp \
+	propertywidget_moc.cpp \
+	typeview_moc.cpp \
+	vjmainwindow_moc.cpp
 
 BUILT_SOURCES = $(MOCED_FILES)
 
 HEADER_FILES = \
 	connectionwidget.h \
 	controlwidget.h \
-	dllselectordialog.h \
 	graphnameview.h \
-	hidebuttonconstructor.h \
+	guiconfig.h \
 	hidebutton.h \
+	hidebuttonconstructor.h \
 	imoduleinfobasestation.h \
 	inputplugwidget.h \
 	modulebutton.h \
@@ -73,24 +74,23 @@ HEADER_FILES = \
 	ownstyle.h \
 	picswitch.h \
 	plugwidget.h \
-	propertywidgetconstructor.h \
 	propertywidget.h \
-	vjmainwindow.h \
-	guiconfig.h \
+	propertywidgetconstructor.h \
 	typeview.h \
 	typeviewfactory.h \
-	aboutdialog.h
+	vjmainwindow.h
+
 
 EXTRA_DIST= \
-	node.xpm \
-	inplugfree.xpm \
+	gruen_klein.xpm \
 	inplugbusy.xpm \
-	outplugfree.xpm \
+	inplugfree.xpm \
+	node.xpm \
 	outplugbusy.xpm \
-	rot_klein.xpm \
-	gruen_klein.xpm
+	outplugfree.xpm \
+	rot_klein.xpm
 
-gephex_gui_SOURCES =  $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
+gephex_gui_real_SOURCES =  $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
 
 dist-hook:
 	rm -f $(distdir)/*_moc.cpp
@@ -100,7 +100,7 @@ Makefile: $(BUILT_SOURCES)
 %_moc.cpp: %.h
 	$(MOC) -o $@ $<
 
-gephex_gui_LDADD = \
+gephex_gui_real_LDADD = \
 	$(QT_LIBS) \
 	-lguimodel \
 	-lgphxnetwork \
@@ -109,21 +109,24 @@ gephex_gui_LDADD = \
 	-lguieditor \
 	-ltypeviews \
 	-lutils \
+	-ldialogs \
 	-L@builddir@/../guimodel \
 	-L@builddir@/../../../base/src/net \
 	-L@builddir@/../../../base/src/netinterfaces \
 	-L@builddir@/../../../base/src/utils \
 	-L@builddir@/base \
 	-L@builddir@/editor \
-	-L@builddir@/typeviews
+	-L@builddir@/typeviews \
+	-L@builddir@/dialogs
 
-gephex_gui_DEPENDENCIES = \
+gephex_gui_real_DEPENDENCIES = \
 	@builddir@/../guimodel/libguimodel.a \
 	@builddir@/../../../base/src/net/libgphxnetwork.a \
 	@builddir@/../../../base/src/netinterfaces/libnetinterfaces.a \
 	@builddir@/../../../base/src/utils/libutils.a \
 	@builddir@/base/libguibase.a \
 	@builddir@/editor/libguieditor.a \
+	@builddir@/dialogs/libdialogs.a \
 	@builddir@/typeviews/libtypeviews.a
 
 CLEANFILES = $(MOCED_FILES)

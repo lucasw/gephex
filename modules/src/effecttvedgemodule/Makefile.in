@@ -281,6 +281,18 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvedgemodule.lo effectvedgemodule.o : effectvedgemodule.c \
+	effectvedgemodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../libeffectv/libeffectv.h edge.c ../libeffectv/EffecTV.h \
+	../libeffectv/utils.h
+effectvedgemodule_auto.lo effectvedgemodule_auto.o : \
+	effectvedgemodule_auto.c effectvedgemodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../engine/src/engine/dllutils.h effectvedgemodule.xpm
 
 info-am:
 info: info-am

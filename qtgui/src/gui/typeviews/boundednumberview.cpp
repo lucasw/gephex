@@ -18,7 +18,8 @@ namespace gui
 
     DoubleSpinBox(QWidget* parent, double lowVal, double highVal,
 		          double stepSize, int precision,
-				  std::string display_format)
+				  const std::string& display_format,
+				  const std::string& special_value_text)
       : QSpinBox(0, RESOLUTION, 1, parent),
 	m_lowVal(lowVal), m_highVal(highVal),
 	m_scale(RESOLUTION / (highVal - lowVal)),
@@ -39,6 +40,13 @@ namespace gui
 	  else if (display_format == "scientific")
 		  m_os.setf(std::ios::scientific, std::ios::floatfield);
 	  // else don't set -> automatic mode
+
+	  if (special_value_text != "")
+		  this->setSpecialValueText(special_value_text.c_str());
+
+	  // set some arbitrary value, otherwise the initial value
+	  // will not be set correctly
+	  setValue((int) (.27*RESOLUTION));	  
     }
 
     QString mapValueToText( int value )
@@ -102,10 +110,14 @@ namespace gui
 	  int precision    = sr.getIntValue("precision", 6);
 	  std::string display_format = sr.getStringValue("display_format", 
 		                                             "auto");
+	  std::string special_value_text = sr.getStringValue("special_text",
+		                                                  "");
 
       QHBoxLayout* l = new QHBoxLayout(this);
       m_spin = new DoubleSpinBox(this, lowVal, highVal,
-		                         stepSize, precision, display_format);
+		                         stepSize, precision,
+								 display_format,
+								 special_value_text);
 
       m_spin->setMinimumSize(40, 33);
       //m_spin->setMaximumSize(60, 20);
@@ -120,10 +132,10 @@ namespace gui
     virtual void valueChange(const utils::Buffer& newValue)
     {
       std::istringstream is(reinterpret_cast<const char*>(newValue.getPtr()));
-      double value;
+      double value = 0;
       is >> value;
       
-	  if (fabs(value - m_spin->getDoubleValue()) > 0.0001)
+	  if (fabs(value - m_spin->getDoubleValue()) > 0.0000001)
 	  {
 		m_setValueCalled = true;
 		m_spin->setDoubleValue(value);
@@ -150,7 +162,7 @@ private slots:
 
   private:
     DoubleSpinBox* m_spin;
-	bool m_setValueCalled;
+	bool m_setValueCalled;	
   };
  
 	

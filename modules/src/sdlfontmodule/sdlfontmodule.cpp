@@ -1,11 +1,20 @@
-extern "C"
-{
 #include "sdlfontmodule.h"
+
+#include <iostream>
+#include <fstream>
+#include <list>
+#include <string>
+
 #include "SDL.h"
 #include "SDL_ttf.h"
-}
 
-#include <string>
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
+#if defined(OS_WIN32)
+#include <windows.h>
+#endif
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define rmask 0x0000ff00
@@ -20,8 +29,6 @@ extern "C"
 #endif
 
 static const int DEFAULT_POINT_SIZE = 18;
-
-using namespace std;
 
 static logT s_log;
 
@@ -40,8 +47,8 @@ typedef struct _MyInstance {
   SDL_Color lastColor;
 
 
-  string* lastText;
-  string* lastFont;
+  std::string* lastText;
+  std::string* lastFont;
   int lastXSize;
   int lastYSize;
   int lastPointSize;
@@ -73,13 +80,13 @@ int init(logT log_function)
 {
   s_log = log_function;
 
-  //cout << "Initializing SDL-subsystem...." << endl;
+  //std::cout << "Initializing SDL-subsystem...." << std::endl;
   if(!my_SDL_init())
     {
       s_log(0,"Initializing SDL-subsystem failed...");
       return 0;
     }
-  //cout << "Initializing SDL-subsystem....done" << endl;
+  //std::cout << "Initializing SDL-subsystem....done" << std::endl;
 
 
   if ( TTF_Init() < 0 ) 
@@ -95,7 +102,7 @@ void shutDown(void)
   TTF_Quit();
 }
 
-scroll_mode_t effectType(const string& which)
+scroll_mode_t effectType(const std::string& which)
 {
   if(which == "vertical_scroll")
     {
@@ -122,12 +129,12 @@ MyInstance* construct()
 
   if (my == 0)
   {
-	  s_log(0, "Could not allocate memory for MyInstance struct\n");
-	  return 0;
+    s_log(0, "Could not allocate memory for MyInstance struct\n");
+    return 0;
   }
   
-  my->lastText = new string("null");
-  my->lastFont = new string("null");
+  my->lastText = new std::string("null");
+  my->lastFont = new std::string("null");
   my->lastColor.r = my->lastColor.g = my->lastColor.b = 0;
   my->scratch = 0;
   my->font = 0;
@@ -164,20 +171,98 @@ void destruct(MyInstance* my)
 
 static int file_ok(const char* file_name)
 {
-	if (file_name == 0)
-		return 0;
+  if (file_name == 0)
+    return 0;
 
-	if (strlen(file_name) == 0)
-		return 0;
+  if (strlen(file_name) == 0)
+    return 0;
 
-	FILE* file = fopen(file_name, "rb");
-
-	if (file == 0)
-		return 0;
-
-	fclose(file);
-	return 1;
+  return 1;
 }
+
+//----------------------------------------------------------------------------
+
+static std::list<std::string> path_to_dirs(const std::string& media_path)
+{
+  std::string::size_type pos = 0;
+  std::string::size_type old_pos = 0;
+
+  std::list<std::string> dir_list;
+  std::cout << "path = " << media_path << "\n";
+  while ( (pos = media_path.find_first_of(";", old_pos)) != std::string::npos )
+    {
+      if (old_pos < pos)
+	{
+	  std::string dir = media_path.substr(old_pos, pos - old_pos -1);
+#if defined(OS_WIN32)
+          dir += "\\";
+#else
+          dir += "/";
+#endif
+	  dir_list.push_back(dir);
+	  std::cout << "... " << dir << "\n";
+	}
+      old_pos = pos+1;
+    }
+
+  std::string dir = media_path.substr(old_pos);
+#if defined(OS_WIN32)
+  dir += "\\";
+#else
+  dir += "/";
+#endif
+  dir_list.push_back(dir);
+
+  std::cout << "... " << dir << "\n";
+  return dir_list;
+}
+
+static std::string get_real_filename(const std::string& fname)
+{
+  static const char* GEPHEX_MEDIA_PATH = "GEPHEX_MEDIA_PATH";
+  // create search path list
+  std::list<std::string> path;
+  path.push_back("");  // local
+#if defined(OS_WIN32)
+  char media_path_buffer[10240];
+  int ret = GetEnvironmentVariable(GEPHEX_MEDIA_PATH,
+	     media_path_buffer,
+		 sizeof(media_path_buffer));
+
+  const char* media_path;
+  if (ret == 0)
+	  media_path = 0;
+  else
+	  media_path = media_path_buffer;
+#else
+  const char* media_path = getenv(GEPHEX_MEDIA_PATH);
+#endif
+  if (media_path == 0)
+    {
+      s_log(2, "GEPHEX_MEDIA_PATH not set!");
+    }
+  else
+    {
+      std::list<std::string> media_dirs = path_to_dirs(media_path);
+      // from config file
+      path.insert(path.end(), media_dirs.begin(), media_dirs.end());
+    }
+		 
+  // search for the file
+  for (std::list<std::string>::const_iterator it = path.begin();
+       it != path.end(); ++it)
+    {
+      const std::string fullfilename (*it+fname);
+      std::ifstream teststream(fullfilename.c_str());
+      std::cout <<"filename: "<< fullfilename << std::endl;
+      if (teststream)
+	return fullfilename;
+    }
+  
+  return "";
+}
+
+//----------------------------------------------------------------------------
 
 int fontChanged(MyInstance* my, const char* font, 
 		int bold, int italic, int underlined,
@@ -186,16 +271,22 @@ int fontChanged(MyInstance* my, const char* font,
   if(my->font)
   {
     TTF_CloseFont(my->font);
-	my->font = 0;
+    my->font = 0;
   }
 
-  if (!file_ok(font))
-	  return 0;
+  std::string fname("");
 
-  my->font = TTF_OpenFont(font, psize);
-  if ( my->font == NULL ) {
-    s_log(0, "could not open font!");
-    return 0;
+  if (!file_ok(font) || (fname = get_real_filename(font)) == "")
+    {
+      s_log(0, "could not open font (file not found)!");
+      return 0;
+    }
+
+  my->font = TTF_OpenFont(fname.c_str(), psize);
+  if ( my->font == NULL )
+    {
+      s_log(0, "could not open font!");
+      return 0;
   }
 
   int style = 0;
@@ -231,10 +322,10 @@ void update(void* instance)
 
   int patch = trim_int(inst->in_patch->number,0,16);
   
-  //cpy input to output... only if not patching.
+  // cpy input to output... only if not patching.
   if (patch == 0)
     {
-      //scale outputframebuffer to inputframebuffer size
+      // scale outputframebuffer to inputframebuffer size
       FrameBufferAttributes attribs;
   
       attribs.xsize = width;
@@ -263,25 +354,28 @@ void update(void* instance)
   
     
   bool renderFont  = false;
-  if (my->font == 0 || *my->lastFont != inst->in_font->text || bold != my->bold ||
-	  italic != my->italic || underlined != my->underlined ||
-	  point_size != my->lastPointSize)
-  {
-	  if (fontChanged(my, inst->in_font->text, 
-	                  bold, italic, underlined, point_size) == 0)
-	  {
-		  return;
-	  }
+  if (my->font == 0 ||
+      *my->lastFont != inst->in_font->text ||
+      bold != my->bold ||
+      italic != my->italic ||
+      underlined != my->underlined ||
+      point_size != my->lastPointSize)
+    {
+      if (fontChanged(my, inst->in_font->text, 
+                      bold, italic, underlined, point_size) == 0)
+        {
+          return;
+        }
 	  
-	  *my->lastFont = inst->in_font->text;
-	  my->lastPointSize = point_size;
-	  my->bold = bold;
-	  my->italic = italic;
-	  my->underlined = underlined;
-	  renderFont = true;
-  }
+      *my->lastFont = inst->in_font->text;
+      my->lastPointSize = point_size;
+      my->bold = bold;
+      my->italic = italic;
+      my->underlined = underlined;
+      renderFont = true;
+    }
     
-  string text = string(inst->in_text_->text);
+  std::string text = std::string(inst->in_text_->text);
 
   SDL_Color col;
   col.r = (Uint8) (inst->in_color->r * 255.f);
@@ -293,8 +387,8 @@ void update(void* instance)
      || col.g != my->lastColor.g || col.b != my->lastColor.b || renderFont)
     {
       
-      /*cout << "textchanged..was: "<<*my->lastText<<" is: "
-	<< inst->in_text_->text <<endl;*/
+      /*std::cout << "textchanged..was: "<<*my->lastText<<" is: "
+	<< inst->in_text_->text <<std::endl;*/
 
       *my->lastText = text;
       my->lastColor = col;
@@ -337,7 +431,7 @@ void update(void* instance)
       break;
     }
 
-  //  cout << "pos_x: " <<pos_x<<", pos_y: "<<pos_y<<endl;
+  //  std::cout << "pos_x: " <<pos_x<<", pos_y: "<<pos_y<<std::endl;
   // determine destination rectangle
   SDL_Rect rect;
   rect.x = pos_x;

@@ -104,22 +104,22 @@ public:
 	/**
 	*
 	*/	
-	virtual void newControllValueSet( const std::string& graphID, const std::string& newSnapName ) = 0;
+	virtual void newControlValueSet( const std::string& graphID, const std::string& newSnapName ) = 0;
 
 	/**
 	*
 	*/
-	virtual void renameControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName ) = 0;
+	virtual void renameControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName ) = 0;
 
 	/**
 	*
 	*/
-	virtual void copyControllValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName ) = 0;
+	virtual void copyControlValueSet( const std::string& graphID, const std::string& snapID, const std::string& newSnapName ) = 0;
 
 	/**
 	*
 	*/
-	virtual void deleteControllValueSet( const std::string& graphID, const std::string& snapID ) = 0;
+	virtual void deleteControlValueSet( const std::string& graphID, const std::string& snapID ) = 0;
 
 	/**
 	*

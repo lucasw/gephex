@@ -62,6 +62,7 @@ CInput::CInput(int _typeID,
 
 CInput::~CInput()
 {
+  delete m_defaultValue;
 	delete internalData;
 }
 
@@ -158,8 +159,6 @@ const TypeAttributes* CInput::getTypeAttributes() const
 
 void CInput::update()
 {
-  const IType* oldValuePtr = data; // remember to check if ptr has changed
-
   if (m_isConnected)
     { // input is connected
       assert(oPlug != 0);

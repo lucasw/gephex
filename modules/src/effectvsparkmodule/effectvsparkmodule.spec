@@ -6,6 +6,7 @@ mod_effectvsparkmodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvsparkmodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

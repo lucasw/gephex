@@ -46,7 +46,7 @@ namespace gui
     {
       std::string doof = reinterpret_cast<const char*>(newValue.getPtr());
       std::istringstream is(doof);
-      double value;
+      double value = 0;
       is >> value;
 
 	  if (fabs(value - m_value) > 0.00001)

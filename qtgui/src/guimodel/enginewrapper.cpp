@@ -148,7 +148,7 @@ namespace gui
           }
 #endif
 	else
-	  {
+	{
 	    throw std::runtime_error("Unknown ipcType '" + m_ipcType + "' at "
 				     "EngineWrapper::connect()");
 	  }
@@ -158,14 +158,14 @@ namespace gui
 
 	net::ISocket* s = clientSocket->connect(m_locator, m_port);
 
-	if (s != 0)
-	  {
-	    socket = utils::AutoPtr<net::ISocket>(s);
-	    socket->setSoTimeout(0);
-	    protocol->registerSender(&*socket);
-	    socketAdaptor->setSocket(&*socket);
-            synchronize();
-	  }
+	if (s == 0)
+		throw std::runtime_error("Could not connect");
+
+    socket = utils::AutoPtr<net::ISocket>(s);
+    socket->setSoTimeout(0);
+    protocol->registerSender(&*socket);
+    socketAdaptor->setSocket(&*socket);
+    synchronize();
       }
   }
 	
@@ -276,9 +276,9 @@ namespace gui
     return *classModel;
   }
 	
-  ControlValueDispatcher& EngineWrapper::controlValueDispatcher()
+  utils::AutoPtr<ControlValueDispatcher> EngineWrapper::controlValueDispatcher()
   {
-    return *dispatcher;
+    return dispatcher;
   }
 
   void EngineWrapper::initTaggers(PortTagger& portTagger,

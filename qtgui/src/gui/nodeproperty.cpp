@@ -22,10 +22,11 @@ namespace gui
 
 NodeProperty::NodeProperty(const ModuleInfo& _info, 
 			   std::vector<utils::AutoPtr<InputPlugWidget> >& ins,
-			   ControlValueDispatcher& dispatcher,
-			   IModelControlReceiver& mcr)
+			   const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
+			   IModelControlReceiver& mcr,
+			   const std::string& media_path)
   : info(_info), inPlugs(ins),
-    factory(new TypeViewFactory()) //TODO: is this wanted???
+    factory(new TypeViewFactory(media_path)) //TODO: is this wanted???
 {
 	
   const std::vector<PlugInfo>& in = _info.getInputs();
@@ -47,7 +48,7 @@ std::list<PropertyEntry> NodeProperty::getEntries() const
 }
 
 void NodeProperty::addProperty(InputPlugWidget& in,
-			       ControlValueDispatcher& dispatcher,
+                               const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
 			       IModelControlReceiver& model)
 {
   int inputIndex = in.getIndex();

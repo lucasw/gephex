@@ -106,7 +106,7 @@ namespace gui
       GraphModel& graphModel();
       ControlModel& controlModel();
       ModuleClassModel& moduleClassModel();
-      ControlValueDispatcher& controlValueDispatcher();
+	  utils::AutoPtr<ControlValueDispatcher> controlValueDispatcher();
 		
     private:
       std::string m_ipcType;

@@ -281,6 +281,20 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvpuzzlemodule.lo effectvpuzzlemodule.o : effectvpuzzlemodule.c \
+	effectvpuzzlemodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h puzzle.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h
+effectvpuzzlemodule_auto.lo effectvpuzzlemodule_auto.o : \
+	effectvpuzzlemodule_auto.c effectvpuzzlemodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvpuzzlemodule.xpm
 
 info-am:
 info: info-am

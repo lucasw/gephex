@@ -55,8 +55,8 @@ void update(void* instance)
   framebuffer_changeAttributes(inst->out_r, &attribs);
 
   effectv_draw(my->effect,
-               inst->in_b->framebuffer,
-	       inst->out_r->framebuffer,
+               (unsigned char*) inst->in_b->framebuffer,
+	       (unsigned char*) inst->out_r->framebuffer,
 	       xsize, ysize);
 }
 

@@ -37,7 +37,7 @@ namespace model
 
   class Graph;
   class GraphFileSystem;
-  class ControllValueSet;
+  class ControlValueSet;
 
   class Model: 
     public IModelControlReceiver, 
@@ -56,8 +56,9 @@ namespace model
     public IModelStatusSender
     {
     public:
-      Model(const std::string basepath_,
-		    utils::AutoPtr<utils::ILogger>& logger);
+      Model(const std::string graph_path,
+            utils::AutoPtr<utils::ILogger>& logger);
+
       virtual ~Model();
 
       // from IModelControlReceiver
@@ -71,8 +72,9 @@ namespace model
 
       virtual void unSetModuleData(int moduleID,int type);
 
-	  Graph* newGraphWithID(const std::string& graphName,
-			  const std::string& graphID);
+      void newGraphWithID(const std::string& graphName,
+                          const std::string& graphID,
+                          bool notifyAndCreate = true);
 
       virtual void newGraph(const std::string& graphName);
 
@@ -86,27 +88,27 @@ namespace model
 
       virtual void deleteGraph(const std::string& graphName);
 
-      virtual void newControllValueSet(const std::string& graphID,
+      virtual void newControlValueSet(const std::string& graphID,
 				       const std::string& SetNme);
 
-	  void newControllValueSetWithID(const std::string& graphID,
+	  void newControlValueSetWithID(const std::string& graphID,
 		  const std::string& SetNme, const std::string& snapID);
 
-      virtual void renameControllValueSet(const std::string& graphID,
+      virtual void renameControlValueSet(const std::string& graphID,
 					  const std::string& snapID,
 					  const std::string& newSnapName);
 
-      virtual void copyControllValueSet(const std::string& graphID,
+      virtual void copyControlValueSet(const std::string& graphID,
 					const std::string& snapID,
 					const std::string& newSnapName);
 
-      virtual void deleteControllValueSet(const std::string& graphID,
+      virtual void deleteControlValueSet(const std::string& graphID,
 					  const std::string& snapID);
 
       //TODO: war mal const
       virtual void synchronize();
 
-	  void sendExistingGraphs();
+      void sendExistingGraphs();
 
       virtual void changeRenderedGraph(const std::string& graphName, const std::string& snapShot);
       virtual void changeEditGraph(const std::string& graphName, const std::string& snapShot);
@@ -128,7 +130,7 @@ namespace model
       virtual void registerSerializedGraphReceiver(ISerializedGraphReceiver&);
       virtual void registerRendererControlReceiver(IRendererControlReceiver&);
 
-      // from ISmartControllValueReceiver
+      // from ISmartControlValueReceiver
       virtual void controlValueChanged(const std::string& graphName,
 				       int nodeID,int intputIndex,
 				       const utils::Buffer& newValue);
@@ -136,7 +138,7 @@ namespace model
       virtual void syncInputValuesStarted(const std::string& graphName);
       virtual void syncInputValuesFinished(const std::string& graphName);
 
-      // from  IControllValueSender
+      // from  IControlValueSender
       virtual void registerControlValueReceiver(IControlValueReceiver& r);
 
       virtual void deserializeGraph(const std::string& graphstream);
@@ -162,17 +164,12 @@ namespace model
       SpecMap specs;
 
       utils::AutoPtr<Graph> renderedGraph; // this is shown by the renderer
-      utils::AutoPtr<Graph> editGraph; // this can be edited by the gui
-      utils::AutoPtr<ControllValueSet> editControllSet;
-      utils::AutoPtr<ControllValueSet> renderedControllSet;
+      utils::AutoPtr<Graph> editGraph;     // this can be edited by the gui
+      utils::AutoPtr<ControlValueSet> editControlSet;
+      utils::AutoPtr<ControlValueSet> renderedControlSet;
 
       std::map<std::string, bool> knownGraphIDs;
-	  std::map<std::string, bool> knownSnapIDs;
-
-	  utils::AutoPtr<utils::ILogger> m_logger;
-
-      // helper functions
-      void deleteModule(utils::AutoPtr<Graph>, int moduleID);      
+      std::map<std::string, bool> knownSnapIDs;
 
       IModuleConstructionDumbReceiver* dumbo;
       IModuleConstructionSmartReceiver* smartAss;	
@@ -183,6 +180,11 @@ namespace model
       IControlValueReceiver* controlValueReceiver;
       IModuleStatisticsReceiver* moduleStatisticsReceiver;
       IModelStatusReceiver* modelStatusReceiver;
+
+      utils::AutoPtr<utils::ILogger> m_logger;
+
+      // helper functions
+      void deleteModule(utils::AutoPtr<Graph>, int moduleID);
 
 #ifndef NDEBUG
       void Model::checkGraphSerialisation();

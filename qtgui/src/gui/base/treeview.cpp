@@ -14,7 +14,6 @@
 namespace gui
 {
 
-
   class TreeViewItemImpl : public QListViewItem,
 			   public TreeViewItem
   {
@@ -56,38 +55,45 @@ namespace gui
     Q_OBJECT
   public:
     TreeViewImpl(QWidget* parent, const std::string& name,
-		const std::vector<std::string>& columnNames)
-      : QListView(parent, name.c_str()), activeItem(0)
+                 const std::vector<std::string>& columnNames,
+                 TreeView* treeview)
+      : QListView(parent, name.c_str()), activeItem(0),
+        m_treeview(treeview)
     {
       for (unsigned int i = 0; i < columnNames.size(); ++i)
 	this->addColumn(columnNames[i].c_str());
 
 
-      connect(this,SIGNAL(doubleClicked ( QListViewItem * )),
-	      this,SLOT(doubleClickedSlot ( QListViewItem * )));
+      connect(this, SIGNAL(doubleClicked ( QListViewItem * )),
+	      this, SLOT(doubleClickedSlot ( QListViewItem * )));
 
       connect(this,SIGNAL(rightButtonClicked ( QListViewItem *, 
-						   const QPoint &, int )),
+                                               const QPoint &, int )),
 	      this,SLOT(rightButtonClickedSlot ( QListViewItem *,
 						 const QPoint &, int )));
 
       connect(this,SIGNAL(rightButtonPressed ( QListViewItem *,
-						   const QPoint &, int )),
+                                               const QPoint &, int )),
 	      this,SLOT(rightButtonPressedSlot ( QListViewItem *,
 						 const QPoint &, int )));
 
       connect(this,SIGNAL(mouseButtonPressed ( int, QListViewItem *,
-						   const QPoint &, int )),
+                                               const QPoint &, int )),
 	      this,SLOT(mouseButtonPressedSlot ( int, QListViewItem *,
 						 const QPoint &, int )));
 
       connect(this,SIGNAL(mouseButtonClicked ( int, QListViewItem *,
-						   const QPoint &, int )),
+                                               const QPoint &, int )),
 	      this,SLOT(mouseButtonClickedSlot ( int, QListViewItem *,
 						 const QPoint &, int )));
 
-      connect(this,SIGNAL(onItem ( QListViewItem * )),
-	      this,SLOT(onItemSlot ( QListViewItem * )));
+      connect(this, SIGNAL(onItem ( QListViewItem * )),
+	      this, SLOT(onItemSlot ( QListViewItem * )));
+    }
+
+    virtual ~TreeViewImpl()
+    {
+      delete m_treeview;
     }
 
     void insertItem( TreeViewItem& item, TreeViewItem* parent)
@@ -149,7 +155,7 @@ namespace gui
 
 	      //TODO: remove it->second.first from parent before deleting?
 
-		  delete it->second.first;
+              delete it->second.first;
 	      m_impls.erase(it);
 		  
 
@@ -176,17 +182,17 @@ namespace gui
 	}
     }
 
-   private slots:
+private slots:
     
-    void doubleClickedSlot (QListViewItem* item)
+void doubleClickedSlot (QListViewItem* item)
     {
       if (!item)
 	return;
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-	  if (treeItem)
-         treeItem->doubleClicked( );
+      if (treeItem)
+        treeItem->doubleClicked( );
     }
 
     void rightButtonClickedSlot (QListViewItem* item, const QPoint& p, int c)
@@ -196,21 +202,21 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-	  if (treeItem)
-	  {
-		  QPopupMenu* popme = treeItem->getPropertyMenu();
+      if (treeItem)
+        {
+          QPopupMenu* popme = treeItem->getPropertyMenu();
+          
+          if (popme != 0)
+            {
+              popme->move(p);
+              popme->show();
+              activeItem = treeItem;
+              connect(popme,SIGNAL(activated(int)),
+                      this,SLOT(popupActivated(int)));
+            }
 		  
-		  if (popme != 0)
-		  {
-			  popme->move(p);
-			  popme->show();
-			  activeItem = treeItem;
-			  connect(popme,SIGNAL(activated(int)),
-				  this,SLOT(popupActivated(int)));
-		  }
-		  
-		  treeItem->rightButtonClicked(gui::Point(p.x(),p.y()), c);
-	  }
+          treeItem->rightButtonClicked(gui::Point(p.x(),p.y()), c);
+        }
     }
 
     void rightButtonPressedSlot (QListViewItem* item, const QPoint& p, int c)
@@ -220,8 +226,8 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-	  if (treeItem)
-		treeItem->rightButtonPressed(gui::Point(p.x(),p.y()), c);
+      if (treeItem)
+        treeItem->rightButtonPressed(gui::Point(p.x(),p.y()), c);
     }
 
     void mouseButtonPressedSlot (int button, QListViewItem* item,
@@ -255,45 +261,46 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-	  if (treeItem)
-         treeItem->mouseOnItem();
+      if (treeItem)
+        treeItem->mouseOnItem();
     }
 
     void popupActivated(int id)
     {
-		if (activeItem )
-		{
+      if (activeItem )
+        {
 			
-			activeItem->propertySelected(id);
-		}
+          activeItem->propertySelected(id);
+        }
     }
 
     
   private:
     //typedef utils::AutoPtr<TreeViewItemImpl> ItemImplPtr;
-	typedef TreeViewItemImpl* ItemImplPtr;
+    typedef TreeViewItemImpl* ItemImplPtr;
     typedef utils::AutoPtr<ColumnTextChangeListenerImpl> TextChangeListenerPtr;
-    typedef std::map<TreeViewItem*, std::pair<ItemImplPtr,TextChangeListenerPtr> > ImplMap;
+    typedef std::map<TreeViewItem*,
+      std::pair<ItemImplPtr, TextChangeListenerPtr> > ImplMap;
     ImplMap m_impls;
 
     typedef std::map<QListViewItem*, TreeViewItem*> ItemMap;
     ItemMap m_items;
 
     TreeViewItem* activeItem;
+
+    TreeView* m_treeview;
   };
 
 
   TreeView::TreeView(QWidget* parent, const std::string& name,
-	  const std::vector<std::string>& columnNames)
-    : m_impl(new TreeViewImpl(parent, name, columnNames))
+                     const std::vector<std::string>& columnNames)
+    : m_impl(new TreeViewImpl(parent, name, columnNames, this))
   {
   }
   
   TreeView::~TreeView()
   {
-    //qt paranoia (try to make sure that m_impl os not deleted twice)!
-    //m_impl->parentWidget()->removeChild(m_impl);
-    //delete m_impl;
+    // Note: the Treeview dtor is called by the TreeViewImpl
   }
 
   QWidget* TreeView::widget()

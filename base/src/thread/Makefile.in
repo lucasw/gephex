@@ -293,14 +293,8 @@ distdir: $(DISTFILES)
 	done
 imutex.o: imutex.cpp imutex.h
 ithread.o: ithread.cpp ithread.h
-testmain.o: testmain.cpp ../TestFramework/CompositeTest.h \
-	../TestFramework/Test.h ../TestFramework/Tester.h threadtest.h \
-	../TestFramework/easytest.h ../TestFramework/LeafTest.h
 threadposix.o: threadposix.cpp threadposix.h ithread.h imutex.h \
 	ithreadutil.h irunnable.h
-threadtest.o: threadtest.cpp threadtest.h ../TestFramework/easytest.h \
-	../TestFramework/LeafTest.h ../TestFramework/Test.h \
-	threadposix.h ithread.h imutex.h ithreadutil.h irunnable.h
 
 check-TESTS: $(TESTS)
 	@failed=0; all=0; \

@@ -29,8 +29,9 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = 0
-        higher_bound      = 360
+        lower_bound       = -180
+        higher_bound      = 180
+        default           = 0
         step_size         = 0.5
     }
 

@@ -20,10 +20,10 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_AudioType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_AudioType id=audio const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=amp const=true strong_dependency=true default=1 } ";
   break;
  }
  return 0;
@@ -31,16 +31,16 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=e1 } ";
   break;
   case 1:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=e2 } ";
   break;
   case 2:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=e3 } ";
   break;
   case 3:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=e4 } ";
   break;
  }
  return 0;

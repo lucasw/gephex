@@ -41,9 +41,9 @@ namespace net
     /*const throw (IOException,UnknownHostException)*/
   {
 #if defined(OS_LINUX)
-	  static const int SEND_FLAGS = MSG_NOSIGNAL;
+    static const int SEND_FLAGS = MSG_NOSIGNAL;
 #else
-	  static const int SEND_FLAGS = 0;
+    static const int SEND_FLAGS = 0;
 #endif
     if (!m_isConnected)
       throw IOException("Socket not connected at FDSocket::send!");
@@ -116,7 +116,7 @@ namespace net
 	    }
 	  else
 	    {
-	      //TODO: use somthnh like b.setData(buf,len)
+	      //TODO: use somthing like b.setData(buf,len)
 	      b = utils::Buffer(buf,len);
 	      return true;
 	    }

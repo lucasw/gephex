@@ -13,7 +13,7 @@ namespace gui
 					     std::string>& params,
 					     int nodeID,int inIndex,
 					     int controlID,
-					     ControlValueDispatcher& dispatcher,
+					     const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
 					     IModelControlReceiver& mcr_)
     : m_viewConstructor(con), m_params(params),
       m_nodeID(nodeID), m_inputIndex(inIndex), m_controlID(controlID),
@@ -39,7 +39,7 @@ namespace gui
 
     //    w->reparent(parent, QPoint(0,0));
 
-    m_dispatcher.registerValueReceiver(m_nodeID, m_inputIndex, *w);
+    m_dispatcher->registerValueReceiver(m_nodeID, m_inputIndex, *w);
 
     return w;
   }
@@ -52,7 +52,7 @@ namespace gui
       throw std::runtime_error("Error at "
 			       "PropertyWidgetConstr::destroyWidget()");
 
-    m_dispatcher.unregisterValueReceiver(m_nodeID, m_inputIndex, *pw);
+    m_dispatcher->unregisterValueReceiver(m_nodeID, m_inputIndex, *pw);
 
     //delete pw;
     //    w->reparent(0, QPoint(0,0));

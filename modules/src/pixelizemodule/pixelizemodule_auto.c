@@ -20,10 +20,10 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=bsize const=true strong_dependency=true default=1 } ";
   break;
   case 1:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=src const=true strong_dependency=true  } ";
   break;
  }
  return 0;
@@ -31,7 +31,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;
@@ -92,7 +92,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Pixelizer] group=[Filter] inputs=[2 BlockSize{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[30] hidden=[false] display_format=[fixed] } Image ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Pixelizer] group=[Filter] inputs=[2 BlockSize{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[80] hidden=[false] display_format=[fixed] } Image ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(pixelizemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

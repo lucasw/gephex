@@ -4,6 +4,11 @@
 #include "config.h"
 #endif
 
+#if !defined(COMP_VC)
+#include <algorithm>
+using std::min;
+#endif
+
 #if defined(OS_WIN32)
 #include <windows.h>
 #define snprintf _snprintf
@@ -12,37 +17,43 @@
 #include "midiutil.h"
 #include "libjoystick.h"
 
-static int number_of_joysticks;
+//---------------------------------------------------------------------
 
 static logT s_log;
 
+static const int MAX_NUM_AXBU = 32;
 
-typedef struct _MyInstance {
+//---------------------------------------------------------------------
 
-  unsigned int old_id;
+typedef struct _MyInstance
+{
+  int old_id;
  
-  unsigned char axis_old[32];
-  unsigned char button_old[32];
+  int axis_old[MAX_NUM_AXBU];
+  int button_old[MAX_NUM_AXBU];
 
   JoystickDriver* jst_drv;
   Joystick* jst;
 } MyInstance, *MyInstancePtr;
 
 
+//---------------------------------------------------------------------
+
+static void reset_axbu(MyInstancePtr my)
+{
+	for (int i = 0; i < MAX_NUM_AXBU; ++i)
+	{
+		my->axis_old[i]   = -1;
+		my->button_old[i] = -1;
+	}
+}
+
+//---------------------------------------------------------------------
+
 int init(logT log_function)
 {
   s_log = log_function;
 
-
-  /*joystick_init_core();
-  number_of_joysticks = joystick_get_num_devices();
-
-  {
-    char buffer[128];
-    snprintf(buffer, sizeof(buffer),
-	     "Number of Joysticks found: %i", number_of_joysticks);
-    s_log(2, buffer);
-  }*/
   return 1;
 }
 
@@ -55,16 +66,20 @@ MyInstance* construct()
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));  
 
   my->old_id = -1;
-  my->jst = 0;
+  my->jst    = 0;
 
+  reset_axbu(my);
   try
     {
       my->jst_drv = new JoystickDriver("default");
       return my;
     } 
-  catch(...)
+  catch(std::exception& e)
     {
-      s_log(0, "Could not create joystick driver");
+      char buffer[256];
+      snprintf(buffer, sizeof(buffer),
+               "Could not create joystick driver: '%s'", e.what());
+      s_log(0, buffer);
       free(my);
     }
   return 0;
@@ -82,11 +97,9 @@ void destruct(MyInstance* my)
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
-  MyInstancePtr my = inst->my;
-  double ax[32];
-  int b[32];
+  MyInstancePtr my = inst->my;  
 
-  unsigned int joy_id = trim_int(inst->in_joy_id->number, 0, 32);
+  int joy_id = trim_int(inst->in_joy_id->number, 0, 31);
   int i, num_axes, num_buttons;
 
   if (joy_id != my->old_id)
@@ -124,67 +137,72 @@ void update(void* instance)
 	  return;
 	}
 	
-      num_axes = my->jst->num_axes();
-      for (i = 0; i < num_axes; ++i)
-	{
-	  my->axis_old[i]   = -1;
-	}    
+	  reset_axbu(my);         
     }
   
   if (my->jst == 0)
     return;
-
-  my->jst->poll();
-
-  num_axes = my->jst->num_axes();
-  num_buttons = my->jst->num_buttons();
-
-  for (i = 0; i < num_axes; ++i)
-    {
-      ax[i] = my->jst->get_axis(i);	  
-    }
-
-  for (i = 0; i < num_buttons; ++i)
-    {
-      b[i] = my->jst->get_button(i);
-    }
-
+  
+  try
   {
-    unsigned char midi_buffer[64];
-    int len = 0;
-	
-
-    for (i = 0; i < num_axes; ++i)
-      {
-	unsigned char axc;
-	axc = (unsigned char) (127. * ax[i]);	
-		
-	if (axc != my->axis_old[i])
+	  my->jst->poll();
+	  
+	  num_axes    = min(my->jst->num_axes(), MAX_NUM_AXBU);
+	  num_buttons = min(my->jst->num_buttons(), MAX_NUM_AXBU);
+	 
+	  double ax[MAX_NUM_AXBU];	  
+	  for (i = 0; i < num_axes; ++i)
 	  {
-	    my->axis_old[i] = axc;
-	    midi_buffer[len++] = MIDI_CTRLCHANGE + 0; //channel 0
-	    midi_buffer[len++] = i;
-	    midi_buffer[len++] = axc;
+		  ax[i] = my->jst->get_axis(i);	  
 	  }
-      }	
-    for (i = 0; i < num_buttons; ++i)
-      {
-	if (b[i] != my->button_old[i])
+	  
+	  bool b[MAX_NUM_AXBU];
+	  for (i = 0; i < num_buttons; ++i)
 	  {
-	    my->button_old[i] = b[i];
-	    midi_buffer[len++] = MIDI_CTRLCHANGE + 1; //channel 1
-	    midi_buffer[len++] = i;
-	    midi_buffer[len++] = b[i]*127;
-	  }    
-      }
+		  b[i] = my->jst->get_button(i);
+	  }
+	  
+  	  unsigned char midi_buffer[MAX_NUM_AXBU*2*3];
+	  int len = 0;
+	  
+	  for (i = 0; i < num_axes; ++i)
+	  {
+		  int axc = static_cast<int>(127. * ax[i]);	
+		  
+		  if (axc != my->axis_old[i])
+		  {
+			  my->axis_old[i]    = axc;
+			  midi_buffer[len++] = MIDI_CTRLCHANGE + 0; //channel 0
+			  midi_buffer[len++] = i;
+			  midi_buffer[len++] = static_cast<unsigned char>(axc);
+		  }
+	  }
 
-    midi_set_buffer(inst->out_midi, midi_buffer, len);
-
-    inst->out_signal_x->number = ax[0];
-    inst->out_signal_y->number = ax[1];
-    
-    inst->out_button_1->number = b[0];
-    inst->out_button_2->number = b[1];
+	  for (i = 0; i < num_buttons; ++i)
+	  {
+		  int bc = b[i] ? 127 : 0;
+		  if (bc != my->button_old[i])
+		  {
+			  my->button_old[i]  = bc;
+			  midi_buffer[len++] = MIDI_CTRLCHANGE + 1; //channel 1
+			  midi_buffer[len++] = i;
+			  midi_buffer[len++] = static_cast<unsigned char>(bc);
+		  }    
+	  }
+	  
+	  midi_set_buffer(inst->out_midi, midi_buffer, len);
+	  
+	  inst->out_signal_x->number = ax[0];
+	  inst->out_signal_y->number = ax[1];
+	  
+	  inst->out_button_1->number = b[0] ? 1.0 : 0.0;
+	  inst->out_button_2->number = b[1] ? 1.0 : 0.0;
   }
-
+  catch (std::exception& e)
+  {
+	  char buffer[128];
+	  snprintf(buffer, sizeof(buffer),
+		  "Error at poll(): '%s'", e.what());
+	  s_log(0, buffer);
+  }
 }

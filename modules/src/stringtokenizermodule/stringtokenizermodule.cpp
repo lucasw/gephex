@@ -4,6 +4,8 @@
 #include <sstream>
 #include <vector>
 
+#include <cassert>
+
 static logT s_log;
 
 typedef struct _MyInstance {
@@ -52,24 +54,28 @@ void update(void* instance)
   const char delimiter =',';
 
   std::string input = inst->in_string->text;
-  size_t nr = trim_int(inst->in_entry->number,1,1000);
+  size_t nr = trim_int(inst->in_entry->number,1,1000) - 1;
 
   std::istringstream ist(input);
   
   std::vector<std::string> tokens;
 
   std::string w;
-  while (std::getline(ist,w,delimiter)) 
+  while (std::getline(ist, w, delimiter)) 
     tokens.push_back(w);
 
-  if (tokens.size()<nr)
-    string_charAssign(inst->out_token,"");
+  inst->out_len->number = tokens.size();
+
+  if (tokens.empty())
+    {
+      string_charAssign(inst->out_token, "");	  
+    }
   else
-    string_charAssign(inst->out_token,tokens[nr-1].c_str());
+    {
+      nr %= tokens.size();
+      assert(0 <= nr && nr < tokens.size());
+      string_charAssign(inst->out_token, tokens[nr].c_str());
+    }
 }
 
-void strongDependencies(Instance* inst, int neededInputs[])
-{
-	// set the inputs to 0 that are not needed!
-}
 

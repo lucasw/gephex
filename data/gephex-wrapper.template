@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#
+# This is the common GePhex wrapper script.
+# It checks wether GePhex is started for the first time.
+# If so, it creates the config file and copies the examples.
+#
+# Don't call it directly! Instead, call gephex-engine or
+# gephex-gui. These are symlinks to this file.
+#
+# TODO: better error handling
+# Note: the prefix variable is replaced at install time
+
+CONF_DIR=$HOME/.gephex
+DATA_PATH=__PREFIX__/share/gephex/
+
+if [ ! -e $CONF_DIR ]; then
+    echo "You started gephex for the first time!"
+
+    echo "Creating $CONF_DIR..."
+    mkdir $CONF_DIR
+    mkdir $CONF_DIR/graphs
+
+    echo "Copying and adapting default config file..."
+    cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g - > $CONF_DIR/gephex.conf
+
+    echo "Copying example graphs..."
+    cp $DATA_PATH/graphs/* $CONF_DIR/graphs
+
+    echo "...done!"
+    echo "Everything is set up."
+    echo "Starting GePhex, have fun."
+fi
+
+# determine which symlink was called
+test_engine=`echo $0 | grep gephex-engine`
+test_gui=`echo $0 | grep gephex-gui`
+
+if test "x$test_engine" != "x"; then
+    __PREFIX__/bin/gephex-engine-real $*
+elif test "x$test_gui" != "x"; then
+    __PREFIX__/bin/gephex-gui-real $*
+else
+    echo "Please don't call this script directly."
+    echo "Use the symlinks gephex-engine and gephex-gui, so I know"
+    echo "what to do."
+fi
+

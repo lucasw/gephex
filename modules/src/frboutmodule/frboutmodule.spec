@@ -46,8 +46,9 @@ inputs
         lower_bound       = 0
         higher_bound      = 2048
         step_size         = 1
-		display_format    = fixed
-		precision         = 0
+        display_format    = fixed
+        precision         = 0
+        special_text      = auto
         help              = If x_size and y_size > 0 the image is scaled
     }
 
@@ -63,8 +64,9 @@ inputs
         lower_bound       = 0
         higher_bound      = 2048
         step_size         = 1
-		display_format    = fixed
-		precision         = 0
+        display_format    = fixed
+        precision         = 0
+        special_text      = auto
         help              = If x_size and y_size > 0 the image is scaled
     }
 
@@ -134,14 +136,14 @@ inputs
 
     server
     {
-        name               = Xserver
+        name               = Display
         type               = typ_StringType
         const              = true
         strong_dependency  = true
         hidden             = true
-        default            = :0.0
+        default            = default
         toggle_keys        = p[:0.1,:0.0]
-        help               = Format is SERVER_HOSTNAME:XSERVER:SCREEN
+        help               = Format is default or SERVER_HOSTNAME:XSERVER:SCREEN
     }
 
 }

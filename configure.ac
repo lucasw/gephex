@@ -1,7 +1,7 @@
 AC_INIT
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.0.4beta2)
+AM_INIT_AUTOMAKE(gephex,0.0.4)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -25,6 +25,14 @@ else
 fi
 
 # check for extra libs
+
+# x11
+AC_PATH_XTRA
+AM_CONDITIONAL(HAVE_X11, test "x$no_x" != "xyes")
+AH_TEMPLATE([HAVE_X11],  [build with x11 support])
+if test "x$no_x" != "xyes"; then
+	AC_DEFINE(HAVE_X11)
+fi
 
 # qt
 AM_PATH_QT([2.3.0], have_qt=yes, have_qt=no)
@@ -108,16 +116,23 @@ fi
 AM_CONDITIONAL(HAVE_ASOUNDLIB, test "x$have_asoundlib" = "xyes")
 
 # video4linux
-AC_CHECK_HEADERS([linux/videodev.h],with_v4l=yes,with_v4l=no)
-AM_CONDITIONAL(WITH_V4L, test "x$with_v4l" = "xyes")
+AM_PATH_V4L(have_v4l=yes,have_v4l=no)
+AM_CONDITIONAL(HAVE_V4L, test "x$have_v4l" = "xyes")
 
 # oss
 AC_CHECK_HEADERS([sys/soundcard.h],have_sys_soundcard_h=yes,have_sys_soundcard_h=no)
 AM_CONDITIONAL(HAVE_OSS, test "x$have_sys_soundcard_h" = "xyes")
 
+
 # audio (oss or alsa)
 AM_CONDITIONAL(HAVE_ASOUNDLIB_OR_OSS, test "x$have_asoundlib" = "xyes" || test "x$have_sys_soundcard_h" = "xyes")
 
+# joystick.h
+AC_CHECK_HEADERS([linux/joystick.h],have_linux_joystick_h=yes,have_linux_joystick_h=no)
+AM_CONDITIONAL(HAVE_LINUX_JOYSTICK, test "x$have_linux_joystick_h" = "xyes")
+
+# joystick (linux or sdl)
+AM_CONDITIONAL(HAVE_JOYSTICK, test "x$have_linux_joystick_h" = "xyes" || test "x$have_sdl" = "xyes")
 
 # Checks for libraries.
 AC_CHECK_LIB(dl,dlopen,
@@ -301,134 +316,143 @@ AC_ARG_WITH(effectv,
       esac],[with_effectv=no])
 AM_CONDITIONAL(EFFECTV, test "x$with_effectv" = "xyes")
 
+AC_ARG_VAR([FRBINCACHE],
+           [The size of the cache of the image source module in MB])
+if test "x$FRBINCACHE" != "x"; then
+AC_DEFINE_UNQUOTED([FRBINMODULE_CACHE_SIZE], $FRBINCACHE, [Size of the cache the frbinmodule uses (in MB)])
+fi;
+
 AC_CONFIG_FILES([Makefile
 base/Makefile
 base/src/Makefile
-base/src/interfaces/Makefile
 base/src/TestFramework/Makefile
-base/src/thread/Makefile
-base/src/utils/Makefile
+base/src/interfaces/Makefile
 base/src/net/Makefile
 base/src/netinterfaces/Makefile
+base/src/thread/Makefile
+base/src/utils/Makefile
+data/Makefile
+doc/Makefile
+doc/images/Makefile
 engine/Makefile
 engine/src/Makefile
 engine/src/dllloader/Makefile
+engine/src/engine/Makefile
 engine/src/model/Makefile
 engine/src/renderer/Makefile
-engine/src/engine/Makefile
-types/Makefile
-types/src/Makefile
-types/src/numbertype/Makefile
-types/src/ifstype/Makefile
-types/src/stringtype/Makefile
-types/src/framebuffertype/Makefile
-types/src/positiontype/Makefile
-types/src/rgbtype/Makefile
-types/src/miditype/Makefile
-types/src/audiotype/Makefile
-types/src/lfotype/Makefile
-types/src/envtype/Makefile
+examples/Makefile
+examples/graphs/Makefile
+examples/img/Makefile
 modules/Makefile
 modules/src/Makefile
-modules/src/libgrid/Makefile
-modules/src/libmidi/Makefile
-modules/src/libscale/Makefile
-modules/src/libeffectv/Makefile
-modules/src/libeffectv/trick/Makefile
-modules/src/tunnelmodule/Makefile
-modules/src/planemodule/Makefile
-modules/src/rotozoommodule/Makefile
+modules/src/audioaddmodule/Makefile
+modules/src/audiobdmodule/Makefile
+modules/src/audioenergymodule/Makefile
+modules/src/audioinmodule/Makefile
+modules/src/audiooutmodule/Makefile
+modules/src/audiospecmodule/Makefile
+modules/src/audiosynthmodule/Makefile
+modules/src/audiovismodule/Makefile
+modules/src/audiowavegenmodule/Makefile
 modules/src/blurmodule/Makefile
-modules/src/numarithmodule/Makefile
 modules/src/bwmodule/Makefile
-modules/src/resultmodule/Makefile
-modules/src/numbermodule/Makefile
-modules/src/numenvmodule/Makefile
-modules/src/numlfomodule/Makefile
-modules/src/twolayermodule/Makefile
-modules/src/xfademodule/Makefile
-modules/src/plasma/Makefile
-modules/src/signalgenmodules/Makefile
-modules/src/imgarithmodule/Makefile
-modules/src/staticcolormodule/Makefile
-modules/src/numposmodule/Makefile
-modules/src/posnummodule/Makefile
+modules/src/color2number/Makefile
+modules/src/diffmodule/Makefile
+modules/src/doepfermodule/Makefile
+modules/src/effecttvedgemodule/Makefile
+modules/src/effectvagingmodule/Makefile
+modules/src/effectvburnmodule/Makefile
+modules/src/effectvcyclemodule/Makefile
+modules/src/effectvdotmodule/Makefile
+modules/src/effectvfiremodule/Makefile
+modules/src/effectvlensmodule/Makefile
+modules/src/effectvlifemodule/Makefile
+modules/src/effectvpuzzlemodule/Makefile
+modules/src/effectvquarkmodule/Makefile
+modules/src/effectvsparkmodule/Makefile
+modules/src/flashmodule/Makefile
+modules/src/flipflopmodule/Makefile
+modules/src/fpsmodule/Makefile
+modules/src/frbinmodule/Makefile
+modules/src/frboutmodule/Makefile
 modules/src/functions/Makefile
 modules/src/functions/jumpmodule/Makefile
 modules/src/functions/numxfadermodule/Makefile
-modules/src/flashmodule/Makefile
-modules/src/joystickmodule/Makefile
-modules/src/v4lmodule/Makefile
-modules/src/ifsmodule/Makefile
-modules/src/netcontrolmodule/Makefile
-modules/src/midiinmodule/Makefile
-modules/src/doepfermodule/Makefile
-modules/src/fpsmodule/Makefile
-modules/src/isingnoizemodule/Makefile
-modules/src/imagewritermodule/Makefile
-modules/src/flipflopmodule/Makefile
-modules/src/diffmodule/Makefile
-modules/src/ifsgenmodule/Makefile
-modules/src/ifsxfadermodule/Makefile
-modules/src/number2color/Makefile
-modules/src/color2number/Makefile
-modules/src/rangeconvertmodule/Makefile
-modules/src/imagebuffermodule/Makefile
-modules/src/frboutmodule/Makefile
-modules/src/frbinmodule/Makefile
-modules/src/audioaddmodule/Makefile
-modules/src/audiospecmodule/Makefile
-modules/src/audioenergymodule/Makefile
-modules/src/audiowavegenmodule/Makefile
-modules/src/audiovismodule/Makefile
-modules/src/audioinmodule/Makefile
-modules/src/audiooutmodule/Makefile
-modules/src/audiobdmodule/Makefile
-modules/src/audiosynthmodule/Makefile
-modules/src/overlaymodule/Makefile
 modules/src/gradnormmodule/Makefile
+modules/src/ifsgenmodule/Makefile
+modules/src/ifsmodule/Makefile
+modules/src/ifsxfadermodule/Makefile
+modules/src/imagebuffermodule/Makefile
+modules/src/imagewritermodule/Makefile
+modules/src/imgarithmodule/Makefile
+modules/src/isingnoizemodule/Makefile
+modules/src/joystickmodule/Makefile
+modules/src/libeffectv/Makefile
+modules/src/libeffectv/trick/Makefile
+modules/src/libgrid/Makefile
+modules/src/libmidi/Makefile
+modules/src/libscale/Makefile
+modules/src/midiinmodule/Makefile
+modules/src/netcontrolmodule/Makefile
+modules/src/numarithmodule/Makefile
+modules/src/number2color/Makefile
+modules/src/numbermodule/Makefile
+modules/src/numenvmodule/Makefile
+modules/src/numlfomodule/Makefile
+modules/src/numposmodule/Makefile
+modules/src/overlaymodule/Makefile
 modules/src/pixelizemodule/Makefile
-modules/src/stringtokenizermodule/Makefile
-modules/src/effecttvedgemodule/Makefile
-modules/src/effectvfiremodule/Makefile
-modules/src/effectvlensmodule/Makefile
-modules/src/effectvpuzzlemodule/Makefile
-modules/src/effectvlifemodule/Makefile
-modules/src/effectvagingmodule/Makefile
-modules/src/effectvburnmodule/Makefile
-modules/src/effectvdotmodule/Makefile
-modules/src/effectvsparkmodule/Makefile
-modules/src/effectvcyclemodule/Makefile
-modules/src/effectvquarkmodule/Makefile
+modules/src/planemodule/Makefile
+modules/src/plasma/Makefile
+modules/src/posnummodule/Makefile
+modules/src/rangeconvertmodule/Makefile
+modules/src/resultmodule/Makefile
+modules/src/rotozoommodule/Makefile
 modules/src/sdlfontmodule/Makefile
+modules/src/signalgenmodules/Makefile
+modules/src/staticcolormodule/Makefile
+modules/src/stringtokenizermodule/Makefile
+modules/src/tunnelmodule/Makefile
+modules/src/twolayermodule/Makefile
+modules/src/v4lmodule/Makefile
+modules/src/xfademodule/Makefile
 qtgui/Makefile
 qtgui/src/Makefile
-qtgui/src/guimodel/Makefile
 qtgui/src/gui/Makefile
 qtgui/src/gui/base/Makefile
+qtgui/src/gui/dialogs/Makefile
 qtgui/src/gui/editor/Makefile
 qtgui/src/gui/typeviews/Makefile
+qtgui/src/guimodel/Makefile
+types/Makefile
+types/src/Makefile
+types/src/audiotype/Makefile
+types/src/envtype/Makefile
+types/src/framebuffertype/Makefile
+types/src/ifstype/Makefile
+types/src/lfotype/Makefile
+types/src/miditype/Makefile
+types/src/numbertype/Makefile
+types/src/positiontype/Makefile
+types/src/rgbtype/Makefile
+types/src/stringtype/Makefile
 util/Makefile
-util/src/Makefile
-util/src/libjoystick/Makefile
-util/src/joystick_net_midi/Makefile
-util/src/cpuinfo/Makefile
-util/src/libgeo/Makefile
-util/src/misc/Makefile
 util/include/Makefile
 util/include/compatibility/Makefile
-doc/Makefile
-doc/images/Makefile
-data/Makefile
+util/src/Makefile
+util/src/cpuinfo/Makefile
+util/src/joystick_net_midi/Makefile
+util/src/libgeo/Makefile
+util/src/libjoystick/Makefile
+util/src/misc/Makefile
 ])
 AC_OUTPUT
-
+#
 #modules/src/starfield/Makefile
 #modules/src/libmpeg3module/Makefile
 
-
 MISSING_LIB_TEXT="Some modules will not be compiled! Install the missing
-library and run configure again to activate these modules."
+library/headers and run configure again to activate these modules."
 
 if test "x$have_sdl" != "xyes";  then
    echo Note: No SDL support found.
@@ -477,6 +501,11 @@ fi
 
 if test "x$have_sys_soundcard_h" != "xyes"; then
    echo "Note: No OpenSoundSystem (OSS) support found."
+   echo $MISSING_LIB_TEXT
+fi
+
+if test "x$have_v4l" != "xyes"; then
+   echo "Note: No Video4Linux (v4l) support found."
    echo $MISSING_LIB_TEXT
 fi
 

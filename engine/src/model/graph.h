@@ -42,14 +42,14 @@ namespace model
 {
   class GraphNode;
   class GraphConnection;
-  class ControllValueSet;
+  class ControlValueSet;
 
   class Graph
     {
     public:
       typedef const std::string ControlValueSetID; 
       typedef int ModuleID;
-      typedef utils::AutoPtr< ControllValueSet > ControlValueSetPtr; 
+      typedef utils::AutoPtr< ControlValueSet > ControlValueSetPtr; 
       typedef std::map< ControlValueSetID, ControlValueSetPtr > ValueSetMap;
       typedef utils::AutoPtr< GraphConnection > ConnectionPtr;
       typedef utils::AutoPtr< GraphNode > NodePtr;
@@ -122,7 +122,7 @@ namespace model
        **/
       std::list<int> moduleDataList(ModuleID moduleID) const;
 
-      // ControllValues
+      // ControlValues
       void newControlValueSet(ControlValueSetID&, const std::string& name);
 
       void setControlValue(ControlValueSetID& snapShotID, 
@@ -130,15 +130,18 @@ namespace model
 			   int inputIndex, 
 			   const utils::Buffer& newValue);
 
-      void copyControllValueSet(ControlValueSetID& snapID,
+      void copyControlValueSet(ControlValueSetID& snapID,
 				ControlValueSetID& newID,
 				const std::string& newSnapName);
 
-      void renameControllValueSet(ControlValueSetID& snapID,
+      void renameControlValueSet(ControlValueSetID& snapID,
 				  const std::string& newSnapName);
 
-      void deleteControllValueSet(const std::string& snapID);
+      void deleteControlValueSet(const std::string& snapID);
       const ValueSetMap& getValueSetMap() const;
+
+      std::string getOutputID(int moduleID, int outputIndex) const;
+      std::string getInputID(int moduleID, int inputIndex) const;
 
     private:
       Graph(const Graph&); //not impl.

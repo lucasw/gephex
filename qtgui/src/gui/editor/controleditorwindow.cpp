@@ -12,12 +12,15 @@ namespace gui
 					   WFlags fl, 
 					   ControlModel& controlModel,
 					   IModelControlReceiver& model,
-					   ControlValueDispatcher& disp)
+					   const utils::AutoPtr<ControlValueDispatcher>& disp,
+					   const std::string& media_path)
     : QMainWindow(parent,name,fl)
   {
     QScrollView* controlScroller = new QScrollView(this);
-    m_controlEditor = new ControlEditor(controlScroller->viewport(),"control",0,
-					controlModel,model,disp);
+    m_controlEditor = new ControlEditor(controlScroller->viewport(),
+					"control",0,
+					controlModel,model,disp,
+					media_path);
 
     controlScroller->addChild(m_controlEditor);
     this->setCaption("Controls");

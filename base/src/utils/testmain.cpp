@@ -13,11 +13,14 @@
 #include "bufferstreamtest.h"
 #include "sharedlibrarytest.h"
 #include "circularbuffertest.h"
-
+#include "xmlutilstest.h"
 
 void doTests()
 {
 	CompositeTest AllTests("Utils Tests","");
+
+        XmlutilsTest xut;
+        AllTests.addTest(xut);
 
 	SharedLibraryTest slt;
 	AllTests.addTest(slt);

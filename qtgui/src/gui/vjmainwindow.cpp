@@ -1,4 +1,28 @@
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "vjmainwindow.h"
+
+#include <iostream>
 
 #include <qmenubar.h>
 #include <qlayout.h>
@@ -20,9 +44,12 @@
 
 #include "picswitch.h"
 
-#include "dllselectordialog.h"
+#include "dialogs/dllselectordialog.h"
 
-#include "aboutdialog.h"
+#include "dialogs/aboutdialogimpl.h"
+#include "dialogs/changesdialogimpl.h"
+#include "dialogs/newgraphdialog.h"
+#include "guiconfig.h"
 
 #include "interfaces/ienginecontrolreceiver.h"
 #include "interfaces/irenderercontrolreceiver.h"
@@ -30,35 +57,37 @@
 #include "interfaces/imoduleclassnamesender.h"
 #include "interfaces/ierrorsender.h"
 #include "interfaces/irendererstatussender.h"
+#include "interfaces/imodelcontrolreceiver.h"
 
 #include "guimodel/enginewrapper.h"
 #include "guimodel/moduleclassmodel.h"
+#include "guimodel/controlvaluedispatcher.h"
 
 #include "rot_klein.xpm"
 #include "gruen_klein.xpm"
 
 #include "utils/structreader.h"
+#include "utils/spawn.h"
+#include "utils/timing.h"
 
+#if defined(HAVE_CONFIG_H)
 #include "config.h"
-// for exec engine
-#ifdef OS_POSIX
-#include <sys/types.h>
-#include <unistd.h>
 #endif
 
 namespace gui
 {
   
   VJMainWindow::VJMainWindow(QWidget* parent, const char* name,
-			     const std::string& ipcType,
-			     const std::string& locator, int port,
-			     StructReaderPtr& config)
+                             const GuiConfig& config)
+			     
     : QMainWindow(parent,name),
-      engineWrapper(new EngineWrapper(ipcType, locator, port)),
+      engineWrapper(new EngineWrapper(config.ipcType,
+                                      config.ipcLocator,
+                                      config.port)),
       running(false), connected(false), 
       moduleClassView(0), graphNameView(0),
       m_config(config),
-      m_kbManager(new KeyboardManager())
+      m_kbManager(0)
   {
     createWindows();
     createActions();
@@ -66,7 +95,7 @@ namespace gui
     buildMenuBar();
     
     switcher = new PicSwitch(statusBar(), "switcher!",
-		                     roter_mann, gruener_mann);
+                             roter_mann, gruener_mann);
 
     statusBar()->addWidget(switcher,0,TRUE);
     
@@ -75,30 +104,33 @@ namespace gui
     connect(switcher, SIGNAL(clicked(int)), this, SLOT(startStop()));
     
     QTimer* timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(pollNetwork()));
+    connect(timer, SIGNAL(timeout()),
+		    this, SLOT(pollNetwork()));
     timer->start(20);
   }
 
 
   VJMainWindow::~VJMainWindow()
   {
-    delete engineWrapper;
     delete graphNameView;
-    
-    delete m_kbManager;
+
+    //TODO: the kbmanager is currently not used (set to 0)
+    // if it is activated, there is a problem with the order of deletion:
+    // the dtor of NodeWidget unregisters itself from the keyboardmanager,
+    // but the keyboardmanager gets deleted before the nodewidgets
+    // (they get deleted by qt).
+    // Possible solution: keep keyboardmanager in a utils::AutoPtr.
   }
 
 
   void VJMainWindow::started()
   {
-	rendererStateAction->setOn(true);
     switcher->setPic(1);
     running = true;
   }
 
   void VJMainWindow::stopped()
   {
-	rendererStateAction->setOn(false);
     switcher->setPic(0);
     running = false;
   }
@@ -106,6 +138,12 @@ namespace gui
   void VJMainWindow::renderedGraphChanged( const std::string& graphID )
   {
     emit renderedGraphChangedSignal( graphID );
+  }
+
+  void VJMainWindow::quitSlot()
+  {
+	
+	emit quitSignal();
   }
 
   void VJMainWindow::pollNetwork()
@@ -133,7 +171,9 @@ namespace gui
     showPlugInManagerAction->setEnabled(true);
     
     rendererStateAction->setEnabled(true);
-    keyGrabStateAction->setEnabled(true);
+    //keyGrabStateAction->setEnabled(true);
+
+    newGraphAction->setEnabled(true);
 
     connectToEngineAction->setEnabled(false);
     disConnectToEngineAction->setEnabled(true);
@@ -147,7 +187,9 @@ namespace gui
     showPlugInManagerAction->setEnabled(false);
     
     rendererStateAction->setEnabled(false);
-    keyGrabStateAction->setEnabled(false);
+    //    keyGrabStateAction->setEnabled(false);
+
+    newGraphAction->setEnabled(false);
 
     connectToEngineAction->setEnabled(true);
     disConnectToEngineAction->setEnabled(false);
@@ -158,75 +200,86 @@ namespace gui
   void VJMainWindow::createActions()
   {
     quitAction= new QAction(this,"QuitAction");
-    quitAction->setText("quit");
+    quitAction->setText("Quit");
     quitAction->setToolTip ("exit the application");
     quitAction->setAccel(Qt::CTRL+Qt::Key_Q);
     quitAction->setEnabled(true);
-    connect(quitAction,SIGNAL(activated()),this,SIGNAL(quitSignal()));
+    connect(quitAction, SIGNAL(activated()),
+		    this, SLOT(quitSlot()));
 
+    newGraphAction= new QAction(this,"NewGraphAction");
+    newGraphAction->setText("New Graph");
+    newGraphAction->setToolTip ("create a new graph");
+    //newGraphAction->setAccel(Qt::CTRL+Qt::Key_Q);
+    newGraphAction->setEnabled(false);
+    connect(newGraphAction,SIGNAL(activated()),this,SLOT(newGraph()));
 
     showPlugInManagerAction= new QAction(this,"ShowPlugInManagerAction",false);
     showPlugInManagerAction->setText("PlugIn Manager");
-    showPlugInManagerAction->setToolTip ("show the PlugIn Manager Dialog");
+    showPlugInManagerAction->setToolTip ("show the plugin-manager dialog");
     showPlugInManagerAction->setEnabled(false);
     showPlugInManagerAction->setToggleAction ( true );
     connect(showPlugInManagerAction,SIGNAL(toggled(bool)),
 	    m_dllSelector,SLOT(setShown ( bool )));  
     
-    
     rendererStateAction= new QAction(this,"RendererStateAction",false);
-    rendererStateAction->setText("Render state");
-    rendererStateAction->setToolTip ("toggle renderer state");
+    rendererStateAction->setText("start/stop rendering");
+    rendererStateAction->setToolTip ("starts and stops the renderer");
     rendererStateAction->setEnabled(false);
-    rendererStateAction->setAccel(Qt::Key_Space);
-    rendererStateAction->setToggleAction ( true );
-    connect(rendererStateAction,SIGNAL(toggled(bool)),
-	    this,SLOT(setRendererState( bool )));      
+    rendererStateAction->setAccel(Qt::CTRL + Qt::Key_Space);
+    rendererStateAction->setToggleAction ( false );
+    connect(rendererStateAction, SIGNAL(activated()),
+	    this,SLOT(setRendererState( )));      
 
     connectToEngineAction= new QAction(this,"ConnectToEngineAction");
-    connectToEngineAction->setText("connect");
+    connectToEngineAction->setText("Connect");
     connectToEngineAction->setToolTip ("connect to the engine");
     connectToEngineAction->setEnabled(false);
     connect(connectToEngineAction,SIGNAL(activated()),
 	    this,SLOT(connectToEngine()));
 
     disConnectToEngineAction= new QAction(this,"disConnectToEngineAction");
-    disConnectToEngineAction->setText("disconnect");
+    disConnectToEngineAction->setText("Disconnect");
     disConnectToEngineAction->setToolTip ("disconnect from the engine");
     disConnectToEngineAction->setEnabled(false);
     connect(disConnectToEngineAction,SIGNAL(activated()),
 	    this,SLOT(disconnectFromEngine()));
 
     synchronizeEngineAction= new QAction(this,"synchronizeEngineAction");
-    synchronizeEngineAction->setText("sync");
+    synchronizeEngineAction->setText("Sync");
     synchronizeEngineAction->setToolTip ("sync the gui with the engine");
     synchronizeEngineAction->setEnabled(false);
     connect(synchronizeEngineAction,SIGNAL(activated()),
 	    this,SLOT(synchronize()));
-
-
+    
     shutDownEngineAction= new QAction(this,"shutDownEngineAction");
-    shutDownEngineAction->setText("stop the engine");
-    shutDownEngineAction->setToolTip ("shut the engine down");
+    shutDownEngineAction->setText("kill the engine");
+    shutDownEngineAction->setToolTip ("terminates the engine process");
     shutDownEngineAction->setEnabled(false);
     connect(shutDownEngineAction,SIGNAL(activated()),
 	    this,SLOT(shutDown()));
 
-    keyGrabStateAction= new QAction(this,"keyGrabStateAction");
-    keyGrabStateAction->setText("grab keyboard");
+    /*    keyGrabStateAction= new QAction(this,"keyGrabStateAction");
+    keyGrabStateAction->setText("Grab keyboard");
     keyGrabStateAction->setToolTip ("turn the keygrabber on/off");
     keyGrabStateAction->setEnabled(false);
     keyGrabStateAction->setToggleAction ( true );
     connect(keyGrabStateAction,SIGNAL(toggled(bool)),
-	    this,SLOT(setKeyGrabState( bool )));
-
-
-	aboutAction= new QAction(this,"aboutAction");
-    aboutAction->setText("about");
-    aboutAction->setToolTip ("shows some stuff");
-    aboutAction->setAccel(Qt::CTRL+Qt::Key_A);
+    this,SLOT(setKeyGrabState( bool )));*/
+    
+    aboutAction= new QAction(this,"aboutAction");
+    aboutAction->setText("About GePhex");
+    //aboutAction->setToolTip ("shows some stuff");
+    //aboutAction->setAccel(Qt::CTRL+Qt::Key_A);
     aboutAction->setEnabled(true);
     connect(aboutAction,SIGNAL(activated()),this,SLOT(aboutSlot()));
+
+    changesAction= new QAction(this,"changesAction");
+    changesAction->setText("Changes");
+    changesAction->setToolTip ("Shows changes to previous version");
+    //changesAction->setAccel(Qt::CTRL+Qt::Key_A);
+    changesAction->setEnabled(true);
+    connect(changesAction,SIGNAL(activated()),this,SLOT(changesSlot()));
   }
   
   
@@ -237,11 +290,11 @@ namespace gui
 			    engineWrapper->moduleClassLoaderControlReceiver(),
 			    true);
 
-	connect(m_dllSelector, SIGNAL(status(const std::string&)),
-		    this, SLOT(displayStatusText(const std::string&)));
+    connect(m_dllSelector, SIGNAL(status(const std::string&)),
+            this, SLOT(displayStatusText(const std::string&)));
 
-	connect(m_dllSelector, SIGNAL(closed()),
-		    this, SLOT(dll_selector_closed()));
+    connect(m_dllSelector, SIGNAL(closed()),
+            this, SLOT(dll_selector_closed()));
     
   }
 
@@ -259,30 +312,35 @@ namespace gui
     //synchronizeEngineAction->addTo(server);
     shutDownEngineAction->addTo(server);
 
+    QPopupMenu* graphMenu = new QPopupMenu(this);
+    menuBar()->insertItem("Graphs",graphMenu,2,2);
+    newGraphAction->addTo(graphMenu);
+
     QPopupMenu* startstop = new QPopupMenu(this);
     menuBar()->insertItem("Engine",startstop,3,3);
     rendererStateAction->addTo(startstop);
 
     /*QPopupMenu* keyboard = new QPopupMenu(this);
-    menuBar()->insertItem("Keyboard", keyboard,4,4);
-    keyGrabStateAction->addTo(keyboard);*/
+      menuBar()->insertItem("Keyboard", keyboard,4,4);
+      keyGrabStateAction->addTo(keyboard);*/
 
     windows = new QPopupMenu(this);
     menuBar()->insertItem("Windows",windows,5,5);
     showPlugInManagerAction->addTo(windows);    
 
-	effectMenue = new QPopupMenu(this);
+    effectMenue = new QPopupMenu(this);
     menuBar()->insertItem("Effects",effectMenue,6,6);
 
-	help = new QPopupMenu(this);
-	menuBar()->insertItem("Help", help,7,7);
-	aboutAction->addTo(help);
+    help = new QPopupMenu(this);
+    menuBar()->insertItem("Help", help,7,7);
+    aboutAction->addTo(help);
+    changesAction->addTo(help);
   }
 
 
   void VJMainWindow::buildModuleBar(void)
   {
-	  //moved to buildMenuBar
+    //moved to buildMenuBar
     //effectMenue = new QPopupMenu(this);
     //menuBar()->insertItem("Effekte",effectMenue,6,6);
   
@@ -294,59 +352,58 @@ namespace gui
     // moduleClassView->show();
     engineWrapper->moduleClassModel().registerModuleClassView(*moduleClassView);
     engineWrapper->moduleClassModel().registerModuleClassView(*m_dllSelector);
-	//engineWrapper->moduleClassModel().registerModuleClassView(*moduleClassTabView);
+    //engineWrapper->moduleClassModel().registerModuleClassView(*moduleClassTabView);
   }
 
   void VJMainWindow::unbuildModuleBar()
   {
-	  // the dllselector and effectmenue clear themselves
-	  // when they receive the syncStarted call
+    // the dllselector and effectmenue clear themselves
+    // when they receive the syncStarted call
     engineWrapper->moduleClassModel().unregisterModuleClassViews();	
+    
     //engineWrapper->moduleClassNameSender().unregisterModuleClassNameReceiver(); //TODO der wird beim naechsten register automatisch ueberschrieben
-
+    
     //delete m_dllSelector;
     //delete effectMenue;
-
-	effectMenue->clear();
-	m_dllSelector->clear();
+    
+    effectMenue->clear();
+    m_dllSelector->clear();
   }
 
   void VJMainWindow::buildSceleton()
   {
-    centralWidget = new QWidget(this,"CentralWidget");
+    centralWidget = new QWidget(this, "CentralWidget");
 	
-    splitVertical = new QSplitter(Vertical,centralWidget);
+    splitVertical = new QSplitter(Qt::Vertical, centralWidget,
+                                  "SplitVertical");
 	
-	//moduleClassTabView = new ModuleClassTabView(splitVertical);
+    splitHorizontal = new QSplitter(Qt::Horizontal, splitVertical,
+                                    "SplitHorizontal");
 
-    splitHorizontal = new QSplitter(splitVertical);	
-
-	//splitHorizontal->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
-	//	QSizePolicy::Minimum));
-	//splitVertical->setResizeMode(splitHorizontal,QSplitter::FollowSizeHint);
-    
-    leftTab = new QTabWidget(splitHorizontal,"Linker Tab");
-	leftTab->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Maximum));
+    leftTab = new QTabWidget(splitHorizontal,"LeftTab");
+    leftTab->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,
+                                       QSizePolicy::Maximum));
 	
 
-    editor = new QWidget(splitHorizontal,"PLATZ FUER EDITOR");
+    editor = new QWidget(splitHorizontal, "space for editor");
 #if QT_VERSION >= 300
-	editor->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+    editor->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
+                                      QSizePolicy::Maximum));
 
-	splitHorizontal->setResizeMode(editor, QSplitter::FollowSizeHint);
-	splitHorizontal->setResizeMode(leftTab, QSplitter::FollowSizeHint);
+    splitHorizontal->setResizeMode(editor, QSplitter::FollowSizeHint);
+    splitHorizontal->setResizeMode(leftTab, QSplitter::FollowSizeHint);
 #endif
-    belowTab = new QTabWidget(splitVertical,"Unterer Tab");
-	belowTab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
-		QSizePolicy::Minimum));
-	splitVertical->setResizeMode(belowTab,QSplitter::FollowSizeHint);
+    belowTab = new QTabWidget(splitVertical, "BelowTab");
+    belowTab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
+                                        QSizePolicy::Minimum));
+    splitVertical->setResizeMode(belowTab,QSplitter::FollowSizeHint);
     
     logWindow = new LogWindow(belowTab);
     engineWrapper->errorSender().registerErrorReceiver(*logWindow);
-    belowTab->addTab(logWindow,"Messages");
+    belowTab->addTab(logWindow, "Messages");
 
     setCentralWidget(centralWidget);
-	
+
     // layout
     QVBoxLayout* topLayout = new QVBoxLayout(centralWidget);
     topLayout->addWidget(splitVertical);	
@@ -367,11 +424,12 @@ namespace gui
 				    engineWrapper->modelControlReceiver(),
 				    engineWrapper->controlModel(),
 				    *moduleClassView,
-					/* *moduleClassTabView,*/
+                                    /* *moduleClassTabView,*/
 				    engineWrapper->controlValueDispatcher(),
 				    engineWrapper->moduleStatisticsSender(),
 				    engineWrapper->modelStatusSender(),
-				    *m_kbManager, *logWindow);
+				    &*m_kbManager, *logWindow,
+				    m_config.media_path);
 
     editorWidget->show();
     QVBoxLayout* editorLayout = new QVBoxLayout(editor);
@@ -386,8 +444,10 @@ namespace gui
     connect(editorWidget,SIGNAL(statusText(const std::string&)),
 	    this,SLOT(displayStatusText(const std::string&)));
 
-    connect(editorWidget,SIGNAL(displayProperties(const IPropertyDescription&)),
-	    this,SLOT(displayProperties(const IPropertyDescription&)));
+    connect(editorWidget,
+            SIGNAL(displayProperties(const IPropertyDescription&)),
+	    this,
+            SLOT(displayProperties(const IPropertyDescription&)));
 
     connect(editorWidget,SIGNAL(undisplayProperties()),
 	    this,SLOT(undisplayProperties()));
@@ -425,10 +485,18 @@ namespace gui
       }
   }
 
+  void VJMainWindow::newGraph()
+  {
+    const std::string newGraphName = NewGraphDialog::open("newGraph");
+    
+    if (newGraphName!="")
+      engineWrapper->modelControlReceiver().newGraph(newGraphName);
+  }
+  
   /**
    * Verbindet zur engine und baut die toolbar des Graphen zusammen
    **/
-  void VJMainWindow::connectToEngine(void)
+  void VJMainWindow::connectToEngine()
   {
     try
       {
@@ -437,36 +505,44 @@ namespace gui
 	    throw std::runtime_error("already connected");
 	  }
 	
-	statusBar()->message("connect to the rendering engine ...");
+	statusBar()->message("connecting to the engine ...");
 
-#ifdef OS_POSIX
+        buildModuleBar();
+        fillSceleton();
+
 	try
 	  {
-#endif
 	    this->connectToRealEngine();
-#ifdef OS_POSIX
 	  }
-	catch(std::runtime_error& e) 
+	catch (std::runtime_error& e) 
 	  {
 	    // start engine
-	    const pid_t pid( fork() );
-	    
-	    if (pid!=0)
-	      {
-		execlp("gephex-engine","gephex-engine",0);
-		exit(0);
-	      }
+            statusBar()->message("trying to spawn gephex-engine...");
+            std::vector<std::string> args;
+            std::string binary_name = m_config.engine_binary;
 
+#if defined(OS_POSIX)
+            args.push_back("-fg");
+            args.push_back("white");
+            args.push_back("-bg");
+            args.push_back("black");
+            args.push_back("-e");
+            args.push_back(binary_name);
+            utils::spawn("xterm", args);
+#elif defined(OS_WIN32)
+            utils::spawn(binary_name, args);
+#endif
+
+            // give engine some time to start up
+            utils::Timing::sleep(1000);
+
+            statusBar()->message("trying to connect...");
+            // try to connect
 	    this->connectToRealEngine();
-
 	  }
-#endif	
-	
-	buildModuleBar();
 
-	fillSceleton();
-				
-	statusBar()->message("Ready");
+
+	statusBar()->message("connected");
 
         connected=true;
       } 
@@ -474,6 +550,8 @@ namespace gui
       {
 	displayErrorMessage(e.what());
         connectToEngineAction->setEnabled(true);
+        this->clearSceleton();
+        this->unbuildModuleBar();
       }
   }
 
@@ -493,14 +571,13 @@ namespace gui
 
     this->unbuildModuleBar();
 		
-    // menuumbauen
-    statusBar()->message("not connected with the engine");
+    statusBar()->message("disconnected");
   }
 
 
   void VJMainWindow::startStop()
   {
-     setRendererState(!running);
+    setRendererState();
   }
 
 
@@ -537,13 +614,13 @@ namespace gui
   void VJMainWindow::displayErrorMessage(const std::string& text)
   {
     if (logWindow)
-    	logWindow->error(text);
+      logWindow->error(text);
   }
 
 
   void VJMainWindow::setCaption(const std::string& text)
   {
-	  QWidget::setCaption(text.c_str());
+    QWidget::setCaption(text.c_str());
   }
 
 
@@ -554,7 +631,13 @@ namespace gui
 
   void VJMainWindow::aboutSlot()
   {
-    AboutDialog* dlg = new AboutDialog(this);
+    AboutDialog* dlg = new AboutDialogImpl(this);
+    dlg->show();
+  }
+
+  void VJMainWindow::changesSlot()
+  {
+    ChangesDialog* dlg = new ChangesDialog(this);
     dlg->show();
   }
 
@@ -563,31 +646,27 @@ namespace gui
     showPlugInManagerAction->setOn(false);
   }
 
-
   void VJMainWindow::shutDown()
   {
     if (connected)
       engineWrapper->engineControlReceiver().shutDown();    
   }
 
-
-  void VJMainWindow::setKeyGrabState(bool state)
+  /*  void VJMainWindow::setKeyGrabState(bool state)
   {
     if (state)
       m_kbManager->turnOn();
     else
       m_kbManager->turnOff();
-  }
+      }*/
 
-
-  void VJMainWindow::setRendererState(bool state)
+  void VJMainWindow::setRendererState()
   {
     if (!connected)
       return;
-    
     try 
       {
-	if (state)
+	if (!running)
 	  engineWrapper->rendererControlReceiver().start();
 	else
 	  engineWrapper->rendererControlReceiver().stop();

@@ -2,14 +2,25 @@
 
 #include <string>
 #include <stdexcept>
-//#include <sstream>
-#include <memory>
-//#include <algorithm>
+#include <algorithm> 
+#include <cctype> // tolower
+#include <stdlib.h>
 #include <iostream>
+#include <fstream>
+#include <list>
 #include <map>
+#include <memory>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
+#endif
+
+#if defined(OS_WIN32)
+#include <windows.h>
+#endif
+
+#if !defined(COMP_VC)
+using std::tolower;
 #endif
 
 #include "videofiledriver.h"
@@ -36,7 +47,11 @@
 #include "framecache.h"
 #include "driverfactory.h"
 
-#define CACHE_SIZE_IN_MB 100
+#if defined (FRBINMODULE_CACHE_SIZE)
+#define CACHE_SIZE_IN_MB FRBINMODULE_CACHE_SIZE
+#else
+#define CACHE_SIZE_IN_MB 128
+#endif
 
 //---------------------------------------------------------------------
 
@@ -45,15 +60,25 @@ static logT s_log;
 static FrameCache* s_cache = 0;
 static DriverFactory* s_factory = 0;
 
+static void fallback_setting(NumberType* pos, 
+                             NumberType* len,
+                             FrameBufferType* fr);
+
+//---------------------------------------------------------------------
+
+typedef std::map<std::string, VideoInfo> InfoMap;
+
 //---------------------------------------------------------------------
 
 typedef struct _MyInstance 
 {
   VideoFileDriver* drv;
-  VideoInfo   info;
-  std::string fileName;
-  int last_frame;
+  VideoInfo  info;
+  std::string* fileName;  
   int flush;
+
+  InfoMap* known_infos;
+  bool damaged;
 } MyInstance, *MyInstancePtr;
 
 //---------------------------------------------------------------------
@@ -61,6 +86,11 @@ typedef struct _MyInstance
 int init(logT log_function)
 {
   s_log = log_function;
+  char buffer[128];
+  snprintf(buffer, sizeof(buffer),
+           "setting up cache: %i mb",
+           CACHE_SIZE_IN_MB);
+  s_log(2, buffer);
   s_cache = new FrameCache(CACHE_SIZE_IN_MB);
   s_factory = new DriverFactory();
 
@@ -109,15 +139,20 @@ MyInstance* construct()
   MyInstance* my = new MyInstance;
 
   my->drv = 0;
-  my->fileName = "";
-  my->last_frame = -1;
+  my->fileName = new std::string("");  
   my->flush = 0;
 
+  my->known_infos = new InfoMap();
+
+  my->damaged = false;
   return my;
 }
 
 void destruct(MyInstance* my)
 {
+  delete my->known_infos;
+  delete my->fileName;
+
   if (my->drv != 0)
     delete my->drv;
 
@@ -130,7 +165,52 @@ static std::string get_extension(const std::string& file_name)
   if (pos == std::string::npos)
     return "";
   else 
-    return file_name.substr(pos+1);
+    {
+      std::string extension(file_name.substr(pos+1));
+
+      typedef std::string::iterator I;
+      std::transform<I,I,int(*)(int)>(extension.begin(),
+				      extension.end(),
+				      extension.begin(),
+				      tolower);
+      return extension;
+    }
+}
+
+
+static std::list<std::string> path_to_dirs(const std::string& media_path)
+{
+  std::string::size_type pos = 0;
+  std::string::size_type old_pos = 0;
+
+  std::list<std::string> dir_list;
+  std::cout << "path = " << media_path << "\n";
+  while ( (pos = media_path.find_first_of(";", old_pos)) != std::string::npos )
+    {
+      if (old_pos < pos)
+	{
+	  std::string dir = media_path.substr(old_pos, pos - old_pos -1);
+#if defined(OS_WIN32)
+          dir += "\\";
+#else
+          dir += "/";
+#endif
+	  dir_list.push_back(dir);
+	  std::cout << "... " << dir << "\n";
+	}
+      old_pos = pos+1;
+    }
+
+  std::string dir = media_path.substr(old_pos);
+#if defined(OS_WIN32)
+  dir += "\\";
+#else
+  dir += "/";
+#endif
+  dir_list.push_back(dir);
+
+  std::cout << "... " << dir << "\n";
+  return dir_list;
 }
 
 /**
@@ -142,17 +222,66 @@ static std::string get_extension(const std::string& file_name)
  * \throws std::invalid_argument if file_name is not a valid file
  * \throws std::runtime_error if no known driver can load the file
  */
-static VideoFileDriver* load_file(const std::string& file_name,
+static VideoFileDriver* load_file(const std::string& short_file_name,
                                   const DriverFactory& factory,
                                   VideoInfo& info)
 {
+  static const char* GEPHEX_MEDIA_PATH = "GEPHEX_MEDIA_PATH";
+  // create search path list
+  std::list<std::string> path;
+  path.push_back("");  // local
+#if defined(OS_WIN32)
+  char media_path_buffer[10240];
+  int ret = GetEnvironmentVariable(GEPHEX_MEDIA_PATH,
+	     media_path_buffer,
+		 sizeof(media_path_buffer));
+
+  const char* media_path;
+  if (ret == 0)
+	  media_path = 0;
+  else
+	  media_path = media_path_buffer;
+#else
+  const char* media_path = getenv(GEPHEX_MEDIA_PATH);
+#endif
+  if (media_path == 0)
+    {
+      s_log(2, "GEPHEX_MEDIA_PATH not set!");
+    }
+  else
+    {
+      std::list<std::string> media_dirs = path_to_dirs(media_path);
+      // from config file
+      path.insert(path.end(), media_dirs.begin(), media_dirs.end());
+    }
+		 
+  // search for the file
+  std::list<std::string>::const_iterator it = path.begin();
+  while(it!=path.end())
+    {
+      const std::string fullfilename (*it+short_file_name);
+      std::ifstream teststream(fullfilename.c_str());
+      std::cout <<"filename: "<< fullfilename << std::endl;
+      if(teststream)
+	break;
+      ++it;
+    }
+  
+  if(it==path.end())
+    {
+      // file not found
+      throw std::runtime_error("file not fould");
+    }
+
+  const std::string file_name( *it + short_file_name );
+  
   std::string ext = get_extension(file_name);
 
-  DriverFactory::CtorList ctors = s_factory->get_drivers(ext);
+  DriverFactory::CtorList ctors = factory.get_drivers(ext);
 
   if (ext != "*")
     {
-      DriverFactory::CtorList stars = s_factory->get_drivers("*");
+      DriverFactory::CtorList stars = factory.get_drivers("*");
       ctors.insert(ctors.end(), stars.begin(), stars.end());
     }
           
@@ -162,10 +291,10 @@ static VideoFileDriver* load_file(const std::string& file_name,
                                 + ext + "'");
 
   VideoFileDriver* drv = 0;
-  for (DriverFactory::CtorList::const_iterator it = ctors.begin();
-       it != ctors.end(); ++it)
+  for (DriverFactory::CtorList::const_iterator cit = ctors.begin();
+       cit != ctors.end(); ++cit)
     {
-      drv = (*it)->create();
+      drv = (*cit)->create();
 
       try {
         drv->load_file(file_name, info);
@@ -177,11 +306,6 @@ static VideoFileDriver* load_file(const std::string& file_name,
           throw e;
         }
       catch (std::runtime_error&)
-        {
-          delete drv;
-          drv = 0;
-        }
-      catch (...)
         {
           delete drv;
           drv = 0;
@@ -202,141 +326,183 @@ void update(void* instance)
   int xsize = trim_int(inst->in_x_size->number, 0 , 1024);
   int ysize = trim_int(inst->in_y_size->number, 0 , 1024);
   int flush = trim_int(inst->in_flush->number, 0, 1);
-  bool use_cache = false;
+  int frame_number = trim_int(inst->in_frame->number, 0, INT_MAX);
 
+  bool use_cache = false;
   if (strcmp(inst->in_cache->text, "yes") == 0)
     use_cache = true;
+
+  InfoMap& m_known_infos   = *my->known_infos;
+  std::string& m_file_name = *my->fileName;
 
   if (flush != my->flush)
     {
       my->flush = flush;
       s_cache->flush();
+	  m_known_infos.clear();
     }
 
-  std::string newFileName = std::string(inst->in_fileName->text);
-  
-  //check is filename changed
-  if (my->fileName != newFileName || my->drv == 0)
+  std::string newFileName = std::string(inst->in_fileName->text);  
+  std::string error_text = "";
+
+  // first determine the output size
+  if (m_file_name != newFileName || (!use_cache && my->drv == 0)
+      || my->damaged)
     {
       if (my->drv)
         {
+          //printf("Closing driver\n");
           if (my->drv->is_open())
             my->drv->close_file();
           delete my->drv;
           my->drv = 0;
         }
-      try
+	  
+      if (use_cache)
+        {  	  		  
+          InfoMap::const_iterator it = m_known_infos.find(newFileName);
+          if (it != m_known_infos.end())
+            {
+              my->info = it->second;
+            }
+          else
+            {
+              try
+                {
+                  my->drv = load_file(newFileName, *s_factory, my->info);
+                  m_known_infos.insert(std::make_pair(newFileName,
+                                                      my->info));
+                  my->damaged = false;
+                }
+              catch (std::exception& e)
+                {
+                  error_text = e.what();
+                  my->damaged = true;
+                }
+            }
+        }  	  
+      else // don't use cache
         {
-          my->drv = load_file(newFileName, *s_factory, my->info);
-        }
-      catch (std::exception& e)
-        {
-          s_log(0, e.what());
-        }
-      my->fileName = newFileName;
+          try
+            {			  
+              my->drv = load_file(newFileName, *s_factory, my->info);	
+              my->damaged = false;
+            }
+          catch (std::exception& e)
+            {
+              error_text = e.what();
+            }
+        }	  
+      m_file_name = newFileName;
+    }
+  
+  if (error_text != "")
+    {
+      s_log(0, error_text.c_str());
+      fallback_setting(inst->out_position,
+                       inst->out_length,
+                       inst->out_result);
+      return;
     }
 
-  if (my->drv == 0 || !my->drv->is_open())
+  if (my->damaged)
     return;
 
-  int pos; // frame nr to decode
-  if(!trim_bool(inst->in_seek->number))
-    {
-      my->last_frame = my->last_frame+1;
-      if (my->last_frame > my->info.num_frames - 1)
-	{
-	  //my->last_frame = my->info.num_frames - 1;
-	  my->last_frame = 0;
-	}
+  assert(m_file_name == newFileName);
 
-      pos = my->last_frame;
-    }
-  else
-    {
-      my->last_frame = trim_int(inst->in_position->number*
-                                (my->info.num_frames - 1.0),
-                                0,
-                                my->info.num_frames-1);
-      pos = my->last_frame;
-      
-      //std::cout <<"pos: " << pos 
-      //	<<" prevkey: "<<my->videoStream->GetPrevKeyFrame(pos) 
-      //	<<" nextkey: "<<my->videoStream->GetNextKeyFrame(pos) 
-      //	<<" total: " <<my->videoStream->GetLength()
-      //	<< std::endl;
-    }
-    
+  // determine frame number
+  int pos = frame_number % my->info.num_frames;
+
+  // resize the output
   if (xsize == 0 || ysize == 0)
     {
       xsize = my->info.width;
       ysize = my->info.height;
     }
-
-  // resize output
+  
   FrameBufferAttributes attribs;
   attribs.xsize = xsize;
   attribs.ysize = ysize;
   int result = framebuffer_changeAttributes(inst->out_result, &attribs);
-
+  
   if (result != 1)
     {
       s_log(0, "Could not scale output!");
+      fallback_setting(inst->out_position,
+                       inst->out_length,
+                       inst->out_result);
       return;
     }
 
-  uint_32* infb = 0;
-  uint_32* outfb = 0;
+  // now get the frame
   if (use_cache)
-    {
-      infb = s_cache->lookup(my->fileName, pos, xsize, ysize);
-      if (infb == 0)
+    {	  
+      uint_32* frb = s_cache->lookup(m_file_name, pos, xsize, ysize);
+	  
+      if (frb == 0) //Cache miss
         {
-          outfb = new uint_32[xsize*ysize];
+          frb = new uint_32[xsize*ysize];
+          try
+            {
+              if (my->drv == 0)
+                {
+                  my->drv = load_file(m_file_name, *s_factory, my->info);
+                  m_known_infos.insert(std::make_pair(m_file_name,
+                                                      my->info));				  
+                }
+
+              my->drv->decode_frame(pos, frb, xsize, ysize);
+              s_cache->store(m_file_name, pos, xsize, ysize, frb);
+            }          
+          catch (std::exception& e)
+            {
+              delete[] frb;
+              frb = 0;
+              error_text = e.what();	  
+            }
         }
-      else
-        {
-          outfb = infb;
-        }
+
+      if (frb)
+        memcpy(inst->out_result->framebuffer, frb, xsize*ysize*4);
     }
-  else
-    outfb = inst->out_result->framebuffer;
-    
-  if (infb == 0) //Cache miss
-    {      	  
+  else // don't use the cache
+    {
       try
-        {          
-          my->drv->decode_frame(pos, outfb, xsize, ysize);
+        {
+          my->drv->decode_frame(pos, inst->out_result->framebuffer,
+                                xsize, ysize);
         }          
       catch (std::exception& e)
-        {
-          //delete[] temp;          
-          s_log(0, e.what());
-		  
-          // set error dummy
-          FrameBufferAttributes attribs;
-          attribs.xsize=1;
-          attribs.ysize=1;
-          framebuffer_changeAttributes(inst->out_result,&attribs);
-          // set black background
-          *(inst->out_result->data)=0x00000000;
-          inst->out_position->number=0.0;
-          return;
-        }		        
-	  
-      if (use_cache)
-        {
-          s_cache->store(my->fileName, pos, xsize, ysize, outfb);
+        {		  
+          error_text = e.what();
         }
     }
-
-  if (use_cache)
+   
+  if (error_text != "")
     {
-      memcpy(inst->out_result->framebuffer, outfb, xsize*ysize*4);
+      s_log(0, error_text.c_str());
+      fallback_setting(inst->out_position,
+                       inst->out_length,
+                       inst->out_result);
+      return;
     }
-	  
-  inst->out_position->number = (double)pos / (double)my->info.num_frames;
+    
+  inst->out_position->number = (double) pos;
+  inst->out_length->number   = (double) my->info.num_frames;
 
 }
 
 //---------------------------------------------------------------------
 
+static void fallback_setting(NumberType* pos, NumberType* len,
+                             FrameBufferType* fr)
+{
+  FrameBufferAttributes attribs;
+  attribs.xsize = 1;
+  attribs.ysize = 1;
+  framebuffer_changeAttributes(fr,&attribs);
+  // set black background
+  *(fr->data) = 0x00000000;
+  pos->number = 0.0;
+  len->number = 0.0;
+}

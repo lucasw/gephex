@@ -10,7 +10,7 @@ namespace gui
       inputs(mi.inputs), outputs(mi.outputs), pixmap(0)
   {
     if (mi.pixmap != 0)
-		pixmap = utils::AutoPtr<Xpm>(new Xpm(*mi.pixmap));
+      pixmap = utils::AutoPtr<Xpm>(new Xpm(*mi.pixmap));
   }
 
   ModuleInfo::ModuleInfo(const std::string& _identifier,
@@ -34,13 +34,12 @@ namespace gui
     identifier = mi.identifier;
     name = mi.name;
     inputs = mi.inputs;
-    outputs = mi.outputs;
-	
+    outputs = mi.outputs;	
     /*if (mi.pixmap != 0)
       pixmap = new Xpm(*mi.pixmap);
     else
       pixmap = 0;*/
-	pixmap = mi.pixmap;
+    pixmap = mi.pixmap;
 
     return *this;
   }
@@ -49,7 +48,6 @@ namespace gui
   {    
   }
 
-  
   std::string ModuleInfo::getName() const { return name; }
   std::string ModuleInfo::getIdentifier() const { return identifier; }
   std::string ModuleInfo::getGroup() const { return group; }

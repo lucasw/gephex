@@ -107,7 +107,9 @@ namespace net
 	throw SocketException("Socket already connected!");
       }
 
-    hostent* phost = gethostbyname(hostName.c_str());
+    hostent* phost;
+	
+	phost = gethostbyname(hostName.c_str());
     
     if (phost == 0)
       {
@@ -125,7 +127,7 @@ namespace net
     if (::connect(m_socket,(struct sockaddr*)&dest_sin,
 		  sizeof(dest_sin)) != 0)
       {
-	throw SocketException("Could not connect.");
+	     return 0;
       }
     
     FDSocket* newSocket = new FDSocket(m_socket, m_localPort);

@@ -20,7 +20,7 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=joy_id const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -28,19 +28,19 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_x } ";
   break;
   case 1:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=signal_y } ";
   break;
   case 2:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=button_1 } ";
   break;
   case 3:
-    return "output_spec { type=typ_NumberType } ";
+    return "output_spec { type=typ_NumberType id=button_2 } ";
   break;
   case 4:
-    return "output_spec { type=typ_MidiType } ";
+    return "output_spec { type=typ_MidiType id=midi } ";
   break;
  }
  return 0;
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Joystick] group=[Input] inputs=[1 Joystick_ID{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[4] hidden=[true] } ] outputs=[5 X_Richtung Y_Richtung Button_1 Button_2 midiOut ] type=xpm } ";
+  static const char* INFO = "info { name=[Joystick] group=[Input] inputs=[1 Joystick_ID{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[31] hidden=[true] display_format=[fixed] } ] outputs=[5 X_Richtung Y_Richtung Button_1 Button_2 midiOut ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(joystickmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

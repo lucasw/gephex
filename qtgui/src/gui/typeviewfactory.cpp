@@ -34,7 +34,7 @@
 namespace gui
 {
 
-  TypeViewFactory::TypeViewFactory()
+  TypeViewFactory::TypeViewFactory(const std::string& media_path)
   {
     
     registerTypeViewConstructor("typ_NumberType",
@@ -49,7 +49,7 @@ namespace gui
 				new BoundedNumberViewConstructor());
     registerTypeViewConstructor("typ_NumberType",
 				new RadioNumberViewConstructor());
-	registerTypeViewConstructor("typ_NumberType",
+    registerTypeViewConstructor("typ_NumberType",
 				new CheckBoxNumberViewConstructor());
 
     registerTypeViewConstructor("typ_StringType",
@@ -57,7 +57,7 @@ namespace gui
     registerTypeViewConstructor("typ_StringType",
 				new ComboboxStringViewConstructor());
     registerTypeViewConstructor("typ_StringType",
-				new FileStringViewConstructor());
+				new FileStringViewConstructor(media_path));
 
     registerTypeViewConstructor("typ_PositionType",
 				new PositionViewConstructor());
@@ -65,7 +65,7 @@ namespace gui
     registerTypeViewConstructor("typ_RGBType",
 				new ColorViewConstructor());
 
-	registerTypeViewConstructor("typ_FontType",
+    registerTypeViewConstructor("typ_FontType",
 				new FontViewConstructor());
 
 #if defined(OPT_SERIALIZE_FRAMEBUFFER)

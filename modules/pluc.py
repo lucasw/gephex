@@ -31,7 +31,6 @@ def removeComment(s):
         else:
                 return s
 
-
 def readBlock(file):
         " Liest einen Block aus file. wenn keiner da ist wird ('',[])"
         " zurueckgegeben. Wenn eine schliessende Klammer gelesen wird,"
@@ -50,7 +49,6 @@ def readBlock(file):
                         break
                 elif endblock.match(strippedLine):
                         return None
-        
 
         if id == '':
                 sys.stderr.write("Module identifier missing!\n")
@@ -217,13 +215,14 @@ def createModuleSpec(id, options, numberOfInputs, numberOfOutputs):
                 + "] deterministic=[" + options['deterministic'] + "] }"
 
 def createInputSpec(input):
-        (name,options) = input
+        (id,options) = input
         if options.has_key('default'):
                 default = 'default='+options['default']
         else:
                 default = ''
 
         return "input_spec { type=" + options['type'] + \
+                            " id=" + id + \
                             " const=" + options['const'] + \
                             " strong_dependency=" + \
                             options['strong_dependency'] + ' ' \
@@ -238,8 +237,9 @@ def createInputSpecs(inputs):
         return specs
 
 def createOutputSpec(input):
-        (name,options) = input
-        return "output_spec { type=" + options['type'] + " } "
+        (id,options) = input
+        return "output_spec { type=" + options['type'] +\
+                            " id=" + id + " } "
 
 def createOutputSpecs(outputs):
         specs = []
@@ -1047,7 +1047,7 @@ LINK32=link.exe
 TargetPath=.\Release\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules      copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "X_NAME_X - Win32 Debug"
@@ -1080,7 +1080,7 @@ LINK32=link.exe
 TargetPath=.\Debug\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules      copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 !ENDIF 
 
@@ -1136,10 +1136,10 @@ InputPath=.\X_NAME_X.spec
 InputName=X_NAME_X
 
 BuildCmds= \
-        python ..\..\pluc.py c $(InputName).spec \
-        python ..\..\pluc.py h $(InputName).spec \
-        python ..\..\pluc.py def $(InputName).spec \
-        
+	python ..\..\pluc.py c $(InputName).spec \
+	python ..\..\pluc.py h $(InputName).spec \
+	python ..\..\pluc.py def $(InputName).spec \
+
 
 "$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
    $(BuildCmds)
@@ -1158,9 +1158,9 @@ InputPath=.\X_NAME_X.spec
 InputName=X_NAME_X
 
 BuildCmds= \
-        python ..\..\pluc.py c $(InputName).spec \
-        python ..\..\pluc.py h $(InputName).spec \
-        python ..\..\pluc.py def $(InputName).spec \
+	python ..\..\pluc.py c $(InputName).spec \
+	python ..\..\pluc.py h $(InputName).spec \
+	python ..\..\pluc.py def $(InputName).spec \
         
 
 "$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"

@@ -47,6 +47,26 @@ public:
    * @return a copy of *this.
    */
 	virtual IModuleClassSpec* clone() const =0;
+
+        /**
+         * \throws std::invalid_argument if the id is not valid.
+         */
+        virtual int indexFromInputID(const std::string& id) const = 0;
+
+        /**
+         * \throws std::invalid_argument if the id is not valid.
+         */
+        virtual int indexFromOutputID(const std::string& id) const = 0;
+
+  /**
+   * \throws std::invalid_argument if the index is not valid.
+   */
+  virtual std::string inputID(int index) const = 0;
+
+  /**
+   * \throws std::invalid_argument if the index is not valid.
+   */
+  virtual std::string outputID(int index) const = 0;
 };
 
 #endif

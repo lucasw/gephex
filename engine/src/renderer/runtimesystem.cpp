@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include <iostream>
+#include <sstream>
 
 #include "interfaces/imodule.h"
 #include "interfaces/itype.h"
@@ -21,6 +22,7 @@
 
 #include "utils/buffer.h"
 #include "utils/timing.h"
+#include "utils/ilogger.h"
 
 namespace renderer
 {
@@ -231,9 +233,10 @@ namespace renderer
   };
 
   RuntimeSystem::RuntimeSystem (const IModuleFactory& factory,
-				const ITypeFactory& tFactory)
+                                const ITypeFactory& tFactory,
+                                utils::AutoPtr<utils::ILogger>& logger)
     :  m_modules(), m_sinks(), m_time(0), frameCount(0),
-       moduleFactory(factory), typeFactory(tFactory)
+       moduleFactory(factory), typeFactory(tFactory), m_logger(logger)
   {
   }
 	
@@ -278,24 +281,24 @@ namespace renderer
     ControlBlockMap::const_iterator it2 = m_modules.find(i2);
     if (it1 == m_modules.end() || it2 == m_modules.end())
       {
-	throw std::runtime_error("Modul nicht vorhanden.");
+	throw std::runtime_error("module does not exist.");
       }
 		
     IModule* m1 = it1->second->module();
     IModule* m2 = it2->second->module();
 	
-	if (outputNumber < 0 || outputNumber >= m1->getOutputs().size())
-		throw std::runtime_error("Ungueltiger output bei RuntimeSystem::connect.");
+    if (outputNumber < 0 || outputNumber >= m1->getOutputs().size())
+      throw std::runtime_error("Invalid output at RuntimeSystem::connect.");
 
-	if (inputNumber < 0 || inputNumber >= m2->getInputs().size())
-		throw std::runtime_error("Ungueltiger input bei RuntimeSystem::connect.");
+    if (inputNumber < 0 || inputNumber >= m2->getInputs().size())
+      throw std::runtime_error("Invalid input at RuntimeSystem::connect.");
 
     int t1 = m1->getOutputs()[outputNumber]->getType();
     int t2 = m2->getInputs()[inputNumber]->getType();
 		
     if (t1 != t2)
       {
-	throw std::runtime_error("Typen sind ungleich!");
+	throw std::runtime_error("Type mismatch!");
       }
 		
     IModule::IOutputPtr out = m1->getOutputs()[outputNumber];
@@ -336,61 +339,61 @@ namespace renderer
     // wird aufgerufen nachdem das zu block gehoerende modul
     // vollständig berechnet wurde
     // setzt auch die verbundenen inputs auf changed
-	  void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
-		  IControlValueReceiver* cvr,
-		  const RuntimeSystem::ControlBlockMap& blocks,
-		  int frameCount)
-	  {
-		  //  int moduleID = m->getID();
-		  IModule* m = block->module();
-		  const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
+    void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
+                         IControlValueReceiver* cvr,
+                         const RuntimeSystem::ControlBlockMap& blocks,
+                         int frameCount)
+    {
+      //  int moduleID = m->getID();
+      IModule* m = block->module();
+      const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
 		  
-		  for (std::vector<IModule::IOutputPtr>::const_iterator 
-			  it = outs.begin(); it != outs.end(); ++it)
-		  {
-			  IModule::IOutputPtr current = *it;
-			  std::list<IInput*> ins = current->getConnectedInputs();	  
+      for (std::vector<IModule::IOutputPtr>::const_iterator 
+             it = outs.begin(); it != outs.end(); ++it)
+        {
+          IModule::IOutputPtr current = *it;
+          std::list<IInput*> ins = current->getConnectedInputs();	  
 			  
-			  for (std::list<IInput*>::const_iterator jz = ins.begin(); 
-			  jz != ins.end(); ++jz)
-			  {
-				  IInput* in = *jz;			  
+          for (std::list<IInput*>::const_iterator jz = ins.begin(); 
+               jz != ins.end(); ++jz)
+            {
+              IInput* in = *jz;			  
 				  
-				  int moduleID = in->getModule()->getID();
-				  int inputIndex = in->getIndex();
+              int moduleID = in->getModule()->getID();
+              int inputIndex = in->getIndex();
 				  
-				  RuntimeSystem::ControlBlockMap::const_iterator 
-					  kt = blocks.find(moduleID);
+              RuntimeSystem::ControlBlockMap::const_iterator 
+                kt = blocks.find(moduleID);
 				  
-				  assert(kt != blocks.end());
+              assert(kt != blocks.end());
 				  
-				  RuntimeSystem::ModuleControlBlockPtr b = kt->second;
-				  b->setChanged(inputIndex);			  			
-			  }
+              RuntimeSystem::ModuleControlBlockPtr b = kt->second;
+              b->setChanged(inputIndex);			  			
+            }
 			  
-		  }
-		  const std::vector<IModule::IInputPtr>& ins = m->getInputs();
-		  for (std::vector<IModule::IInputPtr>::const_iterator it = ins.begin();
-		  it != ins.end(); ++it)
-		  {
-			  IModule::IInputPtr current = *it;
-			  int inputIndex = current->getIndex();
+        }
+      const std::vector<IModule::IInputPtr>& ins = m->getInputs();
+      for (std::vector<IModule::IInputPtr>::const_iterator it = ins.begin();
+           it != ins.end(); ++it)
+        {
+          IModule::IInputPtr current = *it;
+          int inputIndex = current->getIndex();
 
-			  if (!block->hasChanged(inputIndex))
-				  continue;
+          if (!block->hasChanged(inputIndex))
+            continue;
 
-			  const IType* t = current->getData();
-			  utils::Buffer buf;
-			  bool success = t->serialize(buf);
-			  //TODO: catch exceptions!!!!!
-			  if (success && cvr != 0 /*&& (frameCount & 7) == 7*/)
-			  {
-		         int moduleID = current->getModule()->getID();				 
-				 cvr->controlValueChanged(moduleID, inputIndex, buf);
-			  }
-		  }
+          const IType* t = current->getData();
+          utils::Buffer buf;
+          bool success = t->serialize(buf);
+          //TODO: catch exceptions!!!!!
+          if (success && cvr != 0 /*&& (frameCount & 7) == 7*/)
+            {
+              int moduleID = current->getModule()->getID();				 
+              cvr->controlValueChanged(moduleID, inputIndex, buf);
+            }
+        }
 		  
-	  }
+    }
 	  
   }
 	
@@ -459,7 +462,26 @@ namespace renderer
 	      {
 		// lets update the module
 		unsigned long startTime = utils::Timing::getTimeInMillis();
-		m->update();
+		//TODO: if an exception is caught, remove the module!
+		try {
+                  m->update();
+		}
+		catch (std::exception& e){
+                  std::ostringstream os;
+                  os << "error at update: " << e.what() << "\n"
+                     << "module id = " << m->getID() << "\n"
+                     << "module class = " << m->module_class_name() << "\n";
+
+                  m_logger->error("Runtimesystem", os.str());
+		}
+		catch (...) {
+                  std::ostringstream os;
+                  os << "error at update\n"
+                     << "module id = " << m->getID() << "\n"
+                     << "module class = " << m->module_class_name() << "\n";
+
+                  m_logger->error("Runtimesystem", os.str());
+		}
 		unsigned long stopTime = utils::Timing::getTimeInMillis();
 		block->addTime(stopTime-startTime);
 			
@@ -502,7 +524,7 @@ namespace renderer
     if (it == m_modules.end())
       {
 	// a module with that id doesnt exist
-	throw std::runtime_error("Modul nicht vorhanden "
+	throw std::runtime_error("Module does not exist at "
 				 "RuntimeSystem::deleteModule()");
       }
 
@@ -572,7 +594,7 @@ namespace renderer
       it = m_modules.find(moduleID);
     if (it == m_modules.end())
       {
-	throw std::runtime_error("Modul nicht vorhanden "
+	throw std::runtime_error("Module does not exist at "
 				 "RuntimeSystem::setInputValue()");
       }
 
@@ -582,7 +604,7 @@ namespace renderer
 
     if (inputIndex < 0 || inputIndex >= n->getInputs().size())
       {
-	throw std::runtime_error("Input nicht vorhanden "
+	throw std::runtime_error("Input does not exist at "
 				 "RuntimeSystem::setInputValue()");
       }
 
@@ -629,7 +651,7 @@ namespace renderer
       it = m_modules.find(moduleID);
     if (it == m_modules.end())
       {
-	throw std::runtime_error("Modul nicht vorhanden "
+	throw std::runtime_error("Module does not exist at "
 				 "RuntimeSystem::syncInputValue()");
       }
 		

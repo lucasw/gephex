@@ -45,9 +45,9 @@ namespace gui
 
     virtual void moveControl(int controlID, const Point& pos);
 
-	virtual void renameControl(int controlID, const std::string& name);
+    virtual void renameControl(int controlID, const std::string& name);
 
-	//----------------------------------------
+    //--------------------------------------------------------------------
 
     virtual void moduleDataSet(int moduleID, int type,
 			       const utils::Buffer& buf);
@@ -59,7 +59,7 @@ namespace gui
 
   private:
     int lastControlID;
-	typedef std::map<int,utils::AutoPtr<ControlElement> > ControlMap;
+    typedef std::map<int,utils::AutoPtr<ControlElement> > ControlMap;
     ControlMap controls; 
     IControlView* view;
     IControlConnectView* connectView;

@@ -1,7 +1,28 @@
-#include "glutil.h"
+/* This source file is a part of the GePhex Project.
 
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
+#include "glutil.h"
+#include <string.h>
 #include <GL/glx.h>		/* this includes the necessary X headers */
-#include <GL/gl.h>
 
 //static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 //static int dblBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
@@ -25,7 +46,7 @@ static void print_visual(XVisualInfo* vinfo)
 }
 
 // init a opengl window by the native windowsystem
-int initOutput(const char* caption, int xres, int yres, int bpp)
+int initOutput(const char* caption, const char* display_name ,int xres, int yres, int bpp)
 {
   int dummy; // only to trick the glxquery fun
   XVisualInfo  *vi; // to store some info abot the screen
@@ -37,7 +58,15 @@ int initOutput(const char* caption, int xres, int yres, int bpp)
   s_ysize = yres;
 
   // open a new connection to the X server
-  s_dpy = XOpenDisplay(NULL);
+  const char* display_name_ptr;
+  if (strcmp(display_name,"default")==0)
+    display_name_ptr=0; // use the DISPLAY environment variable
+  else
+    display_name_ptr=display_name; // use the userdefined display
+  
+  s_dpy = XOpenDisplay(display_name_ptr);
+  
+  
   if (s_dpy == NULL)
     return 0;
 
@@ -86,8 +115,6 @@ void resizeOutput(int new_xsize, int new_ysize)
   XResizeWindow(s_dpy, s_win, new_xsize, new_ysize);
   
   XFlush(s_dpy);
-
-  glViewport(0, 0, new_xsize, new_ysize);
 
   s_xsize = new_xsize;
   s_ysize = new_ysize;

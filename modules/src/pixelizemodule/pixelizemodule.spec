@@ -23,7 +23,7 @@ inputs
         hidden            = false
         widget_type       = number_selector
         lower_bound       = 1
-        higher_bound      = 30
+        higher_bound      = 80
         step_size         = 1
         display_format    = fixed
         precision         = 0          

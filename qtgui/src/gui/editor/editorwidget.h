@@ -9,6 +9,8 @@
 
 //class QWidget;
 
+#include "utils/autoptr.h"
+
 class IModelControlReceiver;
 class IModuleStatisticsSender;
 class IModelStatusSender;
@@ -33,12 +35,13 @@ namespace gui
     EditorWidget(QWidget *parent, const char *name, 
 		 GraphModel& graphModel,IModelControlReceiver& model,
 		 ControlModel& controlModel,
-		 ModuleClassView&, /*ModuleClassTabView&, */ControlValueDispatcher& disp,
+		 ModuleClassView&,
+         const utils::AutoPtr<ControlValueDispatcher>& disp,
 		 IModuleStatisticsSender&,
 		 IModelStatusSender&,
-		 KeyboardManager& kbManager,
-		 IErrorReceiver& log);
-    //TODO, uncomment if u want the ugly tabview back
+		 KeyboardManager* kbManager,
+		 IErrorReceiver& log,
+		 const std::string& media_path);
 
     ~EditorWidget();
 

@@ -1,7 +1,7 @@
 mod_frbinmodule
 {
     name          = Image Source
-    deterministic = false
+    deterministic = true
     group         = Sources
     xpm           = frbinmodule.xpm
     author        = mistkerl&coma&martin
@@ -24,34 +24,33 @@ inputs
         file_mask2_name   = Images
         file_mask3        = *.avi;*.mpg;*.mpeg;*.divx;*.rm;*.mov;*.wmv
         file_mask3_name   = Videos
+    }    
+
+    flush
+    {
+       name              = FlushCache
+       type              = typ_NumberType
+       hidden            = true
+       widget_type       = radio_button
+       true_value        = 1
+       false_value       = 0
+       default           = 0
+       strong_dependency = true
+       const             = true
     }
 
-    seek
+    frame
     {
-        name              = seek
-        type              = typ_NumberType
-        const             = true
-        strong_dependency = true
-        hidden            = true
-        widget_type       = radio_button
-        true_value        = 1
-        false_value       = 0
-        default           = 0
-        help              = seek to position
-    }
-
-    position
-    {
-        name              = Position
+        name              = FrameNumber
         type              = typ_NumberType
         const             = true
         strong_dependency = true
         hidden            = false
-        widget_type       = number_selector
-        lower_bound       = 0
-        higher_bound      = 1
-        default           = 0.0
-        step_size         = 0.001
+        widget_type       = unboundednumber_selector        
+        default           = 0
+        step_size         = 1
+		display_format    = fixed
+		precision         = 0
     }
 
     x_size
@@ -67,6 +66,7 @@ inputs
         display_format    = fixed
         precision         = 0
         step_size         = 1
+		special_text      = auto
         default           = 0
         help              = If x_size and y_size > 0 the image is scaled
     }
@@ -84,6 +84,7 @@ inputs
         display_format    = fixed
         precision         = 0
         step_size         = 1
+	    special_text      = auto
         default           = 0
         help              = If x_size and y_size > 0 the image is scaled
     }
@@ -98,20 +99,7 @@ inputs
         widget_type       = combo_box
         values            = yes,no
         default           = no
-    }
-
-    flush
-    {
-       name              = FlushCache
-       type              = typ_NumberType
-       hidden            = true
-       widget_type       = radio_button
-       true_value        = 1
-       false_value       = 0
-       default           = 0
-       strong_dependency = true
-       const             = true
-    }
+    }    
 }
 
 outputs
@@ -127,4 +115,10 @@ outputs
         name = Position
         type = typ_NumberType
     }
+
+	length
+	{
+	    name = Length
+		type = typ_NumberType
+	}
 }

@@ -20,19 +20,19 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_PositionType const=true strong_dependency=true default=[0.5 0.5] } ";
+    return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[0.5 0.5] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=150 } ";
+    return "input_spec { type=typ_NumberType id=size const=true strong_dependency=true default=150 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=30 } ";
+    return "input_spec { type=typ_NumberType id=mag const=true strong_dependency=true default=30 } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=interactive const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -40,11 +40,14 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;
 }
+static struct _MyInstance* s_inst = 0;
+static int s_ref_count = 0;
+
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
@@ -55,13 +58,20 @@ void* newInstance()
           return 0;
   }
 
-  inst->my = construct();
+  s_ref_count += 1;
 
-  if (inst->my == 0)
+  if (s_ref_count == 1)
   {
-    free(inst);
-    return 0;
+    s_inst = construct();
+    if (s_inst == 0)
+    {
+      free(inst);
+      s_ref_count = 0;
+      return 0;
+    }
   }
+  
+  inst->my = s_inst;    
 
   return inst;
 }
@@ -70,8 +80,11 @@ void deleteInstance(void* instance)
 {
   Instance* inst = (Instance*) instance;
 
-  destruct(inst->my);
+  s_ref_count -= 1;
 
+  if (s_ref_count == 0)
+        destruct(s_inst);
+        
   free(inst);
 }
 

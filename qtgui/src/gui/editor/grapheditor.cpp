@@ -17,6 +17,7 @@
 #include "interfaces/imodelcontrolreceiver.h"
 #include "interfaces/ierrorreceiver.h"
 #include "guimodel/graphmodel.h"
+#include "guimodel/controlvaluedispatcher.h"
 
 #include "imoduleinfobasestation.h"
 
@@ -43,15 +44,17 @@ namespace gui
   GraphEditor::GraphEditor(QWidget* parent, const char* name, WFlags fl, 
 			   GraphModel& contrl,
 			   const IModuleInfoBaseStation& _infos,
-			   ControlValueDispatcher& _dispatcher,
+			   const utils::AutoPtr<ControlValueDispatcher>& _dispatcher,
 			   IModelControlReceiver& mod,
-			   KeyboardManager& kbManager,
-			   IErrorReceiver& log)
+			   KeyboardManager* kbManager,
+			   IErrorReceiver& log,
+			   const std::string& media_path)
     : QWidget( parent, name, fl ), nodes(), 
     connections(), selectedConnectionPair(-1,-1),clickedPos(QPoint(-1,-1)),
     currentModuleClassName(""), m_controller(&contrl), nodePixmaps(5),
     infos(&_infos), dispatcher(_dispatcher), model(mod),
-      m_kbManager(kbManager), m_log(log), m_drawmoduleinfo(false)
+    m_kbManager(kbManager), m_log(log), m_drawmoduleinfo(false),
+      m_property_id(-1), m_media_path(media_path)
   {
 	
     nodePixmaps[NodeWidget::NODE_WIDGET_PIC]
@@ -85,7 +88,8 @@ namespace gui
 
     NodeWidget* nWidget = new NodeWidget(this,0,0,modID,
 					 mi, nodePixmaps, dispatcher, model,
-					 m_kbManager, m_log);
+					 m_kbManager, m_log,
+					 m_media_path);
 
     // initialise numConnections and hasControl
     std::vector<InputPlugWidget*> ins = nWidget->getInputs();
@@ -263,7 +267,8 @@ namespace gui
 			       "GraphEditor::controlConnected()");
 
     NodeWidget* nWidget = it->second;
-    if (inputIndex < 0 || inputIndex >= nWidget->getInputs().size())
+    if (inputIndex < 0 || 
+        static_cast<unsigned int>(inputIndex) >= nWidget->getInputs().size())
       throw std::runtime_error("Input ex. nicht bei "
 			       "GraphEditor::controlConnected()");
 
@@ -520,6 +525,11 @@ namespace gui
       case NODEWIDGET_KILL:
 	{
 	  int moduleID = currentNode->getID();
+          if (moduleID == m_property_id)
+            {
+              m_property_id = -1;
+              emit undisplayProperties();
+            }
 	  try
 	    {
 	      model.deleteModule(moduleID);
@@ -548,6 +558,7 @@ namespace gui
       case NODEWIDGET_PROPERTIES:
 	{
 	  emit displayProperties(currentNode->getProperties());
+          m_property_id = currentNode->getID();
 	}
 	break;
       default:

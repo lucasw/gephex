@@ -15,12 +15,7 @@
 
 #include "basic_types.h"
 
-#if defined(OS_WIN32)
-void bzero(void* ptr, int size)
-{
-	memset(ptr, 0, size);
-}
-#endif
+//--------------------------------------------------------------------------
 
 /**
  *
@@ -28,20 +23,33 @@ void bzero(void* ptr, int size)
  * http://effectv.sourceforge.net/
  */
 
-int video_width   = 320;
-int video_height  = 240;
-int video_area    = 320*240;
-int screen_width  = 320;
-int screen_height = 240;
-int screen_scale  = 1; //TODO!!!
+//--------------------------------------------------------------------------
 
-int stretch = 0;
-unsigned char* video_address = 0;
-unsigned char* screen_address = 0;
+int video_width                    = 320;
+int video_height                   = 240;
+int video_area                     = 320*240;
+int screen_width                   = 320;
+int screen_height                  = 240;
+int screen_scale                   = 1; //TODO!!!
+int stretch                        = 0;
+unsigned char* video_address       = 0;
+unsigned char* screen_address      = 0;
 
-static RGB32 **s_background_ptr = 0;
-static unsigned char **s_diff_ptr = 0;
-static unsigned char **s_diff2_ptr = 0;
+//--------------------------------------------------------------------------
+
+// shared buffer emulation
+struct BufferNode
+{
+  void* data;
+  struct BufferNode* next;
+};
+
+static struct BufferNode** s_sharedbuffer_head = 0;
+static RGB32** s_background_ptr                = 0;
+static unsigned char** s_diff_ptr              = 0;
+static unsigned char** s_diff2_ptr             = 0;
+
+//--------------------------------------------------------------------------
 
 static void image_free();
 
@@ -60,11 +68,14 @@ struct effectv_Effect
   unsigned char* diff;
   unsigned char* diff2;
 
+  struct BufferNode* sharedbuffer_head;
 
-  unsigned char* scaled;
+  unsigned char* scaled_src;
   unsigned char* scaled_dst;
   int scaled_size;
 };
+
+//--------------------------------------------------------------------------
 
 void fb_scale32(uint_32* dst, int dwidth, int dheight,
                 const uint_32* src, int swidth, int sheight)
@@ -107,6 +118,8 @@ void fb_scale32(uint_32* dst, int dwidth, int dheight,
     }
 }
 
+//--------------------------------------------------------------------------
+
 struct effectv_Effect* effectv_init(void* e,
                                     effectv_lock_funcT lock_func,
                                     effectv_unlock_funcT unlock_func)
@@ -114,18 +127,24 @@ struct effectv_Effect* effectv_init(void* e,
   int error;
   struct effectv_Effect* self = malloc(sizeof(*self));
 
-  self->lock   = lock_func;
-  self->unlock = unlock_func;
-  self->width  = video_width;
-  self->height = video_height;
+  self->lock              = lock_func;
+  self->unlock            = unlock_func;
+  self->width             = video_width;
+  self->height            = video_height;
 
-  self->scaled = 0;
-  self->scaled_dst = 0;
-  self->scaled_size = 0;
+  self->scaled_src        = 0;
+  self->scaled_dst        = 0;
+  self->scaled_size       = 0;
 
-  s_background_ptr = &self->background;
-  s_diff_ptr       = &self->diff;
-  s_diff2_ptr      = &self->diff2;
+  s_background_ptr        = &self->background;
+  s_diff_ptr              = &self->diff;
+  s_diff2_ptr             = &self->diff2;
+  s_sharedbuffer_head     = &self->sharedbuffer_head;
+
+  self->background        = 0;
+  self->diff              = 0;
+  self->diff2             = 0;
+  self->sharedbuffer_head = 0;
 
   image_init();
   yuv_init();
@@ -145,6 +164,8 @@ struct effectv_Effect* effectv_init(void* e,
   return self;
 }
 
+//--------------------------------------------------------------------------
+
 int effectv_draw(struct effectv_Effect* self,
                  unsigned char* vid, unsigned char* screen,
                  int width, int height)
@@ -158,35 +179,42 @@ int effectv_draw(struct effectv_Effect* self,
   if (self->lock)
     self->lock();
 
+  s_background_ptr    = &self->background;
+  s_diff_ptr          = &self->diff;
+  s_diff2_ptr         = &self->diff2;
+  s_sharedbuffer_head = &self->sharedbuffer_head;
+
   if (width < 320 || height < 240)
     {
       // need to scale
-      int new_width = 320;
+      int new_width  = 320;
       int new_height = 240;
-      int size = new_width * new_height * 4;
+      int size       = new_width * new_height * 4;
 
-      if (self->scaled != 0 && self->scaled_size < size)
+      if (self->scaled_src != 0 && self->scaled_size < size)
         {
-          free(self->scaled);
+          free(self->scaled_src);
           free(self->scaled_dst);
-          self->scaled     = 0;
+          self->scaled_src = 0;
           self->scaled_dst = 0;
         }
 
-      if (self->scaled == 0)
+      if (self->scaled_src == 0)
         {
           self->scaled_size = size;
-          self->scaled      = malloc(size);
+          self->scaled_src  = malloc(size);
           self->scaled_dst  = malloc(size);
         }
 
-	  assert(self->scaled_size >= size);
-	  assert(self->scaled && self->scaled_dst);
+      assert(self->scaled_size >= size);
+      assert(self->scaled_src && self->scaled_dst);
 
-      fb_scale32((uint_32*) self->scaled, new_width, new_height,
-                 (uint_32*) vid, width, height);
+      fb_scale32((uint_32*) self->scaled_src,
+                 new_width, new_height,
+                 (uint_32*) vid,
+                 width, height);
 
-      source        = self->scaled;
+      source        = self->scaled_src;
       dest          = self->scaled_dst;
       source_width  = new_width;
       source_height = new_height;
@@ -194,16 +222,16 @@ int effectv_draw(struct effectv_Effect* self,
   else
     {
       // did not need to scale
-      if (self->scaled)
+      if (self->scaled_src)
         {
-          free(self->scaled);
+          free(self->scaled_src);
           free(self->scaled_dst);
-          self->scaled      = 0;
+          self->scaled_src  = 0;
           self->scaled_dst  = 0;
           self->scaled_size = 0;
         }
-      source = vid;
-      dest   = screen;
+      source        = vid;
+      dest          = screen;
       source_width  = width;
       source_height = height;
     }
@@ -220,10 +248,6 @@ int effectv_draw(struct effectv_Effect* self,
   assert(source != 0 && dest != 0);
   assert(video_width >= 320 && video_height >= 240);
 
-  s_background_ptr = &self->background;
-  s_diff_ptr       = &self->diff;
-  s_diff2_ptr      = &self->diff2;
-
   if (video_width  != self->width ||
       video_height != self->height)
     {
@@ -233,29 +257,42 @@ int effectv_draw(struct effectv_Effect* self,
       image_free();
       image_init();
 
+      sharedbuffer_reset();
 
-      free(self->register_func());
+      free(self->effect);
+      self->effect = self->register_func();
       error = self->effect->start();
+      if (error)
+        {
+          fprintf(stderr, "Error at restart()!\n");
+          //          image_free();
+          //          free(self);
+          if (self->unlock)
+            self->unlock();
+          return 1;
+        }
 
       self->width  = video_width;
       self->height = video_height;
-
-      //TODO: error handling!
     }
+
+  assert(self->width == video_width);
+  assert(self->height == video_height);
 
   self->effect->draw();
 
   if (width != screen_width || height != screen_height)
     {
-	  assert(self->scaled_dst);
-	  assert(self->scaled_size >= screen_width*screen_height*4);
+      assert(self->scaled_dst);
+      assert(self->scaled_size >= screen_width*screen_height*4);
       // if it has been scaled before, the result must be scaled down again
       fb_scale32((uint_32*) screen, width, height,
                  (uint_32*) self->scaled_dst, screen_width, screen_height);
     }
   else
   {
-	  assert(self->scaled == self->scaled_dst && self->scaled == 0);
+    assert(self->scaled_src == 0 &&
+           self->scaled_dst == 0);
   }
 
   if (self->unlock)
@@ -264,30 +301,43 @@ int effectv_draw(struct effectv_Effect* self,
   return 0;
 }
 
+//--------------------------------------------------------------------------
+
 void effectv_teardown(struct effectv_Effect* self)
-{
+{  
+  s_background_ptr    = &self->background;
+  s_diff_ptr          = &self->diff;
+  s_diff2_ptr         = &self->diff2;
+  s_sharedbuffer_head = &self->sharedbuffer_head;
+
   self->effect->stop();
   free(self->effect);
 
-  s_background_ptr = &self->background;
-  s_diff_ptr       = &self->diff;
-  s_diff2_ptr      = &self->diff2;
-
+  sharedbuffer_reset();
   image_free();
 
-  if (self->scaled)
+  if (self->scaled_src)
     {
-      free(self->scaled);
+      free(self->scaled_src);
       free(self->scaled_dst);
-      self->scaled = 0;
-      self->scaled_dst = 0;
+      self->scaled_src  = 0;
+      self->scaled_dst  = 0;
       self->scaled_size = 0;
     }
 
-  self->effect = 0;
+  self->effect        = 0;
   self->register_func = 0;
   free(self);
 }
+
+//--------------------------------------------------------------------------
+
+#if defined(OS_WIN32)
+void bzero(void* ptr, int size)
+{
+  memset(ptr, 0, size);
+}
+#endif
 
 /**
  * Helper functions
@@ -304,45 +354,31 @@ unsigned char* screen_getaddress()
 
 /**********************************************************************/
 
-/*#define background (*s_background_ptr)
-  #define diff (*s_diff_ptr)
-  #define diff2 (*s_diff2_ptr)*/
-
-
 /**
  * Emulator functions for effectv
  */
-
-// shared buffer emulation
-struct BufferNode
-{
-  void* data;
-  struct BufferNode* next;
-};
-
-static struct BufferNode* buffer_head = 0;
-
 int sharedbuffer_init() {
   return 0;
 }
 
 void sharedbuffer_reset()
 {
-  struct BufferNode** current = &buffer_head;
+  struct BufferNode* current = *s_sharedbuffer_head;
 
-  while (*current != 0)
+  while (current != 0)
     {
-      struct BufferNode** next = &((*current)->next);
-      free((*current)->data);
-      free(*current);
-      *current = 0;
-      current = next;      
+      struct BufferNode* next = current->next;
+      free(current->data);
+      free(current);      
+      current = next;
     }
+
+  *s_sharedbuffer_head = 0;
 }
 
 unsigned char *sharedbuffer_alloc(int size)
 {
-  struct BufferNode** current = &buffer_head;
+  struct BufferNode** current = s_sharedbuffer_head;
   struct BufferNode* tail = 0;
 
   while(*current != 0)
@@ -360,7 +396,7 @@ unsigned char *sharedbuffer_alloc(int size)
   
   return (*current)->data;
 
-  return malloc(size);
+  //  return malloc(size);
 }
 
 int video_grabstart() { return 0; }
@@ -468,9 +504,22 @@ static void image_free()
 {
   //  printf("image_free() called\n");
   if ((*s_background_ptr))
-    free((*s_background_ptr));
+    {
+      free((*s_background_ptr));
+      *s_background_ptr = 0;
+    }
+
   if ((*s_diff_ptr))
-    free((*s_diff_ptr));
+    {
+      free((*s_diff_ptr));
+      *s_diff_ptr = 0;
+    }
+
+  if ((*s_diff2_ptr))
+    {
+      free((*s_diff2_ptr));
+      *s_diff2_ptr = 0;
+    }
 }
 
 int image_init()
@@ -590,6 +639,7 @@ unsigned char *image_bgsubtract_update_y(RGB32 *src)
 	return (*s_diff_ptr);
 }
 
+// TODO: why is parameter diff not used?
 /* noise filter for subtracted image. */
 unsigned char *image_diff_filter(unsigned char *diff)
 {
@@ -655,3 +705,5 @@ int yuv_init()
 	}
 	return 0;
 }
+
+//--------------------------------------------------------------------------

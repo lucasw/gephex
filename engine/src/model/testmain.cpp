@@ -2,18 +2,15 @@
 
 #include "TestFramework/CompositeTest.h"
 #include "TestFramework/Tester.h"
-//#include "modeltest.h"
-//#include "datatreetest.h"
+
+#include "graphparsertest.h"
 
 void doTests()
 {
 	CompositeTest AllTests("Alle Tests","");
 
-	/*ModelTest mt;
-	AllTests.addTest(mt);*/
-
-	//DataTreeTest dtt;
-	//AllTests.addTest(dtt);
+	GraphParserTest gpt;
+	AllTests.addTest(gpt);
 	
 	TesterStream ts(std::cout);
 	AllTests.action(ts);

@@ -83,6 +83,10 @@ namespace utils
     m_listener.scannedStructName(name);
   }
 
+  static bool is_whitespace(char c)
+  {
+    return c == ' ' || c == '\t' || c == '\n';
+  }
 
   void StructScanner::processContent(const std::string& content) const
   {
@@ -112,23 +116,27 @@ namespace utils
 
 	std::string value;
 
-	if (content[pos+1] == '[')
+	pos++; //first position after '='
+	while (pos < content.length() && is_whitespace(content[pos]))
+	  ++pos;
+	       
+	if (content[pos] == '[')
 	  {
 	    std::string::size_type pos2 = findNextClosingBracket(content,
-								 pos+2);
+								 pos+1);
 	    if (pos2 == std::string::npos)
 	      {
 		//TODO
 	      }
 
-	    value = ownSubstr(content,pos+2,pos2);
+	    value = ownSubstr(content,pos+1,pos2);
 	    assert(content[pos2] == ']');
 
 	    index = pos2+1;
 	  }
 	else
 	  {
-	    StringTokenizer st(content,pos+1);
+	    StringTokenizer st(content,pos);
 	    value = st.next("; \n\t");
 	    index = st.getPos();
 	  }

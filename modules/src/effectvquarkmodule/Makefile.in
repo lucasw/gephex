@@ -281,6 +281,18 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvquarkmodule.lo effectvquarkmodule.o : effectvquarkmodule.c \
+	effectvquarkmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../libeffectv/libeffectv.h quark.c ../libeffectv/EffecTV.h \
+	../libeffectv/utils.h
+effectvquarkmodule_auto.lo effectvquarkmodule_auto.o : \
+	effectvquarkmodule_auto.c effectvquarkmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../engine/src/engine/dllutils.h effectvquarkmodule.xpm
 
 info-am:
 info: info-am

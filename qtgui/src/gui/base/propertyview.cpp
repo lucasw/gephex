@@ -13,8 +13,9 @@ namespace gui
   static const int NUM_ROWS = 32;
 
   PropertyView::PropertyView(QWidget* parent)
-    : QWidget(parent,"Property View",0), table(0), m_layout(new QHBoxLayout(this))
+    : QWidget(parent,"Property View",0), table(0)
   {
+	  m_layout = new QHBoxLayout(this);
   }
 
   PropertyView::~PropertyView()

@@ -105,40 +105,40 @@ STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
 
-SUBDIRS = base editor typeviews
+SUBDIRS = base editor typeviews dialogs
 
-AM_CPPFLAGS =  	-I $(srcdir)/.. 	-I $(srcdir)/../.. 	-I $(srcdir)/../../../util/include 	-I @builddir@/../../../util/include 	-I $(srcdir)/../../../base/src/ 	-I $(srcdir)/../../../base/src/utils 	-I @builddir@/../../../base/src/ 	-I $(srcdir)/../../../base/src/net 	-I $(srcdir)/../../../base/src/netinterfaces 	$(QT_CXXFLAGS)
-
-
-bin_PROGRAMS = gephex-gui
-
-CPP_FILES =  	nodewidget.cpp 	connectionwidget.cpp 	main.cpp 	vjmainwindow.cpp 	controlwidget.cpp 	moduleclassview.cpp 	propertywidget.cpp 	picswitch.cpp 	nodeproperty.cpp 	propertywidgetconstructor.cpp 	hidebuttonconstructor.cpp 	hidebutton.cpp 	plugwidget.cpp 	inputplugwidget.cpp 	outputplugwidget.cpp 	dllselectordialog.cpp 	graphnameview.cpp 	modulebutton.cpp 	guiconfig.cpp 	typeview.cpp 	typeviewfactory.cpp 	aboutdialog.cpp
+AM_CPPFLAGS =  	-DINST_INSTALL_PREFIX=\"$(prefix)\" 	-I $(srcdir)/.. 	-I $(srcdir)/dialogs 	-I @builddir@/dialogs 	-I $(srcdir)/../.. 	-I $(srcdir)/../../../util/include 	-I @builddir@/../../../util/include 	-I $(srcdir)/../../../base/src/ 	-I $(srcdir)/../../../base/src/utils 	-I @builddir@/../../../base/src/ 	-I $(srcdir)/../../../base/src/net 	-I $(srcdir)/../../../base/src/netinterfaces 	$(QT_CXXFLAGS)
 
 
-MOCED_FILES =  	dllselectordialog_moc.cpp 	plugwidget_moc.cpp 	outputplugwidget_moc.cpp 	inputplugwidget_moc.cpp 	moduleclassview_moc.cpp 	propertywidget_moc.cpp 	vjmainwindow_moc.cpp 	controlwidget_moc.cpp 	graphnameview_moc.cpp 	picswitch_moc.cpp 	hidebutton_moc.cpp 	nodewidget_moc.cpp 	modulebutton_moc.cpp 	typeview_moc.cpp
+bin_PROGRAMS = gephex-gui-real
+
+CPP_FILES =  	connectionwidget.cpp 	controlwidget.cpp 	graphnameview.cpp 	guiconfig.cpp 	hidebutton.cpp 	hidebuttonconstructor.cpp 	inputplugwidget.cpp 	main.cpp 	modulebutton.cpp 	moduleclassview.cpp 	nodeproperty.cpp 	nodewidget.cpp 	outputplugwidget.cpp 	picswitch.cpp 	plugwidget.cpp 	propertywidget.cpp 	propertywidgetconstructor.cpp 	typeview.cpp 	typeviewfactory.cpp 	vjmainwindow.cpp
+
+
+MOCED_FILES =  	controlwidget_moc.cpp 	graphnameview_moc.cpp 	hidebutton_moc.cpp 	inputplugwidget_moc.cpp 	modulebutton_moc.cpp 	moduleclassview_moc.cpp 	nodewidget_moc.cpp 	outputplugwidget_moc.cpp 	picswitch_moc.cpp 	plugwidget_moc.cpp 	propertywidget_moc.cpp 	typeview_moc.cpp 	vjmainwindow_moc.cpp
 
 
 BUILT_SOURCES = $(MOCED_FILES)
 
-HEADER_FILES =  	connectionwidget.h 	controlwidget.h 	dllselectordialog.h 	graphnameview.h 	hidebuttonconstructor.h 	hidebutton.h 	imoduleinfobasestation.h 	inputplugwidget.h 	modulebutton.h 	moduleclassview.h 	nodeproperty.h 	nodewidget.h 	outputplugwidget.h 	ownstyle.h 	picswitch.h 	plugwidget.h 	propertywidgetconstructor.h 	propertywidget.h 	vjmainwindow.h 	guiconfig.h 	typeview.h 	typeviewfactory.h 	aboutdialog.h
+HEADER_FILES =  	connectionwidget.h 	controlwidget.h 	graphnameview.h 	guiconfig.h 	hidebutton.h 	hidebuttonconstructor.h 	imoduleinfobasestation.h 	inputplugwidget.h 	modulebutton.h 	moduleclassview.h 	nodeproperty.h 	nodewidget.h 	outputplugwidget.h 	ownstyle.h 	picswitch.h 	plugwidget.h 	propertywidget.h 	propertywidgetconstructor.h 	typeview.h 	typeviewfactory.h 	vjmainwindow.h
 
 
-EXTRA_DIST =  	node.xpm 	inplugfree.xpm 	inplugbusy.xpm 	outplugfree.xpm 	outplugbusy.xpm 	rot_klein.xpm 	gruen_klein.xpm
+EXTRA_DIST =  	gruen_klein.xpm 	inplugbusy.xpm 	inplugfree.xpm 	node.xpm 	outplugbusy.xpm 	outplugfree.xpm 	rot_klein.xpm
 
 
-gephex_gui_SOURCES = $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
+gephex_gui_real_SOURCES = $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
 
-gephex_gui_LDADD =  	$(QT_LIBS) 	-lguimodel 	-lgphxnetwork 	-lnetinterfaces 	-lguibase 	-lguieditor 	-ltypeviews 	-lutils 	-L@builddir@/../guimodel 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L@builddir@/../../../base/src/utils 	-L@builddir@/base 	-L@builddir@/editor 	-L@builddir@/typeviews
+gephex_gui_real_LDADD =  	$(QT_LIBS) 	-lguimodel 	-lgphxnetwork 	-lnetinterfaces 	-lguibase 	-lguieditor 	-ltypeviews 	-lutils 	-ldialogs 	-L@builddir@/../guimodel 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L@builddir@/../../../base/src/utils 	-L@builddir@/base 	-L@builddir@/editor 	-L@builddir@/typeviews 	-L@builddir@/dialogs
 
 
-gephex_gui_DEPENDENCIES =  	@builddir@/../guimodel/libguimodel.a 	@builddir@/../../../base/src/net/libgphxnetwork.a 	@builddir@/../../../base/src/netinterfaces/libnetinterfaces.a 	@builddir@/../../../base/src/utils/libutils.a 	@builddir@/base/libguibase.a 	@builddir@/editor/libguieditor.a 	@builddir@/typeviews/libtypeviews.a
+gephex_gui_real_DEPENDENCIES =  	@builddir@/../guimodel/libguimodel.a 	@builddir@/../../../base/src/net/libgphxnetwork.a 	@builddir@/../../../base/src/netinterfaces/libnetinterfaces.a 	@builddir@/../../../base/src/utils/libutils.a 	@builddir@/base/libguibase.a 	@builddir@/editor/libguieditor.a 	@builddir@/dialogs/libdialogs.a 	@builddir@/typeviews/libtypeviews.a
 
 
 CLEANFILES = $(MOCED_FILES)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  gephex-gui$(EXEEXT)
+bin_PROGRAMS =  gephex-gui-real$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -150,23 +150,22 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-gephex_gui_OBJECTS =  nodewidget.$(OBJEXT) connectionwidget.$(OBJEXT) \
-main.$(OBJEXT) vjmainwindow.$(OBJEXT) controlwidget.$(OBJEXT) \
-moduleclassview.$(OBJEXT) propertywidget.$(OBJEXT) picswitch.$(OBJEXT) \
-nodeproperty.$(OBJEXT) propertywidgetconstructor.$(OBJEXT) \
-hidebuttonconstructor.$(OBJEXT) hidebutton.$(OBJEXT) \
-plugwidget.$(OBJEXT) inputplugwidget.$(OBJEXT) \
-outputplugwidget.$(OBJEXT) dllselectordialog.$(OBJEXT) \
-graphnameview.$(OBJEXT) modulebutton.$(OBJEXT) guiconfig.$(OBJEXT) \
-typeview.$(OBJEXT) typeviewfactory.$(OBJEXT) aboutdialog.$(OBJEXT) \
-dllselectordialog_moc.$(OBJEXT) plugwidget_moc.$(OBJEXT) \
-outputplugwidget_moc.$(OBJEXT) inputplugwidget_moc.$(OBJEXT) \
-moduleclassview_moc.$(OBJEXT) propertywidget_moc.$(OBJEXT) \
-vjmainwindow_moc.$(OBJEXT) controlwidget_moc.$(OBJEXT) \
-graphnameview_moc.$(OBJEXT) picswitch_moc.$(OBJEXT) \
-hidebutton_moc.$(OBJEXT) nodewidget_moc.$(OBJEXT) \
-modulebutton_moc.$(OBJEXT) typeview_moc.$(OBJEXT)
-gephex_gui_LDFLAGS = 
+gephex_gui_real_OBJECTS =  connectionwidget.$(OBJEXT) \
+controlwidget.$(OBJEXT) graphnameview.$(OBJEXT) guiconfig.$(OBJEXT) \
+hidebutton.$(OBJEXT) hidebuttonconstructor.$(OBJEXT) \
+inputplugwidget.$(OBJEXT) main.$(OBJEXT) modulebutton.$(OBJEXT) \
+moduleclassview.$(OBJEXT) nodeproperty.$(OBJEXT) nodewidget.$(OBJEXT) \
+outputplugwidget.$(OBJEXT) picswitch.$(OBJEXT) plugwidget.$(OBJEXT) \
+propertywidget.$(OBJEXT) propertywidgetconstructor.$(OBJEXT) \
+typeview.$(OBJEXT) typeviewfactory.$(OBJEXT) vjmainwindow.$(OBJEXT) \
+controlwidget_moc.$(OBJEXT) graphnameview_moc.$(OBJEXT) \
+hidebutton_moc.$(OBJEXT) inputplugwidget_moc.$(OBJEXT) \
+modulebutton_moc.$(OBJEXT) moduleclassview_moc.$(OBJEXT) \
+nodewidget_moc.$(OBJEXT) outputplugwidget_moc.$(OBJEXT) \
+picswitch_moc.$(OBJEXT) plugwidget_moc.$(OBJEXT) \
+propertywidget_moc.$(OBJEXT) typeview_moc.$(OBJEXT) \
+vjmainwindow_moc.$(OBJEXT)
+gephex_gui_real_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -184,8 +183,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(gephex_gui_SOURCES)
-OBJECTS = $(gephex_gui_OBJECTS)
+SOURCES = $(gephex_gui_real_SOURCES)
+OBJECTS = $(gephex_gui_real_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -267,9 +266,9 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-gephex-gui$(EXEEXT): $(gephex_gui_OBJECTS) $(gephex_gui_DEPENDENCIES)
-	@rm -f gephex-gui$(EXEEXT)
-	$(CXXLINK) $(gephex_gui_LDFLAGS) $(gephex_gui_OBJECTS) $(gephex_gui_LDADD) $(LIBS)
+gephex-gui-real$(EXEEXT): $(gephex_gui_real_OBJECTS) $(gephex_gui_real_DEPENDENCIES)
+	@rm -f gephex-gui-real$(EXEEXT)
+	$(CXXLINK) $(gephex_gui_real_LDFLAGS) $(gephex_gui_real_OBJECTS) $(gephex_gui_real_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:
@@ -392,7 +391,6 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
-aboutdialog.o: aboutdialog.cpp aboutdialog.h ../../../config.h
 connectionwidget.o: connectionwidget.cpp connectionwidget.h \
 	inputplugwidget.h plugwidget.h outputplugwidget.h
 controlwidget.o: controlwidget.cpp controlwidget.h \
@@ -400,14 +398,6 @@ controlwidget.o: controlwidget.cpp controlwidget.h \
 	../../../base/src/utils/buffer.h
 controlwidget_moc.o: controlwidget_moc.cpp controlwidget.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h
-dllselectordialog.o: dllselectordialog.cpp dllselectordialog.h \
-	../../../base/src/interfaces/imoduleclassnamereceiver.h \
-	../guimodel/imoduleclassview.h ../guimodel/moduleinfo.h \
-	../guimodel/pluginfo.h ../../../base/src/utils/autoptr.h \
-	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h
-dllselectordialog_moc.o: dllselectordialog_moc.cpp dllselectordialog.h \
-	../../../base/src/interfaces/imoduleclassnamereceiver.h \
-	../guimodel/imoduleclassview.h
 graphnameview.o: graphnameview.cpp graphnameview.h base/treeview.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
 	../../../base/src/utils/autoptr.h \
@@ -420,10 +410,11 @@ graphnameview_moc.o: graphnameview_moc.cpp graphnameview.h \
 	base/treeview.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
 	../../../base/src/utils/autoptr.h
-guiconfig.o: guiconfig.cpp guiconfig.h \
-	../../../base/src/utils/structreader.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
-	../../../base/src/utils/filesystem.h
+guiconfig.o: guiconfig.cpp guiconfig.h ../../../config.h \
+	../../../base/src/utils/configfile.h \
+	../../../base/src/utils/autoptr.h \
+	../../../base/src/utils/filesystem.h \
+	../../../base/src/utils/structreader.h
 hidebutton.o: hidebutton.cpp hidebutton.h inputplugwidget.h plugwidget.h
 hidebutton_moc.o: hidebutton_moc.cpp hidebutton.h
 hidebuttonconstructor.o: hidebuttonconstructor.cpp \
@@ -431,10 +422,9 @@ hidebuttonconstructor.o: hidebuttonconstructor.cpp \
 inputplugwidget.o: inputplugwidget.cpp inputplugwidget.h plugwidget.h
 inputplugwidget_moc.o: inputplugwidget_moc.cpp inputplugwidget.h \
 	plugwidget.h
-main.o: main.cpp ../../../config.h ownstyle.h vjmainwindow.h \
+main.o: main.cpp ../../../config.h ownstyle.h guiconfig.h vjmainwindow.h \
 	../../../base/src/interfaces/irendererstatusreceiver.h \
-	../../../base/src/utils/autoptr.h guiconfig.h \
-	../../../base/src/utils/structreader.h
+	../../../base/src/utils/autoptr.h
 modulebutton.o: modulebutton.cpp modulebutton.h
 modulebutton_moc.o: modulebutton_moc.cpp modulebutton.h
 moduleclassview.o: moduleclassview.cpp moduleclassview.h \
@@ -479,7 +469,7 @@ propertywidget_moc.o: propertywidget_moc.cpp propertywidget.h \
 	../../../base/src/utils/buffer.h
 propertywidgetconstructor.o: propertywidgetconstructor.cpp \
 	propertywidgetconstructor.h base/iwidgetconstructor.h \
-	propertywidget.h \
+	../../../base/src/utils/autoptr.h propertywidget.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../base/src/utils/buffer.h \
 	../guimodel/controlvaluedispatcher.h ../guimodel/point.h
@@ -503,20 +493,28 @@ vjmainwindow.o: vjmainwindow.cpp vjmainwindow.h \
 	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
 	graphnameview.h base/treeview.h \
 	../../../base/src/interfaces/igraphnamereceiver.h picswitch.h \
-	dllselectordialog.h \
+	dialogs/dllselectordialog.h \
 	../../../base/src/interfaces/imoduleclassnamereceiver.h \
-	aboutdialog.h \
+	dialogs/aboutdialogimpl.h dialogs/aboutdialog.h \
+	dialogs/changesdialogimpl.h dialogs/changesdialog.h \
+	dialogs/newgraphdialog.h guiconfig.h \
 	../../../base/src/interfaces/ienginecontrolreceiver.h \
 	../../../base/src/interfaces/irenderercontrolreceiver.h \
 	../../../base/src/interfaces/igraphnamesender.h \
 	../../../base/src/interfaces/imoduleclassnamesender.h \
 	../../../base/src/interfaces/ierrorsender.h \
 	../../../base/src/interfaces/irendererstatussender.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../guimodel/enginewrapper.h ../../../util/include/basic_types.h \
 	../guimodel/moduleclassmodel.h \
 	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	../guimodel/controlvaluedispatcher.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../guimodel/point.h ../../../base/src/utils/buffer.h \
 	rot_klein.xpm gruen_klein.xpm \
-	../../../base/src/utils/structreader.h ../../../config.h
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/spawn.h \
+	../../../base/src/utils/timing.h ../../../config.h
 vjmainwindow_moc.o: vjmainwindow_moc.cpp vjmainwindow.h \
 	../../../base/src/interfaces/irendererstatusreceiver.h \
 	../../../base/src/utils/autoptr.h

@@ -45,14 +45,17 @@ static double sin_op(double lhs, double rhs);
 static double abs_op(double lhs, double rhs);
 static double proj1_op(double lhs, double rhs);
 static double proj2_op(double lhs, double rhs);
+static double floor_op(double lhs, double rhs);
+static double ceil_op(double lhs, double rhs);
+static double round_op(double lhs, double rhs);
 
 //---------------------------------------------------------------------------
 
 typedef struct _MyInstance {
 
- operation_t op;
+  operation_t op;
 
- StringType op_text;
+  StringType op_text;
 
 } MyInstance, *MyInstancePtr;
 
@@ -74,10 +77,10 @@ MyInstance* construct()
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
   if (my == 0)
-  {
-	  s_log(0, "Could not allocate memory for MyInstance struct\n");
-	  return 0;
-  }
+    {
+      s_log(0, "Could not allocate memory for MyInstance struct\n");
+      return 0;
+    }
 
   my->op = 0;
   string_initInstance(&my->op_text);
@@ -87,71 +90,81 @@ MyInstance* construct()
 
 void destruct(MyInstance* my)
 {
-  
+  string_destroyInstance(&my->op_text);
   free(my);
 }
 
 void update(void* instance)
 {
-  InstancePtr inst = (InstancePtr) instance;
-  MyInstancePtr my = inst->my;
+  InstancePtr inst    = (InstancePtr) instance;
+  MyInstancePtr my    = inst->my;
   const char* op_text = inst->in_op->text;
 
   if (strcmp(my->op_text.text, op_text) != 0
-	  || my->op == 0)
-  {
-	  string_assign(&my->op_text, inst->in_op);
+      || my->op == 0)
+    {
+      string_assign(&my->op_text, inst->in_op);
 	  
-	  if (strcmp(op_text, "x+y") == 0) {
-		  my->op = add_op;
-	  }
-	  else if (strcmp(op_text, "x-y") == 0) {
-		  my->op = sub_op;
-	  }
-	  else if (strcmp(op_text, "x*y") == 0) {
-		  my->op = mul_op;
-	  }
-	  else if (strcmp(op_text, "x/y") == 0) {
-		  my->op = div_op;
-	  }
-	  else if (strcmp(op_text, "x%y") == 0) {
-		  my->op = mod_op;
-	  }
-	  else if (strcmp(op_text, "x^y") == 0) {
-		  my->op = pow_op;
-	  }
-	  else if (strcmp(op_text, "max(x;y)") == 0) {
-		  my->op = max_op;
-	  }
-	  else if (strcmp(op_text, "min(x;y)") == 0) {
-		  my->op = min_op;
-	  }
-	  else if (strcmp(op_text, "exp(x)") == 0) {
-		  my->op = exp_op;
-	  }
-	  else if (strcmp(op_text, "ln(x)") == 0) {
-		  my->op = ln_op;
-	  }
-	  else if (strcmp(op_text, "sin(x)") == 0) {
-		  my->op = sin_op;
-	  }
-	  else if (strcmp(op_text, "|x|") == 0) {
-		  my->op = abs_op;
-	  }
-	  else if (strcmp(op_text, "x") == 0) {
-		  my->op = proj1_op;
-	  }
-	  else if (strcmp(op_text, "y") == 0) {
-		  my->op = proj2_op;
-	  }
-	  else {
-		  char buffer[128];
-		  snprintf(buffer, sizeof(buffer),
-			       "Unknown operation: '%s' - using x+y instead!", op_text);
-		  s_log(0, buffer);
-		  my->op = add_op;
-	  }
-  }
+      if (strcmp(op_text, "x+y") == 0) {
+        my->op = add_op;
+      }
+      else if (strcmp(op_text, "x-y") == 0) {
+        my->op = sub_op;
+      }
+      else if (strcmp(op_text, "x*y") == 0) {
+        my->op = mul_op;
+      }
+      else if (strcmp(op_text, "x/y") == 0) {
+        my->op = div_op;
+      }
+      else if (strcmp(op_text, "x%y") == 0) {
+        my->op = mod_op;
+      }
+      else if (strcmp(op_text, "x^y") == 0) {
+        my->op = pow_op;
+      }
+      else if (strcmp(op_text, "max(x;y)") == 0) {
+        my->op = max_op;
+      }
+      else if (strcmp(op_text, "min(x;y)") == 0) {
+        my->op = min_op;
+      }
+      else if (strcmp(op_text, "exp(x)") == 0) {
+        my->op = exp_op;
+      }
+      else if (strcmp(op_text, "ln(x)") == 0) {
+        my->op = ln_op;
+      }
+      else if (strcmp(op_text, "sin(x)") == 0) {
+        my->op = sin_op;
+      }
+      else if (strcmp(op_text, "|x|") == 0) {
+        my->op = abs_op;
+      }
+      else if (strcmp(op_text, "x") == 0) {
+        my->op = proj1_op;
+      }
+      else if (strcmp(op_text, "y") == 0) {
+        my->op = proj2_op;
+      }
+      else if (strcmp(op_text, "floor(x)") == 0) {
+        my->op = floor_op;
+      }
+      else if (strcmp(op_text, "ceil(x)") == 0) {
+        my->op = ceil_op;
+      }
+      else if (strcmp(op_text, "round(x)") == 0) {
+        my->op = round_op;
+      }
+      else {
+        char buffer[128];
+        snprintf(buffer, sizeof(buffer),
+                 "Unknown operation: '%s' - using x+y instead!",
+                 op_text);
+        s_log(0, buffer);
+        my->op = add_op;
+      }
+    }
 
   assert(my->op);
 
@@ -161,22 +174,22 @@ void update(void* instance)
 //---------------------------------------------------------------------------
 
 static double add_op(double lhs, double rhs) {
-	return lhs + rhs;
+  return lhs + rhs;
 }
 
 static double sub_op(double lhs, double rhs) {
-	return lhs - rhs;
+  return lhs - rhs;
 }
 
 static double mul_op(double lhs, double rhs) {
-	return lhs * rhs;
+  return lhs * rhs;
 }
 
 static double div_op(double lhs, double rhs) {
-	if (fabs(rhs) < 0.00000001)
-		return 0;
+  if (fabs(rhs) < 0.00000001)
+    return 0;
 
-	return lhs / rhs;
+  return lhs / rhs;
 }
 
 static double mod_op(double lhs, double rhs) {
@@ -188,11 +201,11 @@ static double pow_op(double lhs, double rhs) {
 }
 
 static double max_op(double lhs, double rhs) {
-	return (lhs > rhs) ? lhs : rhs;
+  return (lhs > rhs) ? lhs : rhs;
 }
 
 static double min_op(double lhs, double rhs) {
-	return (lhs < rhs) ? lhs : rhs;
+  return (lhs < rhs) ? lhs : rhs;
 }
 
 static double exp_op(double lhs, double rhs) {
@@ -208,13 +221,25 @@ static double sin_op(double lhs, double rhs) {
 }
 
 static double abs_op(double lhs, double rhs) {
-	return fabs(lhs);
+  return fabs(lhs);
 }
 
 static double proj1_op(double lhs, double rhs) {
-	return lhs;
+  return lhs;
 }
 
 static double proj2_op(double lhs, double rhs) {
-	return rhs;
+  return rhs;
+}
+
+static double floor_op(double lhs, double rhs) {
+  return floor(lhs);
+}
+
+static double ceil_op(double lhs, double rhs) {
+  return ceil(lhs);
+}
+
+static double round_op(double lhs, double rhs) {
+  return floor(rhs+0.5);
 }

@@ -30,8 +30,10 @@ inputs
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-        lower_bound       = 0
-        higher_bound      = 360
+        widget_type       = number_selector
+        default           = 0         
+        lower_bound       = -180
+        higher_bound      = 180
         step_size         = 0.5
     }
 

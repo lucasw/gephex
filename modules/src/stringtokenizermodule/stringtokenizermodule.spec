@@ -23,24 +23,32 @@ inputs
 
     entry
     {
-        name                = Entry
-        type                = typ_NumberType
-        const               = true
-        strong_dependency   = true
-        widget_type         = number_selector
-        lower_bound         = 1
-        higher_bound        = 1000
-		step_size           = 1
-        default             = 1        
+        name              = Entry
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        widget_type       = number_selector
+        lower_bound       = 1
+        higher_bound      = 1000
+        step_size         = 1
+        display_format    = fixed
+        precision         = 0
+        default           = 1        
     }
 
 }
 
 outputs
 {
+    len
+    {
+       name = Number_of_Tokens
+       type = typ_NumberType
+    }
+
     token
     {
-        name = extracted Token
+        name = extracted_Token
         type = typ_StringType
     }
 }

@@ -3,14 +3,16 @@
 #include <cmath>
 
 #if defined(HAVE_CONFIG_H)
-  #include "config.h"
+#include "config.h"
 #endif
 
 // for the min and max templates
 #if defined (COMP_VC)
   #include "minmax.h"
 #else 
-  #include <algorithm> 
+  #include <algorithm>
+using std::max;
+using std::min;
 #endif
 
 static logT s_log;
@@ -78,7 +80,7 @@ void update(void* instance)
     }
   else
     {
-      int maxfun=std::max(inst->in_1->numfun,inst->in_2->numfun);
+      int maxfun=max(inst->in_1->numfun,inst->in_2->numfun);
       inst->out_r->numfun = maxfun;
       for (int i=0;i!=maxfun;++i)
 	{

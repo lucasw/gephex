@@ -5,42 +5,46 @@ check_PROGRAMS = utilstest
 noinst_LIBRARIES = libutils.a
 
 libutils_a_SOURCES = \
-		stringtokenizer.cpp \
-		structscanner.cpp \
-		filesystem.cpp \
-		structreader.cpp \
-		buffer.cpp \
-		itokenizer.cpp \
-		streamtokenizer.cpp \
-		bufferutils.cpp \
-		xmlutils.cpp \
-		streamlogger.cpp \
-		bufferstream.cpp \
-		string_.cpp \
-		sharedlibrary.cpp \
-		timing.cpp \
-                circularbuffer.cpp
+	buffer.cpp \
+	bufferstream.cpp \
+	bufferutils.cpp \
+	circularbuffer.cpp \
+	configfile.cpp \
+	filesystem.cpp \
+	itokenizer.cpp \
+	sharedlibrary.cpp \
+	spawn.cpp \
+	streamlogger.cpp \
+	streamtokenizer.cpp \
+	string_.cpp \
+	stringtokenizer.cpp \
+	structreader.cpp \
+	structscanner.cpp \
+	timing.cpp \
+	xmlutils.cpp
 
 noinst_HEADERS = \
-		autoptr.h \
-		buffer.h \
-		bufferutils.h \
-		filesystem.h \
-		ilogger.h \
-		istructtokenlistener.h \
-		itokenizer.h \
-		streamlogger.h \
-		streamtokenizer.h \
-		stringtokenizer.h \
-		structreader.h \
-		structscanner.h \
-		xmlutils.h \
-		bufferstream.h \
-		block.h \
-		string_.h \
-		sharedlibrary.h \
-		timing.h \
-                circularbuffer.h
+	autoptr.h \
+	block.h \
+	buffer.h \
+	bufferstream.h \
+	bufferutils.h \
+	circularbuffer.h \
+	configfile.h \
+	filesystem.h \
+	ilogger.h \
+	istructtokenlistener.h \
+	itokenizer.h \
+	sharedlibrary.h \
+	spawn.h \
+	streamlogger.h \
+	streamtokenizer.h \
+	string_.h \
+	stringtokenizer.h \
+	structreader.h \
+	structscanner.h \
+	timing.h \
+	xmlutils.h
 
 INCLUDES = \
 	-I @srcdir@/.. \
@@ -48,27 +52,29 @@ INCLUDES = \
 	-I@top_builddir@/util/include
 
 utilstest_SOURCES = \
-	testmain.cpp \
-	stringtokenizertest.cpp \
-	structreadertest.cpp \
-	streamtokenizertest.cpp \
-	structscannertest.cpp \
-	buffertest.cpp \
-	filesystemtest.cpp \
-        autoptrtest.cpp \
-	bufferstreamtest.cpp \
-	sharedlibrarytest.cpp \
-	circularbuffertest.cpp \
+	autoptrtest.cpp \
 	autoptrtest.h \
+	bufferstreamtest.cpp \
 	bufferstreamtest.h \
+	buffertest.cpp \
 	buffertest.h \
+	circularbuffertest.cpp \
+	circularbuffertest.h \
+	filesystemtest.cpp \
 	filesystemtest.h \
-	streamtokenizertest.h \
-	stringtokenizertest.h \
-	structreadertest.h \
-	structscannertest.h \
+	sharedlibrarytest.cpp \
 	sharedlibrarytest.h \
-	circularbuffertest.h
+	streamtokenizertest.cpp \
+	streamtokenizertest.h \
+	stringtokenizertest.cpp \
+	stringtokenizertest.h \
+	structreadertest.cpp \
+	structreadertest.h \
+	structscannertest.cpp \
+	structscannertest.h \
+	testmain.cpp \
+	xmlutilstest.cpp \
+	xmlutilstest.h
 
 utilstest_LDADD = \
 	-L@builddir@/../TestFramework \
@@ -79,8 +85,3 @@ utilstest_LDADD = \
 utilstest_DEPENDENCIES = \
 	@builddir@/../TestFramework/libtestframework.a \
 	@builddir@/libutils.a
-
-
-
-
-

@@ -5,6 +5,8 @@
 #include <map>
 #include "base/iwidgetconstructor.h"
 
+#include "utils/autoptr.h"
+
 class IModelControlReceiver;
 
 namespace gui
@@ -25,7 +27,7 @@ public:
   PropertyWidgetConstr(const TypeViewConstructor* con,
 		       const std::map<std::string, std::string>& params,
 		       int nodeID,int inIndex, int controlID,
-		       ControlValueDispatcher& cvd,
+		       const utils::AutoPtr<ControlValueDispatcher>& cvd,
 		       IModelControlReceiver&);
 
   virtual ~PropertyWidgetConstr();
@@ -40,7 +42,7 @@ private:
   int m_nodeID;
   int m_inputIndex;
   int m_controlID;
-  ControlValueDispatcher& m_dispatcher;
+  utils::AutoPtr<ControlValueDispatcher> m_dispatcher;
   IModelControlReceiver& mcr;
   PropertyWidget* w;
 };

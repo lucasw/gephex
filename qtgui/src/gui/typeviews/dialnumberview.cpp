@@ -40,7 +40,7 @@ namespace gui
     virtual void valueChange(const utils::Buffer& newValue) {
 
       std::istringstream is(reinterpret_cast<const char*>(newValue.getPtr()));
-      double raw;
+      double raw = 0;
       is >> raw;
       double d = (raw - m_lowVal) / (m_highVal - m_lowVal) * RESOLUTION;
 

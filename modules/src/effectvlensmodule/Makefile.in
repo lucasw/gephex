@@ -281,6 +281,22 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvlensmodule.lo effectvlensmodule.o : effectvlensmodule.c \
+	effectvlensmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/positiontype/positiontype.h \
+	../../../util/include/basic_types.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../config.h ../../../types/src/numbertype/numbertype.h \
+	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h lens.c \
+	../libeffectv/EffecTV.h ../libeffectv/utils.h
+effectvlensmodule_auto.lo effectvlensmodule_auto.o : \
+	effectvlensmodule_auto.c effectvlensmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/positiontype/positiontype.h \
+	../../../util/include/basic_types.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../config.h ../../../types/src/numbertype/numbertype.h \
+	../../../engine/src/engine/dllutils.h effectvlensmodule.xpm
 
 info-am:
 info: info-am

@@ -6,6 +6,7 @@ mod_effectvedgemodule
     deterministic = true
     group         = EffecTV
     xpm           = effectvedgemodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

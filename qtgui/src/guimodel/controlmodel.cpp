@@ -223,8 +223,7 @@ namespace gui
 	  {
 	    lastControlID = controlID;
 	  }
-			
-			
+
 	utils::AutoPtr<ControlElement> 
 	  cElem ( new ControlElement(buffer2CElem(buf)) );
 
@@ -232,9 +231,9 @@ namespace gui
 	view->controlAdded(controlID,cElem->name(),cElem->nodeID(),
 			   cElem->inputIndex(), cElem->widgetType(),
 			   cElem->params());
-			
+
 	view->controlMoved(controlID,cElem->position());
-			
+
         try {
           if (connectView != 0)
             connectView->controlConnected(cElem->nodeID(),cElem->inputIndex());
@@ -247,9 +246,9 @@ namespace gui
     else
       {
 	utils::AutoPtr<ControlElement> oldElem = i->second;
-			
+
 	ControlElement cElem = buffer2CElem(buf);
-			
+
 	if (cElem.widgetType() != oldElem->widgetType()
 	    || cElem.nodeID() != oldElem->nodeID()
 	    || cElem.inputIndex() != oldElem->inputIndex())
@@ -261,15 +260,15 @@ namespace gui
 	  {
 	    view->controlRenamed(controlID, cElem.name());
 	  }
-			
+
 	if (!(cElem.position() == oldElem->position()))
 	  {
 	    view->controlMoved(controlID,cElem.position());
-				
 	  }
 	else
 	  {
-	    throw std::runtime_error("WAS IST NUR LOS HIER????");
+	    throw std::runtime_error("No change at "
+                                     "ControlModel::moduleDataSet()");
 	  }
       }
   }
@@ -307,7 +306,7 @@ namespace gui
 	
   void ControlModel::syncDataStarted()
   {
-    //TODO
+    controls.clear();
   }
 	
   void ControlModel::syncDataFinished()

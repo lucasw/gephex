@@ -113,7 +113,7 @@ namespace renderer
 			       "(Renderer::newGraphCreated)");
     graphs[graphID] 
       = utils::AutoPtr<RuntimeSystem>(new RuntimeSystem(*moduleFactory,
-							*typeFactory));
+							*typeFactory, m_logger));
 
   }
 

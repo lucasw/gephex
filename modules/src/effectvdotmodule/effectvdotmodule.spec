@@ -5,6 +5,7 @@ mod_effectvdotemodule
     name          = DotTV
     deterministic = false
     group         = EffecTV
+    static        = true
     xpm           = effectvdotmodule.xpm
     author        = ----
     version       = 1.0

@@ -30,6 +30,10 @@
 #include "utils/autoptr.h"
 #include "specmap.h"
 
+namespace utils
+{
+  class ILogger;
+}
 class IModuleClassSpec;
 
 namespace model
@@ -57,7 +61,8 @@ namespace model
        *
        * \param basepath This is the root directory for graph hierarchy.
        */
-      GraphFileSystem(const std::string& basepath);
+      GraphFileSystem(const std::string& graph_path,
+                      utils::AutoPtr<utils::ILogger>& logger);
 
       /**
        * Destroys the Object
@@ -112,11 +117,9 @@ namespace model
       bool graphExists(const std::string& graphName) const;
       
     private:
-      
-      /**
-       * Root directory of the graph subdir e.g. "/home/user/.gephex/graphs"
-       */
-      std::string basePath;
+      utils::AutoPtr<utils::ILogger> m_logger;      
+      typedef std::list<std::string> DirList;
+      DirList m_dirs;
       
       /**
        * Maps the Name of the Graphs to the files on the disc

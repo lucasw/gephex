@@ -5,6 +5,7 @@ mod_effectvfiremodule
     name          = Fire
     deterministic = false
     group         = EffecTV
+    static        = true
     xpm           = effectvfiremodule.xpm
     author        = ----
     version       = 1.0

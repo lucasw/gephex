@@ -1,4 +1,4 @@
- #include "avifiledriver.h"
+#include "avifiledriver.h"
 
 #include <string>
 #include <stdexcept>
@@ -260,7 +260,8 @@ void AviFileDriver::decode_frame(unsigned int frame_number,
           //std::cout << "drop " << m_impl->videoStream->GetPos() << std::endl;
           m_impl->videoStream->ReadFrame();
           avm::CImage* image = m_impl->videoStream->GetFrame();
-          image->Release();
+	  if (image!=0)
+	    image->Release();
         }
     }
 	      
@@ -277,13 +278,14 @@ void AviFileDriver::decode_frame(unsigned int frame_number,
       }
         
       avm::CImage* image = m_impl->videoStream->GetFrame();
-              
-      // convert any format to bgra
-      m_impl->im->Convert(image);
-              
-      // release pointer to internal frame
-      image->Release();
-
+      if (image!=0)
+	{
+	  // convert any format to bgra
+	  m_impl->im->Convert(image);
+	  
+	  // release pointer to internal frame
+	  image->Release();
+	}
       // scale to width x height
       ls_scale32(framebuffer, width, height,
                  reinterpret_cast<const uint_32*>(m_impl->im->Data()),

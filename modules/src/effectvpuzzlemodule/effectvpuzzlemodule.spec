@@ -6,6 +6,7 @@ mod_effectvpuzzlemodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvpuzzlemodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
 }

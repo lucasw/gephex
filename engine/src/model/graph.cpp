@@ -133,7 +133,7 @@ namespace model
 		// all snapshots
 		for (Graph::ValueSetMap::iterator i=valueSets.begin();i!=valueSets.end();++i)
 		  {
-		    i->second->deleteControllValue(moduleID,input);
+		    i->second->deleteControlValue(moduleID,input);
 		  }
 	      }
 	    m_nodes.erase(i);		
@@ -248,8 +248,8 @@ namespace model
       throw std::runtime_error("snapshot with that name already exists "
 			       "(Graph::newControlValueSet)");
 
-    utils::AutoPtr<ControllValueSet> 
-      newSet = utils::AutoPtr<ControllValueSet>(new ControllValueSet(id,name));
+    utils::AutoPtr<ControlValueSet> 
+      newSet = utils::AutoPtr<ControlValueSet>(new ControlValueSet(id,name));
 
     valueSets[id]=newSet;
     // every module
@@ -278,25 +278,25 @@ namespace model
     it->second->setControlValue(nodeID,intputIndex,value);
   }
 
-  void Graph::renameControllValueSet(const std::string& snapID,
+  void Graph::renameControlValueSet(const std::string& snapID,
 				     const std::string& newSnapName)
   {
     ValueSetMap::iterator it = valueSets.find(snapID);
 
     if (it == valueSets.end())
       throw std::runtime_error("No such Snapshot at "
-			       "Graph::renameControllValueSet()");
+			       "Graph::renameControlValueSet()");
 
     /*    ValueSetMap::iterator it2 = valueSets.find(newSnapName);
     if (it2 != valueSets.end())
       throw std::runtime_error("Snapshot already exists at "
-      "Graph::renameControllValueSet()");*/
+      "Graph::renameControlValueSet()");*/
 
     it->second->setName(newSnapName);
 
   }
 
-  void Graph::copyControllValueSet(const std::string& snapID,
+  void Graph::copyControlValueSet(const std::string& snapID,
 				   const std::string& newID,
 				   const std::string& newName)
   {
@@ -304,21 +304,21 @@ namespace model
 
     if (it == valueSets.end())
       throw std::runtime_error("No such Snapshot at "
-			       "Graph::copyControllValueSet()");
+			       "Graph::copyControlValueSet()");
 
     /*
     ValueSetMap::iterator it2 = valueSets.find(newSnapName);
     if (it2 != valueSets.end())
       throw std::runtime_error("Snapshot already exists at "
-			       "Graph::copyControllValueSet()");
+			       "Graph::copyControlValueSet()");
     */
 
-    utils::AutoPtr<ControllValueSet> 
-      copySet = utils::AutoPtr<ControllValueSet>(new ControllValueSet(newID,
+    utils::AutoPtr<ControlValueSet> 
+      copySet = utils::AutoPtr<ControlValueSet>(new ControlValueSet(newID,
 								      newName));
     valueSets[newID] = copySet;
 	
-    for (ControllValueSet::const_iterator it3 = it->second->begin();
+    for (ControlValueSet::const_iterator it3 = it->second->begin();
 	 it3 != it->second->end(); ++it3)
       {
 	copySet->setControlValue(it3->first.first, it3->first.second,
@@ -327,13 +327,13 @@ namespace model
 	
   }
 
-  void Graph::deleteControllValueSet(const std::string& snapID)
+  void Graph::deleteControlValueSet(const std::string& snapID)
   {
     ValueSetMap::iterator it = valueSets.find(snapID);
 
     if (it == valueSets.end())
       throw std::runtime_error("No such Snapshot at "
-			       "Graph::deleteControllValueSet()");
+			       "Graph::deleteControlValueSet()");
 
     valueSets.erase(it);
   }
@@ -348,4 +348,32 @@ namespace model
     return m_maxModuleID;
   }
 
+  std::string Graph::getOutputID(int moduleID, int outputIndex) const
+  {
+    for (GraphNodeList::const_iterator i = m_nodes.begin();
+    	 i != m_nodes.end(); ++i)
+      {
+	if ((*i)->moduleID() == moduleID) // found
+	  {
+	    utils::AutoPtr<GraphNode> node = *i;
+	    return node->spec().outputID(outputIndex);
+	  }
+      }
+
+    throw std::runtime_error("module does not exist");
+  }
+  std::string Graph::getInputID(int moduleID, int inputIndex) const
+  {
+    for (GraphNodeList::const_iterator i = m_nodes.begin();
+    	 i != m_nodes.end(); ++i)
+      {
+	if ((*i)->moduleID() == moduleID) // found
+	  {
+	    utils::AutoPtr<GraphNode> node = *i;
+	    return node->spec().inputID(inputIndex);
+	  }
+      }
+
+    throw std::runtime_error("module does not exist");
+  }
 } // end of namespace model

@@ -1,5 +1,6 @@
 #include "comboboxstringview.h"
 
+#include <iostream>
 #include <qcombobox.h>
 #include <qlayout.h>
 
@@ -48,17 +49,35 @@ namespace gui
 
     void valueChange(const utils::Buffer& newValue)
     {
-      std::string str = reinterpret_cast<const char*>(newValue.getPtr());
+      int len = newValue.getLen();
+      const char* raw;
+      if (len <= 0)
+        {
+          raw = "";
+          len = 1;
+        }
+      else
+        {
+          raw = reinterpret_cast<const char*>(newValue.getPtr());
+        }
+
+      if (raw[len-1] != 0)
+        {
+          std::cout << "ignoring string with missing termination\n";
+          return;
+        }
+
+      std::string str ( raw, len );
       std::map<std::string, int>::const_iterator
 	it = m_values.find(str.c_str());
 			
       if (it == m_values.end())
 	{
 	  //bad idea! don't throw!!
-//	throw std::runtime_error("Invalid combobox value: '" + str + "'");
+          //	throw std::runtime_error("Invalid combobox value: '" + str + "'");
 	}
-	else
-      m_box->setCurrentItem(it->second);
+      else
+        m_box->setCurrentItem(it->second);
     }
 
 

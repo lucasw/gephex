@@ -326,6 +326,8 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+libeffectv.o: libeffectv.c libeffectv.h ../../../config.h EffecTV.h \
+	utils.h ../../../util/include/basic_types.h
 
 info-am:
 info: info-recursive

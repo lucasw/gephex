@@ -1,9 +1,9 @@
-running cat aclocal/avifile.m4 aclocal/qt.m4 aclocal/sdl.m4 aclocal/sstream.m4 ...
+running cat aclocal/avifile.m4 aclocal/qt.m4 aclocal/sdl.m4 aclocal/sstream.m4 aclocal/v4l.m4 ...
 # AM_PATH_AVIFILE 0.1.0
 # CXXFLAGS and LIBS for avifile
 
 # modified from the below version by georg for GePhex
-# cahnges: perform ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
+# changes: perform ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
 
 # taken from Autostar Sandbox, http://autostars.sourceforge.net/
 # constructed by careful cross-pollination from various sources and lots of
@@ -139,8 +139,8 @@ decoder = Creators::CreateVideoDecoder(bh) ],
     else
       ifelse([$3], , :, [$3])
     fi
+    rm -f conf.avifiletest
 ])
-
 dnl qt.m4
 dnl Adapted to GePhex by Georg Seidel <georg.seidel@web.de>
 dnl Changes made: 
@@ -306,6 +306,7 @@ if test "x$HAVE_QT" = "xyes"
 then
   AC_MSG_CHECKING(for qt - version >= $min_qt_version)
 	dnl now run a short C app that tells us if the version is ok or not
+        rm -f conf.qttest
 	AC_TRY_RUN([
 #include <stdio.h>
 #include <stdlib.h>
@@ -319,7 +320,7 @@ main ()
   int major, minor, micro;
   char ver[50];
 
-  //system ("touch conf.qttest");
+  system ("touch conf.qttest");
 
   /* HP/UX 9 (%@#!) writes to sscanf strings */
   strncpy(ver, "$min_qt_version", sizeof(ver) - 1);
@@ -353,23 +354,27 @@ main ()
     ])
 fi
 
+found_qt="no"
+
 if test "x$HAVE_QT" = "xyes"
 then
-  AC_MSG_CHECKING([if a Qt program links])
+  if test -f conf.qttest ; then
+      found_qt="yes"
+  else
+      AC_MSG_CHECKING([Could not run QT test program, checking if a Qt program links...])
 
-  found_qt="no"
-
-  AC_TRY_LINK([
-#include <qstring.h>
-  ],
-  [
-  QString s("Hello, world!");
-  qDebug(s.latin1());
-  ],
-  found_qt="yes"
-  AC_MSG_RESULT([ok]),
-  AC_MSG_RESULT([failed - check config.log for details])
-  )
+      AC_TRY_LINK([
+       #include <qstring.h>
+      ],
+      [
+       QString s("Hello, world!");
+       qDebug(s.latin1());
+      ],
+      found_qt="yes"
+      AC_MSG_RESULT([ok]),
+      AC_MSG_RESULT([failed - check config.log for details])
+      )
+  fi
 
   if test "x$found_qt" = "xyes"
   then
@@ -403,6 +408,7 @@ LIBRARY_PATH="$saved_LIBRARY_PATH"
 CXXFLAGS="$saved_CXXFLAGS"
 LDFLAGS="$saved_LDFLAGS"
 LIBS="$saved_LIBS"
+rm -f conf.qttest
 ])
 # Configure paths for SDL
 # Adapted for GePhex 4/2003
@@ -614,6 +620,39 @@ else
   AC_MSG_RESULT(missing)
   ifelse([$2], , :, [$2])
 fi
+
+AC_LANG_RESTORE()
+])
+dnl tests wether the v4l videodev header exists
+dnl AM_PATH_V4L([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+AC_DEFUN(AM_PATH_V4L,
+[
+AC_MSG_CHECKING(for v4l header...)
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+dnl AC_CHECK_HEADERS([modules/src/v4lmodule/videodev.h],have_videodev_header=yes,have_videodev_header=no)
+
+dnl if test "x$have_videodev_header" = "xyes"
+dnl then
+  AC_MSG_CHECKING(found header, checking wether it compiles)
+  AC_TRY_COMPILE([#include <cstdlib>
+                #include <linux/types.h>],[],
+               videodev_h_compiles=yes,videodev_h_compiles=no)
+
+  if test "x$videodev_h_compiles" = "xyes"
+  then
+    AC_MSG_RESULT(ok)
+    ifelse([$1], , :, [$1])
+  else
+    AC_MSG_RESULT(does not compile)
+    ifelse([$2], , :, [$2])
+  fi
+dnl else
+dnl   AC_MSG_RESULT(missing)
+dnl   ifelse([$2], , :, [$2])
+dnl fi
 
 AC_LANG_RESTORE()
 ])

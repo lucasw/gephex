@@ -8,24 +8,25 @@ mod_joystickmodule
     xpm           = joystickmodule.xpm
     author        = A PATHETIC HUMAN
     version       = -0.9
-    static = false
+    static        = false
 }
 
 inputs
 {
     joy_id
     {
-    name = Joystick_ID
-    type = typ_NumberType
-	strong_dependency = true
-	const = true
-
-    hidden = true	
-    widget_type =   number_selector
-    lower_bound = 0
-    higher_bound = 4
-    step_size = 1
-    default = 0
+        name              = Joystick_ID
+        type              = typ_NumberType
+        strong_dependency = true
+        const             = true
+        hidden            = true    
+        widget_type       = number_selector
+        lower_bound       = 0
+        higher_bound      = 31
+        step_size         = 1
+        display_format    = fixed
+        precision         = 0
+        default           = 0
     }
 }
 
@@ -34,31 +35,31 @@ outputs
 {
     signal_x
     {
-    name = X_Richtung
-    type = typ_NumberType
+        name = X_Richtung
+        type = typ_NumberType
     }
 
     signal_y
     {
-    name = Y_Richtung
-    type = typ_NumberType
+        name = Y_Richtung
+        type = typ_NumberType
     }
 
     button_1
     {
-    name = Button_1
-    type = typ_NumberType
+        name = Button_1
+        type = typ_NumberType
     }    
 
     button_2
     {
-    name = Button_2
-    type = typ_NumberType
+        name = Button_2
+        type = typ_NumberType
     }
 
-	midi
-	{
-		name = midiOut
-		type = typ_MidiType
-	}
+    midi
+    {
+        name = midiOut
+        type = typ_MidiType
+    }
 }

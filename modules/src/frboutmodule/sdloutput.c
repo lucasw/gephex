@@ -165,15 +165,16 @@ static void SDL_destroy(struct DriverInstance* sh)
       sh->scaledFrb = 0;
     }
   // according to the sdl docu, the surface that is created
-  // by SDL_SetVideoMode does not have to be freed.
+  // by SDL_SetVideoMode should not be freed.
+  // see http://sdldoc.csn.ul.ie/sdlsetvideomode.php
   //  if (sh->Screen != 0)
-  //  SDL_FreeSurface(sh->Screen);
+  //    SDL_FreeSurface(sh->Screen);
 
   free(sh);
 }
 
 static int SDL_resize(struct DriverInstance* sh, int width, int height,
-					  char* error_text, int text_len)
+                      char* error_text, int text_len)
 { 
 
   sh->width  = width;
@@ -252,18 +253,17 @@ static int SDL_blit_(struct DriverInstance* sh,
       return 0;
     }
   
-  /*tmp2 = SDL_DisplayFormat(tmp);
+  tmp2 = SDL_DisplayFormat(tmp);
   if (tmp2 == 0)
     {      
       snprintf(error_text, text_len, "%s", SDL_GetError());
       return 0;
     }
 
-  SDL_BlitSurface(tmp2, NULL, sh->Screen, NULL);*/
-  SDL_BlitSurface(tmp, NULL, sh->Screen, NULL);
+  SDL_BlitSurface(tmp2, NULL, sh->Screen, NULL);
   SDL_Flip(sh->Screen);
   
-  //SDL_FreeSurface(tmp2);
+  SDL_FreeSurface(tmp2);
   SDL_FreeSurface(tmp);
   
 	return 1;

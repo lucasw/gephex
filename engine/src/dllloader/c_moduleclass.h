@@ -20,7 +20,8 @@ class CModuleClass : public IModuleClass
 public:
 
 	CModuleClass(const CModuleFunctionTable&,
-		     const CModuleAttributes& attr_);
+		     const CModuleAttributes& attr_,
+			 const std::string& name);
 
 	virtual IModuleClass* clone() const;
 
@@ -34,6 +35,7 @@ private:
 	CModuleAttributes* attributes;
 	typedef utils::AutoPtr<IType> ITypePtr;
 	mutable std::vector<ITypePtr> defaultInputValues;
+	std::string m_name;
 };
 
 #endif

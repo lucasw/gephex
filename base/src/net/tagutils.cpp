@@ -1,6 +1,8 @@
 #include "tagutils.h"
 
+#include "convertbin.h"
 #include "utils/buffer.h"
+
 
 namespace net {
 
@@ -27,42 +29,42 @@ namespace net {
 				const utils::Buffer& src)
   {
     const unsigned char* data = src.getPtr();
-	const unsigned int l = *reinterpret_cast<const unsigned int*>(data);
+    const unsigned int l = *reinterpret_cast<const unsigned int*>(data);
 
-	//std::cout << "src = '" << /*src <<*/ "', l = '" << l << "'" << std::endl;
+    //std::cout << "src = '" << /*src <<*/ "', l = '" << l << "'" << std::endl;
     
-	dst = utils::Buffer(data + sizeof(unsigned int) + l,
-			    src.getLen() - l - sizeof(unsigned int));
+    dst = utils::Buffer(data + sizeof(unsigned int) + l,
+			src.getLen() - l - sizeof(unsigned int));
 
-	tag = std::string(reinterpret_cast<const char*>(data 
-							+ sizeof(unsigned int)),
-			  l-1);
+    tag = std::string(reinterpret_cast<const char*>(data 
+						    + sizeof(unsigned int)),
+		      l-1);
 
-	//std::cout << "dst = '" << /*dst <<*/ "', tag = '" << tag << "'" << std::endl;
+    //std::cout << "dst = '" << /*dst 
+    //<<*/ "', tag = '" << tag << "'" << std::endl;
 
-      }
+  }
  
 
   void UInt32TagUtil::attachTag(utils::Buffer& dst,
-			     const uint_32& tag,
-			     const utils::Buffer& b)
+				const uint_32& tag,
+				const utils::Buffer& b)
   {
     static unsigned char data[sizeof(uint_32)];
     
-    uint_32* d = reinterpret_cast<uint_32*>(data);
-    *d = tag;
+    convert_uint32_to_le(tag, data);
     
-    dst = utils::Buffer(data, sizeof(uint_32)) + b;
+    dst = utils::Buffer(data, sizeof(data)) + b;
     
     //std::cout << "Attached Tag = " << tag << std::endl;
   }
 
   void UInt32TagUtil::removeTag(utils::Buffer& dst,
-			     uint_32& tag,
-			     const utils::Buffer& src)
+				uint_32& tag,
+				const utils::Buffer& src)
   {
     const unsigned char* data = src.getPtr();
-    tag = *reinterpret_cast<const uint_32*>(data);
+    tag = convert_uint32_from_le(data);
     
     dst = utils::Buffer(data + sizeof(uint_32),
 			src.getLen() - sizeof(uint_32));

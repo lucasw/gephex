@@ -6,9 +6,9 @@ mod_effectvquarkmodule
     deterministic = false
     group         = EffecTV
     xpm           = effectvquarkmodule.xpm
+    static        = true
     author        = ----
     version       = 1.0
-	static        = true
 }
 
 inputs

@@ -3,8 +3,136 @@
 #include <iostream>
 #include <stdexcept>
 
+
 namespace utils
 {
+
+  static bool is_whitespace(char c)
+  {
+    static std::string WHITESPACES = " \t\n\r";  
+    return WHITESPACES.find(c) != std::string::npos;
+  }
+
+  namespace xml
+  {
+
+    static Iterator scan_string(Iterator begin, 
+                                Iterator end,
+                                const std::string& s)
+    {
+      Iterator i = begin;
+      while (i != end && is_whitespace(*i))
+        ++i;
+
+      for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
+        {
+          if (i == end || *i != *j)
+            {
+              std::string msg = "scan_string failed: expected '";
+              msg += s + "'\n";
+              if (i != end)
+                {
+                  msg += "*i = " ;
+                  msg += *i;
+                  msg += "\n";
+                }
+              msg += "*j = ";
+              msg += *j;
+              msg += "\n";
+            throw std::runtime_error(msg.c_str());
+            }
+
+          ++i;
+        }
+      //      std::cout << "matched " << s << "\n";
+
+      return i;
+    }
+
+    static Iterator scan_pcdata(Iterator begin, Iterator end, std::string& b)
+    {
+      Iterator i = begin;
+      int len = 0;
+      while (i != end && !(*i == '<' || *i == '>'))
+        {
+          ++i;
+          ++len;
+        }
+
+      if (i == end)
+        throw std::runtime_error("unexpected end at scan_pcdata");
+
+      if (len == 0)
+        {
+          b = std::string("");
+        }
+      else
+        {
+          char* data = new char[len];
+          int index = 0;
+          for (Iterator j = begin; j != i; ++j, ++index)
+            {
+              data[index] = *j;
+            }
+      
+          b = std::string(data, len);
+          delete[] data;
+        }
+      return i;
+    }
+
+    std::string next_tag_name(Iterator begin, Iterator end)
+    {
+      std::string tag_name;
+      Iterator i = begin;
+      i = scan_string(i, end, "<");
+      i = scan_pcdata(i, end, tag_name);
+      i = scan_string(i, end, ">");
+
+      return tag_name;
+    }
+
+    Iterator tagOpens(Iterator begin, 
+                      Iterator end,
+                      const std::string& tag_name)
+    {
+      Iterator i = begin;
+      i = scan_string(i, end, "<");
+      i = scan_string(i, end, tag_name);
+      i = scan_string(i, end, ">");
+      
+      //      std::cout << "matched tag open <" << tag_name << ">\n";
+      return i;
+    }
+
+    Iterator tagCloses(Iterator begin,
+                   Iterator end,
+                   const std::string& tag_name)
+    {
+      Iterator i = begin;
+      i = scan_string(i, end, "<");
+      i = scan_string(i, end, "/");
+      i = scan_string(i, end, tag_name);
+      i = scan_string(i, end, ">");
+      
+      //      std::cout << "matched tag close <" << tag_name << ">\n";
+      return i;
+    }
+
+    Iterator leafTag(Iterator begin,
+                 Iterator end,
+                 const std::string& tag_name,
+                 std::string& b)
+    {
+      Iterator i = begin;
+      i = tagOpens(i, end, tag_name);
+      i = scan_pcdata(i, end, b);
+      i = tagCloses(i, end, tag_name);      
+        
+      //      std::cout << "matched leaf tag <" << tag_name << "> '" << b << "'\n";
+      return i;
+    }
+  }
 
   void checktag(std::istream& s,const std::string& giventag)
   {

@@ -304,6 +304,8 @@ dialnumberview.o: dialnumberview.cpp dialnumberview.h \
 filestringview.o: filestringview.cpp filestringview.h \
 	../../gui/typeview.h ../../../../base/src/utils/buffer.h \
 	../../../../base/src/utils/structreader.h \
+	../../../../base/src/utils/stringtokenizer.h \
+	../../../../base/src/utils/itokenizer.h ../../../../config.h \
 	filestringview_moc.cpp
 fontview.o: fontview.cpp fontview.h ../../gui/typeview.h \
 	../../../../base/src/utils/buffer.h \

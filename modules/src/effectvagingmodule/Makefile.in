@@ -281,6 +281,18 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+effectvagingmodule.lo effectvagingmodule.o : effectvagingmodule.c \
+	effectvagingmodule.h ../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../libeffectv/libeffectv.h aging.c ../libeffectv/EffecTV.h \
+	../libeffectv/utils.h
+effectvagingmodule_auto.lo effectvagingmodule_auto.o : \
+	effectvagingmodule_auto.c effectvagingmodule.h \
+	../../../engine/src/engine/dllmodule.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../engine/src/engine/dllutils.h effectvagingmodule.xpm
 
 info-am:
 info: info-am

@@ -20,31 +20,31 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=key_press const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=24 } ";
+    return "input_spec { type=typ_NumberType id=key const=true strong_dependency=true default=24 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1.0 } ";
+    return "input_spec { type=typ_NumberType id=amplitude const=true strong_dependency=true default=1.0 } ";
   break;
   case 3:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=sinus } ";
+    return "input_spec { type=typ_StringType id=signal const=true strong_dependency=true default=sinus } ";
   break;
   case 4:
-    return "input_spec { type=typ_EnvType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_EnvType id=a_env const=true strong_dependency=true  } ";
   break;
   case 5:
-    return "input_spec { type=typ_LfoType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_LfoType id=a_lfo const=true strong_dependency=true  } ";
   break;
   case 6:
-    return "input_spec { type=typ_EnvType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_EnvType id=f_env const=true strong_dependency=true  } ";
   break;
   case 7:
-    return "input_spec { type=typ_LfoType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_LfoType id=f_lfo const=true strong_dependency=true  } ";
   break;
   case 8:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=44100 } ";
+    return "input_spec { type=typ_NumberType id=sample_rate const=true strong_dependency=true default=44100 } ";
   break;
  }
  return 0;
@@ -52,7 +52,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_AudioType } ";
+    return "output_spec { type=typ_AudioType id=r } ";
   break;
  }
  return 0;

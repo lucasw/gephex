@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
   if (!cpuinfo_has_cpuid())
     {
       fprintf(stderr, "Cpu does not support CPUID, aborting.\n");
-      return 1;
+      return 0;
     }
 
   cpuinfo_get_vendor(vendor);

@@ -15,10 +15,11 @@ typedef struct _Instance
 struct _MyInstance* my;
  StringType* in_string;
  NumberType* in_entry;
+ NumberType* out_len;
  StringType* out_token;
 } Instance, *InstancePtr;
 enum Inputs { in_string = 0, in_entry = 1 };
-enum Outputs { out_token = 0 };
+enum Outputs { out_len = 0, out_token = 1 };
 
 struct _MyInstance* construct(void);
 void destruct(struct _MyInstance*);

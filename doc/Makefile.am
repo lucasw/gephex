@@ -11,6 +11,7 @@ SGML_FILES = \
         gephex-gui.sgml
 
 # include this stuff in the dist
+
 EXTRA_DIST = $(man_MANS) $(html_DATA) $(SGML_FILES)
 
 DISTCLEANFILES=gephex-gui.1 gephex-engine.1 documentation.html

@@ -20,28 +20,28 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=t const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_PositionType const=true strong_dependency=true default=[0.5 0.5] } ";
+    return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[0.5 0.5] } ";
   break;
   case 3:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=640 } ";
+    return "input_spec { type=typ_NumberType id=xres const=true strong_dependency=true default=640 } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=480 } ";
+    return "input_spec { type=typ_NumberType id=yres const=true strong_dependency=true default=480 } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=d const=true strong_dependency=true default=0.5 } ";
   break;
   case 7:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=shading const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -49,7 +49,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=r } ";
   break;
  }
  return 0;
@@ -128,7 +128,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Plane] group=[Effects] inputs=[8 Motion{widget_type=[unboundednumber_selector] } Rotation{lower_bound=[0] widget_type=[number_selector] step_size=[0.5] higher_bound=[360] } Position Image Size(X){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Size(Y){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Distance{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] } Shading{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] display_format=[fixed] help=[Degree of Shading] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Plane] group=[Effects] inputs=[8 Motion{widget_type=[unboundednumber_selector] } Rotation{lower_bound=[-180] widget_type=[number_selector] step_size=[0.5] higher_bound=[180] } Position Image Size(X){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Size(Y){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Distance{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] } Shading{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] display_format=[fixed] help=[Degree of Shading] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(planemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

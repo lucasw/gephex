@@ -20,19 +20,19 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=amount const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_FrameBufferType id=input1 const=true strong_dependency=true  } ";
   break;
   case 2:
-    return "input_spec { type=typ_FrameBufferType const=true strong_dependency=false  } ";
+    return "input_spec { type=typ_FrameBufferType id=input2 const=true strong_dependency=false  } ";
   break;
   case 3:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=yes } ";
+    return "input_spec { type=typ_StringType id=mmx const=true strong_dependency=true default=yes } ";
   break;
   case 4:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=[x + c*y] } ";
+    return "input_spec { type=typ_StringType id=op const=true strong_dependency=true default=[x + c*y] } ";
   break;
  }
  return 0;
@@ -40,7 +40,7 @@ const char* getInputSpec(int index) {
 const char* getOutputSpec(int index) {
  switch(index) {
    case 0:
-    return "output_spec { type=typ_FrameBufferType } ";
+    return "output_spec { type=typ_FrameBufferType id=result } ";
   break;
  }
  return 0;
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Image Calculon] group=[Mixer] inputs=[5 c{lower_bound=[0] widget_type=[hslider] step_size=[0.01] higher_bound=[1] } x y Use-MMX{widget_type=[combo_box] values=[yes,no] hidden=[true] } Operation{widget_type=[combo_box] values=[x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x] hidden=[true] help=[x und y sind die beiden Bilder, c ist eine konstante Zahl] } ] outputs=[1 Ergebnis ] type=xpm } ";
+  static const char* INFO = "info { name=[Image Calculon] group=[Mixer] inputs=[5 c{lower_bound=[0] widget_type=[hslider] step_size=[0.01] higher_bound=[1] } x y Use-MMX{widget_type=[combo_box] values=[yes,no] hidden=[true] } Operation{widget_type=[combo_box] values=[x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x] hidden=[true] help=[x und y sind die beiden Bilder, c ist eine konstante Zahl] } ] outputs=[1 Result ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(imgarithmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

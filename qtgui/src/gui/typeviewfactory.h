@@ -34,7 +34,7 @@ namespace gui
     typedef std::map<std::string, std::string> ParamMap;
     typedef std::list<TypeViewInfo> TypeViewInfoList;
 
-    TypeViewFactory();
+    TypeViewFactory(const std::string& media_path);
     ~TypeViewFactory();
 
     /**

@@ -25,9 +25,9 @@ AM_CPPFLAGS = \
 	-I @srcdir@/../../../util/include
 	-I @builddir@/../../../util/include
 
-bin_PROGRAMS = gephex-engine
+bin_PROGRAMS = gephex-engine-real
 
-gephex_engine_SOURCES = \
+gephex_engine_real_SOURCES = \
 	main.cpp \
 	scheduler.cpp \
 	netlogger.cpp \
@@ -40,7 +40,7 @@ gephex_engine_SOURCES = \
         bufferedsender.h \
         bufferedsender.cpp
 
-gephex_engine_LDADD = \
+gephex_engine_real_LDADD = \
 	-ldllloader \
 	-lmodel \
 	-lrenderer \
@@ -57,7 +57,7 @@ gephex_engine_LDADD = \
 	-L@builddir@/../../../base/src/netinterfaces \
 	-L/sw/lib
 
-gephex_engine_DEPENDENCIES = \
+gephex_engine_real_DEPENDENCIES = \
 	@builddir@/../dllloader/libdllloader.a \
 	@builddir@/../model/libmodel.a \
 	@builddir@/../renderer/librenderer.a \

@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 extern "C" {
-#include <linux/videodev.h>
+#include "videodev.h"
 }
 
 #include "basic_types.h"

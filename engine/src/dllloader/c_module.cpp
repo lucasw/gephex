@@ -175,10 +175,12 @@ CModule::CModule(void* instance,
 		 CModuleVTable& vtable,
 		 const CModuleAttributes& attributes,
 		 const ITypeFactory& tfactory_,
-		 const std::vector<ITypePtr>& defaultInputTypes)
+		 const std::vector<ITypePtr>& defaultInputTypes,
+		 const std::string& module_class_name)
   : IModule(-1), m_instance(instance), m_vtable(&vtable),
     inputs(attributes.inputs.size()),outputs(attributes.outputs.size()),
-    _isDeterministic(attributes.isDeterministic)
+    _isDeterministic(attributes.isDeterministic),
+	m_module_class_name(module_class_name)
 				 
 {
   for (unsigned int i = 0; i < attributes.inputs.size(); ++i)
@@ -217,6 +219,11 @@ CModule::CModule(void* instance,
 CModule::~CModule()
 {
   m_vtable->deleteInstance(m_instance);	
+}
+
+std::string CModule::module_class_name() const
+{
+	return m_module_class_name;
 }
 
 const std::vector<CModule::IInputPtr>& CModule::getInputs() const
@@ -282,11 +289,5 @@ void CModule::update()
   
   m_vtable->update(m_instance);
 }
-
-void CModule::parseInput(const char* data,int len)
-{
-  m_vtable->parseInput(m_instance, data,len);
-}
-
 
 //----------------------------------------------------------------------------

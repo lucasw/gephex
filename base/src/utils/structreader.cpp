@@ -85,7 +85,7 @@ bool StructReader::getBoolValue(const std::string& name) const
   std::string value;
   bool found = this->find(name, value);
   if (!found)
-	  throw std::runtime_error("Value not found!");
+    throw std::runtime_error(std::string("Key '") + name + "' not found!");
 
   if (value == "true")
     return true;
@@ -105,7 +105,7 @@ double StructReader::getDoubleValue(const std::string& name) const
   std::string value;
   bool found = this->find(name, value);
   if (!found)
-	  throw std::runtime_error("Value not found!");
+	  throw std::runtime_error(std::string("Key '") + name + "' not found!");
   
   std::istringstream s(value);
   double val;
@@ -127,7 +127,7 @@ int StructReader::getIntValue(const std::string& name) const
   std::string value;
   bool found = this->find(name, value);
   if (!found)
-	  throw std::runtime_error("Value not found!");
+	  throw std::runtime_error(std::string("Key '") + name + "' not found!");
   
   std::istringstream s(value);
   int val;
@@ -149,7 +149,7 @@ std::string StructReader::getStringValue(const std::string& name) const
   std::string value;
   bool found = this->find(name, value);
   if (!found)
-	  throw std::runtime_error("Value not found!");
+	  throw std::runtime_error(std::string("Key '") + name + "' not found!");
 
   return value;
 }

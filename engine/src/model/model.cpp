@@ -43,9 +43,9 @@ namespace model
     {
     public:
       has_name(const std::string& name) : m_name( name ) {}
-      bool operator()(Model::GraphMap::value_type p)
+      bool operator()(const Model::GraphMap::value_type& p)
       { 
-	return p.second->getName()==m_name;
+	return p.second->getName() == m_name;
       }
     private:
       const std::string m_name;
@@ -116,16 +116,18 @@ namespace model
 	    smartAss->moduleAdded(graphID,
 				  (*jt)->spec().moduleClassName(),
 				  (*jt)->moduleID());
-			
-	  const std::map<int,utils::Buffer>& datas = (*jt)->data();
-	  for (std::map<int,utils::Buffer>::const_iterator lt = datas.begin();
-	       lt != datas.end(); ++lt)
-	    {
-	      if (dr)
-		dr->moduleDataSet((*jt)->moduleID(), lt->first,
-				  lt->second);
-	    }	
-	}	
+
+          if (dr)
+            {			
+              const std::map<int,utils::Buffer>& datas = (*jt)->data();
+              for (std::map<int,utils::Buffer>::const_iterator 
+                     lt = datas.begin(); lt != datas.end(); ++lt)
+                {
+                  dr->moduleDataSet((*jt)->moduleID(), lt->first,
+                                    lt->second);
+                }
+            }
+	}
 		
       // build the connections
       const Graph::ConnectionMap& connections = g.connections();
@@ -195,7 +197,7 @@ namespace model
 	    {
 	      fileSystem.loadGraph(graphID, *graph, specs);
 	    }
-	  catch (std::runtime_error& e)
+	  catch (std::exception& e)
 	    {
 	      m_logger->error("Model", e.what());
 	      return graphs.end();
@@ -246,14 +248,17 @@ namespace model
 
 }
 	
-  Model::Model(const std::string basepath_, utils::AutoPtr<utils::ILogger>& logger)
+  Model::Model(const std::string graph_path,
+               utils::AutoPtr<utils::ILogger>& logger)
     : dumbo(0), smartAss(0), gnr(0),serializedGraphReceiver(0),
       dr(0), controlValueReceiver(0), m_logger(logger)
   {
-    fileSystem=utils::AutoPtr<GraphFileSystem>(new GraphFileSystem(basepath_));								   
+    fileSystem=utils::AutoPtr<GraphFileSystem>(new GraphFileSystem(graph_path,
+                                                                   m_logger));
   }
 
-  typedef std::pair<std::pair<std::string,std::string>,std::list<std::pair<std::string, std::string> > > GraphInfo;
+  typedef std::pair<std::pair<std::string,std::string>,
+    std::list<std::pair<std::string, std::string> > > GraphInfo;
   
 namespace
 {
@@ -282,14 +287,15 @@ namespace
     // (list::sort does not work with predicate object):
     // use global std::sort on a vector (because random access iterators are
     // needed).
-	namesVector namesV(names.size());
-	std::copy(names.begin(), names.end(), namesV.begin());
+    namesVector namesV(names.size());
+    std::copy(names.begin(), names.end(), namesV.begin());
 
     // do a deep search
     //names.sort(deepSearch());
-	std::sort(namesV.begin(), namesV.end(), deepSearch());
+    std::sort(namesV.begin(), namesV.end(), deepSearch());
 
-    for (namesVector::const_iterator it = namesV.begin();it != namesV.end(); ++it)
+    for (namesVector::const_iterator it = namesV.begin();
+         it != namesV.end(); ++it)
       {
 	std::string graphID = it->first.first;
 	std::string graphName = it->first.second;
@@ -310,7 +316,8 @@ namespace
 		   snap = it->second.begin(); snap != it->second.end(); ++snap)
 	      {
 		if (gnr != 0)
-		  gnr->graphExists(graphID,snap->first, graphName, snap->second);
+		  gnr->graphExists(graphID, snap->first,
+                                   graphName, snap->second);
 		
 #if (ENGINE_VERBOSITY > 0)
 		std::cout << "snapshotname: " << snap->second << std::endl;
@@ -354,7 +361,7 @@ namespace
     }
     catch (std::runtime_error& e)
       {
-	    editGraph->deleteModule(moduleID);
+        editGraph->deleteModule(moduleID);
         m_logger->error("Model", e.what());	
       }    
 		
@@ -374,7 +381,7 @@ namespace
     //checkGraphSerialisation();
 #endif
   }
-	
+
   void Model::connectModules(int moduleID1,int outputIndex,
 			     int moduleID2,int inputIndex)
   {
@@ -395,7 +402,7 @@ namespace
     dumbo->modulesDisconnected(moduleID, inputIndex);
     smartAss->modulesDisconnected(editGraph->getID(), moduleID,inputIndex);
 
-	// update snapShot with defaultvals
+    // update snapShot with defaultvals
 		
 #ifndef NDEBUG
     //checkGraphSerialisation();
@@ -438,11 +445,18 @@ namespace
 #endif
   }
 	
-  Graph* Model::newGraphWithID(const std::string& graphName,
-			     const std::string& graphID)
+  void Model::newGraphWithID(const std::string& graphName,
+                             const std::string& graphID,
+                             bool notifyAndCreate)
   {
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << "Model::newGraphWithID( graphName = '" << graphName << "',\n"
+              << "graphID = '" << graphID << "' )\n\{\n";
+#endif
     // check if the name of the new graph is unique
-	  if (graphs.end()!=std::find_if(graphs.begin(),graphs.end(),has_name(graphName)))
+    if (graphs.end() != std::find_if(graphs.begin(),
+                                     graphs.end(),
+                                     has_name(graphName)))
       throw std::runtime_error("name " + graphName + 
 			       " already exists (Model::newGraph)");
     
@@ -452,36 +466,50 @@ namespace
 			       " already exists (Model::newGraph)");
     
     // create new graph und register it
-    Graph* newGraph = new Graph(graphID,graphName);
-    graphs[graphID] = utils::AutoPtr<Graph>(newGraph);
+    utils::AutoPtr<Graph> newGraph ( new Graph(graphID, graphName) );
+    graphs.insert(std::make_pair(graphID, newGraph));
 
-	if (!isDirectoryName(graphName))
-	   smartAss->newGraphCreated(graphID);
+    if(isDirectoryName(graphName))
+      { // a directory has no real snapshots
+        if (notifyAndCreate)
+          gnr->graphExists(graphID, graphID, graphName, "");
+      }
+    else
+      { // create default snapshot
+        if (notifyAndCreate)
+          {
+            std::string snapName = "default";
+            newGraph->newControlValueSet(graphID, snapName);
+            if (gnr != 0)
+              gnr->graphExists(graphID, graphID, graphName, snapName);
+          }
+        
+        if (smartAss != 0)
+          smartAss->newGraphCreated(graphID);
+      }
 
-	return newGraph;
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << "}\n";
+#endif     
   }
 	
   void Model::newGraph(const std::string& graphName)
-  {        
+  {
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << "Model::newGraph( graphName = '" << graphName<< "' )\n\{\n";
+#endif     
     std::string graphID = createNewGraphID(graphName, knownGraphIDs);
-		
-	Graph* newGraph = newGraphWithID(graphName, graphID);
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << " graphID = '" << graphID << "'; \n";
+#endif     
 
-	
-	if(isDirectoryName(graphName))
-	{ // a directory has no real snapshots
-		gnr->graphExists(graphID, graphID, graphName, "");
-	}
-    else
-	{ // create default snapshot
-		std::string snapName = "default";
-		newGraph->newControlValueSet(graphID,snapName);
-		if (gnr != 0)
-			gnr->graphExists(graphID,graphID,graphName,snapName);	
-	}
-  }
-	
-  	
+    newGraphWithID(graphName, graphID, true);
+
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << "}\n";
+#endif 
+  }	
+
   void Model::renameGraph(const std::string& graphID,
 			  const std::string& newGraphName)
   {
@@ -529,7 +557,7 @@ namespace
     utils::AutoPtr<Graph> deserializedGraph (new Graph("noIDYet",
 						       "noNameYet"));
     std::istringstream ist(graphstream);
-    model::deserializeGraph(ist,*deserializedGraph,specs);
+    model::deserializeGraph(ist,*deserializedGraph,specs, *m_logger);
     //ist >> (*deserializedGraph);
     // is there already a graph with that id?
     const std::string id = deserializedGraph->getID();
@@ -573,7 +601,7 @@ namespace
 	if (editGraph)
 	{
 	   modelStatusReceiver->editGraphChanged(editGraph->getID(),
-	                                         editControllSet->getID());
+	                                         editControlSet->getID());
 	}
 
     sendGraphConstruction(*editGraph,dumbo,dr);
@@ -704,12 +732,12 @@ namespace
       }
 		
     //TODO: ich glaub das ist ein fehler: der wert gehoert
-    // nicht unbedingt ins renderedControllSet
+    // nicht unbedingt ins renderedControlSet
     // (falls er z.B. bei syncInputValue getriggert wurde)
-    /*if (renderedControllSet)
-      renderedControllSet->setControlValue(nodeID,inputIndex,newValue);*/
+    /*if (renderedControlSet)
+      renderedControlSet->setControlValue(nodeID,inputIndex,newValue);*/
 		
-    if (editGraph == renderedGraph && editControllSet == renderedControllSet)
+    if (editGraph == renderedGraph && editControlSet == renderedControlSet)
       {
 	controlValueReceiver->controlValueChanged(nodeID, inputIndex,
 						  newValue);
@@ -775,10 +803,15 @@ namespace
   {		
     // check if graph has changed
     if (renderedGraph == 0 || graphID != renderedGraph->getID() ||
-	snapID != renderedControllSet->getID())
+	snapID != renderedControlSet->getID())
       {
 	GraphMap::const_iterator 
-	  it = lookForGraph(graphID,graphs,specs,*fileSystem, smartAss, m_logger);
+	  it = lookForGraph(graphID,
+                            graphs,
+                            specs,
+                            *fileSystem,
+                            smartAss,
+                            m_logger);
 
 	if (it==graphs.end())
 	  {	    
@@ -800,56 +833,61 @@ namespace
 				     "Model::changeRenderedGraph()");
 	  }
 
-	renderedControllSet = valIt->second;
+	renderedControlSet = valIt->second;
 
-	std::list<std::pair<int, int> > del_list;
-	for (ControllValueSet::const_iterator
-	       setIt = renderedControllSet->begin();
-	setIt!=renderedControllSet->end();++setIt)
-	{
-		int moduleID   = setIt->first.first;
-		int inputIndex = setIt->first.second;
-		try {
-			rendererControlReceiver->setInputValue(graphID,
-				moduleID,
-				inputIndex,
-				setIt->second);
-		} catch (std::runtime_error& e) {
-			std::ostringstream os;
-			os << e.what() << "\n";
-			os << "Removing value of module " << moduleID
-				<< ", input " << inputIndex << " from snapshot\n";
-			os << "Note: this message means that this snapshot "
-				<< "has become corrupted.\n";
-			os << "THIS SHOULD NOT HAPPEN!\n";
-			os << "Probably there is a bug in the model (haha)\n";
-			m_logger->error("Model", os.str());
-			// This is not allowed! don't change the map that you iterate through!!!
-			//renderedControllSet->deleteControllValue(moduleID, inputIndex);
+        typedef std::list<std::pair<int, int> > InputList;
+	InputList del_list;
+
+	for (ControlValueSet::const_iterator
+	       setIt = renderedControlSet->begin();
+             setIt!=renderedControlSet->end(); ++setIt)
+          {
+            int moduleID   = setIt->first.first;
+            int inputIndex = setIt->first.second;
+            try
+              {
+                rendererControlReceiver->setInputValue(graphID,
+                                                       moduleID,
+                                                       inputIndex,
+                                                       setIt->second);
+              }
+            catch (std::runtime_error& e)
+              {
+                std::ostringstream os;
+                os << e.what() << "\n";
+                os << "Removing value of module " << moduleID
+                   << ", input " << inputIndex << " from snapshot.\n";
+                os << "Save this graph to make the removal permanent.\n";
+                os << "Note: this message means that the graph "
+                   << "has become corrupted\n(i.e. does not fit to the "
+                   << "interface of the used modules).\n";
+                os << "This could mean that the graph was created with "
+                   << "a different version of GePhex.\n";
+                m_logger->error("Model", os.str());
 			
-			// instead remember the nodes and delete later
-			del_list.push_back(setIt->first);
-		}
-	}
+                // remember the node and delete later
+                del_list.push_back(setIt->first);
+              }
+          }
 
 	// delete invalid entries from snapshot
-	for (std::list<std::pair<int, int> >::const_iterator it = del_list.begin();
-	it != del_list.end(); ++it)
+	for (InputList::const_iterator it = del_list.begin();
+             it != del_list.end(); ++it)
 	{
-		renderedControllSet->deleteControllValue(it->first, it->second);
+          renderedControlSet->deleteControlValue(it->first, it->second);
 	}
 
       }
   }
-	
-  void Model::newControllValueSet(const std::string& graphID,
+
+  void Model::newControlValueSet(const std::string& graphID,
 				  const std::string& snapName)
   {
 	std::string snapID = createNewSnapID(snapName,knownSnapIDs);
-    newControllValueSetWithID(graphID, snapName, snapID);
+    newControlValueSetWithID(graphID, snapName, snapID);
   }
 
-  void Model::newControllValueSetWithID(const std::string& graphID,
+  void Model::newControlValueSetWithID(const std::string& graphID,
 				  const std::string& snapName,
 				  const std::string& snapID)
   {
@@ -858,7 +896,7 @@ namespace
 		
     if (it == graphs.end())
       throw std::runtime_error("No such Graph at "
-			       "Model::newControllValueSet()");
+			       "Model::newControlValueSet()");
 		
     
     it->second->newControlValueSet(snapID, snapName);
@@ -866,7 +904,7 @@ namespace
     gnr->graphExists(graphID, snapID, it->second->getName(), snapName);
   }
 	
-  void Model::renameControllValueSet(const std::string& graphID,
+  void Model::renameControlValueSet(const std::string& graphID,
 				     const std::string& snapID,
 				     const std::string& newSnapName)
   {
@@ -875,31 +913,31 @@ namespace
 		
     if (it == graphs.end())
       throw std::runtime_error("No such Graph at "
-			       "Model::renameControllValueSet()");
+			       "Model::renameControlValueSet()");
 		
-    it->second->renameControllValueSet(snapID, newSnapName);
+    it->second->renameControlValueSet(snapID, newSnapName);
 		
-    gnr->graphRenamed(graphID,snapID,it->second->getName(),newSnapName);
+    gnr->graphRenamed(graphID, snapID, it->second->getName(), newSnapName);
   }
 	
-  void Model::copyControllValueSet(const std::string& graphID,
-				   const std::string& snapID,
-				   const std::string& newSnapName)
+  void Model::copyControlValueSet(const std::string& graphID,
+                                  const std::string& snapID,
+                                  const std::string& newSnapName)
   {
     GraphMap::const_iterator it = lookForGraph(graphID,graphs,specs,
 					       *fileSystem,smartAss, m_logger);
 		
     if (it == graphs.end())
       throw std::runtime_error("No such Graph at "
-			       "Model::copyControllValueSet()");
+			       "Model::copyControlValueSet()");
 		
     std::string newID = createNewSnapID(newSnapName,knownSnapIDs);
-    it->second->copyControllValueSet(snapID, newID, newSnapName);
+    it->second->copyControlValueSet(snapID, newID, newSnapName);
 		
     gnr->graphExists(graphID, newID, it->second->getName(),newSnapName);
   }
 	
-  void Model::deleteControllValueSet(const std::string& graphID,
+  void Model::deleteControlValueSet(const std::string& graphID,
 				     const std::string& snapID)
   {
     GraphMap::const_iterator it = lookForGraph(graphID,graphs,specs,
@@ -907,9 +945,9 @@ namespace
 		
     if (it == graphs.end())
       throw std::runtime_error("No such Graph at "
-			       "Model::deleteControllValueSet()");
+			       "Model::deleteControlValueSet()");
 		
-    it->second->deleteControllValueSet(snapID);
+    it->second->deleteControlValueSet(snapID);
 		
     gnr->graphNoLongerExists(graphID, snapID);
 		
@@ -1095,12 +1133,13 @@ namespace
 		
     if (it == graphs.end())
       {
-	throw std::runtime_error("Could not change to Graph");
+	m_logger->error("Model", "Could not change to Graph");
+        return;
       }
 
 	modelStatusReceiver->editGraphChanged(graphID, snapID);
 
-    if (editGraph != it->second || snapID != editControllSet->getID())
+    if (editGraph != it->second || snapID != editControlSet->getID())
       {
 	if (editGraph != it->second)
 	  {
@@ -1123,11 +1162,11 @@ namespace
 				     "Model::changeEditGraph()");
 	  }
 	
-	editControllSet= valIt->second;
+	editControlSet= valIt->second;
 	
-	for (ControllValueSet::const_iterator
-	       setIt = editControllSet->begin();
-	     setIt != editControllSet->end(); ++setIt)
+	for (ControlValueSet::const_iterator
+	       setIt = editControlSet->begin();
+	     setIt != editControlSet->end(); ++setIt)
 	  {
 	    controlValueReceiver->controlValueChanged(setIt->first.first,
 						      setIt->first.second,
@@ -1141,9 +1180,9 @@ namespace
   void Model::setInputValue(int moduleID, int inputIndex,
 			    const utils::Buffer& buf)
   {		
-    editControllSet->setControlValue(moduleID, inputIndex, buf);
+    editControlSet->setControlValue(moduleID, inputIndex, buf);
 			
-    if (editGraph == renderedGraph && editControllSet == renderedControllSet)
+    if (editGraph == renderedGraph && editControlSet == renderedControlSet)
       {
 	rendererControlReceiver->setInputValue(editGraph->getID(),moduleID,
 					       inputIndex, buf);
@@ -1160,22 +1199,22 @@ namespace
   void Model::syncInputValue(int moduleID, int inputIndex)
   {
 		
-    ControllValueSet::const_iterator
-      it = editControllSet->find(std::make_pair(moduleID,inputIndex));
+    ControlValueSet::const_iterator
+      it = editControlSet->find(std::make_pair(moduleID,inputIndex));
 		
-    if (it == editControllSet->end())
+    if (it == editControlSet->end())
       {
 	/*rendererControlReceiver->syncInputValue(editGraph->getName(),
 	  moduleID, inputIndex);*/
 			
 	//TODO
-	//it = editControllSet->values.find(std::make_pair(moduleID,
-	//													 inputIndex));
+	//it = editControlSet->values.find(std::make_pair(moduleID,
+        //	 inputIndex));
 			
-	//if (it == editControllSet->values.end())
+	//if (it == editControlSet->values.end())
 	{			
 	  //throw std::runtime_error("Mist bei Model::syncInputValue()");
-       m_logger->error("Model","Mist bei Model::syncInputValue()");
+       m_logger->error("Model", "Mist bei Model::syncInputValue()");
 	}		
       }
     else
@@ -1209,19 +1248,18 @@ namespace
 	  }*/
 		
 		
-    std::string newID = createNewGraphID(dstGraphName,knownGraphIDs);
+    std::string newID = createNewGraphID(dstGraphName, knownGraphIDs);
 		
-    newGraphWithID(dstGraphName, newID);
+    newGraphWithID(dstGraphName, newID, false);
 		
     GraphMap::const_iterator dst = graphs.find(newID);
     assert ( dst != graphs.end() );
-		
-		
+
     std::ostringstream ostSrc;
     ostSrc << *src->second;
     std::string serSrc = ostSrc.str();
     std::istringstream ist(serSrc);
-    model::deserializeGraph(ist, *(dst->second),specs);		
+    model::deserializeGraph(ist, *(dst->second),specs,*m_logger);
     dst->second->setName(dstGraphName);
     dst->second->setID(newID);
 		
@@ -1254,7 +1292,7 @@ namespace
     std::istringstream ist(serOld);
     //Graph builtGraph(0, specs,"blahblah");
     Graph builtGraph("blahblah","blohbloh");
-    model::deserializeGraph(ist, builtGraph,specs);
+    model::deserializeGraph(ist, builtGraph,specs, *m_logger);
     //ist >> builtGraph;
 #if (ENGIN_VERBOSITY > 0)
     std::cout << "------------reloaded-graph-------------\n";

@@ -182,7 +182,7 @@ static void test2()
 void ProtocolTest::run() throw(std::runtime_error)
 {
    test1();
-   test2();
+   test2(); 
 }
 
 void ProtocolTest::post() throw(std::runtime_error)

@@ -15,17 +15,17 @@ typedef struct _Instance
 {
 struct _MyInstance* my;
  StringType* in_fileName;
- NumberType* in_seek;
- NumberType* in_position;
+ NumberType* in_flush;
+ NumberType* in_frame;
  NumberType* in_x_size;
  NumberType* in_y_size;
  StringType* in_cache;
- NumberType* in_flush;
  FrameBufferType* out_result;
  NumberType* out_position;
+ NumberType* out_length;
 } Instance, *InstancePtr;
-enum Inputs { in_fileName = 0, in_seek = 1, in_position = 2, in_x_size = 3, in_y_size = 4, in_cache = 5, in_flush = 6 };
-enum Outputs { out_result = 0, out_position = 1 };
+enum Inputs { in_fileName = 0, in_flush = 1, in_frame = 2, in_x_size = 3, in_y_size = 4, in_cache = 5 };
+enum Outputs { out_result = 0, out_position = 1, out_length = 2 };
 
 struct _MyInstance* construct(void);
 void destruct(struct _MyInstance*);

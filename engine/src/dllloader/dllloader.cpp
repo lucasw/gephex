@@ -1,6 +1,8 @@
 #include "dllloader.h"
 
+#if defined (HAVE_CONFIG_H)
 #include "config.h"
+#endif
 
 #include <cassert>
 #include <string>
@@ -453,6 +455,7 @@ namespace dllloader
       defaultVals(numInputs,
 		  utils::Buffer(reinterpret_cast<const unsigned char*>(""),1));
     std::vector<std::string> inputNames(numInputs);
+    std::vector<std::string> inputIDs(numInputs);
 		
     std::vector<bool> isConst(numInputs);
     std::vector<bool> isStrong(numInputs);
@@ -477,6 +480,14 @@ namespace dllloader
 	catch (...)
 	  {
 	    throw std::runtime_error("type nicht angegeben");
+	  }
+
+	try {
+	  inputIDs[i] = inputSpec.getStringValue("id");
+	}
+	catch (...)
+	  {
+	    throw std::runtime_error("id nicht angegeben");
 	  }
 
 #if (ENGINE_VERBOSITY > 2)
@@ -531,6 +542,7 @@ namespace dllloader
 		
     std::vector<int> outputs(numOutputs);
     std::vector<std::string> outputNames(numOutputs);
+    std::vector<std::string> outputIDs(numOutputs);
     for (int j = 0; j < numOutputs; ++j)
       {
 	std::string outSpec = fTable->getOutputSpec(j);
@@ -542,6 +554,13 @@ namespace dllloader
 	catch (...)
 	  {
 	    throw std::runtime_error("type nicht angegeben");
+	  }
+	try {
+	  outputIDs[j] = outputSpec.getStringValue("id");
+	}
+	catch (...)
+	  {
+	    throw std::runtime_error("id nicht angegeben");
 	  }
 	try {
 	  outputs[j] = resolver->getObjectID(outputNames[j]);
@@ -597,11 +616,13 @@ namespace dllloader
 	m_infoReceiver->moduleClassLoaded(name,mi);
 
 	m_classReceiver->moduleClassLoaded(name,
-					   CModuleClass(*fTable,attributes));
+					   CModuleClass(*fTable,attributes,name));
 
 	m_specReceiver->moduleClassLoaded(name,ModuleClassSpec(name,inputs,
 							       defaultVals,
-							       outputs));
+                                                               inputIDs,
+							       outputs,
+                                                               outputIDs));
   
       }
     catch (...)

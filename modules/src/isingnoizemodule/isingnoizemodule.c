@@ -41,8 +41,8 @@ struct IsingField {
 // rnd_mt19937 is a mersenne twisterm lcg1 is a simple lcg
 // for details see crandgen.h
 
-//#define my_rand(x) rnd_mt19937(x)
-#define my_rand(x) rnd_lcg1(x)
+//#define my_rand() rnd_mt19937()
+#define my_rand() rnd_lcg1()
 
 static void init_field(struct IsingField* f, int xsize, int ysize);
 static void destroy_field(struct IsingField* f);
@@ -127,8 +127,8 @@ void update(void* instance)
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
 
-  int xsize = trim_int(inst->in_outx->number, 0, 1024);
-  int ysize = trim_int(inst->in_outy->number, 0, 1024);
+  int xsize = trim_int(inst->in_outx->number, 1, 1024);
+  int ysize = trim_int(inst->in_outy->number, 1, 1024);
   double temp = inst->in_temp->number;
   double b_gr = inst->in_border_growth->number;
   double s_gr = inst->in_spont_growth->number;
@@ -140,7 +140,7 @@ void update(void* instance)
       my->old_xsize = xsize;
       my->old_ysize = ysize;
 
-      s_log(2, "Changing resolution");
+      //      s_log(2, "Changing resolution");
     }
 
   if (temp != my->old_temp ||
@@ -184,7 +184,7 @@ static void init_field(struct IsingField* f, int xsize, int ysize)
       int y_base = y*xsize;
       for (x = 1; x < xsize-1; ++x) 
 	{
-	  f->s[x + y_base] = (my_rand(x) < MY_RAND_MAX/2) ? -1 : 1;
+	  f->s[x + y_base] = (my_rand() < MY_RAND_MAX/2) ? -1 : 1;
 	}
       f->s[y_base] = f->s[xsize-1 + y_base] = 1;
     }
@@ -225,7 +225,7 @@ static void do_step(struct IsingField* f, uint_32 bf[3])
 	  
 	  int e = *current * sum;
 
-	  if (e < 0 || my_rand(x) < bf[e>>1])
+	  if (e < 0 || my_rand() < bf[e>>1])
 	    {
 	      *current *= -1;
 	    }

@@ -110,10 +110,10 @@ TESTS = nettest
 check_PROGRAMS = nettest
 noinst_LIBRARIES = libgphxnetwork.a
 
-libgphxnetwork_a_SOURCES =  		netexceptions.cpp 		protocol.cpp 		tagutils.cpp 		isocket.cpp 		sotimeout.cpp 		socketutils.cpp 		tcpserversocket.cpp 		tcpclientsocket.cpp 		fdsocket.cpp 		socketadaptor.cpp 		domainserversocket.cpp 		domainclientsocket.cpp
+libgphxnetwork_a_SOURCES =  		netexceptions.cpp 		protocol.cpp 		tagutils.cpp 		isocket.cpp 		sotimeout.cpp 		socketutils.cpp 		tcpserversocket.cpp 		tcpclientsocket.cpp 		fdsocket.cpp 		socketadaptor.cpp 		domainserversocket.cpp 		domainclientsocket.cpp 		convertbin.cpp
 
 
-noinst_HEADERS =  		protocol.h 		idatalistener.h 		isender.h 		netexceptions.h 		itagger.h 		itaginterpreter.h 		tagger.h 		tagger.cpp 		tagutils.h 		isocket.h 		socketutils.h 		sotimeout.h 		iclientsocket.h 		iserversocket.h 		tcpclientsocket.h 		tcpserversocket.h 		fdsocket.h 		socketadaptor.h 		tagdispatcher.h 		tagdispatcher.cpp 		domainserversocket.h 		domainclientsocket.h 		protocoltest.h 		tcpsockettest.h 		tagdispatchertest.h 		taggertest.h 		domainsockettest.h
+noinst_HEADERS =  		protocol.h 		idatalistener.h 		isender.h 		netexceptions.h 		itagger.h 		itaginterpreter.h 		tagger.h 		tagger.cpp 		tagutils.h 		isocket.h 		socketutils.h 		sotimeout.h 		iclientsocket.h 		iserversocket.h 		tcpclientsocket.h 		tcpserversocket.h 		fdsocket.h 		socketadaptor.h 		tagdispatcher.h 		tagdispatcher.cpp 		domainserversocket.h 		domainclientsocket.h 		protocoltest.h 		tcpsockettest.h 		tagdispatchertest.h 		taggertest.h 		domainsockettest.h 		convertbin.h
 
 
 INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
@@ -145,7 +145,8 @@ libgphxnetwork_a_OBJECTS =  netexceptions.$(OBJEXT) protocol.$(OBJEXT) \
 tagutils.$(OBJEXT) isocket.$(OBJEXT) sotimeout.$(OBJEXT) \
 socketutils.$(OBJEXT) tcpserversocket.$(OBJEXT) \
 tcpclientsocket.$(OBJEXT) fdsocket.$(OBJEXT) socketadaptor.$(OBJEXT) \
-domainserversocket.$(OBJEXT) domainclientsocket.$(OBJEXT)
+domainserversocket.$(OBJEXT) domainclientsocket.$(OBJEXT) \
+convertbin.$(OBJEXT)
 check_PROGRAMS =  nettest$(EXEEXT)
 nettest_OBJECTS =  testmain.$(OBJEXT) tcpsockettest.$(OBJEXT) \
 protocoltest.$(OBJEXT) taggertest.$(OBJEXT) tagdispatchertest.$(OBJEXT) \
@@ -305,61 +306,35 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+convertbin.o: convertbin.cpp convertbin.h \
+	../../../util/include/basic_types.h
 domainclientsocket.o: domainclientsocket.cpp domainclientsocket.h \
 	iclientsocket.h sotimeout.h ../../../config.h netexceptions.h \
 	socketutils.h fdsocket.h isocket.h isender.h ../utils/buffer.h
 domainserversocket.o: domainserversocket.cpp domainserversocket.h \
 	iserversocket.h sotimeout.h ../../../config.h netexceptions.h \
 	socketutils.h fdsocket.h isocket.h isender.h ../utils/buffer.h
-domainsockettest.o: domainsockettest.cpp domainsockettest.h \
-	../TestFramework/LeafTest.h ../TestFramework/Test.h \
-	idatalistener.h isocket.h netexceptions.h isender.h sotimeout.h \
-	domainserversocket.h iserversocket.h domainclientsocket.h \
-	iclientsocket.h block.h ../../../config.h ../utils/buffer.h
 fdsocket.o: fdsocket.cpp fdsocket.h isocket.h netexceptions.h isender.h \
 	sotimeout.h ../../../config.h socketutils.h ../utils/buffer.h
 isocket.o: isocket.cpp isocket.h netexceptions.h isender.h sotimeout.h
 netexceptions.o: netexceptions.cpp netexceptions.h
 protocol.o: protocol.cpp protocol.h idatalistener.h isender.h \
-	../../../config.h ../utils/buffer.h \
-	../../../util/include/basic_types.h
-protocoltest.o: protocoltest.cpp protocoltest.h \
-	../TestFramework/LeafTest.h ../TestFramework/Test.h isender.h \
-	protocol.h idatalistener.h block.h ../../../config.h \
-	../utils/buffer.h
+	../../../config.h convertbin.h \
+	../../../util/include/basic_types.h ../utils/buffer.h
 socketadaptor.o: socketadaptor.cpp socketadaptor.h isocket.h \
 	netexceptions.h isender.h sotimeout.h idatalistener.h \
 	../utils/buffer.h
 socketutils.o: socketutils.cpp socketutils.h ../../../config.h \
 	netexceptions.h
 sotimeout.o: sotimeout.cpp sotimeout.h
-tagdispatchertest.o: tagdispatchertest.cpp tagdispatchertest.h \
-	../TestFramework/LeafTest.h ../TestFramework/Test.h \
-	tagdispatcher.h itaginterpreter.h tagdispatcher.cpp \
-	idatalistener.h block.h ../../../config.h ../utils/buffer.h
-taggertest.o: taggertest.cpp taggertest.h ../TestFramework/LeafTest.h \
-	../TestFramework/Test.h isender.h itaginterpreter.h tagger.h \
-	itagger.h idatalistener.h ../net/tagger.cpp ../net/tagger.h \
-	tagutils.h ../../../util/include/basic_types.h block.h \
-	../../../config.h ../utils/buffer.h ../utils/bufferutils.h
 tagutils.o: tagutils.cpp tagutils.h ../../../util/include/basic_types.h \
-	../utils/buffer.h
+	convertbin.h ../utils/buffer.h
 tcpclientsocket.o: tcpclientsocket.cpp tcpclientsocket.h iclientsocket.h \
 	sotimeout.h ../../../config.h netexceptions.h socketutils.h \
 	fdsocket.h isocket.h isender.h ../utils/buffer.h
 tcpserversocket.o: tcpserversocket.cpp tcpserversocket.h iserversocket.h \
 	sotimeout.h ../../../config.h netexceptions.h socketutils.h \
 	fdsocket.h isocket.h isender.h ../utils/buffer.h
-tcpsockettest.o: tcpsockettest.cpp tcpsockettest.h \
-	../TestFramework/LeafTest.h ../TestFramework/Test.h \
-	idatalistener.h isocket.h netexceptions.h isender.h sotimeout.h \
-	tcpserversocket.h iserversocket.h tcpclientsocket.h \
-	iclientsocket.h block.h ../../../config.h ../utils/buffer.h
-testmain.o: testmain.cpp ../../../config.h \
-	../TestFramework/CompositeTest.h ../TestFramework/Test.h \
-	../TestFramework/Tester.h protocoltest.h \
-	../TestFramework/LeafTest.h tcpsockettest.h domainsockettest.h \
-	taggertest.h tagdispatchertest.h
 
 check-TESTS: $(TESTS)
 	@failed=0; all=0; \
