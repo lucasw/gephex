@@ -7,6 +7,7 @@ endif
 
 SUBDIRS = $(SDL_DIRS) \
 	cpuinfo \
-	libgeo #	idlc
+	libgeo \
+	misc # idlc
 
 

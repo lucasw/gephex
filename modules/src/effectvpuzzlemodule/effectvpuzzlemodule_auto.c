@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "effectvpuzzlemodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_effectvpuzzlemodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_effectvpuzzlemodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -40,6 +48,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -96,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Puzzle] group=[EffecTV] inputs=[5 Bild Links{false_value=[0] true_value=[1] widget_type=[radio_button] } Rechts{false_value=[0] true_value=[1] widget_type=[radio_button] } Hoch{false_value=[0] true_value=[1] widget_type=[radio_button] } Runter{false_value=[0] true_value=[1] widget_type=[radio_button] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Puzzle] group=[EffecTV] inputs=[5 Image Left{widget_type=[radio_button] false_value=[0] true_value=[1] } Right{widget_type=[radio_button] false_value=[0] true_value=[1] } Up{widget_type=[radio_button] false_value=[0] true_value=[1] } Down{widget_type=[radio_button] false_value=[0] true_value=[1] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(effectvpuzzlemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -105,6 +119,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(effectvpuzzlemodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -120,14 +139,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_effectvpuzzlemodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

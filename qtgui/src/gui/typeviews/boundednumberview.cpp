@@ -25,7 +25,7 @@ namespace gui
       this->setLineStep((int) m_intStepSize);
       //      this->setSteps((int) m_intStepSize, (int) m_intStepSize);
 
-      QValidator* validator = new QDoubleValidator(lowVal, highVal, 4, this);
+      QValidator* validator = new QDoubleValidator(lowVal, highVal, 6, this);
       this->setValidator(validator);
     }
 
@@ -33,7 +33,7 @@ namespace gui
     {
       std::ostringstream os;
       double val = ((double) value / m_scale) + m_lowVal;
-      os.precision(3);
+      os.precision(6);
       os << val;
       /*      std::cout << "Wert = " << value << "(" << val 
 	      << "), Text = " << os.str() << std::endl;*/

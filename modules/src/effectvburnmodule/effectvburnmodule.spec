@@ -14,7 +14,7 @@ inputs
 {
     b
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -22,12 +22,12 @@ inputs
 
     bg
     {
-        name              = Hintergrund_uebernehmen
+        name              = Background
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
         widget_type       = radio_button
-	default           = 0
+        default           = 0
     }
 }
 
@@ -35,7 +35,7 @@ outputs
 {
     r
     {
-    name = Bild
-    type = typ_FrameBufferType
+        name = Image
+        type = typ_FrameBufferType
     }
 }

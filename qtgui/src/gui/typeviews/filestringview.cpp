@@ -1,11 +1,13 @@
 #include "filestringview.h"
 
-#include "utils/structreader.h"
+#include <sstream>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qfiledialog.h>
 #include <qtooltip.h>
+
+#include "utils/structreader.h"
 
 namespace gui
 {
@@ -16,13 +18,26 @@ namespace gui
 			
   public:
     FileStringView(QWidget* parent, const ParamMap& params)
-      : TypeView(parent, params)
+      : TypeView(parent, params), m_fileDialog(0)
     {
       utils::StructReader sr(params);
     
-      m_fileMask = sr.getStringValue("file_mask","*.*");
-      m_fileMaskName = sr.getStringValue("file_mask_name","All");
-    	
+	  std::string fullMask = "";
+	  
+	  for (int i = 1; ; ++i)
+	  {
+		  std::ostringstream os;
+		  os << "file_mask" << i;
+
+		  std::string fileMask = sr.getStringValue(os.str(), "_");
+		  std::string fileMaskName = sr.getStringValue(os.str() + "_name", "_");
+
+		  if (fileMask == "_")
+			  break;
+
+		  m_fullMask += fileMaskName + " ( " + fileMask + " );;";
+	  }      	  
+
       QHBoxLayout* l = new QHBoxLayout(this);
       m_select = new QPushButton("Select",this);
       m_select->setMinimumSize(40, 33);
@@ -47,13 +62,9 @@ namespace gui
     }
 
 private slots:
-void selectFile()
-    {
-      std::string fullMask = m_fileMaskName + " (" + m_fileMask + ")";	
-      QString name = QFileDialog::getOpenFileName( m_current.c_str(),
-						   fullMask.c_str(),
-						   this );
-      if (name.length() != 0)
+  void userSelectedFile(const QString& name)
+  {
+	if (name.length() != 0)
 	{
 	  utils::Buffer
 	    b(reinterpret_cast<const unsigned char*>(name.latin1()),
@@ -61,13 +72,27 @@ void selectFile()
 
 	  emit valueChanged(b);
 	}
+  }
+
+void selectFile()
+    {
+	  if (m_fileDialog)
+		  delete m_fileDialog;      
+
+	  m_fileDialog = new QFileDialog("Choose File", m_fullMask.c_str(), this);
+	  m_fileDialog->setDir(m_current.c_str());
+
+	  connect(m_fileDialog, SIGNAL(fileSelected(const QString&)), 
+		      this, SLOT(userSelectedFile(const QString&)));
+
+	  m_fileDialog->show();	        
     }
 
   private:
     QButton* m_select;
     std::string m_current;
-    std::string m_fileMask;
-    std::string m_fileMaskName;
+    std::string m_fullMask;    
+	QFileDialog* m_fileDialog;
 
   };
 	

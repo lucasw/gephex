@@ -39,10 +39,20 @@ public:
   
   void moduleClassNameExists(const std::string& moduleClassName);
 
+signals:
+	void status(const std::string& s);
+
 private slots:
 	void loadModuleClass();
 	void unloadModuleClass();
-
+#if (QT_VERSION < 0x030100)
+	void setShown( bool _show ) {
+		if (_show)
+			show();
+		else
+			hide();
+	}
+#endif
 
 private:
     QLabel* TextLabel1;

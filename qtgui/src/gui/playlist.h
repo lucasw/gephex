@@ -49,6 +49,15 @@ public slots:
     virtual void changeLengthClicked();
     virtual void deleteClicked();
 
+#if (QT_VERSION < 0x030100)
+	void setShown( bool _show ) {
+		if (_show)
+			show();
+		else
+			hide();
+	}
+#endif
+
   signals:
     void editPlaylistChanged( const std::string& playlistID );
 

@@ -14,12 +14,11 @@ endif
 
 if HAVE_SDL
 SDL_DIRS = \
-	sdloutputmodule \
 	joystickmodule
 endif
 
 if HAVE_AVIFILE
-AVIFILE_DIRS = avifilemodule
+AVIFILE_DIRS = #avifilemodule
 endif
 
 if HAVE_MPEG3
@@ -27,41 +26,51 @@ if HAVE_MPEG3
 MPEG3_DIRS = #libmpeg3module
 endif
 
-if HAVE_GLX
-GLX_DIRS = gloutmodule
-endif
+#if HAVE_GLX
+#GLX_DIRS = gloutmodule
+#endif
 
 if HAVE_PNG
 PNG_DIRS = imagewritermodule
+endif
+
+if HAVE_ASOUNDLIB_OR_OSS
+SOUND_DIRS = audiooutmodule audioinmodule
 endif
 
 if WITH_V4L
 V4L_DIRS = v4lmodule
 endif
 
+
 SUBDIRS = libgrid \
 	libmidi \
-	addmodule \
+	numarithmodule \
+        audioaddmodule \
+        audiospecmodule \
+        audiowavegenmodule \
+        audiovismodule \
+        audiobdmodule \
+	audiosynthmodule \
 	bwmodule \
-	submodule \
 	resultmodule \
 	numbermodule \
+	numenvmodule \
+	numlfomodule \
 	xfademodule \
 	plasma \
-	bmpmodule \
 	rotozoommodule \
 	imagebuffermodule \
-	invertmodule \
 	blurmodule \
 	tunnelmodule \
 	planemodule \
 	signalgenmodules \
-	imgsubmodule \
 	staticcolormodule \
 	functions \
 	numposmodule \
 	posnummodule \
 	flashmodule \
+        imgarithmodule \
 	ifsgenmodule \
 	ifsxfadermodule \
 	netcontrolmodule \
@@ -75,11 +84,14 @@ SUBDIRS = libgrid \
 	number2color \
 	overlaymodule \
 	color2number \
+	gradnormmodule \
+	twolayermodule \
 	rangeconvertmodule \
-        x11outmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(GLX_DIRS) $(V4L_DIRS) $(PNG_DIRS)
+        frboutmodule \
+	frbinmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(SOUND_DIRS) #$(GLX_DIRS)
 # commented out for the release because they don't work
-#	imgaddmodule \
-#	imgmulmodule \
 #	starfield \
 #	libmpeg3module
+
+
 

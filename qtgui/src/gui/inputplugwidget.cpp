@@ -23,7 +23,7 @@ namespace gui
   {
     if (lineDrawMode)
       {
-	emit redrawLine(this->pos()+parentWidget()->pos(),
+	emit redrawLine(this->pos()+parentWidget()->pos() + QPoint(this->width() / 2,this->height() / 2),
 			this->pos()+e->pos()+parentWidget()->pos());
       }
     else

@@ -2,6 +2,7 @@
 #define INCLUDED_SHARED_LIBRARAY_H
 
 #include <string>
+#include <memory>
 
 namespace utils
 {
@@ -44,7 +45,7 @@ namespace utils
     void* loadSymbol(const std::string& name) const;
 
   private:
-    SharedLibraryImpl* m_impl;
+    std::auto_ptr<SharedLibraryImpl> m_impl;
 
     std::string m_TODOName;
   };

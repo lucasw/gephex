@@ -332,81 +332,62 @@ HREF="#AEN334"
 ><DT
 ><A
 HREF="#AEN336"
->Installing the Examles</A
-></DT
-><DD
-><DL
-><DT
-><A
-HREF="#AEN338"
->Win32</A
+>Installing the Examles (Un*x version only)</A
 ></DT
 ><DT
 ><A
-HREF="#AEN344"
->Un*x</A
-></DT
-></DL
-></DD
-><DT
-><A
-HREF="#AEN350"
->Note on the examples</A
-></DT
-><DT
-><A
-HREF="#AEN354"
+HREF="#AEN342"
 >Example1: Tunnel-Vision</A
 ></DT
 ><DT
 ><A
-HREF="#AEN359"
+HREF="#AEN346"
 >Example2: Plasma</A
 ></DT
 ><DT
 ><A
-HREF="#AEN362"
+HREF="#AEN349"
 >Example3: A simple Feedback Loop</A
 ></DT
 ></DL
 ></DD
 ><DT
 >6. <A
-HREF="#AEN365"
+HREF="#AEN352"
 >Module Reference</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN367"
+HREF="#AEN354"
 >Generators</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN369"
+HREF="#AEN356"
 >ifsmodule</A
 ></DT
 ></DL
 ></DD
 ><DT
 ><A
-HREF="#AEN381"
+HREF="#AEN366"
 >Input Modules</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN384"
->libmpeg3module</A
+HREF="#AEN369"
+>Videoplayback (avifilemodule)</A
 ></DT
 ><DT
 ><A
-HREF="#AEN388"
->v4lmodule</A
+HREF="#AEN389"
+>Video for Linux (v4lmodule)</A
 ></DT
 ></DL
 ></DD
@@ -414,60 +395,70 @@ HREF="#AEN388"
 ></DD
 ><DT
 >7. <A
-HREF="#AEN410"
+HREF="#AEN418"
 >Type Reference</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN412"
+HREF="#AEN420"
 >NumberType</A
 ></DT
 ><DT
 ><A
-HREF="#AEN415"
+HREF="#AEN423"
 >FrameBufferType</A
 ></DT
 ></DL
 ></DD
 ><DT
 >8. <A
-HREF="#AEN418"
+HREF="#AEN426"
 >Developer Information</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN423"
+HREF="#AEN431"
 >Adding new data types</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN439"
+HREF="#AEN447"
 >The c-API</A
 ></DT
 ><DT
 ><A
-HREF="#AEN839"
+HREF="#AEN847"
 >An example for a new datatype</A
 ></DT
 ></DL
 ></DD
 ><DT
 ><A
-HREF="#AEN872"
+HREF="#AEN880"
 >Adding new effect modules</A
 ></DT
 ><DD
 ><DL
 ><DT
 ><A
-HREF="#AEN875"
+HREF="#AEN883"
 >The C-API</A
+></DT
+><DT
+><A
+HREF="#AEN1173"
+>Pluc the skeleton generator</A
+></DT
+><DT
+><A
+HREF="#AEN1191"
+>An example for a new module</A
 ></DT
 ></DL
 ></DD
@@ -475,7 +466,7 @@ HREF="#AEN875"
 ></DD
 ><DT
 >9. <A
-HREF="#AEN1165"
+HREF="#AEN1194"
 >Old text describing GePhex</A
 ></DT
 ></DL
@@ -1430,7 +1421,7 @@ NAME="AEN232"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_1.jpg"><DIV
+SRC="images/gui_1.png"><DIV
 CLASS="CAPTION"
 ><P
 > The GUI (just started). </P
@@ -1502,7 +1493,7 @@ NAME="AEN253"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_2.jpg"><DIV
+SRC="images/gui_2.png"><DIV
 CLASS="CAPTION"
 ><P
 > Creating a graph </P
@@ -1517,7 +1508,7 @@ CLASS="CAPTION"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_3.jpg"><DIV
+SRC="images/gui_3.png"><DIV
 CLASS="CAPTION"
 ><P
 > Choosing the name of the graph </P
@@ -1567,7 +1558,7 @@ VALIGN="TOP"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_4.jpg"><DIV
+SRC="images/gui_4.png"><DIV
 CLASS="CAPTION"
 ><P
 > Activating the graph </P
@@ -1589,14 +1580,14 @@ NAME="AEN283"
      </P
 ><P
 >       To do so, open the "Effekte" menu in the top-level menu-bar.
-       Choose "Quellen"-&#62;"Bitmap Loader".
+       Choose "Sources"-&#62;"Image Source".
        Then click into the graph window as shown in the next image.
      </P
 ><DIV
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_5.jpg"><DIV
+SRC="images/gui_5.png"><DIV
 CLASS="CAPTION"
 ><P
 > Adding an basic effect </P
@@ -1604,8 +1595,8 @@ CLASS="CAPTION"
 ></P
 ></DIV
 ><P
->       Do the same for "Effekte"-&#62;"Outputs"-&#62;"X11 Output" 
-       (or "GDI Output" on win32) and "Effekte"-&#62;"Filter"-&#62;"FlashFader".
+>       Do the same for "Effekte"-&#62;"Outputs"-&#62;"Image Output" 
+       and "Effekte"-&#62;"Filter"-&#62;"FlashFader".
        Arrange them as in the next image (You can simply move them around with
        the mouse).
      </P
@@ -1620,7 +1611,7 @@ CLASS="CAPTION"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_6.jpg"><DIV
+SRC="images/gui_6.png"><DIV
 CLASS="CAPTION"
 ><P
 > Connecting effects </P
@@ -1649,7 +1640,7 @@ NAME="AEN306"
 ></H3
 ><P
 >        This is simple. We just choose a bitmap.
-        Right-click on the "Bitmap-loader"-effect and choose "Properties"
+        Right-click on the "Image Source"-effect and choose "Properties"
         in the context menu. Now the info-window displays the properties
         of the bitmap effect:
      </P
@@ -1657,7 +1648,7 @@ NAME="AEN306"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_7.jpg"><DIV
+SRC="images/gui_7.png"><DIV
 CLASS="CAPTION"
 ><P
 > Properties </P
@@ -1692,7 +1683,7 @@ NAME="AEN317"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/gui_8.jpg"><DIV
+SRC="images/gui_8.png"><DIV
 CLASS="CAPTION"
 ><P
 > Creating a control </P
@@ -1759,39 +1750,8 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="AEN336"
->Installing the Examles</A
+>Installing the Examles (Un*x version only)</A
 ></H2
-><DIV
-CLASS="SECT2"
-><H3
-CLASS="SECT2"
-><A
-NAME="AEN338"
->Win32</A
-></H3
-><P
->  All following paths are relative to your GePhex distribution dir
-  (for example <TT
-CLASS="FILENAME"
->c:\programs\GePhex-0.0.4alpha\</TT
->).
-  Just copy the files in <TT
-CLASS="FILENAME"
->examples\graphs</TT
->
-  into <TT
-CLASS="FILENAME"
->graphs</TT
-> and restart GePhex if it is running.</P
-></DIV
-><DIV
-CLASS="SECT2"
-><HR><H3
-CLASS="SECT2"
-><A
-NAME="AEN344"
->Un*x</A
-></H3
 ><P
 >   Copy the files in
    <TT
@@ -1809,43 +1769,21 @@ CLASS="FILENAME"
    time you start GePhex.
   </P
 ></DIV
-></DIV
 ><DIV
 CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN350"
->Note on the examples</A
-></H2
-><P
->    The example graphs are not complete. To use them, you must
-    add an output module. For Un*x, we suggest the X11Output.
-    For Win32 we suggest the GDIOutput.
-  </P
-><P
->    The output module should be connected to the rightmost module of each
-    example graph.
-  </P
-></DIV
-><DIV
-CLASS="SECT1"
-><HR><H2
-CLASS="SECT1"
-><A
-NAME="AEN354"
+NAME="AEN342"
 >Example1: Tunnel-Vision</A
 ></H2
 ><P
 >     Shows how to use the tunnel.
   </P
 ><P
->     Try to attach the bitmap module instead of the isingnoize.
+>     Try to attach the frbinmodule (Image Source) module instead of the 
+     isingnoize.
      (Don't forget to choose a bitmap as shown in the Guided Tour).
-  </P
-><P
->     Of course you can attach an avimodule too, to watch your favourite
-     movie inside the tunnel...
   </P
 ></DIV
 ><DIV
@@ -1853,7 +1791,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN359"
+NAME="AEN346"
 >Example2: Plasma</A
 ></H2
 ><P
@@ -1865,7 +1803,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN362"
+NAME="AEN349"
 >Example3: A simple Feedback Loop</A
 ></H2
 ><P
@@ -1879,7 +1817,7 @@ NAME="AEN362"
 CLASS="CHAPTER"
 ><HR><H1
 ><A
-NAME="AEN365"
+NAME="AEN352"
 ></A
 >Chapter 6. Module Reference</H1
 ><DIV
@@ -1887,7 +1825,7 @@ CLASS="SECT1"
 ><H2
 CLASS="SECT1"
 ><A
-NAME="AEN367"
+NAME="AEN354"
 >Generators</A
 ></H2
 ><DIV
@@ -1895,7 +1833,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN369"
+NAME="AEN356"
 >ifsmodule</A
 ></H3
 ><P
@@ -1904,7 +1842,7 @@ NAME="AEN369"
 CLASS="MEDIAOBJECT"
 ><P
 ><IMG
-SRC="images/ifs.jpg"><DIV
+SRC="images/ifs.png"><DIV
 CLASS="CAPTION"
 ><P
 >      This IFS fractal is rendered in gray scale mode.
@@ -1919,7 +1857,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN381"
+NAME="AEN366"
 >Input Modules</A
 ></H2
 ><P
@@ -1929,33 +1867,137 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN384"
->libmpeg3module</A
+NAME="AEN369"
+>Videoplayback (avifilemodule)</A
 ></H3
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="AEN371"
+>Description</A
+></H4
 ><P
->This module has only one input. This is the name of a video file. The module opens and decodes this. The frames are exported to the output. The resolution is the original of the video stream.</P
+>There are different videofileformats. Some can be streamed via net. Others allow random access to each videoframes. For some there is a normative standart. mpeg 1,2 and 4 are an example for these kinds. avi, quicktime or real video are (re)defined by their vendors. In most cases the video format is just a wrapper for a video stream encoded with a concrete videocodec.</P
 ><P
->Supported file formats are mpeg1 and mpeg2 ...</P
+>The avifile library extracts the compressed videodata from the fileformats and and provides with the help of its plugins a lot of codecs to decode the framesequences. The actual support for one format depends on compile time options and the existance of other librarys on you system. Further information is provided at the homepage of the <A
+HREF="http://www.avifile.sourceforge.net"
+TARGET="_top"
+> <I
+CLASS="CITETITLE"
+>avifile</I
+></A
+> project.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN377"
+>Inputs</A
+></H4
+><P
+>The first input is the name and path of the videofile.</P
+><P
+>There are two way to controll the playbackposition. If the seek input is false the module plays the film sequential frame by frame. The playback starts at the the beginning and plays the sequence once. If the seek input is true the playbackposition is controlls by the position input. A zero means jump to the beginning and a 1 to the end. If a signalgenertor is connected to the position the film can be played reverse, faster or slower just depending on the parameters of the generator.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN381"
+>Outputs</A
+></H4
+><P
+>The first output is the videostream.</P
+><P
+>The second output is the playbackposition in the stream. If the seek is active this is the same as the seekposition but if we disabled seeking this position follows the playback. This output enables looping of parts or setting breakpoints at an arbitrary position.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN385"
+>Notes</A
+></H4
+><P
+>Many codecs don't allow fast seeking to an arbitrary video position. This isn't a problem for standard video playback applications. User of a video effect systems want to reverse the playback direction and jump to an random position in the videofootage. Sequential playback is borring. Watch you favourite movie in sine waves!</P
+><P
+>For random access to the video footage it is often nessecary to reencode the material to framebased codecs like mjpeg. Tools like mencoder of virtual dub are very helpfull for these tasks.</P
+></DIV
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN388"
->v4lmodule</A
+NAME="AEN389"
+>Video for Linux (v4lmodule)</A
 ></H3
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="AEN391"
+>Description</A
+></H4
 ><P
->Video4linux is the original video capture/overlay API of the linux kernel. It is based on the API introduced by the bttv driver. It seems that v4l will be replaced in the next stable linux kernel by its successor <A
-HREF=" http://bytesex.org/v4l/spec/"
+>It is possible to attach serveral different videoinput devices to the computer. Video signals from analog camcorders or vcrs are typically injected by a framegrabberadapter on the PCI-bus. Digital cameras or low cost webcams can be connected via USB(2) oder Firewire.</P
+><P
+>Most operating systems with multimedia capabilities provide a convinience layer between the videodevice drivers and the application. All devices are handled independent of the connection typ in a similar fashion.</P
+><P
+>Video4Linux (V4L) is the video capture/overlay API of the linux kernel. It is based on the programming interface introduced by the bttv driver. This is a consumer framegrabber chip used in most tv cards.</P
+><P
+>In future linux kernel series this api will be replaced by the successor <A
+HREF="http://bytesex.org/v4l/spec/"
 TARGET="_top"
 > <I
 CLASS="CITETITLE"
 >Video for Linux Two</I
 ></A
-> but at the moment no distribution has support for that API in its precompiled kernels. Support for this API is planned.</P
+>. At the moment no GNU/Linux distribution supports this new API in their standard kernels.</P
 ><P
->The first input is the filename of the video device. This is normally /dev/videoX where X is the number of the device. It is possible to switch the device during rendering. An invalid device results in a black output screen. The device is opened the first time the output of the module is used and closed with quit of the gephex-engine. A manual unloading of the module can also free the device handles. The other two inputs force the size of the grabbed image. If the device doesn't support that resolution a black frame is generated. A resolution 0,0 forces the module to choose any capable resolution. The output is either the grabbed frame from the v4l device or in case of an error a black, fully transparent 1x1 image.</P
+>Support for the V4L2 API is planned.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN400"
+>Inputs</A
+></H4
+><P
+>The first input is the filename of the video device. In most cases this is /dev/videoX where X is the number of the device. A setup with a webcam and a bttv card e.g. uses the devicefiles /dev/video0 and /dev/video1.</P
+><P
+>It is possible to switch the device during rendering. But with some hardware/driver combinations this results in one or two broken frames.</P
+><P
+>The other two inputs tell the framegrabber the image resolution. A resolution 0,0 forces the grabber to choose any supported resolution.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN405"
+>Output</A
+></H4
+><P
+>The captured frames are sent to the output. In case of an invalid videodevice, unsupported image size or any other error a black, full transparent one pixel sized image is returned.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN408"
+>Notes</A
+></H4
 ><P
 >The current version of this module is tested with the 2.4.20 kernel drivers of the the <A
 HREF="http://www.smcc.demon.nl/webcam/"
@@ -1973,25 +2015,6 @@ CLASS="CITETITLE"
 ></A
 >.</P
 ><P
->known bugs:
-<P
-></P
-><UL
-><LI
-><P
->A error in the yuv2rgb conversion function creates sometimes  a broken bottom line.</P
-></LI
-><LI
-><P
->The capturing process is not while one update of the module. it is between two updates. If update isn't called every frame e.g. cause the branch isn't needed the module delivers one old frame with the first update. One solution is the check system time and check for dropped frames</P
-></LI
-><LI
-><P
->the memory of the output frame is allocated in the module and not the resize code of the framebuffertype is called</P
-></LI
-></UL
-></P
-><P
 >Further informations about video4linux driver- and user-space programming can be found in the kernel documentation (kernel-source-2.4.20/Documentation/video4linux/API.html and kernel-source-2.4.20/Documentation/DocBook/videobook.tmpl) and in the <A
 HREF="https://listman.redhat.com/mailman/listinfo/video4linux-list"
 TARGET="_top"
@@ -2003,11 +2026,12 @@ CLASS="CITETITLE"
 ></DIV
 ></DIV
 ></DIV
+></DIV
 ><DIV
 CLASS="CHAPTER"
 ><HR><H1
 ><A
-NAME="AEN410"
+NAME="AEN418"
 ></A
 >Chapter 7. Type Reference</H1
 ><DIV
@@ -2015,7 +2039,7 @@ CLASS="SECT1"
 ><H2
 CLASS="SECT1"
 ><A
-NAME="AEN412"
+NAME="AEN420"
 >NumberType</A
 ></H2
 ><P
@@ -2027,7 +2051,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN415"
+NAME="AEN423"
 >FrameBufferType</A
 ></H2
 ><P
@@ -2040,7 +2064,7 @@ NAME="AEN415"
 CLASS="CHAPTER"
 ><HR><H1
 ><A
-NAME="AEN418"
+NAME="AEN426"
 ></A
 >Chapter 8. Developer Information</H1
 ><P
@@ -2054,7 +2078,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN423"
+NAME="AEN431"
 >Adding new data types</A
 ></H2
 ><P
@@ -2092,7 +2116,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN439"
+NAME="AEN447"
 >The c-API</A
 ></H3
 ><P
@@ -2152,7 +2176,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN461"
+NAME="AEN469"
 >Required methods</A
 ></H4
 ><DIV
@@ -2208,7 +2232,7 @@ NAME="TYPE-API-INIT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN464"
+NAME="AEN472"
 ></A
 ><H2
 >Name</H2
@@ -2216,7 +2240,7 @@ NAME="AEN464"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN467"
+NAME="AEN475"
 ></A
 ><H2
 >Synopsis</H2
@@ -2225,7 +2249,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN468"
+NAME="AEN476"
 ></A
 ><P
 ><CODE
@@ -2241,7 +2265,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN474"
+NAME="AEN482"
 ></A
 ><H2
 >Description</H2
@@ -2255,7 +2279,7 @@ NAME="AEN474"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN479"
+NAME="AEN487"
 ></A
 ><H2
 >Return Value</H2
@@ -2270,7 +2294,7 @@ NAME="TYPE-API-SHUTDOWN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN483"
+NAME="AEN491"
 ></A
 ><H2
 >Name</H2
@@ -2278,7 +2302,7 @@ NAME="AEN483"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN486"
+NAME="AEN494"
 ></A
 ><H2
 >Synopsis</H2
@@ -2287,7 +2311,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN487"
+NAME="AEN495"
 ></A
 ><P
 ><CODE
@@ -2303,7 +2327,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN493"
+NAME="AEN501"
 ></A
 ><H2
 >Description</H2
@@ -2320,7 +2344,7 @@ NAME="TYPE-API-GETINFO"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN498"
+NAME="AEN506"
 ></A
 ><H2
 >Name</H2
@@ -2328,7 +2352,7 @@ NAME="AEN498"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN501"
+NAME="AEN509"
 ></A
 ><H2
 >Synopsis</H2
@@ -2337,7 +2361,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN502"
+NAME="AEN510"
 ></A
 ><P
 ><CODE
@@ -2353,7 +2377,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN510"
+NAME="AEN518"
 ></A
 ><H2
 >Arguments</H2
@@ -2386,7 +2410,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN523"
+NAME="AEN531"
 ></A
 ><H2
 >Description</H2
@@ -2419,7 +2443,7 @@ CLASS="PROGRAMLISTING"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN532"
+NAME="AEN540"
 ></A
 ><H2
 >Return Value</H2
@@ -2434,7 +2458,7 @@ NAME="TYPE-API-GETSPEC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN536"
+NAME="AEN544"
 ></A
 ><H2
 >Name</H2
@@ -2442,7 +2466,7 @@ NAME="AEN536"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN539"
+NAME="AEN547"
 ></A
 ><H2
 >Synopsis</H2
@@ -2451,7 +2475,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN540"
+NAME="AEN548"
 ></A
 ><P
 ><CODE
@@ -2467,7 +2491,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN546"
+NAME="AEN554"
 ></A
 ><H2
 >Description</H2
@@ -2498,7 +2522,7 @@ CLASS="PROGRAMLISTING"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN554"
+NAME="AEN562"
 ></A
 ><H2
 >Return Value</H2
@@ -2513,7 +2537,7 @@ NAME="TYPE-API-NEWINSTANCE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN558"
+NAME="AEN566"
 ></A
 ><H2
 >Name</H2
@@ -2521,7 +2545,7 @@ NAME="AEN558"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN561"
+NAME="AEN569"
 ></A
 ><H2
 >Synopsis</H2
@@ -2530,7 +2554,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN562"
+NAME="AEN570"
 ></A
 ><TABLE
 BORDER="0"
@@ -2558,7 +2582,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN568"
+NAME="AEN576"
 ></A
 ><H2
 >Description</H2
@@ -2583,7 +2607,7 @@ CLASS="FUNCTION"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN577"
+NAME="AEN585"
 ></A
 ><H2
 >Return Value</H2
@@ -2601,7 +2625,7 @@ NAME="TYPE-API-DELETEINSTANCE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN582"
+NAME="AEN590"
 ></A
 ><H2
 >Name</H2
@@ -2609,7 +2633,7 @@ NAME="AEN582"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN585"
+NAME="AEN593"
 ></A
 ><H2
 >Synopsis</H2
@@ -2618,7 +2642,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN586"
+NAME="AEN594"
 ></A
 ><TABLE
 BORDER="0"
@@ -2646,7 +2670,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN593"
+NAME="AEN601"
 ></A
 ><H2
 >Arguments</H2
@@ -2670,7 +2694,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN601"
+NAME="AEN609"
 ></A
 ><H2
 >Description</H2
@@ -2703,7 +2727,7 @@ NAME="TYPE-API-ASSIGN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN611"
+NAME="AEN619"
 ></A
 ><H2
 >Name</H2
@@ -2712,7 +2736,7 @@ NAME="AEN611"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN614"
+NAME="AEN622"
 ></A
 ><H2
 >Synopsis</H2
@@ -2721,7 +2745,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN615"
+NAME="AEN623"
 ></A
 ><TABLE
 BORDER="0"
@@ -2749,7 +2773,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN624"
+NAME="AEN632"
 ></A
 ><H2
 >Arguments</H2
@@ -2791,7 +2815,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN640"
+NAME="AEN648"
 ></A
 ><H2
 >Description</H2
@@ -2813,7 +2837,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN646"
+NAME="AEN654"
 >Optional methods</A
 ></H4
 ><DIV
@@ -2855,7 +2879,7 @@ NAME="TYPE-API-SERIALIZE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN649"
+NAME="AEN657"
 ></A
 ><H2
 >Name</H2
@@ -2863,7 +2887,7 @@ NAME="AEN649"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN652"
+NAME="AEN660"
 ></A
 ><H2
 >Synopsis</H2
@@ -2872,7 +2896,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN653"
+NAME="AEN661"
 ></A
 ><TABLE
 BORDER="0"
@@ -2900,7 +2924,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN664"
+NAME="AEN672"
 ></A
 ><H2
 >Arguments</H2
@@ -2957,7 +2981,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN687"
+NAME="AEN695"
 ></A
 ><H2
 >Description</H2
@@ -2987,7 +3011,7 @@ CLASS="FUNCTION"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN697"
+NAME="AEN705"
 ></A
 ><H2
 >Return Value</H2
@@ -3002,7 +3026,7 @@ NAME="TYPE-API-DESERIALIZE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN701"
+NAME="AEN709"
 ></A
 ><H2
 >Name</H2
@@ -3010,7 +3034,7 @@ NAME="AEN701"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN704"
+NAME="AEN712"
 ></A
 ><H2
 >Synopsis</H2
@@ -3019,7 +3043,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN705"
+NAME="AEN713"
 ></A
 ><TABLE
 BORDER="0"
@@ -3047,7 +3071,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN716"
+NAME="AEN724"
 ></A
 ><H2
 >Arguments</H2
@@ -3101,7 +3125,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN738"
+NAME="AEN746"
 ></A
 ><H2
 >Description</H2
@@ -3136,7 +3160,7 @@ NAME="TYPE-API-ATTRIBUTESEQUAL"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN749"
+NAME="AEN757"
 ></A
 ><H2
 >Name</H2
@@ -3145,7 +3169,7 @@ NAME="AEN749"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN752"
+NAME="AEN760"
 ></A
 ><H2
 >Synopsis</H2
@@ -3154,7 +3178,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN753"
+NAME="AEN761"
 ></A
 ><TABLE
 BORDER="0"
@@ -3183,7 +3207,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN762"
+NAME="AEN770"
 ></A
 ><H2
 >Arguments</H2
@@ -3222,7 +3246,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN777"
+NAME="AEN785"
 ></A
 ><H2
 >Description</H2
@@ -3248,7 +3272,7 @@ CLASS="FUNCTION"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN786"
+NAME="AEN794"
 ></A
 ><H2
 >Return Value</H2
@@ -3263,7 +3287,7 @@ NAME="TYPE-API-CONVERTTYPE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN790"
+NAME="AEN798"
 ></A
 ><H2
 >Name</H2
@@ -3272,7 +3296,7 @@ NAME="AEN790"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN793"
+NAME="AEN801"
 ></A
 ><H2
 >Synopsis</H2
@@ -3281,7 +3305,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN794"
+NAME="AEN802"
 ></A
 ><TABLE
 BORDER="0"
@@ -3310,7 +3334,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN805"
+NAME="AEN813"
 ></A
 ><H2
 >Arguments</H2
@@ -3373,7 +3397,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN830"
+NAME="AEN838"
 ></A
 ><H2
 >Description</H2
@@ -3404,7 +3428,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN839"
+NAME="AEN847"
 >An example for a new datatype</A
 ></H3
 ><P
@@ -3612,7 +3636,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN872"
+NAME="AEN880"
 >Adding new effect modules</A
 ></H2
 ><P
@@ -3622,7 +3646,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN875"
+NAME="AEN883"
 >The C-API</A
 ></H3
 ><P
@@ -3632,7 +3656,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN878"
+NAME="AEN886"
 >The Core Methods</A
 ></H4
 ><DIV
@@ -3714,7 +3738,7 @@ NAME="MODULE-API-INIT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN882"
+NAME="AEN890"
 ></A
 ><H2
 >Name</H2
@@ -3722,7 +3746,7 @@ NAME="AEN882"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN885"
+NAME="AEN893"
 ></A
 ><H2
 >Synopsis</H2
@@ -3731,7 +3755,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN886"
+NAME="AEN894"
 ></A
 ><TABLE
 BORDER="0"
@@ -3759,7 +3783,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN893"
+NAME="AEN901"
 ></A
 ><H2
 >Arguments</H2
@@ -3783,7 +3807,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN901"
+NAME="AEN909"
 ></A
 ><H2
 >Description</H2
@@ -3803,7 +3827,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN908"
+NAME="AEN916"
 ></A
 ><H2
 >Return Value</H2
@@ -3818,7 +3842,7 @@ NAME="MODULE-API-SHUTDOWN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN912"
+NAME="AEN920"
 ></A
 ><H2
 >Name</H2
@@ -3826,7 +3850,7 @@ NAME="AEN912"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN915"
+NAME="AEN923"
 ></A
 ><H2
 >Synopsis</H2
@@ -3835,7 +3859,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN916"
+NAME="AEN924"
 ></A
 ><P
 ><CODE
@@ -3851,7 +3875,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN921"
+NAME="AEN929"
 ></A
 ><H2
 >Description</H2
@@ -3878,7 +3902,7 @@ NAME="MODULE-API-GETSPEC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN929"
+NAME="AEN937"
 ></A
 ><H2
 >Name</H2
@@ -3886,7 +3910,7 @@ NAME="AEN929"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN932"
+NAME="AEN940"
 ></A
 ><H2
 >Synopsis</H2
@@ -3895,7 +3919,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN933"
+NAME="AEN941"
 ></A
 ><P
 ><CODE
@@ -3911,7 +3935,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN938"
+NAME="AEN946"
 ></A
 ><H2
 >Description</H2
@@ -3941,7 +3965,7 @@ CLASS="PROGRAMLISTING"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN943"
+NAME="AEN951"
 ></A
 ><H2
 >Return Value</H2
@@ -3959,7 +3983,7 @@ NAME="MODULE-API-GETINFO"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN948"
+NAME="AEN956"
 ></A
 ><H2
 >Name</H2
@@ -3967,7 +3991,7 @@ NAME="AEN948"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN951"
+NAME="AEN959"
 ></A
 ><H2
 >Synopsis</H2
@@ -3976,7 +4000,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN952"
+NAME="AEN960"
 ></A
 ><P
 ><CODE
@@ -3992,7 +4016,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN960"
+NAME="AEN968"
 ></A
 ><H2
 >Description</H2
@@ -4028,7 +4052,7 @@ are applied and the needed size is returned.</P
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN973"
+NAME="AEN981"
 ></A
 ><H2
 >Return Value</H2
@@ -4043,7 +4067,7 @@ NAME="MODULE-API-GETINPUTSPEC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN977"
+NAME="AEN985"
 ></A
 ><H2
 >Name</H2
@@ -4051,7 +4075,7 @@ NAME="AEN977"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN980"
+NAME="AEN988"
 ></A
 ><H2
 >Synopsis</H2
@@ -4060,7 +4084,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN981"
+NAME="AEN989"
 ></A
 ><P
 ><CODE
@@ -4076,7 +4100,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN987"
+NAME="AEN995"
 ></A
 ><H2
 >Description</H2
@@ -4131,7 +4155,7 @@ NAME="MODULE-API-GETOUTPUTSPEC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1003"
+NAME="AEN1011"
 ></A
 ><H2
 >Name</H2
@@ -4139,7 +4163,7 @@ NAME="AEN1003"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1006"
+NAME="AEN1014"
 ></A
 ><H2
 >Synopsis</H2
@@ -4148,7 +4172,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1007"
+NAME="AEN1015"
 ></A
 ><P
 ><CODE
@@ -4164,7 +4188,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1013"
+NAME="AEN1021"
 ></A
 ><H2
 >Description</H2
@@ -4180,7 +4204,7 @@ NAME="MODULE-API-NEWINSTANCE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1017"
+NAME="AEN1025"
 ></A
 ><H2
 >Name</H2
@@ -4188,7 +4212,7 @@ NAME="AEN1017"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1020"
+NAME="AEN1028"
 ></A
 ><H2
 >Synopsis</H2
@@ -4197,7 +4221,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1021"
+NAME="AEN1029"
 ></A
 ><P
 ><CODE
@@ -4213,7 +4237,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1026"
+NAME="AEN1034"
 ></A
 ><H2
 >Description</H2
@@ -4231,7 +4255,7 @@ NAME="MODULE-API-DELETEINSTANCE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1031"
+NAME="AEN1039"
 ></A
 ><H2
 >Name</H2
@@ -4239,7 +4263,7 @@ NAME="AEN1031"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1034"
+NAME="AEN1042"
 ></A
 ><H2
 >Synopsis</H2
@@ -4248,7 +4272,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1035"
+NAME="AEN1043"
 ></A
 ><P
 ><CODE
@@ -4264,7 +4288,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1041"
+NAME="AEN1049"
 ></A
 ><H2
 >Description</H2
@@ -4285,7 +4309,7 @@ NAME="MODULE-API-SETINPUT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1047"
+NAME="AEN1055"
 ></A
 ><H2
 >Name</H2
@@ -4293,7 +4317,7 @@ NAME="AEN1047"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1050"
+NAME="AEN1058"
 ></A
 ><H2
 >Synopsis</H2
@@ -4302,7 +4326,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1051"
+NAME="AEN1059"
 ></A
 ><P
 ><CODE
@@ -4318,7 +4342,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1061"
+NAME="AEN1069"
 ></A
 ><H2
 >Description</H2
@@ -4342,7 +4366,7 @@ NAME="MODULE-API-SETOUTPUT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1068"
+NAME="AEN1076"
 ></A
 ><H2
 >Name</H2
@@ -4350,7 +4374,7 @@ NAME="AEN1068"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1071"
+NAME="AEN1079"
 ></A
 ><H2
 >Synopsis</H2
@@ -4359,7 +4383,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1072"
+NAME="AEN1080"
 ></A
 ><P
 ><CODE
@@ -4375,7 +4399,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1082"
+NAME="AEN1090"
 ></A
 ><H2
 >Description</H2
@@ -4402,7 +4426,7 @@ NAME="MODULE-API-UPDATE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1090"
+NAME="AEN1098"
 ></A
 ><H2
 >Name</H2
@@ -4410,7 +4434,7 @@ NAME="AEN1090"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1093"
+NAME="AEN1101"
 ></A
 ><H2
 >Synopsis</H2
@@ -4419,7 +4443,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1094"
+NAME="AEN1102"
 ></A
 ><P
 ><CODE
@@ -4435,7 +4459,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1100"
+NAME="AEN1108"
 ></A
 ><H2
 >Description</H2
@@ -4459,7 +4483,7 @@ NAME="MODULE-API-GETINPUTATTRIBUTES"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1107"
+NAME="AEN1115"
 ></A
 ><H2
 >Name</H2
@@ -4467,7 +4491,7 @@ NAME="AEN1107"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1110"
+NAME="AEN1118"
 ></A
 ><H2
 >Synopsis</H2
@@ -4476,7 +4500,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1111"
+NAME="AEN1119"
 ></A
 ><P
 ><CODE
@@ -4492,7 +4516,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1117"
+NAME="AEN1125"
 ></A
 ><H2
 >Description</H2
@@ -4505,7 +4529,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN1120"
+NAME="AEN1128"
 >Optional Methods</A
 ></H4
 ><DIV
@@ -4550,7 +4574,7 @@ NAME="MODULE-API-GETPATCHLAYOUT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1129"
+NAME="AEN1137"
 ></A
 ><H2
 >Name</H2
@@ -4558,7 +4582,7 @@ NAME="AEN1129"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1132"
+NAME="AEN1140"
 ></A
 ><H2
 >Synopsis</H2
@@ -4567,7 +4591,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1133"
+NAME="AEN1141"
 ></A
 ><P
 ><CODE
@@ -4583,7 +4607,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1141"
+NAME="AEN1149"
 ></A
 ><H2
 >Description</H2
@@ -4604,7 +4628,7 @@ NAME="MODULE-API-STRONGDEPENDENCIESCALCULATED"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1147"
+NAME="AEN1155"
 ></A
 ><H2
 >Name</H2
@@ -4612,7 +4636,7 @@ NAME="AEN1147"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1150"
+NAME="AEN1158"
 ></A
 ><H2
 >Synopsis</H2
@@ -4621,7 +4645,7 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1151"
+NAME="AEN1159"
 ></A
 ><P
 ><CODE
@@ -4637,7 +4661,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1159"
+NAME="AEN1167"
 ></A
 ><H2
 >Description</H2
@@ -4655,13 +4679,98 @@ CLASS="FUNCTION"
 ></DIV
 ></DIV
 ></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN1173"
+>Pluc the skeleton generator</A
+></H3
+><P
+>The c-api design allows module developers to write their plugins in almost any programming language. This is archieved by a very lowlevel interface between host and plugin.</P
+><P
+>Many module functions a very simple and have just some lines of code. We want to implement a module that outputs the maximum of its both number inputs. In c++ this would be a one liner:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>double output1,input1,input2;
+output1 = std::max(input1,input2)</PRE
+></TD
+></TR
+></TABLE
+><P
+>But the effort needed to export this piece of code via the c-api interface is huge. This is the reason why the pluc.py stub generator exists.</P
+><P
+>The idea of pluc is that many properties of a module are described in an abstract fashon in a spec file. Pluc can generate from this file:</P
+><P
+>The files needed for the buildsystem like automake and the visual studio are generated.</P
+><P
+>convinience layer to abstract from the c-api</P
+><P
+>A minimum skeleton code for the module implementation. This can be used as a basis for implemention the function.</P
+><P
+>sample invocations of pluc</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>pluc.py dsp testmodule.spec 
+pluc.py am testmodule.spec 
+pluc.py skel testmodule.spec </PRE
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN1185"
+>Syntax and semantic of the spec file</A
+></H4
+><P
+></P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN1188"
+>Invocation of pluc.py</A
+></H4
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN1191"
+>An example for a new module</A
+></H3
+><P
+>TODO</P
+></DIV
 ></DIV
 ></DIV
 ><DIV
 CLASS="CHAPTER"
 ><HR><H1
 ><A
-NAME="AEN1165"
+NAME="AEN1194"
 ></A
 >Chapter 9. Old text describing GePhex</H1
 ><P

@@ -235,8 +235,14 @@ namespace gui
 			
 	view->controlMoved(controlID,cElem->position());
 			
-	if (connectView != 0)
-	  connectView->controlConnected(cElem->nodeID(),cElem->inputIndex());
+        try {
+          if (connectView != 0)
+            connectView->controlConnected(cElem->nodeID(),cElem->inputIndex());
+        }
+        catch(std::exception& e)
+          {
+            std::cerr << e.what() << "\n";
+          }
       }
     else
       {
@@ -281,17 +287,22 @@ namespace gui
     int inputIndex = i->second->inputIndex();
     controls.erase(i);
 
-    if (connectView != 0)
-      connectView->controlDisconnected(nodeID, inputIndex);
-		
-
-    view->controlDeleted(type);
-		
-
     if (nodeID != moduleID)
       {
 	throw std::runtime_error("moduleDataUnSet: shit detection activated!");
       }
+
+    try {
+    if (connectView != 0)
+      connectView->controlDisconnected(nodeID, inputIndex);
+    }
+    catch (std::exception& e) {
+      std::cerr << "Error at controlDisconnected: " << e.what() << "\n";
+    }
+
+    view->controlDeleted(type);
+		
+
   }
 	
   void ControlModel::syncDataStarted()

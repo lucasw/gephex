@@ -343,9 +343,16 @@ namespace dllloader
     // and the typeinfo
     int bufLen = ft.getInfo(0,0); // how big is it?
     char* data = new char[bufLen];
-    ft.getInfo(data,bufLen);
+    int len = ft.getInfo(data,bufLen);
     // no exception thrower
-    utils::Buffer mi(reinterpret_cast<unsigned char*>(data),bufLen);
+	if (len == 0)
+	{
+		//TODO: is it ok to throw here (probably some leaks)?
+	   delete[] data;
+	   throw std::runtime_error("getInfo failed!");
+	}
+	
+    utils::Buffer mi(reinterpret_cast<unsigned char*>(data), len);
     delete[] data;
 
     // register typename and get a unique id
@@ -408,11 +415,11 @@ namespace dllloader
   {
     if (fTable->init != 0)
       {
-	if (fTable->init(moduleLog) == 0)
+        if (fTable->init(moduleLog) == 0)
 	  {
 	    throw std::runtime_error("init of plugin " + moduleName
                                      + " failed");
-	  }
+          }
       }
 		
     std::string moduleSpec = fTable->getSpec();
@@ -568,7 +575,12 @@ namespace dllloader
 
     int bufLen = fTable->getInfo(0,0);
     char* data = new char[bufLen];
-    fTable->getInfo(data,bufLen);
+    int len = fTable->getInfo(data,bufLen);
+	if (len == 0) {
+		//TODO: is it ok to throw here (probably some leaks)?		
+		delete[] data;
+		throw std::runtime_error("getInfo failed!");
+	}
     try 
       {
 	utils::Buffer mi = 

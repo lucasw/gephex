@@ -19,6 +19,7 @@ signalgenmodule_la_LDFLAGS = -module -avoid-version
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../util/src/misc \
 		-I @srcdir@/../../../types/src/numbertype \
 		-I @srcdir@/../../../types/src/stringtype
 

@@ -58,34 +58,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 libdir = @libdir@/gephex/modules
 
@@ -93,7 +108,7 @@ PLUC = python @srcdir@/../../pluc.py
 
 lib_LTLIBRARIES = v4lmodule.la
 
-v4lmodule_la_SOURCES = v4lmodule_auto.c 			v4lmodule.cpp 			videodevice.cpp 			videodevice.h 			v4lmodule.h 			v4lmodule.spec 			v4lmodule.xpm
+v4lmodule_la_SOURCES = v4lmodule_auto.c 			v4lmodule.cpp 			videodevice.cpp 			videodevice.h 			colorconv.h 			colorconv.cpp 			v4lmodule.h 			v4lmodule.spec 			v4lmodule.xpm
 
 
 v4lmodule_la_LDFLAGS = -module -avoid-version
@@ -118,7 +133,8 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 v4lmodule_la_DEPENDENCIES = 
-v4lmodule_la_OBJECTS =  v4lmodule_auto.lo v4lmodule.lo videodevice.lo
+v4lmodule_la_OBJECTS =  v4lmodule_auto.lo v4lmodule.lo videodevice.lo \
+colorconv.lo
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -272,21 +288,21 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+colorconv.lo colorconv.o : colorconv.cpp colorconv.h
 v4lmodule.lo v4lmodule.o : v4lmodule.cpp v4lmodule.h \
 	../../../engine/src/engine/dllmodule.h \
-	../../../types/src/numbertype/numbertype.h \
-	../../../util/include/basic_types.h \
+	../../../types/src/stringtype/stringtype.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
-	../../../config.h ../../../types/src/stringtype/stringtype.h \
-	videodevice.h
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h videodevice.h \
+	colorconv.h
 v4lmodule_auto.lo v4lmodule_auto.o : v4lmodule_auto.c v4lmodule.h \
 	../../../engine/src/engine/dllmodule.h \
-	../../../types/src/numbertype/numbertype.h \
-	../../../util/include/basic_types.h \
+	../../../types/src/stringtype/stringtype.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
-	../../../config.h ../../../types/src/stringtype/stringtype.h \
+	../../../util/include/basic_types.h ../../../config.h \
+	../../../types/src/numbertype/numbertype.h \
 	../../../engine/src/engine/dllutils.h v4lmodule.xpm
-videodefostr.lo videodefostr.o : videodefostr.cpp videodefostr.h
 videodevice.lo videodevice.o : videodevice.cpp videodevice.h \
 	../../../util/include/basic_types.h
 

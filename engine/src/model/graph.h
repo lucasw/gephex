@@ -25,52 +25,89 @@ namespace model
 
   class Graph
     {
-    public:    
-      typedef std::map<const std::string, utils::AutoPtr<ControllValueSet> > ValueSetMap;
-      typedef std::map<std::pair<int,int>,utils::AutoPtr<GraphConnection> > ConnectionMap;
-      typedef std::list<utils::AutoPtr<GraphNode> > GraphNodeList;
+    public:
+      typedef const std::string ControlValueSetID; 
+      typedef int ModuleID;
+      typedef utils::AutoPtr< ControllValueSet > ControlValueSetPtr; 
+      typedef std::map< ControlValueSetID, ControlValueSetPtr > ValueSetMap;
+      typedef utils::AutoPtr< GraphConnection > ConnectionPtr;
+      typedef utils::AutoPtr< GraphNode > NodePtr;
+      typedef std::list< NodePtr > GraphNodeList;
 
+      typedef std::map<std::pair<int,int>, ConnectionPtr > ConnectionMap;
+
+      /**
+       * Creates a new Graph
+       * \param graphID unique ID for the graph
+       * \param graphName userreadable name for the graph
+       */
       Graph(const std::string& graphID, const std::string& graphName);
+
+      /**
+       * destroys the Graphobject
+       */
       ~Graph();
 
+      /**
+       * change the ID of the graph
+       * \todo the id should not change. remove this
+       */
       void setID(const std::string& id_);
+
+      /**
+       * retrieve the unique id of the graph
+       */
       std::string getID() const;
 
-      // GraphName
+      /**
+       * changes the name of the Graph
+       * \param new name
+       */
       void setName(const std::string& name_);
+
+      /**
+       * get the name of the graph
+       * \returns the name of the graph
+       */
       std::string getName() const;
 
-      // GraphStructure
-      int addModule(const IModuleClassSpec&);
+      /**
+       * add a new module to the graph
+       * \param spec of the new module
+       * \returns the ID of the module
+       */
+      ModuleID addModule(const IModuleClassSpec&);
       void addModule(const IModuleClassSpec&,				   
-		     int moduleID);
+		     ModuleID moduleID);
 
-      void connectModules(int moduleID1,int outputIndex,
-			  int moduleID2,int inputIndex);
-      void disconnectModules(int moduleID,int inputIndex);
-      void deleteModule(int moduleID);
+      void connectModules(ModuleID moduleID1, int outputIndex,
+			  ModuleID moduleID2, int inputIndex);
+      void disconnectModules(ModuleID moduleID,int inputIndex);
+      void deleteModule(ModuleID moduleID);
       const ConnectionMap& connections() const;
       const GraphNodeList& nodes() const;
       /** Deletes all Modules and Connections. */
       void clear();
 
       // ModuleData
-      void setModuleData(int moduleID,int type,const utils::Buffer& buf);
-      void unSetModuleData(int moduleID,int type);
+      void setModuleData(ModuleID moduleID,int type,const utils::Buffer& buf);
+      void unSetModuleData(ModuleID moduleID,int type);
       /** returns a list of set moduleDatas **/
-      std::list<int> moduleDataList(int moduleID) const;
+      std::list<int> moduleDataList(ModuleID moduleID) const;
 
       // ControllValues
-      void newControlValueSet(const std::string& id, const std::string& name);
+      void newControlValueSet(ControlValueSetID&, const std::string& name);
 
-      void setControlValue(const std::string& snapShotID,int nodeID,
-			   int intputIndex, const utils::Buffer& newValue);
+      void setControlValue(ControlValueSetID& snapShotID, 
+			   ModuleID nodeID,
+			   int inputIndex, 
+			   const utils::Buffer& newValue);
 
-      void copyControllValueSet(const std::string& snapID,
-				const std::string& newID,
+      void copyControllValueSet(ControlValueSetID& snapID,
+				ControlValueSetID& newID,
 				const std::string& newSnapName);
 
-      void renameControllValueSet(const std::string& snapID,
+      void renameControllValueSet(ControlValueSetID& snapID,
 				  const std::string& newSnapName);
 
       void deleteControllValueSet(const std::string& snapID);

@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "effectvlensmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_effectvlensmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_effectvlensmodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -40,6 +48,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -96,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Lens] group=[EffecTV] inputs=[5 Bild Linsenposition Linsengroesse{higher_bound=[500] lower_bound=[10] widget_type=[unboundednumber_selector] } Vergroesserung{higher_bound=[200] lower_bound=[5] widget_type=[unboundednumber_selector] } Interaktiv{false_value=[0] true_value=[1] widget_type=[radio_button] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Lens] group=[EffecTV] inputs=[5 Image Position Size{lower_bound=[10] widget_type=[unboundednumber_selector] higher_bound=[500] } Magnification{lower_bound=[5] widget_type=[unboundednumber_selector] higher_bound=[200] } Interactiv{widget_type=[radio_button] false_value=[0] true_value=[1] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(effectvlensmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -105,6 +119,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(effectvlensmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -120,14 +139,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_effectvlensmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

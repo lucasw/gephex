@@ -66,11 +66,11 @@ void update(void* instance)
 	InstancePtr inst = (InstancePtr) instance;
 	MyInstancePtr my = inst->my;
 		
-	int x, y, newx, newy, u=0, v=0;
+	int x, y, newx, newy;
 	
 	double time = inst->in_time->number;
 	double amplitude = trim_double(inst->in_amp->number, 0, 1);
-	double frequence = inst->in_frq->number; 
+	double freq = inst->in_frq->number; 
 	int xsize = trim_int(inst->in_b->xsize,1,FRAMEBUFFER_X_MAX);
 	int ysize = trim_int(inst->in_b->ysize,1,FRAMEBUFFER_Y_MAX);
 
@@ -96,8 +96,8 @@ void update(void* instance)
 	{		
 		for(x= 0; x<= xsize; x+=LIBGRID_GRIDSIZE)
 		{
-			newx = fx(xsize, ysize, x,y,time, amplitude, frequence);
-			newy = fy(xsize, ysize, x,y,time, amplitude, frequence);
+			newx = fx(xsize, ysize, x,y,time, amplitude, freq);
+			newy = fy(xsize, ysize, x,y,time, amplitude, freq);
 			grid_points->u = newx;	
 			grid_points->v = newy;
 			++grid_points;

@@ -235,8 +235,10 @@ void calc_parameters(void* instance, double* theta, double* zoom,
 		     int* transpx, int* transpy)
 {
   InstancePtr inst = (InstancePtr) instance;  
-  int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
+  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  int xsize_out = inst->in_texture->xsize;
+  int ysize_out = inst->in_texture->ysize;
 
   *theta = (M_PI * (double) trim_double(inst->in_rot->number,0,360)) / 180;
   *zoom =  trim_double(inst->in_zoom->number,0.001,4);
@@ -261,8 +263,10 @@ void strongDependencies(Instance* inst, int neededInputs[])
   double theta, zoom;
   int transpx, transpy;
 
-  int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
+  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  int xsize_out = inst->in_texture->xsize;
+  int ysize_out = inst->in_texture->ysize;
 
   int xsize_text = inst->in_texture->xsize;
   int ysize_text = inst->in_texture->ysize;
@@ -311,8 +315,10 @@ void update(void* instance)
   double theta, zoom;
   int transpx, transpy;
 
-  int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
+  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
+  int xsize_out = inst->in_texture->xsize;
+  int ysize_out = inst->in_texture->ysize;
 
   int xsize_text = inst->in_texture->xsize;
   int ysize_text = inst->in_texture->ysize;
@@ -506,7 +512,8 @@ static void getMinMaxYIndex(struct geo_Point points[], int n,
   if (!(ymin_ <= ymax_))
     {
       poly_print(points, n);
-      getchar();
+	  //TODO
+      //getchar();
     }
 }
 

@@ -1,18 +1,19 @@
 #include "protocol.h"
 #include <cassert>
 
-#include <algorithm>
-
-#include "utils/buffer.h"
-
-#include "basic_types.h"
-
 #if defined(HAVE_CONFIG_H)
-#include "config.h"
+  #include "config.h"
 #endif
 
-#include "minmax.h"
+// for the min and max templates
+#if defined (COMP_VC)
+  #include "minmax.h"
+#else 
+  #include <algorithm> 
+#endif
 
+#include "utils/buffer.h"
+#include "basic_types.h"
 
 //TODO: alles plattformabhängig ab hier
 // man muesste die endianess und das padding von Header

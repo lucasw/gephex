@@ -1,4 +1,51 @@
-0.0.4_alpha_1:
+0.0.4alpha2:
+
+        * audio type and some audio modules (beat detection works, but it's
+          still pretty dumb)
+
+        * Grapheditor shows icons of the modules now
+
+        * merged several modules for better usability:
+          (plz see README if you want to convert old graphs)
+           - all framebuffer outputs are merged into frboutmodule
+             (the same module for linux and windows, this way
+              the graphs are more portable) [note that some outputs
+              like glout and sdlout are commented out for the moment
+              due to their bad performance]
+
+           - bmpmodule, avifilemodule, libmpeg3loader, videomodule,
+             directshowmodule are merged into frbinmodule
+             (again only one module for all plattforms)
+
+           - addmodule and submodule have been merged into arithmodule
+             (which now can do a lot more than just addition and
+              subtraction)
+
+           - imgmulmodule, imgaddmodule, imgsubmodule, invertmodule
+             have been fixed and merged into imgarithmodule
+
+        * all framebuffer output drivers now support control over
+          brightness, contrast, gamma
+
+        * new aalib driver in frboutmodule
+
+        * new modules: 
+            - gradnormmoule  : shows the edges of an image
+            - twolayermodule : turns an image to black and white
+            - audio(in|out)module : in and output, supports alsa and os
+               on posix platforms and wavein/out on win32
+            - audiobdmodule  : simple beat detection
+
+	* default graph is now edited and rendered graph at startup
+ 
+        * removed output size from rotary zoomer, the size of the input
+          framebuffer is used instead
+
+        * new check-box property widget
+
+        * fixed some bugs and glitches
+
+0.0.4alpha1:
 	
 	* NumberType changed from unsigned int (32 bit) to
 	  IEEE 64 bit floating point value.

@@ -50,7 +50,6 @@ namespace gui
   {
     Q_OBJECT
   private:
-
     std::map<int,NodeWidget*> nodes;
     
     typedef std::map<std::pair<int, int>,ConnectionWidget*> ConnectionMap;
@@ -94,7 +93,8 @@ namespace gui
 
     KeyboardManager& m_kbManager;
 
-	IErrorReceiver& m_log;
+    IErrorReceiver& m_log;
+    bool m_drawmoduleinfo;
 
   public:
     typedef std::map<std::string, std::string> ParamMap;
@@ -147,11 +147,13 @@ void beginLineDraw();
     void inputPopupActivated(int);
     void connectionPopupActivated(int);
 
+    void mouseOverNode(const NodeWidget*);
     void mouseOverInputPlug(const InputPlugWidget*);
     void mouseOverOutputPlug(const OutputPlugWidget*);
 
     void moduleClassSelected(const std::string&);
 
+    void setDrawModuleInfo(bool draw){m_drawmoduleinfo=draw;}
 
     signals:
     void createControl(const std::string& name,const std::string& type,

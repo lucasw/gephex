@@ -4,7 +4,7 @@ mod_resultmodule
 {
     name          = Result
     deterministic = true
-    group         = Outputs
+    group         = Number
     xpm           = resultmodule_icon.xpm
     author        = Duran Duran
     version       = 0.61-prealpha
@@ -15,12 +15,12 @@ inputs
 
     in
     {
-        name              = Eingang
+        name              = Input
         type              = typ_NumberType
         const             = true
         strong_dependency = true
         default           = 0
-	widget_type       = unboundednumber_selector
+        widget_type       = unboundednumber_selector
         toggle_keys       = a[1.0,0]
         keys              = b[0.5];ctrl-b[0.25]
     }
@@ -32,10 +32,9 @@ inputs
         const             = true
         strong_dependency = true
         hidden            = true        
-        widget_type       = radio_button
-        true_value        = 1
-        false_value       = 0
-        default           = 1
+        widget_type       = check_box
+        values            = a,b
+		default           = 0
     }
 
 }

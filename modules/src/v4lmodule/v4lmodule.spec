@@ -4,7 +4,7 @@ mod_v4lmodule
 {
 	name          = Video4Linux
 	deterministic = false
-	group	      = Quellen
+	group	      = Sources
 	xpm	      = v4lmodule.xpm
 	author        = Mad VideoJockey
     	version       = 0.61-doubleprealpha
@@ -24,7 +24,7 @@ inputs
 	file_mask         = *
 	file_mask_name    = Gerätedatei
 	default           = /dev/video0
-	help	= Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)
+	help	          = Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)
     }
 
     x_size
@@ -56,6 +56,72 @@ inputs
 	default	= 0
 	help	= Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert
     }
+
+    brightness
+    {
+	name	          = Brigthness
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	lower_bound	  = 0
+	higher_bound      = 1
+	step_size         = 0.01
+	default	          = 0.5
+    }
+
+    hue
+    {
+	name	          = Hue
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	lower_bound	  = 0
+	higher_bound      = 1
+	step_size         = 0.01
+	default	          = 0.5
+    }
+
+    colour
+    {
+	name	          = Colour
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	lower_bound	  = 0
+	higher_bound      = 1
+	step_size         = 0.01
+	default	          = 0.5
+    }
+
+    contrast
+    {
+	name	          = Contrast
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	lower_bound	  = 0
+	higher_bound      = 1
+	step_size         = 0.01
+	default	          = 0.5
+    }
+
+    whiteness
+    {
+	name	          = Whiteness
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	lower_bound	  = 0
+	higher_bound      = 1
+	step_size         = 0.01
+	default	          = 0.5
+    }
+
 }
 
 outputs

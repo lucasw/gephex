@@ -59,41 +59,56 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 TESTS = nettest
 
 check_PROGRAMS = nettest
-noinst_LIBRARIES = libnetwork.a
+noinst_LIBRARIES = libgphxnetwork.a
 
-libnetwork_a_SOURCES =  		netexceptions.cpp 		protocol.cpp 		tagutils.cpp 		isocket.cpp 		sotimeout.cpp 		socketutils.cpp 		tcpserversocket.cpp 		tcpclientsocket.cpp 		fdsocket.cpp 		socketadaptor.cpp 		domainserversocket.cpp 		domainclientsocket.cpp
+libgphxnetwork_a_SOURCES =  		netexceptions.cpp 		protocol.cpp 		tagutils.cpp 		isocket.cpp 		sotimeout.cpp 		socketutils.cpp 		tcpserversocket.cpp 		tcpclientsocket.cpp 		fdsocket.cpp 		socketadaptor.cpp 		domainserversocket.cpp 		domainclientsocket.cpp
 
 
 noinst_HEADERS =  		protocol.h 		idatalistener.h 		isender.h 		netexceptions.h 		itagger.h 		itaginterpreter.h 		tagger.h 		tagger.cpp 		tagutils.h 		isocket.h 		socketutils.h 		sotimeout.h 		iclientsocket.h 		iserversocket.h 		tcpclientsocket.h 		tcpserversocket.h 		fdsocket.h 		socketadaptor.h 		tagdispatcher.h 		tagdispatcher.cpp 		domainserversocket.h 		domainclientsocket.h 		protocoltest.h 		tcpsockettest.h 		tagdispatchertest.h 		taggertest.h 		domainsockettest.h
@@ -104,10 +119,10 @@ INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
 nettest_SOURCES =  		testmain.cpp 		block.h 		tcpsockettest.cpp 		protocoltest.cpp 		taggertest.cpp 		tagdispatchertest.cpp 		domainsockettest.cpp 		tcpsockettest.h 		protocoltest.h 		taggertest.h 		tagdispatchertest.h 		domainsockettest.h
 
 
-nettest_LDADD =  	-L@builddir@/../TestFramework 	-L@builddir@/../utils 	-L@builddir@ 	-ltestframework 	-lnetwork 	-lutils 
+nettest_LDADD =  	-L@builddir@/../TestFramework 	-L@builddir@/../utils 	-L@builddir@ 	-ltestframework 	-lgphxnetwork 	-lutils 
 
 
-nettest_DEPENDENCIES =  	@builddir@/../TestFramework/libtestframework.a 	@builddir@/../utils/libutils.a  	@builddir@/libnetwork.a
+nettest_DEPENDENCIES =  	@builddir@/../TestFramework/libtestframework.a 	@builddir@/../utils/libutils.a  	@builddir@/libgphxnetwork.a
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
@@ -123,13 +138,12 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-libnetwork_a_LIBADD = 
-libnetwork_a_OBJECTS =  netexceptions.$(OBJEXT) protocol.$(OBJEXT) \
+libgphxnetwork_a_LIBADD = 
+libgphxnetwork_a_OBJECTS =  netexceptions.$(OBJEXT) protocol.$(OBJEXT) \
 tagutils.$(OBJEXT) isocket.$(OBJEXT) sotimeout.$(OBJEXT) \
 socketutils.$(OBJEXT) tcpserversocket.$(OBJEXT) \
 tcpclientsocket.$(OBJEXT) fdsocket.$(OBJEXT) socketadaptor.$(OBJEXT) \
 domainserversocket.$(OBJEXT) domainclientsocket.$(OBJEXT)
-AR = ar
 check_PROGRAMS =  nettest$(EXEEXT)
 nettest_OBJECTS =  testmain.$(OBJEXT) tcpsockettest.$(OBJEXT) \
 protocoltest.$(OBJEXT) taggertest.$(OBJEXT) tagdispatchertest.$(OBJEXT) \
@@ -154,8 +168,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(libnetwork_a_SOURCES) $(nettest_SOURCES)
-OBJECTS = $(libnetwork_a_OBJECTS) $(nettest_OBJECTS)
+SOURCES = $(libgphxnetwork_a_SOURCES) $(nettest_SOURCES)
+OBJECTS = $(libgphxnetwork_a_OBJECTS) $(nettest_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -221,10 +235,10 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-libnetwork.a: $(libnetwork_a_OBJECTS) $(libnetwork_a_DEPENDENCIES)
-	-rm -f libnetwork.a
-	$(AR) cru libnetwork.a $(libnetwork_a_OBJECTS) $(libnetwork_a_LIBADD)
-	$(RANLIB) libnetwork.a
+libgphxnetwork.a: $(libgphxnetwork_a_OBJECTS) $(libgphxnetwork_a_DEPENDENCIES)
+	-rm -f libgphxnetwork.a
+	$(AR) cru libgphxnetwork.a $(libgphxnetwork_a_OBJECTS) $(libgphxnetwork_a_LIBADD)
+	$(RANLIB) libgphxnetwork.a
 
 mostlyclean-checkPROGRAMS:
 
@@ -300,8 +314,8 @@ fdsocket.o: fdsocket.cpp fdsocket.h isocket.h netexceptions.h isender.h \
 isocket.o: isocket.cpp isocket.h netexceptions.h isender.h sotimeout.h
 netexceptions.o: netexceptions.cpp netexceptions.h
 protocol.o: protocol.cpp protocol.h idatalistener.h isender.h \
-	../utils/buffer.h ../../../util/include/basic_types.h \
-	../../../config.h ../../../util/include/minmax.h
+	../../../config.h ../utils/buffer.h \
+	../../../util/include/basic_types.h
 socketadaptor.o: socketadaptor.cpp socketadaptor.h isocket.h \
 	netexceptions.h isender.h sotimeout.h idatalistener.h \
 	../utils/buffer.h

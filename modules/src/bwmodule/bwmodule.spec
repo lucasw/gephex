@@ -2,7 +2,7 @@
 
 mod_bwmodule
 {
-    name          = Schwarz Weiss
+    name          = Grayscale
     deterministic = true
     group         = Filter
     xpm	          = bwmodule.xpm

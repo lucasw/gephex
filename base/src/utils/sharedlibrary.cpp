@@ -49,7 +49,7 @@ namespace utils
       = DarwinComp::dlopen(path.c_str(),
 			   DarwinComp::RTLD_LAZY);
 #elif defined(OS_POSIX)
-    m_impl->handle = dlopen(path.c_str(), RTLD_LAZY);
+    m_impl->handle = dlopen(path.c_str(), RTLD_NOW);
 #endif
 
     if (m_impl->handle == 0)

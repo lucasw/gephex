@@ -57,34 +57,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 includedir = $(baseincludedir)/dllloader
@@ -120,7 +135,6 @@ c_module.$(OBJEXT) c_input.$(OBJEXT) c_output.$(OBJEXT) \
 c_typeclass.$(OBJEXT) moduleclassspec.$(OBJEXT) c_outputplug.$(OBJEXT) \
 c_type.$(OBJEXT) moduleinfoutils.$(OBJEXT) freeframeloader.$(OBJEXT) \
 metamodule.$(OBJEXT)
-AR = ar
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -263,41 +277,41 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 c_input.o: c_input.cpp c_input.h ../../../base/src/interfaces/imodule.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/itypefactory.h \
 	../../../base/src/interfaces/itype.h c_moduletables.h \
 	c_functiontypes.h
 c_module.o: c_module.cpp c_module.h \
 	../../../base/src/interfaces/imodule.h \
-	../../../base/src/utils/autoptr.h ../../../config.h c_input.h \
-	c_output.h c_moduletables.h c_functiontypes.h \
+	../../../base/src/utils/autoptr.h c_input.h c_output.h \
+	c_moduletables.h c_functiontypes.h \
 	../../../base/src/interfaces/itype.h \
 	../../../base/src/interfaces/itypefactory.h
 c_moduleclass.o: c_moduleclass.cpp c_moduleclass.h \
 	../../../base/src/interfaces/imoduleclass.h \
-	../../../base/src/utils/autoptr.h ../../../config.h c_module.h \
+	../../../base/src/utils/autoptr.h c_module.h \
 	../../../base/src/interfaces/imodule.h c_moduletables.h \
 	c_functiontypes.h ../renderer/typefactory.h \
 	../../../base/src/interfaces/itypefactory.h \
 	../../../base/src/interfaces/itype.h
 c_output.o: c_output.cpp c_output.h \
 	../../../base/src/interfaces/imodule.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
-	c_outputplug.h ../../../base/src/interfaces/itype.h \
-	c_moduletables.h c_functiontypes.h
+	../../../base/src/utils/autoptr.h c_outputplug.h \
+	../../../base/src/interfaces/itype.h c_moduletables.h \
+	c_functiontypes.h
 c_outputplug.o: c_outputplug.cpp c_outputplug.h \
 	../../../base/src/interfaces/imodule.h \
-	../../../base/src/utils/autoptr.h ../../../config.h
+	../../../base/src/utils/autoptr.h
 c_type.o: c_type.cpp c_type.h ../../../base/src/interfaces/itype.h \
 	c_typetables.h c_functiontypes.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/utils/sharedlibrary.h \
 	../../../base/src/utils/buffer.h
 c_typeclass.o: c_typeclass.cpp c_typeclass.h \
 	../../../base/src/interfaces/itypeclass.h c_typetables.h \
 	c_functiontypes.h ../../../base/src/utils/autoptr.h \
-	../../../config.h ../../../base/src/utils/sharedlibrary.h \
-	c_type.h ../../../base/src/interfaces/itype.h
+	../../../base/src/utils/sharedlibrary.h c_type.h \
+	../../../base/src/interfaces/itype.h
 dllloader.o: dllloader.cpp dllloader.h \
 	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
 	../../../base/src/interfaces/imoduleclassinfosender.h \
@@ -341,7 +355,7 @@ moduleinfoutils.o: moduleinfoutils.cpp moduleinfoutils.h \
 nameresolver.o: nameresolver.cpp nameresolver.h
 typedllloader.o: typedllloader.cpp typedllloader.h c_typetables.h \
 	c_functiontypes.h ../../../base/src/utils/autoptr.h \
-	../../../config.h ../../../base/src/utils/sharedlibrary.h
+	../../../base/src/utils/sharedlibrary.h
 
 info-am:
 info: info-am

@@ -6,6 +6,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 
+#include "guimodel/moduleinfo.h"
 #include "interfaces/imoduleclassloadercontrolreceiver.h"
 
 #include <stdexcept>
@@ -83,7 +84,7 @@ void DllSelectorDialog::unloadModuleClass()
 	{
 		std::string name = geladene->text(id).latin1();
 		m_loader.unloadModuleClass(name);
-	}
+	}	
 }
 
 void DllSelectorDialog::moduleClassLoaded(const std::string& moduleClassName,
@@ -100,6 +101,9 @@ void DllSelectorDialog::moduleClassLoaded(const std::string& moduleClassName,
 	delete item;
 
 	geladene->insertItem(moduleClassName.c_str());
+
+	std::string msg = "Loading ";
+	emit status(msg + mi.getGroup() + ":" + mi.getName());
 }
 
 void DllSelectorDialog::moduleClassUnloaded(const std::string& moduleClassName)

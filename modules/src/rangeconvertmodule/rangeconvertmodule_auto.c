@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "rangeconvertmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_rangeconvertmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_rangeconvertmodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -40,6 +48,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -96,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[RangeKonvert0r] group=[Signale] inputs=[5 Eingang{widget_type=[unboundednumber_selector] } Minimum_Eingang{hidden=[true] widget_type=[unboundednumber_selector] } Maximum_Eingang{hidden=[true] widget_type=[unboundednumber_selector] } Minimum_Ausgang{hidden=[true] widget_type=[unboundednumber_selector] } Maximum_Ausgang{hidden=[true] widget_type=[unboundednumber_selector] } ] outputs=[1 Ausgang ] type=xpm } ";
+  static const char* INFO = "info { name=[RangeKonvert0r] group=[Number] inputs=[5 Input{widget_type=[unboundednumber_selector] } Min_In{widget_type=[unboundednumber_selector] hidden=[true] } Max_In{widget_type=[unboundednumber_selector] hidden=[true] } Min_Out{widget_type=[unboundednumber_selector] hidden=[true] } Max_Out{widget_type=[unboundednumber_selector] hidden=[true] } ] outputs=[1 Output ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(rangeconvertmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -105,6 +119,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(rangeconvertmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -120,14 +139,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_rangeconvertmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

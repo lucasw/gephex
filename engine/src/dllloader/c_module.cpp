@@ -234,13 +234,26 @@ bool CModule::isDeterministic() const
   return _isDeterministic;
 }
 
-void CModule::dependencies(std::list<IInput*>& l)
+IInput* CModule::dependencies()
 {
-  us->dependencies(l,m_instance,inputs,*m_vtable);
+  if (m_deps.empty())
+    {
+      us->dependencies(m_deps, m_instance, inputs, *m_vtable);
+    }
+ 
+  if (m_deps.empty())
+    {
+      return 0;
+    }
+
+  IInput* in = m_deps.front();
+  m_deps.pop_front();
+  return in;
 }
 
 void CModule::update()
-{	
+{
+  assert(m_deps.empty());
   // Das patchlayout des Moduls abfragen:
   if (m_vtable->getPatchLayout != 0)
   {

@@ -1,6 +1,6 @@
 #include "numbermodule.h"
 
-#include <limits.h>
+#include "crandgen.h"
 
 typedef struct _MyInstance {
   double lastnoise;
@@ -43,16 +43,16 @@ void update(void* instance)
   min= inst->in_min->number;
   max= inst->in_max->number;
 
-  newnoise=(((double)rand() / (double)RAND_MAX));
+  newnoise= ((double)rnd_mt19937() / (double)(0xFFFFFFFF));
   
   my->lastnoise =((1.0-feedback)*newnoise) + (feedback)*my->lastnoise;
   if (min<max)
     {
-  inst->out_r->number =min+my->lastnoise*(max-min);
+      inst->out_r->number =min+my->lastnoise*(max-min);
     }
   else
     {
-  inst->out_r->number =max+my->lastnoise*(min-max);
+      inst->out_r->number =max+my->lastnoise*(min-max);
     }
 
 }

@@ -144,12 +144,11 @@ decoder = Creators::CreateVideoDecoder(bh) ],
 dnl qt.m4
 dnl Adapted to GePhex by Georg Seidel <georg.seidel@web.de>
 dnl Changes made: 
-dnl    -added minimum version check
-dnl    -replaced AC_ERROR with AC_MSG_RESULT
-dnl    -moved evaluation of ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
-dnl     to the end
-dnl
-dnl TODO: is it ok to just check fot libqt.so? what about libqt-mt.so?
+dnl    - added check for libqt-mt.so
+dnl    - added minimum version check
+dnl    - replaced AC_ERROR with AC_MSG_RESULT
+dnl    - moved evaluation of ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
+dnl      to the end
 dnl     
 dnl Original version from Rik Hemsley:
 dnl   Copyright (C) 2001 Rik Hemsley (rikkus) <rik@kde.org>
@@ -219,6 +218,8 @@ dnl If we weren't given qt_libdir, have a guess.
 
 AC_MSG_CHECKING([library path])
 
+qt_mt=no
+
 if test "x$qt_libdir" != "x"
 then
   AC_MSG_RESULT([specified as $qt_libdir])
@@ -235,8 +236,29 @@ else
       break
     fi
   done
+
+dnl if not found look for libqt-mt.so
+  if test "x$qt_libdir" = "x"
+  then
+    for dir in $GUESS_QT_LIB_DIRS
+    do
+      if test -e $dir/libqt-mt.so
+      then
+        qt_mt=yes
+        qt_libdir=$dir
+        AC_MSG_RESULT([assuming $dir/libqt-mt.so])
+        break
+      fi
+    done
+  fi
 fi
 
+if test "x$qt_mt" = "xno"
+then
+  qt_ld_flag="-lqt"
+else
+  qt_ld_flag="-lqt-mt"
+fi
 dnl If we weren't given qt_bindir, have a guess.
 
 AC_MSG_CHECKING([binary directory])
@@ -275,7 +297,7 @@ else
 fi
 
   LDFLAGS="$LDFLAGS -L$qt_libdir"
-  LIBS="$LIBS -lqt"
+  LIBS="$LIBS $qt_ld_flag"
   CXXFLAGS="$CXXFLAGS -I$qt_incdir"
   LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$qt_libdir"
 
@@ -308,7 +330,10 @@ main ()
   }
 
   if ( QT_VERSION >= major*100 + minor*10 + micro )
+  {
+    printf("%s - ", QT_VERSION_STR);
     return 0;
+  }
   else
   {
     printf("\n*** Version of QT found is too old: QT_VERSION is %i.\n",
@@ -349,7 +374,7 @@ then
   if test "x$found_qt" = "xyes"
   then
     QT_CXXFLAGS="-I$qt_incdir"
-    QT_LIBS="-L$qt_libdir -lqt"
+    QT_LIBS="-L$qt_libdir $qt_ld_flag"
     MOC="$qt_bindir/moc"
     UIC="$qt_bindir/uic"
     HAVE_QT=yes
@@ -381,7 +406,7 @@ LIBS="$saved_LIBS"
 ])
 # Configure paths for SDL
 # Adapted for GePhex 4/2003
-#  changes: added AC_HELP_STRING
+#  changes: added AC_HELP_STRING, SDL_PREFIX
 
 # Sam Lantinga 9/21/99
 # stolen from Manish Singh
@@ -390,7 +415,7 @@ LIBS="$saved_LIBS"
 # Shamelessly stolen from Owen Taylor
 
 dnl AM_PATH_SDL([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
-dnl Test for SDL, and define SDL_CFLAGS and SDL_LIBS
+dnl Test for SDL, and define SDL_CFLAGS, SDL_LIBS, and SDL_PREFIX
 dnl
 AC_DEFUN(AM_PATH_SDL,
 [dnl 
@@ -433,6 +458,7 @@ AC_ARG_ENABLE([sdltest],
   if test "$SDL_CONFIG" = "no" ; then
     no_sdl=yes
   else
+    SDL_PREFIX=`$SDL_CONFIG $sdlconf_args --prefix`
     SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
     SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
 
@@ -557,10 +583,12 @@ int main(int argc, char *argv[])
           LIBS="$ac_save_LIBS"
        fi
      fi
+     SDL_PREFIX=""
      SDL_CFLAGS=""
      SDL_LIBS=""
      ifelse([$3], , :, [$3])
   fi
+  AC_SUBST(SDL_PREFIX)
   AC_SUBST(SDL_CFLAGS)
   AC_SUBST(SDL_LIBS)
   rm -f conf.sdltest

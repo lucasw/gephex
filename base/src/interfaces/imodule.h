@@ -241,7 +241,7 @@ public:
 	 * @param l Liste der Inputs, die vom Modul im nächsten Rechenschritt
 	 *        benötigt werden.
 	 */
-	virtual void dependencies(std::list<IInput*>& l) = 0;
+	virtual IInput* dependencies() = 0;
 
 	/**
 	 * Das ist die Berechnungsfunktion.

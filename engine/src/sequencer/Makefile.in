@@ -57,34 +57,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
@@ -116,7 +131,6 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libsequencer_a_LIBADD = 
 libsequencer_a_OBJECTS =  sequencer.$(OBJEXT) sequence.$(OBJEXT) \
 sequenceserial.$(OBJEXT) sequencefilesystem.$(OBJEXT)
-AR = ar
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -259,12 +273,11 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 sequence.o: sequence.cpp sequence.h ../../../base/src/utils/autoptr.h \
-	../../../config.h \
 	../../../base/src/interfaces/isequenceupdatereceiver.h \
 	../../../base/src/utils/timing.h
 sequencefilesystem.o: sequencefilesystem.cpp sequencefilesystem.h \
-	sequence.h ../../../base/src/utils/autoptr.h ../../../config.h \
-	sequenceserial.h ../../../base/src/utils/filesystem.h
+	sequence.h ../../../base/src/utils/autoptr.h sequenceserial.h \
+	../../../base/src/utils/filesystem.h
 sequencer.o: sequencer.cpp sequencer.h \
 	../../../base/src/interfaces/imodelcontrolsender.h \
 	../../../base/src/interfaces/isequencercontrolreceiver.h \
@@ -272,7 +285,7 @@ sequencer.o: sequencer.cpp sequencer.h \
 	../../../base/src/interfaces/isequencenamesender.h \
 	../../../base/src/interfaces/isequencerstatussender.h \
 	../../../base/src/interfaces/itask.h \
-	../../../base/src/utils/autoptr.h ../../../config.h sequence.h \
+	../../../base/src/utils/autoptr.h sequence.h \
 	sequencefilesystem.h \
 	../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../base/src/interfaces/isequenceupdatereceiver.h \
@@ -281,7 +294,7 @@ sequencer.o: sequencer.cpp sequencer.h \
 	../../../base/src/utils/stringtokenizer.h \
 	../../../base/src/utils/itokenizer.h
 sequenceserial.o: sequenceserial.cpp sequenceserial.h sequence.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/utils/xmlutils.h
 
 info-am:

@@ -116,8 +116,8 @@ void update(void* instance)
       attribs.ysize = yres;
       framebuffer_changeAttributes(inst->out_r, &attribs);
 
-      grid_change_dst(&my->grid,xres,yres,inst->out_r->framebuffer);		
-		
+      grid_change_dst(&my->grid,xres,yres,inst->out_r->framebuffer);
+
       my->xres_old = xres;
       my->yres_old = yres;				
     }
@@ -136,9 +136,9 @@ void update(void* instance)
   gridpointer = my->grid.points;
 
   //compute a grid of GRID_SIZExGRID_SIZE blocks
-  for(y=0; y<=yres; y += LIBGRID_GRIDSIZE)
+  for(y=0; y <= yres; y += LIBGRID_GRIDSIZE)
     {
-      for(x=0; x<=xres; x += LIBGRID_GRIDSIZE)
+      for(x=0; x <=xres; x += LIBGRID_GRIDSIZE)
         {
           //intersection = t*direction
           dir.x = fabs(x-xres/2); //TODO

@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "numxfadermodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_numxfademodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_numxfademodule] number_of_inputs=[3] number_of_outputs=[1] deterministic=[true] }";
 }
@@ -34,6 +42,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -84,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Zahlen Crossfader] group=[Signale] inputs=[3 Fader{lower_value=[0] higher_value=[1] step_size=[0.01] widget_type=[number_selector] } Signal_1{widget_type=[unboundednumber_selector] } Signal_2{widget_type=[unboundednumber_selector] } ] outputs=[1 Gemischtes_Signal ] type=xpm } ";
+  static const char* INFO = "info { name=[Number Crossfader] group=[Number] inputs=[3 Fader{lower_value=[0] widget_type=[number_selector] step_size=[0.01] higher_value=[1] } Signal_1{widget_type=[unboundednumber_selector] } Signal_2{widget_type=[unboundednumber_selector] } ] outputs=[1 Mix_Signal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(numxfadermodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -93,6 +107,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(numxfadermodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -123,14 +142,6 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
   strongDependencies(inst, neededIns);
 }
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_numxfademodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

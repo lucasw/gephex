@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "midiinmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_midiinmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_midiinmodule] number_of_inputs=[1] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -31,6 +39,12 @@ static int s_ref_count = 0;
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   s_ref_count += 1;
 
@@ -59,7 +73,6 @@ void deleteInstance(void* instance)
   if (s_ref_count == 0)
   	destruct(s_inst);
 	
-
   free(inst);
 }
 
@@ -86,7 +99,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[MidiQuelle] group=[Midi] inputs=[1 Device-Name{hidden=[true] } ] outputs=[1 Midi-Strom ] type=xpm } ";
+  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[1 Device{hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(midiinmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -95,6 +108,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(midiinmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -110,14 +128,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_midiinmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

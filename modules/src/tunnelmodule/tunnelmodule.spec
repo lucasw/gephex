@@ -4,7 +4,7 @@ mod_tunnelmodule
 {
     name          = Tunnel
     deterministic = true
-    group         = GrafikEffekte
+    group         = Effects
     xpm           = tunnelmodule.xpm
     author        = Coma
     version       = 0.999999
@@ -14,25 +14,25 @@ inputs
 {
     t
     {
-        name              = Bewegung
+        name              = Motion
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-	widget_type       = number_selector
-	lower_bound       = -1.6
-	higher_bound      = 1.6
+        widget_type       = number_selector
+        lower_bound       = -1.6
+        higher_bound      = 1.6
         default           = 0
     }
 
     rot
     {
-        name              = Drehung
+        name              = Rotation
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-	lower_bound       = 0
-	higher_bound      = 360
-	step_size         = 0.5
+        lower_bound       = 0
+        higher_bound      = 360
+        step_size         = 0.5
     }
 
     pos
@@ -40,13 +40,13 @@ inputs
         name              = Position
         type              = typ_PositionType
         const             = true
-        strong_dependency = true		
+        strong_dependency = true        
         default           = [0.5 0.5]
     }
 
     b
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -55,7 +55,7 @@ inputs
 
     xres
     {
-        name              = Groesse(X)
+        name              = Size(X)
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -64,13 +64,13 @@ inputs
         lower_bound       = 0
         higher_bound      = 1024
         default           = 640
-	step_size         = 1
-        help              = Größe des Outputs in Pixeln
+        step_size         = 1
+        help              = Size of the output in pixels
     }
 
     yres
     {
-        name              = Groesse(Y)
+        name              = Size(Y)
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -79,8 +79,8 @@ inputs
         lower_bound       = 0
         higher_bound      = 1024
         default           = 480
-	step_size         = 1
-        help              = Größe des Outputs in Pixeln
+        step_size         = 1
+        help              = Size of the output in pixels
     }
 
     radius
@@ -89,10 +89,10 @@ inputs
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-	widget_type       = number_selector
-	lower_bound       = 0
-	higher_bound      = 1
-	step_size         = 0.01
+        widget_type       = number_selector
+        lower_bound       = 0
+        higher_bound      = 1
+        step_size         = 0.01
     }
 
     shading
@@ -105,9 +105,9 @@ inputs
         widget_type       = number_selector
         higher_bound      = 10
         lower_bound       = 0
-	step_size         = 1
+        step_size         = 1
         default           = 0
-        help              = Stärke des Shadings
+        help              = Degree of shading
     }
 }
 
@@ -115,7 +115,7 @@ outputs
 {
     r
     {
-        name = Bild
+        name = Image
         type = typ_FrameBufferType
     }
 }

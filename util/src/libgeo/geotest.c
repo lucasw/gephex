@@ -478,57 +478,57 @@ int main(int argc, char* argv[])
   if (!test_scalar_prod1(EPS))
     printf("test scalar_prod1 failed!\n");
   else
-    printf("test scalar_prod1 succesfull!\n");  
+    printf("test scalar_prod1 successful!\n");  
   
   if (!test_intersect1(EPS))
     printf("test intersect1 failed!\n");
   else
-    printf("test intersect1 succesfull!\n");
+    printf("test intersect1 successful!\n");
 
   if (!test_intersect2(EPS))
     printf("test intersect2 failed!\n");
   else
-    printf("test intersect2 succesfull!\n");
+    printf("test intersect2 successful!\n");
 
   if (!test_intersect3(EPS))
     printf("test intersect3 failed!\n");
   else
-    printf("test intersect3 succesfull!\n");
+    printf("test intersect3 successful!\n");
 
   if (!test_intersect4(EPS))
     printf("test intersect4 failed!\n");
   else
-    printf("test intersect4 succesfull!\n");
+    printf("test intersect4 successful!\n");
 
   if (!test_intersect5(EPS))
     printf("test intersect5 failed!\n");
   else
-  printf("test intersect5 succesfull!\n");
+  printf("test intersect5 successful!\n");
 
   if (!test_intersect6(EPS))
     printf("test intersect6 failed!\n");
   else
-    printf("test intersect6 succesfull!\n");
+    printf("test intersect6 successful!\n");
 
   if (!test_intersect7(EPS))
     printf("test intersect7 failed!\n");
   else
-    printf("test intersect7 succesfull!\n");
+    printf("test intersect7 successful!\n");
 
   if (!test_intersect_line1(EPS))
     printf("test intersect_line1 failed!\n");
   else
-    printf("test intersect_line1 succesfull!\n");
+    printf("test intersect_line1 successful!\n");
 
   if (!test_intersect_line2(EPS))
     printf("test intersect_line2 failed!\n");
   else
-    printf("test intersect_line2 succesfull!\n");
+    printf("test intersect_line2 successful!\n");
 
   if (!test_intersect_line3(EPS))
     printf("test intersect_line3 failed!\n");
   else
-    printf("test intersect_line3 succesfull!\n");
+    printf("test intersect_line3 successful!\n");
 
   return 0;
 }

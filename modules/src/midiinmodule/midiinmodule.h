@@ -6,8 +6,8 @@ extern "C"
 {
 #endif
 #include "dllmodule.h"
-#include "stringtype.h"
 #include "miditype.h"
+#include "stringtype.h"
 
 struct _MyInstance;
 typedef struct _Instance

@@ -1,9 +1,9 @@
 TESTS=nettest
 
 check_PROGRAMS = nettest
-noinst_LIBRARIES = libnetwork.a
+noinst_LIBRARIES = libgphxnetwork.a
 
-libnetwork_a_SOURCES = \
+libgphxnetwork_a_SOURCES = \
 		netexceptions.cpp \
 		protocol.cpp \
 		tagutils.cpp \
@@ -67,10 +67,10 @@ nettest_LDADD = \
 	-L@builddir@/../utils \
 	-L@builddir@ \
 	-ltestframework \
-	-lnetwork \
+	-lgphxnetwork \
 	-lutils 
 
 nettest_DEPENDENCIES = \
 	@builddir@/../TestFramework/libtestframework.a \
 	@builddir@/../utils/libutils.a  \
-	@builddir@/libnetwork.a
+	@builddir@/libgphxnetwork.a

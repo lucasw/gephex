@@ -23,6 +23,7 @@ PropertyWidget::PropertyWidget(QWidget* parent, const char* name, WFlags fl,
   setFocusPolicy(QWidget::ClickFocus);
   
   m_view = con.construct(this, params);
+   this->resize(m_view->width(), m_view->height());
 
   QHBoxLayout* l = new QHBoxLayout(this);
     

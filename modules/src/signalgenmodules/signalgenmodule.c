@@ -1,7 +1,7 @@
 #include "signalgenmodule.h"
 
-#include <limits.h>
 #include <math.h>
+#include "crandgen.h"
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -175,6 +175,8 @@ void update(void* instance)
                 my->noize_data.values = (double*) malloc(sizeof(double) * n);
                 my->noize_data.size = n;
                 my->noize_data.pos = n;
+		// initialize it value
+		my->noize_data.values[n-1] = 0;
             }
         }
         else
@@ -280,7 +282,7 @@ static void noize_fill_data(struct NoizeData* noize_data, double f, double amp)
         a = amp / (k+1);
     
     values[0] = values[n-1]; // use old value
-    values[n-1] = (rand() / (double) RAND_MAX)*a*sigma;
+    values[n-1] = (rnd_mt19937() / (double) 0xFFFFFFFF)*a*sigma;
     
     do {
         int i;
@@ -290,7 +292,7 @@ static void noize_fill_data(struct NoizeData* noize_data, double f, double amp)
         for (i = n; i < size; i += n) {
             if ((i & ((n<<1)-1)) == 0)
                 continue; //don't calculate values that have been calculated before
-            values[i] = (rand() / (double) RAND_MAX)*a*sigma 
+            values[i] = (rnd_mt19937() / (double) 0xFFFFFFF)*a*sigma 
                 + 0.5*(values[i-n] + values[i+n]);
         }
         

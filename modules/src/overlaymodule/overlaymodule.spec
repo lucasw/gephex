@@ -19,7 +19,7 @@ inputs
         type              = typ_NumberType
         const             = true
         default           = 0
-	lower_bound       = 0
+        lower_bound       = 0
         higher_bound      = 1
         step_size         = 0.01
         strong_dependency = true
@@ -35,7 +35,7 @@ inputs
 
     1
     {
-        name              = Bild1
+        name              = Image1
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = false
@@ -43,7 +43,7 @@ inputs
 
     2
     {
-        name              = Bild2
+        name              = Image2
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = false
@@ -55,7 +55,7 @@ outputs
 {
     r
     {
-    name = Bild
-    type = typ_FrameBufferType
+        name = Image
+        type = typ_FrameBufferType
     }
 }

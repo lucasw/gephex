@@ -6,6 +6,7 @@
 
 
 class QTable;
+class QHBoxLayout;
 
 /**
  * Diese Klasse zeigt Eigenschaften von Objekten (z.B. NodeWidgets) an.
@@ -71,6 +72,7 @@ public:
 
 private:
 	QTable* table;
+	QHBoxLayout* m_layout;
 
 	std::list<std::pair<const IWidgetConstructor*,QWidget*> > widgetCtors;
 

@@ -1,9 +1,17 @@
 #include "ifsxfadermodule.h"
 
 #include <cmath>
-#include <algorithm>
 
-#include "minmax.h"
+#if defined(HAVE_CONFIG_H)
+  #include "config.h"
+#endif
+
+// for the min and max templates
+#if defined (COMP_VC)
+  #include "minmax.h"
+#else 
+  #include <algorithm> 
+#endif
 
 static logT s_log;
 

@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "flipflopmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_flipflopmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_flipflopmodule] number_of_inputs=[3] number_of_outputs=[1] deterministic=[true] }";
 }
@@ -34,6 +42,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -84,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Flipflop] group=[Signale] inputs=[3 data{widget_type=[unboundednumber_selector] } clk{widget_type=[unboundednumber_selector] } tolerance{help=[Mindestgroesse der Taktflanke ab der das Flipflop schaltet] hidden=[true] widget_type=[unboundednumber_selector] } ] outputs=[1 out ] type=xpm } ";
+  static const char* INFO = "info { name=[Flipflop] group=[Number] inputs=[3 data{widget_type=[unboundednumber_selector] } clk{widget_type=[unboundednumber_selector] } tolerance{widget_type=[unboundednumber_selector] hidden=[true] help=[Minimum size of the edge] } ] outputs=[1 out ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(flipflopmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -93,6 +107,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(flipflopmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -123,14 +142,6 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
   strongDependencies(inst, neededIns);
 }
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_flipflopmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

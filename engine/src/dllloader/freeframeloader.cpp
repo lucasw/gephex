@@ -4,6 +4,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <iostream>
+#include <cassert>
 
 #include "utils/sharedlibrary.h"
 #include "freeframedefs.h"

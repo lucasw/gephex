@@ -146,7 +146,7 @@ int main(int /*argc*/,char* /*argv[]*/)
       controller = &ctrl; // publish for signalhandling
       ctrl.start();
     }
-  catch (std::runtime_error& e)
+  catch (std::exception& e)
     {
       std::cerr << "catched known exception: " << e.what() << std::endl;
       return -1;

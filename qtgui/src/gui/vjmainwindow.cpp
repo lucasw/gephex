@@ -6,6 +6,7 @@
 #include <qstatusbar.h>
 #include <qsplitter.h>
 #include <qtimer.h>
+#include <qaction.h>
 
 #include "base/propertyview.h"
 #include "base/logwindow.h"
@@ -24,6 +25,8 @@
 #include "playlist.h"
 
 #include "sequenceeditor.h"
+
+#include "aboutdialog.h"
 
 #include "interfaces/ienginecontrolreceiver.h"
 #include "interfaces/irenderercontrolreceiver.h"
@@ -47,7 +50,7 @@
 
 namespace gui
 {
-
+  
   VJMainWindow::VJMainWindow(QWidget* parent, const char* name,
 			     const std::string& ipcType,
 			     const std::string& locator, int port,
@@ -59,20 +62,23 @@ namespace gui
       sequenceNameView(0), sequencerWrapper(0), m_config(config),
       m_kbManager(new KeyboardManager())
   {
+    createWindows();
+    createActions();
+
     buildMenuBar();
-
+    
     switcher = new PicSwitch(statusBar(),"switcher!",roter_mann,gruener_mann);
-
     statusBar()->addWidget(switcher,0,TRUE);
-
+    
     buildSceleton();
-  
+    
     connect(switcher,SIGNAL(clicked(int)),this,SLOT(startStop()));
-  
+    
     QTimer* timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(pollNetwork()));
     timer->start(5);
   }
+
 
   VJMainWindow::~VJMainWindow()
   {
@@ -84,6 +90,7 @@ namespace gui
     delete playlistWrapper;
     delete m_kbManager;
   }
+
 
   void VJMainWindow::started()
   {
@@ -118,69 +125,166 @@ namespace gui
   void VJMainWindow::connectToRealEngine() throw (std::runtime_error)
   {
     engineWrapper->connect();
-	
     connected=true;
+    showPlugInManagerAction->setEnabled(true);
+    showPlayListAction->setEnabled(true);
+    rendererStateAction->setEnabled(true);
+	keyGrabStateAction->setEnabled(true);
   }
 
   void VJMainWindow::disconnectFromRealEngine() throw (std::runtime_error)
   {
     engineWrapper->disconnect();
-  
     connected = false;
+    showPlugInManagerAction->setEnabled(false);
+    showPlayListAction->setEnabled(false);
+    rendererStateAction->setEnabled(false);
+	keyGrabStateAction->setEnabled(false);
   }
 
+  void VJMainWindow::createActions()
+  {
+    quitAction= new QAction(this,"QuitAction");
+    quitAction->setText("quit");
+    quitAction->setToolTip ("exit the application");
+    quitAction->setAccel(Qt::CTRL+Qt::Key_Q);
+    quitAction->setEnabled(true);
+    connect(quitAction,SIGNAL(activated()),this,SIGNAL(quitSignal()));
+
+
+    showPlugInManagerAction= new QAction(this,"ShowPlugInManagerAction",false);
+    showPlugInManagerAction->setText("PlugIn Manager");
+    showPlugInManagerAction->setToolTip ("show the PlugIn Manager Dialog");
+    showPlugInManagerAction->setEnabled(false);
+    showPlugInManagerAction->setToggleAction ( true );
+    connect(showPlugInManagerAction,SIGNAL(toggled(bool)),
+	    m_dllSelector,SLOT(setShown ( bool )));  
+    
+    showPlayListAction= new QAction(this,"ShowPlayListAction",false);
+    showPlayListAction->setText("Playlist");
+    showPlayListAction->setToolTip ("show the Playlist Dialog");
+    showPlayListAction->setEnabled(false);
+    showPlayListAction->setToggleAction ( true );
+    connect(showPlayListAction,SIGNAL(toggled(bool)),
+	    m_playlist,SLOT(setShown ( bool )));  
+
+    
+    rendererStateAction= new QAction(this,"RendererStateAction",false);
+    rendererStateAction->setText("Render state");
+    rendererStateAction->setToolTip ("toggle renderer state");
+    rendererStateAction->setEnabled(false);
+    rendererStateAction->setAccel(Qt::Key_Space);
+    rendererStateAction->setToggleAction ( true );
+    connect(rendererStateAction,SIGNAL(toggled(bool)),
+	    this,SLOT(setRendererState( bool )));      
+
+    connectToEngineAction= new QAction(this,"ConnectToEngineAction");
+    connectToEngineAction->setText("connect");
+    connectToEngineAction->setToolTip ("connect to the engine");
+    connectToEngineAction->setEnabled(false);
+    connect(connectToEngineAction,SIGNAL(activated()),
+	    this,SLOT(connectToEngine()));
+
+    disConnectToEngineAction= new QAction(this,"disConnectToEngineAction");
+    disConnectToEngineAction->setText("disconnect");
+    disConnectToEngineAction->setToolTip ("disconnect from the engine");
+    disConnectToEngineAction->setEnabled(false);
+    connect(disConnectToEngineAction,SIGNAL(activated()),
+	    this,SLOT(disconnectFromEngine()));
+
+    synchronizeEngineAction= new QAction(this,"synchronizeEngineAction");
+    synchronizeEngineAction->setText("sync");
+    synchronizeEngineAction->setToolTip ("sync the gui with the engine");
+    synchronizeEngineAction->setEnabled(false);
+    connect(synchronizeEngineAction,SIGNAL(activated()),
+	    this,SLOT(synchronize()));
+
+
+    shutDownEngineAction= new QAction(this,"shutDownEngineAction");
+    shutDownEngineAction->setText("stop the engine");
+    shutDownEngineAction->setToolTip ("shut the engine down");
+    shutDownEngineAction->setEnabled(false);
+    connect(shutDownEngineAction,SIGNAL(activated()),
+	    this,SLOT(shutDown()));
+
+    keyGrabStateAction= new QAction(this,"keyGrabStateAction");
+    keyGrabStateAction->setText("grab keyboard");
+    keyGrabStateAction->setToolTip ("turn the keygrabber on/off");
+    keyGrabStateAction->setEnabled(false);
+    keyGrabStateAction->setToggleAction ( true );
+    connect(keyGrabStateAction,SIGNAL(toggled(bool)),
+	    this,SLOT(setKeyGrabState( bool )));
+
+
+	aboutAction= new QAction(this,"aboutAction");
+    aboutAction->setText("about");
+    aboutAction->setToolTip ("shows some stuff");
+    aboutAction->setAccel(Qt::CTRL+Qt::Key_A);
+    aboutAction->setEnabled(true);
+    connect(aboutAction,SIGNAL(activated()),this,SLOT(aboutSlot()));
+  }
+  
+  
+  void VJMainWindow::createWindows()
+  {
+    m_dllSelector = 
+      new DllSelectorDialog(this,"PlugIn Manager Dialog",0,
+			    engineWrapper->moduleClassLoaderControlReceiver(),
+			    true);
+
+	connect(m_dllSelector, SIGNAL(status(const std::string&)),
+		    this, SLOT(displayStatusText(const std::string&)));
+
+    m_playlist = new Playlist(this, engineWrapper->playlistControlReceiver(),
+			      *playlistWrapper);
+  }
+
+  
   void VJMainWindow::buildMenuBar(void)
   {
     QPopupMenu* file = new QPopupMenu(this);
-
-    //TODO: removed "advanced" options
-    /*    QPopupMenu* fileImport = new QPopupMenu(file);
-    fileImport->insertItem("image",1);
-    fileImport->insertItem("video",1);
-    file->insertItem("import",fileImport);
-    file->insertSeparator();*/
-    file->insertItem("quit",FILE_QUIT);
-    menuBar()->insertItem("File",file);
-    connect(file,SIGNAL(activated(int)),this,SLOT(action(int)));
+    menuBar()->insertItem("File",file,1,1);
+    quitAction->addTo(file);
 
     QPopupMenu* server = new QPopupMenu(this);
-    server->insertItem("connect",CONNECT_ENGINE);
-    server->insertItem("disconnect",DISCONNECT_ENGINE);
-    server->insertItem("synchronize",SYNCHRONIZE_ENGINE);
-    server->insertItem("shutdown",SHUTDOWN_ENGINE);
-    menuBar()->insertItem("Server",server);
-    connect(server,SIGNAL(activated(int)),this,SLOT(action(int)));
+    menuBar()->insertItem("Server",server,2,2);
+    connectToEngineAction->addTo(server);
+    disConnectToEngineAction->addTo(server);
+    synchronizeEngineAction->addTo(server);
+    shutDownEngineAction->addTo(server);
 
     QPopupMenu* startstop = new QPopupMenu(this);
-    startstop->insertItem("start/stop",STARTSTOP_ENGINE);
-    menuBar()->insertItem("Engine",startstop);
-    connect(startstop,SIGNAL(activated(int)),this,SLOT(action(int)));
+    menuBar()->insertItem("Engine",startstop,3,3);
+    rendererStateAction->addTo(startstop);
 
     QPopupMenu* keyboard = new QPopupMenu(this);
-    keyboard->insertItem("keygrab on", KEYGRAB_ON);
-    keyboard->insertItem("keygrab off", KEYGRAB_OFF);
-    menuBar()->insertItem("Keyboard", keyboard);
-    connect(keyboard,SIGNAL(activated(int)),this,SLOT(action(int)));
+    menuBar()->insertItem("Keyboard", keyboard,4,4);
+    keyGrabStateAction->addTo(keyboard);
+
 
     windows = new QPopupMenu(this);
-    windows->insertItem("Dlls Laden/Entladen",WINDOW_DLL_SELECTOR);
-    windows->insertItem("Playlist", WINDOW_PLAYLIST);
-    connect(windows, SIGNAL(activated(int)), this, SLOT(action(int)));
-    menuBar()->insertItem("Windows",windows);
+    menuBar()->insertItem("Windows",windows,5,5);
+    showPlugInManagerAction->addTo(windows);
+    showPlayListAction->addTo(windows);
+
+	effectMenue = new QPopupMenu(this);
+    menuBar()->insertItem("Effekte",effectMenue,6,6);
+
+	help = new QPopupMenu(this);
+	menuBar()->insertItem("Help", help,7,7);
+	aboutAction->addTo(help);
   }
+
 
   void VJMainWindow::buildModuleBar(void)
   {
-    effectMenue = new QPopupMenu(this);
-    menuBar()->insertItem("Effekte",effectMenue);
+	  //moved to buildMenuBar
+    //effectMenue = new QPopupMenu(this);
+    //menuBar()->insertItem("Effekte",effectMenue,6,6);
   
     moduleClassView = new ModuleClassView(effectMenue);
 
 
-    m_dllSelector = 
-      new DllSelectorDialog(this,"böla",0,
-			    engineWrapper->moduleClassLoaderControlReceiver(),
-			    true);
 
     engineWrapper->moduleClassNameSender().registerModuleClassNameReceiver(*m_dllSelector);
 
@@ -196,27 +300,34 @@ namespace gui
     //engineWrapper->moduleClassNameSender().unregisterModuleClassNameReceiver(); //TODO der wird beim naechsten register automatisch ueberschrieben
 
     delete m_dllSelector;
-    delete effectMenue;
+    //delete effectMenue;
   }
 
   void VJMainWindow::buildSceleton()
   {
     centralWidget = new QWidget(this,"CentralWidget");
 	
-
-
     splitVertical = new QSplitter(Vertical,centralWidget);
+	
 	//moduleClassTabView = new ModuleClassTabView(splitVertical);
 
     splitHorizontal = new QSplitter(splitVertical);	
+
 	//splitHorizontal->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
 	//	QSizePolicy::Minimum));
 	//splitVertical->setResizeMode(splitHorizontal,QSplitter::FollowSizeHint);
-
+    
     leftTab = new QTabWidget(splitHorizontal,"Linker Tab");
+	leftTab->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Maximum));
+	
 
     editor = new QWidget(splitHorizontal,"PLATZ FUER EDITOR");
+#if QT_VERSION >= 300
+	editor->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
 
+	splitHorizontal->setResizeMode(editor, QSplitter::FollowSizeHint);
+	splitHorizontal->setResizeMode(leftTab, QSplitter::FollowSizeHint);
+#endif
     belowTab = new QTabWidget(splitVertical,"Unterer Tab");
 	belowTab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
 		QSizePolicy::Minimum));
@@ -224,10 +335,10 @@ namespace gui
     
     logWindow = new LogWindow(belowTab);
     engineWrapper->errorSender().registerErrorReceiver(*logWindow);
-    belowTab->addTab(logWindow,"Meldungen");
+    belowTab->addTab(logWindow,"Messages");
 
     setCentralWidget(centralWidget);
-  
+	
     // layout
     QVBoxLayout* topLayout = new QVBoxLayout(centralWidget);
     topLayout->addWidget(splitVertical);	
@@ -240,7 +351,7 @@ namespace gui
     sequencerWrapper = new ActionSequencerWrapper();
     playlistWrapper = new ActionSequencerWrapper();
 
-    sequenceEditor = new SequenceEditor(belowTab,"Sequenzer",0,
+    sequenceEditor = new SequenceEditor(belowTab,"Sequencer",0,
 					engineWrapper->sequencerControlReceiver(),
 					*sequencerWrapper);
 
@@ -255,7 +366,8 @@ namespace gui
 
     graphNameView = new GraphNameView(leftTab,
 				      engineWrapper->modelControlReceiver(),
-				      *sequencerWrapper);
+				      *sequencerWrapper,
+                                      *logWindow);
 
     sequenceNameView = 
       new SequenceNameView(leftTab,
@@ -285,8 +397,6 @@ namespace gui
     QVBoxLayout* editorLayout = new QVBoxLayout(editor);
     editorLayout->addWidget(editorWidget);
 
-    m_playlist = new Playlist(this, engineWrapper->playlistControlReceiver(),
-			      *playlistWrapper);
 
     playlistWrapper->registerSceneChangeListener(*m_playlist);
     playlistWrapper->registerSequencerControlReceiver(engineWrapper->playlistControlReceiver());
@@ -308,10 +418,10 @@ namespace gui
 
 
     propertyView = new PropertyView(leftTab);
-    leftTab->addTab(propertyView,"Eigenschaften");
+    leftTab->addTab(propertyView,"Properties");
     propertyTabID = leftTab->currentPageIndex();
-    leftTab->addTab(graphNameView->widget(),"Graphen");
-    leftTab->addTab(sequenceNameView->widget(),"Sequenzen");
+    leftTab->addTab(graphNameView->widget(),"Graphs");
+    leftTab->addTab(sequenceNameView->widget(),"Sequences");
     leftTab->addTab(playlistNameView->widget(),"Playlists");
     
     connect(editorWidget,SIGNAL(statusText(const std::string&)),
@@ -328,8 +438,6 @@ namespace gui
     connect(this,SIGNAL(renderedGraphChangedSignal(const std::string&)),
 	    graphNameView->signalObject(),
 	    SLOT(renderedGraphChanged(const std::string&)));
-
-
   }
 
   void VJMainWindow::clearSceleton()
@@ -352,10 +460,10 @@ namespace gui
       {
 	if (connected)
 	  {
-	    throw std::runtime_error("schon mit der Engine verbunden");
+	    throw std::runtime_error("already connected");
 	  }
 
-	statusBar()->message("mit der Engine verbinden ...");		
+	statusBar()->message("connect to the rendering engine ...");		
 		
 	buildModuleBar();
 
@@ -363,7 +471,7 @@ namespace gui
 				
 	fillSceleton();
 
-	statusBar()->message("Bereit");
+	statusBar()->message("Ready");
 		
       } 
     catch(std::runtime_error& e) 
@@ -372,11 +480,12 @@ namespace gui
       }
   }
 
+
   void VJMainWindow::disconnectFromEngine(void)
   {
     if (!connected)
       {	
-	throw std::runtime_error("nicht mit der Engine verbunden");
+	throw std::runtime_error("not connected with the engine");
       }
 		
     this->disconnectFromRealEngine();
@@ -386,18 +495,20 @@ namespace gui
     this->unbuildModuleBar();
 		
     // menuumbauen
-    statusBar()->message("nicht mit der Engine verbunden");
+    statusBar()->message("not connected with the engine");
   }
+
 
   void VJMainWindow::startStop()
   {
-    this->action(STARTSTOP_ENGINE);
   }
+
 
   void VJMainWindow::displayStatusText(const std::string& s)
   {
     statusBar()->message(s.c_str(),2500);
   }
+
 
   void VJMainWindow::displayProperties(const IPropertyDescription& pd)
   {
@@ -411,79 +522,62 @@ namespace gui
       }
   }
 
+
   void VJMainWindow::displayErrorMessage(const std::string& text)
   {
-    logWindow->error(text);
+    if (logWindow)
+    	logWindow->error(text);
   }
+
 
   void VJMainWindow::setCaption(const std::string& text)
   {
 	  QWidget::setCaption(text.c_str());
   }
 
-  void VJMainWindow::action(int actionID){
-    switch (actionID)
-      {
-      case CONNECT_ENGINE:
-	connectToEngine();
-	break;
 
-      case DISCONNECT_ENGINE:
-	disconnectFromEngine();
-	break;
-
-      case SYNCHRONIZE_ENGINE:
-	engineWrapper->synchronize();
-	break;
-      case SHUTDOWN_ENGINE:
-	engineWrapper->engineControlReceiver().shutDown();
-	disconnectFromEngine();
-	break;
-
-      case STARTSTOP_ENGINE:
-	if (connected) 
-	  {
-	    try 
-	      {
-		if (running)
-		  {
-		    engineWrapper->rendererControlReceiver().stop();
-		  }
-		else
-		  {
-		    engineWrapper->rendererControlReceiver().start();
-		  }
-	      } 
-	    catch (std::runtime_error& err)
-	      {
-		displayErrorMessage(err.what());
-	      }
-	  }
-	break;
-	
-      case FILE_QUIT:
-	quitSignal();
-	break;
-	
-      case WINDOW_DLL_SELECTOR:
-	{
-	  m_dllSelector->show();
-	} break;
-	 case WINDOW_PLAYLIST:
-	{
-	  m_playlist->show();
-	} break;
-      case KEYGRAB_ON:
-	m_kbManager->turnOn();
-	break;
-      case KEYGRAB_OFF:
-	m_kbManager->turnOff();
-	break;
-      default:
-	throw std::runtime_error("unbekannter Befehl");
-      }	  
-
-  
+  void VJMainWindow::synchronize()
+  {
+    engineWrapper->synchronize();
   }
 
+  void VJMainWindow::aboutSlot()
+  {
+	  AboutDialog* dlg = new AboutDialog(this);
+	  dlg->show();
+  }
+
+
+  void VJMainWindow::shutDown()
+  {
+    engineWrapper->engineControlReceiver().shutDown();
+    disconnectFromEngine();
+  }
+
+
+  void VJMainWindow::setKeyGrabState(bool state)
+  {
+    if (state)
+      m_kbManager->turnOn();
+    else
+      m_kbManager->turnOff();
+  }
+
+
+  void VJMainWindow::setRendererState(bool state)
+  {
+    assert(connected);
+    
+    try 
+      {
+	if (state)
+	  engineWrapper->rendererControlReceiver().start();
+	else
+	  engineWrapper->rendererControlReceiver().stop();
+      }
+    catch (std::runtime_error& err)
+      {
+	displayErrorMessage(err.what());
+      }
+  }
 } //end of namespace gui

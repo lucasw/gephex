@@ -8,6 +8,7 @@ BUILT_SOURCES = \
 	unboundednumberview_moc.cpp \
 	comboboxstringview_moc.cpp \
 	radionumberview_moc.cpp \
+	checkboxnumberview_moc.cpp \
 	positionview_moc.cpp \
 	filestringview_moc.cpp \
 	colorview_moc.cpp \
@@ -27,6 +28,8 @@ libtypeviews_a_SOURCES = \
 	comboboxstringview.h \
 	radionumberview.cpp \
 	radionumberview.h \
+	checkboxnumberview.cpp \
+	checkboxnumberview.h \
 	positionview.cpp \
 	positionview.h \
 	filestringview.cpp \

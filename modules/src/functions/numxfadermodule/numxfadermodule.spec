@@ -2,9 +2,9 @@
 
 mod_numxfademodule
 {
-    name          = Zahlen Crossfader
+    name          = Number Crossfader
     deterministic = true
-    group         = Signale
+    group         = Number
     xpm           = numxfadermodule.xpm
     author        = Don Bosco
     version       = 0.65-pregamma
@@ -19,9 +19,9 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-	lower_value       = 0
-	higher_value      = 1
-	step_size         = 0.01
+		lower_value       = 0
+		higher_value      = 1
+		step_size         = 0.01
         default           = 0
     }
 
@@ -50,7 +50,7 @@ outputs
 {
     r
     {
-        name = Gemischtes_Signal
+        name = Mix_Signal
         type = typ_NumberType
     }
 }

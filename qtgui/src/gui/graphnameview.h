@@ -13,11 +13,12 @@
 
 class QWidget;
 class IModelControlReceiver;
+class IErrorReceiver;
 
 namespace gui
 {
 
-  class GraphTopItem;
+  class FolderItem;
   class GraphItem;
   class SnapItem;
   class GraphNameView;
@@ -54,7 +55,7 @@ namespace gui
   {
   public:
     GraphNameView(QWidget* parent, IModelControlReceiver& gModel,
-		  ISceneSequencer& sequencer);
+		  ISceneSequencer& sequencer, IErrorReceiver& log);
 
     virtual ~GraphNameView();
 
@@ -81,14 +82,23 @@ namespace gui
 
 
   private:
+
+	TreeViewItem* getFolder(const std::string& path);
+
     typedef utils::AutoPtr<GraphItem> GraphItemPtr;
+	typedef utils::AutoPtr<FolderItem> FolderItemPtr;
     typedef utils::AutoPtr<SnapItem> SnapItemPtr;
 
     typedef std::map<std::string,GraphItemPtr> GraphMap;
+	typedef std::map<std::string,FolderItemPtr> FolderMap;
+	typedef std::map<std::string,std::string> FolderNameMap;
     typedef std::map<std::pair<std::string,std::string>,SnapItemPtr> SnapMap;
 
     TreeView* m_treeView;
     GraphMap m_graphs;
+
+	FolderNameMap m_folderNames;
+	FolderMap m_folders;
     SnapMap m_snaps;
 
     GraphNameViewObject stupidObject;
@@ -98,13 +108,13 @@ namespace gui
 
     IModelControlReceiver& m_model;
 
-    typedef utils::AutoPtr<GraphTopItem> TopItemPtr;
+    typedef utils::AutoPtr<FolderItem> TopItemPtr;
     TopItemPtr m_topItem;
 
     ISceneSequencer* m_sequencer;
+    IErrorReceiver& m_log;
   };
 			
-  bool checkNamePolicy (const std::string& name);
 }
 
 #endif

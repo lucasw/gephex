@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "flashmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_flashmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_flashmodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -40,6 +48,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -96,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Flashfader] group=[Filter] inputs=[5 Trigger{widget_type=[radio_button] } Bild Attack{higher_bound=[10] hidden=[true] lower_bound=[0] step_size=[1] widget_type=[number_selector] } Sustain{higher_bound=[10] hidden=[true] lower_bound=[0] step_size=[1] widget_type=[number_selector] } Decay{higher_bound=[25] hidden=[true] lower_bound=[0] step_size=[1] widget_type=[number_selector] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Flashfader] group=[Filter] inputs=[5 Trigger{widget_type=[radio_button] } Bild Attack{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Sustain{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Decay{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[25] hidden=[true] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(flashmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -105,6 +119,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(flashmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -133,14 +152,6 @@ void getPatchLayout(void* instance,int** out2in)
   patchLayout(inst, out2in_);
 }
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_flashmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

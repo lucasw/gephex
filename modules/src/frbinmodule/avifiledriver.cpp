@@ -1,0 +1,233 @@
+#include "avifiledriver.h"
+
+#include <string>
+#include <stdexcept>
+#include <sstream>
+#include <memory>
+#include <algorithm>
+#include <iostream>
+
+#include "avifile.h"
+
+//----------------------------------------------------------------------
+
+static uint32_t bgra2rgba (uint32_t in)
+{
+  uint32_t out;
+  uint8_t* in_b=reinterpret_cast<uint8_t*>(&in);
+  uint8_t* out_b=reinterpret_cast<uint8_t*>(&out);
+  out_b[0]=in_b[2];
+  out_b[1]=in_b[1];
+  out_b[2]=in_b[0];
+  out_b[3]=0;
+  return out;
+}
+
+struct bgr_t
+{
+  uint8_t bgr[3];
+};
+
+static uint32_t bgr2rgba (bgr_t in)
+{
+  uint32_t out;
+  uint8_t* in_b=reinterpret_cast<uint8_t*>(&in);
+  uint8_t* out_b=reinterpret_cast<uint8_t*>(&out);
+  out_b[0]=in_b[2];
+  out_b[1]=in_b[1];
+  out_b[2]=in_b[0];
+  out_b[3]=0;
+  return out;
+}
+
+//----------------------------------------------------------------------
+
+struct AviFileDriverImpl
+{
+  AviFileDriverImpl()
+    : videoStream(0), videoFile(0), file_name(""), w(0), h(0), nf(0) {}
+
+  ~AviFileDriverImpl()
+  {
+    if (videoStream != 0) 
+      videoStream->StopStreaming();
+  }
+
+  avm::IReadStream* videoStream;
+  avm::IReadFile* videoFile;
+  std::string file_name;
+  int w;
+  int h;
+  unsigned int nf;
+  avm::CImage* im;
+};
+
+AviFileDriver::AviFileDriver()
+  : m_impl(new AviFileDriverImpl())
+{
+}
+
+AviFileDriver::~AviFileDriver()
+{
+}
+
+std::list<std::string> AviFileDriver::supported_extensions()
+{
+	std::list<std::string> el;
+	el.push_back("avi");
+	el.push_back("divx");
+	el.push_back("mpg");
+	el.push_back("mpeg");
+	el.push_back("mov");
+	el.push_back("wmv");
+	el.push_back("rm");
+
+	return el;
+}
+
+void AviFileDriver::load_file(const std::string& file_name, VideoInfo& info)
+{
+  if (file_name != m_impl->file_name)
+    { // close and open file
+      m_impl->file_name = file_name;
+
+      if (m_impl->videoFile != 0)
+	{
+	  m_impl->videoStream -> StopStreaming();
+	  delete m_impl->im;
+	  //delete m_impl->videoStream;
+	  //delete m_impl->videoFile;
+	  m_impl->videoStream=0;
+	  m_impl->videoFile=0;
+	}
+
+      m_impl->videoFile = avm::CreateReadFile(m_impl->file_name.c_str());
+      try
+        {
+          if(!m_impl->videoFile->IsValid())
+            {
+              throw std::invalid_argument("videoFile is not valid");
+            }
+          
+          if(m_impl->videoFile->IsRedirector())
+            {
+              throw std::invalid_argument("not implemented");	      
+            }
+          
+          if(!m_impl->videoFile->IsOpened())
+            {
+              throw std::invalid_argument("videoFile not opened");	      
+            }
+	  
+          if(m_impl->videoFile->VideoStreamCount() < 1)
+            {
+              throw std::invalid_argument("no VideoStream");	      
+            }
+          
+          m_impl->videoStream 
+            = m_impl->videoFile->GetStream(0,avm::IStream::Video);
+          try
+            {
+              std::auto_ptr<avm::StreamInfo> 
+                sinfo(m_impl->videoStream->GetStreamInfo());
+              
+              info.width      = m_impl->w = sinfo->GetVideoWidth();
+              info.height     = m_impl->h = sinfo->GetVideoHeight();
+              info.num_frames = m_impl->nf = 
+                m_impl->videoStream->GetLength()-1;
+              
+              //m_impl->videoStream->SetDirection(true);
+              int error = m_impl->videoStream->StartStreaming();
+              if (error == -1)
+                throw std::invalid_argument("could not start streaming");
+
+              avm::BitmapInfo bi(m_impl->w, m_impl->h, 32);
+              m_impl->im = new avm::CImage(&bi);
+	      
+            }
+          catch(std::runtime_error& e)
+            {
+              //delete m_impl->videoStream;
+              m_impl->videoStream=0;
+              throw;
+            }
+        }
+      catch(std::invalid_argument& e)
+        {
+          //delete m_impl->videoFile;
+          m_impl->videoFile=0;
+          throw;
+        }
+    }
+}
+
+
+void AviFileDriver::decode_frame(unsigned int frame_number,
+                                 uint_32* framebuffer)
+{      
+  if (m_impl->videoFile == 0)
+    throw std::invalid_argument("No file loaded");
+
+  if (frame_number >= m_impl->nf)
+    throw std::range_error("frame_number out of range");
+
+  // we must decode
+  if(m_impl->videoStream->GetLength() != 0 &&
+     frame_number != m_impl->videoStream->GetPos())
+    {
+      // we must seek
+      unsigned int pkey = m_impl->videoStream->GetPrevKeyFrame(frame_number);
+
+      if (frame_number == pkey)
+        {
+          // frame is a keyframe
+          m_impl->videoStream->Seek(pkey);
+        }
+      else
+        {
+          // frame isnt a keyframe
+          if (!(m_impl->videoStream->GetPos() <= frame_number&&
+                m_impl->videoStream->GetPos() >= pkey))
+            {
+              // current position is not  better than any key
+              m_impl->videoStream->Seek(pkey);
+            }
+        }
+		  
+      // drop non keyframes
+      int drop = frame_number - m_impl->videoStream->GetPos();
+      for (int i=0; i != drop; ++i)
+        {
+          //std::cout << "drop " << m_impl->videoStream->GetPos() << std::endl;
+          m_impl->videoStream->ReadFrame();
+          avm::CImage* image = m_impl->videoStream->GetFrame();
+          image->Release();
+        }
+    }
+	      
+  //std::cout << "decode: " << m_impl->videoStream->GetPos() << std::endl;
+  if(!m_impl->videoStream->Eof())
+    {
+      // decode frame
+      int error = m_impl->videoStream->ReadFrame();
+          
+      // get pointer to internal frame
+      if (error != -1)
+        {
+          avm::CImage* image = m_impl->videoStream->GetFrame();
+              
+          // convert any format to bgra
+          m_impl->im->Convert(image);
+              
+          // release pointer to internal frame
+          image->Release();
+
+          int size = m_impl->w * m_impl->h * 4;
+          memcpy(framebuffer, m_impl->im->Data(), size);
+        }
+      else
+        {
+          throw std::runtime_error(" error while read ");
+        }
+    }
+}

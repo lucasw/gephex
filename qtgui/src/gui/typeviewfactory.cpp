@@ -15,6 +15,7 @@
 #include "typeviews/slidernumberview.h"
 #include "typeviews/dialnumberview.h"
 #include "typeviews/radionumberview.h"
+#include "typeviews/checkboxnumberview.h"
 
 #include "typeviews/stringview.h"
 #include "typeviews/comboboxstringview.h"
@@ -48,6 +49,8 @@ namespace gui
 				new BoundedNumberViewConstructor());
     registerTypeViewConstructor("typ_NumberType",
 				new RadioNumberViewConstructor());
+	registerTypeViewConstructor("typ_NumberType",
+				new CheckBoxNumberViewConstructor());
 
     registerTypeViewConstructor("typ_StringType",
 				new StringViewConstructor());

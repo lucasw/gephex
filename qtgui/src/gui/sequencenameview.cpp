@@ -161,7 +161,7 @@ namespace gui
 		//length = 5000;
 	      }
 
-	    m_playlist->appendScene(m_id,length*1000);
+	    m_playlist->appendScene(m_id,static_cast<int>(length*1000));
 	  }
 	  break;
 	default:
@@ -252,6 +252,9 @@ namespace gui
 	throw std::runtime_error("Sequence doesnt exist at "
 				 "SequenceNameView::sequenceNoLongerExists()");
       }
+
+	if (editSequence && editSequence->id() == id)
+      editSequence = SequenceItemPtr(0);
 
     m_treeView->removeItem(*it->second);
     m_sequences.erase(it);

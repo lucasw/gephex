@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "resultmodule_icon.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_resultmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_resultmodule] number_of_inputs=[2] number_of_outputs=[0] deterministic=[true] }";
 }
@@ -15,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -28,6 +36,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -72,7 +86,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Result] group=[Outputs] inputs=[2 Eingang{toggle_keys=[a[1.0,0]] keys=[b[0.5];ctrl-b[0.25]] widget_type=[unboundednumber_selector] } ShutUp!{false_value=[0] hidden=[true] true_value=[1] widget_type=[radio_button] } ] outputs=[0] type=xpm } ";
+  static const char* INFO = "info { name=[Result] group=[Number] inputs=[2 Input{keys=[b[0.5];ctrl-b[0.25]] widget_type=[unboundednumber_selector] toggle_keys=[a[1.0,0]] } ShutUp!{widget_type=[check_box] values=[a,b] hidden=[true] } ] outputs=[0] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(resultmodule_icon_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -81,6 +95,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(resultmodule_icon_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -96,14 +115,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_resultmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

@@ -5,7 +5,7 @@ mod_flipflopmodule
 {
     name                 = Flipflop
     deterministic        = true
-    group                = Signale
+    group                = Number
     xpm                  = flipflopmodule.xpm
     author               = Das kleine pelziges Tierchen
     version              = 0.23
@@ -42,7 +42,7 @@ inputs
         default           = 1
         hidden            = true
         widget_type       = unboundednumber_selector
-        help              = Mindestgroesse der Taktflanke ab der das Flipflop schaltet
+        help              = Minimum size of the edge
     }
 }
 

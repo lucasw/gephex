@@ -16,6 +16,7 @@ isingnoizemodule_la_LDFLAGS = -module -avoid-version -no-undefined
 
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../util/include \
+           -I@srcdir@/../../../util/src/misc \
            -I@srcdir@/../../../types/src/framebuffertype \
            -I@srcdir@/../../../types/src/numbertype 
 

@@ -50,7 +50,7 @@ namespace gui
     connections(), selectedConnectionPair(-1,-1),clickedPos(QPoint(-1,-1)),
     currentModuleClassName(""), m_controller(&contrl), nodePixmaps(5),
     infos(&_infos), dispatcher(_dispatcher), model(mod),
-    m_kbManager(kbManager), m_log(log)
+      m_kbManager(kbManager), m_log(log), m_drawmoduleinfo(false)
   {
 	
     nodePixmaps[NodeWidget::NODE_WIDGET_PIC]
@@ -141,6 +141,9 @@ namespace gui
     connect(nWidget, SIGNAL(openPopup(InputPlugWidget*)), 
 	    this, SLOT(openPopup(InputPlugWidget*)));
 	
+    connect(nWidget, SIGNAL(mouseOverNode(const NodeWidget*)),
+            this, SLOT(mouseOverNode(const NodeWidget*)));
+
     connect(nWidget, SIGNAL(mouseOverInputPlug(const InputPlugWidget*)), 
 	    this, SLOT(mouseOverInputPlug(const InputPlugWidget*)));
 
@@ -257,6 +260,9 @@ namespace gui
 			       "GraphEditor::controlConnected()");
 
     NodeWidget* nWidget = it->second;
+    if (inputIndex < 0 || inputIndex >= nWidget->getInputs().size())
+      throw std::runtime_error("Input ex. nicht bei "
+			       "GraphEditor::controlConnected()");
 
     InputPlugWidget* in = nWidget->getInputs()[inputIndex];
 
@@ -482,9 +488,9 @@ namespace gui
   void GraphEditor::openPopup(NodeWidget* which, const QPoint& pos)
   {
     QPopupMenu *popme = new QPopupMenu(0, "pop"); //TODO: wird das deleted?
-    popme->insertItem("Kill",NODEWIDGET_KILL);
-    popme->insertItem("Timing",NODEWIDGET_TIMING);
     popme->insertItem("Properties",NODEWIDGET_PROPERTIES);
+    popme->insertItem("Timing",NODEWIDGET_TIMING);
+    popme->insertItem("Kill",NODEWIDGET_KILL);
 	
     currentNode = which;
     connect(popme,SIGNAL(activated(int)),this,SLOT(nodePopupActivated(int)));
@@ -636,9 +642,18 @@ namespace gui
       }
   }
 
+  void GraphEditor::mouseOverNode(const NodeWidget* in)
+  {
+    std::string msg = "module: ";
+    msg += in->group();
+    msg += ":";
+    msg += in->moduleClassName();
+    emit statusText(msg);
+  }
+
   void GraphEditor::mouseOverInputPlug(const InputPlugWidget* in)
   {
-    std::string msg = "Input: ";
+    std::string msg = "input: ";
     msg += in->getName();
     msg += " (";
     msg += in->getType();
@@ -737,18 +752,20 @@ namespace gui
 
     mainPainter.setPen(pen1);
 
-    for (std::map<int,NodeWidget*>::const_iterator jt = nodes.begin();
-	 jt != nodes.end(); ++jt)
+    if (m_drawmoduleinfo)
       {
-	NodeWidget* nWidget = jt->second;
-	std::ostringstream msg;
-	msg << nWidget->getTime();
-      
-	mainPainter.eraseRect(nWidget->pos().x(),nWidget->pos().y()-10,
-			      40,10);
-	mainPainter.drawText(nWidget->pos(), msg.str().c_str());
+	for (std::map<int,NodeWidget*>::const_iterator jt = nodes.begin();
+	     jt != nodes.end(); ++jt)
+	  {
+	    NodeWidget* nWidget = jt->second;
+	    std::ostringstream msg;
+	    msg << nWidget->moduleClassName() << " (" << nWidget->getTime() <<")";
+	    
+	    mainPainter.eraseRect(nWidget->pos().x(),nWidget->pos().y()-10,
+				  40,10);
+	    mainPainter.drawText(nWidget->pos().x(),nWidget->pos().y()-5,msg.str().c_str());
+	  }
       }
-    
 	
     mainPainter.end();
   }

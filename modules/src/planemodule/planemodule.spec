@@ -4,7 +4,7 @@ mod_planemodule
 {
     name          = Plane
     deterministic = true
-    group         = GrafikEffekte
+    group         = Effects
     xpm           = planemodule.xpm
     author        = captain Coma
     version       = 0.9999991
@@ -14,7 +14,7 @@ inputs
 {
     t
     {
-        name              = Bewegung
+        name              = Motion
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -24,7 +24,7 @@ inputs
 
     rot
     {
-        name              = Drehung
+        name              = Rotation
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -45,7 +45,7 @@ inputs
 
     b
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -54,22 +54,22 @@ inputs
 
     xres
     {
-        name              = Groesse(X)
+        name              = Size(X)
         type              = typ_NumberType
         const             = true
         strong_dependency = true
         hidden            = true
-        widget_type       =  number_selector
+        widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 1024
         default           = 640
         step_size         = 1
-        help              = Größe des Outputs in Pixeln
+        help              = Size of output in pixels
     }
 
     yres
     {
-        name              = Groesse(Y)
+        name              = Size(Y)
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -79,12 +79,12 @@ inputs
         higher_bound      = 1024
         default           = 480
         step_size         = 1
-        help              = Größe des Outputs in Pixeln
+        help              = Size of output in pixels
     }
 
     d
     {
-        name              = Abstand
+        name              = Distance
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -107,7 +107,7 @@ inputs
         lower_bound       = 0
         step_size         = 1
         default           = 0
-        help              = Stärke des Shadings
+        help              = Degree of Shading
     }
 }
 
@@ -115,7 +115,7 @@ outputs
 {
     r
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
     }
 }

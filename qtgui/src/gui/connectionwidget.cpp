@@ -70,8 +70,8 @@ bool ConnectionWidget::isInside(QWidget* rel,const QPoint& y) const
 
 void ConnectionWidget::draw(QWidget* rel, QPainter& painter) const
 {
-  painter.drawLine(in.mapTo(rel,in.pos())-in.pos(),
-		   out.mapTo(rel,out.pos())-out.pos());
+  painter.drawLine(in.mapTo(rel,in.pos())-in.pos() + QPoint(in.width()/2, in.height()/2),
+		   out.mapTo(rel,out.pos())-out.pos() + QPoint(in.width()/2, in.height()/2));
 }
 
 } // end of namespace gui

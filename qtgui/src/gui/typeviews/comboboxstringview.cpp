@@ -20,7 +20,7 @@ namespace gui
       
       m_box = new QComboBox(false, this, "blah");
 		
-      QBoxLayout* layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10);
+      QVBoxLayout* layout = new QVBoxLayout(this);
       layout->addWidget(m_box);
 
       utils::StructReader sr(params);
@@ -41,6 +41,7 @@ namespace gui
 	{
 	}
 		
+	  this->resize(m_box->sizeHint());
       connect(m_box, SIGNAL(activated(const QString&)),
 	      this,SLOT(comboboxChanged(const QString&)));
     }

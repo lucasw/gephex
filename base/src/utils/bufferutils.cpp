@@ -72,7 +72,7 @@ namespace utils
     s << "<l>" << len << "</l>";
     s << "<d>";
     char* tempData = new char[len * 2];
-    const unsigned char* end = buf.getPtr() + len;
+
     int index = len-1;
     for (const unsigned char* d = buf.getPtr() + len - 1;
 	 index >= 0; --d, --index)

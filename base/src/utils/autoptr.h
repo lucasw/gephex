@@ -4,10 +4,6 @@
 #include <stdexcept>
 #include <cassert>
 
-#if defined(HAVE_CONFIG_H)
-#include "config.h"
-#endif
-
 namespace utils
 {
 
@@ -93,7 +89,7 @@ namespace utils
 
 	// this is needed because vc6 can't handle template constructors 
 	// correctly
-#if !defined(COMP_VC)
+#if !defined(_MSC_VER)
 	template <typename U>
     AutoPtr<T>(const AutoPtr<U>& ap)
 	: m_ref(ap.ref()), m_ptr(ap.c_ptr())

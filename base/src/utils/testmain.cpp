@@ -31,8 +31,8 @@ void doTests()
 	StructScannerTest ssc;
 	AllTests.addTest(ssc);
 
-	/*	FileSystemTest fst;
-		AllTests.addTest(fst);*/
+	FileSystemTest fst;
+	AllTests.addTest(fst);
 
 	StructReaderTest srt;
 	AllTests.addTest(srt);

@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "imagebuffermodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_imagebuffermodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_imagebuffermodule] number_of_inputs=[4] number_of_outputs=[1] deterministic=[true] }";
 }
@@ -37,6 +45,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -90,7 +104,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Buffer] group=[Filter] inputs=[4 Puffergroesse{help=[Groesse des Puffers in Frames] higher_bound=[250] lower_bound=[1] step_size=[1] widget_type=[number_selector] } Pufferposition{lower_bound=[0] higher_bound=[1] help                    = Position im Puffer: 0 = aeltestes Bild, 1=[neustes Bild] widget_type=[number_selector] } Aufnehmen{help=[Neue Bilder aufnehmen oder alte beibehalten] true_value=[1] false_value=[0] widget_type=[radio_button] } Bild ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Buffer] group=[Filter] inputs=[4 Puffergroesse{lower_bound=[1] widget_type=[number_selector] step_size=[1] higher_bound=[250] help=[Groesse des Puffers in Frames] } Pufferposition{lower_bound=[0] widget_type=[number_selector] help                    = Position im Puffer: 0 = aeltestes Bild, 1=[neustes Bild] higher_bound=[1] } Aufnehmen{widget_type=[radio_button] false_value=[0] true_value=[1] help=[Neue Bilder aufnehmen oder alte beibehalten] } Bild ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(imagebuffermodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -99,6 +113,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(imagebuffermodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -114,14 +133,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_imagebuffermodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

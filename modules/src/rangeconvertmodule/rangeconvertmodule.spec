@@ -4,7 +4,7 @@ mod_rangeconvertmodule
 {
     name          = RangeKonvert0r
     deterministic = false
-    group         = Signale
+    group         = Number
     xpm           = rangeconvertmodule.xpm
     author        = Blade
     version       = 0.61-postalphaprebeta(rightbetweenalphaandbeta)
@@ -14,56 +14,56 @@ inputs
 {
     n
     {
-    name              = Eingang
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    widget_type       = unboundednumber_selector
-    default           = 0
+        name              = Input
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        widget_type       = unboundednumber_selector
+        default           = 0
     }
 
     min_in
     {
-    name              = Minimum_Eingang
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    widget_type       = unboundednumber_selector
-    hidden            = true
-    default           = 0
+        name              = Min_In
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        widget_type       = unboundednumber_selector
+        hidden            = true
+        default           = 0
     }
 
     max_in
     {
-    name              = Maximum_Eingang
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    default           = 1
-    hidden            = true
-    widget_type       = unboundednumber_selector
+        name              = Max_In
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        default           = 1
+        hidden            = true
+        widget_type       = unboundednumber_selector
     }
 
     min_out
     {
-    name              = Minimum_Ausgang
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    default           = 0
-    hidden            = true
-    widget_type       = unboundednumber_selector
+        name              = Min_Out
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        default           = 0
+        hidden            = true
+        widget_type       = unboundednumber_selector
     }
 
     max_out
     {
-    name              = Maximum_Ausgang
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    default           = 1
-    hidden            = true
-    widget_type       = unboundednumber_selector
+        name              = Max_Out
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        default           = 1
+        hidden            = true
+        widget_type       = unboundednumber_selector
     }
 }
 
@@ -71,7 +71,7 @@ outputs
 {
     r
     {
-    name = Ausgang
-    type = typ_NumberType
+        name = Output
+        type = typ_NumberType
     }
 }

@@ -39,18 +39,14 @@ gephex_engine_SOURCES = \
 	controller.h \
 	controller.cpp
 
-if NEED_DL
-LIB_DL_FLAGS = -ldl
-endif
-
 gephex_engine_LDADD = \
 	-ldllloader \
 	-lsequencer \
 	-lmodel \
 	-lrenderer \
-	-lnetwork \
+	-lgphxnetwork \
 	-lnetinterfaces \
-	-lutils $(LIB_DL_FLAGS) \
+	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS)\
 	-L@builddir@/../dllloader \
 	-L@builddir@/../sequencer \
 	-L@builddir@/../model \
@@ -67,7 +63,7 @@ gephex_engine_DEPENDENCIES = \
 	@builddir@/../sequencer/libsequencer.a \
 	@builddir@/../model/libmodel.a \
 	@builddir@/../renderer/librenderer.a \
-	@top_builddir@/base/src/net/libnetwork.a \
+	@top_builddir@/base/src/net/libgphxnetwork.a \
 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a \
 	@top_builddir@/base/src/utils/libutils.a
 

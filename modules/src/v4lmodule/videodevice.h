@@ -22,7 +22,7 @@ public:
   {
     int xSize;
     int ySize;
-    PixelType type;
+    unsigned int type;
     uint_32* frameptr;
   };
   
@@ -42,6 +42,10 @@ public:
    * \param frame image params 
    */
   void grabImage(Frame& frame) throw (std::runtime_error);
+
+  void setProperties(int brightness,int hue,int colour,
+		     int contrast,
+		     int whiteness);
 private:
   /**
    * filedescriptor
@@ -55,12 +59,20 @@ private:
   
   bool initialized;
   Frame initFrame;
+  
+  // converter parameters
+  int m_brightness;
+  int m_hue;
+  int m_colour;
+  int m_contrast;
+  int m_whiteness;
+
+  // mmap mode
   void* mmapBase;
   size_t mmapSize;
   uint_32* frameptr[2];
   int frontbf;
   int backbf;
-
 
   logT log2;
 };

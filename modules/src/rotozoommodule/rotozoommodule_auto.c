@@ -6,8 +6,16 @@
 #include "dllutils.h"
 #include "rotozoommodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_rotozoommodule", msg);
+}
+
 const char* getSpec(void) {
- return "mod_spec { name=[mod_rotozoommodule] number_of_inputs=[9] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_rotozoommodule] number_of_inputs=[7] number_of_outputs=[1] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
@@ -27,16 +35,10 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType const=false strong_dependency=false  } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
   break;
   case 6:
     return "input_spec { type=typ_StringType const=true strong_dependency=true default=regular } ";
-  break;
-  case 7:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=640 } ";
-  break;
-  case 8:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=480 } ";
   break;
  }
  return 0;
@@ -52,6 +54,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -98,12 +106,6 @@ int setInput(void* instance,int index,void* typePointer)
   case 6:
    inst->in_routine = (StringType *) typePointer;
   break;
-  case 7:
-   inst->in_outx = (NumberType *) typePointer;
-  break;
-  case 8:
-   inst->in_outy = (NumberType *) typePointer;
-  break;
  } //switch(index) 
  return 1;
 }
@@ -120,7 +122,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Rotary Zoomer] group=[GrafikEffekte] inputs=[9 Zoom{lower_bound=[0] higher_bound=[4] step_size=[0.04] widget_type=[number_selector] } Drehung{lower_bound=[0] higher_bound=[360] step_size=[1] widget_type=[number_selector] } Verschiebung Textur Hintergrund{help=[Das Hintergrundbild] } Hintergrund_Kopieren{false_value=[0] help=[Soll Hintergrund kopiert werden oder direkt reingeschrieben werden?] hidden=[true] true_value=[1] widget_type=[radio_button] } Rotozoom-Routine{values=[regular,poly] help=[regular ist besser getestet, poly ist schneller] hidden=[true] widget_type=[combo_box] } outx{hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Groesse des Ergebnis-Bildes] } outy{hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Groesse des Ergebnis-Bildes] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Rotozoom] group=[Effects] inputs=[7 Zoom{lower_bound=[0] widget_type=[number_selector] step_size=[0.04] higher_bound=[4] } Rotation{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[360] } Translation Texture Background{help=[The background image] } Copy_Background{widget_type=[radio_button] false_value=[0] true_value=[1] hidden=[true] help=[Should backgound be copied or modified?] } Mode{widget_type=[combo_box] values=[regular,poly] hidden=[true] help=[regular is stable, poly is faster] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(rotozoommodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -129,6 +131,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(rotozoommodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -147,7 +154,7 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
 {
   InstancePtr inst = (InstancePtr) instance;
 
-  static int neededIns[9];
+  static int neededIns[7];
   *neededInputs = neededIns;
 	
 	neededIns[in_zoom] = 0;
@@ -157,8 +164,6 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
 	neededIns[in_background] = 1;
 	neededIns[in_copy_background] = 0;
 	neededIns[in_routine] = 0;
-	neededIns[in_outx] = 0;
-	neededIns[in_outy] = 0;
 
 
 
@@ -178,14 +183,6 @@ void getPatchLayout(void* instance,int** out2in)
   patchLayout(inst, out2in_);
 }
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_rotozoommodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

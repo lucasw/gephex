@@ -151,8 +151,8 @@ namespace gui
 		for(int i = 0; i < 10000; ++i)
 		{
 			int h = height();
-			int hShort = h - (0.075 * h);
-			int hLong = h - (0.2 * h);			
+			int hShort = static_cast<int>(h - (0.075 * h));
+			int hLong = static_cast<int>(h - (0.2 * h));
 			if ( i % oneSecond == 0 )
 			{
 				painter.drawLine(i, hLong, i, h);
@@ -199,7 +199,7 @@ namespace gui
 		
 		header = buildHeader();
 		fillHeader(header,m_scenes, section2scene);
-		header->resize(width(), height()*0.8);
+		header->resize(width(), static_cast<int>(height()*0.8));
 		header->show();
 	}  
 	

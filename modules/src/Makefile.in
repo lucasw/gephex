@@ -58,53 +58,72 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 libdir = @libdir@/gephex/modules
 
 @EFFECTV_TRUE@EFFECTV_DIRS = 	libeffectv 	effecttvedgemodule 	effectvfiremodule 	effectvlensmodule 	effectvpuzzlemodule 	effectvlifemodule 	effectvagingmodule 	effectvburnmodule
 
-@HAVE_SDL_TRUE@SDL_DIRS = 	sdloutputmodule 	joystickmodule
+@HAVE_SDL_TRUE@SDL_DIRS = 	joystickmodule
 
-@HAVE_AVIFILE_TRUE@AVIFILE_DIRS = avifilemodule
+@HAVE_AVIFILE_TRUE@AVIFILE_DIRS = #avifilemodule
 
 # commented out for the release (does not work on all tested computers)
 @HAVE_MPEG3_TRUE@MPEG3_DIRS = #libmpeg3module
 
-@HAVE_GLX_TRUE@GLX_DIRS = gloutmodule
+#if HAVE_GLX
+#GLX_DIRS = gloutmodule
+#endif
 
 @HAVE_PNG_TRUE@PNG_DIRS = imagewritermodule
 
+@HAVE_ASOUNDLIB_OR_OSS_TRUE@SOUND_DIRS = audiooutmodule audioinmodule
+
 @WITH_V4L_TRUE@V4L_DIRS = v4lmodule
 
-SUBDIRS = libgrid 	libmidi 	addmodule 	bwmodule 	submodule 	resultmodule 	numbermodule 	xfademodule 	plasma 	bmpmodule 	rotozoommodule 	imagebuffermodule 	invertmodule 	blurmodule 	tunnelmodule 	planemodule 	signalgenmodules 	imgsubmodule 	staticcolormodule 	functions 	numposmodule 	posnummodule 	flashmodule 	ifsgenmodule 	ifsxfadermodule 	netcontrolmodule 	midiinmodule 	doepfermodule 	fpsmodule 	ifsmodule 	isingnoizemodule 	flipflopmodule 	diffmodule 	number2color 	overlaymodule 	color2number 	rangeconvertmodule         x11outmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(GLX_DIRS) $(V4L_DIRS) $(PNG_DIRS)
+SUBDIRS = libgrid 	libmidi 	numarithmodule         audioaddmodule         audiospecmodule         audiowavegenmodule         audiovismodule         audiobdmodule 	audiosynthmodule 	bwmodule 	resultmodule 	numbermodule 	numenvmodule 	numlfomodule 	xfademodule 	plasma 	rotozoommodule 	imagebuffermodule 	blurmodule 	tunnelmodule 	planemodule 	signalgenmodules 	staticcolormodule 	functions 	numposmodule 	posnummodule 	flashmodule         imgarithmodule 	ifsgenmodule 	ifsxfadermodule 	netcontrolmodule 	midiinmodule 	doepfermodule 	fpsmodule 	ifsmodule 	isingnoizemodule 	flipflopmodule 	diffmodule 	number2color 	overlaymodule 	color2number 	gradnormmodule 	twolayermodule 	rangeconvertmodule         frboutmodule 	frbinmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(SOUND_DIRS) #$(GLX_DIRS)
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -116,17 +135,20 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DIST_SUBDIRS =  libgrid libmidi addmodule bwmodule submodule \
-resultmodule numbermodule xfademodule plasma bmpmodule rotozoommodule \
-imagebuffermodule invertmodule blurmodule tunnelmodule planemodule \
-signalgenmodules imgsubmodule staticcolormodule functions numposmodule \
-posnummodule flashmodule ifsgenmodule ifsxfadermodule netcontrolmodule \
-midiinmodule doepfermodule fpsmodule ifsmodule isingnoizemodule \
-flipflopmodule diffmodule number2color overlaymodule color2number \
-rangeconvertmodule x11outmodule libeffectv effecttvedgemodule \
-effectvfiremodule effectvlensmodule effectvpuzzlemodule \
-effectvlifemodule effectvagingmodule effectvburnmodule sdloutputmodule \
-joystickmodule avifilemodule gloutmodule v4lmodule imagewritermodule
+DIST_SUBDIRS =  libgrid libmidi numarithmodule audioaddmodule \
+audiospecmodule audiowavegenmodule audiovismodule audiobdmodule \
+audiosynthmodule bwmodule resultmodule numbermodule numenvmodule \
+numlfomodule xfademodule plasma rotozoommodule imagebuffermodule \
+blurmodule tunnelmodule planemodule signalgenmodules staticcolormodule \
+functions numposmodule posnummodule flashmodule imgarithmodule \
+ifsgenmodule ifsxfadermodule netcontrolmodule midiinmodule \
+doepfermodule fpsmodule ifsmodule isingnoizemodule flipflopmodule \
+diffmodule number2color overlaymodule color2number gradnormmodule \
+twolayermodule rangeconvertmodule frboutmodule frbinmodule libeffectv \
+effecttvedgemodule effectvfiremodule effectvlensmodule \
+effectvpuzzlemodule effectvlifemodule effectvagingmodule \
+effectvburnmodule joystickmodule v4lmodule imagewritermodule \
+audiooutmodule audioinmodule
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
@@ -321,8 +343,6 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 # commented out for the release because they don't work
-#	imgaddmodule \
-#	imgmulmodule \
 #	starfield \
 #	libmpeg3module
 

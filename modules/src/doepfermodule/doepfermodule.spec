@@ -5,9 +5,9 @@ mod_doepfermodule
 	name          = Doepferl
 	group	      = Midi
 	deterministic = true
-	xpm	      = doepfermodule.xpm
+	xpm	          = doepfermodule.xpm
 	author        = Mel Duran
-        version       = 1000.65-prealpha
+    version       = 1000.65-prealpha
 	static        = false
 }
 

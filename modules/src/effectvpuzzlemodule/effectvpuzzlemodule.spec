@@ -14,7 +14,7 @@ inputs
 {
     b
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -22,50 +22,50 @@ inputs
 
     left
     {
-        name              = Links
+        name              = Left
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-	default           = 0
+        default           = 0
         widget_type       = radio_button
         true_value        = 1
-	false_value       = 0 
+        false_value       = 0 
     }
 
     right
     {
-        name              = Rechts
+        name              = Right
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-	default           = 0
+        default           = 0
         widget_type       = radio_button
         true_value        = 1
-	false_value       = 0
+        false_value       = 0
     }
 
     up
     {
-        name              = Hoch
+        name              = Up
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
-	default           = 0
+        default           = 0
         widget_type       = radio_button
         true_value        = 1
-	false_value       = 0
+        false_value       = 0
     }
 
     down
     {
-        name              = Runter
+        name              = Down
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
-	default           = 0
+        default           = 0
         widget_type       = radio_button
         true_value        = 1
-	false_value       = 0
+        false_value       = 0
     }
 }
 
@@ -73,7 +73,7 @@ outputs
 {
     r
     {
-    name = Bild
-    type = typ_FrameBufferType
+        name = Image
+        type = typ_FrameBufferType
     }
 }

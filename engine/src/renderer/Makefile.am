@@ -9,6 +9,17 @@ librenderer_a_SOURCES = renderer.cpp  runtimesystem.cpp modulefactory.cpp typefa
 
 noinst_HEADERS = renderer.h
 
+TESTS = renderertest
+
+check_PROGRAMS = renderertest
+
+renderertest_SOURCES = renderertest.cpp
+renderertest_LDADD = 	librenderer.a \
+			-L@builddir@/../../../base/src/utils \
+			-lutils
+
+renderertest_DEPENDENCIES = \
+			@top_builddir@/base/src/utils/libutils.a
 
 
 

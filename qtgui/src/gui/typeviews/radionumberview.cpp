@@ -29,8 +29,8 @@ namespace gui
       m_oldValue = 0;
       // wenn wertebereich definiert ist, übernehmen
     
-      m_trueVal = sr.getDoubleValue("true_value", 0);
-      m_falseVal = sr.getDoubleValue("false_value", 1);
+      m_trueVal = sr.getDoubleValue("true_value", 1);
+      m_falseVal = sr.getDoubleValue("false_value", 0);
     	
       QHBoxLayout* l = new QHBoxLayout(this);
       m_radio = new QRadioButton(this);

@@ -38,6 +38,8 @@ namespace gui
 
     int id;
     std::string modName;
+    std::string m_group;
+    QPixmap* m_icon;
 
     std::vector<QPixmap> pictures; //pointer to the backgroundpics n stuff the node is using
 
@@ -66,6 +68,7 @@ namespace gui
     void beenRightClicked(NodeWidget*, const QPoint& );
     void moved(NodeWidget*, const QPoint& where);
     void released(NodeWidget*,const QPoint& where);
+    void mouseOverNode(const NodeWidget*);
 
     // die folgenden signale werden von den inputs/outputs durchgesschleift
     void beginLineDraw();
@@ -91,6 +94,7 @@ namespace gui
     std::vector<InputPlugWidget*> getInputs() const;
 
     int getID() const { return id; }
+    std::string group() const { return m_group; }
     std::string moduleClassName() const { return modName; }
 
     const OutputPlugWidget* isAtOutput(const QPoint& p) const;
@@ -98,6 +102,8 @@ namespace gui
     
     void setTime(double t);
     double getTime() const;
+
+    QPixmap* icon(){return m_icon;}
     
     const IPropertyDescription& getProperties() const;
     

@@ -57,34 +57,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
@@ -96,6 +111,17 @@ noinst_LIBRARIES = librenderer.a
 librenderer_a_SOURCES = renderer.cpp  runtimesystem.cpp modulefactory.cpp typefactory.cpp modulefactory.h runtimesystem.h typefactory.h
 
 noinst_HEADERS = renderer.h
+
+TESTS = renderertest
+
+check_PROGRAMS = renderertest
+
+renderertest_SOURCES = renderertest.cpp
+renderertest_LDADD = librenderer.a 			-L@builddir@/../../../base/src/utils 			-lutils
+
+
+renderertest_DEPENDENCIES =  			@top_builddir@/base/src/utils/libutils.a
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
@@ -113,7 +139,9 @@ X_PRE_LIBS = @X_PRE_LIBS@
 librenderer_a_LIBADD = 
 librenderer_a_OBJECTS =  renderer.$(OBJEXT) runtimesystem.$(OBJEXT) \
 modulefactory.$(OBJEXT) typefactory.$(OBJEXT)
-AR = ar
+check_PROGRAMS =  renderertest$(EXEEXT)
+renderertest_OBJECTS =  renderertest.$(OBJEXT)
+renderertest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -133,8 +161,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(librenderer_a_SOURCES)
-OBJECTS = $(librenderer_a_OBJECTS)
+SOURCES = $(librenderer_a_SOURCES) $(renderertest_SOURCES)
+OBJECTS = $(librenderer_a_OBJECTS) $(renderertest_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -204,6 +232,19 @@ librenderer.a: $(librenderer_a_OBJECTS) $(librenderer_a_DEPENDENCIES)
 	-rm -f librenderer.a
 	$(AR) cru librenderer.a $(librenderer_a_OBJECTS) $(librenderer_a_LIBADD)
 	$(RANLIB) librenderer.a
+
+mostlyclean-checkPROGRAMS:
+
+clean-checkPROGRAMS:
+	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
+
+distclean-checkPROGRAMS:
+
+maintainer-clean-checkPROGRAMS:
+
+renderertest$(EXEEXT): $(renderertest_OBJECTS) $(renderertest_DEPENDENCIES)
+	@rm -f renderertest$(EXEEXT)
+	$(CXXLINK) $(renderertest_LDFLAGS) $(renderertest_OBJECTS) $(renderertest_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:
@@ -256,7 +297,7 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 modulefactory.o: modulefactory.cpp modulefactory.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imoduleclass.h
 renderer.o: renderer.cpp renderer.h \
 	../../../base/src/interfaces/irenderercontrolreceiver.h \
@@ -267,8 +308,8 @@ renderer.o: renderer.cpp renderer.h \
 	../../../base/src/interfaces/imodulestatisticssmartsender.h \
 	../../../base/src/interfaces/irendererstatussender.h \
 	../../../base/src/interfaces/itask.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
-	runtimesystem.h modulefactory.h typefactory.h \
+	../../../base/src/utils/autoptr.h runtimesystem.h \
+	modulefactory.h typefactory.h \
 	../../../base/src/interfaces/itypefactory.h \
 	../../../base/src/interfaces/irendererstatusreceiver.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
@@ -277,7 +318,7 @@ renderer.o: renderer.cpp renderer.h \
 	../../../base/src/interfaces/imodulestatisticssmartreceiver.h \
 	../../../base/src/utils/ilogger.h
 runtimesystem.o: runtimesystem.cpp runtimesystem.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imodule.h \
 	../../../base/src/interfaces/itype.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
@@ -286,14 +327,41 @@ runtimesystem.o: runtimesystem.cpp runtimesystem.h \
 	../../../base/src/utils/timing.h
 typefactory.o: typefactory.cpp typefactory.h \
 	../../../base/src/interfaces/itypefactory.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/itypeclass.h
 
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
+	    all=`expr $$all + 1`; \
+	    echo "PASS: $$tst"; \
+	  elif test $$? -ne 77; then \
+	    all=`expr $$all + 1`; \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  banner="All $$all tests passed"; \
+	else \
+	  banner="$$failed of $$all tests failed"; \
+	fi; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"; \
+	test "$$failed" -eq 0
 info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
@@ -325,27 +393,28 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags \
-		mostlyclean-generic
+		mostlyclean-libtool mostlyclean-checkPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-generic mostlyclean-am
+clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool \
+		clean-checkPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-noinstLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-generic \
-		clean-am
+		distclean-libtool distclean-checkPROGRAMS \
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-checkPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -355,8 +424,10 @@ maintainer-clean: maintainer-clean-am
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+clean-libtool maintainer-clean-libtool mostlyclean-checkPROGRAMS \
+distclean-checkPROGRAMS clean-checkPROGRAMS \
+maintainer-clean-checkPROGRAMS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir check-TESTS info-am info \
 dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
 install-exec install-data-am install-data install-am install \
 uninstall-am uninstall all-redirect all-am all installdirs \

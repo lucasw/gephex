@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "xfademodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_xfademodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_xfademodule] number_of_inputs=[4] number_of_outputs=[1] deterministic=[true] }";
 }
@@ -21,7 +29,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=false  } ";
   break;
   case 3:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=regular } ";
+    return "input_spec { type=typ_StringType const=true strong_dependency=true default=mmx } ";
   break;
  }
  return 0;
@@ -37,6 +45,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -90,7 +104,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Crossfader] group=[Mixer] inputs=[4 Fader{step_size=[0.01] lower_bound=[0] higher_bound=[1] } Bild1 Bild2 Fade-Routine{values=[regular,mmx] hidden=[true] widget_type=[combo_box] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Crossfader] group=[Mixer] inputs=[4 Fader{lower_bound=[0] step_size=[0.01] higher_bound=[1] } Image1 Image2 Fade-Routine{widget_type=[combo_box] values=[regular,mmx] hidden=[true] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(xfademodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -99,6 +113,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(xfademodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -143,14 +162,6 @@ void getPatchLayout(void* instance,int** out2in)
   patchLayout(inst, out2in_);
 }
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_xfademodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

@@ -6,8 +6,8 @@ extern "C"
 {
 #endif
 #include "dllmodule.h"
-#include "numbertype.h"
 #include "positiontype.h"
+#include "numbertype.h"
 
 struct _MyInstance;
 typedef struct _Instance

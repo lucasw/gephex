@@ -1,10 +1,12 @@
 #include "nodewidget.h"
 
+#include <iostream>
 #include <cassert>
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <iostream>
+#include <qpainter.h>
+#include <qtooltip.h>
 
 #include "nodeproperty.h"
 
@@ -192,12 +194,17 @@ namespace gui
     setFixedSize(50, 50);
     setBackgroundPixmap(pictures[NODE_WIDGET_PIC]);
 	
+    this->setMouseTracking(true);
+
+    modName = _info.getName();
+    m_group = _info.getGroup();
+    m_icon = new QPixmap(_info.getIcon().getPtr());
+    QToolTip::add(this, (m_group + ":" + modName).c_str());
+
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     QVBoxLayout* inputLayout = new QVBoxLayout();
     QVBoxLayout* midLayout = new QVBoxLayout();
     QVBoxLayout* outputLayout = new QVBoxLayout();
-	
-    modName = _info.getName();
 
     for(unsigned int i=0;i < _info.getInputs().size(); ++i)
       {
@@ -298,6 +305,7 @@ namespace gui
   NodeWidget::~NodeWidget()     
   {
     removeKeyListeners(m_keyListeners, m_kbManager);
+    delete m_icon;
   }
 
   void NodeWidget::mouseMoveEvent(QMouseEvent* e)
@@ -305,6 +313,8 @@ namespace gui
     if(dragMode){
       emit moved(this, mapToParent(e->pos()-clickedPos));
     }
+
+    emit mouseOverNode(this);
   }
 
   void NodeWidget::mousePressEvent(QMouseEvent* e)
@@ -331,8 +341,9 @@ namespace gui
 
   void NodeWidget::paintEvent(QPaintEvent* /*e*/)
   {
-	
-    drawText(10/*abs(50-modName.length())/2*/, 28, modName.c_str());
+    QPainter p(this);
+    p.drawPixmap (5,5, *icon());
+    //p.drawText(10/*abs(50-modName.length())/2*/, 28, modName.c_str());
   }
 
   void NodeWidget::setTime(double t)

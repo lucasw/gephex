@@ -38,7 +38,7 @@ namespace gui
       double value;
       is >> value;
       std::ostringstream os;
-      os.precision(3);
+      os.precision(6);
       os << value;
 
       m_lineEdit->setText(os.str().c_str());

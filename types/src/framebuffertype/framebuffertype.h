@@ -160,7 +160,8 @@ void framebuffer_scale(FrameBufferType* dst,
   int y;
   uint_32 x_a, y_a;
   uint_32 A,B;
-  uint_32* src_, *dst_;
+  const uint_32* src_;
+  uint_32* dst_;
   double deltax=.0, deltay=.0;
 
   assert (w >= 0 && h >= 0);
@@ -190,14 +191,15 @@ void framebuffer_scale(FrameBufferType* dst,
   src_ = src->framebuffer;
   dst_ = dst->framebuffer;	
 
-  for (y = 0; y < h; ++y)
+  for (y = h; y != 0; --y)
     {
-      int x, line_base;
-      x_a = 0;		
-      line_base = (y_a >> 16) * src->xsize;
-      for (x = 0; x < w; ++x)
-	{			
-	  *dst_= src_[(x_a >> 16) + line_base];
+      int x;
+      const uint_32* line_base;
+      x_a = 0;
+      line_base = src_ + ((y_a >> 16) * src->xsize);
+      for (x = w; x != 0; --x)
+	{
+	  *dst_= line_base[x_a >> 16];
 	  ++dst_;
 	  x_a += A;
 	}

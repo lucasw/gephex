@@ -19,7 +19,7 @@ namespace utils
 	//todo fehler behandlung
       }
 
-    while (s && (c == ' ' || c == '\t'))
+    while (s && (c == ' ' || c == '\t' || c == '\n'))
       s.get(c);
 
     if (c!='<') 
@@ -61,7 +61,7 @@ namespace utils
 	//todo fehler behandlung
       }
 
-    while (s && (c == ' ' || c == '\t'))
+    while (s && (c == ' ' || c == '\t' || c == '\n'))
       s.get(c);
 
     if (c!='<') 

@@ -57,9 +57,9 @@ MyInstance* construct()
   my->old_capacity = 10;
   my->buffer = cbuffer_alloc();
   cbuffer_init(my->buffer, my->old_capacity,
-	           framebuffer_newInstance,
-			   framebuffer_assign,
-			   framebuffer_deleteInstance);
+	           (ElemCreate)framebuffer_newInstance,
+			   (ElemAssign)framebuffer_assign,
+			   (ElemDestroy)framebuffer_deleteInstance);
   
   return my;
 }

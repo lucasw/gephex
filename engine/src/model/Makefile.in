@@ -57,34 +57,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
@@ -126,7 +141,6 @@ graphnode.$(OBJEXT) graphconnection.$(OBJEXT) \
 controllvalueset.$(OBJEXT) datatree.$(OBJEXT) persistentinode.$(OBJEXT) \
 standardinode.$(OBJEXT) debugpersistor.$(OBJEXT) \
 graphfilesystem.$(OBJEXT) graphserial.$(OBJEXT)
-AR = ar
 check_PROGRAMS =  modeltest$(EXEEXT)
 modeltest_OBJECTS =  testmain.$(OBJEXT) datatreetest.$(OBJEXT)
 modeltest_DEPENDENCIES =  libmodel.a
@@ -294,26 +308,24 @@ debugpersistor.o: debugpersistor.cpp debugpersistor.h \
 	../../../base/src/utils/buffer.h \
 	../../../base/src/utils/bufferutils.h
 graph.o: graph.cpp graph.h ../../../base/src/utils/autoptr.h \
-	../../../config.h graphconnection.h graphnode.h \
-	../../../base/src/utils/buffer.h \
+	graphconnection.h graphnode.h ../../../base/src/utils/buffer.h \
 	../../../base/src/interfaces/imoduleclassspec.h \
 	controllvalueset.h
 graphconnection.o: graphconnection.cpp graphconnection.h
 graphfilesystem.o: graphfilesystem.cpp graphfilesystem.h \
-	../../../base/src/utils/autoptr.h ../../../config.h specmap.h \
+	../../../base/src/utils/autoptr.h specmap.h \
 	../../../base/src/utils/filesystem.h graph.h graphserial.h \
 	controllvalueset.h ../../../base/src/utils/buffer.h
 graphnode.o: graphnode.cpp graphnode.h ../../../base/src/utils/buffer.h \
 	../../../base/src/interfaces/imoduleclassspec.h \
 	../../../base/src/utils/bufferutils.h
 graphserial.o: graphserial.cpp graphserial.h specmap.h \
-	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imoduleclassspec.h graph.h \
 	graphnode.h ../../../base/src/utils/buffer.h graphconnection.h \
 	controllvalueset.h ../../../base/src/utils/xmlutils.h \
 	../../../base/src/utils/bufferutils.h
-model.o: model.cpp model.h ../../../base/src/utils/autoptr.h \
-	../../../config.h specmap.h \
+model.o: model.cpp model.h ../../../base/src/utils/autoptr.h specmap.h \
 	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
 	../../../base/src/interfaces/imoduleclassspecreceiver.h \
 	../../../base/src/interfaces/igraphnamesender.h \
@@ -328,7 +340,7 @@ model.o: model.cpp model.h ../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imodulestatisticssmartreceiver.h \
 	../../../base/src/interfaces/imodelstatussender.h graph.h \
 	graphserial.h graphnode.h ../../../base/src/utils/buffer.h \
-	graphconnection.h graphfilesystem.h \
+	graphconnection.h graphfilesystem.h controllvalueset.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
 	../../../base/src/interfaces/imoduleconstructionsmartreceiver.h \
 	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
@@ -338,8 +350,7 @@ model.o: model.cpp model.h ../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imoduleclassspec.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../base/src/interfaces/imodulestatisticsreceiver.h \
-	../../../base/src/interfaces/imodelstatusreceiver.h \
-	controllvalueset.h
+	../../../base/src/interfaces/imodelstatusreceiver.h
 persistentinode.o: persistentinode.cpp persistentinode.h standardinode.h \
 	inode.h datatreetypes.h ../../../base/src/utils/buffer.h
 standardinode.o: standardinode.cpp standardinode.h inode.h \

@@ -102,7 +102,7 @@ static int getDevCaps(struct JoystickDevCaps* caps, JoystickHandle joy_id)
 
 struct Joystick* joystick_open(int id)
 {
-	int i = 0;
+  // int i = 0;
 	struct Joystick* jst = (struct Joystick*) malloc(sizeof(*jst));
 	
 #if defined(OS_POSIX)

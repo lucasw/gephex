@@ -4,7 +4,7 @@ mod_jumpmodule
 {
     name          = Jump Signal
     deterministic = true
-    group         = Signale
+    group         = Number
     xpm           = jumpmodule.xpm
     author        = Barbarella
     version       = 0.65-prealpha
@@ -14,7 +14,7 @@ inputs
 {
     in
     {
-        name              = Eingangssignal
+        name              = signal
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -24,7 +24,7 @@ inputs
 
     thr
     {
-        name              = Schwellwert
+        name              = Threshold
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -35,7 +35,7 @@ inputs
 
     lower
     {
-        name              = Unterer_Wert
+        name              = Lower_Value
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -46,7 +46,7 @@ inputs
 
     upper
     {
-        name              = Oberer_Wert
+        name              = Upper_Value
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -60,7 +60,7 @@ outputs
 {
     r
     {
-        name = Ausgangssignal
+        name = Outputsignal
         type = typ_NumberType
     }
 }

@@ -2,9 +2,9 @@
 
 mod_diffmodule
 {
-    name                 = Differenzenquotient
+    name                 = Difference Quotient
     deterministic        = true
-    group                = Signale
+    group                = Number
     xpm                  = diffmodule.xpm
     author               = Das kleine pelziges Tierchen
     version              = 0.24
@@ -17,7 +17,7 @@ inputs
         type              = typ_NumberType
         const             = true
         strong_dependency = true
-		widget_type       = unboundednumber_selector
+        widget_type       = unboundednumber_selector
         default           = 0
     }
 }

@@ -4,15 +4,16 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "minmax.h"
-
 #if defined(HAVE_CONFIG_H)
-#include "config.h"
+  #include "config.h"
 #endif
 
-using std::min;
-using std::max;
-
+// for the min and max templates
+#if defined (COMP_VC)
+  #include "minmax.h"
+#else 
+  #include <algorithm> 
+#endif
 
 static logT s_log;
 
@@ -81,9 +82,9 @@ void update(void* instance)
   for (int i=0;i!=256;++i)
     {
       uint_32 r,g,b;
-      r=min(255,i);
-      g=min(255,i);
-      b=min(255,i);
+      r=std::min(255,i);
+      g=std::min(255,i);
+      b=std::min(255,i);
       pal[i]=r|(g<<8)|(b<<16);
     }
 

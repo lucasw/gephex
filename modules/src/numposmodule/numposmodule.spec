@@ -19,7 +19,7 @@ inputs
         default           = 0.5
         lower_bound       = 0
         higher_bound      = 1
-	step_size         = 0.01
+        step_size         = 0.01
     }
 
     ypos
@@ -31,7 +31,7 @@ inputs
         default           = 0.5
         lower_bound       = 0
         higher_bound      = 1
-	step_size         = 0.01
+        step_size         = 0.01
     }
 }
 
@@ -39,7 +39,7 @@ outputs
 {
     result
     {
-        name = Ergebnis-Position
+        name = Result-Position
         type = typ_PositionType
     }
 }

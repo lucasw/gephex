@@ -1,20 +1,25 @@
 #include "buffer.h"
-
-#include <algorithm>
 #include <cstring>
 
-//#include <iostream>
+#if defined(HAVE_CONFIG_H)
+  #include "config.h"
+#endif
 
-#include "minmax.h"
+// for the min and max templates
+#if defined (COMP_VC)
+  #include "minmax.h"
+#else 
+  #include <algorithm>   
+#endif
+
 namespace
 {
   const double GROW_FACTOR = 1.2;
 }
 
 namespace utils
-{
-	using std::max;
-
+{  
+  using std::max;
   Buffer::Buffer(int maxLengthHint)
     : m_buffer(0), m_len(0), m_capacity(max(0,maxLengthHint))
   {

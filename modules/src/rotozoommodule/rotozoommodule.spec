@@ -2,9 +2,9 @@
 
 mod_rotozoommodule
 {
-    name           = Rotary Zoomer
+    name           = Rotozoom
     deterministic  = true
-    group          = GrafikEffekte
+    group          = Effects
     xpm            = rotozoommodule.xpm
     author         = Miss Piggy
     version        = -1.0
@@ -28,7 +28,7 @@ inputs
 
     rot
     {
-        name              = Drehung
+        name              = Rotation
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -41,7 +41,7 @@ inputs
 
     disp
     {
-        name              = Verschiebung
+        name              = Translation
         type              = typ_PositionType
         const             = true
         default           = [0.5 0.5]
@@ -50,7 +50,7 @@ inputs
 
     texture
     {
-        name              = Textur
+        name              = Texture
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -58,16 +58,16 @@ inputs
 
     background
     {
-        name              = Hintergrund
+        name              = Background
         type              = typ_FrameBufferType
         const             = false
         strong_dependency = false
-        help              = Das Hintergrundbild
+        help              = The background image
     }
 
     copy_background
     {
-        name              = Hintergrund_Kopieren
+        name              = Copy_Background
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -75,13 +75,13 @@ inputs
         widget_type       = radio_button
         true_value        = 1
         false_value       = 0
-        default           = 0
-        help              = Soll Hintergrund kopiert werden oder direkt reingeschrieben werden?
+        default           = 1
+        help              = Should backgound be copied or modified?
     }
 
     routine
     {
-        name              = Rotozoom-Routine
+        name              = Mode
         type              = typ_StringType
         const             = true
         strong_dependency = true
@@ -89,37 +89,7 @@ inputs
         widget_type       = combo_box
         values            = regular,poly
         default           = regular
-        help              = regular ist besser getestet, poly ist schneller
-    }
-
-    outx
-    {
-       name               = outx
-       type               = typ_NumberType
-       const              = true
-       strong_dependency  = true
-       hidden             = true
-       default            = 640
-       widget_type        = number_selector
-       lower_bound        = 0
-       higher_bound       = 1024
-       step_size          = 1
-       help = Groesse des Ergebnis-Bildes
-    }
-
-    outy
-    {
-       name                     = outy
-       type                     = typ_NumberType
-       const                    = true
-       strong_dependency        = true
-       hidden                   = true
-       default                  = 480
-       widget_type              = number_selector
-       lower_bound              = 0
-       higher_bound             = 1024
-       step_size                = 1
-       help                     = Groesse des Ergebnis-Bildes
+        help              = regular is stable, poly is faster
     }
 
 }
@@ -128,7 +98,7 @@ outputs
 {
     r
     {
-        name = Bild
+        name = Image
         type = typ_FrameBufferType
     }
 }

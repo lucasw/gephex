@@ -14,8 +14,10 @@
 class QPopupMenu;
 class QTabWidget;
 class QSplitter;
+class QAction;
 
-namespace utils {
+namespace utils 
+{
   class StructReader;
 }
 
@@ -67,8 +69,6 @@ namespace gui
 	void connectToEngine(void);
       void disconnectFromEngine(void);
 	
-      void action(int);
-	
       void startStop();
       void displayStatusText(const std::string& s);
 
@@ -80,8 +80,15 @@ namespace gui
 
       private slots:
 	void pollNetwork();
+      void setRendererState(bool state);
+      void setKeyGrabState(bool state);
+      void shutDown();
+      void synchronize();
+	  void aboutSlot();
 	
     private:
+      void createActions(void);
+      void createWindows();
       void buildMenuBar(void);
       void buildModuleBar(void);
       void buildSceleton(void);
@@ -92,7 +99,19 @@ namespace gui
 
       void connectToRealEngine() throw (std::runtime_error);
       void disconnectFromRealEngine() throw (std::runtime_error);
-	
+      
+      // Actions
+      QAction* quitAction;
+      QAction* showPlugInManagerAction;
+      QAction* showPlayListAction;
+      QAction* rendererStateAction;
+      QAction* connectToEngineAction;
+      QAction* disConnectToEngineAction;
+      QAction* synchronizeEngineAction;
+      QAction* shutDownEngineAction;
+      QAction* keyGrabStateAction;
+	  QAction* aboutAction;
+      
       // widgets
       QWidget* centralWidget;
       QSplitter* splitVertical;
@@ -117,7 +136,7 @@ namespace gui
       SequenceNameView* sequenceNameView;
       PlaylistNameView* playlistNameView;
 
-      enum {FILE_QUIT, CONNECT_ENGINE, 
+      enum {CONNECT_ENGINE, 
 	    DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
 	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR, WINDOW_PLAYLIST,
 	    KEYGRAB_ON, KEYGRAB_OFF};
@@ -128,6 +147,7 @@ namespace gui
       PropertyView* propertyView;
 	
       QPopupMenu* windows;
+	  QPopupMenu* help;
 
       int propertyTabID;
 

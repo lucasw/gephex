@@ -74,18 +74,17 @@ namespace engine
 
   EngineConfig::EngineConfig()
     :sr(readConfigFile()),
-     port(sr.getIntValue("ipc_port")),
      graphDir(sr.getStringValue("graph_dir")),
      sequDir(sr.getStringValue("sequence_dir")),
      plDir(sr.getStringValue("playlist_dir")),
      ipcType(sr.getStringValue("ipc_type","inet")),
-     ipcUnixNodePrefix(sr.getStringValue("ipc_unix_node_prefix",
-					 "/tmp/gephex_socket")),
+     ipcUnixNodePrefix(sr.getStringValue("ipc_unix_node_prefix","/tmp/gephex_socket")),
+     moduleDirs(sr.getStringValue("module_dirs")),
+     typeDirs(sr.getStringValue("type_dirs")),
      rendererInterval(sr.getIntValue("renderer_interval", 35)),
      netInterval(sr.getIntValue("net_interval", 35)),
      sequencerInterval(sr.getIntValue("sequencer_interval", 100)),
-     moduleDirs(sr.getStringValue("module_dirs")),
-     typeDirs(sr.getStringValue("type_dirs"))
+     port(sr.getIntValue("ipc_port"))
   {
   }
 

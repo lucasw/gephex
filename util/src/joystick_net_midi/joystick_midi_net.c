@@ -40,7 +40,7 @@ struct OldValues
 };
 
 static void sleep_in_millis(unsigned long millis);
-static void keys_init();
+//static void keys_init();
 static int keys_read();
 static void close_socket(int* socket);
 static int open_socket(int port, int* socket);
@@ -326,7 +326,7 @@ static int joystick_read_midi(struct Joystick* jst, struct OldValues* old,
 	for (i = 0; i < num_axes; ++i)
 	{
 		unsigned char axc = (unsigned char) (joystick_get_axis(jst, i) * 127);
-		assert ( 0 <= axc && axc <= 127 );
+		//assert ( 0 <= axc && axc <= 127 );
 		
 		if (abs(axc - old->axis[i]) > 0)
 		{
@@ -340,7 +340,7 @@ static int joystick_read_midi(struct Joystick* jst, struct OldValues* old,
 	{
 		unsigned char b = joystick_get_button(jst, i) * 127;
 		
-		assert ( 0 <= b && b <= 127 );
+		//assert ( 0 <= b && b <= 127 );
 		
 		if (b != old->button[i])
 		{
@@ -356,16 +356,17 @@ static int joystick_read_midi(struct Joystick* jst, struct OldValues* old,
   return len;
 }
 
+/*
 static void keys_init()
 {
-	const int STDIN = 0;
+  //const int STDIN = 0;
 #if defined(OS_POSIX)
 	//    int val = fcntl(STDIN, F_GETFL, 0);
 
 	//	fcntl(fileno(stdin), F_SETFL, val | O_NONBLOCK);
 #elif defined(OS_WIN32)	
 #endif
-}
+}*/
 
 static int keys_read()
 {

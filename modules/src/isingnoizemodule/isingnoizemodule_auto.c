@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "isingnoizemodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_isingnoizemodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_isingnoizemodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -40,6 +48,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -96,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Isingnoize] group=[Quellen] inputs=[5 Temperatur{higher_bound=[6] help=[Relative Temperatur] lower_bound=[0] widget_type=[unboundednumber_selector] } Randwachstum{hidden=[true] higher_bound=[16] widget_type=[number_selector] step_size=[0.5] lower_bound=[1] help=[Gibt an, wie stark der Rand fluktuiert] } Spontanes_Wachstum{hidden=[true] higher_bound=[48] widget_type=[number_selector] step_size=[0.5] lower_bound=[1] help=[Gibt an, wie stark Flächen fluktuieren] } outx{hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Groesse des Ergebnis-Bildes] } outy{hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Groesse des Ergebnis-Bildes] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Isingnoize] group=[Sources] inputs=[5 Temperature{lower_bound=[0] widget_type=[unboundednumber_selector] higher_bound=[6] help=[Relative temperature] } Bordergrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[16] hidden=[true] } Spontaneousgrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[48] hidden=[true] } outx{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the resulting image] } outy{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the resulting image] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(isingnoizemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -105,6 +119,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(isingnoizemodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -120,14 +139,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_isingnoizemodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

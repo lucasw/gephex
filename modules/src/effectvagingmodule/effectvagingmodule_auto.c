@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "effectvagingmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_effectvagingmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_effectvagingmodule] number_of_inputs=[1] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -28,6 +36,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -72,7 +86,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Aging] group=[EffecTV] inputs=[1 Bild ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Aging] group=[EffecTV] inputs=[1 Image ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(effectvagingmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -81,6 +95,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(effectvagingmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -96,14 +115,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_effectvagingmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

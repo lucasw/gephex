@@ -23,7 +23,7 @@ gephex-engine.1: $(srcdir)/gephex-engine.sgml
 gephex-gui.1: $(srcdir)/gephex-gui.sgml
 	docbook-to-man $(srcdir)/gephex-gui.sgml > gephex-gui.1
 
-documentation.html: $(srcdir)/documentation.sgml $(srcdir)/images/*.jpg
+documentation.html: $(srcdir)/documentation.sgml $(srcdir)/images/*.png
 	sgmltools -b onehtml $(srcdir)/documentation.sgml
 
 

@@ -2,14 +2,24 @@
 
 #include <iostream>
 
+
+
 #if defined (HAVE_CONFIG_H)
+
 #include "config.h"
+
 #endif
 
+
+
 #if defined(OS_POSIX)
+
 #include "domainserversocket.h"
+
 #elif defined(OS_WIN32)
+
 #include "namedpipeserversocket.h"
+
 #endif
 
 #include "netlogger.h"
@@ -117,8 +127,8 @@ void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
 }
   
   Controller::Controller(const EngineConfig& config_)
-    : m_finished(false),
-      config(config_),
+    : config(config_),
+      m_finished(false),
       m_port(config.port),      
       tagger1(modelControlSender),      
       tagger2(rendererControlSender),        
@@ -141,7 +151,7 @@ void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
       protocol(portTagger),
       socket(0),
       netPoller(socketAdaptor),
-		
+
       moduleReceiver(tagger1),
       moduleClassInfoReceiver(tagger2),
       moduleDataReceiver(tagger3),
@@ -157,9 +167,18 @@ void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
       modelStatusReceiver(tagger13),
       rendererStatusReceiver(tagger14),
       sequencerStatusReceiver(tagger15),
-	  logger(new engine::NetLogger(errorReceiver)),
-
       playlistStatusReceiver(tagger16),
+
+
+
+
+
+
+		
+
+      logger(new engine::NetLogger(errorReceiver)),
+
+
       pModel(config.graphDir),
       pRenderer(logger),
       pDllLoader(logger),
@@ -360,7 +379,16 @@ void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
 				
 	    pModel.updateFileSystem();
 				
-	    pModel.newGraph("default");	    
+		try 
+		{
+			pModel.newGraphWithID("default","_default_");
+			pModel.changeRenderedGraph("_default_", "_default_");
+			pModel.changeEditGraph("_default_", "_default_");
+		}
+		catch (std::exception& e)
+		{
+			logger->error("Could not create default graph", e.what());
+		}
 				
 	    pSequencer.updateFileSystem();
 	    pSequencer.createSequence("default");

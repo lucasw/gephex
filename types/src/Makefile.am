@@ -4,4 +4,8 @@ SUBDIRS = 	framebuffertype \
 		positiontype \
 		ifstype \
 		rgbtype \
-		miditype
+		miditype \
+                audiotype \
+		envtype \
+		lfotype
+

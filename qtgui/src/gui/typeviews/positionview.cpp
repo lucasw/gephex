@@ -25,7 +25,9 @@ namespace gui
 
   protected:
     void paintEvent(QPaintEvent* pe);
+    void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent* e);
+    void mouseReleaseEvent(QMouseEvent* e);
 
   private:
     void drawCuteLittleCross(const QPoint& p, QPainter& painter);
@@ -146,11 +148,23 @@ public slots:
   }
 
 
+
   void KleinesFeld::mouseMoveEvent(QMouseEvent* e)
   {
     setPos(e->pos());
-    QWidget::mouseMoveEvent(e);
+    // The parent widget must not receive this event
+    // see comment below
+    //QWidget::mouseMoveEvent(e);
   }
+  
+  /*
+   * These function are overloaded to prevent the default implementation
+   * from propagating the events to the parent widget.
+   * This has happened with qt >= 3.0 (but not 2.3).
+   * TODO: verify this works with qt 2.3
+   */
+  void KleinesFeld::mousePressEvent(QMouseEvent*) {};  
+  void KleinesFeld::mouseReleaseEvent(QMouseEvent* e) {};
 
 
   void KleinesFeld::drawCuteLittleCross(const QPoint& p, QPainter& painter)

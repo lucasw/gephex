@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "ifsmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_ifsmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_ifsmodule] number_of_inputs=[6] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -47,6 +55,12 @@ void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
 
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
+
   s_ref_count += 1;
 
   if (s_ref_count == 1)
@@ -74,7 +88,6 @@ void deleteInstance(void* instance)
   if (s_ref_count == 0)
   	destruct(s_inst);
 	
-
   free(inst);
 }
 
@@ -116,7 +129,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[IFS] group=[Ifs] inputs=[6 Größe(x){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } dotnum{help=[try something 5000 - 100000] hidden=[true] widget_type=[unboundednumber_selector] } lightness{hidden=[true] higher_bound=[1] widget_type=[number_selector] step_size=[0.01] lower_bound=[0] help=[lightness] } ifsin recdeep{help=[puh] hidden=[true] lower_bound=[0] higher_bound=[255] widget_type=[number_selector] } ] outputs=[1 Frame ] type=xpm } ";
+  static const char* INFO = "info { name=[IFS] group=[Ifs] inputs=[6 Größe(x){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } dotnum{widget_type=[unboundednumber_selector] hidden=[true] help=[try something 5000 - 100000] } lightness{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] hidden=[true] help=[lightness] } ifsin recdeep{lower_bound=[0] widget_type=[number_selector] higher_bound=[255] hidden=[true] help=[puh] } ] outputs=[1 Frame ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(ifsmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -125,6 +138,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(ifsmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -140,14 +158,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_ifsmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

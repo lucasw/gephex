@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "tunnelmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_tunnelmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_tunnelmodule] number_of_inputs=[8] number_of_outputs=[1] deterministic=[true] }";
 }
@@ -49,6 +57,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -114,7 +128,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Tunnel] group=[GrafikEffekte] inputs=[8 Bewegung{lower_bound=[-1.6] higher_bound=[1.6] widget_type=[number_selector] } Drehung{lower_bound=[0] higher_bound=[360] step_size=[0.5] } Position Bild Groesse(X){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Groesse(Y){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Radius{lower_bound=[0] higher_bound=[1] step_size=[0.01] widget_type=[number_selector] } Shading{hidden=[true] higher_bound=[10] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Stärke des Shadings] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Tunnel] group=[Effects] inputs=[8 Motion{lower_bound=[-1.6] widget_type=[number_selector] higher_bound=[1.6] } Rotation{lower_bound=[0] step_size=[0.5] higher_bound=[360] } Position Image Size(X){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the output in pixels] } Size(Y){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the output in pixels] } Radius{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] } Shading{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] help=[Degree of shading] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(tunnelmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -123,6 +137,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(tunnelmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -159,14 +178,6 @@ void* getInputAttributes(int index)
 	return attributes[index];
 }
 	
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_tunnelmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

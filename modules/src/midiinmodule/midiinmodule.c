@@ -159,6 +159,7 @@ static unsigned char s_midi_longbuf[MIDI_LONG_BUF_SIZE];
 #define MIDI_BUF_SIZE 1024
 static unsigned char s_midi_buf[MIDI_BUF_SIZE];
 static int s_midi_buf_len;
+static int s_init_finnished = 0;
 
 static CRITICAL_SECTION s_critical_section;
 
@@ -177,17 +178,22 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		MMRESULT res;
         int numDevs;
 
+		s_log = log_function;
+
+		s_midi_buf_len = 0;
+
 		numDevs = midiInGetNumDevs();
 
 		if (numDevs == 0)
 		{		  
 		  s_log(0, "No Midi Devices found - aborting");
 		  return 0;		  
-		}
+		}		
 
-		s_log = log_function;
+		InitializeCriticalSection(&s_critical_section);		
 
-		s_midi_buf_len = 0;
+		// to protect ourselves from midi-messages while init is not done yet
+		s_init_finnished = 0;
 
 		res = midiInOpen(&s_midi_in, 0, (DWORD) midiCallBack, (DWORD) 
 			0, CALLBACK_FUNCTION);
@@ -264,7 +270,7 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		  s_log(2, buffer);
 		}
 
-		InitializeCriticalSection(&s_critical_section);
+		s_init_finnished = 1;
 				
 		return 1;
 	}
@@ -324,10 +330,10 @@ static void put_byte(unsigned char byte)
 		s_midi_buf[s_midi_buf_len++] = byte;
 	else
 	{
-		char buffer[64];
+		/*char buffer[64];
 		snprintf(buffer, sizeof(buffer),
 			     "Buffer overflow at midiinmodule::put_byte, ignoring %i", byte);
-		s_log(0, buffer);
+		s_log(0, buffer)*/;
 	}
 	LeaveCriticalSection(&s_critical_section);
 }
@@ -344,11 +350,11 @@ static void put_block(unsigned char* block, int len)
 	}
 	else
 	{
-		char buffer[64];
+		/*char buffer[64];
 		snprintf(buffer, sizeof(buffer),
 			     "Buffer overflow at midiinmodule::put_block, ignoring %i bytes",
 				 len);
-		s_log(0, buffer);
+		s_log(0, buffer);*/
 	}
 	LeaveCriticalSection(&s_critical_section);
 }
@@ -361,6 +367,11 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 	unsigned char midiParam2; /* je nach commando andere bedeutung */
 
 	MidiType* buffer = (MidiType*) dwInstance;
+
+	// don't do anything if init has not finnished yet!
+	if (!s_init_finnished)
+		return;
+
 	midiStat   = (unsigned char) ((dwParam1 & 0x000000ff) >> 0);
 	midiParam1 = (unsigned char) ((dwParam1 & 0x0000ff00) >> 8);
 	midiParam2 = (unsigned char) ((dwParam1 & 0x00ff0000) >> 16);

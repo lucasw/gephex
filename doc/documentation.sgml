@@ -501,12 +501,8 @@ The Renderer knows there states for an graph:
    <title> The GePhex Graphical User Interface </title>
    <mediaobject>
    <imageobject>
-      <imagedata fileref="images/gui_1.jpg" format="jpg">
+      <imagedata fileref="images/gui_1.png">
    </imageobject>
-   <!--
-   <imageobject>
-      <imagedata fileref="images/gui_1.eps" format="eps">
-   </imageobject> -->
    <textobject> <phrase>The GUI (just started).</phrase> </textobject>
    <caption> <para> The GUI (just started). </para> </caption>
  </mediaobject>
@@ -559,12 +555,8 @@ The Renderer knows there states for an graph:
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_2.jpg" format="jpg">
+         <imagedata fileref="images/gui_2.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_2.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase>Creating a graph.</phrase> </textobject>
        <caption> <para> Creating a graph </para> </caption>
      </mediaobject>
@@ -574,12 +566,8 @@ The Renderer knows there states for an graph:
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_3.jpg" format="jpg">
+         <imagedata fileref="images/gui_3.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_3.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase> Choosing the name of the graph.</phrase>
        </textobject>
        <caption> <para> Choosing the name of the graph </para> </caption>
@@ -602,13 +590,9 @@ The Renderer knows there states for an graph:
        tell you that graph "first" is active (with current snapshot "default").
      </para>
      <mediaobject>
-        <imageobject>
-         <imagedata fileref="images/gui_4.jpg" format="jpg">
-       </imageobject>
-       <!--
        <imageobject>
-         <imagedata fileref="images/gui_4.eps" format="eps">
-       </imageobject> -->
+         <imagedata fileref="images/gui_4.png">
+       </imageobject>
        <textobject> <phrase>Activating the graph.</phrase> </textobject>
        <caption> <para> Activating the graph </para> </caption>
      </mediaobject>
@@ -621,23 +605,19 @@ The Renderer knows there states for an graph:
      </para>
      <para>
        To do so, open the "Effekte" menu in the top-level menu-bar.
-       Choose "Quellen"->"Bitmap Loader".
+       Choose "Sources"->"Image Source".
        Then click into the graph window as shown in the next image.
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_5.jpg" format="jpg">
+         <imagedata fileref="images/gui_5.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_5.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase>Adding an basic effect.</phrase> </textobject>
        <caption> <para> Adding an basic effect </para> </caption>
      </mediaobject>
      <para>
-       Do the same for "Effekte"->"Outputs"->"X11 Output" 
-       (or "GDI Output" on win32) and "Effekte"->"Filter"->"FlashFader".
+       Do the same for "Effekte"->"Outputs"->"Image Output" 
+       and "Effekte"->"Filter"->"FlashFader".
        Arrange them as in the next image (You can simply move them around with
        the mouse).
      </para>
@@ -650,12 +630,8 @@ The Renderer knows there states for an graph:
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_6.jpg" format="jpg">
+         <imagedata fileref="images/gui_6.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_6.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase>Connecting effects.</phrase> </textobject>
        <caption> <para> Connecting effects </para> </caption>
      </mediaobject>
@@ -674,18 +650,14 @@ The Renderer knows there states for an graph:
    <sect2> <title> Configuring the Graph </title>
      <para>
         This is simple. We just choose a bitmap.
-        Right-click on the "Bitmap-loader"-effect and choose "Properties"
+        Right-click on the "Image Source"-effect and choose "Properties"
         in the context menu. Now the info-window displays the properties
         of the bitmap effect:
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_7.jpg" format="jpg">
+         <imagedata fileref="images/gui_7.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_7.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase>Properties</phrase> </textobject>
        <caption> <para> Properties </para> </caption>
      </mediaobject>
@@ -708,12 +680,8 @@ The Renderer knows there states for an graph:
      </para>
      <mediaobject>
        <imageobject>
-         <imagedata fileref="images/gui_8.jpg" format="jpg">
+         <imagedata fileref="images/gui_8.png">
        </imageobject>
-       <!--
-       <imageobject>
-         <imagedata fileref="images/gui_8.eps" format="eps">
-       </imageobject> -->
        <textobject> <phrase>Creating a control.</phrase> </textobject>
        <caption> <para> Creating a control </para> </caption>
      </mediaobject>
@@ -739,16 +707,7 @@ The Renderer knows there states for an graph:
  </chapter>
 
 <chapter><title>Example Graphs</title>
-<sect1><title>Installing the Examles</title>
-<sect2><title>Win32</title>
-<para>
-  All following paths are relative to your GePhex distribution dir
-  (for example <filename>c:\programs\GePhex-0.0.4alpha\</filename>).
-  Just copy the files in <filename>examples\graphs</filename>
-  into <filename>graphs</filename> and restart GePhex if it is running.
-</para>
-</sect2>
-<sect2><title>Un*x</title>
+<sect1><title>Installing the Examles (Un*x version only)</title>
  <para>
    Copy the files in
    <filename>[your gephex source dir]/examples/graphs</filename>
@@ -756,30 +715,15 @@ The Renderer knows there states for an graph:
    The <filename>~/.gephex</filename> directory is created the first
    time you start GePhex.
   </para>
-</sect2>
-</sect1>
-<sect1><title>Note on the examples</title>
-  <para>
-    The example graphs are not complete. To use them, you must
-    add an output module. For Un*x, we suggest the X11Output.
-    For Win32 we suggest the GDIOutput.
-  </para>
-  <para>
-    The output module should be connected to the rightmost module of each
-    example graph.
-  </para>
 </sect1>
 <sect1><title>Example1: Tunnel-Vision</title>
   <para>
      Shows how to use the tunnel.
   </para>
   <para>
-     Try to attach the bitmap module instead of the isingnoize.
+     Try to attach the frbinmodule (Image Source) module instead of the 
+     isingnoize.
      (Don't forget to choose a bitmap as shown in the Guided Tour).
-  </para>
-  <para>
-     Of course you can attach an avimodule too, to watch your favourite
-     movie inside the tunnel...
   </para>
 </sect1>
 <sect1><title>Example2: Plasma</title>
@@ -796,21 +740,21 @@ The Renderer knows there states for an graph:
 </sect1>
 </chapter>
 
- <chapter><title>Module Reference</title>
+  <chapter>
+    <title>Module Reference</title>
 
-<sect1><title>Generators</title>
-<sect2><title>ifsmodule</title>
-<para>Linear iterated function systems are a fractal type. The module renders these kind of ifs parameter sets to a image.
-</para>
+    <sect1>
+      <title>Generators</title>
+
+      <sect2>
+        <title>ifsmodule</title>
+
+<para>Linear iterated function systems are a fractal type. The module renders these kind of ifs parameter sets to a image.</para>
+
 <mediaobject>
    <imageobject>
-      <imagedata fileref="images/ifs.jpg" format="jpg">
+      <imagedata fileref="images/ifs.png">
    </imageobject>
-
-   <imageobject>
-      <imagedata fileref="images/ifs.eps" format="eps">
-   </imageobject>
-
    <textobject>
       <phrase>This is an example for the output of the ifs module.</phrase>
    </textobject>
@@ -822,41 +766,101 @@ The Renderer knows there states for an graph:
    </caption>
 </mediaobject>
 
-</sect2>
-</sect1>
+    </sect2>
+  </sect1>
 
- <sect1> <title>Input Modules</title>
+  <sect1>
+    <title>Input Modules</title>
+
 <para>In this section all modules are listed, who's main goal is to inject data in from external sources in signal graph.</para>
 
-<sect2> <title>libmpeg3module</title>
-<para>This module has only one input. This is the name of a video file. The module opens and decodes this. The frames are exported to the output. The resolution is the original of the video stream.
-</para>
-<para>Supported file formats are mpeg1 and mpeg2 ...
-</para>
-</sect2>
+    <sect2>
+      <title>Videoplayback (avifilemodule)</title>
 
-<sect2> <title>v4lmodule</title>
+      <sect3>
+        <title>Description</title>
 
+<para>There are different videofileformats. Some can be streamed via net. Others allow random access to each videoframes. For some there is a normative standart. mpeg 1,2 and 4 are an example for these kinds. avi, quicktime or real video are (re)defined by their vendors. In most cases the video format is just a wrapper for a video stream encoded with a concrete videocodec.</para>
 
-<para>Video4linux is the original video capture/overlay API of the linux kernel. It is based on the API introduced by the bttv driver. It seems that v4l will be replaced in the next stable linux kernel by its successor <ulink url=" http://bytesex.org/v4l/spec/"> <citetitle>Video for Linux Two</citetitle></ulink> but at the moment no distribution has support for that API in its precompiled kernels. Support for this API is planned.</para>
+<para>The avifile library extracts the compressed videodata from the fileformats and and provides with the help of its plugins a lot of codecs to decode the framesequences. The actual support for one format depends on compile time options and the existance of other librarys on you system. Further information is provided at the homepage of the <ulink url="http://www.avifile.sourceforge.net"> <citetitle>avifile</citetitle></ulink> project.</para>
 
-<para>
-The first input is the filename of the video device. This is normally /dev/videoX where X is the number of the device. It is possible to switch the device during rendering. An invalid device results in a black output screen. The device is opened the first time the output of the module is used and closed with quit of the gephex-engine. A manual unloading of the module can also free the device handles. The other two inputs force the size of the grabbed image. If the device doesn't support that resolution a black frame is generated. A resolution 0,0 forces the module to choose any capable resolution. The output is either the grabbed frame from the v4l device or in case of an error a black, fully transparent 1x1 image.</para>
+      </sect3>
+
+      <sect3>
+        <title>Inputs</title>
+
+<para>The first input is the name and path of the videofile.</para>
+
+<para>There are two way to controll the playbackposition. If the seek input is false the module plays the film sequential frame by frame. The playback starts at the the beginning and plays the sequence once. If the seek input is true the playbackposition is controlls by the position input. A zero means jump to the beginning and a 1 to the end. If a signalgenertor is connected to the position the film can be played reverse, faster or slower just depending on the parameters of the generator.</para>
+
+      </sect3>
+
+      <sect3>
+        <title>Outputs</title>
+
+<para>The first output is the videostream.</para>
+
+<para>The second output is the playbackposition in the stream. If the seek is active this is the same as the seekposition but if we disabled seeking this position follows the playback. This output enables looping of parts or setting breakpoints at an arbitrary position.</para>
+
+      </sect3>
+
+      <sect3>
+        <title>Notes</title>
+
+<para>Many codecs don't allow fast seeking to an arbitrary video position. This isn't a problem for standard video playback applications. User of a video effect systems want to reverse the playback direction and jump to an random position in the videofootage. Sequential playback is borring. Watch you favourite movie in sine waves!</para>
+
+<para>For random access to the video footage it is often nessecary to reencode the material to framebased codecs like mjpeg. Tools like mencoder of virtual dub are very helpfull for these tasks.</para>
+
+      </sect3>
+
+    </sect2>
+
+    <sect2> 
+      <title>Video for Linux (v4lmodule)</title>
+
+      <sect3>
+        <title>Description</title>
+
+<para>It is possible to attach serveral different videoinput devices to the computer. Video signals from analog camcorders or vcrs are typically injected by a framegrabberadapter on the PCI-bus. Digital cameras or low cost webcams can be connected via USB(2) oder Firewire.</para>
+
+<para>Most operating systems with multimedia capabilities provide a convinience layer between the videodevice drivers and the application. All devices are handled independent of the connection typ in a similar fashion.</para>
+
+<para>Video4Linux (V4L) is the video capture/overlay API of the linux kernel. It is based on the programming interface introduced by the bttv driver. This is a consumer framegrabber chip used in most tv cards.</para> 
+
+<para>In future linux kernel series this api will be replaced by the successor <ulink url="http://bytesex.org/v4l/spec/"> <citetitle>Video for Linux Two</citetitle></ulink>. At the moment no GNU/Linux distribution supports this new API in their standard kernels.</para>
+
+<para>Support for the V4L2 API is planned.</para>
+
+      </sect3>
+    
+      <sect3>
+        <title>Inputs</title>
+
+<para>The first input is the filename of the video device. In most cases this is /dev/videoX where X is the number of the device. A setup with a webcam and a bttv card e.g. uses the devicefiles /dev/video0 and /dev/video1.</para>
+
+<para>It is possible to switch the device during rendering. But with some hardware/driver combinations this results in one or two broken frames.</para>
+
+<para>The other two inputs tell the framegrabber the image resolution. A resolution 0,0 forces the grabber to choose any supported resolution.</para>
+
+      </sect3>
+
+      <sect3>
+        <title>Output</title>
+
+<para>The captured frames are sent to the output. In case of an invalid videodevice, unsupported image size or any other error a black, full transparent one pixel sized image is returned.</para>
+ 
+      </sect3
+
+      <sect3>
+        <title>Notes</title>
 
 <para>The current version of this module is tested with the 2.4.20 kernel drivers of the the <ulink url="http://www.smcc.demon.nl/webcam/"><citetitle>usb webcam PCVC740K "ToUCam Pro"</citetitle></ulink> from Phillips and the <ulink url="http://bytesex.org/bttv/"><citetitle>pci bttv848 frame-grabber card win-TV radio</citetitle></ulink>.</para>
 
-<para>
-known bugs:
-<itemizedlist>
-<listitem><para>A error in the yuv2rgb conversion function creates sometimes  a broken bottom line.</para></listitem>
-<listitem><para>The capturing process is not while one update of the module. it is between two updates. If update isn't called every frame e.g. cause the branch isn't needed the module delivers one old frame with the first update. One solution is the check system time and check for dropped frames</para></listitem>
-<listitem><para>the memory of the output frame is allocated in the module and not the resize code of the framebuffertype is called</para></listitem>
-</itemizedlist>
-</para>
-
 <para>Further informations about video4linux driver- and user-space programming can be found in the kernel documentation (kernel-source-2.4.20/Documentation/video4linux/API.html and kernel-source-2.4.20/Documentation/DocBook/videobook.tmpl) and in the <ulink url="https://listman.redhat.com/mailman/listinfo/video4linux-list"><citetitle>video4linux mailing list</citetitle></ulink>.</para>
 
- </sect2>
+      </sect3>
+
+    </sect2>
 
  </sect1>
   </chapter>
@@ -1099,9 +1103,8 @@ static __inline void palette_deleteInstance(PaletteType* pal)
 &module-api-update
 
 &module-api-getInputAttributes
-
-
 </sect3>
+
 <sect3><title>Optional Methods</title>
 <para>
 To enable additional functionality the shared library must export some of the the following methods. The functions are used for optimisation:
@@ -1117,6 +1120,54 @@ To enable additional functionality the shared library must export some of the th
       </sect3>
 
     </sect2>
+
+    <sect2>
+      <title>Pluc the skeleton generator</title>
+
+<para>The c-api design allows module developers to write their plugins in almost any programming language. This is archieved by a very lowlevel interface between host and plugin.</para>
+
+<para>Many module functions a very simple and have just some lines of code. We want to implement a module that outputs the maximum of its both number inputs. In c++ this would be a one liner:</para>
+<programlisting>
+double output1,input1,input2;
+output1 = std::max(input1,input2)
+</programlisting>
+<para>But the effort needed to export this piece of code via the c-api interface is huge. This is the reason why the pluc.py stub generator exists.</para>
+
+<para>The idea of pluc is that many properties of a module are described in an abstract fashon in a spec file. Pluc can generate from this file:</para>
+<para>The files needed for the buildsystem like automake and the visual studio are generated.</para>
+<para>convinience layer to abstract from the c-api</para>
+<para>A minimum skeleton code for the module implementation. This can be used as a basis for implemention the function.</para>
+
+<para>sample invocations of pluc</para>
+<screen>
+pluc.py dsp testmodule.spec 
+pluc.py am testmodule.spec 
+pluc.py skel testmodule.spec 
+</screen>
+
+<sect3>
+  <title>Syntax and semantic of the spec file</title>
+
+<para></para>
+
+</sect3>
+
+<sect3>
+  <title>Invocation of pluc.py</title>
+
+<para></para>
+
+</sect3>
+
+   </sect2>
+
+    <sect2>
+      <title>An example for a new module</title>
+
+<para>TODO</para>
+
+    </sect2>
+
   </sect1>
 </chapter>
 
@@ -1133,3 +1184,4 @@ To enable additional functionality the shared library must export some of the th
 
 
 </book>
+

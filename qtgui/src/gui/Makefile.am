@@ -44,7 +44,8 @@ CPP_FILES = \
 	videowallcontrollwidget.cpp \
 	guiconfig.cpp \
 	typeview.cpp \
-	typeviewfactory.cpp
+	typeviewfactory.cpp \
+	aboutdialog.cpp
 
 MOCED_FILES = \
 	playlist_moc.cpp \
@@ -102,7 +103,8 @@ HEADER_FILES = \
 	uebertab.h \
 	guiconfig.h \
 	typeview.h \
-	typeviewfactory.h
+	typeviewfactory.h \
+	aboutdialog.h
 
 EXTRA_DIST= \
 	node.xpm \
@@ -126,7 +128,7 @@ Makefile: $(BUILT_SOURCES)
 gephex_gui_LDADD = \
 	$(QT_LIBS) \
 	-lguimodel \
-	-lnetwork \
+	-lgphxnetwork \
 	-lnetinterfaces \
 	-lguibase \
 	-lguieditor \
@@ -142,7 +144,7 @@ gephex_gui_LDADD = \
 
 gephex_gui_DEPENDENCIES = \
 	@builddir@/../guimodel/libguimodel.a \
-	@builddir@/../../../base/src/net/libnetwork.a \
+	@builddir@/../../../base/src/net/libgphxnetwork.a \
 	@builddir@/../../../base/src/netinterfaces/libnetinterfaces.a \
 	@builddir@/../../../base/src/utils/libutils.a \
 	@builddir@/base/libguibase.a \

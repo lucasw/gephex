@@ -10,6 +10,7 @@
 #include <qmessagebox.h>
 
 #include "interfaces/imodelcontrolreceiver.h"
+#include "interfaces/ierrorreceiver.h"
 
 #include "guimodel/iscenesequencer.h"
 
@@ -17,20 +18,33 @@
 
 #include "base/treeviewitem.h"
 
+#include "utils/stringtokenizer.h"
 
 namespace gui
 {
+  static bool checkNamePolicy (const std::string& name);
 
-  class GraphTopItem : public TreeViewItem
+  class FolderItem : public TreeViewItem
   {
   public:
-    GraphTopItem(IModelControlReceiver& model)
-      :  m_model(model) {}
+    enum Permission {NONE = 0, DENY_RENAME = 1, DENY_REMOVE = 2};
+
+    FolderItem(IModelControlReceiver& model, 
+               const std::string graphID,
+               const std::string& path,
+               const std::string& displayName, int mask = NONE)
+      : m_model(model), m_graphID(graphID), m_path(path), 
+      m_name(displayName), m_mask(mask) {}
+
+    std::string getPath() const
+    {
+      return m_path;
+    }
 
     virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
     {
       TreeViewItem::setColumnTextChangeListener(l);
-      l.textChanged(0,"Graphen");
+      l.textChanged(0, m_name);
     }
 
     virtual QPopupMenu* getPropertyMenu()
@@ -38,6 +52,13 @@ namespace gui
       QPopupMenu *popme = new QPopupMenu(0, "TopPop");
 
       popme->insertItem("New Graph",NEW_GRAPH);
+      popme->insertItem("New Folder",NEW_FOLDER);
+
+      if (!(m_mask & DENY_RENAME))
+        popme->insertItem("Rename",RENAME_FOLDER);
+
+      if (!(m_mask & DENY_REMOVE))
+        popme->insertItem("Remove",REMOVE_FOLDER);
 
       return popme;      
     }
@@ -48,35 +69,83 @@ namespace gui
 	{
 	case NEW_GRAPH:
 	  {
-      bool retry=true;
-      while(retry)
-      {
-  	    const std::string newName = AskForStringDialog::open(0, "New Graph",
-  						   "Enter a name");
-        if (checkNamePolicy(newName))
-        {
-	        m_model.newGraph(newName);
-          retry=false;
-        }
-        else
-        {
-          switch (QMessageBox::warning (0,"ungueltiger Name","Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
-                QMessageBox::Retry | QMessageBox::Default,
-                QMessageBox::Abort | QMessageBox::Escape))
-          {
-            case QMessageBox::Abort:
-            {
-             retry=false;
-             break;
-            }
-            case QMessageBox::Retry:
-            {
-             break;
-            }
-          }
-        }
-      }
+            bool retry=true;
+            while(retry)
+              {
+                const std::string newName = AskForStringDialog::open(0, "New Graph",
+                                                                     "Enter a name");
+                if (checkNamePolicy(newName))
+                  {
+                    m_model.newGraph(m_path + "/" + newName);
+                    retry=false;
+                  }
+                else
+                  {
+                    switch (QMessageBox::warning (0,"ungueltiger Name",
+                                                  "Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
+                                                  QMessageBox::Retry | QMessageBox::Default,
+                                                  QMessageBox::Abort | QMessageBox::Escape))
+                      {
+                      case QMessageBox::Abort: retry=false; break;            
+                      case QMessageBox::Retry: break;            
+                      }
+                  }
+              }
 	  } break;
+        case NEW_FOLDER:
+	  {
+            bool retry=true;
+            while(retry)
+              {
+                const std::string newName = AskForStringDialog::open(0, "New Folder",
+                                                                     "Enter a name");
+                if (checkNamePolicy(newName))
+                  {
+                    m_model.newGraph(m_path + "/" + newName + "/");
+                    retry=false;
+                  }
+                else
+                  {
+                    switch (QMessageBox::warning (0,"ungueltiger Name","Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
+                                                  QMessageBox::Retry | QMessageBox::Default,
+                                                  QMessageBox::Abort | QMessageBox::Escape))
+                      {
+                      case QMessageBox::Abort: retry=false; break;
+                      case QMessageBox::Retry: break;
+                      }
+                  }
+              }
+	  } break;
+        case RENAME_FOLDER:
+	  {
+            if (m_mask & DENY_RENAME)
+              break;
+            bool retry=true;
+            while(retry)
+              {
+                const std::string newName = AskForStringDialog::open(0, "New Name",
+                                                                     "Enter a name");
+                if (checkNamePolicy(newName))
+                  {
+                    m_model.renameGraph(m_graphID, m_path + "/" + newName + "/");
+                    retry=false;
+                  }
+                else
+                  {
+                    switch (QMessageBox::warning (0,"ungueltiger Name","Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
+                                                  QMessageBox::Retry | QMessageBox::Default,
+                                                  QMessageBox::Abort | QMessageBox::Escape))
+                      {
+                      case QMessageBox::Abort: retry=false; break;
+                      case QMessageBox::Retry: break;
+                      }
+                  }
+              }
+	  } break;
+        case REMOVE_FOLDER:	  
+          if (!(m_mask & DENY_REMOVE))		  
+            m_model.deleteGraph(m_graphID);
+	  break;
 	default:
 	  assert("so ein mist!");
 	}
@@ -84,33 +153,23 @@ namespace gui
 
   private:
     IModelControlReceiver& m_model;
-
-    enum { NEW_GRAPH };
-  };
-
-  class FolderItem : public TreeViewItem
-  {
-  public:
-    FolderItem(const std::string& name)
-      : m_name(name) {}
-
-    virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
-    {
-      TreeViewItem::setColumnTextChangeListener(l);
-      l.textChanged(0,m_name.c_str());
-    }
-
-  private:
+    std::string m_graphID;
+    std::string m_path;
     std::string m_name;
+
+    int m_mask;
+
+    enum { NEW_GRAPH, NEW_FOLDER, REMOVE_FOLDER, RENAME_FOLDER };
   };
 
   class GraphItem : public TreeViewItem
   {
   public:
     GraphItem(const std::string& graphID,
+	      const std::string& path,
 	      const std::string& graphName,
 	      IModelControlReceiver& model)
-      :      m_graphID(graphID), m_graphName(graphName), m_model(model),
+      :      m_graphID(graphID),m_path(path), m_graphName(graphName), m_model(model),
 	     m_numberOfSnaps(0) {}
 
     virtual ~GraphItem() {}
@@ -193,17 +252,17 @@ namespace gui
 	    m_model.deleteGraph(m_graphID);
 	  } break;
 	case RENAME_GRAPH:
-	{
-	  std::string newName = AskForStringDialog::open(0, "Rename Graph",
-							 "Enter new name");
-	  m_model.renameGraph(m_graphID, newName);
-	} break;
+          {
+            std::string newName = AskForStringDialog::open(0, "Rename Graph",
+                                                           "Enter new name");
+            m_model.renameGraph(m_graphID, m_path+newName);
+          } break;
 	case COPY_GRAPH:
-	{
-	  std::string newName = AskForStringDialog::open(0, "Copy Graph",
-							 "Enter name of copy");
-	  m_model.copyGraph(m_graphID, newName);
-	} break;
+	  {
+	    std::string newName = AskForStringDialog::open(0, "Copy Graph",
+							   "Enter name of copy");
+	    m_model.copyGraph(m_graphID, m_path+ newName);
+	  } break;
 	default:
 	  assert(!"MIST!");
 	}
@@ -212,6 +271,8 @@ namespace gui
   private:
     std::string m_graphID;
     std::string m_graphName;
+    std::string m_path;
+
 
     IModelControlReceiver& m_model;
 
@@ -326,7 +387,7 @@ namespace gui
 	      }
 
 	    std::string command = m_graphID + ":" + m_snapID;
-	    m_sequencer->appendScene(command, length*1000);
+	    m_sequencer->appendScene(command, static_cast<int>(length*1000));
 	  }
 	  break;
 	case RENAME_SNAPSHOT:
@@ -350,7 +411,7 @@ namespace gui
 	  } break;
 	default:
 	  assert(!"MIST!");
-      }
+        }
     }
 
   private:
@@ -386,16 +447,18 @@ namespace gui
 
   GraphNameView::GraphNameView(QWidget* parent,
 			       IModelControlReceiver& model,
-			       ISceneSequencer& sequencer)
+			       ISceneSequencer& sequencer,
+                               IErrorReceiver& log)
     :  stupidObject(0,*this), editSnap(0), renderedGraph(0),
-       m_model(model), m_topItem(new GraphTopItem(model) ),
-       m_sequencer(&sequencer)
+       m_model(model), m_topItem(new FolderItem(model, "_", "", "Graphen", 
+                                                FolderItem::DENY_REMOVE | FolderItem::DENY_RENAME) ),
+       m_sequencer(&sequencer), m_log(log)
   {
     std::vector<std::string> cols;
     cols.push_back("Name");
     cols.push_back("Status");
     m_treeView = new TreeView(parent,"Graphen",cols);
-    m_treeView->insertItem(*m_topItem,0);
+    m_treeView->insertItem(*m_topItem,0);	
   }
 
   GraphNameView::~GraphNameView()
@@ -412,6 +475,62 @@ namespace gui
     return m_treeView->widget();
   }
 
+  /**
+   * Extracts the first part and the last component of a full path.
+   * For example, if fullPath = "/one/two/three/four"
+   *  then path will be "/one/two/three" (without trailing slash!),
+   *  and last will be "four".
+   *
+   * If fullPath ends with a "/" the result is the same.
+   *
+   * If fillPath has only one or zero components ("/one/" or "/"), then
+   * path will be "" and last will be "one" or "/".
+   */
+  void extractPath(const std::string& fullPath, std::string& path, std::string& last)
+  {
+    utils::StringTokenizer sr(fullPath);
+
+    /*if (fullPath[fullPath.length()-1] == '/')
+      {
+      path = fullPath.substr(0, fullPath.length()-1);
+      last = "";
+      return;
+      }*/
+
+    path = "";
+    last = "";
+
+    std::string token = sr.next("/");
+    while (token != "")
+      {		  
+        std::string new_token = sr.next("/");
+        if (new_token == "")
+          last = token; 
+        else
+          path = path + "/" + token;
+
+        token = new_token;
+      }
+  }
+
+  TreeViewItem* GraphNameView::getFolder(const std::string& path)
+  {
+    if (path == "/")
+      return &*m_topItem;	  
+
+    FolderNameMap::const_iterator it = m_folderNames.find(path);
+    if (it == m_folderNames.end())
+      return 0;
+
+    std::string graphID = it->second;
+
+    FolderMap::const_iterator it2 = m_folders.find(graphID);
+    if (it2 == m_folders.end())
+      return 0;
+
+    return &*it2->second;
+  }
+
   void GraphNameView::graphExists(const std::string& graphID,
 				  const std::string& snapID,
 				  const std::string& graphName,
@@ -423,58 +542,120 @@ namespace gui
 
     if (it2 != m_snaps.end())
       {
-	throw std::runtime_error("Snap already exists!");
+	m_log.error("Snap already exists!");
+        return;
       }
+
+    bool folder = false;
 
     if (it == m_graphs.end())
       {
-	GraphItemPtr tmp( new GraphItem(graphID,graphName,m_model) );
+        std::string folderName;
+        std::string fileName;
+        extractPath(graphName, folderName, fileName);
 
-	m_graphs[graphID] = tmp;
-	m_treeView->insertItem(*tmp,&*m_topItem);
+        TreeViewItem* parent = getFolder(folderName + "/");
+        if (parent == 0)
+          {
+            m_log.error("graphNameExists: Could not find folder '" 
+                                     + folderName + "/'");
+            return;
+          }		
+        if (graphName[graphName.length()-1] == '/') // create a folder
+          {
+            folder = true;						
+            FolderItemPtr tmp (new FolderItem(m_model, graphID, 
+                                              folderName + "/" + fileName,
+                                              "%" + fileName + "%"));
 
-	it = m_graphs.find(graphID);
+            m_folders[graphID] = tmp;
+            m_folderNames[graphName] = graphID;
+						
+            m_treeView->insertItem(*tmp, parent);
+          }
+        else                // create a graph
+          {
+            folder = false;
+            GraphItemPtr tmp( new GraphItem(graphID,folderName+"/", fileName, m_model) );
+            m_graphs[graphID] = tmp;
+            m_treeView->insertItem(*tmp, parent);
+            it = m_graphs.find(graphID);
+          }				
       }
 
 
-    assert(it != m_graphs.end());
+    if (!folder)
+      {
+        assert(it != m_graphs.end());
 
-    SnapItemPtr tmp( new SnapItem(graphID,snapID,
-				  graphName,snapName,m_model,*m_sequencer) );
+        SnapItemPtr tmp( new SnapItem(graphID,snapID,
+                                      graphName,snapName,m_model,*m_sequencer) );
 
-    m_snaps[std::make_pair(graphID,snapID)] = tmp;
-    m_treeView->insertItem(*tmp,&*it->second);
-    it->second->snapAdded();
+        m_snaps[std::make_pair(graphID,snapID)] = tmp;
+        m_treeView->insertItem(*tmp,&*it->second);
+        it->second->snapAdded();
+      }
   }
 
   void GraphNameView::graphNoLongerExists(const std::string& graphID,
 					  const std::string& snapID)
   {
-    GraphMap::iterator it = m_graphs.find(graphID);
-    SnapMap::iterator it2 = m_snaps.find(std::make_pair(graphID,snapID));
-	
-    if (it == m_graphs.end() || it2 == m_snaps.end())
+    if (m_graphs.find(graphID) == m_graphs.end() || snapID == "") //folder
       {
-	throw std::runtime_error("Graph '" + graphID + ":" + snapID + "' doesnt exist at "
-				 "GraphNameView::graphNoLongerExists()");
+        FolderMap::iterator it = m_folders.find(graphID);
+        if (it == m_folders.end())
+          {
+            m_log.error("Folder '" + graphID 
+                                     + "' doesnt exist at "
+                                     "GraphNameView::graphNoLongerExists()");
+            return;
+          }
+
+        std::string path = it->second->getPath();
+        m_treeView->removeItem(*it->second);
+
+        m_folders.erase(it);
+
+        FolderNameMap::iterator it2 = m_folderNames.find(path + "/");
+        if (it2 == m_folderNames.end())
+          {
+            m_log.error("Foldername '" + path + "' doesnt exist at "
+                                     "GraphNameView::graphNoLongerExists()");
+            return;
+          }
+            
+        m_folderNames.erase(it2);
       }
-
-	if (editSnap->snapName() == it2->second->snapName())
-		editSnap = SnapItemPtr(0);
-
-    m_treeView->removeItem(*it2->second);
-    m_snaps.erase(it2);
-    it->second->snapRemoved();
-
-    // remove graph if it has no snaps left
-    if (it->second->numberOfSnaps() == 0)
-    {
-	  if (renderedGraph->graphName() == it->second->graphName())
-		  renderedGraph = GraphItemPtr(0);
-
-      m_treeView->removeItem(*it->second);
-      m_graphs.erase(it);
-    }
+    if (snapID != "") //graph
+      {
+        GraphMap::iterator it = m_graphs.find(graphID);
+        SnapMap::iterator it2 = m_snaps.find(std::make_pair(graphID,snapID));
+		  
+        if (it == m_graphs.end() || it2 == m_snaps.end())
+          {
+            m_log.error("Graph '" + graphID + ":" 
+                                     + snapID + "' doesnt exist at "
+                                     "GraphNameView::graphNoLongerExists()");
+            return;
+          }
+		  
+        if (editSnap && editSnap->snapName() == it2->second->snapName())
+          editSnap = SnapItemPtr(0);
+		  
+        m_treeView->removeItem(*it2->second);
+        m_snaps.erase(it2);
+        it->second->snapRemoved();
+		  
+        // remove graph if it has no snaps left
+        if (it->second->numberOfSnaps() == 0)
+          {
+            if (renderedGraph && renderedGraph->graphName() == it->second->graphName())
+              renderedGraph = GraphItemPtr(0);
+			  
+            m_treeView->removeItem(*it->second);
+            m_graphs.erase(it);
+          }
+      }
   }
 
 
@@ -488,8 +669,9 @@ namespace gui
 
     if (it == m_graphs.end() || it2 == m_snaps.end())
       {
-	throw std::runtime_error("Graph doesnt exist at "
+	m_log.error("Graph doesnt exist at "
 				 "GraphNameView::graphRenamed()");
+        return;
       }
 
     it->second->setName(newGraphName);
@@ -504,7 +686,8 @@ namespace gui
 
     if (it == m_snaps.end())
       {
-	throw std::runtime_error("Snap doesnt!");
+	m_log.error("Snap doesnt!");
+        return;
       }
 
     if (editSnap != 0)
@@ -520,7 +703,10 @@ namespace gui
     GraphMap::const_iterator it = m_graphs.find(graphID);
 
     if (it == m_graphs.end())
-	throw std::runtime_error("Graph doesnt!");
+      {
+        m_log.error("Graph doesn't exist at markRenderedGraph!");
+        return;
+      }
 
     if (renderedGraph != 0)
       renderedGraph->setStatus("");
@@ -540,20 +726,20 @@ namespace gui
     const std::string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 
     if (name.length()>maxNameLength||name.length()<minNameLength)
-    {
-      // violation of the length rule in the name policy
-      return false;
-    }
+      {
+        // violation of the length rule in the name policy
+        return false;
+      }
 
     for(std::string::const_iterator it=name.begin();it!=name.end();++it)
-    {
-      std::string::const_iterator it2 = std::find(allowedCharacters.begin(),allowedCharacters.end(),*it);
-      if (it2==allowedCharacters.end())
-        {
-          // this character is not allowed
-          return false;
-        }
-    }
+      {
+        std::string::const_iterator it2 = std::find(allowedCharacters.begin(),allowedCharacters.end(),*it);
+        if (it2==allowedCharacters.end())
+          {
+            // this character is not allowed
+            return false;
+          }
+      }
 
     return true;
   }

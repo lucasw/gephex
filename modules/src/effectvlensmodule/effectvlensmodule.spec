@@ -14,7 +14,7 @@ inputs
 {
     b
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -22,7 +22,7 @@ inputs
 
     pos
     {
-        name              = Linsenposition
+        name              = Position
         type              = typ_PositionType
         const             = true
         strong_dependency = true
@@ -31,11 +31,11 @@ inputs
 
     size
     {
-        name              = Linsengroesse
+        name              = Size
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
-	default           = 150
+        default           = 150
         lower_bound       = 10
         higher_bound      = 500
         widget_type       = unboundednumber_selector
@@ -43,11 +43,11 @@ inputs
 
     mag
     {
-        name              = Vergroesserung
+        name              = Magnification
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
-	default           = 30
+        default           = 30
         lower_bound       = 5
         higher_bound      = 200
         widget_type       = unboundednumber_selector
@@ -55,14 +55,14 @@ inputs
 
     interactive
     {
-        name              = Interaktiv
+        name              = Interactiv
         type              = typ_NumberType
         const             = true
         strong_dependency = true 
-	default           = 0
+        default           = 0
         widget_type       = radio_button
         true_value        = 1
-	false_value       = 0
+        false_value       = 0
     }
 }
 
@@ -70,7 +70,7 @@ outputs
 {
     r
     {
-    name = Bild
-    type = typ_FrameBufferType
+        name = Image
+        type = typ_FrameBufferType
     }
 }

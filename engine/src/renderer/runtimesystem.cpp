@@ -5,10 +5,12 @@
 #endif
 
 #include <stdexcept>
-#include <list>
+#include <stack>
 #include <cassert>
 
 #include <algorithm>
+
+#include <iostream>
 
 #include "interfaces/imodule.h"
 #include "interfaces/itype.h"
@@ -22,8 +24,9 @@
 
 namespace renderer
 {
+
   static const int AVG_LEN = 20;
-	
+    
   /**
    * This class manages a module. It has the ownership of the module
    * and contains some other (statistical and internal) data.
@@ -31,21 +34,40 @@ namespace renderer
   class ModuleControlBlock
   {
   private:
+    /**
+     * Pointer to the module instance. The object is managed by the
+     * ModuleControlBlock
+     */
     IModule* m_module;
+      
+    /**
+     * This flag is used by the renderer algorithm, to indicate that the
+     * is already on the stack and that means it is a parent node of the
+     * current one 
+     */
     bool m_active;
     int m_activationCount;
     std::list<int> m_times;
     int m_lastTime;
+      
+    /**
+     * every input has a flag that is set to true if the input was changed.
+     */
     std::vector<bool> m_inputHasChanged;
-	int m_lastUpdated;
-		
-		
-    ModuleControlBlock(const ModuleControlBlock&); //nicht impl.
-    const ModuleControlBlock& operator=(const ModuleControlBlock&); //nicht impl.
+
+    /**
+     * Time the module was last updated. -1 indicates a never updated module
+     */
+    int m_lastUpdated;
+    
+    // not implemented methods
+    ModuleControlBlock(const ModuleControlBlock&);
+    const ModuleControlBlock& operator=(const ModuleControlBlock&);
+
   public:
     /**
      * Creates a new ModuleContrlBlock.
-     * @param module The module that is managed by this class.
+     * @param module Pointer to the module. It is now managed by this class.
      */
     ModuleControlBlock(IModule* module)
       : m_module(module), m_active(false), m_activationCount(0),
@@ -54,27 +76,57 @@ namespace renderer
 	m_lastUpdated(-1)
     {
     }
+
 		
-    ~ModuleControlBlock() {
+    /**
+     * Destroys the ModuleControlBlock and its Module
+     */
+    ~ModuleControlBlock() 
+    {
       delete m_module;
     }
+
 		
-    IModule* module() {
+    /**
+     * Get a pointer to the managed module
+     * \returns pointer to the module
+     */
+    IModule* module() 
+    {
       return m_module; 
     }
+
 		
+    /**
+     * Sets the changed flag for one input of the module
+     * \param input index of the input. [0 .. #inputs-1]
+     */
     void setChanged(int input)
     {
-      assert(input >= 0 && input < (int) m_inputHasChanged.size());
+      if (!(input >= 0 && input < (int) m_inputHasChanged.size()))
+        {
+          std::cerr << "Wrong input at setChanged!\n";
+          return; 
+        }
       m_inputHasChanged[input] = 1;
     }
-		
+	
+	
+    /**
+     * Query the status of one changed flag
+     * \param input index of the input. [0 .. #inputs-1]
+     */
     bool hasChanged(int input) const
     {
-      assert(input >= 0 && input < (int) m_inputHasChanged.size());
+      if (!(input >= 0 && input < (int) m_inputHasChanged.size()))
+        {
+          std::cerr << "Wrong input at setChanged!\n";
+          return false; 
+        }
       return m_inputHasChanged[input];
     }
-		
+	
+    
     bool hasChanged() const
     {
       std::vector<bool>::const_iterator 
@@ -86,20 +138,24 @@ namespace renderer
 			
       return *it;
     }
-		
+	
+    
     /**
      * Wurde setActive() seit dem letzten Aufruf von reset() schon
      * aufgerufen?
      */
-    bool isActive() const { 
+    bool isActive() const 
+    { 
       return m_active; 
     }
-		
+	
+    
     /**
      * Markiert das Modul als reseted (und damit als nicht aktiv).
      * The changed attributes of all inputs are set to false;
      */
-    void reset() {
+    void reset() 
+    {
       m_active = false;
 
       for (std::vector<bool>::iterator it = m_inputHasChanged.begin();
@@ -109,10 +165,12 @@ namespace renderer
 	}
     }
 
+    
     /**
      * Markiert das Modul als aktiv (und damit als nicht reseted).	 
      */
-    void activate() {
+    void activate() 
+    {
       if (m_activationCount >= AVG_LEN)
 	m_times.pop_front();
 			
@@ -122,17 +180,23 @@ namespace renderer
       m_active = true; 
     }
 
-    void addTime(int t)	{
+    
+    void addTime(int t)
+    {
       m_lastTime += t;
     }
-		
-    int lastTime() const {
+	
+    
+    int lastTime() const 
+    {
       return m_lastTime;
     }
+
 		
-    double avgTime() const {
+    double avgTime() const 
+    {
       int num = m_times.size();
-			
+      
       if (num == 0)
 	return 0;
 			
@@ -145,24 +209,27 @@ namespace renderer
       return aTime / (double) num;
     }
 
-	/**
-	 * returns the framecount, when the module was last updated
-	 */
-	int lastUpdated() const
-	{
-	return m_lastUpdated;
-	}
 
-	/**
-	* sets the time when the module was last updated
-	*/
-	void updated(int frameCount)
-	{
-		m_lastUpdated = frameCount;
-	}
+    /**
+     * \returns the framecount, when the module was last updated
+     */
+    int lastUpdated() const
+    {
+      return m_lastUpdated;
+    }
 
+
+    /**
+     * sets the time when the module was last updated
+     * \param frameCount last update time
+     */
+    void updated(int frameCount)
+    {
+      m_lastUpdated = frameCount;
+    }
+    
   };
-	
+
   RuntimeSystem::RuntimeSystem (const IModuleFactory& factory,
 				const ITypeFactory& tFactory)
     :  m_modules(), m_sinks(), m_time(0), frameCount(0),
@@ -217,7 +284,13 @@ namespace renderer
 		
     IModule* m1 = it1->second->module();
     IModule* m2 = it2->second->module();
-		
+	
+	if (outputNumber < 0 || outputNumber >= m1->getOutputs().size())
+		throw std::runtime_error("Ungueltiger output bei RuntimeSystem::connect.");
+
+	if (inputNumber < 0 || inputNumber >= m2->getInputs().size())
+		throw std::runtime_error("Ungueltiger input bei RuntimeSystem::connect.");
+
     int t1 = m1->getOutputs()[outputNumber]->getType();
     int t2 = m2->getInputs()[inputNumber]->getType();
 		
@@ -310,13 +383,14 @@ namespace renderer
   void RuntimeSystem::update(IControlValueReceiver* cvr,
 			     IModuleStatisticsReceiver* msr)
   {	
-    std::list<ModuleControlBlockPtr> stack;
-		
+    std::stack<ModuleControlBlockPtr> stack;
+    
+    // push the sinks (modules with no output) on the stack
     for (std::list<ModuleControlBlockPtr>::iterator sink = m_sinks.begin();
 	 sink != m_sinks.end(); ++sink)
       {
 	(*sink)->activate();
-	stack.push_front(*sink);
+	stack.push(*sink);
       }
 
 #if (ENGINE_VERBOSITY > 2)
@@ -326,130 +400,132 @@ namespace renderer
 		
     while (!stack.empty())
       {
-	ModuleControlBlockPtr block = stack.front();
+	ModuleControlBlockPtr block = stack.top();
 			
 	IModule* m = block->module();
 			
 	assert (block->isActive());
 			
-	std::list<IInput*> l;
-	m->dependencies(l);
+	IInput* dep = m->dependencies();
 			
-	// alle module die m benötigt auf den stack
-	if (!l.empty())
+	// is there a not satisfied dependency left?
+	if (dep != 0)
 	  {
-	    for (std::list<IInput*>::iterator i = l.begin(); i != l.end(); ++i)
-	      {
-		IModule* temp = (*i)->getConnectedModule();
-					
-		//TODO: wenn der input nicht verbunden ist???
-		if (temp == 0)
-		  {
-		    continue;
-		  }
-					
+	    IModule* temp = dep->getConnectedModule();
+	    
+	    // is the input connected to an other module?
+	    if (temp != 0)
+              {
+		// check that module
 		ModuleControlBlockPtr current = getControlBlock(temp);
-		// nur module hinzufügen die noch nicht im stack sind
-		// und noch nicht in diesem frame gerechnet wurden
-		if (!current->isActive() && current->lastUpdated() != frameCount)
+		
+		// 1. in case the module is on the stack we detected a cycle
+		// the solution is to use the old value of that output
+		// 2. the module is already updatet in this cycle
+		// we dont want do update it again
+		if (current->isActive()||(current->lastUpdated()==frameCount))
 		  {
-		    current->activate();
-		    stack.push_front(current);
+		    // it could be that the value changed (conservative)
+		    block->setChanged(dep->getIndex());
 		  }
 		else
 		  {
-		    // current ist schon im stack		    
-		    // there must be a cycle, update the input
-		    block->setChanged((*i)->getIndex());
+		    // we must update this module
+		    current->activate();
+		    stack.push(current);		    
 		  }
-	      }
+              }
 	  }
-	else // m does not need any more inputs
+	else
 	  {
-		
+	    // all dependencies are satisfied
+
+	    // is a update necessary?
 	    if (!m->isDeterministic() || block->hasChanged())
 	      {
-		//call update for all needed inputs
-		//updateInputs(block, frameCount);
-			
-		unsigned long t1 = utils::Timing::getTimeInMillis();
+		// lets update the module
+		unsigned long startTime = utils::Timing::getTimeInMillis();
 		m->update();
-
-		// check patched outputs
-		//TODO: this seems to be a bug, the same is already done in CModule::update()!
-		// commented it out
-/*		const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
-		for (int i = 0; i < outs.size(); ++i)
-		  {
-		    IInput* patchedInput = outs[i]->getPatchedInput();
-				
-		    IOutput* out = &*outs[i];
-		    if (patchedInput != 0)
-		      {
-			out->setPatchedInput(patchedInput);
-		      }
-		    else
-		      out->unPatch();
-		  }*/
-
-		unsigned long t2 = utils::Timing::getTimeInMillis();
-		block->addTime(t2-t1);
+		unsigned long stopTime = utils::Timing::getTimeInMillis();
+		block->addTime(stopTime-startTime);
 			
+		// should we send the statistic data?
+		// is there a receiver?
+		// is it the right time?
 		if (msr != 0 && (frameCount & 7) == 7)
 		  {
-		    //sende statistik-daten
+		    // send statistic data
 		    msr->modExecTimeSignal(m->getID(),block->avgTime());
 		  }
-		// die geänderten werte an die controlValueReceiver senden
-		// und die verbundenen inputs auf changed setzen
+
+		// send the changes values to the controlValueReceiver
+		// and set them there to changed
 		sendInputValues(block,cvr,m_modules,frameCount);
 	      }
 		
-	    stack.pop_front();
+	    // this module is now updated
+	    stack.pop(); 
 	    block->reset();
-		block->updated(frameCount);
+	    block->updated(frameCount);
 	  }
-	}
+      }
 		
+    // all sinks are uptodate we can finish now
+    // increase the timestamp
     ++frameCount;
+
 #if (ENGINE_VERBOSITY > 2)
     std::cout << "finished with updating" << std::endl;
 #endif
   }
 	
-  void RuntimeSystem::deleteModule(int id)
+
+  void RuntimeSystem::deleteModule(int moduleID)
   {
-    ControlBlockMap::iterator it = m_modules.find(id);
+    // get the control block for the moduleid
+    ControlBlockMap::iterator it = m_modules.find(moduleID);
+    
     if (it == m_modules.end())
       {
+	// a module with that id doesnt exist
 	throw std::runtime_error("Modul nicht vorhanden "
 				 "RuntimeSystem::deleteModule()");
       }
-		
+
+    // a module with that id must exist
+    assert(it != m_modules.end());
+
     ModuleControlBlockPtr block = it->second;  
     IModule* n = block->module();
 
-    // disconnect all modules that are connected to an ouput of the
-    // deleted module
+    // disconnect all modules that are connected to an output
     for (ControlBlockMap::iterator i = m_modules.begin(); 
 	 i != m_modules.end(); ++i)
       {
-	if (i->second == 0) continue;
+	// is this possible?
+	// if (i->second == 0) continue;
+	assert(i->second != 0);
+
 	ModuleControlBlockPtr block = i->second;
-	IModule* m = block->module();
+	IModule* m = block->module();	
+
+	// check all inputs of that module
 	for (unsigned int j = 0; j < m->getInputs().size(); ++j)
 	  {
 	    IModule::IInputPtr in = m->getInputs()[j];
+
+	    // is it connected?
 	    if (in->getConnectedModule() == n) 
 	      {
+		// yes, the unplug it
 		in->unPlug();
+		// and signal change
 		block->hasChanged(j);
 	      }
 	  }
       }
 
-    // disconnect all modules that are connected to an input of
-    // the deleted module
+    // disconnect all modules that are connected to an input
     for (unsigned int j = 0; j < n->getInputs().size(); ++j)
       {
 	IModule::IInputPtr in = n->getInputs()[j];
@@ -458,17 +534,21 @@ namespace renderer
 	  in->unPlug();
       }
 		
+    // remove the module from the sink list
     if (n->getOutputs().size() == 0)
       {
 	m_sinks.remove(block); 
       }
-		
+	
+    // remove it from the module set
+    // the module control block should be deleted here by its autoptr
     m_modules.erase(it);
 		
 #if (ENGINE_VERBOSITY > 0)
     std::cout << "Deleted Module # " << id << std::endl;
 #endif
   }
+
 	
   void RuntimeSystem::setInputValue(int moduleID,int inputIndex,
 				    const utils::Buffer& buf,
@@ -481,11 +561,20 @@ namespace renderer
 	throw std::runtime_error("Modul nicht vorhanden "
 				 "RuntimeSystem::setInputValue()");
       }
+
 		
     ModuleControlBlockPtr block = it->second;
+    IModule* n = block->module();
+
+    if (inputIndex < 0 || inputIndex >= n->getInputs().size())
+      {
+	throw std::runtime_error("Input nicht vorhanden "
+				 "RuntimeSystem::setInputValue()");
+      }
+
+
     block->setChanged(inputIndex);
 		
-    IModule* n = block->module();
 		
     IModule::IInputPtr in = n->getInputs()[inputIndex];
 		
@@ -494,43 +583,28 @@ namespace renderer
     if (cvr != 0)
       cvr->controlValueChanged(moduleID,inputIndex,buf);
   }
-	
-  struct DoSync
-  {
-    DoSync(IControlValueReceiver* cvr_) : cvr(cvr_) {};
-    void operator()(const IModule::IInputPtr& in)
-    {
-      utils::Buffer b;
-      bool success = in->getData()->serialize(b);
 
-      if (success)
-	cvr->controlValueChanged(in->getModule()->getID(),
-				 in->getIndex(),b);
-    }
-		
-  private:
-    IControlValueReceiver* cvr;
-  };
-	
-  struct DoAllSync
+
+  namespace
   {
-    DoAllSync(IControlValueReceiver* cvr_) : cvr(cvr_) {};
-    void operator()(const std::pair<int,RuntimeSystem::ModuleControlBlockPtr>& p)
+    struct DoSync
     {
-      if (cvr)
-	{
-	  RuntimeSystem::ModuleControlBlockPtr block = p.second;
-				
-	  IModule* n = block->module();
-				
-	  std::for_each(n->getInputs().begin(), n->getInputs().end(),
-			DoSync(cvr));
-	}
-    }
-  private:
-    IControlValueReceiver* cvr;
-  };
+      DoSync(IControlValueReceiver* cvr_) : cvr(cvr_) {};
+      void operator()(const IModule::IInputPtr& in)
+      {
+	utils::Buffer b;
+	bool success = in->getData()->serialize(b);
 	
+	if (success)
+	  cvr->controlValueChanged(in->getModule()->getID(),
+				   in->getIndex(),b);
+      }
+		
+    private:
+      IControlValueReceiver* cvr;
+    };
+  }
+		
   void RuntimeSystem::syncInputValue(int moduleID, int inputIndex,
 				     IControlValueReceiver* cvr) const
   {
@@ -556,6 +630,29 @@ namespace renderer
     sync(in);
   }
 	
+
+  namespace
+  {
+    struct DoAllSync
+    {
+      DoAllSync(IControlValueReceiver* cvr_) : cvr(cvr_) {};
+      void operator()(const std::pair<int,RuntimeSystem::ModuleControlBlockPtr>& p)
+      {
+	if (cvr)
+	  {
+	    RuntimeSystem::ModuleControlBlockPtr block = p.second;
+	    
+	    IModule* n = block->module();
+	    
+	    std::for_each(n->getInputs().begin(), n->getInputs().end(),
+			  DoSync(cvr));
+	  }
+      }
+    private:
+      IControlValueReceiver* cvr;
+    };
+  }
+  
   void RuntimeSystem::synchronizeInputValues(IControlValueReceiver* cvr) const
   {
     std::for_each(m_modules.begin(), m_modules.end(), DoAllSync(cvr));

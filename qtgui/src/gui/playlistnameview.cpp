@@ -227,6 +227,9 @@ namespace gui
 				 "PlaylistNameView::sequenceNoLongerExists()");
       }
 
+	if (editPlaylist && editPlaylist->id() == id)
+		editPlaylist = PlaylistItemPtr(0);
+
     m_treeView->removeItem(*it->second);
     m_playlists.erase(it);
   }

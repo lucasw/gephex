@@ -1,18 +1,17 @@
 #include "model.h"
 
-#include <ctime>
-
 #include <list>
 #include <stdexcept>
 #include <cassert>
-#include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "graph.h"
 #include "graphserial.h"
 #include "graphnode.h"
 #include "graphconnection.h"
 #include "graphfilesystem.h"
+#include "controllvalueset.h"
 
 #include "utils/autoptr.h"
 
@@ -28,15 +27,37 @@
 #include "interfaces/imodulestatisticsreceiver.h"
 #include "interfaces/imodelstatusreceiver.h"
 
-#include "controllvalueset.h"
+// debug
+#include <iostream>
 
-	
 
 namespace model
 {
-
+  
   namespace
   {
+
+    class has_name
+    {
+    public:
+      has_name(const std::string& name) : m_name( name ) {}
+      bool operator()(Model::GraphMap::value_type p)
+      { 
+	return p.second->getName()==m_name;
+      }
+    private:
+      const std::string m_name;
+    };
+
+    bool isDirectoryName(const std::string& name)
+    {
+		//TODO: changed assert to this test
+		// dunno why it is needed
+      if (name.length() <= 2)
+		  return false;
+      return *(name.end()-1)=='/';
+    }
+    
     // Teilt einem IModuleConstructionDumbReceiver mit, dass alle Module
     // und Connections eines Graphen gelöscht wurden.
     void sendGraphDestruction(const Graph& g,
@@ -129,35 +150,33 @@ namespace model
     std::string createNewGraphID(const std::string& graphName,
 				 std::map<std::string,bool>& knownGraphIDs)
     {
-      //TODO
-      /*time_t tt = time(0);
-      std::string time = ctime(&tt);
-      return time;*/
-      std::string id = graphName + '_';
+      // the name is a good start 
+      std::string id = "IDSTART" + graphName + "ENDID";
 
+      // make it unique with a number 
       while (knownGraphIDs.find(id) != knownGraphIDs.end())
-	id += '_';
-
+	{
+	  id += '_';
+	}
+      
       knownGraphIDs[id] = true;
+      
       return id;
     }
 
     std::string createNewSnapID(const std::string& snapName,
 				std::map<std::string,bool>& knownSnapIDs)
     {
-      //TODO
-      /*time_t tt = time(0);
-      std::string time = ctime(&tt);
-      return time;*/
       std::string id = snapName + '_';
-
+      
       while (knownSnapIDs.find(id) != knownSnapIDs.end())
 	id += '_';
-
+      
       knownSnapIDs[id] = true;
+      
       return id;
     }
-
+    
     // sucht einen Graphen und lädt ihn nach falls nötig
     Model::GraphMap::iterator lookForGraph(const std::string& graphID,
 					   Model::GraphMap& graphs,
@@ -166,30 +185,36 @@ namespace model
 					   IModuleConstructionSmartReceiver* smartAss)
     {
       Model::GraphMap::iterator it=graphs.find(graphID);
-    if (it==graphs.end())
-      {
-	utils::AutoPtr<Graph> graph(new Graph("noid","noname"));
-	try {
-	  fileSystem.loadGraph(graphID, *graph, specs);
+      if (it==graphs.end())
+	{
+	  utils::AutoPtr<Graph> graph(new Graph("noid","noname"));
+	  try 
+	    {
+	      fileSystem.loadGraph(graphID, *graph, specs);
+	    }
+	  catch (std::runtime_error& e)
+	    {
+	      std::cerr << e.what() << std::endl;
+	      return graphs.end();
+	    }
+	  
+	  graphs[graphID] = graph;
+	  
+	  // teilt dem renderer mit dass es den graph gibt
+	  if (smartAss)
+	    smartAss->newGraphCreated(graphID);
+	  
+	  sendGraphConstruction(*graph,0,0,smartAss);
+	  
+	  it = graphs.find(graphID);
+	  
+	  assert( it!=graphs.end() );
+	} 
+      else
+	{
+	  assert( it!=graphs.end() );
 	}
-	catch (std::runtime_error& e)
-	  {
-	    std::cerr << e.what() << std::endl;
-	    return graphs.end();
-	  }
-			
-	graphs[graphID] = graph;
-			
-	// teilt dem renderer mit dass es den graph gibt
-	if (smartAss)
-	  smartAss->newGraphCreated(graphID);
-			
-	sendGraphConstruction(*graph,0,0,smartAss);
-			
-	it = graphs.find(graphID);
-      }      
-		
-    return it;
+      return it;
   }
 	
 	
@@ -225,35 +250,73 @@ namespace model
   {
     fileSystem=utils::AutoPtr<GraphFileSystem>(new GraphFileSystem(basepath_));								   
   }
+
+  typedef std::pair<std::pair<std::string,std::string>,std::list<std::pair<std::string, std::string> > > GraphInfo;
+  
+namespace
+{
+
+  class deepSearch
+  {
+  public:
+    bool operator()(const GraphInfo& a,const GraphInfo& b)
+    {
+      // dirs must be smaller than their graphs
+      return (a.first.second < b.first.second);
+    }
+  };  
+
+} 
 	
   void Model::updateFileSystem()
   {
-    typedef const std::list<std::pair<std::pair<std::string,std::string>,std::list<std::pair<std::string, std::string> > > > namesList;
+
+    typedef std::list<GraphInfo> namesList;
+	typedef std::vector<GraphInfo> namesVector;
+    // get list with info about all loadable graphs in the graph dir
     namesList names = fileSystem->getNames(specs);
-		
-    for (namesList::const_iterator it = names.begin();it != names.end(); ++it)
+
+    // stupid workaround for vc6 
+    // (list::sort does not work with predicate object):
+    // use global std::sort on a vector (because random access iterators are
+    // needed).
+	namesVector namesV(names.size());
+	std::copy(names.begin(), names.end(), namesV.begin());
+
+    // do a deep search
+    //names.sort(deepSearch());
+	std::sort(namesV.begin(), namesV.end(), deepSearch());
+
+    for (namesVector::const_iterator it = namesV.begin();it != namesV.end(); ++it)
       {
 	std::string graphID = it->first.first;
 	std::string graphName = it->first.second;
 
 #if (ENGINE_VERBOSITY > 0)
-	std::cout << "graphname: " << graphName << "  " << std::endl;
+	std::cout << "name " << graphName << " id " << graphID << std::endl;
 #endif
-			
-	for (std::list<std::pair<std::string, std::string> >::const_iterator
-	       snap = it->second.begin(); snap != it->second.end(); ++snap)
+	
+	if (isDirectoryName(graphName))
+	  {  
+	    // load directories now
+	    lookForGraph(graphID,graphs,specs,*fileSystem,smartAss);
+	  }
+	else
 	  {
-	    if (gnr != 0)
-	      gnr->graphExists(graphID,snap->first, graphName, snap->second);
-
+	    for (std::list<std::pair<std::string, std::string> >::const_iterator
+		   snap = it->second.begin(); snap != it->second.end(); ++snap)
+	      {
+		if (gnr != 0)
+		  gnr->graphExists(graphID,snap->first, graphName, snap->second);
+		
 #if (ENGINE_VERBOSITY > 0)
-	    std::cout << "snapshotname: " << snap->second << std::endl;
+		std::cout << "snapshotname: " << snap->second << std::endl;
 #endif
-	    knownGraphIDs[graphID] = true;
-	    knownSnapIDs[snap->first] = true;
+		knownGraphIDs[graphID] = true;
+		knownSnapIDs[snap->first] = true;
+	      }
 	  }
       }
-		
   }
 	
   Model::~Model() 
@@ -286,10 +349,10 @@ namespace model
       smartAss->moduleAdded(editGraph->getID(),moduleClassName,moduleID);
       dumbo->moduleAdded(moduleClassName,moduleID);
     }
-    catch (std::runtime_error&)
+    catch (std::runtime_error& e)
       {
 	editGraph->deleteModule(moduleID);
-	throw;
+        std::cerr << e.what() << std::endl;	
       }    
 		
     if (renderedGraph == editGraph)
@@ -375,29 +438,32 @@ namespace model
   void Model::newGraphWithID(const std::string& graphName,
 			     const std::string& graphID)
   {
-    for (GraphMap::const_iterator git = graphs.begin();
-	 git != graphs.end(); ++git)
-      {
-	if (git->second->getName() == graphName)
-	  {
-	    throw std::runtime_error("a graph with that name (" + graphName +
-				     ") already exists (Model::newGraph)");
-	  }
-      }
-		
-    GraphMap::const_iterator it = graphs.find(graphID);
-    assert( it == graphs.end() );
-		
+    // check if the name of the new graph is unique
+	  if (graphs.end()!=std::find_if(graphs.begin(),graphs.end(),has_name(graphName)))
+      throw std::runtime_error("name " + graphName + 
+			       " already exists (Model::newGraph)");
+    
+    // check if the id is unique
+    if (graphs.end() != graphs.find(graphID))
+      throw std::runtime_error("id " + graphID + 
+			       " already exists (Model::newGraph)");
+    
+    // create new graph und register it
     utils::AutoPtr<Graph> newGraph(new Graph(graphID,graphName));
     graphs[graphID]=newGraph;
 		
-    std::string snapName = "default";
-    newGraph->newControlValueSet(graphID,snapName);
-		
-    if (gnr != 0)
-      gnr->graphExists(graphID,graphID,graphName,snapName);
-		
-    smartAss->newGraphCreated(graphID);
+      if(isDirectoryName(graphName))
+      { // a directory has no real snapshots
+	gnr->graphExists(graphID, graphID, graphName, "");
+      }
+    else
+      { // create default snapshot
+	std::string snapName = "default";
+	newGraph->newControlValueSet(graphID,snapName);
+	if (gnr != 0)
+	  gnr->graphExists(graphID,graphID,graphName,snapName);
+	smartAss->newGraphCreated(graphID);
+      }
   }
 	
   void Model::newGraph(const std::string& graphName)
@@ -654,15 +720,41 @@ namespace model
 
 	renderedControllSet = valIt->second;
 
+	std::list<std::pair<int, int> > del_list;
 	for (ControllValueSet::const_iterator
 	       setIt = renderedControllSet->begin();
-	     setIt!=renderedControllSet->end();++setIt)
-	  {
-	    rendererControlReceiver->setInputValue(graphID,
-						   setIt->first.first,
-						   setIt->first.second,
-						   setIt->second);
-	  }
+	setIt!=renderedControllSet->end();++setIt)
+	{
+		int moduleID   = setIt->first.first;
+		int inputIndex = setIt->first.second;
+		try {
+			rendererControlReceiver->setInputValue(graphID,
+				moduleID,
+				inputIndex,
+				setIt->second);
+		} catch (std::runtime_error& e) {
+			std::cerr << e.what() << "\n";
+			std::cerr << "Removing value of module " << moduleID
+				<< ", input " << inputIndex << " from snapshot\n";
+			std::cerr << "Note: this message means that this snapshot "
+				<< "has become corrupted.\n";
+			std::cerr << "THIS SHOULD NOT HAPPEN!\n";
+			std::cerr << "Probably there is a bug in the model (haha)\n";
+			// This is not allowed! don't change the map that you iterate through!!!
+			//renderedControllSet->deleteControllValue(moduleID, inputIndex);
+			
+			// instead remember the nodes and delete later
+			del_list.push_back(setIt->first);
+		}
+	}
+
+	// delete invalid entries from snapshot
+	for (std::list<std::pair<int, int> >::const_iterator it = del_list.begin();
+	it != del_list.end(); ++it)
+	{
+		renderedControllSet->deleteControllValue(it->first, it->second);
+	}
+
       }
   }
 	
@@ -792,41 +884,81 @@ namespace model
     //checkGraphSerialisation();
 #endif
   }
-	
+  
+
   void Model::saveGraph(const std::string& graphID)
   {
-    GraphMap::const_iterator it = graphs.find(graphID);
+    GraphMap::const_iterator 
+      it = lookForGraph(graphID,graphs,specs,*fileSystem,smartAss);
+
     if (it == graphs.end())
-      throw std::runtime_error("no graph with that id (Model::saveGraph): "
+      throw std::runtime_error("(Model::saveGraph) no graph with id: "
 			       + graphID);
+    
+    // save the dirs
+    std::string graphName = (*it).second->getName();
+    
+    // extract the names of all subdirs
+    for(std::string::iterator strit=graphName.begin();
+	strit!=graphName.end();
+	++strit)
+      {
+	if ( *strit=='/' && strit!=graphName.begin() )
+	  {
+	    std::string dir(graphName.begin(),strit+1);
+	    // dir is the name of the subdir
+
+	    // search the graphid by name
+	    GraphMap::const_iterator dirIt = std::find_if(graphs.begin(),
+							  graphs.end(),
+							  has_name(dir)
+							  );
+	    if (dirIt != graphs.end() )
+	      {
+		fileSystem->saveGraph(*dirIt->second);
+	      }
+	    else
+	      {
+		std::cerr << "graph "<< graphName <<" is in a unknown directory with the name";
+		std::cerr << " : " << dir << std::endl;
+	      }
+	  }
+      }
+    
+    // and now save the the graph
     fileSystem->saveGraph(*it->second);
   }
-	
+  
   void Model::deleteGraph(const std::string& graphID)
   {
-		
-    GraphMap::iterator it = lookForGraph(graphID, graphs, specs,
-					 *fileSystem, 0);
-		
-    if ( it == graphs.end() )
-      {					
-	throw std::runtime_error("Musterbeispiel: " + graphID);
-      }
-		
-    utils::AutoPtr<Graph> g = it->second;
-    graphs.erase(it);
-		
-    fileSystem->deleteGraph(graphID);
-		
-    const Graph::ValueSetMap& vals = g->getValueSetMap();
-		
-    for (Graph::ValueSetMap::const_iterator valIt = vals.begin();
-	 valIt != vals.end(); ++valIt)
-      {		
-	gnr->graphNoLongerExists(graphID, valIt->first);
-      }
-
+    GraphMap::iterator 
+      it = lookForGraph(graphID,graphs,specs,*fileSystem,smartAss);
+    
+    if (it == graphs.end())
+      throw std::runtime_error("(Model::deleteGraph) no graphid: "+ graphID);
+    
+    utils::AutoPtr<Graph> g = it->second;		
+    graphs.erase(it);    
+    
     smartAss->graphDeleted(graphID);
+    fileSystem->deleteGraph(graphID);
+    
+    if (isDirectoryName(g->getName()))
+      {
+	gnr->graphNoLongerExists(graphID,"");
+	// delete all graphs in that dir
+
+	// TODO
+      }
+    else
+      {
+	const Graph::ValueSetMap& vals = g->getValueSetMap();
+	for (Graph::ValueSetMap::const_iterator valIt = vals.begin();
+	     valIt != vals.end(); ++valIt)
+	  {		
+	    gnr->graphNoLongerExists(graphID, valIt->first);
+	  }
+      }
   }
 
   void Model::changeEditGraph(const std::string& graphID,
@@ -923,7 +1055,8 @@ namespace model
 			
 	//if (it == editControllSet->values.end())
 	{			
-	  throw std::runtime_error("Mist bei Model::syncInputValue()");
+	  //throw std::runtime_error("Mist bei Model::syncInputValue()");
+          std::cerr << "Mist bei Model::syncInputValue()\n";
 	}		
       }
     else

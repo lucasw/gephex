@@ -4,7 +4,7 @@ mod_plasmamodule
 {
     name          = Plasma
     deterministic = true
-    group         = GrafikEffekte
+    group         = Effects
     xpm           = plasmamodule.xpm
     author        = Spencer
     version       = ultra.5
@@ -14,7 +14,7 @@ inputs
 {
     time
     {
-      name              = Zeit
+      name              = Time
       type              = typ_NumberType
       const             = true
       strong_dependency = true
@@ -37,20 +37,20 @@ inputs
 
     frq
     {
-    name              = Frequenz
-    type              = typ_NumberType
-    const             = true
-    strong_dependency = true
-    widget_type       = unboundednumber_selector
-    default           = 1
+      name              = Frequency
+      type              = typ_NumberType
+      const             = true
+      strong_dependency = true
+      widget_type       = unboundednumber_selector
+      default           = 1
     }
 
     b
     {
-    name              = Bild
-    type              = typ_FrameBufferType
-    const             = true
-    strong_dependency = true
+      name              = Image
+      type              = typ_FrameBufferType
+      const             = true
+      strong_dependency = true
     }
 
 }

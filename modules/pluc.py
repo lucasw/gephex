@@ -164,7 +164,7 @@ def checkKeyTypes(map,keys):
 	   	return checkType(map[keys[0][0]],keys[0][1]) and checkKeyTypes(map,keys[1:])
 
 def checkModuleOptions(id, options):	
-	"Überprüft ob der Module Block ok ist"
+	"Ueberprueft ob der Module Block ok ist"
 	error = checkMapForKeys(options,['name','group','deterministic','xpm'])
 	if error != "":
 		sys.stderr.write("Missing Key! " + error +'\n')
@@ -179,11 +179,11 @@ def checkModuleOptions(id, options):
       		sys.stderr.write('Type error!=!?!\n')
 
 def checkInputs(inputs):
-	"Überprüft ob der Inputs Block ok ist"
+	"Ueberprueft ob der Inputs Block ok ist"
 	return
 
 def checkOutputs(outputs):
-	"Überprüft ob der Outputs Block ok ist"
+	"Ueberprueft ob der Outputs Block ok ist"
 	return
 
 
@@ -337,14 +337,25 @@ def createTypeIncludes(inputs,outputs):
 
 	return typeincludes
 
-def createPrelog(xpmfile,inputs, outputs, fileprefix):
+def createPrelog(xpmfile,inputs, outputs, fileprefix, id):
 	structinclude = '#include "' + fileprefix + '.h' + '"\n'
 	stdincludes = '#include <stdlib.h>\n//#include <assert.h>\n' \
 		      '//#include <stdio.h>\n//#include <string.h>\n' \
 		      '#include "dllutils.h"\n'
 
+	logstuffr = """
+static log2T s_log_function = 0;
 
-	return structinclude + stdincludes + '#include "' + xpmfile + '"\n'
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, \"XXX_MODULE_CLASS_NAME_XXX\", msg);
+}
+"""
+	logstuff = string.replace(logstuffr,'XXX_MODULE_CLASS_NAME_XXX', id)
+
+
+	return structinclude + stdincludes + '#include "' + xpmfile + '"\n' + logstuff
 	
 	
 def createSetInput(inputs):
@@ -487,6 +498,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(XXX_XPMNAME_XXX);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -519,6 +535,12 @@ def createCtorDtor(static):
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
 
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\\n");
+	  return 0;
+  }
+
   inst->my = construct();
 
   if (inst->my == 0)
@@ -545,6 +567,12 @@ static int s_ref_count = 0;
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\\n");
+	  return 0;
+  }
 
   s_ref_count += 1;
 
@@ -573,7 +601,6 @@ void deleteInstance(void* instance)
   if (s_ref_count == 0)
   	destruct(s_inst);
 	
-
   free(inst);
 }
 """
@@ -677,7 +704,7 @@ def createAttribBlocks(inputs):
 
 		
 def createCFile(id,options,inputs,outputs,file,fileprefix):
-	prelog = createPrelog(options['xpm'],inputs,outputs,fileprefix)
+	prelog = createPrelog(options['xpm'],inputs,outputs,fileprefix,id)
 
 	static = options.get('static','false')
 	module_spec = createModuleSpec(id,options,len(inputs),len(outputs))
@@ -700,14 +727,6 @@ def createCFile(id,options,inputs,outputs,file,fileprefix):
 		attributeInitCode = ''
 
 	initTemplate = """
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, \"XXX_MODULE_CLASS_NAME_XXX\", msg);
-}
-
 int initSO(log2T log_function) 
 {
 	s_log_function = log_function;
@@ -717,10 +736,7 @@ int initSO(log2T log_function)
 	return init(logger);
 }
 """
-	initFunc = string.replace(string.replace(initTemplate,
-						 'XXX_ATTRIB_CODE',
-						 attributeInitCode),
-				  'XXX_MODULE_CLASS_NAME_XXX', id)
+	initFunc = string.replace(initTemplate, 'XXX_ATTRIB_CODE', attributeInitCode)
 
 	file.write(prelog)
 	file.write('\n')
@@ -843,6 +859,12 @@ void shutDown(void)
 MyInstance* construct()
 {
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
+
+  if (my == 0)
+  {
+	  s_log(0, "Could not allocate memory for MyInstance struct\\n");
+	  return 0;
+  }
 
   // Add your initialization here
 
@@ -971,17 +993,17 @@ def createDspFile(file, fileprefix):
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=X_NAME_X - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE Dies ist kein gueltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und fuehren Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "X_NAME_X.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE Sie koennen beim Ausfuehren von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "X_NAME_X.mak" CFG="X_NAME_X - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Fuer die Konfiguration stehen zur Auswahl:
 !MESSAGE 
 !MESSAGE "X_NAME_X - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "X_NAME_X - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")

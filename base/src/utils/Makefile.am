@@ -76,10 +76,6 @@ utilstest_SOURCES = \
 	structscannertest.h \
 	sharedlibrarytest.h
 
-if NEED_DL
-LIB_DL_FLAGS = -ldl
-endif
-
 utilstest_LDADD = \
 	-L@builddir@/../TestFramework \
 	-L@builddir@ \

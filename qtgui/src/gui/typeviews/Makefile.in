@@ -59,43 +59,58 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AR = @AR@
 AS = @AS@
 AVIFILE_CONFIG = @AVIFILE_CONFIG@
 AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
 AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
+CXXCPP = @CXXCPP@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
+EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-LEX = @LEX@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
+HAVE_LIB = @HAVE_LIB@
+LIB = @LIB@
 LIBTOOL = @LIBTOOL@
+LIB_DL_FLAGS = @LIB_DL_FLAGS@
+LIB_EXTRA_FLAGS = @LIB_EXTRA_FLAGS@
+LIB_POSIX4_FLAGS = @LIB_POSIX4_FLAGS@
+LIB_SOCKET_FLAGS = @LIB_SOCKET_FLAGS@
 LN_S = @LN_S@
+LTLIB = @LTLIB@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
+MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 QT_CXXFLAGS = @QT_CXXFLAGS@
 QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
+SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
 SDL_LIBS = @SDL_LIBS@
+SDL_PREFIX = @SDL_PREFIX@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
-YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 
 noinst_LIBRARIES = libtypeviews.a
 
-BUILT_SOURCES =  	boundednumberview_moc.cpp 	slidernumberview_moc.cpp 	unboundednumberview_moc.cpp 	comboboxstringview_moc.cpp 	radionumberview_moc.cpp 	positionview_moc.cpp 	filestringview_moc.cpp 	colorview_moc.cpp 	fontview_moc.cpp 	frameview_moc.cpp 	dialnumberview_moc.cpp 	stringview_moc.cpp
+BUILT_SOURCES =  	boundednumberview_moc.cpp 	slidernumberview_moc.cpp 	unboundednumberview_moc.cpp 	comboboxstringview_moc.cpp 	radionumberview_moc.cpp 	checkboxnumberview_moc.cpp 	positionview_moc.cpp 	filestringview_moc.cpp 	colorview_moc.cpp 	fontview_moc.cpp 	frameview_moc.cpp 	dialnumberview_moc.cpp 	stringview_moc.cpp
 
 
-libtypeviews_a_SOURCES =  	boundednumberview.cpp 	boundednumberview.h 	slidernumberview.cpp 	slidernumberview.h 	unboundednumberview.cpp 	unboundednumberview.h 	comboboxstringview.cpp 	comboboxstringview.h 	radionumberview.cpp 	radionumberview.h 	positionview.cpp 	positionview.h 	filestringview.cpp 	filestringview.h 	colorview.cpp 	colorview.h 	fontview.cpp 	fontview.h 	frameview.cpp 	frameview.h 	dialnumberview.cpp 	dialnumberview.h 	stringview.cpp 	stringview.h
+libtypeviews_a_SOURCES =  	boundednumberview.cpp 	boundednumberview.h 	slidernumberview.cpp 	slidernumberview.h 	unboundednumberview.cpp 	unboundednumberview.h 	comboboxstringview.cpp 	comboboxstringview.h 	radionumberview.cpp 	radionumberview.h 	checkboxnumberview.cpp 	checkboxnumberview.h 	positionview.cpp 	positionview.h 	filestringview.cpp 	filestringview.h 	colorview.cpp 	colorview.h 	fontview.cpp 	fontview.h 	frameview.cpp 	frameview.h 	dialnumberview.cpp 	dialnumberview.h 	stringview.cpp 	stringview.h
 
 
 INCLUDES =  	-I @srcdir@/../.. 	-I @srcdir@/../../../../base/src/ 	-I @builddir@/../../../../base/src/         -I @top_srcdir@/util/include         -I @top_builddir@/util/include 	$(QT_CXXFLAGS)
@@ -120,10 +135,9 @@ libtypeviews_a_LIBADD =
 libtypeviews_a_OBJECTS =  boundednumberview.$(OBJEXT) \
 slidernumberview.$(OBJEXT) unboundednumberview.$(OBJEXT) \
 comboboxstringview.$(OBJEXT) radionumberview.$(OBJEXT) \
-positionview.$(OBJEXT) filestringview.$(OBJEXT) colorview.$(OBJEXT) \
-fontview.$(OBJEXT) frameview.$(OBJEXT) dialnumberview.$(OBJEXT) \
-stringview.$(OBJEXT)
-AR = ar
+checkboxnumberview.$(OBJEXT) positionview.$(OBJEXT) \
+filestringview.$(OBJEXT) colorview.$(OBJEXT) fontview.$(OBJEXT) \
+frameview.$(OBJEXT) dialnumberview.$(OBJEXT) stringview.$(OBJEXT)
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -267,6 +281,12 @@ boundednumberview.o: boundednumberview.cpp boundednumberview.h \
 	../../gui/typeview.h ../../../../base/src/utils/buffer.h \
 	../../../../base/src/utils/structreader.h \
 	boundednumberview_moc.cpp
+checkboxnumberview.o: checkboxnumberview.cpp checkboxnumberview.h \
+	../../gui/typeview.h ../../../../base/src/utils/buffer.h \
+	../../../../base/src/utils/structreader.h \
+	../../../../base/src/utils/stringtokenizer.h \
+	../../../../base/src/utils/itokenizer.h \
+	checkboxnumberview_moc.cpp
 colorview.o: colorview.cpp colorview.h ../../gui/typeview.h \
 	../../../../base/src/utils/buffer.h colorview_moc.cpp
 comboboxstringview.o: comboboxstringview.cpp comboboxstringview.h \

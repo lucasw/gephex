@@ -28,7 +28,7 @@ public:
 
   virtual const std::vector<IOutputPtr>& getOutputs() const;
 
-  virtual void dependencies(std::list<IInput*>&);
+  virtual IInput* dependencies();
 
   virtual void update();
 
@@ -49,6 +49,8 @@ private:
   bool _isDeterministic;
   typedef utils::AutoPtr<UpdateStrategy> UpdateStrategyPtr;
   UpdateStrategyPtr us;
+
+  std::list<IInput*> m_deps;
 
   //CModule(const CModule&);
 

@@ -6,6 +6,14 @@
 #include "dllutils.h"
 #include "signalgenmodule.xpm"
 
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
+{
+   if (s_log_function)
+      s_log_function(level, "mod_signalmodule", msg);
+}
+
 const char* getSpec(void) {
  return "mod_spec { name=[mod_signalmodule] number_of_inputs=[6] number_of_outputs=[1] deterministic=[false] }";
 }
@@ -43,6 +51,12 @@ const char* getOutputSpec(int index) {
 void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
+
+  if (inst == 0)
+  {
+	  logger(0, "Could not allocate memory for instance struct!\n");
+	  return 0;
+  }
 
   inst->my = construct();
 
@@ -102,7 +116,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[SignalGenerator] group=[Signale] inputs=[6 Amplitude{hidden=[true] widget_type=[unboundednumber_selector] } Frequenz{hidden=[true] widget_type=[unboundednumber_selector] } Phase{higher_bound=[1] hidden=[true] lower_bound=[0] step_size=[0.01] widget_type=[number_selector] } Position{hidden=[true] widget_type=[unboundednumber_selector] } Signal{values=[sinus,saegezahn,rampe,rechteck,noize] hidden=[true] widget_type=[combo_box] } Modus{help                = Gibt den Modus an: real = Systemzeit, relativ=[Einheitliche Zeit unabhaengig von den FPS] values=[real,relativ] hidden=[true] widget_type=[combo_box] } ] outputs=[1 Signal ] type=xpm } ";
+  static const char* INFO = "info { name=[SignalGenerator] group=[Number] inputs=[6 Amplitude{widget_type=[unboundednumber_selector] hidden=[true] } Frequency{widget_type=[unboundednumber_selector] hidden=[true] } Phase{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] hidden=[true] } Position{widget_type=[unboundednumber_selector] hidden=[true] } Signal{widget_type=[combo_box] values=[sinus,saegezahn,rampe,rechteck,noize] hidden=[true] } Mode{widget_type=[combo_box] values=[real,relativ] hidden=[true] help=[real is system time, relativ is relative to the frame rate] } ] outputs=[1 Signal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(signalgenmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -111,6 +125,11 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(signalgenmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
+	  if (tmpBuf == 0)
+	  {
+	     printf("Could not allocate memory in getInfo\n");
+		 return 0;
+	  }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -126,14 +145,6 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-
-static log2T s_log_function = 0;
-
-static void logger(int level, const char* msg)
-{
-   if (s_log_function)
-      s_log_function(level, "mod_signalmodule", msg);
-}
 
 int initSO(log2T log_function) 
 {

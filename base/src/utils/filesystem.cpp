@@ -5,6 +5,9 @@
 #if defined(OS_WIN32)
 #include <direct.h>
 #include <io.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
 #elif defined(OS_POSIX)
 #include <cstdio>
 #include <sys/stat.h>
@@ -137,7 +140,24 @@ void FileSystem::removeFile(const std::string& path)
 bool FileSystem::exists(const std::string& path)
 {
 #if defined(OS_WIN32)
-  //TODO
+  struct _stat st;
+
+  std::string p;
+  char lastc = path[path.length() -1];
+  if (lastc == '\\' || lastc == '/')
+	  p = path.substr(0, path.length()-1);
+  else
+	  p = path;
+
+  int err = _stat(p.c_str(),&st);      
+  if (err != 0)
+    {
+      return false;
+    }
+  else
+    {
+      return true;
+    }
   return true;
 #elif defined(OS_POSIX)
   struct stat st;

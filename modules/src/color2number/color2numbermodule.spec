@@ -2,9 +2,9 @@
 
 mod_color2numbermodule
 {
-    name          = Farbe zu Zahl Konvertierer
+    name          = Colour to RGB
     deterministic = true
-    group         = Farbe
+    group         = Colour
     xpm           = color2numbermodule.xpm
     author        = coma
     version       = 0.65-pregammaalphabetaficken
@@ -14,7 +14,7 @@ inputs
 {
     color
     {
-      name              = Farbe
+      name              = Colour
       type              = typ_RGBType
       const             = true
       strong_dependency = true
@@ -26,17 +26,17 @@ outputs
 {
     r
     {
-      name = Rot
+      name = Red
       type = typ_NumberType
     }
     g
     {
-      name = Gruen
+      name = Green
       type = typ_NumberType
     }
     b
     {
-      name = Blau
+      name = Blue
       type = typ_NumberType
     }
 }

@@ -2,7 +2,7 @@
 
 mod_midiinmodule
 {
-    name          = MidiQuelle
+    name          = Midi Source
     deterministic = false
     group         = Midi
     xpm           = midiinmodule.xpm
@@ -15,7 +15,7 @@ inputs
 {
     device
     {
-        name              = Device-Name
+        name              = Device
         type              = typ_StringType
         hidden            = true
         default           = /dev/midi00
@@ -28,7 +28,7 @@ outputs
 {
     r
     {
-        name = Midi-Strom
+        name = Midi-Stream
         type = typ_MidiType
     }
 }

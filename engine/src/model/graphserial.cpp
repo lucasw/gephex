@@ -20,16 +20,16 @@ namespace model
 	s << "<node>";
 	s << "<id>" << node.moduleID() << "</id>";
 	s << "<type>" << node.spec().moduleClassName() << "</type>";
-	s << "<data>";
+	s << "<data>\n";
 	const std::map<int,utils::Buffer>& data = node.data();
 	for (std::map<int,utils::Buffer>::const_iterator dataItem=data.begin();dataItem!=data.end();++dataItem)
 	  {
 	    s << "<dataitem>";
 	    s << "<key>" << (*dataItem).first << "</key>";
 	    s << (*dataItem).second;
-	    s << "</dataitem>";
+	    s << "</dataitem>\n";
 	  }
-	s << "</data>";			
+	s << "</data>\n";	
 	s << "</node>";
 
 	return s;
@@ -55,33 +55,33 @@ namespace model
   {
     s << "<graph>";
     s << "<id>" << graph.getID() << "</id>";
-    s << "<name>" << graph.getName() << "</name>";
-    s << "<nodes>";
+    s << "<name>" << graph.getName() << "</name>\n";
+    s << "<nodes>\n";
 
     const Graph::GraphNodeList& nodes = graph.nodes();
     for ( Graph::GraphNodeList::const_iterator node = nodes.begin();
 		 node != nodes.end(); ++node)
       {
-	s << **node;
+	s << **node << "\n";
       }		
-    s << "</nodes>";
-    s << "<connections>";
+    s << "</nodes>\n";
+    s << "<connections>\n";
     const Graph::ConnectionMap& connections = graph.connections();
     for(Graph::ConnectionMap::const_iterator i = connections.begin();
 	i != connections.end(); ++i)
       {
-	s << *i->second; // serialize the connection
+	s << *i->second << "\n"; // serialize the connection
       }
-    s << "</connections>";
+    s << "</connections>\n";
     // snapshots start
-    s << "<snapshots>";
+    s << "<snapshots>\n";
     const Graph::ValueSetMap valueSets=graph.getValueSetMap();
     for (Graph::ValueSetMap::const_iterator it=valueSets.begin();it!=valueSets.end();++it)
     {
-      s << "<snapshot>";
+      s << "<snapshot>\n";
         s << "<id>" << it->first << "</id>";
         s << "<name>" << it->second->getName() << "</name>";
-        s << "<values>";
+        s << "<values>\n";
         for (ControllValueSet::const_iterator
           valpair = it->second->begin();valpair!=it->second->end();++valpair)
           {
@@ -89,12 +89,12 @@ namespace model
             s << "<moduleid>" << valpair->first.first << "</moduleid>";
             s << "<nodeid>" << valpair->first.second << "</nodeid>";
             s << valpair->second;
-          s << "</value>";
+          s << "</value>\n";
           }
-        s << "</values>";
-      s << "</snapshot>";
+        s << "</values>\n";
+      s << "</snapshot>\n";
     }
-    s << "</snapshots>";
+    s << "</snapshots>\n";
     // snapshots stop
     s << "</graph>";
     return s;

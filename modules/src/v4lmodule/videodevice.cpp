@@ -10,6 +10,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <errno.h>
+#include <cassert>
 
 // debug
 //#include "videodefostr.h"
@@ -17,7 +18,16 @@
 
 VideoDevice::VideoDevice(const std::string& deviceFileName, logT log2_)   
   throw (std::runtime_error)
-  :initialized(false),frontbf(1),log2(log2_)
+  :initialized(false),
+   frontbf(1),
+   log2(log2_),  
+   m_brightness(-1),
+   m_hue(-1),
+   m_colour(-1),
+   m_contrast(-1),
+   m_whiteness(-1)
+
+
 {
  
   // try to open the video device file
@@ -77,26 +87,19 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
 {
   // the default size is minimum size
   if (frame.xSize==0)
-    frame.xSize=cap.minwidth;
+    frame.xSize=cap.maxwidth;
   if (frame.ySize==0)
-    frame.ySize=cap.minheight;
+    frame.ySize=cap.maxheight;
 
-  frame.xSize-=frame.xSize%4;
-  frame.ySize-=frame.ySize%4;
+  frame.xSize-=frame.xSize%2;
+  frame.ySize-=frame.ySize%2;
   
-  //
-  // is initialized and grab geometry has changed
+  // check if initialized and grab geometry has changed
   if (initialized &&
       !(frame.xSize==initFrame.xSize&&frame.ySize==initFrame.ySize))
     {
       log2(2,"geometry has changed");
-      //sync to last
-      std::swap(frontbf,backbf);
-      
-      assert(frontbf!=backbf);
-      //std::cout << "csync " << backbf <<std::endl;
-      log2(2,"get missing frames");
-      int errorCode = ioctl(fd, VIDIOCSYNC, &backbf);  
+      int errorCode = ioctl(fd, VIDIOCSYNC, &frontbf);  
       if(errorCode==-1)
 	{
 	  std::ostringstream errorMsg;
@@ -105,10 +108,8 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
 	  errorMsg << " errno= " << errno;
 	  errorMsg << " errorstring= " << strerror(errno);
 	  log2(2,errorMsg.str().c_str());
-	  //throw std::runtime_error(errorMsg.str());
 	}
-      
-      log2(2,"unmap");
+
       errorCode= munmap(mmapBase,mmapSize);
       if (errorCode==-1)
 	{
@@ -117,11 +118,11 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
 	  errorMsg << " errno= " << errno;
 	  errorMsg << " errorstring= " << strerror(errno);
 	  log2(2,errorMsg.str().c_str());
-	  //throw std::runtime_error(errorMsg.str());
 	}
       initialized=false;
-      log2(2,"uninitialized");
     }
+  
+  // assert(!initialized || (initialized&&(frame.xSize==initFrame.xSize&&frame.ySize==initFrame.ySize)));
 
   if (!initialized)
     {
@@ -175,10 +176,8 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
 	  ((int)videoWindow.height!=frame.ySize))
 	{
 	  std::ostringstream errorMsg;
-	  errorMsg << "Grabber doesn't support that geometry" << std::endl;
+	  errorMsg << "unsupported geometry" << std::endl;
 	  errorMsg << "requested: " << frame.xSize << " " << frame.ySize;
-	  errorMsg << " returned: " << videoWindow.width << " " << videoWindow.height;
-	  
 	  throw std::runtime_error(errorMsg.str());
 	}
 
@@ -213,11 +212,9 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
 	}
 
       // initialize array with startpointer to the mapped frames
-      //for(int i=0; i<videoMBuf.frames; ++i)
       for(int i=0; i!=2; ++i)
 	{
 	  frameptr[i]=reinterpret_cast<uint_32*>(reinterpret_cast<char*>(mmapBase)+videoMBuf.offsets[i]);
-	  //std::cout << frameptr[i]<< std::endl;
 	}
       
       frontbf=0;
@@ -227,36 +224,38 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
       videoMMap.frame = frontbf; // buffer position
       videoMMap.width = frame.xSize;
       videoMMap.height = frame.ySize;
-      //videoMMap.format =  VIDEO_PALETTE_RGB32;
-      videoMMap.format =  VIDEO_PALETTE_YUV420P;
-      //std::cout << "cmcap" << frontbf <<std::endl;
+
+      // probe pixelformats
+      
+      // try RGBA
+      videoMMap.format =  VIDEO_PALETTE_RGB32;
       errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
+      if (errorCode==-1)
+	{
+	  // try YUV
+	  videoMMap.format =  VIDEO_PALETTE_YUV420P;
+	  errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
+	}
+      
       if(errorCode==-1)
 	{
 	  throw std::runtime_error("error while starting capture to buffer");
 	}
-      
-      //initialize;
-      initFrame=frame;
-      initialized=true;
-    }
-  else
-    {
 
+      // remember working geometry and format
+      frame.type=videoMMap.format;
+      initFrame=frame;
+
+      initialized=true;
     }
 
   assert(initialized);
-  //assert(frontbf==0||frontbf==1);
-  //assert(backbf==0||backbf==1);
 
-  //std::cout << frame.xSize << " " << frame.ySize<< std::endl;;
   video_mmap videoMMap; // v4l struct for mmap informations
   videoMMap.frame = backbf; // buffer position
-  videoMMap.width = frame.xSize;
-  videoMMap.height = frame.ySize;
-  //videoMMap.format =  VIDEO_PALETTE_RGB32;
-  videoMMap.format =  VIDEO_PALETTE_YUV420P;
-  // std::cout << "cmcap " << backbf <<std::endl;
+  videoMMap.width = initFrame.xSize;
+  videoMMap.height = initFrame.ySize;
+  videoMMap.format =  initFrame.type;
   int errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
   if(errorCode==-1)
     {
@@ -270,9 +269,9 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
   
   std::swap(frontbf,backbf);
   
-  assert(frontbf!=backbf);
-  //std::cerr << "csync " << backbf <<std::endl;
   errorCode = ioctl(fd, VIDIOCSYNC, &backbf);  
+  frame.frameptr=frameptr[backbf];
+  frame.type=initFrame.type;
   if(errorCode==-1)
      {
       std::ostringstream errorMsg;
@@ -280,11 +279,55 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
       errorMsg << backbf << " !!!";
       errorMsg << " errno= " << errno;
       errorMsg << " errorstring= " << strerror(errno);
-      //throw std::runtime_error(errorMsg.str());
-log2(2,errorMsg.str().c_str());
-      }
-
-  frame.frameptr=frameptr[backbf];
-  
-
+      throw std::runtime_error(errorMsg.str());
+     }
 }
+
+void VideoDevice::setProperties(int brightness,int hue,int colour,
+		   int contrast,
+		   int whiteness)
+{
+  /*if (!
+      (brightness==m_brightness)&&
+      (hue==m_hue)&&
+      (colour==m_colour)&&
+      (contrast==m_contrast)&&
+      (whiteness==m_whiteness)
+      )*/
+    {
+      video_picture videopic;
+      
+      int errorCode = ioctl(fd, VIDIOCGPICT, &videopic);  
+      if(errorCode==-1)
+	{
+	  std::ostringstream errorMsg;
+	  errorMsg << " could not get image parameter: ";
+	  errorMsg << " errno= " << errno;
+	  errorMsg << " errorstring= " << strerror(errno);
+	  throw std::runtime_error(errorMsg.str());
+	}
+      
+      videopic.brightness=brightness;
+      videopic.hue=hue;
+      videopic.colour=colour;
+      videopic.contrast=contrast;
+      videopic.whiteness=whiteness;
+      
+      errorCode = ioctl(fd, VIDIOCSPICT, &videopic);  
+      if(errorCode==-1)
+	{
+	  std::ostringstream errorMsg;
+	  errorMsg << " could not set image parameter: ";
+	  errorMsg << " errno= " << errno;
+	  errorMsg << " errorstring= " << strerror(errno);
+	  throw std::runtime_error(errorMsg.str());
+	}
+
+      m_brightness=brightness;
+      m_hue=hue;
+      m_colour=colour;
+      m_contrast=contrast;
+      m_whiteness=whiteness;
+    }
+}
+

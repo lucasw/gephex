@@ -1,5 +1,4 @@
+SUBDIRS = compatibility
 includedir = @includedir@/gephex
 include_HEADERS = \
-	basic_types.h \
-	minmax.h \
-	sstream_compat
+	basic_types.h
