@@ -13,7 +13,6 @@ libguimodel_a_SOURCES = \
 	controlvaluedispatcher.cpp \
 	moduledatadispatcher.cpp \
 	enginewrapper.cpp \
-	actionsequencerwrapper.cpp \
 	controlmodel.h \
 	controlvaluedispatcher.h \
 	enginewrapper.h \
@@ -27,20 +26,13 @@ libguimodel_a_SOURCES = \
 	moduleinfo.h \
 	pluginfo.h \
 	point.h \
-	xpm.h \
-	actionsequencerwrapper.h \
-	iscenesequencer.h \
-	iscenechangelistener.h
+	xpm.h	
 
 TESTS=guimodeltest
 
 check_PROGRAMS = guimodeltest
 
-guimodeltest_SOURCES = \
-	testmain.cpp \
-	actionsequencerwrapper.cpp \
-	actionsequencerwrappertest.cpp \
-	actionsequencerwrappertest.h
+guimodeltest_SOURCES = testmain.cpp
 
 guimodeltest_LDADD = 	-L../../../base/src/TestFramework -ltestframework \
 			-L../../../base/src/utils -lutils

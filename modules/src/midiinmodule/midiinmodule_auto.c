@@ -20,7 +20,7 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_StringType const=true strong_dependency=true default=/dev/midi00 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -42,8 +42,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   s_ref_count += 1;
@@ -59,7 +59,7 @@ void* newInstance()
     }
   }
   
-  inst->my = s_inst;	
+  inst->my = s_inst;    
 
   return inst;
 }
@@ -71,8 +71,8 @@ void deleteInstance(void* instance)
   s_ref_count -= 1;
 
   if (s_ref_count == 0)
-  	destruct(s_inst);
-	
+        destruct(s_inst);
+        
   free(inst);
 }
 
@@ -81,7 +81,7 @@ int setInput(void* instance,int index,void* typePointer)
  InstancePtr inst = (InstancePtr) instance;
  switch(index) {
   case 0:
-   inst->in_device = (StringType *) typePointer;
+   inst->in_device = (NumberType *) typePointer;
   break;
  } //switch(index) 
  return 1;
@@ -99,7 +99,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[1 Device{hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
+  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[1 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(midiinmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -108,32 +108,32 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(midiinmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = midiinmodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = midiinmodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

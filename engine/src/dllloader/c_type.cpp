@@ -80,6 +80,9 @@ void CType::convert(const IType& src,const TypeAttributes& attr)
 			     "CType::convert()");
   
   //TODO: test if the types match
-  vTab->convertType(instance,src_->getPointer(),
-		    const_cast<void*>(static_cast<const void*>(&attr)));
+  int result = vTab->convertType(instance,src_->getPointer(),
+		        const_cast<void*>(static_cast<const void*>(&attr)));
+
+  if (result != 1)
+	  throw std::runtime_error("Could not convert");
 }

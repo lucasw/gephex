@@ -100,7 +100,7 @@ struct OutputDriver* SDL_get_driver()
 
 int SDL_init(char* error_text, int text_len)
 {
-    if(SDL_WasInit(SDL_INIT_VIDEO) && SDL_INIT_VIDEO == 0)
+    if((SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO) == 0)
     {
 		if(SDL_Init(SDL_INIT_VIDEO) == -1)
 		{

@@ -90,6 +90,7 @@ inputs
 	const	          = true
 	strong_dependency = true
 	hidden	          = true
+	widget_type	=	number_selector
 	lower_bound	  = 0
 	higher_bound      = 1
 	step_size         = 0.01
@@ -120,6 +121,20 @@ inputs
 	higher_bound      = 1
 	step_size         = 0.01
 	default	          = 0.5
+    }
+
+    drops
+    {
+	name	          = Droprate
+	type	          = typ_NumberType
+	const	          = true
+	strong_dependency = true
+	hidden	          = true
+	widget_type	  = number_selector
+	lower_bound	  = 0
+	higher_bound      = 200
+	step_size         = 1
+	default	          = 1
     }
 
 }

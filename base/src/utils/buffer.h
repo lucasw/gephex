@@ -26,12 +26,25 @@ public:
   /**
    * Erzeugt einen Buffer der eine Kopie von date der Länge len enthält.
    * @param data Die Daten die der Buffer speichern soll.
-   * @param len Die Gösse des Arrays data.
+   * @param len Die Gösse des Arrays data.   
    * @param maxLengthHint is a hint for the maximal length of this buffer.
    *        If set correctly this hint can be used to improve performance,
    *        but at the cost that needed memory is allocated earlier.
    */
   Buffer(const unsigned char* data, int len, int maxLengthHint = 0);
+
+  /**
+   * Erzeugt einen Buffer der eine Kopie von date der Länge len enthält.
+   * @param data Die Daten die der Buffer speichern soll.
+   * @param len Die Gösse des Arrays data.
+   * @param owner Wenn owner == true dann ist der Buffer neuer owner von 
+   *              data
+   * @param maxLengthHint is a hint for the maximal length of this buffer.
+   *        If set correctly this hint can be used to improve performance,
+   *        but at the cost that needed memory is allocated earlier.
+   */
+  Buffer(unsigned char* data, int len, bool owner = false,
+	     int maxLengthHint = 0);
 
 
   /**
@@ -39,6 +52,15 @@ public:
    * @param buf Der Buffer der kopiert wird.
    */
   Buffer(const Buffer& buf);
+
+   /**
+   * Erzeugt einen Buffer der eine Kopie der Dateb von buf enthält.
+   * @param buf Der Buffer der kopiert wird.
+   * @param maxLengthHint is a hint for the maximal length of this buffer.
+   *        If set correctly this hint can be used to improve performance,
+   *        but at the cost that needed memory is allocated earlier.
+   */
+  Buffer(const Buffer& buf, int maxLengthHint);
 
   /**
    * Zerstört einen Buffer. Alle Aliases für getPtr() werden ungültig.

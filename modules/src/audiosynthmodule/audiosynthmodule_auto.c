@@ -63,8 +63,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   inst->my = construct();
@@ -143,32 +143,32 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(audiosynthmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = audiosynthmodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = audiosynthmodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

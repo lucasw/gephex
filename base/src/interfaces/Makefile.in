@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,13 +98,14 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
 
-INTERFACE_FILES =  		controlvalue.if 		enginecontrol.if 		error.if 		graphname.if 		modelcontrol.if 		modelstatus.if 		moduleclass.if 		moduleclassinfo.if 		moduleclassloadercontrol.if 		moduleclassname.if 		moduleclassspec.if 		moduleconstructiondumb.if 		moduleconstructionsmart.if 		moduledata.if 		modulestatistics.if 		modulestatisticssmart.if 		renderercontrol.if 		rendererstatus.if 		sequencename.if 		sequencercontrol.if 		sequencerstatus.if 		sequenceupdate.if 		serializedgraph.if 		smartcontrolvalue.if 		typeclass.if 		typeclassinfo.if 		typeclassloadercontrol.if 		typeclassname.if
+INTERFACE_FILES =  		controlvalue.if 		enginecontrol.if 		error.if 		graphname.if 		modelcontrol.if 		modelstatus.if 		moduleclass.if 		moduleclassinfo.if 		moduleclassloadercontrol.if 		moduleclassname.if 		moduleclassspec.if 		moduleconstructiondumb.if 		moduleconstructionsmart.if 		moduledata.if 		modulestatistics.if 		modulestatisticssmart.if 		renderercontrol.if 		rendererstatus.if 		serializedgraph.if 		smartcontrolvalue.if 		typeclass.if 		typeclassinfo.if 		typeclassloadercontrol.if 		typeclassname.if
 
 
 GENERATED_H = $(INTERFACE_FILES:%.if=i%receiver.h) $(INTERFACE_FILES:%.if=i%sender.h)

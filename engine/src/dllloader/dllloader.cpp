@@ -295,18 +295,19 @@ namespace dllloader
   void DllLoader::synchronize()
   {
     //TODO: bis jetzt wird nur der moduleClassNameReceiver
-    // und der moduleClassInforReceiver benachrichtigt!
+    // und der moduleClassInfoReceiver benachrichtigt!
 
 #if (ENGINE_VERBOSITY > 0)
     std::cout << "sync dllloader" << std::endl;
 #endif
     m_infoReceiver->syncStarted();
+//	m_nameReceiver->syncStarted();
 
     for (std::map<std::string,std::string>::const_iterator nameIt 
 	   = m_mod2fileName.begin();
 	 nameIt != m_mod2fileName.end(); ++nameIt)
       {
-	m_nameReceiver->moduleClassNameExists(nameIt->first);       
+     	m_nameReceiver->moduleClassNameExists(nameIt->first);       
       }
 
 
@@ -317,6 +318,7 @@ namespace dllloader
 	m_infoReceiver->moduleClassLoaded(modIt->first, *modIt->second);
       }
 
+	//m_nameReceiver->syncFinished();
     m_infoReceiver->syncFinished();
   }
 	

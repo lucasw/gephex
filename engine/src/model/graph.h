@@ -1,5 +1,27 @@
-#ifndef _INCLUDED_GRAPH_H_
-#define _INCLUDED_GRAPH_H_
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
+#ifndef INCLUDED_GRAPH_H
+#define INCLUDED_GRAPH_H
 
 #include <map>
 #include <vector>
@@ -8,10 +30,9 @@
 #include <iosfwd>
 
 #include "utils/autoptr.h"
-//#include "controllvalueset.h"
 
-
-namespace utils {
+namespace utils 
+{
   class Buffer;
 }
 
@@ -42,23 +63,23 @@ namespace model
        * \param graphName userreadable name for the graph
        */
       Graph(const std::string& graphID, const std::string& graphName);
-
+      
       /**
        * destroys the Graphobject
        */
       ~Graph();
-
+      
       /**
        * change the ID of the graph
        * \todo the id should not change. remove this
        */
       void setID(const std::string& id_);
-
+      
       /**
        * retrieve the unique id of the graph
        */
       std::string getID() const;
-
+      
       /**
        * changes the name of the Graph
        * \param new name
@@ -86,13 +107,19 @@ namespace model
       void deleteModule(ModuleID moduleID);
       const ConnectionMap& connections() const;
       const GraphNodeList& nodes() const;
-      /** Deletes all Modules and Connections. */
+      
+      /** 
+       * Deletes all Modules and Connections. 
+       */
       void clear();
 
       // ModuleData
       void setModuleData(ModuleID moduleID,int type,const utils::Buffer& buf);
       void unSetModuleData(ModuleID moduleID,int type);
-      /** returns a list of set moduleDatas **/
+
+      /** 
+       * returns a list of set moduleDatas 
+       **/
       std::list<int> moduleDataList(ModuleID moduleID) const;
 
       // ControllValues
@@ -116,11 +143,11 @@ namespace model
     private:
       Graph(const Graph&); //not impl.
       Graph& operator=(const Graph&); //not impl.
-
+      
       std::string m_id;
       std::string m_name;
       int m_maxModuleID;    
-
+      
       // graph structure	
       GraphNodeList m_nodes;
       ConnectionMap m_connections;
@@ -128,9 +155,6 @@ namespace model
       // controll Value Sets
       ValueSetMap valueSets;
     };  
-
 }
-
-
 
 #endif

@@ -10,7 +10,7 @@
 
 #include "outputdriver.h"
 
-#include "adjustutil.h"
+#include "libscale.h"
 
 #define EPS 0.0001
 
@@ -25,7 +25,7 @@ struct DriverInstance {
   uint_8* data;
   int data_size;
 
-  adjust_pal pal;
+  ls_adjust_pal pal;
 };
 
 static void print_visual(XVisualInfo* vinfo)
@@ -213,6 +213,7 @@ static int XImage_blit(struct DriverInstance* sh,
   XImage* img;
   int err;
 
+  // first scale and adjust input framebuffer fb
   int needs_adjust = (fabs(params->brightness-0.5) > EPS 
                       || fabs(params->contrast-1.0) > EPS
                       || fabs(params->gamma-1.0) > EPS
@@ -237,18 +238,18 @@ static int XImage_blit(struct DriverInstance* sh,
       
       if (needs_adjust)
         {
-          set_adjustment(sh->pal, params->brightness, params->contrast,
+          ls_set_adjustment(sh->pal, params->brightness, params->contrast,
                          params->gamma, params->invert);
                      
-          fb_scale32_adjust((uint_32*)sh->data, sh->width, sh->height,
-                            (uint_32*)fb, width, height, params->mirrorx,
-                            params->mirrory, sh->pal);
+          ls_scale32m_adjust((uint_32*)sh->data, sh->width, sh->height,
+                             (uint_32*)fb, width, height, params->mirrorx,
+                             params->mirrory, sh->pal);
         }
       else
         {
-          fb_scale32((uint_32*)sh->data, sh->width, sh->height,
-                     (uint_32*)fb, width, height, params->mirrorx,
-                     params->mirrory);
+          ls_scale32m((uint_32*)sh->data, sh->width, sh->height,
+                      (uint_32*)fb, width, height, params->mirrorx,
+                      params->mirrory);
         }
 
       framebuffer = sh->data;
@@ -265,6 +266,7 @@ static int XImage_blit(struct DriverInstance* sh,
       framebuffer = (unsigned char*) fb;
     }
 
+  // now create an XImage using the framebuffers pixel data
   err = find_best_visual(sh->display, &vis);
   img = XCreateImage(sh->display,
                      vis.visual,
@@ -284,12 +286,15 @@ static int XImage_blit(struct DriverInstance* sh,
       return 0;
     }
 
+  // ... blit it to screen
   XPutImage(sh->display, sh->win, sh->gc, img, 0, 0, 0, 0,
             sh->width, sh->height);
 
   XFree(img);
 
-  XFlush(sh->display);
+  // and finally make sure the xserver performs the blitting
+  //  XFlush(sh->display);
+  XSync(sh->display, 0);
   return 1;
 }
 

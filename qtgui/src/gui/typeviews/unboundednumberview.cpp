@@ -1,14 +1,13 @@
 #include "unboundednumberview.h"
 
 #include <sstream>
+#include <cmath>
+
+#include <qvalidator.h>
+#include <qlineedit.h>
 
 #include <utils/structreader.h>
 #include <utils/buffer.h>
-
-#include <qvalidator.h>
-
-#include <qlineedit.h>
-
 
 namespace gui
 {
@@ -18,11 +17,23 @@ namespace gui
     Q_OBJECT
   public:
     UnboundedNumberView(QWidget* parent, const ParamMap& params)
-      : TypeView(parent, params)
+      : TypeView(parent, params), m_value(-1.0)
     {
+	  utils::StructReader sr(params);
       m_lineEdit = new QLineEdit("", this, 0);
 
+	  int precision = sr.getIntValue("precision", 6);
+	  std::string display_format = sr.getStringValue("display_format",
+		                                             "auto");
+
       m_lineEdit->setValidator(new QDoubleValidator(this));
+
+	  m_os.precision(precision);
+	  if (display_format == "fixed")
+		  m_os.setf(std::ios::fixed, std::ios::floatfield);
+	  else if (display_format == "scientific")
+		  m_os.setf(std::ios::scientific, std::ios::floatfield);
+	  // else don't set -> automatic mode
 
       connect(m_lineEdit, SIGNAL(returnPressed()),
 	      this, SLOT(lineeditChanged()));
@@ -37,11 +48,15 @@ namespace gui
       std::istringstream is(doof);
       double value;
       is >> value;
-      std::ostringstream os;
-      os.precision(6);
-      os << value;
 
-      m_lineEdit->setText(os.str().c_str());
+	  if (fabs(value - m_value) > 0.00001)
+	  {
+		  m_value = value;
+		  m_os.str("");		  
+		  m_os << value;
+		  
+		  m_lineEdit->setText(m_os.str().c_str());
+	  }
     }
 
 public slots:
@@ -59,12 +74,14 @@ public slots:
 		
   private:
     QLineEdit* m_lineEdit;
+	double m_value;
+	std::ostringstream m_os;
   };
 
   // constructor
 
   UnboundedNumberViewConstructor::UnboundedNumberViewConstructor()
-    : TypeViewConstructor("Zahlen Eingabefeld", "unboundednumber_selector")
+    : TypeViewConstructor("number input", "unboundednumber_selector")
   {
   }
 

@@ -64,6 +64,8 @@ inputs
         higher_bound      = 1024
         default           = 640
         step_size         = 1
+        display_format    = fixed
+        precision         = 0
         help              = Size of output in pixels
     }
 
@@ -79,6 +81,8 @@ inputs
         higher_bound      = 1024
         default           = 480
         step_size         = 1
+        display_format    = fixed
+        precision         = 0
         help              = Size of output in pixels
     }
 
@@ -107,6 +111,8 @@ inputs
         lower_bound       = 0
         step_size         = 1
         default           = 0
+        display_format    = fixed
+        precision         = 0
         help              = Degree of Shading
     }
 }

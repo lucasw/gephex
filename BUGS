@@ -1,8 +1,6 @@
 known bugs:
+-----------
 
- * engine crashes when gui is closed
-
- * sequencer is buggy
-
- * some other stuff (see the bugtracker at sf)
+There are no known severe bugs, for minor bugs please
+see the bugtracker at sourceforge.
 

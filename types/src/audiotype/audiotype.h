@@ -37,7 +37,7 @@ static __inline void audio_initInstance(AudioType* newType)
   newType->capacity    = 0;
   newType->samples     = 0;
   newType->channels    = 1;
-  newType->sample_rate = 22050;
+  newType->sample_rate = 44100;
 }
 
 static __inline AudioType* audio_newInstance(void)

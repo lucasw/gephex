@@ -1,10 +1,12 @@
 #include "slidernumberview.h"
 
+#include <sstream>
+#include <cmath>
+#include <cassert>
+
 #include <qslider.h>
 #include <qlayout.h>
 //#include <qmessagebox.h>
-
-#include <sstream>
 
 #include "utils/buffer.h"
 #include "utils/structreader.h"
@@ -20,7 +22,7 @@ namespace gui
   public:
     SliderNumberView(QWidget* parent, Qt::Orientation orient,
 		     const ParamMap& params)
-      : TypeView(parent, params), m_setValueCalled(false)
+      : TypeView(parent, params), m_setValueCalled(false), m_value(0)
     {
       if (orient == QSlider::Vertical)
 	{
@@ -52,39 +54,46 @@ namespace gui
       double d = (raw - m_lowVal) / (m_highVal - m_lowVal) * RESOLUTION;
 
       if (d < 0)
-	d = 0;
+		  d = 0;
       else if (d > RESOLUTION)
-	d = RESOLUTION;
+		  d = RESOLUTION;
 
-      m_setValueCalled = true;
-      m_slider->setValue((int) d);
+      if (fabs(d - m_value) > 0.00001)
+	  {
+		  m_setValueCalled = true;
+		  m_value = d;
+		  m_slider->setValue(static_cast<int>(d));
+	  }
     }
 
 private slots:
     void sliderChanged(int newVal)
-    {
-      if (!m_setValueCalled)
-	{	
-	  double i = newVal / (double) RESOLUTION;
-	  i = i * (m_highVal - m_lowVal) + m_lowVal;
-
-	  std::ostringstream s;
-	  s << i;
-	  std::string data = s.str();
-	  const unsigned char*
-	    udata = reinterpret_cast<const unsigned char*>(data.c_str());
-	  emit valueChanged(utils::Buffer(udata, data.length()+1));
-	}
-      else
-	{
-	  //QMessageBox::information(0, "It was me!", "Yes, thats true!!!!");
-	  m_setValueCalled = false;
-	}
+    {      	
+	  if (!m_setValueCalled)
+	  {
+		  double i = newVal / (double) RESOLUTION;
+		  i = i * (m_highVal - m_lowVal) + m_lowVal;
+		  
+		  if (fabs(i - m_value) > 0.00001)
+		  {
+			  std::ostringstream s;
+			  s << i;
+			  std::string data = s.str();
+			  const unsigned char*
+				  udata = reinterpret_cast<const unsigned char*>(data.c_str());
+			  emit valueChanged(utils::Buffer(udata, data.length()+1));	
+		  }
+	  }
+	  else
+	  {
+		  m_setValueCalled = false;
+	  }
     }
 
   private:
     QSlider* m_slider;
-    bool m_setValueCalled;
+	bool m_setValueCalled;
+    double m_value;
     double m_lowVal;
     double m_highVal;
   };
@@ -93,7 +102,7 @@ private slots:
 
 
   HSliderNumberViewConstructor::HSliderNumberViewConstructor()
-    : TypeViewConstructor("Horizontaler Slider", "hslider") {}
+    : TypeViewConstructor("horizontal slider", "hslider") {}
 
   TypeView* HSliderNumberViewConstructor::construct(QWidget* parent,
 					   const ParamMap& params) const
@@ -103,7 +112,7 @@ private slots:
  
 
   VSliderNumberViewConstructor::VSliderNumberViewConstructor()
-    : TypeViewConstructor("Vertikaler Slider", "vslider") {}
+    : TypeViewConstructor("vertical slider", "vslider") {}
 
   TypeView* VSliderNumberViewConstructor::construct(QWidget* parent,
 					   const ParamMap& params) const

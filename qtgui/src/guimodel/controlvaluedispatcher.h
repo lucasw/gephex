@@ -29,7 +29,7 @@ class ControlValueDispatcher : public IControlValueReceiver
 {
 
   ControlValueDispatcher(const ControlValueDispatcher&); // nicht impl.
-  ControlValueDispatcher& operator =(const ControlValueDispatcher&); // nicht impl.
+  ControlValueDispatcher& operator=(const ControlValueDispatcher&); // nicht impl.
   
 public:
 	ControlValueDispatcher(IModelControlReceiver&);
@@ -46,6 +46,8 @@ public:
 
 	virtual void syncInputValuesStarted();
 	virtual void syncInputValuesFinished();
+
+        void clear();
 
 private:
   std::map<std::pair<int,int>, std::list<IControlValueReceiver*> > receivers;

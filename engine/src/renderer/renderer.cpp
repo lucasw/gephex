@@ -158,7 +158,8 @@ namespace renderer
 
 	  if (activeGraphName == graphID)
 	  {
-		  //TODO
+            activeGraph = utils::AutoPtr<RuntimeSystem>(0);
+            activeGraphName = "";
 	  }
 
 	  graphs.erase(it);
@@ -287,11 +288,25 @@ namespace renderer
     find(graphID)->syncInputValue(nodeID, inputIndex, &wrapper);
   }
 
+  void Renderer::synchronize()
+  {
+  	if (rendererStatusReceiver!=0)
+	{
+      rendererStatusReceiver->renderedGraphChanged(activeGraphName);
+	  if (isStarted)
+		  rendererStatusReceiver->started();
+	  else
+		  rendererStatusReceiver->stopped();
+	}
+  }
+
   void Renderer::synchronizeInputValues(const std::string& graphID)
   {
     cvr->syncInputValuesStarted(graphID);
+
     ControlValueReceiverWrapper wrapper(cvr,graphID);
     find(graphID)->synchronizeInputValues(&wrapper);
+
     cvr->syncInputValuesFinished(graphID);
   }
 

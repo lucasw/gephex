@@ -69,18 +69,18 @@ int attributesEqual(FrameBufferInstanceID type_,
 }
 
 
-void convertType(FrameBufferInstanceID dstType_,
+int convertType(FrameBufferInstanceID dstType_,
 		 FrameBufferInstanceID srcType_, 
 		 FrameBufferAttributesInstanceID attributes_)
 {
-  framebuffer_convertType((FrameBufferType*) dstType_,
+  return framebuffer_convertType((FrameBufferType*) dstType_,
 			  (const FrameBufferType*) srcType_,
 			  (FrameBufferAttributes*) attributes_);	
 }
 
-void changeAttributes(FrameBufferInstanceID fb_, 
+int changeAttributes(FrameBufferInstanceID fb_, 
 		      FrameBufferAttributesInstanceID attributes_)
 {
-  framebuffer_changeAttributes((FrameBufferType*) fb_,
+  return framebuffer_changeAttributes((FrameBufferType*) fb_,
 			       (FrameBufferAttributes*) attributes_);
 }

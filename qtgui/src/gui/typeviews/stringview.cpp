@@ -56,7 +56,7 @@ public slots:
   // constructor
 
   StringViewConstructor::StringViewConstructor()
-    : TypeViewConstructor("Text Eingabefeld", "line_edit")
+    : TypeViewConstructor("text input", "line_edit")
   {
   }
 

@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -109,16 +111,16 @@ check_PROGRAMS = utilstest
 
 noinst_LIBRARIES = libutils.a
 
-libutils_a_SOURCES =  		stringtokenizer.cpp 		structscanner.cpp 		filesystem.cpp 		structreader.cpp 		buffer.cpp 		itokenizer.cpp 		streamtokenizer.cpp 		bufferutils.cpp 		xmlutils.cpp 		streamlogger.cpp 		outbytestream.cpp 		inbytestream.cpp 		outbytestreamutils.cpp 		inbytestreamutils.cpp 		bufferstream.cpp 		string_.cpp 		sharedlibrary.cpp 		timing.cpp
+libutils_a_SOURCES =  		stringtokenizer.cpp 		structscanner.cpp 		filesystem.cpp 		structreader.cpp 		buffer.cpp 		itokenizer.cpp 		streamtokenizer.cpp 		bufferutils.cpp 		xmlutils.cpp 		streamlogger.cpp 		bufferstream.cpp 		string_.cpp 		sharedlibrary.cpp 		timing.cpp                 circularbuffer.cpp
 
 
-noinst_HEADERS =  		autoptr.h 		buffer.h 		bufferutils.h 		filesystem.h 		ilogger.h 		istructtokenlistener.h 		itokenizer.h 		streamlogger.h 		streamtokenizer.h 		stringtokenizer.h 		structreader.h 		structscanner.h 		xmlutils.h 		outbytestream.h 		inbytestream.h 		outbytestreamutils.h 		inbytestreamutils.h 		bufferstream.h 		block.h 		string_.h 		sharedlibrary.h 		timing.h
+noinst_HEADERS =  		autoptr.h 		buffer.h 		bufferutils.h 		filesystem.h 		ilogger.h 		istructtokenlistener.h 		itokenizer.h 		streamlogger.h 		streamtokenizer.h 		stringtokenizer.h 		structreader.h 		structscanner.h 		xmlutils.h 		bufferstream.h 		block.h 		string_.h 		sharedlibrary.h 		timing.h                 circularbuffer.h
 
 
 INCLUDES =  	-I @srcdir@/.. 	-I@top_srcdir@/util/include 	-I@top_builddir@/util/include
 
 
-utilstest_SOURCES =  	testmain.cpp 	stringtokenizertest.cpp 	structreadertest.cpp 	streamtokenizertest.cpp 	structscannertest.cpp 	buffertest.cpp 	filesystemtest.cpp         autoptrtest.cpp         bytestreamtest.cpp 	bufferstreamtest.cpp 	sharedlibrarytest.cpp 	autoptrtest.h 	bufferstreamtest.h 	buffertest.h 	bytestreamtest.h 	filesystemtest.h 	streamtokenizertest.h 	stringtokenizertest.h 	structreadertest.h 	structscannertest.h 	sharedlibrarytest.h
+utilstest_SOURCES =  	testmain.cpp 	stringtokenizertest.cpp 	structreadertest.cpp 	streamtokenizertest.cpp 	structscannertest.cpp 	buffertest.cpp 	filesystemtest.cpp         autoptrtest.cpp 	bufferstreamtest.cpp 	sharedlibrarytest.cpp 	circularbuffertest.cpp 	autoptrtest.h 	bufferstreamtest.h 	buffertest.h 	filesystemtest.h 	streamtokenizertest.h 	stringtokenizertest.h 	structreadertest.h 	structscannertest.h 	sharedlibrarytest.h 	circularbuffertest.h
 
 
 utilstest_LDADD =  	-L@builddir@/../TestFramework 	-L@builddir@         -ltestframework 	-lutils $(LIB_DL_FLAGS)
@@ -144,16 +146,16 @@ libutils_a_LIBADD =
 libutils_a_OBJECTS =  stringtokenizer.$(OBJEXT) structscanner.$(OBJEXT) \
 filesystem.$(OBJEXT) structreader.$(OBJEXT) buffer.$(OBJEXT) \
 itokenizer.$(OBJEXT) streamtokenizer.$(OBJEXT) bufferutils.$(OBJEXT) \
-xmlutils.$(OBJEXT) streamlogger.$(OBJEXT) outbytestream.$(OBJEXT) \
-inbytestream.$(OBJEXT) outbytestreamutils.$(OBJEXT) \
-inbytestreamutils.$(OBJEXT) bufferstream.$(OBJEXT) string_.$(OBJEXT) \
-sharedlibrary.$(OBJEXT) timing.$(OBJEXT)
+xmlutils.$(OBJEXT) streamlogger.$(OBJEXT) bufferstream.$(OBJEXT) \
+string_.$(OBJEXT) sharedlibrary.$(OBJEXT) timing.$(OBJEXT) \
+circularbuffer.$(OBJEXT)
 check_PROGRAMS =  utilstest$(EXEEXT)
 utilstest_OBJECTS =  testmain.$(OBJEXT) stringtokenizertest.$(OBJEXT) \
 structreadertest.$(OBJEXT) streamtokenizertest.$(OBJEXT) \
 structscannertest.$(OBJEXT) buffertest.$(OBJEXT) \
-filesystemtest.$(OBJEXT) autoptrtest.$(OBJEXT) bytestreamtest.$(OBJEXT) \
-bufferstreamtest.$(OBJEXT) sharedlibrarytest.$(OBJEXT)
+filesystemtest.$(OBJEXT) autoptrtest.$(OBJEXT) \
+bufferstreamtest.$(OBJEXT) sharedlibrarytest.$(OBJEXT) \
+circularbuffertest.$(OBJEXT)
 utilstest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -309,26 +311,54 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+autoptrtest.o: autoptrtest.cpp autoptrtest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h autoptr.h
 buffer.o: buffer.cpp buffer.h ../../../config.h
 bufferstream.o: bufferstream.cpp bufferstream.h buffer.h
+bufferstreamtest.o: bufferstreamtest.cpp bufferstreamtest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h bufferstream.h string_.h buffer.h \
+	bufferutils.h block.h ../../../config.h
+buffertest.o: buffertest.cpp buffertest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h buffer.h block.h ../../../config.h
 bufferutils.o: bufferutils.cpp bufferutils.h buffer.h xmlutils.h
+circularbuffer.o: circularbuffer.cpp circularbuffer.h buffer.h
 filesystem.o: filesystem.cpp filesystem.h ../../../config.h
-inbytestream.o: inbytestream.cpp inbytestream.h buffer.h
-inbytestreamutils.o: inbytestreamutils.cpp inbytestreamutils.h \
-	inbytestream.h buffer.h
+filesystemtest.o: filesystemtest.cpp filesystemtest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h \
+	filesystem.h ../../../config.h
 itokenizer.o: itokenizer.cpp itokenizer.h
-outbytestream.o: outbytestream.cpp outbytestream.h buffer.h
-outbytestreamutils.o: outbytestreamutils.cpp outbytestreamutils.h \
-	outbytestream.h buffer.h
 sharedlibrary.o: sharedlibrary.cpp sharedlibrary.h ../../../config.h
+sharedlibrarytest.o: sharedlibrarytest.cpp sharedlibrarytest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h ../../../config.h sharedlibrary.h
 streamlogger.o: streamlogger.cpp streamlogger.h ilogger.h
 streamtokenizer.o: streamtokenizer.cpp streamtokenizer.h itokenizer.h
+streamtokenizertest.o: streamtokenizertest.cpp streamtokenizertest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h streamtokenizer.h itokenizer.h
 string_.o: string_.cpp string_.h xmlutils.h
 stringtokenizer.o: stringtokenizer.cpp stringtokenizer.h itokenizer.h
+stringtokenizertest.o: stringtokenizertest.cpp stringtokenizertest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h stringtokenizer.h itokenizer.h
 structreader.o: structreader.cpp structreader.h istructtokenlistener.h \
 	structscanner.h
+structreadertest.o: structreadertest.cpp structreadertest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h structreader.h
 structscanner.o: structscanner.cpp structscanner.h \
 	istructtokenlistener.h stringtokenizer.h itokenizer.h
+structscannertest.o: structscannertest.cpp structscannertest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h structscanner.h istructtokenlistener.h
+testmain.o: testmain.cpp ../TestFramework/CompositeTest.h \
+	../TestFramework/Test.h ../TestFramework/Tester.h \
+	stringtokenizertest.h ../TestFramework/easytest.h \
+	../TestFramework/LeafTest.h streamtokenizertest.h \
+	structscannertest.h filesystemtest.h structreadertest.h \
+	buffertest.h autoptrtest.h bufferstreamtest.h \
+	sharedlibrarytest.h
 timing.o: timing.cpp timing.h ../../../config.h
 xmlutils.o: xmlutils.cpp xmlutils.h
 

@@ -73,6 +73,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -95,8 +96,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -112,7 +114,7 @@ INCLUDES =  	-I @srcdir@/.. 	-I @srcdir@/../../../base/src 	-I @builddir@/../../
 
 noinst_LIBRARIES = libdllloader.a
 
-libdllloader_a_SOURCES =  	typedllloader.cpp 	c_moduleclass.cpp 	dllloader.cpp 	nameresolver.cpp 	c_module.cpp 	c_input.cpp 	c_output.cpp 	c_typeclass.cpp 	moduleclassspec.cpp 	c_outputplug.cpp 	c_type.cpp 	moduleinfoutils.cpp 	freeframeloader.cpp 	metamodule.cpp 	typedllloader.h 	c_functiontypes.h 	c_input.h 	c_moduleclass.h 	c_module.h 	c_moduletables.h 	c_output.h 	c_outputplug.h 	c_typeclass.h 	c_type.h 	c_typetables.h 	moduleclassspec.h 	moduleinfoutils.h 	nameresolver.h 	freeframeloader.h 	freeframedefs.h 	metamodule.h 	module.h
+libdllloader_a_SOURCES =  	typedllloader.cpp 	c_moduleclass.cpp 	dllloader.cpp 	nameresolver.cpp 	c_module.cpp 	c_input.cpp 	c_output.cpp 	c_typeclass.cpp 	moduleclassspec.cpp 	c_outputplug.cpp 	c_type.cpp 	moduleinfoutils.cpp 	typedllloader.h 	c_functiontypes.h 	c_input.h 	c_moduleclass.h 	c_module.h 	c_moduletables.h 	c_output.h 	c_outputplug.h 	c_typeclass.h 	c_type.h 	c_typetables.h 	moduleclassspec.h 	moduleinfoutils.h 	nameresolver.h 	module.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
@@ -133,8 +135,7 @@ libdllloader_a_OBJECTS =  typedllloader.$(OBJEXT) \
 c_moduleclass.$(OBJEXT) dllloader.$(OBJEXT) nameresolver.$(OBJEXT) \
 c_module.$(OBJEXT) c_input.$(OBJEXT) c_output.$(OBJEXT) \
 c_typeclass.$(OBJEXT) moduleclassspec.$(OBJEXT) c_outputplug.$(OBJEXT) \
-c_type.$(OBJEXT) moduleinfoutils.$(OBJEXT) freeframeloader.$(OBJEXT) \
-metamodule.$(OBJEXT)
+c_type.$(OBJEXT) moduleinfoutils.$(OBJEXT)
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -339,10 +340,6 @@ dllloader.o: dllloader.cpp dllloader.h \
 	../../../base/src/interfaces/itypeclassreceiver.h \
 	../../../base/src/interfaces/itypeclassinforeceiver.h \
 	../../../base/src/interfaces/itypeclassnamereceiver.h
-freeframeloader.o: freeframeloader.cpp freeframeloader.h \
-	../../../base/src/utils/sharedlibrary.h freeframedefs.h \
-	../../../util/include/basic_types.h metamodule.h module.h
-metamodule.o: metamodule.cpp metamodule.h
 moduleclassspec.o: moduleclassspec.cpp moduleclassspec.h \
 	../../../base/src/interfaces/imoduleclassspec.h \
 	../../../base/src/utils/buffer.h

@@ -6,6 +6,7 @@
 #include <qpushbutton.h>
 #include <qfiledialog.h>
 #include <qtooltip.h>
+#include <qmessagebox.h>
 
 #include "utils/structreader.h"
 
@@ -18,7 +19,7 @@ namespace gui
 			
   public:
     FileStringView(QWidget* parent, const ParamMap& params)
-      : TypeView(parent, params), m_fileDialog(0)
+      : TypeView(parent, params)
     {
       utils::StructReader sr(params);
     
@@ -62,44 +63,60 @@ namespace gui
     }
 
 private slots:
-  void userSelectedFile(const QString& name)
+  void userSelectedFile(const QString& name_)
   {
-	if (name.length() != 0)
-	{
-	  utils::Buffer
-	    b(reinterpret_cast<const unsigned char*>(name.latin1()),
-	      name.length()+1);
-
-	  emit valueChanged(b);
-	}
   }
 
 void selectFile()
     {
-	  if (m_fileDialog)
-		  delete m_fileDialog;      
+	std::string path;
+    int pos = m_current.find_last_of("/");
+	//if (pos == std::string::npos)
+		//pos = m_current.find_last_of("\\");
 
-	  m_fileDialog = new QFileDialog("Choose File", m_fullMask.c_str(), this);
-	  m_fileDialog->setDir(m_current.c_str());
+	if (pos != std::string::npos)
+		path = m_current.substr(0, pos);
 
-	  connect(m_fileDialog, SIGNAL(fileSelected(const QString&)), 
-		      this, SLOT(userSelectedFile(const QString&)));
+	QStringList files = QFileDialog::getOpenFileNames (m_fullMask.c_str(), 
+							 path.c_str(), 
+							 this, "file selector",
+							 "choose Files");
 
-	  m_fileDialog->show();	        
+      QString name;
+
+//      QStringList::const_iterator it=files.begin();
+	  QStringList::Iterator it=files.begin();
+      
+      if (it!=files.end())
+	{
+	  name+=*it++;
+	}
+
+      while(it!=files.end())
+	{
+	  name+= "," + *it++;
+	}
+      
+      if (name.length() != 0)
+	{
+	  utils::Buffer
+	    b(reinterpret_cast<const unsigned char*>(name.latin1()),
+	      name.length()+1);
+	  
+	  emit valueChanged(b);
+	}
     }
 
   private:
     QButton* m_select;
     std::string m_current;
     std::string m_fullMask;    
-	QFileDialog* m_fileDialog;
-
   };
 	
   // constructor
 
   FileStringViewConstructor::FileStringViewConstructor()
-    : TypeViewConstructor("Datei Auswahl", "file_selector")
+    : TypeViewConstructor("file dialog", "file_selector")
   {
   }
 

@@ -47,9 +47,7 @@ namespace engine
           << "/lib/gephex/modules/]" << std::endl
 	  << "type_dirs=[" << INST_INSTALL_PREFIX << "/lib/gephex/types/]" 
 	  << std::endl
-	  << "graph_dir=["<< home <<"/.gephex/graphs/]" << std::endl
-	  << "sequence_dir=["<< home <<"/.gephex/sequences/]" << std::endl
-	  << "playlist_dir=["<< home <<"/.gephex/playlists/]" << std::endl
+	  << "graph_dir=["<< home <<"/.gephex/graphs/]" << std::endl	  	  
 	  << "ipc_type=[inet]" << std::endl
 	  << "ipc_unix_node_prefix=[/tmp/gephex_socket_]" << std::endl
 	  << "ipc_port=[6666]" << std::endl
@@ -74,16 +72,13 @@ namespace engine
 
   EngineConfig::EngineConfig()
     :sr(readConfigFile()),
-     graphDir(sr.getStringValue("graph_dir")),
-     sequDir(sr.getStringValue("sequence_dir")),
-     plDir(sr.getStringValue("playlist_dir")),
+     graphDir(sr.getStringValue("graph_dir")),     
      ipcType(sr.getStringValue("ipc_type","inet")),
      ipcUnixNodePrefix(sr.getStringValue("ipc_unix_node_prefix","/tmp/gephex_socket")),
      moduleDirs(sr.getStringValue("module_dirs")),
      typeDirs(sr.getStringValue("type_dirs")),
      rendererInterval(sr.getIntValue("renderer_interval", 35)),
-     netInterval(sr.getIntValue("net_interval", 35)),
-     sequencerInterval(sr.getIntValue("sequencer_interval", 100)),
+     netInterval(sr.getIntValue("net_interval", 35)),     
      port(sr.getIntValue("ipc_port"))
   {
   }

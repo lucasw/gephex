@@ -11,6 +11,9 @@ namespace gui
 		virtual ~IModuleClassView() {};
 		virtual void moduleClassLoaded(const std::string& moduleClassName,const ModuleInfo& mi) = 0;
 		virtual void moduleClassUnloaded(const std::string& moduleClassName) = 0;
+
+		virtual void syncStarted() = 0;
+		virtual void syncFinished() = 0;
 	};
 }
 

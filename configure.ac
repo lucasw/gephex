@@ -1,7 +1,7 @@
 AC_INIT
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.0.4alpha2)
+AM_INIT_AUTOMAKE(gephex,0.0.4beta2)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -42,13 +42,24 @@ fi
 AC_CHECK_HEADERS([SDL/SDL_image.h],
 	have_sdl_image_header=yes,
 	have_sdl_image_header=no)
-
 AH_TEMPLATE([HAVE_SDL_IMAGE],  [build with libsdl_image support])
 AM_CONDITIONAL(HAVE_SDL_IMAGE, test "x$have_sdl_image_header" = "xyes")
 if test "x$have_sdl_image_header" = "xyes"; then
         AC_DEFINE(HAVE_SDL_IMAGE)
-	AC_SUBST(SDL_IMAGE_LDFLAGS,"-lSDL -lSDL_image")
+	AC_SUBST(SDL_IMAGE_LDFLAGS,"-lSDL_image")
 fi
+
+# SDL_ttf
+AC_CHECK_HEADERS([SDL/SDL_ttf.h],
+	have_sdl_ttf_header=yes,
+	have_sdl_ttf_header=no)
+AH_TEMPLATE([HAVE_SDL_TTF],  [build with libsdl true type font support])
+AM_CONDITIONAL(HAVE_SDL_TTF, test "x$have_sdl_ttf_header" = "xyes")
+if test "x$have_sdl_ttf_header" = "xyes"; then
+        AC_DEFINE(HAVE_SDL_TTF)
+	AC_SUBST(SDL_TTF_LDFLAGS,"-lSDL_ttf")
+fi
+
 
 # avifile
 AM_PATH_AVIFILE([0.7.0], have_avifile=yes, have_avifile=no)
@@ -69,7 +80,12 @@ fi
 
 # OpenGL
 AC_CHECK_HEADERS([GL/glx.h],have_glx=yes,have_glx=no)
+AH_TEMPLATE([HAVE_GLX],  [build with gl output driver support])
 AM_CONDITIONAL(HAVE_GLX, test "x$have_glx" = "xyes")
+if test "x$have_glx" = "xyes"; then
+	AC_DEFINE(HAVE_GLX)
+	AC_SUBST(GLX_LDFLAGS, [-lgl])
+fi
 
 # libpng
 AC_CHECK_HEADERS([png.h],have_png=yes,have_png=no)
@@ -296,7 +312,6 @@ base/src/net/Makefile
 base/src/netinterfaces/Makefile
 engine/Makefile
 engine/src/Makefile
-engine/src/sequencer/Makefile
 engine/src/dllloader/Makefile
 engine/src/model/Makefile
 engine/src/renderer/Makefile
@@ -317,6 +332,7 @@ modules/Makefile
 modules/src/Makefile
 modules/src/libgrid/Makefile
 modules/src/libmidi/Makefile
+modules/src/libscale/Makefile
 modules/src/libeffectv/Makefile
 modules/src/libeffectv/trick/Makefile
 modules/src/tunnelmodule/Makefile
@@ -362,12 +378,17 @@ modules/src/frboutmodule/Makefile
 modules/src/frbinmodule/Makefile
 modules/src/audioaddmodule/Makefile
 modules/src/audiospecmodule/Makefile
+modules/src/audioenergymodule/Makefile
 modules/src/audiowavegenmodule/Makefile
 modules/src/audiovismodule/Makefile
 modules/src/audioinmodule/Makefile
 modules/src/audiooutmodule/Makefile
 modules/src/audiobdmodule/Makefile
 modules/src/audiosynthmodule/Makefile
+modules/src/overlaymodule/Makefile
+modules/src/gradnormmodule/Makefile
+modules/src/pixelizemodule/Makefile
+modules/src/stringtokenizermodule/Makefile
 modules/src/effecttvedgemodule/Makefile
 modules/src/effectvfiremodule/Makefile
 modules/src/effectvlensmodule/Makefile
@@ -375,8 +396,11 @@ modules/src/effectvpuzzlemodule/Makefile
 modules/src/effectvlifemodule/Makefile
 modules/src/effectvagingmodule/Makefile
 modules/src/effectvburnmodule/Makefile
-modules/src/overlaymodule/Makefile
-modules/src/gradnormmodule/Makefile
+modules/src/effectvdotmodule/Makefile
+modules/src/effectvsparkmodule/Makefile
+modules/src/effectvcyclemodule/Makefile
+modules/src/effectvquarkmodule/Makefile
+modules/src/sdlfontmodule/Makefile
 qtgui/Makefile
 qtgui/src/Makefile
 qtgui/src/guimodel/Makefile
@@ -416,6 +440,10 @@ if test "x$have_sdl_image_header" != "xyes";  then
    echo $MISSING_LIB_TEXT
 fi
 
+if test "x$have_sdl_ttf_header" != "xyes";  then
+   echo Note: No SDL_ttf support found.
+   echo $MISSING_LIB_TEXT
+fi
 
 if test "x$have_avifile" != "xyes"; then
    echo Note: No Avifile support found.

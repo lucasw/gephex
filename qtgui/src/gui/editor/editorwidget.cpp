@@ -10,7 +10,6 @@
 #include "controleditorwindow.h"
 
 #include "moduleclassview.h"
-#include "moduleclasstabview.h"
 
 //TODO: remove
 #include "guimodel/graphmodel.h"
@@ -60,8 +59,11 @@ EditorWidget::EditorWidget(QWidget* parent, const char* name,
   connect(graphEditor,SIGNAL(statusText(const std::string&)),
 	  this,SLOT(displayStatusText(const std::string&)));
 
-  connect(graphEditor,SIGNAL(properties(const IPropertyDescription&)),
-	  this,SLOT(displayProperties(const IPropertyDescription&)));
+  connect(graphEditor,SIGNAL(displayProperties(const IPropertyDescription&)),
+	  this,SLOT(displayProperties_(const IPropertyDescription&)));
+
+  connect(graphEditor,SIGNAL(undisplayProperties()),
+	  this,SLOT(undisplayProperties_()));
 
   connect(graphEditor,SIGNAL(newEditGraph(const std::string&,
 					  const std::string&)),
@@ -107,10 +109,16 @@ void EditorWidget::displayStatusText(const std::string& s)
 	emit statusText(s);
 }
 
-void EditorWidget::displayProperties(const IPropertyDescription& pd)
+void EditorWidget::displayProperties_(const IPropertyDescription& pd)
 {
-  emit properties(pd);
+  emit displayProperties(pd);
 }
+
+void EditorWidget::undisplayProperties_()
+{
+  emit undisplayProperties();
+}
+
 
 void EditorWidget::newEditGraphSlot(const std::string&g, const std::string&s)
 {

@@ -44,5 +44,10 @@ public:
    */
 	virtual void synchronizeInputValues( const std::string& graphName ) = 0;
 
+  /**
+   *
+   */
+	virtual void synchronize(  ) = 0;
+
 };
 #endif

@@ -91,14 +91,14 @@ void fb_scale32(uint_32* dst, int dwidth, int dheight,
 
       y_a = 0;
 
-      for (y = 0; y < dheight; ++y)
+      for (y = dheight; y > 0; --y)
         {
-          int x, line_base;
+          int x;
+          const uint_32* line_base = src + ((y_a >> 16) * swidth);
           x_a = 0;		
-          line_base = (y_a >> 16) * swidth;
-          for (x = 0; x < dwidth; ++x)
+          for (x = dwidth; x > 0; --x)
             {			
-              *dst= src[(x_a >> 16) + line_base];
+              *dst= line_base[x_a >> 16];
               ++dst;
               x_a += A;
             }
@@ -128,19 +128,20 @@ struct effectv_Effect* effectv_init(void* e,
   s_diff2_ptr      = &self->diff2;
 
   image_init();
+  yuv_init();
 
   self->register_func = (effectRegistFunc*) e;
   self->effect        = self->register_func();
-  printf("name = %s\n", self->effect->name);
+  //printf("name = %s\n", self->effect->name);
   error = self->effect->start();
   if (error)
     {
-      printf("Error at start()!\n");
+      fprintf(stderr, "Error at start()!\n");
       image_free();
       free(self);
       return 0;
     }
-  printf("...started\n");
+  //printf("...started\n");
   return self;
 }
 
@@ -616,4 +617,41 @@ unsigned char *image_diff_filter(unsigned char *diff)
 	}
 	
 	return (*s_diff2_ptr);
+}
+
+/*
+ * from yuv.c--------------------------------------------------------
+ */
+
+int YtoRGB[256];
+int VtoR[256], VtoG[256];
+int UtoG[256], UtoB[256];
+int RtoY[256], RtoU[256], RtoV[256];
+int GtoY[256], GtoU[256], GtoV[256];
+int BtoY[256],            BtoV[256];
+
+int yuv_init()
+{
+	static int initialized = 0;
+	int i;
+
+	if(!initialized) {
+		for(i=0; i<256; i++) {
+			YtoRGB[i] =  1.164*(i-16);
+			VtoR[i] =  1.596*(i-128);
+			VtoG[i] = -0.813*(i-128);
+			UtoG[i] = -0.391*(i-128);
+			UtoB[i] =  2.018*(i-128);
+			RtoY[i] =  0.257*i;
+			RtoU[i] = -0.148*i;
+			RtoV[i] =  0.439*i;
+			GtoY[i] =  0.504*i;
+			GtoU[i] = -0.291*i;
+			GtoV[i] = -0.368*i;
+			BtoY[i] =  0.098*i;
+			BtoV[i] = -0.071*i;
+		}
+		initialized = 1;
+	}
+	return 0;
 }

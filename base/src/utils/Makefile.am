@@ -15,14 +15,11 @@ libutils_a_SOURCES = \
 		bufferutils.cpp \
 		xmlutils.cpp \
 		streamlogger.cpp \
-		outbytestream.cpp \
-		inbytestream.cpp \
-		outbytestreamutils.cpp \
-		inbytestreamutils.cpp \
 		bufferstream.cpp \
 		string_.cpp \
 		sharedlibrary.cpp \
-		timing.cpp
+		timing.cpp \
+                circularbuffer.cpp
 
 noinst_HEADERS = \
 		autoptr.h \
@@ -38,15 +35,12 @@ noinst_HEADERS = \
 		structreader.h \
 		structscanner.h \
 		xmlutils.h \
-		outbytestream.h \
-		inbytestream.h \
-		outbytestreamutils.h \
-		inbytestreamutils.h \
 		bufferstream.h \
 		block.h \
 		string_.h \
 		sharedlibrary.h \
-		timing.h
+		timing.h \
+                circularbuffer.h
 
 INCLUDES = \
 	-I @srcdir@/.. \
@@ -62,19 +56,19 @@ utilstest_SOURCES = \
 	buffertest.cpp \
 	filesystemtest.cpp \
         autoptrtest.cpp \
-        bytestreamtest.cpp \
 	bufferstreamtest.cpp \
 	sharedlibrarytest.cpp \
+	circularbuffertest.cpp \
 	autoptrtest.h \
 	bufferstreamtest.h \
 	buffertest.h \
-	bytestreamtest.h \
 	filesystemtest.h \
 	streamtokenizertest.h \
 	stringtokenizertest.h \
 	structreadertest.h \
 	structscannertest.h \
-	sharedlibrarytest.h
+	sharedlibrarytest.h \
+	circularbuffertest.h
 
 utilstest_LDADD = \
 	-L@builddir@/../TestFramework \

@@ -47,6 +47,9 @@ namespace gui
 			offset += strlen(offset)+1;
 		}
 		
+                //if (offset - ptr > len)
+                  //printf("Ich protestiere!\n");
+
 		m_ptr = new char*[index];
 		m_len = index;
 		
@@ -56,7 +59,7 @@ namespace gui
 		{
 			int currentLen = strlen(offset)+1;
 			m_ptr[index] = new char[currentLen];
-			memcpy(m_ptr[index],offset,currentLen);
+			memcpy(m_ptr[index], offset, currentLen);
 			
 			offset += currentLen;
 			++index;

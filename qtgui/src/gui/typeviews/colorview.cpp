@@ -102,7 +102,7 @@ void selectColor()
   // constructor
 
   ColorViewConstructor::ColorViewConstructor()
-    : TypeViewConstructor("Farbauswahl", "color_selector")
+    : TypeViewConstructor("color dialog", "color_selector")
   {
   }
 	

@@ -62,6 +62,21 @@ private:
   net::Protocol* np;
 };
 
+
+class TestSender2 : public net::ISender
+{
+public:
+  TestSender2() {}
+  
+  virtual int send(const utils::Buffer& buf)
+  {
+    m_buf = buf;
+	return buf.getLen();
+  }
+
+  utils::Buffer m_buf;
+};
+
 class TestInterpreter : public net::IDataListener
 {
 public:
@@ -102,36 +117,72 @@ void ProtocolTest::pre() throw(std::runtime_error)
 
 }
 
+static void test1()
+{
+	protocol_test::TestSender sender;
+	protocol_test::TestInterpreter tip;
+	net::Protocol np(tip);
+	
+	np.registerSender(&sender);
+	sender.setProtocol(np);
+	
+	for (int len = 0; len < 4098; ++len)
+    {
+		unsigned char* data = createRandomBlock(len);
+		np.send(utils::Buffer(data,len));
+		
+		if (!compareBlocks(data,len,tip.m_data,tip.m_len))
+		{
+			std::cerr << "len = " << len << std::endl;
+			std::cerr << "m_len = " << tip.m_len << std::endl;
+			throw std::runtime_error("Da ist nicht das Richtige"
+				" beim Richtigen ankegommen hier.");
+		}
+		delete[] data;
+		
+		if (len % 128 == 0)
+		{
+			std::cerr << ".";
+			std::cerr.flush();
+		}
+		
+    }
+}
+
+static void test2()
+{
+	protocol_test::TestInterpreter tip;
+	protocol_test::TestSender2 sender;
+	net::Protocol np(tip);
+
+	np.registerSender(&sender);	
+
+	utils::Buffer buf;
+	np.send(utils::Buffer((unsigned char*)"Hallo", strlen("Hallo")+1));
+	buf += sender.m_buf;
+	np.send(utils::Buffer((unsigned char*)"Test", strlen("Test")+1));
+	buf += sender.m_buf;
+
+	unsigned char* ptr = new unsigned char[buf.getLen()];
+	memcpy(ptr, buf.getPtr(), buf.getLen());
+
+	unsigned int* header_thingy = (unsigned int*) ptr;
+	*header_thingy += 7;
+
+	utils::Buffer mod_buf(ptr, buf.getLen());
+	delete[] ptr;
+
+	np.dataReceived(mod_buf);
+
+    const char* text = (const char*) tip.m_data;
+	if (strcmp(text, "Test") != 0)
+		throw std::runtime_error("sync failed");
+}
+
 void ProtocolTest::run() throw(std::runtime_error)
 {
-  protocol_test::TestSender sender;
-  protocol_test::TestInterpreter tip;
-  net::Protocol np(tip);
-
-  np.registerSender(sender);
-  sender.setProtocol(np);
-
-  for (int len = 0; len < 4098; ++len)
-    {
-      unsigned char* data = createRandomBlock(len);
-      np.send(utils::Buffer(data,len));
-	
-      if (!compareBlocks(data,len,tip.m_data,tip.m_len))
-	{
-	  std::cerr << "len = " << len << std::endl;
-	  std::cerr << "m_len = " << tip.m_len << std::endl;
-	  throw std::runtime_error("Da ist nicht das Richtige"
-				   " beim Richtigen ankegommen hier.");
-	}
-      delete[] data;
-
-      if (len % 128 == 0)
-	{
-	  std::cerr << ".";
-	  std::cerr.flush();
-	}
-
-    }
+   test1();
+   test2();
 }
 
 void ProtocolTest::post() throw(std::runtime_error)

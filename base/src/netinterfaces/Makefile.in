@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -107,10 +109,10 @@ INCLUDES = -I @builddir@/.. -I @srcdir@/.. -I @top_srcdir@/util/include
 
 noinst_LIBRARIES = libnetinterfaces.a
 
-libnetinterfaces_a_SOURCES =  		sequencercontrolsendernet.cpp 		sequencercontrolreceivernet.cpp 		enginecontrolsendernet.cpp 		enginecontrolreceivernet.cpp 		moduleclassloadercontrolsendernet.cpp 		moduleclassloadercontrolreceivernet.cpp 		renderercontrolreceivernet.cpp 		renderercontrolsendernet.cpp 		modelcontrolreceivernet.cpp 		moduledatareceivernet.cpp 		moduledatasendernet.cpp 		moduleclassnamereceivernet.cpp 		moduleclassnamesendernet.cpp 		moduleconstructiondumbreceivernet.cpp 		modelcontrolsendernet.cpp 		moduleconstructiondumbsendernet.cpp 		moduleclassinforeceivernet.cpp 		moduleclassinfosendernet.cpp 		controlvaluereceivernet.cpp 		controlvaluesendernet.cpp 		modulestatisticsreceivernet.cpp 		modulestatisticssendernet.cpp 		errorsendernet.cpp 		errorreceivernet.cpp 		graphnamereceivernet.cpp 		graphnamesendernet.cpp 		sequenceupdatereceivernet.cpp 		sequenceupdatesendernet.cpp 		sequencenamesendernet.cpp 		sequencenamereceivernet.cpp 		sequencerstatussendernet.cpp 		sequencerstatusreceivernet.cpp 		modelstatusreceivernet.cpp 		modelstatussendernet.cpp 		rendererstatusreceivernet.cpp 		rendererstatussendernet.cpp
+libnetinterfaces_a_SOURCES =  		enginecontrolsendernet.cpp 		enginecontrolreceivernet.cpp 		moduleclassloadercontrolsendernet.cpp 		moduleclassloadercontrolreceivernet.cpp 		renderercontrolreceivernet.cpp 		renderercontrolsendernet.cpp 		modelcontrolreceivernet.cpp 		moduledatareceivernet.cpp 		moduledatasendernet.cpp 		moduleclassnamereceivernet.cpp 		moduleclassnamesendernet.cpp 		moduleconstructiondumbreceivernet.cpp 		modelcontrolsendernet.cpp 		moduleconstructiondumbsendernet.cpp 		moduleclassinforeceivernet.cpp 		moduleclassinfosendernet.cpp 		controlvaluereceivernet.cpp 		controlvaluesendernet.cpp 		modulestatisticsreceivernet.cpp 		modulestatisticssendernet.cpp 		errorsendernet.cpp 		errorreceivernet.cpp 		graphnamereceivernet.cpp 		graphnamesendernet.cpp 		modelstatusreceivernet.cpp 		modelstatussendernet.cpp 		rendererstatusreceivernet.cpp 		rendererstatussendernet.cpp
 
 
-noinst_HEADERS =  		controlvaluereceivernet.h 		controlvaluesendernet.h 		enginecontrolreceivernet.h 		enginecontrolsendernet.h 		errorreceivernet.h 		errorsendernet.h 		graphnamereceivernet.h 		graphnamesendernet.h 		modelcontrolreceivernet.h 		modelcontrolsendernet.h 		moduleclassinforeceivernet.h 		moduleclassinfosendernet.h 		moduleclassloadercontrolreceivernet.h 		moduleclassloadercontrolsendernet.h 		moduleclassnamereceivernet.h 		moduleclassnamesendernet.h 		moduleconstructiondumbreceivernet.h 		moduleconstructiondumbsendernet.h 		moduledatareceivernet.h 		moduledatasendernet.h 		modulestatisticsreceivernet.h 		modulestatisticssendernet.h 		nodelcontrolreceivertest.h 		renderercontrolreceivernet.h 		renderercontrolsendernet.h 		sequencenamereceivernet.h 		sequencenamesendernet.h 		sequencercontrolreceivernet.h 		sequencercontrolsendernet.h 		sequenceupdatereceivernet.h 		sequenceupdatesendernet.h 		sequencerstatussendernet.h 		sequencerstatusreceivernet.h 		modelstatusreceivernet.h 		modelstatussendernet.h 		rendererstatusreceivernet.h 		rendererstatussendernet.h
+noinst_HEADERS =  		controlvaluereceivernet.h 		controlvaluesendernet.h 		enginecontrolreceivernet.h 		enginecontrolsendernet.h 		errorreceivernet.h 		errorsendernet.h 		graphnamereceivernet.h 		graphnamesendernet.h 		modelcontrolreceivernet.h 		modelcontrolsendernet.h 		moduleclassinforeceivernet.h 		moduleclassinfosendernet.h 		moduleclassloadercontrolreceivernet.h 		moduleclassloadercontrolsendernet.h 		moduleclassnamereceivernet.h 		moduleclassnamesendernet.h 		moduleconstructiondumbreceivernet.h 		moduleconstructiondumbsendernet.h 		moduledatareceivernet.h 		moduledatasendernet.h 		modulestatisticsreceivernet.h 		modulestatisticssendernet.h 		nodelcontrolreceivertest.h 		renderercontrolreceivernet.h 		renderercontrolsendernet.h 		modelstatusreceivernet.h 		modelstatussendernet.h 		rendererstatusreceivernet.h 		rendererstatussendernet.h
 
 
 DISTCLEANFILES = *sendernet.cpp *sendernet.h *receivernet.cpp *receivernet.h
@@ -129,8 +131,7 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libnetinterfaces_a_LIBADD = 
-libnetinterfaces_a_OBJECTS =  sequencercontrolsendernet.$(OBJEXT) \
-sequencercontrolreceivernet.$(OBJEXT) enginecontrolsendernet.$(OBJEXT) \
+libnetinterfaces_a_OBJECTS =  enginecontrolsendernet.$(OBJEXT) \
 enginecontrolreceivernet.$(OBJEXT) \
 moduleclassloadercontrolsendernet.$(OBJEXT) \
 moduleclassloadercontrolreceivernet.$(OBJEXT) \
@@ -146,10 +147,7 @@ controlvaluereceivernet.$(OBJEXT) controlvaluesendernet.$(OBJEXT) \
 modulestatisticsreceivernet.$(OBJEXT) \
 modulestatisticssendernet.$(OBJEXT) errorsendernet.$(OBJEXT) \
 errorreceivernet.$(OBJEXT) graphnamereceivernet.$(OBJEXT) \
-graphnamesendernet.$(OBJEXT) sequenceupdatereceivernet.$(OBJEXT) \
-sequenceupdatesendernet.$(OBJEXT) sequencenamesendernet.$(OBJEXT) \
-sequencenamereceivernet.$(OBJEXT) sequencerstatussendernet.$(OBJEXT) \
-sequencerstatusreceivernet.$(OBJEXT) modelstatusreceivernet.$(OBJEXT) \
+graphnamesendernet.$(OBJEXT) modelstatusreceivernet.$(OBJEXT) \
 modelstatussendernet.$(OBJEXT) rendererstatusreceivernet.$(OBJEXT) \
 rendererstatussendernet.$(OBJEXT)
 CXXFLAGS = @CXXFLAGS@
@@ -447,53 +445,6 @@ rendererstatussendernet.o: rendererstatussendernet.cpp \
 	rendererstatussendernet.h ../interfaces/irendererstatussender.h \
 	../net/itaginterpreter.h \
 	../interfaces/irendererstatusreceiver.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencenamereceivernet.o: sequencenamereceivernet.cpp \
-	sequencenamereceivernet.h ../interfaces/isequencenamereceiver.h \
-	../net/itagger.h ../net/isender.h ../net/idatalistener.h \
-	../utils/buffer.h ../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencenamesendernet.o: sequencenamesendernet.cpp \
-	sequencenamesendernet.h ../interfaces/isequencenamesender.h \
-	../net/itaginterpreter.h ../interfaces/isequencenamereceiver.h \
-	../utils/buffer.h ../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencercontrolreceivernet.o: sequencercontrolreceivernet.cpp \
-	sequencercontrolreceivernet.h \
-	../interfaces/isequencercontrolreceiver.h ../net/itagger.h \
-	../net/isender.h ../net/idatalistener.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencercontrolsendernet.o: sequencercontrolsendernet.cpp \
-	sequencercontrolsendernet.h \
-	../interfaces/isequencercontrolsender.h \
-	../net/itaginterpreter.h \
-	../interfaces/isequencercontrolreceiver.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencerstatusreceivernet.o: sequencerstatusreceivernet.cpp \
-	sequencerstatusreceivernet.h \
-	../interfaces/isequencerstatusreceiver.h ../net/itagger.h \
-	../net/isender.h ../net/idatalistener.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequencerstatussendernet.o: sequencerstatussendernet.cpp \
-	sequencerstatussendernet.h \
-	../interfaces/isequencerstatussender.h ../net/itaginterpreter.h \
-	../interfaces/isequencerstatusreceiver.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequenceupdatereceivernet.o: sequenceupdatereceivernet.cpp \
-	sequenceupdatereceivernet.h \
-	../interfaces/isequenceupdatereceiver.h ../net/itagger.h \
-	../net/isender.h ../net/idatalistener.h ../utils/buffer.h \
-	../utils/bufferstream.h ../utils/string_.h \
-	../utils/bufferutils.h
-sequenceupdatesendernet.o: sequenceupdatesendernet.cpp \
-	sequenceupdatesendernet.h ../interfaces/isequenceupdatesender.h \
-	../net/itaginterpreter.h \
-	../interfaces/isequenceupdatereceiver.h ../utils/buffer.h \
 	../utils/bufferstream.h ../utils/string_.h \
 	../utils/bufferutils.h
 

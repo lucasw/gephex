@@ -1,11 +1,16 @@
+Please read README first!
+
 To install GePhex, perform the following steps:
 
 1. Type "./configure" (you may choose a different installation prefix
    with --prefix=<your prefix here>, default is /usr/)
 
+   Interesting options are -with-effectv=<effectv src dir> and -enable-mmx.
+   Please see ./configure --help for details.
+
 2. Type make
 
-3. Type make install
+3. Type make install (you might need to become root for this step)
 
 4. Go into <your chosen prefix>/bin and start engine and gui (in that order).
 

@@ -88,7 +88,7 @@ int attributesEqual(TypeInstanceID instance,
  * assigns ths value from src to dst and changes the attributes while doing
  * that.
  */
-void convertType(TypeInstanceID destination, 
+int convertType(TypeInstanceID destination, 
 		 TypeInstanceID source, 
 		 TypeAttributesInstanceID attributes);
 

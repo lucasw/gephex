@@ -9,33 +9,32 @@ EFFECTV_DIRS = \
 	effectvpuzzlemodule \
 	effectvlifemodule \
 	effectvagingmodule \
-	effectvburnmodule
+	effectvburnmodule \
+	effectvdotmodule \
+	effectvsparkmodule \
+	effectvcyclemodule \
+	effectvquarkmodule
 endif
 
 if HAVE_SDL
-SDL_DIRS = \
-	joystickmodule
+SDL_DIRS = joystickmodule
+
+if HAVE_SDL_TTF
+SDL_TTF_DIRS = sdlfontmodule
 endif
 
-if HAVE_AVIFILE
-AVIFILE_DIRS = #avifilemodule
 endif
-
-if HAVE_MPEG3
-# commented out for the release (does not work on all tested computers)
-MPEG3_DIRS = #libmpeg3module
-endif
-
-#if HAVE_GLX
-#GLX_DIRS = gloutmodule
-#endif
 
 if HAVE_PNG
 PNG_DIRS = imagewritermodule
 endif
 
 if HAVE_ASOUNDLIB_OR_OSS
-SOUND_DIRS = audiooutmodule audioinmodule
+AUDIO_DIRS = audiooutmodule audioinmodule
+endif
+
+if HAVE_OSS
+OSS_DIRS = midiinmodule
 endif
 
 if WITH_V4L
@@ -45,9 +44,11 @@ endif
 
 SUBDIRS = libgrid \
 	libmidi \
+	libscale \
 	numarithmodule \
         audioaddmodule \
         audiospecmodule \
+        audioenergymodule \
         audiowavegenmodule \
         audiovismodule \
         audiobdmodule \
@@ -74,7 +75,6 @@ SUBDIRS = libgrid \
 	ifsgenmodule \
 	ifsxfadermodule \
 	netcontrolmodule \
-	midiinmodule \
 	doepfermodule \
 	fpsmodule \
 	ifsmodule \
@@ -88,10 +88,10 @@ SUBDIRS = libgrid \
 	twolayermodule \
 	rangeconvertmodule \
         frboutmodule \
-	frbinmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(SOUND_DIRS) #$(GLX_DIRS)
-# commented out for the release because they don't work
-#	starfield \
-#	libmpeg3module
+	frbinmodule \
+	stringtokenizermodule \
+        pixelizemodule $(EFFECTV_DIRS) $(SDL_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
+
 
 
 

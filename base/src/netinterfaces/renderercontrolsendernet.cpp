@@ -59,6 +59,10 @@ void RendererControlSenderNet::dataReceived(const std::string& command,const uti
 		bs  >> graphName;
 		m_rec->synchronizeInputValues( graphName );
 	 }
+	else 	if (command == "0005")
+	 {
+		m_rec->synchronize(  );
+	 }
 	 else
 	 {
 		std::ostringstream stream;

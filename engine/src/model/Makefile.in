@@ -73,6 +73,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -95,8 +96,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -110,7 +112,7 @@ INCLUDES =  	-I @srcdir@/.. 	-I @srcdir@/../../../base/src 	-I @builddir@/../../
 
 noinst_LIBRARIES = libmodel.a
 
-libmodel_a_SOURCES = model.cpp                      model.h                      graph.cpp                      graphnode.cpp                      graphconnection.cpp                      controllvalueset.cpp                      datatree.cpp                      datatree.h                      datatreetypes.h                      persistentinode.cpp                      persistentinode.h                      standardinode.cpp                      standardinode.h                      debugpersistor.cpp                      debugpersistor.h                      idatatreepersistor.h                      inode.h                      graphfilesystem.cpp                      graphserial.cpp                      controllvalueset.h                      graphconnection.h                      graphfilesystem.h                      graph.h                      graphnode.h                      graphserial.h                      specmap.h
+libmodel_a_SOURCES = model.cpp                      model.h                      graph.cpp                      graphnode.cpp                      graphconnection.cpp                      controllvalueset.cpp                      graphfilesystem.cpp                      graphserial.cpp                      controllvalueset.h                      graphconnection.h                      graphfilesystem.h                      graph.h                      graphnode.h                      graphserial.h                      specmap.h
 
 
 noinst_HEADERS = model.h
@@ -118,7 +120,7 @@ noinst_HEADERS = model.h
 TESTS = modeltest
 
 check_PROGRAMS = modeltest
-modeltest_SOURCES = testmain.cpp datatreetest.cpp datatreetest.h
+modeltest_SOURCES = testmain.cpp
 modeltest_LDFLAGS = -L$(libdir) -L../../../base/src/TestFramework -L../../../base/src/utils
 modeltest_LDADD = -ltestframework libmodel.a -lutils
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -138,11 +140,10 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libmodel_a_LIBADD = 
 libmodel_a_OBJECTS =  model.$(OBJEXT) graph.$(OBJEXT) \
 graphnode.$(OBJEXT) graphconnection.$(OBJEXT) \
-controllvalueset.$(OBJEXT) datatree.$(OBJEXT) persistentinode.$(OBJEXT) \
-standardinode.$(OBJEXT) debugpersistor.$(OBJEXT) \
-graphfilesystem.$(OBJEXT) graphserial.$(OBJEXT)
+controllvalueset.$(OBJEXT) graphfilesystem.$(OBJEXT) \
+graphserial.$(OBJEXT)
 check_PROGRAMS =  modeltest$(EXEEXT)
-modeltest_OBJECTS =  testmain.$(OBJEXT) datatreetest.$(OBJEXT)
+modeltest_OBJECTS =  testmain.$(OBJEXT)
 modeltest_DEPENDENCIES =  libmodel.a
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -300,13 +301,6 @@ distdir: $(DISTFILES)
 	done
 controllvalueset.o: controllvalueset.cpp controllvalueset.h \
 	../../../base/src/utils/buffer.h
-datatree.o: datatree.cpp datatree.h ../../../base/src/utils/buffer.h \
-	datatreetypes.h idatatreepersistor.h \
-	../../../base/src/utils/bufferutils.h inode.h standardinode.h
-debugpersistor.o: debugpersistor.cpp debugpersistor.h \
-	idatatreepersistor.h datatreetypes.h datatree.h \
-	../../../base/src/utils/buffer.h \
-	../../../base/src/utils/bufferutils.h
 graph.o: graph.cpp graph.h ../../../base/src/utils/autoptr.h \
 	graphconnection.h graphnode.h ../../../base/src/utils/buffer.h \
 	../../../base/src/interfaces/imoduleclassspec.h \
@@ -341,6 +335,7 @@ model.o: model.cpp model.h ../../../base/src/utils/autoptr.h specmap.h \
 	../../../base/src/interfaces/imodelstatussender.h graph.h \
 	graphserial.h graphnode.h ../../../base/src/utils/buffer.h \
 	graphconnection.h graphfilesystem.h controllvalueset.h \
+	../../../base/src/utils/ilogger.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
 	../../../base/src/interfaces/imoduleconstructionsmartreceiver.h \
 	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
@@ -351,10 +346,6 @@ model.o: model.cpp model.h ../../../base/src/utils/autoptr.h specmap.h \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../base/src/interfaces/imodulestatisticsreceiver.h \
 	../../../base/src/interfaces/imodelstatusreceiver.h
-persistentinode.o: persistentinode.cpp persistentinode.h standardinode.h \
-	inode.h datatreetypes.h ../../../base/src/utils/buffer.h
-standardinode.o: standardinode.cpp standardinode.h inode.h \
-	datatreetypes.h ../../../base/src/utils/buffer.h
 
 check-TESTS: $(TESTS)
 	@failed=0; all=0; \

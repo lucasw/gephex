@@ -156,7 +156,7 @@ void AlsaDriver::open(device_id_t device,
 void AlsaDriver::close()
  {
   if (!this->is_open())
-    throw std::logic_error("Device not open");
+    return;
 
   snd_pcm_close(m_impl->handle);
   m_impl->handle = 0;

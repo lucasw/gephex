@@ -3,8 +3,6 @@ INCLUDES= -I @builddir@/.. -I @srcdir@/.. -I @top_srcdir@/util/include
 noinst_LIBRARIES = libnetinterfaces.a
 
 libnetinterfaces_a_SOURCES = \
-		sequencercontrolsendernet.cpp \
-		sequencercontrolreceivernet.cpp \
 		enginecontrolsendernet.cpp \
 		enginecontrolreceivernet.cpp \
 		moduleclassloadercontrolsendernet.cpp \
@@ -29,12 +27,6 @@ libnetinterfaces_a_SOURCES = \
 		errorreceivernet.cpp \
 		graphnamereceivernet.cpp \
 		graphnamesendernet.cpp \
-		sequenceupdatereceivernet.cpp \
-		sequenceupdatesendernet.cpp \
-		sequencenamesendernet.cpp \
-		sequencenamereceivernet.cpp \
-		sequencerstatussendernet.cpp \
-		sequencerstatusreceivernet.cpp \
 		modelstatusreceivernet.cpp \
 		modelstatussendernet.cpp \
 		rendererstatusreceivernet.cpp \
@@ -66,19 +58,10 @@ noinst_HEADERS = \
 		nodelcontrolreceivertest.h \
 		renderercontrolreceivernet.h \
 		renderercontrolsendernet.h \
-		sequencenamereceivernet.h \
-		sequencenamesendernet.h \
-		sequencercontrolreceivernet.h \
-		sequencercontrolsendernet.h \
-		sequenceupdatereceivernet.h \
-		sequenceupdatesendernet.h \
-		sequencerstatussendernet.h \
-		sequencerstatusreceivernet.h \
 		modelstatusreceivernet.h \
 		modelstatussendernet.h \
 		rendererstatusreceivernet.h \
 		rendererstatussendernet.h
-
 
 
 %receivernet.h: ../interfaces/%.if
@@ -99,17 +82,4 @@ DISTCLEANFILES = *sendernet.cpp *sendernet.h *receivernet.cpp *receivernet.h
 # check_PROGRAMS = netinterfacetest
 # netinterfacetest_SOURCES = testmain.cpp classinfotest.cpp nodelcontrolreceivertest.cpp classinfotest.h
 # netinterfacetest_LDADD = ../TestFramework/libtestframework.la libnetinterfaces.a ../utils/libutils.a
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -74,6 +74,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -96,8 +97,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -278,20 +280,6 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-effectvlifemodule.lo effectvlifemodule.o : effectvlifemodule.c \
-	effectvlifemodule.h ../../../engine/src/engine/dllmodule.h \
-	../../../types/src/framebuffertype/framebuffertype.h \
-	../../../util/include/basic_types.h ../../../config.h \
-	../../../types/src/numbertype/numbertype.h \
-	../libeffectv/libeffectv.h ../libeffectv/sdldummy.h life.c \
-	../libeffectv/EffecTV.h ../libeffectv/utils.h
-effectvlifemodule_auto.lo effectvlifemodule_auto.o : \
-	effectvlifemodule_auto.c effectvlifemodule.h \
-	../../../engine/src/engine/dllmodule.h \
-	../../../types/src/framebuffertype/framebuffertype.h \
-	../../../util/include/basic_types.h ../../../config.h \
-	../../../types/src/numbertype/numbertype.h \
-	../../../engine/src/engine/dllutils.h effectvlifemodule.xpm
 
 info-am:
 info: info-am

@@ -4,6 +4,7 @@
 #include "config.h"
 #endif
 
+#include <iostream>
 
 #if defined(OS_WIN32)
 #include <windows.h>
@@ -69,7 +70,9 @@ namespace net
     if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR,
 		   &yes, sizeof(yes)) == SOCKET_ERROR)
       {
-	throw SocketException("Could not set socket options");
+		// this throws on win98 - no need to abort here
+	    //throw SocketException("Could not set socket options");
+		std::cerr << "Could not set socket options\n";
       }
 
     sockaddr_in local_sin;

@@ -74,6 +74,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -96,8 +97,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -307,7 +309,7 @@ editorwidget.o: editorwidget.cpp editorwidget.h grapheditor.h \
 	../../guimodel/icontrolview.h controleditorwindow.h \
 	../moduleclassview.h ../imoduleinfobasestation.h \
 	../../guimodel/imoduleclassview.h \
-	../../../../base/src/utils/autoptr.h ../moduleclasstabview.h \
+	../../../../base/src/utils/autoptr.h \
 	../../guimodel/graphmodel.h \
 	../../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
@@ -322,6 +324,7 @@ grapheditor.o: grapheditor.cpp grapheditor.h \
 	../../guimodel/igraphview.h \
 	../../guimodel/icontrolconnectview.h ../../guimodel/point.h \
 	../../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../../base/src/interfaces/ierrorreceiver.h \
 	../../guimodel/graphmodel.h \
 	../../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
 	../../../../base/src/interfaces/imoduledatareceiver.h \

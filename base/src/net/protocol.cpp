@@ -1,15 +1,19 @@
 #include "protocol.h"
+
+#include <iostream>
+
 #include <cassert>
+#include <cstdio>
 
 #if defined(HAVE_CONFIG_H)
-  #include "config.h"
+#include "config.h"
 #endif
 
 // for the min and max templates
 #if defined (COMP_VC)
-  #include "minmax.h"
+#include "minmax.h"
 #else 
-  #include <algorithm> 
+#include <algorithm> 
 #endif
 
 #include "utils/buffer.h"
@@ -19,6 +23,7 @@
 // man muesste die endianess und das padding von Header
 // durch den compiler berücksichtigen...
 
+static const unsigned int MAX_PACKET_LEN = 1024000;
 namespace net
 {
   using std::max;
@@ -29,14 +34,16 @@ namespace net
   Protocol::Protocol()
     : m_sender(0), m_listener(0),
       bufferBegin(new unsigned char[BUFFER_SIZE]),
-      bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE)
+      bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE),
+	  m_silent_mode(false)
   {
   }
 
   Protocol::Protocol(IDataListener& dl)
     : m_sender(0), m_listener(&dl),
       bufferBegin(new unsigned char[BUFFER_SIZE]),
-      bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE)
+      bufferPos(bufferBegin),bufferEnd(bufferBegin+BUFFER_SIZE),
+	  m_silent_mode(false)
   {
   }
 
@@ -50,9 +57,9 @@ namespace net
     m_listener = &listener;
   }
 
-  void Protocol::registerSender(ISender& sender)
+  void Protocol::registerSender(ISender* sender)
   {
-    m_sender = &sender;
+    m_sender = sender;
   }
 
   namespace {
@@ -61,28 +68,49 @@ namespace net
       uint_32 packetLen;
       uint_32 version;
       uint_32 dataLen;
+      uint_32 checkSum;
     };
+  }
+
+  static uint_32 check_sum(const Header& h)
+  {
+    return (h.packetLen << 13) + (h.version << 17) + (h.dataLen << 11);
   }
 
   int Protocol::send(const utils::Buffer& buf)
   {
-    static Header header;
-
-    header.packetLen = sizeof(header) + buf.getLen();
-    header.version = PROT_VERSION;
-    header.dataLen = buf.getLen();
-	
-    if (m_sender)
-      return
-	m_sender->send(utils::Buffer(reinterpret_cast<unsigned char*>(&header),
-				     sizeof(header)) + buf);
-    else
-      return 0;
+	  Header header;
+	  
+	  header.packetLen = sizeof(header) + buf.getLen();
+	  header.version = PROT_VERSION;
+	  header.dataLen = buf.getLen();
+	  header.checkSum = check_sum(header);
+	  
+	  if (m_sender)
+	  {
+		  try {
+		  int len = m_sender->send(utils::Buffer(reinterpret_cast<unsigned char*>(&header),
+			  sizeof(header)) + buf);
+		  m_silent_mode = false;
+		  return len;
+		  }
+		  catch (std::exception& e)
+		  {
+			  if (!m_silent_mode)
+			  {
+			    std::cerr << "protocol.cpp: send threw " << e.what() << "\n";
+			    std::cerr << "silent mode turned on\n";
+				m_silent_mode = true;
+			  }			  
+		  }
+		  
+	  }
+		  return 0;
   }
 
   void Protocol::read(const unsigned char*& dataPos,
-				       const unsigned char* dataEnd,
-				       int bytesToRead, int& bytesLeft)
+                      const unsigned char* dataEnd,
+                      int bytesToRead, int& bytesLeft)
   {
     if (bytesToRead == 0)
       return;
@@ -94,7 +122,7 @@ namespace net
 	int currentSize = bufferEnd - bufferBegin;
 	int posDistance = bufferPos - bufferBegin;
 	int newSize = max((int) (currentSize*1.3 + 1),
-			       (int) (bufferPos-bufferBegin+bytesToRead+1));
+                          (int) (bufferPos-bufferBegin+bytesToRead+1));
 
 	unsigned char* newBuffer = new unsigned char[newSize];
 	memcpy(newBuffer,bufferBegin,posDistance);
@@ -113,13 +141,33 @@ namespace net
     bytesLeft -= bytesToRead;
   }
 
+  static bool header_ok(const Header& header)
+  {
+    return (header.version == PROT_VERSION &&
+	    header.packetLen <= MAX_PACKET_LEN &&
+	    header.packetLen == header.dataLen + sizeof(Header) &&
+	    header.checkSum == check_sum(header));
+  }
+
+  // tries to find a valid header somwhere inside data
+  static int try_sync(const unsigned char* data, int data_len)
+  {
+    for (unsigned int i = 0; i < data_len - sizeof(Header); ++i)
+      {
+	const Header* test_header = reinterpret_cast<const Header*>(data+i);
+	if (header_ok(*test_header))
+	  return i;
+      }
+    return -1;
+  }
+
   void Protocol::dataReceived(const utils::Buffer& buf)
   {
     const unsigned char* dataBegin = buf.getPtr();
     int len = buf.getLen();
 
     const unsigned char* dataEnd = dataBegin+len;
-    const unsigned char* dataPos= dataBegin;
+    const unsigned char* dataPos = dataBegin;
 
     int bytesLeft = len;
 
@@ -151,6 +199,44 @@ namespace net
 	    // bufferbegin kann sich bei read aendern!
 	    header = reinterpret_cast<Header *>(bufferBegin);
 
+	    // check if header is valid
+	    if (!header_ok(*header))
+	      {
+		fprintf(stderr, "protocol.cpp: out of sync!\n");
+		fprintf(stderr, "pl = %i, dl = %i\n",
+			header->packetLen,
+			header->dataLen);
+		fprintf(stderr, "Trying to resync protocol...\n");
+
+		// Syncing will not work if the header is partly in this data packet
+		// and partly in the next.
+        int syncPoint = try_sync(dataPos, dataEnd - dataPos);
+		if (syncPoint == -1)
+		  {
+		    fprintf(stderr, "Skipping %i bytes\n", dataEnd - dataPos);
+		    bufferPos = bufferBegin;
+		    return;
+		  }
+		else
+		  {
+		    fprintf(stderr, "Skipping %i bytes\n", syncPoint);
+		    dataPos   += syncPoint;
+		    bytesLeft -= (syncPoint + sizeof(Header));;
+		    bufferPos  = bufferBegin + sizeof(Header);
+            
+		    memcpy(bufferBegin, dataPos, sizeof(Header));
+            dataPos += sizeof(Header);
+		    
+		    header = reinterpret_cast<Header*>(bufferBegin);
+		    fprintf(stderr, "pl = %i, dl = %i\n",
+			    header->packetLen,
+			    header->dataLen);
+
+		    if (bytesLeft == 0)
+		      return;
+		  }
+	      }
+
 	    if (static_cast<uint_32>(bufferPos-bufferBegin+bytesLeft)
 		< header->packetLen) 
 	      { // Paket nicht ganz da
@@ -173,15 +259,30 @@ namespace net
 				
 		// Paket parsen
 		if (header->version == PROT_VERSION && m_listener != 0)
-		  {		  
-		    m_listener->dataReceived(utils::Buffer(bufferBegin
-							      +sizeof(Header),
-							      header->packetLen
-							      -sizeof(Header)));
+		  {
+                    try {
+                      m_listener->dataReceived(utils::Buffer(bufferBegin
+                                                             +sizeof(Header),
+                                                             header->packetLen
+                                                             -sizeof(Header)));
+                    }
+                    catch (std::exception& e)
+                      {
+                        fprintf(stderr, 
+                                "protocol.cpp, dataReceived of listener "
+                                "throwed: %s\n", e.what()); 
+                      }
+                    catch(...)
+                      {
+                        fprintf(stderr, 
+                                "protocol.cpp, dataReceived of listener "
+                                "throwed: unknown exception\n");
+                      }
 		  }
 		else if (header->version != PROT_VERSION)
 		  {
-		    // TODO: Fehlerbehandlung
+		    fprintf(stderr, "protocol.cpp: ignoring wrong header version %i\n",
+				    header->version);
 		  }
 	      }
 
@@ -190,5 +291,9 @@ namespace net
       } // while
   }
 
+  void Protocol::reset()
+  {
+    bufferPos = bufferBegin;
+  }
 
 } //end of namespace

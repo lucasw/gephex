@@ -10,9 +10,9 @@
 #include "structreadertest.h"
 #include "buffertest.h"
 #include "autoptrtest.h"
-#include "bytestreamtest.h"
 #include "bufferstreamtest.h"
 #include "sharedlibrarytest.h"
+#include "circularbuffertest.h"
 
 
 void doTests()
@@ -43,11 +43,11 @@ void doTests()
 	AutoPtrTest apt;
 	AllTests.addTest(apt);
 
-	ByteStreamTest bst;
-	AllTests.addTest(bst);
-
 	BufferStreamTest bufst;
 	AllTests.addTest(bufst);
+
+	CircularBufferTest cbtst;
+	AllTests.addTest(cbtst);
 	
 	TesterStream ts(std::cout);
 	AllTests.action(ts);

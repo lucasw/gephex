@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -291,8 +293,14 @@ distdir: $(DISTFILES)
 	done
 imutex.o: imutex.cpp imutex.h
 ithread.o: ithread.cpp ithread.h
+testmain.o: testmain.cpp ../TestFramework/CompositeTest.h \
+	../TestFramework/Test.h ../TestFramework/Tester.h threadtest.h \
+	../TestFramework/easytest.h ../TestFramework/LeafTest.h
 threadposix.o: threadposix.cpp threadposix.h ithread.h imutex.h \
 	ithreadutil.h irunnable.h
+threadtest.o: threadtest.cpp threadtest.h ../TestFramework/easytest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h \
+	threadposix.h ithread.h imutex.h ithreadutil.h irunnable.h
 
 check-TESTS: $(TESTS)
 	@failed=0; all=0; \

@@ -16,6 +16,8 @@ extern "C"
 #include "config.h"
 #endif
 
+#include "libscale.h"
+
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define rmask 0x0000ff00
 #define gmask 0x00ff0000
@@ -45,7 +47,7 @@ public:
   
   void load(const std::string& filename, VideoInfo& info)
   {
-    SDL_Surface* tmp_image=IMG_Load(filename.c_str());
+    SDL_Surface* tmp_image = IMG_Load(filename.c_str());
 
     if ( tmp_image == NULL )
       {
@@ -85,14 +87,18 @@ public:
     m_image=0;
   }
 
-  void grab_frame(uint_32* frb, unsigned int frame)
+  void grab_frame(uint_32* frb, unsigned int frame,
+		          int width, int height)
   {	  	  
 	if (m_image == 0)
 		throw std::runtime_error("No image loaded");
 
-	//if (frame != 0)
-	//throw std::range_error("No such frame in image (only 0 is valid)");
-	memcpy(frb,m_image->pixels, m_width * m_height * 4);
+	if (frame != 0)
+	   throw std::range_error("No such frame in image (only 0 is valid)");
+
+        ls_scale32(frb, width, height,
+                   (uint_32*) m_image->pixels,
+                   m_width, m_height);
   }
 
   bool is_open() const
@@ -139,14 +145,29 @@ std::list<std::string> SDLImageDriver::supported_extensions()
 void SDLImageDriver::load_file(const std::string& file_name, VideoInfo& info)
 {
 	if (m_impl->is_open())
-		m_impl->close();
+          throw std::logic_error("Driver already open");
+
 	m_impl->load(file_name, info);
+}
+
+void SDLImageDriver::close_file()
+{
+  if (m_impl->is_open())
+    m_impl->close();
 }
   
 void SDLImageDriver::decode_frame(unsigned int frame_number,
-                                  uint_32* framebuffer)
+                                  uint_32* framebuffer,
+                                  int width, int height)
 {
-	m_impl->grab_frame(framebuffer, frame_number);
+	if (!m_impl->is_open())
+          throw std::logic_error("Driver not open");
+
+	m_impl->grab_frame(framebuffer, frame_number, width, height);
 }
 
+bool SDLImageDriver::is_open() const
+{
+  return m_impl->is_open();
+}
  

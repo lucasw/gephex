@@ -163,7 +163,7 @@ namespace gui
 	      {
 		const char* ptr = reinterpret_cast<const char*>(buf.getPtr());
 		const char* offset = ptr + strlen(ptr) + 1;
-		int newLen = buf.getLen() - strlen(ptr) + 1;
+		int newLen = buf.getLen() - strlen(ptr) - 1;
 		utils::AutoPtr<Xpm> xpm(new Xpm(offset,newLen));
 	      
 		return ModuleInfo(identifier,name,group,ins,outs,xpm);
@@ -225,12 +225,20 @@ namespace gui
 	
   void ModuleClassModel::syncStarted()
   {
-    //TODO
+    for (std::list<IModuleClassView*>::const_iterator it = views.begin();
+	 it != views.end(); ++it)
+      {
+	(*it)->syncStarted();
+      }
   }
 	
   void ModuleClassModel::syncFinished()
   {
-    //TODO
+    for (std::list<IModuleClassView*>::const_iterator it = views.begin();
+	 it != views.end(); ++it)
+      {
+	(*it)->syncFinished();
+      }
   }
 	
 } // end of namespace

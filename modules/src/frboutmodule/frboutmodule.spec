@@ -29,8 +29,8 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = check_box
-        values            = On Top,Rahmen,Mirror X,Mirror Y,Invert
-        default           = 0
+        values            = On Top,Frame,Mirror X,Mirror Y,Invert
+        default           = 2
         toggle_keys       = p[0,1]        
     }
 
@@ -44,8 +44,10 @@ inputs
         default           = 0
         widget_type       = number_selector
         lower_bound       = 0
-        higher_bound      = 1024
+        higher_bound      = 2048
         step_size         = 1
+		display_format    = fixed
+		precision         = 0
         help              = If x_size and y_size > 0 the image is scaled
     }
 
@@ -59,8 +61,10 @@ inputs
         default           = 480
         widget_type       = number_selector
         lower_bound       = 0
-        higher_bound      = 1024
+        higher_bound      = 2048
         step_size         = 1
+		display_format    = fixed
+		precision         = 0
         help              = If x_size and y_size > 0 the image is scaled
     }
 

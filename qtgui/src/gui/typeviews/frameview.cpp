@@ -6,10 +6,10 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include "qpixmap.h"
-#include "qimage.h"
-#include "qlabel.h"
-#include "qpainter.h"
+#include <qpixmap.h>
+#include <qimage.h>
+#include <qlabel.h>
+#include <qpainter.h>
 
 namespace gui
 {
@@ -27,7 +27,7 @@ namespace gui
       m_view->setMinimumSize(16, 16);
       m_view->setScaledContents ( true );
       //select->setMaximumSize(60, 20);
-      resize(32, 32);	
+      resize(32, 32);
       m_view->show();
       l->addWidget(m_view);
     }
@@ -67,7 +67,7 @@ namespace gui
   // constructor
 
   FrameViewConstructor::FrameViewConstructor()
-    : TypeViewConstructor("Frame preview", "frame_preview")
+    : TypeViewConstructor("frame preview", "frame_preview")
   {
   }
 	

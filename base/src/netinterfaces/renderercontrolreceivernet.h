@@ -28,5 +28,7 @@ public:
 
 	void synchronizeInputValues( const std::string& graphName );
 
+	void synchronize(  );
+
 };
 #endif

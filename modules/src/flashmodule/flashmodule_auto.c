@@ -51,8 +51,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   inst->my = construct();
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Flashfader] group=[Filter] inputs=[5 Trigger{widget_type=[radio_button] } Bild Attack{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Sustain{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Decay{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[25] hidden=[true] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Flashfader] group=[Filter] inputs=[5 Trigger{widget_type=[radio_button] } Image Attack{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Sustain{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] } Decay{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[25] hidden=[true] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(flashmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -119,23 +119,23 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(flashmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = flashmodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = flashmodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
@@ -145,7 +145,7 @@ void getPatchLayout(void* instance,int** out2in)
 
   static int out2in_[1];
   *out2in = out2in_;
-	
+        
 	out2in_[out_r] = -1;
 
 
@@ -155,9 +155,9 @@ void getPatchLayout(void* instance,int** out2in)
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

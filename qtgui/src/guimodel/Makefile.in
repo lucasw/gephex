@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -107,15 +109,14 @@ INCLUDES = -I @srcdir@/../../../base/src 	   -I @builddir@/../../../base/src 	  
 
 
 noinst_LIBRARIES = libguimodel.a
-libguimodel_a_SOURCES =  	controlmodel.cpp 	moduleinfo.cpp 	moduleclassmodel.cpp 	point.cpp 	graphmodel.cpp 	xpm.cpp 	controlvaluedispatcher.cpp 	moduledatadispatcher.cpp 	enginewrapper.cpp 	actionsequencerwrapper.cpp 	controlmodel.h 	controlvaluedispatcher.h 	enginewrapper.h 	graphmodel.h 	icontrolconnectview.h 	icontrolview.h 	igraphview.h 	imoduleclassview.h 	moduleclassmodel.h 	moduledatadispatcher.h 	moduleinfo.h 	pluginfo.h 	point.h 	xpm.h 	actionsequencerwrapper.h 	iscenesequencer.h 	iscenechangelistener.h
+libguimodel_a_SOURCES =  	controlmodel.cpp 	moduleinfo.cpp 	moduleclassmodel.cpp 	point.cpp 	graphmodel.cpp 	xpm.cpp 	controlvaluedispatcher.cpp 	moduledatadispatcher.cpp 	enginewrapper.cpp 	controlmodel.h 	controlvaluedispatcher.h 	enginewrapper.h 	graphmodel.h 	icontrolconnectview.h 	icontrolview.h 	igraphview.h 	imoduleclassview.h 	moduleclassmodel.h 	moduledatadispatcher.h 	moduleinfo.h 	pluginfo.h 	point.h 	xpm.h	
 
 
 TESTS = guimodeltest
 
 check_PROGRAMS = guimodeltest
 
-guimodeltest_SOURCES =  	testmain.cpp 	actionsequencerwrapper.cpp 	actionsequencerwrappertest.cpp 	actionsequencerwrappertest.h
-
+guimodeltest_SOURCES = testmain.cpp
 
 guimodeltest_LDADD = -L../../../base/src/TestFramework -ltestframework 			-L../../../base/src/utils -lutils
 
@@ -137,11 +138,9 @@ libguimodel_a_LIBADD =
 libguimodel_a_OBJECTS =  controlmodel.$(OBJEXT) moduleinfo.$(OBJEXT) \
 moduleclassmodel.$(OBJEXT) point.$(OBJEXT) graphmodel.$(OBJEXT) \
 xpm.$(OBJEXT) controlvaluedispatcher.$(OBJEXT) \
-moduledatadispatcher.$(OBJEXT) enginewrapper.$(OBJEXT) \
-actionsequencerwrapper.$(OBJEXT)
+moduledatadispatcher.$(OBJEXT) enginewrapper.$(OBJEXT)
 check_PROGRAMS =  guimodeltest$(EXEEXT)
-guimodeltest_OBJECTS =  testmain.$(OBJEXT) \
-actionsequencerwrapper.$(OBJEXT) actionsequencerwrappertest.$(OBJEXT)
+guimodeltest_OBJECTS =  testmain.$(OBJEXT)
 guimodeltest_DEPENDENCIES = 
 guimodeltest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
@@ -296,13 +295,6 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-actionsequencerwrapper.o: actionsequencerwrapper.cpp \
-	actionsequencerwrapper.h iscenesequencer.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
-	../../../base/src/interfaces/isequencercontrolsender.h \
-	../../../base/src/utils/autoptr.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	iscenechangelistener.h
 controlmodel.o: controlmodel.cpp controlmodel.h point.h \
 	../../../base/src/interfaces/imoduledatareceiver.h \
 	../../../base/src/utils/autoptr.h icontrolview.h \
@@ -335,18 +327,12 @@ enginewrapper.o: enginewrapper.cpp ../../../config.h enginewrapper.h \
 	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
 	../../../base/src/netinterfaces/graphnamesendernet.h \
 	../../../base/src/interfaces/igraphnamesender.h \
-	../../../base/src/netinterfaces/sequenceupdatesendernet.h \
-	../../../base/src/interfaces/isequenceupdatesender.h \
-	../../../base/src/netinterfaces/sequencenamesendernet.h \
-	../../../base/src/interfaces/isequencenamesender.h \
+	../../../base/src/netinterfaces/rendererstatussendernet.h \
+	../../../base/src/interfaces/irendererstatussender.h \
 	../../../base/src/netinterfaces/errorsendernet.h \
 	../../../base/src/interfaces/ierrorsender.h \
 	../../../base/src/netinterfaces/modelstatussendernet.h \
 	../../../base/src/interfaces/imodelstatussender.h \
-	../../../base/src/netinterfaces/sequencerstatussendernet.h \
-	../../../base/src/interfaces/isequencerstatussender.h \
-	../../../base/src/netinterfaces/rendererstatussendernet.h \
-	../../../base/src/interfaces/irendererstatussender.h \
 	../../../base/src/netinterfaces/modelcontrolreceivernet.h \
 	../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../base/src/netinterfaces/renderercontrolreceivernet.h \
@@ -355,8 +341,6 @@ enginewrapper.o: enginewrapper.cpp ../../../config.h enginewrapper.h \
 	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
 	../../../base/src/netinterfaces/enginecontrolreceivernet.h \
 	../../../base/src/interfaces/ienginecontrolreceiver.h \
-	../../../base/src/netinterfaces/sequencercontrolreceivernet.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
 	../../../base/src/net/isocket.h \
 	../../../base/src/net/netexceptions.h \
 	../../../base/src/net/isender.h \

@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-
 //----------------------------------------------------------------------
 
 
@@ -18,6 +17,7 @@
 #define snprintf _snprintf
 #endif
 
+#include "libscale.h"
 
 /*-------------structs needed for loading bitmaps-----------------------*/
 
@@ -252,7 +252,7 @@ public:
 	  //open file
 	  if ( (file = fopen(filename.c_str(), "rb")) == 0 )
 	  {       
-		  throw std::runtime_error("Could not open file");
+		  throw std::invalid_argument("Could not open file");
 	  }
 	  
 	  read16bit  (&bitmap.fileHeader.bfType,      file);
@@ -393,14 +393,14 @@ public:
 
   void close()
   {
-	  if (m_data == 0)
-		throw std::runtime_error("No bmp loaded");
-
-	  delete[] m_data;
-	  m_data = 0;
+	  if (m_data != 0)
+	  {
+	    delete[] m_data;
+	    m_data = 0;
+	  }
   }
 
-  void grab_frame(uint_32* frb, int frame)
+  void grab_frame(uint_32* frb, int frame, int width, int height)
   {	  	  
 	if (m_data == 0)
 		throw std::runtime_error("No bmp loaded");
@@ -408,7 +408,7 @@ public:
 	if (frame != 0)
 		throw std::range_error("No such frame in bmp (only 0 is valid)");
 
-	memcpy(frb, m_data, m_width * m_height * 4);
+        ls_scale32(frb, width, height, m_data, m_width, m_height);
   }
 
   bool is_open() const
@@ -444,14 +444,29 @@ std::list<std::string> BMPDriver::supported_extensions()
 
 void BMPDriver::load_file(const std::string& file_name, VideoInfo& info)
 {
-	if (m_impl->is_open())
-		m_impl->close();
-	m_impl->load(file_name, info);
+  if (m_impl->is_open())
+    throw std::logic_error("Driver already open");
+  m_impl->load(file_name, info);
+}
+
+void BMPDriver::close_file()
+{
+  if (m_impl->is_open())
+    m_impl->close();
+}
+
+bool BMPDriver::is_open() const
+{
+  return m_impl->is_open();
 }
   
-void BMPDriver::decode_frame(unsigned int frame_number, uint_32* framebuffer)
+void BMPDriver::decode_frame(unsigned int frame_number, uint_32* framebuffer,
+							 int width, int height)
 {
-	m_impl->grab_frame(framebuffer, frame_number);
+  if (!m_impl->is_open())
+    throw std::logic_error("Driver not open");
+
+  m_impl->grab_frame(framebuffer, frame_number, width, height);
 }
 
  

@@ -61,3 +61,11 @@ void RendererControlReceiverNet::synchronizeInputValues( const std::string& grap
 
 }
 
+void RendererControlReceiverNet::synchronize(  )
+{
+	utils::Buffer temp_buf_((unsigned char*) "",1);
+	m_tagger->setTag( "0005" );
+	m_tagger->send( temp_buf_ );
+
+}
+

@@ -73,6 +73,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -95,8 +96,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -109,18 +111,18 @@ libdir = @libdir@/gephex
 include_HEADERS =  	dllmodule.h 	dlltype.h 	dllutils.h
 
 
-AM_CPPFLAGS =  	-DINST_INSTALL_PREFIX=\"$(prefix)\" 	-I @srcdir@/.. 	-I @srcdir@/../renderer 	-I @srcdir@/../model 	-I @srcdir@/../dllloader 	-I @srcdir@/../sequencer 	-I @srcdir@/../../../base/src 	-I @builddir@/../../../base/src/interfaces 	-I @builddir@/../../../base/src 	-I @srcdir@/../../../base/src/interfaces 	-I @srcdir@/../../../base/src/netinterfaces 	-I @builddir@/../../../base/src/netinterfaces 	-I @srcdir@/../../../base/src/net 	-I @srcdir@/../../../base/src/utils 	-I @srcdir@/../../../util/include
+AM_CPPFLAGS =  	-DINST_INSTALL_PREFIX=\"$(prefix)\" 	-I @srcdir@/.. 	-I @srcdir@/../renderer 	-I @srcdir@/../model 	-I @srcdir@/../dllloader 	-I @srcdir@/../../../base/src 	-I @builddir@/../../../base/src/interfaces 	-I @builddir@/../../../base/src 	-I @srcdir@/../../../base/src/interfaces 	-I @srcdir@/../../../base/src/netinterfaces 	-I @builddir@/../../../base/src/netinterfaces 	-I @srcdir@/../../../base/src/net 	-I @srcdir@/../../../base/src/utils 	-I @srcdir@/../../../util/include
 
 
 bin_PROGRAMS = gephex-engine
 
-gephex_engine_SOURCES =  	main.cpp 	scheduler.cpp 	netlogger.cpp 	netlogger.h 	scheduler.h 	engineconfig.cpp 	engineconfig.h 	controller.h 	controller.cpp
+gephex_engine_SOURCES =  	main.cpp 	scheduler.cpp 	netlogger.cpp 	netlogger.h 	scheduler.h 	engineconfig.cpp 	engineconfig.h 	controller.h 	controller.cpp         bufferedsender.h         bufferedsender.cpp
 
 
-gephex_engine_LDADD =  	-ldllloader 	-lsequencer 	-lmodel 	-lrenderer 	-lgphxnetwork 	-lnetinterfaces 	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS) 	-L@builddir@/../dllloader 	-L@builddir@/../sequencer 	-L@builddir@/../model 	-L@builddir@/../renderer 	-L$(libdir) 	-L@builddir@/../../../base/src/TestFramework 	-L@builddir@/../../../base/src/utils 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L/sw/lib
+gephex_engine_LDADD =  	-ldllloader 	-lmodel 	-lrenderer 	-lgphxnetwork 	-lnetinterfaces 	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS) 	-L@builddir@/../dllloader 	-L@builddir@/../model 	-L@builddir@/../renderer 	-L$(libdir) 	-L@builddir@/../../../base/src/TestFramework 	-L@builddir@/../../../base/src/utils 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L/sw/lib
 
 
-gephex_engine_DEPENDENCIES =  	@builddir@/../dllloader/libdllloader.a 	@builddir@/../sequencer/libsequencer.a 	@builddir@/../model/libmodel.a 	@builddir@/../renderer/librenderer.a 	@top_builddir@/base/src/net/libgphxnetwork.a 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a 	@top_builddir@/base/src/utils/libutils.a
+gephex_engine_DEPENDENCIES =  	@builddir@/../dllloader/libdllloader.a 	@builddir@/../model/libmodel.a 	@builddir@/../renderer/librenderer.a 	@top_builddir@/base/src/net/libgphxnetwork.a 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a 	@top_builddir@/base/src/utils/libutils.a
 
 
 TESTS = enginetest
@@ -152,7 +154,8 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 gephex_engine_OBJECTS =  main.$(OBJEXT) scheduler.$(OBJEXT) \
-netlogger.$(OBJEXT) engineconfig.$(OBJEXT) controller.$(OBJEXT)
+netlogger.$(OBJEXT) engineconfig.$(OBJEXT) controller.$(OBJEXT) \
+bufferedsender.$(OBJEXT)
 gephex_engine_LDFLAGS = 
 enginetest_OBJECTS =  testmain.$(OBJEXT) schedulertest.$(OBJEXT) \
 scheduler.$(OBJEXT)
@@ -341,6 +344,10 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+bufferedsender.o: bufferedsender.cpp bufferedsender.h \
+	../../../base/src/net/isender.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/utils/circularbuffer.h
 controller.o: controller.cpp controller.h \
 	../../../base/src/interfaces/ienginecontrolreceiver.h \
 	../../../base/src/interfaces/itypeclassnamereceiver.h \
@@ -365,10 +372,6 @@ controller.o: controller.cpp controller.h \
 	../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../../base/src/netinterfaces/graphnamereceivernet.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
-	../../../base/src/netinterfaces/sequenceupdatereceivernet.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
-	../../../base/src/netinterfaces/sequencenamereceivernet.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
 	../../../base/src/netinterfaces/errorreceivernet.h \
 	../../../base/src/interfaces/ierrorreceiver.h \
 	../../../base/src/netinterfaces/rendererstatusreceivernet.h \
@@ -383,7 +386,6 @@ controller.o: controller.cpp controller.h \
 	../../../base/src/net/tagdispatcher.h \
 	../../../base/src/net/itaginterpreter.h \
 	../../../base/src/net/tagdispatcher.cpp \
-	../../../base/src/net/socketadaptor.h \
 	../../../base/src/net/tcpserversocket.h \
 	../../../base/src/net/iserversocket.h \
 	../../../base/src/netinterfaces/modelcontrolsendernet.h \
@@ -394,10 +396,6 @@ controller.o: controller.cpp controller.h \
 	../../../base/src/interfaces/imoduleclassloadercontrolsender.h \
 	../../../base/src/netinterfaces/enginecontrolsendernet.h \
 	../../../base/src/interfaces/ienginecontrolsender.h \
-	../../../base/src/netinterfaces/sequencercontrolsendernet.h \
-	../../../base/src/interfaces/isequencercontrolsender.h \
-	../../../base/src/netinterfaces/sequencerstatusreceivernet.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
 	../../../base/src/utils/autoptr.h ../model/model.h \
 	../model/specmap.h \
 	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
@@ -429,14 +427,9 @@ controller.o: controller.cpp controller.h \
 	../../../base/src/interfaces/itypeclassloadercontrolreceiver.h \
 	../../../base/src/interfaces/itypeclassinfosender.h \
 	../../../base/src/interfaces/itypeclasssender.h \
-	../../../base/src/interfaces/itypeclassnamesender.h \
-	../sequencer/sequencer.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	../../../base/src/interfaces/isequenceupdatesender.h \
-	../../../base/src/interfaces/isequencenamesender.h \
-	../../../base/src/interfaces/isequencerstatussender.h \
-	scheduler.h engineconfig.h \
-	../../../base/src/utils/structreader.h ../../../config.h \
+	../../../base/src/interfaces/itypeclassnamesender.h scheduler.h \
+	engineconfig.h ../../../base/src/utils/structreader.h \
+	bufferedsender.h ../../../config.h \
 	../../../base/src/net/domainserversocket.h netlogger.h \
 	../../../base/src/utils/ilogger.h \
 	../../../base/src/utils/filesystem.h
@@ -469,10 +462,6 @@ main.o: main.cpp ../../../config.h engineconfig.h \
 	../../../base/src/interfaces/imodelstatusreceiver.h \
 	../../../base/src/netinterfaces/graphnamereceivernet.h \
 	../../../base/src/interfaces/igraphnamereceiver.h \
-	../../../base/src/netinterfaces/sequenceupdatereceivernet.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
-	../../../base/src/netinterfaces/sequencenamereceivernet.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
 	../../../base/src/netinterfaces/errorreceivernet.h \
 	../../../base/src/interfaces/ierrorreceiver.h \
 	../../../base/src/netinterfaces/rendererstatusreceivernet.h \
@@ -487,7 +476,6 @@ main.o: main.cpp ../../../config.h engineconfig.h \
 	../../../base/src/net/tagdispatcher.h \
 	../../../base/src/net/itaginterpreter.h \
 	../../../base/src/net/tagdispatcher.cpp \
-	../../../base/src/net/socketadaptor.h \
 	../../../base/src/net/tcpserversocket.h \
 	../../../base/src/net/iserversocket.h \
 	../../../base/src/netinterfaces/modelcontrolsendernet.h \
@@ -498,10 +486,6 @@ main.o: main.cpp ../../../config.h engineconfig.h \
 	../../../base/src/interfaces/imoduleclassloadercontrolsender.h \
 	../../../base/src/netinterfaces/enginecontrolsendernet.h \
 	../../../base/src/interfaces/ienginecontrolsender.h \
-	../../../base/src/netinterfaces/sequencercontrolsendernet.h \
-	../../../base/src/interfaces/isequencercontrolsender.h \
-	../../../base/src/netinterfaces/sequencerstatusreceivernet.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
 	../../../base/src/utils/autoptr.h ../model/model.h \
 	../model/specmap.h \
 	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
@@ -533,13 +517,8 @@ main.o: main.cpp ../../../config.h engineconfig.h \
 	../../../base/src/interfaces/itypeclassloadercontrolreceiver.h \
 	../../../base/src/interfaces/itypeclassinfosender.h \
 	../../../base/src/interfaces/itypeclasssender.h \
-	../../../base/src/interfaces/itypeclassnamesender.h \
-	../sequencer/sequencer.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	../../../base/src/interfaces/isequenceupdatesender.h \
-	../../../base/src/interfaces/isequencenamesender.h \
-	../../../base/src/interfaces/isequencerstatussender.h \
-	scheduler.h
+	../../../base/src/interfaces/itypeclassnamesender.h scheduler.h \
+	bufferedsender.h
 netlogger.o: netlogger.cpp netlogger.h ../../../base/src/utils/ilogger.h \
 	../../../base/src/interfaces/ierrorreceiver.h
 scheduler.o: scheduler.cpp scheduler.h ../../../base/src/utils/autoptr.h \

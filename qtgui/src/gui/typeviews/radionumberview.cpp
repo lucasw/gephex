@@ -23,24 +23,27 @@ namespace gui
 			
   public:
     RadioNumberView(QWidget* parent, const ParamMap& params)
-      : TypeView(parent, params)
+      : TypeView(parent, params),
+        m_setCheckedCalled(false),
+        m_isChecked(0), m_value(-1)
     {
       utils::StructReader sr(params);
-      m_oldValue = 0;
+      
       // wenn wertebereich definiert ist, übernehmen
-    
       m_trueVal = sr.getDoubleValue("true_value", 1);
       m_falseVal = sr.getDoubleValue("false_value", 0);
     	
       QHBoxLayout* l = new QHBoxLayout(this);
       m_radio = new QRadioButton(this);
-      m_radio->setMinimumSize(40, 33);
+      l->addWidget(m_radio);
+
+      //m_radio->setMinimumSize(40, 33);
+      this->resize(m_radio->sizeHint());
+		
+      connect(m_radio, SIGNAL(stateChanged(int)),
+              this, SLOT(radiobuttonChanged(int)));
 
       m_radio->show();
-      l->addWidget(m_radio);
-		
-    connect(m_radio, SIGNAL(stateChanged(int)),
-	    this, SLOT(radiobuttonChanged(int)));
     }
 		
     virtual void valueChange(const utils::Buffer& newValue)
@@ -49,33 +52,49 @@ namespace gui
       double raw;
       is >> raw;
 		
-      if(fabs(raw - m_falseVal) < 0.0001)
-	m_radio->setChecked(false);
-      else
-	m_radio->setChecked(true);
+      if (fabs(raw - m_value) > 0.0001)
+        {
+          m_value = raw;
+          m_setCheckedCalled = true;
+          if(fabs(raw - m_falseVal) < fabs(raw - m_trueVal))
+            m_radio->setChecked(false);
+          else
+            m_radio->setChecked(true);
+        }
     }
 		
 private slots:
-    void radiobuttonChanged(int)
+void radiobuttonChanged(int)
     {
-      std::ostringstream os;			
-			
-      if(!m_oldValue)
-	os << m_trueVal;
+      if (!m_setCheckedCalled)
+        {
+          std::ostringstream os;
+
+          if(!m_isChecked)
+            os << m_trueVal;
+          else
+            os << m_falseVal;
+
+          os.flush();
+
+          m_isChecked = !m_isChecked;
+
+          utils::Buffer
+            b (reinterpret_cast<const unsigned char*>(os.str().c_str()),
+               os.str().length()+1);
+          emit valueChanged(b);
+        }
       else
-	os << m_falseVal;
-
-      m_oldValue = !m_oldValue;
-
-      utils::Buffer
-	b (reinterpret_cast<const unsigned char*>(os.str().c_str()),
-	   os.str().length()+1);
-      emit valueChanged(b);
+        {
+          m_setCheckedCalled = false;
+        }
     }
 
   private:
     QRadioButton* m_radio;
-    bool m_oldValue;
+    bool m_setCheckedCalled;
+    bool m_isChecked;
+    double m_value;
     double m_falseVal;
     double m_trueVal;
 
@@ -84,7 +103,7 @@ private slots:
   // constructor
 
   RadioNumberViewConstructor::RadioNumberViewConstructor():
-    TypeViewConstructor("Radio Button", "radio_button")
+    TypeViewConstructor("radio button", "radio_button")
   {
   }
 	

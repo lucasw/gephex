@@ -34,7 +34,7 @@ inputs
         hidden            = true        
         widget_type       = check_box
         values            = a,b
-		default           = 0
+        default           = 3
     }
 
 }

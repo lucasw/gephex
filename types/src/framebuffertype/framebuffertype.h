@@ -99,7 +99,7 @@ static __inline
 int framebuffer_serialize(const void* type, char* buffer,
 			  int bufferLen)
 {
-#if defined(OPT_SERIALIZE_FRAMEBUFFER)
+#if defined(OPT_SERIALIZE_FRAMEBUFFER)	
   FrameBufferType* fb  = (FrameBufferType*)type;
   // generate 16*16*3 preview
   char* bufPtr;
@@ -151,9 +151,10 @@ void framebuffer_deSerialize(const char* buffer,
 {
 }
 
-//scale src to dst
+// scale src to dst
+// returns 1 on success
 static __inline
-void framebuffer_scale(FrameBufferType* dst,
+int framebuffer_scale(FrameBufferType* dst,
 		       const FrameBufferType* src,
 		       int w, int h)
 {
@@ -164,18 +165,24 @@ void framebuffer_scale(FrameBufferType* dst,
   uint_32* dst_;
   double deltax=.0, deltay=.0;
 
-  assert (w >= 0 && h >= 0);
+  if (w < 0 || h < 0)
+	  return 0;
 
   dst->xsize = w;
   dst->ysize = h;
 	
   if(dst->size < (w*h))
     {
+	  uint_32* new_data;
+	  new_data = (uint_32*) malloc(w*h*sizeof(uint_32));
+
+	  if (new_data == 0)
+		  return 0;
+
       if (dst->data)
-	free(dst->data);
+	    free(dst->data);
       dst->size = w*h;
-      dst->data = (uint_32*) malloc(w*h*sizeof(uint_32));
-      assert(dst->data); //TODO
+      dst->data = new_data;      
     }
 
   dst->framebuffer = dst->data;
@@ -205,6 +212,8 @@ void framebuffer_scale(FrameBufferType* dst,
 	}
       y_a += B;
     }
+
+  return 1;
 }
 
 static __inline
@@ -224,30 +233,37 @@ int framebuffer_attributesEqual(FrameBufferType* type,
   return (attributes->xsize == type->xsize && attributes->ysize == type->ysize);
 }
 
+// returns 1 on success
 static __inline
-void framebuffer_convertType(FrameBufferType* dstType,
+int framebuffer_convertType(FrameBufferType* dstType,
 			     const FrameBufferType* srcType,
 			     FrameBufferAttributes* attributes)
 {
-  framebuffer_scale(dstType, srcType, attributes->xsize, attributes->ysize);
+  return framebuffer_scale(dstType, srcType, attributes->xsize, attributes->ysize);
 }
 
+// returns 1 on success
 static __inline
-void framebuffer_changeAttributes(FrameBufferType* fb,
+int framebuffer_changeAttributes(FrameBufferType* fb,
 				  FrameBufferAttributes* attributes)
 {
   FrameBufferType* newFb;
 
   if (framebuffer_attributesEqual(fb, attributes))
-    return;
+    return 1;
 
   newFb = framebuffer_newInstance();
 
-  framebuffer_convertType(newFb, fb, attributes);
+  if (framebuffer_convertType(newFb, fb, attributes) != 1)
+  {
+	  framebuffer_deleteInstance(newFb);
+	  return 0;
+  }
 
   framebuffer_swap(newFb, fb);
-
   framebuffer_deleteInstance(newFb);
+
+  return 1;
 }
 
 static __inline

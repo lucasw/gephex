@@ -23,15 +23,13 @@ namespace gui
   class SnapItem;
   class GraphNameView;
   class TreeView;
-  class ISceneSequencer;
-
 
   class GraphNameViewObject : public QObject
   {
     Q_OBJECT
   public:
     GraphNameViewObject(QObject* parent, GraphNameView& view);
-
+    ~GraphNameViewObject();
 
  public slots:
 
@@ -46,6 +44,11 @@ namespace gui
      */
     void renderedGraphChanged( const std::string& graphID );
 
+	void undisplayProperties_();
+
+  signals:
+	void undisplayProperties();
+
 
   private:
     GraphNameView& m_view;
@@ -55,7 +58,7 @@ namespace gui
   {
   public:
     GraphNameView(QWidget* parent, IModelControlReceiver& gModel,
-		  ISceneSequencer& sequencer, IErrorReceiver& log);
+                  IErrorReceiver& log);
 
     virtual ~GraphNameView();
 
@@ -97,8 +100,8 @@ namespace gui
     TreeView* m_treeView;
     GraphMap m_graphs;
 
-	FolderNameMap m_folderNames;
-	FolderMap m_folders;
+    FolderNameMap m_folderNames;
+    FolderMap m_folders;
     SnapMap m_snaps;
 
     GraphNameViewObject stupidObject;
@@ -111,7 +114,6 @@ namespace gui
     typedef utils::AutoPtr<FolderItem> TopItemPtr;
     TopItemPtr m_topItem;
 
-    ISceneSequencer* m_sequencer;
     IErrorReceiver& m_log;
   };
 			

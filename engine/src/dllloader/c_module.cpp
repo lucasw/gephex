@@ -254,19 +254,19 @@ IInput* CModule::dependencies()
 void CModule::update()
 {
   assert(m_deps.empty());
-  // Das patchlayout des Moduls abfragen:
+  
   if (m_vtable->getPatchLayout != 0)
   {
       int* out2in;
-	  
+      // Das patchlayout des Moduls abfragen:	  
       m_vtable->getPatchLayout(m_instance, &out2in);
 	  
       //Alle gepatchten outputs updaten
       for (int i = 0; i < outputs.size(); ++i)
 	  {
-		  int patchedInputIndex = out2in[i];
+		  int patchedInputIndex = out2in[i];		  
 		  COutput* out = static_cast<COutput*>(&*outputs[i]);
-		  assert(out == dynamic_cast<COutput*>(&*outputs[i]));
+	      assert(out == dynamic_cast<COutput*>(&*outputs[i]));
 		  
 		  if (patchedInputIndex != -1)
 		  {
@@ -274,14 +274,12 @@ void CModule::update()
 		  }
 		  else
 		  {
-			  //out->setPatchedInput(0);
 			  out->unPatch();
 		  }
-		  
-	  }
+
+	  }	  
   }
   
-  // Modul updaten
   m_vtable->update(m_instance);
 }
 

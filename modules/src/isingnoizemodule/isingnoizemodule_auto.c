@@ -51,8 +51,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   inst->my = construct();
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Isingnoize] group=[Sources] inputs=[5 Temperature{lower_bound=[0] widget_type=[unboundednumber_selector] higher_bound=[6] help=[Relative temperature] } Bordergrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[16] hidden=[true] } Spontaneousgrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[48] hidden=[true] } outx{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the resulting image] } outy{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Size of the resulting image] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Isingnoize] group=[Sources] inputs=[5 Temperature{lower_bound=[0] widget_type=[unboundednumber_selector] higher_bound=[6] help=[Relative temperature] } Bordergrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[16] hidden=[true] } Spontaneousgrowth{lower_bound=[1] widget_type=[number_selector] step_size=[0.5] higher_bound=[48] hidden=[true] } outx{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } outy{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of the resulting image] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(isingnoizemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -119,32 +119,32 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(isingnoizemodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = isingnoizemodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = isingnoizemodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

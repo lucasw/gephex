@@ -149,7 +149,7 @@ void OSSDriver::open(device_id_t device,
 void OSSDriver::close()
 {
   if (!this->is_open())
-    throw std::logic_error("Device not open");
+    return;
 
   close_device(&m_impl->fd);
   m_impl->fd = -1;

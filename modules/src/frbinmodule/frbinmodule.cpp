@@ -45,9 +45,6 @@ static logT s_log;
 static FrameCache* s_cache = 0;
 static DriverFactory* s_factory = 0;
 
-static int scale(uint_32* result, const uint_32* data, int_32 width,
-                 int_32 height, int_32 newWidth, int_32 newHeight);
-
 //---------------------------------------------------------------------
 
 typedef struct _MyInstance 
@@ -55,7 +52,6 @@ typedef struct _MyInstance
   VideoFileDriver* drv;
   VideoInfo   info;
   std::string fileName;
-  bool loaded;
   int last_frame;
   int flush;
 } MyInstance, *MyInstancePtr;
@@ -70,9 +66,9 @@ int init(logT log_function)
 
 #if defined(OS_POSIX)
 #if defined(HAVE_MPEG3)
-  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
-    = new DriverConstructor<Mpeg3Driver>();
-  s_factory->register_driver(mpeg3_ctor);
+  //  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
+  //  = new DriverConstructor<Mpeg3Driver>();
+  //s_factory->register_driver(mpeg3_ctor);
 #endif
 #if defined(HAVE_AVIFILE)
   DriverConstructor<AviFileDriver>* aviFile_ctor 
@@ -114,7 +110,6 @@ MyInstance* construct()
 
   my->drv = 0;
   my->fileName = "";
-  my->loaded   = false;
   my->last_frame = -1;
   my->flush = 0;
 
@@ -138,6 +133,68 @@ static std::string get_extension(const std::string& file_name)
     return file_name.substr(pos+1);
 }
 
+/**
+ * Probes for a driver for this file and opens it if possible.
+ *
+ * \returns a IVideoFileDriver object that has already loaded
+ *    the file
+ *
+ * \throws std::invalid_argument if file_name is not a valid file
+ * \throws std::runtime_error if no known driver can load the file
+ */
+static VideoFileDriver* load_file(const std::string& file_name,
+                                  const DriverFactory& factory,
+                                  VideoInfo& info)
+{
+  std::string ext = get_extension(file_name);
+
+  DriverFactory::CtorList ctors = s_factory->get_drivers(ext);
+
+  if (ext != "*")
+    {
+      DriverFactory::CtorList stars = s_factory->get_drivers("*");
+      ctors.insert(ctors.end(), stars.begin(), stars.end());
+    }
+          
+  if (ctors.empty())
+    throw std::invalid_argument(std::string("No driver for " 
+                                            "extension '")
+                                + ext + "'");
+
+  VideoFileDriver* drv = 0;
+  for (DriverFactory::CtorList::const_iterator it = ctors.begin();
+       it != ctors.end(); ++it)
+    {
+      drv = (*it)->create();
+
+      try {
+        drv->load_file(file_name, info);
+        break;
+      }
+      catch (std::invalid_argument& e)
+        {
+          delete drv;
+          throw e;
+        }
+      catch (std::runtime_error&)
+        {
+          delete drv;
+          drv = 0;
+        }
+      catch (...)
+        {
+          delete drv;
+          drv = 0;
+        }
+    }
+    
+  if (drv == 0)
+    throw std::runtime_error("Could not load file");
+
+  return drv;
+}
+
+
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
@@ -156,33 +213,30 @@ void update(void* instance)
       s_cache->flush();
     }
 
-  std::string newFileName=std::string(inst->in_fileName->text);
+  std::string newFileName = std::string(inst->in_fileName->text);
   
   //check is filename changed
-  if (my->fileName!=newFileName)
+  if (my->fileName != newFileName || my->drv == 0)
     {
+      if (my->drv)
+        {
+          if (my->drv->is_open())
+            my->drv->close_file();
+          delete my->drv;
+          my->drv = 0;
+        }
       try
         {
-          std::string ext = get_extension(newFileName);
-          my->drv = s_factory->get_driver(ext);
-          
-          if (my->drv == 0)
-            throw std::invalid_argument(std::string("No driver for " 
-                                                    "extension '")
-                                        + ext + "'");
-
-          my->drv->load_file(newFileName, my->info);          
-          my->loaded = true;
+          my->drv = load_file(newFileName, *s_factory, my->info);
         }
       catch (std::exception& e)
         {
-          my->loaded = false;
           s_log(0, e.what());
         }
       my->fileName = newFileName;
     }
 
-  if (!my->loaded)
+  if (my->drv == 0 || !my->drv->is_open())
     return;
 
   int pos; // frame nr to decode
@@ -190,7 +244,10 @@ void update(void* instance)
     {
       my->last_frame = my->last_frame+1;
       if (my->last_frame > my->info.num_frames - 1)
-        my->last_frame = my->info.num_frames - 1;
+	{
+	  //my->last_frame = my->info.num_frames - 1;
+	  my->last_frame = 0;
+	}
 
       pos = my->last_frame;
     }
@@ -208,8 +265,7 @@ void update(void* instance)
       //	<<" total: " <<my->videoStream->GetLength()
       //	<< std::endl;
     }
-  
-  bool need_scale = false;
+    
   if (xsize == 0 || ysize == 0)
     {
       xsize = my->info.width;
@@ -220,10 +276,13 @@ void update(void* instance)
   FrameBufferAttributes attribs;
   attribs.xsize = xsize;
   attribs.ysize = ysize;
-  framebuffer_changeAttributes(inst->out_result, &attribs);
+  int result = framebuffer_changeAttributes(inst->out_result, &attribs);
 
-  if (xsize != my->info.width || ysize != my->info.height)
-    need_scale = true;
+  if (result != 1)
+    {
+      s_log(0, "Could not scale output!");
+      return;
+    }
 
   uint_32* infb = 0;
   uint_32* outfb = 0;
@@ -236,7 +295,6 @@ void update(void* instance)
         }
       else
         {
-          need_scale = false;
           outfb = infb;
         }
     }
@@ -244,17 +302,10 @@ void update(void* instance)
     outfb = inst->out_result->framebuffer;
     
   if (infb == 0) //Cache miss
-    {
-      //std::cout << " ...miss\n";
-      uint_32* temp;
-      if (need_scale)
-        temp = new uint_32[my->info.width*my->info.height];
-      else
-        temp = outfb;
-	  
+    {      	  
       try
         {          
-          my->drv->decode_frame(pos, temp);
+          my->drv->decode_frame(pos, outfb, xsize, ysize);
         }          
       catch (std::exception& e)
         {
@@ -270,14 +321,7 @@ void update(void* instance)
           *(inst->out_result->data)=0x00000000;
           inst->out_position->number=0.0;
           return;
-        }
-		  
-      if ( need_scale )
-        {		  
-          assert(temp != outfb);
-          scale(outfb, temp, my->info.width, my->info.height, xsize, ysize);
-          delete[] temp;
-        }
+        }		        
 	  
       if (use_cache)
         {
@@ -296,39 +340,3 @@ void update(void* instance)
 
 //---------------------------------------------------------------------
 
-/**
-* Scales a bitmap to a new resolution.
-*/
-static int scale(uint_32* result, const uint_32* data, int_32 width,
-                 int_32 height, int_32 newWidth, int_32 newHeight)
-{	
-  int_32 x,y;
-  double alpha = (double) width / (double) newWidth;
-  double beta = (double) height / (double) newHeight;
-  uint_32 A = (int_32) (alpha* (1<<16));
-  uint_32 B = (int_32) (beta* (1<<16));
-
-  if (newWidth == width && newHeight == height)
-    {
-      memcpy(result,data,width*height*4);
-    }
-  else
-    {
-      int_32 bb = 0;
-      for (y = 0; y < newHeight; ++y)
-        {			
-          int_32 aa = 0;			
-          const uint_32* offset_ = data + (int) ((bb >> 16) * width);
-          for (x = 0; x < newWidth; ++x)
-            {
-              *result = offset_[aa >> 16];
-              aa += A;
-              ++result;
-            }
-          bb += B;
-        }
-    }
-  return 1;
-}
-
-//---------------------------------------------------------------------

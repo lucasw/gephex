@@ -239,7 +239,6 @@ namespace renderer
 	
   RuntimeSystem::~RuntimeSystem ()
   {
-		
   }
 	
   RuntimeSystem::ModuleControlBlockPtr RuntimeSystem::getControlBlock(IModule* mod)
@@ -337,47 +336,62 @@ namespace renderer
     // wird aufgerufen nachdem das zu block gehoerende modul
     // vollständig berechnet wurde
     // setzt auch die verbundenen inputs auf changed
-    void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
-			 IControlValueReceiver* cvr,
-			 const RuntimeSystem::ControlBlockMap& blocks,
-			 int frameCount)
-    {
-      //  int moduleID = m->getID();
-      IModule* m = block->module();
-      const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
-		
-      for (std::vector<IModule::IOutputPtr>::const_iterator 
-	     it = outs.begin(); it != outs.end(); ++it)
-	{
-	  IModule::IOutputPtr current = *it;
-	  std::list<IInput*> ins = current->getConnectedInputs();
-			
-	  for (std::list<IInput*>::const_iterator jz = ins.begin(); 
-	       jz != ins.end(); ++jz)
-	    {
-	      IInput* in = *jz;
-	      const IType* t = in->getData();
-	      utils::Buffer buf;
-	      bool success = t->serialize(buf);
-	      int moduleID = in->getModule()->getID();
-	      int inputIndex = in->getIndex();
-				
-	      RuntimeSystem::ControlBlockMap::const_iterator 
-		kt = blocks.find(moduleID);
-				
-	      assert(kt != blocks.end());
-				
-	      RuntimeSystem::ModuleControlBlockPtr b = kt->second;
-	      b->setChanged(inputIndex);
-	      
-	      //TODO: catch exceptions!!!!!
-	      if (success && cvr != 0 /*&& (frameCount & 7) == 7*/)
-		{
-		  cvr->controlValueChanged(moduleID, inputIndex, buf);
-		}
-	    }
-	}
-    }
+	  void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
+		  IControlValueReceiver* cvr,
+		  const RuntimeSystem::ControlBlockMap& blocks,
+		  int frameCount)
+	  {
+		  //  int moduleID = m->getID();
+		  IModule* m = block->module();
+		  const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
+		  
+		  for (std::vector<IModule::IOutputPtr>::const_iterator 
+			  it = outs.begin(); it != outs.end(); ++it)
+		  {
+			  IModule::IOutputPtr current = *it;
+			  std::list<IInput*> ins = current->getConnectedInputs();	  
+			  
+			  for (std::list<IInput*>::const_iterator jz = ins.begin(); 
+			  jz != ins.end(); ++jz)
+			  {
+				  IInput* in = *jz;			  
+				  
+				  int moduleID = in->getModule()->getID();
+				  int inputIndex = in->getIndex();
+				  
+				  RuntimeSystem::ControlBlockMap::const_iterator 
+					  kt = blocks.find(moduleID);
+				  
+				  assert(kt != blocks.end());
+				  
+				  RuntimeSystem::ModuleControlBlockPtr b = kt->second;
+				  b->setChanged(inputIndex);			  			
+			  }
+			  
+		  }
+		  const std::vector<IModule::IInputPtr>& ins = m->getInputs();
+		  for (std::vector<IModule::IInputPtr>::const_iterator it = ins.begin();
+		  it != ins.end(); ++it)
+		  {
+			  IModule::IInputPtr current = *it;
+			  int inputIndex = current->getIndex();
+
+			  if (!block->hasChanged(inputIndex))
+				  continue;
+
+			  const IType* t = current->getData();
+			  utils::Buffer buf;
+			  bool success = t->serialize(buf);
+			  //TODO: catch exceptions!!!!!
+			  if (success && cvr != 0 /*&& (frameCount & 7) == 7*/)
+			  {
+		         int moduleID = current->getModule()->getID();				 
+				 cvr->controlValueChanged(moduleID, inputIndex, buf);
+			  }
+		  }
+		  
+	  }
+	  
   }
 	
   void RuntimeSystem::update(IControlValueReceiver* cvr,

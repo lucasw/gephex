@@ -1,5 +1,6 @@
 #include "scheduler.h"
 
+#include <iostream>
 #include <cassert>
 
 #include "interfaces/itask.h"
@@ -89,14 +90,30 @@ namespace engine
 
 	if (diffMax >= 0)
 	  {
-	    bool result = tMax->task->run();
+		bool kill_task = false;
+		try
+		{
+			bool result = tMax->task->run();
+			tMax->timeLastCall = t;
 
-	    tMax->timeLastCall = t;
-				
-	    if (!result)
-	      {
-		killTask(*tMax->task);
-	      }
+			if (!result)			
+				kill_task = true;			
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "scheduler.cpp: run threw exception: " << e.what() << "\n";
+			kill_task = true;
+		}
+		catch (...)
+		{
+			std::cerr <<  "scheduler.cpp: run threw unknown exception\n";
+			kill_task = true;
+		}				
+
+		if (kill_task)
+		{
+		   killTask(*tMax->task);
+		}
 	  }
 	else if (diffMax < -5)
 	  {	    

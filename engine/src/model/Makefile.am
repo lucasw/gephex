@@ -18,17 +18,6 @@ libmodel_a_SOURCES = model.cpp \
                      graphnode.cpp \
                      graphconnection.cpp \
                      controllvalueset.cpp \
-                     datatree.cpp \
-                     datatree.h \
-                     datatreetypes.h\
-                     persistentinode.cpp \
-                     persistentinode.h \
-                     standardinode.cpp \
-                     standardinode.h \
-                     debugpersistor.cpp \
-                     debugpersistor.h \
-                     idatatreepersistor.h \
-                     inode.h \
                      graphfilesystem.cpp \
                      graphserial.cpp \
                      controllvalueset.h \
@@ -44,7 +33,7 @@ noinst_HEADERS = model.h
 TESTS=modeltest
 
 check_PROGRAMS = modeltest
-modeltest_SOURCES = testmain.cpp datatreetest.cpp datatreetest.h
+modeltest_SOURCES = testmain.cpp
 modeltest_LDFLAGS = -L$(libdir) -L../../../base/src/TestFramework -L../../../base/src/utils
 modeltest_LDADD = -ltestframework libmodel.a -lutils
 

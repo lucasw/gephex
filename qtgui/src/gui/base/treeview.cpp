@@ -149,7 +149,10 @@ namespace gui
 
 	      //TODO: remove it->second.first from parent before deleting?
 
+		  delete it->second.first;
 	      m_impls.erase(it);
+		  
+
 	      m_items.erase(it2);
 	      
 	      // std::cout << "Treeview: Removed item!" << std::endl;
@@ -163,9 +166,7 @@ namespace gui
     {
       ItemMap::const_iterator it = m_items.find(item);
       if (it == m_items.end())
-	{
-	  //TODO
-	  assert(!"tschuess");
+	{	  
 	  //std::cerr << "mist" << std::endl;
 	  return 0;
 	}
@@ -184,7 +185,8 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      treeItem->doubleClicked( );
+	  if (treeItem)
+         treeItem->doubleClicked( );
     }
 
     void rightButtonClickedSlot (QListViewItem* item, const QPoint& p, int c)
@@ -194,18 +196,21 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      QPopupMenu* popme = treeItem->getPropertyMenu();
-
-      if (popme != 0)
-	{
-	  popme->move(p);
-	  popme->show();
-	  activeItem = treeItem;
-	  connect(popme,SIGNAL(activated(int)),
-		  this,SLOT(popupActivated(int)));
-	}
-
-      treeItem->rightButtonClicked(gui::Point(p.x(),p.y()), c);
+	  if (treeItem)
+	  {
+		  QPopupMenu* popme = treeItem->getPropertyMenu();
+		  
+		  if (popme != 0)
+		  {
+			  popme->move(p);
+			  popme->show();
+			  activeItem = treeItem;
+			  connect(popme,SIGNAL(activated(int)),
+				  this,SLOT(popupActivated(int)));
+		  }
+		  
+		  treeItem->rightButtonClicked(gui::Point(p.x(),p.y()), c);
+	  }
     }
 
     void rightButtonPressedSlot (QListViewItem* item, const QPoint& p, int c)
@@ -215,7 +220,8 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      treeItem->rightButtonPressed(gui::Point(p.x(),p.y()), c);
+	  if (treeItem)
+		treeItem->rightButtonPressed(gui::Point(p.x(),p.y()), c);
     }
 
     void mouseButtonPressedSlot (int button, QListViewItem* item,
@@ -226,7 +232,7 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      if (button == Qt::LeftButton)
+      if (treeItem && button == Qt::LeftButton)
 	treeItem->leftButtonPressed(gui::Point(p.x(),p.y()), c);
     }
 
@@ -238,7 +244,7 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      if (button == Qt::LeftButton)
+      if (treeItem && button == Qt::LeftButton)
 	treeItem->leftButtonClicked(gui::Point(p.x(),p.y()), c);
     }
 
@@ -249,22 +255,23 @@ namespace gui
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      treeItem->mouseOnItem();
+	  if (treeItem)
+         treeItem->mouseOnItem();
     }
 
     void popupActivated(int id)
     {
-      if (activeItem == 0)
-	{
-	  assert("!!!!!"); //TODO
-	}
-      else
-	activeItem->propertySelected(id);
+		if (activeItem )
+		{
+			
+			activeItem->propertySelected(id);
+		}
     }
 
     
   private:
-    typedef utils::AutoPtr<TreeViewItemImpl> ItemImplPtr;
+    //typedef utils::AutoPtr<TreeViewItemImpl> ItemImplPtr;
+	typedef TreeViewItemImpl* ItemImplPtr;
     typedef utils::AutoPtr<ColumnTextChangeListenerImpl> TextChangeListenerPtr;
     typedef std::map<TreeViewItem*, std::pair<ItemImplPtr,TextChangeListenerPtr> > ImplMap;
     ImplMap m_impls;
@@ -285,8 +292,8 @@ namespace gui
   TreeView::~TreeView()
   {
     //qt paranoia (try to make sure that m_impl os not deleted twice)!
-    m_impl->parentWidget()->removeChild(m_impl);
-    delete m_impl;
+    //m_impl->parentWidget()->removeChild(m_impl);
+    //delete m_impl;
   }
 
   QWidget* TreeView::widget()

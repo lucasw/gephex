@@ -230,6 +230,7 @@ static int scale_grey(uint_8* result, const uint_32* data, int_32 width,
   uint_32 A = (int_32) (alpha* (1<<16));
   uint_32 B = (int_32) (beta* (1<<16));
   int dirx, diry;
+  int_32 bb;
 
   uint_8* current = result;
 
@@ -253,7 +254,7 @@ static int scale_grey(uint_8* result, const uint_32* data, int_32 width,
       diry = newWidth;
     }
 
-  int_32 bb = 0;
+  bb = 0;
   for (y = 0; y < newHeight; ++y)
     {			
       int_32 aa = 0;			
@@ -271,4 +272,3 @@ static int scale_grey(uint_8* result, const uint_32* data, int_32 width,
 
   return 1;
 }
-

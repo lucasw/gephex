@@ -34,6 +34,8 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 4096
+        display_format    = fixed
+        precision         = 0
         step_size         = 1
     }
 
@@ -48,6 +50,8 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 4096
+        display_format    = fixed
+        precision         = 0
         step_size         = 1
      }
 

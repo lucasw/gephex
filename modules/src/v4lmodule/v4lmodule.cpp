@@ -21,6 +21,7 @@ typedef struct _MyInstance
 {
   int videoDeviceDescriptor;
   int blubb;
+  int todrop;
 } MyInstance, *MyInstancePtr;
 
 int init(logT log_function)
@@ -38,6 +39,7 @@ MyInstance* construct()
 {
     MyInstance* my = new MyInstance;
     my->blubb = 0;
+    my->todrop=0;
     return my;
 }
 
@@ -52,15 +54,6 @@ void update(void* instance)
 {
   InstancePtr inst = static_cast<InstancePtr>(instance);
   MyInstancePtr my = inst->my;
-
-  if (my->blubb == 0)
-    my->blubb = 2;
-  else {
-    my->blubb--;
-    return;
-  }
-
-
 
   try
     {
@@ -118,7 +111,21 @@ void update(void* instance)
       VideoDevice::Frame frame;
       frame.xSize=trim_int(inst->in_x_size->number,0,FRAMEBUFFER_X_MAX);
       frame.ySize=trim_int(inst->in_y_size->number,0,FRAMEBUFFER_Y_MAX);
-      videoDev->grabImage(frame);
+      
+      bool drop;
+
+      if (inst->my->todrop==0)
+	{
+	  drop=false;
+	  inst->my->todrop=trim_int(inst->in_drops->number,0,200);
+	}
+      else
+	{
+	  drop=true;
+	  inst->my->todrop--;
+	}
+
+      videoDev->grabImage(frame,drop);
     
       // change framebuffer size
       FrameBufferAttributes attribs;

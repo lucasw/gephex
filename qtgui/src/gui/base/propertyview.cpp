@@ -17,6 +17,11 @@ namespace gui
   {
   }
 
+  PropertyView::~PropertyView()
+  {
+	  deleteTable();
+  }
+
   namespace
   {
     QTable* buildNewTable(QWidget* parent)
@@ -60,8 +65,6 @@ namespace gui
   {
     if (table != 0)
       {
-	
-
 	for (std::list<std::pair<const IWidgetConstructor*,
 	       QWidget*> >::const_iterator it = widgetCtors.begin(); 
 	     it != widgetCtors.end(); ++it)
@@ -82,6 +85,7 @@ namespace gui
 
 	delete table;
 	widgetCtors.clear();
+	table = 0;
       }
   }
 
@@ -127,6 +131,11 @@ namespace gui
 	++rowIndex;
       }
 
+  }
+
+  void PropertyView::undisplayProperties()
+  {	    
+    this->deleteTable();
   }
 
 } // end of namespace

@@ -1,4 +1,31 @@
 
+Where to get the source
+------------------------
+
+If this is a binary release, you can get the source at http://www.gephex.org.
+
+
+EffecTV
+--------
+
+This release contains effects that have been ported from EffecTV
+(http://effectv.sf.net).
+If this is a binary release, the dlls are included and will show up under
+"EffecTV" in the "Effects" menue.
+
+If this is a source release, you will need the original effectv sources in
+order to build those effects. We did not include them, just our wrapper code
+to make them work with GePhex.
+
+To use the EffecTV effects download effectv-0.3.8 and untar it somwehere,
+for example $HOME/effectv-0.3.8 (no need to build it!).
+Then, when configuring GePhex, add --with-effectv=$HOME/effectv-0.3.8 to the 
+configure commandline parameters.
+For details see configure --help.
+
+Thanks to the EffecTV people for their cool effects!
+
+
 Important note:
 ---------------
 

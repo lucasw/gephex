@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,21 +98,26 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
 
 noinst_LIBRARIES = libjoystick.a
 
-libjoystick_a_SOURCES = libjoystick.c
+@HAVE_SDL_TRUE@SDL_sOURCES = 	sdljoystickdriver.h 	sdljoystickdriver.cpp
+@HAVE_SDL_TRUE@SDL_lIBADD = @SDL_PREFIX@/lib/libSDL.so /usr/lib/libpthread.so
+
+libjoystick_a_SOURCES =  	libjoystick.cpp 	joystickdriver.h 	linuxjoystickdriver.h 	linuxjoystickdriver.cpp $(SDL_sOURCES)
+
 
 #libjoystick_a_LIBADD = /usr/lib/libSDL.so 
-libjoystick_a_LIBADD = @SDL_PREFIX@/lib/libSDL.so /usr/lib/libpthread.so
+libjoystick_a_LIBADD = $(SDL_lIBADD)
 noinst_HEADERS = libjoystick.h
 
-INCLUDES = -I @srcdir@/.. 		-I @srcdir@/../../include                 -I /usr/include/SDL @SDL_CFLAGS@
+INCLUDES = -I @srcdir@/.. 		-I @srcdir@/../../include @SDL_CFLAGS@
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
@@ -127,9 +133,19 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-libjoystick_a_DEPENDENCIES =  @SDL_PREFIX@/lib/libSDL.so \
-/usr/lib/libpthread.so
-libjoystick_a_OBJECTS =  libjoystick.$(OBJEXT)
+@HAVE_SDL_FALSE@libjoystick_a_DEPENDENCIES = 
+@HAVE_SDL_TRUE@libjoystick_a_DEPENDENCIES =  @SDL_PREFIX@/lib/libSDL.so \
+@HAVE_SDL_TRUE@/usr/lib/libpthread.so
+@HAVE_SDL_FALSE@libjoystick_a_OBJECTS =  libjoystick.$(OBJEXT) \
+@HAVE_SDL_FALSE@linuxjoystickdriver.$(OBJEXT)
+@HAVE_SDL_TRUE@libjoystick_a_OBJECTS =  libjoystick.$(OBJEXT) \
+@HAVE_SDL_TRUE@linuxjoystickdriver.$(OBJEXT) \
+@HAVE_SDL_TRUE@sdljoystickdriver.$(OBJEXT)
+CXXFLAGS = @CXXFLAGS@
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -149,7 +165,7 @@ OBJECTS = $(libjoystick_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .obj .s
+.SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps util/src/libjoystick/Makefile
 
@@ -215,6 +231,12 @@ libjoystick.a: $(libjoystick_a_OBJECTS) $(libjoystick_a_DEPENDENCIES)
 	-rm -f libjoystick.a
 	$(AR) cru libjoystick.a $(libjoystick_a_OBJECTS) $(libjoystick_a_LIBADD)
 	$(RANLIB) libjoystick.a
+.cpp.o:
+	$(CXXCOMPILE) -c $<
+.cpp.obj:
+	$(CXXCOMPILE) -c `cygpath -w $<`
+.cpp.lo:
+	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -260,7 +282,12 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-libjoystick.o: libjoystick.c libjoystick.h ../../../config.h
+libjoystick.o: libjoystick.cpp libjoystick.h ../../../config.h \
+	joystickdriver.h linuxjoystickdriver.h sdljoystickdriver.h
+linuxjoystickdriver.o: linuxjoystickdriver.cpp linuxjoystickdriver.h \
+	joystickdriver.h
+sdljoystickdriver.o: sdljoystickdriver.cpp sdljoystickdriver.h \
+	joystickdriver.h
 
 info-am:
 info: info-am

@@ -26,6 +26,6 @@ typedef void (*assignT)(void*,const void*);
 typedef int (*serializeT)(void* type, char* buffer, int bufferLen);
 typedef void (*deSerializeT)(const char* buffer,int len, void*);
 typedef int (*attributesEqualT)(void*,void*);	
-typedef void (*convertTypeT)(void*,void*,void*);
+typedef int (*convertTypeT)(void*,void*,void*);
 			  
 #endif

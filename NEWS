@@ -1,4 +1,42 @@
+0.0.4beta2:
+=============
+
+        * removed nonfunctional and unneeded functionality
+            - sequencer
+            - playlist
+            - tons of old and unneeded code
+            - folders for graphs
+            
+        * fixed several open bugs
+            - fixed crash when deleting module that is connected
+              to a patched input
+            - fixed bug that moved modules in the grapheditor
+            - fixed engine crash when gui disconnects
+            - fixed bug in protocol when the datareceiver throws an
+              exception
+            - enhanced robustness of protocol (resync)
+       	    - fixed "lost value" problem of spinbox widget
+
+        * gui and engine now run independent, when one app crashes
+          the other one continues
+
+        * gui can detach from engine and reconnect later
+
+        * improved startup speed (loading the plugins took very long before)
+
+        * new modules:
+            - font module that can use any true type font (uses
+              sdl_ttf)
+            - several more effecTV ports (sparkTV, quarkTV, ...)
+            - pixelizer effect
+
+        * new gl output driver in frboutmodule (uses textures)
+
+        * more bugfixes and small improvements in engine, gui and modules
+
+
 0.0.4alpha2:
+=============
 
         * audio type and some audio modules (beat detection works, but it's
           still pretty dumb)
@@ -46,6 +84,7 @@
         * fixed some bugs and glitches
 
 0.0.4alpha1:
+=============
 	
 	* NumberType changed from unsigned int (32 bit) to
 	  IEEE 64 bit floating point value.
@@ -73,6 +112,7 @@
 
 	
 Version 0.0.3
+=============
 	
 	* Bugs, Bugs, Bugs
 	

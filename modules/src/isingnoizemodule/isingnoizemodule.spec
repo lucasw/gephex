@@ -55,7 +55,7 @@ inputs
         widget_type       = number_selector
         lower_bound       = 1
         higher_bound      = 16
-    step_size         = 0.5
+        step_size         = 0.5
     }
 
     spont_growth
@@ -69,7 +69,7 @@ inputs
         widget_type       = number_selector
         lower_bound       = 1
         higher_bound      = 48
-    step_size         = 0.5
+        step_size         = 0.5
     }
 
     outx
@@ -84,6 +84,8 @@ inputs
        lower_bound        = 0
        higher_bound       = 1024
        step_size          = 1
+       display_format     = fixed
+       precision          = 0
        help               = Size of the resulting image
     }
 
@@ -99,6 +101,8 @@ inputs
        lower_bound        = 0
        higher_bound       = 1024
        step_size          = 1
+       display_format     = fixed
+       precision          = 0
        help               = Size of the resulting image
     }
 }

@@ -99,6 +99,8 @@ namespace renderer
     //TODO: war mal const
     virtual void synchronizeInputValues(const std::string& graphID);
 
+	void synchronize();
+
   private:
     typedef std::map<const std::string,utils::AutoPtr<RuntimeSystem> > RuntimeSystemMap;
     RuntimeSystemMap graphs;

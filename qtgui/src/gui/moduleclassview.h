@@ -35,6 +35,11 @@ namespace gui
     virtual void moduleClassUnloaded(const std::string& moduleClassName);
 
     virtual const ModuleInfo& getModuleInfo(const std::string& moduleClassName) const;
+
+	void syncStarted();
+	void syncFinished();
+
+	void clear();
 private slots:
 void moduleClassSelected(int);
 

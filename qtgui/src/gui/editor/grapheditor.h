@@ -163,7 +163,8 @@ void beginLineDraw();
     void deleteControl(int nodeID,int inputIndex);
 
     void statusText(const std::string&);
-    void properties(const IPropertyDescription& pd);
+    void displayProperties(const IPropertyDescription& pd);
+    void undisplayProperties();
 
     /**
      * This signal is emitted when the model tells the graph editor,

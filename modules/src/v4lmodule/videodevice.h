@@ -4,8 +4,12 @@
 #include <string>
 #include <stdexcept>
 
+extern "C" {
+#include <linux/videodev.h>
+}
+
 #include "basic_types.h"
-#include "linux/videodev.h"
+
 
 class VideoDevice
 {
@@ -41,7 +45,7 @@ public:
   /** grabs one frame 
    * \param frame image params 
    */
-  void grabImage(Frame& frame) throw (std::runtime_error);
+  void grabImage(Frame& frame,bool drop) throw (std::runtime_error);
 
   void setProperties(int brightness,int hue,int colour,
 		     int contrast,

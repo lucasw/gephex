@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "graphfilesystem.h"
 
 #include <fstream>
@@ -14,10 +36,7 @@
 
 #include "graph.h"
 #include "graphserial.h"
-
 #include "controllvalueset.h"
-
-#include <iostream>
 
 namespace model
 {
@@ -36,7 +55,7 @@ namespace model
   {
   }
 
-  void GraphFileSystem::loadGraph(const std::string graphID, 
+  void GraphFileSystem::loadGraph(const std::string& graphID, 
 				  Graph& destination,
 				  const SpecMap& specMap)
   {
@@ -44,17 +63,15 @@ namespace model
       graphNames2fileNames.find(graphID);
     if (it==graphNames2fileNames.end())
       throw std::runtime_error("no graph with that name(GraphFileSystem::loadGraph)");
-
-    std::string fileName=basePath + "/" + it->second;
+    
+    const std::string fileName=basePath + "/" + it->second;
     std::ifstream graphfile(fileName.c_str());
     
     deserializeGraph(graphfile,destination,specMap);
-    //graphfile >> destination;
   }
 
   namespace
   {
-
     // checks for a invalid char in a filename
     class isnt_allowedFileNameChar
     {
@@ -79,7 +96,7 @@ namespace model
     if (it!=graphNames2fileNames.end())
       {
 	// use the old filename
-	fileName=(it->second);
+	fileName = it->second;
       }
     else
       {
@@ -88,13 +105,8 @@ namespace model
 	std::string newFileName;
 
 	// remove forbitten chars from the name to generate the filename
-        //#ifndef _MSC_VER
-        //       	std::remove_copy_if(graphName.begin(),graphName.end(),
-        //			    std::back_inserter(newFileName),
-        //			    isnt_allowedFileNameChar());
-        //#else
 	for(std::string::const_iterator it=graphName.begin();
-	      it!=graphName.end();++it)
+	    it!=graphName.end();++it)
 	  {
 	    isnt_allowedFileNameChar pred;
 	    if (!pred(*it))
@@ -102,10 +114,8 @@ namespace model
 	        newFileName+=*it;
 	      }
 	  }
-        //#endif
-
-
-	//make unique
+	
+	// make the filename unique
 	std::string uniqueNewFileName = newFileName;
 	int index=0;
 	while (utils::FileSystem::exists(uniqueNewFileName))
@@ -119,7 +129,7 @@ namespace model
       }
 
     // create or overwrite the file
-    std::string pathFileName=basePath+"/"+fileName;
+    const std::string pathFileName(basePath + "/" + fileName);
     std::ofstream graphfile(pathFileName.c_str());
 
     // check if we can open the file for write mode
@@ -128,13 +138,11 @@ namespace model
 	graphfile << toSave;
 	if (!graphfile)
 	  {
-	    std::cerr << "cant write to file:" << fileName.c_str() <<std::endl;
 	    throw std::runtime_error("cant write to file");
 	  }
       }
     else
       {
-	std::cerr << "cant open file:" << fileName.c_str() << std::endl;
 	throw std::runtime_error("cant open file");
       }
     
@@ -146,16 +154,20 @@ namespace model
   {
     std::map<std::string,std::string>::iterator 
       it = graphNames2fileNames.find(name);
-
+    
     if ( it == graphNames2fileNames.end() )
       {
 	return;
 	//		throw std::runtime_error("Graph doesnt exist at "
 	//	"GraphFileSystem::deleteSequence()");
       }
-	
-    std::string fileName = basePath+"/"+it->second;
+    
+    const std::string fileName(basePath + "/" + it->second);
     graphNames2fileNames.erase(it);
+
+    ValueSetMap::iterator it2 = m_value_sets.find(name);
+    if (it2 != m_value_sets.end())
+      m_value_sets.erase(it2);
 	
     utils::FileSystem::removeFile(fileName);
   }
@@ -167,6 +179,9 @@ namespace model
     // create list of all subdirs and graph with a DFS
     // no check for cycles implemented
 
+    graphNames2fileNames.clear();
+    m_value_sets.clear();
+
     // initialize
     std::list<std::string> directories;
     std::list<std::string> graphs;
@@ -177,18 +192,18 @@ namespace model
     // process
     while ( stack.size() > 0 )
       {
-	std::string current=stack.top();
+	std::string current(stack.top());
 	stack.pop();
 
 	// get the objects in the current dir
 	std::list<utils::DirEntry> entries;
-	utils::FileSystem::listDir(basePath+"/"+current,entries);
+	utils::FileSystem::listDir(basePath + "/" + current, entries);
 	
 	// push all subdirs
-	for (std::list<utils::DirEntry>::const_iterator
-	       it=entries.begin();it!=entries.end();++it)
+	for (std::list<utils::DirEntry>::const_iterator it=entries.begin();
+	     it != entries.end(); ++it)
 	  {
-	    std::string fileName=current + "/" + it->getName();
+	    const std::string fileName(current + "/" + it->getName());
 	    switch (it->getType())
 	      {
 	      case utils::DirEntry::DIRECTORY :
@@ -204,8 +219,6 @@ namespace model
 		break;
 	      }
 	  }
-	
-
       }
     
     // create list of all files
@@ -214,7 +227,9 @@ namespace model
     for (std::list<std::string>::const_iterator
 	   graph_it=graphs.begin();graph_it!=graphs.end();++graph_it)
       {
+#if (ENGINE_VERBOSITY > 0)
 	std::cout << *graph_it << std::endl;
+#endif
 	try
 	  {
 	    std::ifstream graphfile((basePath + "/" + (*graph_it)).c_str());
@@ -233,7 +248,7 @@ namespace model
 		     
 		graphNames2fileNames[graph.getID()] = *graph_it;
 		
-		std::list<std::pair<std::string,std::string> > valueSetNames;
+		ValueSetList valueSetNames;
 		typedef std::map<const std::string,
 		  utils::AutoPtr<ControllValueSet> > ValueSetMap;
 		    
@@ -250,6 +265,7 @@ namespace model
 		      graphData(std::make_pair(graph.getID(),graph.getName()),
 				valueSetNames);
 		    
+			m_value_sets.insert(std::make_pair(graph.getID(), valueSetNames));
 		    retList.push_back(graphData);
 		    
 #if (ENGINE_VERBOSITY > 0)
@@ -274,6 +290,18 @@ namespace model
     return retList;
   }
 
+  GraphFileSystem::ValueSetList GraphFileSystem::getValueSetList(const std::string& graphID) const
+  {
+      if (!graphExists(graphID))
+		  return ValueSetList();
+
+	  ValueSetMap::const_iterator it = m_value_sets.find(graphID);
+	  if (it == m_value_sets.end())
+		  return ValueSetList();
+
+	  return it->second;
+  }
+
 
   bool GraphFileSystem::graphExists(const std::string& graphName) const
   {
@@ -283,24 +311,4 @@ namespace model
     return (it != graphNames2fileNames.end());
   }
 
-
-  /*
-    void GraphFileSystem::rename(const std::string& graphName,
-    const std::string& newGraphName)
-    {
-    std::map<std::string,std::string>::iterator 
-    it = graphNames2fileNames.find(graphName);
-	
-    if (it == graphNames2fileNames.end())
-    throw std::runtime_error("No such Graph at "
-    "GraphFileSystem::rename()");
-	
-    std::string fileName = it->second;
-	
-    graphNames2fileNames.erase(it);
-	
-    graphNames2fileNames[newGraphName] = fileName;
-	
-    }
-  */
 }

@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,21 +98,22 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
 
 bin_PROGRAMS = joystick_midi_net
 
-joystick_midi_net_SOURCES = joystick_midi_net.c
+joystick_midi_net_SOURCES = joystick_midi_net.cpp
 
 INCLUDES = -I @srcdir@/../libjoystick
 
 joystick_midi_net_LDFLAGS = 
 
-joystick_midi_net_LDADD = -ljoystick $(SDL_LIBS) -L@builddir@/../libjoystick/ 
+joystick_midi_net_LDADD = -ljoystick $(SDL_LD_FLAGS) -L@builddir@/../libjoystick/ 
 
 joystick_midi_net_DEPENDENCIES = @builddir@/../libjoystick/libjoystick.a
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -130,11 +132,11 @@ X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 joystick_midi_net_OBJECTS =  joystick_midi_net.$(OBJEXT)
-CFLAGS = @CFLAGS@
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+CXXFLAGS = @CXXFLAGS@
+CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -147,7 +149,7 @@ OBJECTS = $(joystick_midi_net_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .obj .s
+.SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps util/src/joystick_net_midi/Makefile
 
@@ -227,7 +229,13 @@ maintainer-clean-libtool:
 
 joystick_midi_net$(EXEEXT): $(joystick_midi_net_OBJECTS) $(joystick_midi_net_DEPENDENCIES)
 	@rm -f joystick_midi_net$(EXEEXT)
-	$(LINK) $(joystick_midi_net_LDFLAGS) $(joystick_midi_net_OBJECTS) $(joystick_midi_net_LDADD) $(LIBS)
+	$(CXXLINK) $(joystick_midi_net_LDFLAGS) $(joystick_midi_net_OBJECTS) $(joystick_midi_net_LDADD) $(LIBS)
+.cpp.o:
+	$(CXXCOMPILE) -c $<
+.cpp.obj:
+	$(CXXCOMPILE) -c `cygpath -w $<`
+.cpp.lo:
+	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -273,7 +281,7 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-joystick_midi_net.o: joystick_midi_net.c ../../../config.h \
+joystick_midi_net.o: joystick_midi_net.cpp ../../../config.h \
 	../libjoystick/libjoystick.h
 
 info-am:

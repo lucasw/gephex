@@ -91,7 +91,7 @@ void update(void* instance)
   {
 	unsigned char* result    = (unsigned char*) inst->out_r->framebuffer;
 	unsigned char* framebuf1 = (unsigned char*) inst->in_src->framebuffer;
-    unsigned char* end	     = result + (xsize*ysize-1)*4;
+    unsigned char* end	     = result + (xsize*ysize)*4;
     
 		
       while (result != end)

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "graphnameview.h"
 
 #include <cassert>
@@ -11,8 +33,6 @@
 
 #include "interfaces/imodelcontrolreceiver.h"
 #include "interfaces/ierrorreceiver.h"
-
-#include "guimodel/iscenesequencer.h"
 
 #include "base/askforstringdialog.h"
 
@@ -52,13 +72,13 @@ namespace gui
       QPopupMenu *popme = new QPopupMenu(0, "TopPop");
 
       popme->insertItem("New Graph",NEW_GRAPH);
-      popme->insertItem("New Folder",NEW_FOLDER);
+      //popme->insertItem("New Folder",NEW_FOLDER);
 
-      if (!(m_mask & DENY_RENAME))
+      /*if (!(m_mask & DENY_RENAME))
         popme->insertItem("Rename",RENAME_FOLDER);
 
       if (!(m_mask & DENY_REMOVE))
-        popme->insertItem("Remove",REMOVE_FOLDER);
+        popme->insertItem("Remove",REMOVE_FOLDER);*/
 
       return popme;      
     }
@@ -92,7 +112,7 @@ namespace gui
                   }
               }
 	  } break;
-        case NEW_FOLDER:
+        /*case NEW_FOLDER:
 	  {
             bool retry=true;
             while(retry)
@@ -145,7 +165,7 @@ namespace gui
         case REMOVE_FOLDER:	  
           if (!(m_mask & DENY_REMOVE))		  
             m_model.deleteGraph(m_graphID);
-	  break;
+	  break;*/
 	default:
 	  assert("so ein mist!");
 	}
@@ -159,7 +179,7 @@ namespace gui
 
     int m_mask;
 
-    enum { NEW_GRAPH, NEW_FOLDER, REMOVE_FOLDER, RENAME_FOLDER };
+    enum { NEW_GRAPH/*, NEW_FOLDER, REMOVE_FOLDER, RENAME_FOLDER*/ };
   };
 
   class GraphItem : public TreeViewItem
@@ -253,15 +273,53 @@ namespace gui
 	  } break;
 	case RENAME_GRAPH:
           {
-            std::string newName = AskForStringDialog::open(0, "Rename Graph",
-                                                           "Enter new name");
-            m_model.renameGraph(m_graphID, m_path+newName);
+            bool retry=true;
+            while(retry)
+              {
+                const std::string newName = 
+		  AskForStringDialog::open(0, "New Graph",
+					   "Enter new name");
+                if (checkNamePolicy(newName))
+                  {
+		    m_model.renameGraph(m_graphID, newName);
+                    retry=false;
+                  }
+                else
+                  {
+                    switch (QMessageBox::warning (0,"invalid name","Only names with max 20 characters and without space or other special characters are possible",
+						  QMessageBox::Retry | QMessageBox::Default,
+                                                  QMessageBox::Abort | QMessageBox::Escape))
+                      {
+                      case QMessageBox::Abort: retry=false; break;            
+                      case QMessageBox::Retry: break;            
+                      }
+                  }
+              }
           } break;
 	case COPY_GRAPH:
 	  {
-	    std::string newName = AskForStringDialog::open(0, "Copy Graph",
-							   "Enter name of copy");
-	    m_model.copyGraph(m_graphID, m_path+ newName);
+            bool retry=true;
+            while(retry)
+              {
+                const std::string newName = 
+		  AskForStringDialog::open(0, "New Graph",
+					   "Enter the name of the copy");
+                if (checkNamePolicy(newName))
+                  {
+		    m_model.copyGraph(m_graphID, newName);
+                    retry=false;
+                  }
+                else
+                  {
+                    switch (QMessageBox::warning (0,"invalid name","Only names with max 20 characters and without space or other special characters are possible",
+						  QMessageBox::Retry | QMessageBox::Default,
+                                                  QMessageBox::Abort | QMessageBox::Escape))
+                      {
+                      case QMessageBox::Abort: retry=false; break;            
+                      case QMessageBox::Retry: break;            
+                      }
+                  }
+              }
 	  } break;
 	default:
 	  assert(!"MIST!");
@@ -291,11 +349,11 @@ namespace gui
 	     const std::string& snapID,
 	     const std::string& graphName,
 	     const std::string& snapName,
-	     IModelControlReceiver& model,
-	     ISceneSequencer& sequencer)
+	     IModelControlReceiver& model,	     
+		 GraphNameViewObject& stupidObject)
       : m_graphID(graphID), m_snapID(snapID),
 	m_graphName(graphName), m_snapName(snapName),
-	m_model(model), m_sequencer(&sequencer) {}
+	m_model(model), m_stupidObject(stupidObject) {}
 
     virtual ~SnapItem() {}
 
@@ -319,8 +377,7 @@ namespace gui
       popme->insertItem("Rename Snapshot",
 			RENAME_SNAPSHOT);
       popme->insertItem("Copy Snapshot",COPY_SNAPSHOT);
-      popme->insertItem("Remove Snapshot",KILL_SNAPSHOT);
-      popme->insertItem("Put into Sequencer",PUT_INTO_SEQUENCER);      
+      popme->insertItem("Remove Snapshot",KILL_SNAPSHOT);      
 
       return popme;
     }
@@ -364,32 +421,14 @@ namespace gui
 	{
 	case EDIT_GRAPH:
 	  {
+        m_stupidObject.undisplayProperties_();
 	    m_model.changeEditGraph(m_graphID, m_snapID);
 	  } break;
 	case RENDER_GRAPH:
 	  {
 	    m_model.changeRenderedGraph(m_graphID, m_snapID);
 	  }
-	  break;
-	case PUT_INTO_SEQUENCER:
-	  {
-	    std::string 
-	      sLength = AskForStringDialog::open(0,
-						 "Put into Sequencer",
-						 "Enter length in secs");
-	    std::istringstream is(sLength);
-	    double length;
-	    is >> length;
-	    if (!is)
-	      {
-		//TODO
-		//length = 5000;
-	      }
-
-	    std::string command = m_graphID + ":" + m_snapID;
-	    m_sequencer->appendScene(command, static_cast<int>(length*1000));
-	  }
-	  break;
+	  break;		  
 	case RENAME_SNAPSHOT:
 	  {
 	    std::string 
@@ -420,9 +459,10 @@ namespace gui
     std::string m_graphName;
     std::string m_snapName;
     IModelControlReceiver& m_model;
-    ISceneSequencer* m_sequencer;
+    
+    GraphNameViewObject& m_stupidObject;
 
-    enum {PUT_INTO_SEQUENCER,RENAME_SNAPSHOT, KILL_SNAPSHOT, COPY_SNAPSHOT,
+    enum {RENAME_SNAPSHOT, KILL_SNAPSHOT, COPY_SNAPSHOT,
 	  EDIT_GRAPH, RENDER_GRAPH};
 
 
@@ -433,6 +473,11 @@ namespace gui
     : QObject(parent), m_view(view)
   {
   }
+  GraphNameViewObject::~GraphNameViewObject()
+  {
+    //    fprintf(stderr, "Dtor GraphNameViewObject\n");
+  }
+
 
   void GraphNameViewObject::editGraphChanged( const std::string& graphID,
 					      const std::string& snapID )
@@ -445,14 +490,19 @@ namespace gui
     m_view.markRenderedGraph(graphID);
   }
 
+  void GraphNameViewObject::undisplayProperties_()
+  {
+    emit undisplayProperties();
+  }
+
   GraphNameView::GraphNameView(QWidget* parent,
 			       IModelControlReceiver& model,
-			       ISceneSequencer& sequencer,
                                IErrorReceiver& log)
     :  stupidObject(0,*this), editSnap(0), renderedGraph(0),
        m_model(model), m_topItem(new FolderItem(model, "_", "", "Graphen", 
-                                                FolderItem::DENY_REMOVE | FolderItem::DENY_RENAME) ),
-       m_sequencer(&sequencer), m_log(log)
+                                                FolderItem::DENY_REMOVE 
+                                                | FolderItem::DENY_RENAME) ),
+       m_log(log)
   {
     std::vector<std::string> cols;
     cols.push_back("Name");
@@ -463,6 +513,7 @@ namespace gui
 
   GraphNameView::~GraphNameView()
   {
+    //    fprintf(stderr, "Dtor GraphNameView\n");
   }
 
   QObject* GraphNameView::signalObject()
@@ -589,7 +640,8 @@ namespace gui
         assert(it != m_graphs.end());
 
         SnapItemPtr tmp( new SnapItem(graphID,snapID,
-                                      graphName,snapName,m_model,*m_sequencer) );
+                                      graphName,snapName,m_model,
+									  stupidObject) );
 
         m_snaps[std::make_pair(graphID,snapID)] = tmp;
         m_treeView->insertItem(*tmp,&*it->second);
@@ -733,7 +785,8 @@ namespace gui
 
     for(std::string::const_iterator it=name.begin();it!=name.end();++it)
       {
-        std::string::const_iterator it2 = std::find(allowedCharacters.begin(),allowedCharacters.end(),*it);
+        std::string::const_iterator it2 = std::find(allowedCharacters.begin(),
+			                                        allowedCharacters.end(),*it);
         if (it2==allowedCharacters.end())
           {
             // this character is not allowed

@@ -12,7 +12,7 @@
 
 #include "outputdriver.h"
 
-#include "adjustutil.h"
+#include "libscale.h"
 
 #define EPS 0.0001
 
@@ -31,7 +31,10 @@ struct DriverInstance {
   int width;
   int height;
 
-  adjust_pal pal;
+  ls_adjust_pal pal;
+
+  int completion_type;
+  int event_pending;
 };
 
 static struct DriverInstance*
@@ -96,6 +99,9 @@ XShm_new_instance(const char* server_name,
 
       return 0;
     }
+
+  sh->completion_type = XShmGetEventBase(sh->display) + ShmCompletion;
+  sh->event_pending = 0;
 
   screen = DefaultScreen(sh->display);
   sh->win = XCreateSimpleWindow(sh->display,
@@ -204,26 +210,45 @@ static int XShm_blit(struct DriverInstance* sh,
                       || fabs(params->gamma-1.0) > EPS
                       || params->invert);
 
+  // wait until last blit has completed
+  if (sh->event_pending)
+    {
+	  XEvent event;
+      sh->event_pending = 0;
+      
+      while (1)
+        {
+          XNextEvent(sh->display, &event);
+
+          if (event.type = sh->completion_type)
+            break;          
+        }
+    }
+
+  // adjust and scale input framebuffer frb into shared mem
   if (needs_adjust)
     {
-      set_adjustment(sh->pal, params->brightness, params->contrast,
+      ls_set_adjustment(sh->pal, params->brightness, params->contrast,
                      params->gamma, params->invert);
                      
-      fb_scale32_adjust((uint_32*)sh->shimage->data, sh->width, sh->height,
+      ls_scale32m_adjust((uint_32*)sh->shimage->data, sh->width, sh->height,
                         (uint_32*)fb, width, height, params->mirrorx,
                         params->mirrory, sh->pal);
     }
   else
     {
-      fb_scale32((uint_32*)sh->shimage->data, sh->width, sh->height,
-                 (uint_32*)fb, width, height, params->mirrorx,
-                 params->mirrory);
+      ls_scale32m((uint_32*)sh->shimage->data, sh->width, sh->height,
+                  (uint_32*)fb, width, height, params->mirrorx,
+                  params->mirrory);
     }
 
+  // blit shared mem image
   XShmPutImage(sh->display, sh->win, sh->gc, sh->shimage,
-               0, 0, 0, 0, sh->width, sh->height, False);
+               0, 0, 0, 0, sh->width, sh->height, True);
+  sh->event_pending = 1;
 
   XFlush(sh->display);
+  //XSync(sh->display, False);
   return 1;
 }
 

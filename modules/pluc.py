@@ -11,10 +11,10 @@ import re, sys, string, os
 beginblock_string = r"^\s*\{\s*$"
 endblock_string   = r"^\s*\}\s*$"
 
-# something as "\tabc\t"
-identifier_string = r"^\s*(?P<id>[a-zA-Z0-9 \t_-]+)\s*$"
+# something like "\tabc\t"
+identifier_string = r"^\s*(?P<id>[a-zA-z_0-9-][a-zA-Z0-9 \t_-]*)\s*$"
 
-#someting as "agag = 100"
+# something like "agag = 100"
 assignment_string = r"\s*(?P<name>.*)\s*=\s*(?P<value>.*)\s*"
 
 beginblock = re.compile(beginblock_string)
@@ -24,326 +24,326 @@ assignment = re.compile(assignment_string)
 emptyline = re.compile(r"\s*");
 
 def removeComment(s):
-	" Entfernt alles ab einem '#' Zeichen aus dem String s"
-	p = string.find(s,'#')
-	if p != -1:
-		return s[:p]
-	else:
-		return s
+        " Entfernt alles ab einem '#' Zeichen aus dem String s"
+        p = string.find(s,'#')
+        if p != -1:
+                return s[:p]
+        else:
+                return s
 
 
 def readBlock(file):
-	" Liest einen Block aus file. wenn keiner da ist wird ('',[])"
-	" zurueckgegeben. Wenn eine schliessende Klammer gelesen wird,"
-	" wird None zurueckgegeben. "
-	line = ' '
-	id = ''
-	pairs = {}
-	matchedEndBlock = 0
+        " Liest einen Block aus file. wenn keiner da ist wird ('',[])"
+        " zurueckgegeben. Wenn eine schliessende Klammer gelesen wird,"
+        " wird None zurueckgegeben. "
+        line = ' '
+        id = ''
+        pairs = {}
+        matchedEndBlock = 0
 
-	while line != '':
-		line = file.readline()
-		strippedLine = removeComment(line)
-		m = identifier.match(strippedLine)
-		if m:
-			id = m.group('id')
-			break
-		elif endblock.match(strippedLine):
-			return None
-	
+        while line != '':
+                line = file.readline()
+                strippedLine = removeComment(line)
+                m = identifier.match(strippedLine)
+                if m:
+                        id = m.group('id')
+                        break
+                elif endblock.match(strippedLine):
+                        return None
+        
 
-	if id == '':
-		sys.stderr.write("Module identifier missing!\n")
-		sys.stderr.write("Line = " + line + "\n");
-		return ('',{})
+        if id == '':
+                sys.stderr.write("Module identifier missing!\n")
+                sys.stderr.write("Line = " + line + "\n");
+                return ('',{})
 
-	while line != '':
-		line = file.readline()
-		strippedLine = removeComment(line)
-		m = beginblock.match(strippedLine)
-		if m:
-			break
-	if line == '':
-		sys.stderr.write("{ missing!\n")
-		sys.exit(1)
+        while line != '':
+                line = file.readline()
+                strippedLine = removeComment(line)
+                m = beginblock.match(strippedLine)
+                if m:
+                        break
+        if line == '':
+                sys.stderr.write("{ missing!\n")
+                sys.exit(1)
 
-	while line != '':
-		line = file.readline()
-		strippedLine = removeComment(line)
-		m = assignment.match(strippedLine)
-		if m:
-			name  = string.strip(m.group('name'))
-			value = string.strip(m.group('value'))
-			pairs[name] = value
-		elif endblock.match(strippedLine):
-			matchedEndBlock = 1
-			break;
-		elif emptyline.match(strippedLine):
-			continue;
-		else:
-			sys.stderr.write("Error: " + line + " at line " \
-					 + `1` + "\n");
-			
-	if matchedEndBlock == 0:
-	      sys.stderr.write("Error: missing }\n");
-	
-	return (id, pairs)
+        while line != '':
+                line = file.readline()
+                strippedLine = removeComment(line)
+                m = assignment.match(strippedLine)
+                if m:
+                        name  = string.strip(m.group('name'))
+                        value = string.strip(m.group('value'))
+                        pairs[name] = value
+                elif endblock.match(strippedLine):
+                        matchedEndBlock = 1
+                        break;
+                elif emptyline.match(strippedLine):
+                        continue;
+                else:
+                        sys.stderr.write("Error: " + line + " at line " \
+                                         + `1` + "\n");
+                        
+        if matchedEndBlock == 0:
+              sys.stderr.write("Error: missing }\n");
+        
+        return (id, pairs)
 
 def readRekBlock(file):
-	" Liest einen Block aus file der wieder Blocks als Eintraege hat. "
-	" Es wird eine Liste von Blocks zurueckgegeben."
-	line = ' '
-	id = ''
-	pairs = {}
-	matchedEndBlock = 0
+        " Liest einen Block aus file der wieder Blocks als Eintraege hat. "
+        " Es wird eine Liste von Blocks zurueckgegeben."
+        line = ' '
+        id = ''
+        pairs = {}
+        matchedEndBlock = 0
 
-	while line != '':
-		line = file.readline()
-		strippedLine = removeComment(line)
-		m = identifier.match(strippedLine)
-		if m:
-			id = m.group('id')
-			break
+        while line != '':
+                line = file.readline()
+                strippedLine = removeComment(line)
+                m = identifier.match(strippedLine)
+                if m:
+                        id = m.group('id')
+                        break
 
-	if id == '':
-		sys.stderr.write("Block identifier missing!\n")
-		sys.stderr.write("Line = '" + line + "'\n");
-		sys.exit(1)
+        if id == '':
+                sys.stderr.write("Block identifier missing!\n")
+                sys.stderr.write("Line = '" + line + "'\n");
+                sys.exit(1)
 
-	while line != '':
-		line = file.readline()
-		strippedLine = removeComment(line)
-		m = beginblock.match(strippedLine)
-		if m:
-			break
-	if line == '':
-		sys.stderr.write("{ missing!\n")
-		sys.exit(1)
+        while line != '':
+                line = file.readline()
+                strippedLine = removeComment(line)
+                m = beginblock.match(strippedLine)
+                if m:
+                        break
+        if line == '':
+                sys.stderr.write("{ missing!\n")
+                sys.exit(1)
 
-	blocks = []
-	while 1:
-		block = readBlock(file)
-		if block:
-			if block[0] == '':
-				break
-			blocks.append(block)
-		else:
-			matchedEndBlock = 1
-			break
+        blocks = []
+        while 1:
+                block = readBlock(file)
+                if block:
+                        if block[0] == '':
+                                break
+                        blocks.append(block)
+                else:
+                        matchedEndBlock = 1
+                        break
 
 
-	if matchedEndBlock == 0:
-	      sys.stderr.write("Error: missing }\n");
-	
-	return blocks
+        if matchedEndBlock == 0:
+              sys.stderr.write("Error: missing }\n");
+        
+        return blocks
 
 def checkMapForKeys(map,keys):
-	if len(keys) == 0:
-		return ""
-	else:
-	   if not map.has_key(keys[0]):
-		return keys[0]
-	   else:
-		return checkMapForKeys(map,keys[1:])
-		
+        if len(keys) == 0:
+                return ""
+        else:
+           if not map.has_key(keys[0]):
+                return keys[0]
+           else:
+                return checkMapForKeys(map,keys[1:])
+                
 
 def checkType(s,type):
-	if type == 'text':
-		return 1
-	elif type == 'bool':
-		return s == 'true' or s == 'false'
-	elif type == 'path':
-		return 1
-	else:
-		return 0
+        if type == 'text':
+                return 1
+        elif type == 'bool':
+                return s == 'true' or s == 'false'
+        elif type == 'path':
+                return 1
+        else:
+                return 0
 
 def checkKeyTypes(map,keys):
-	if len(keys) == 0:
-       		return 1
-	else:
-	   	return checkType(map[keys[0][0]],keys[0][1]) and checkKeyTypes(map,keys[1:])
+        if len(keys) == 0:
+                return 1
+        else:
+                return checkType(map[keys[0][0]],keys[0][1]) and checkKeyTypes(map,keys[1:])
 
-def checkModuleOptions(id, options):	
-	"Ueberprueft ob der Module Block ok ist"
-	error = checkMapForKeys(options,['name','group','deterministic','xpm'])
-	if error != "":
-		sys.stderr.write("Missing Key! " + error +'\n')
-		sys.exit(1)
+def checkModuleOptions(id, options):    
+        "Ueberprueft ob der Module Block ok ist"
+        error = checkMapForKeys(options,['name','group','deterministic','xpm'])
+        if error != "":
+                sys.stderr.write("Missing Key! " + error +'\n')
+                sys.exit(1)
 
-	error = checkMapForKeys(options,['author','version'])
-	if error != '':
-		sys.stderr.write("Warning! Missing Key! " + error +'\n')
+        error = checkMapForKeys(options,['author','version'])
+        if error != '':
+                sys.stderr.write("Warning! Missing Key! " + error +'\n')
 
-	if not checkKeyTypes(options,[('name','text'),('group','text'),
-				      ('deterministic','bool'),('xpm','path')]):
-      		sys.stderr.write('Type error!=!?!\n')
+        if not checkKeyTypes(options,[('name','text'),('group','text'),
+                                      ('deterministic','bool'),('xpm','path')]):
+                sys.stderr.write('Type error!=!?!\n')
 
 def checkInputs(inputs):
-	"Ueberprueft ob der Inputs Block ok ist"
-	return
+        "Ueberprueft ob der Inputs Block ok ist"
+        return
 
 def checkOutputs(outputs):
-	"Ueberprueft ob der Outputs Block ok ist"
-	return
+        "Ueberprueft ob der Outputs Block ok ist"
+        return
 
 
 def usesStrongDepFeature(inputs):
-	if inputs == []:
-		return 0
-	
-	list = map(lambda x: x[1]['strong_dependency'] == 'false', inputs)
-	uses = reduce(lambda x, y: x or y, list)
-	return uses
-	
+        if inputs == []:
+                return 0
+        
+        list = map(lambda x: x[1]['strong_dependency'] == 'false', inputs)
+        uses = reduce(lambda x, y: x or y, list)
+        return uses
+        
 
 def usesAttributesFeature(inputs):
-	if inputs == []:
-		return 0
-	
-	list = map(lambda x: x[1].has_key('attributes'), inputs)	
-	uses = reduce(lambda x, y: x or y, list)
-	
-	return uses
+        if inputs == []:
+                return 0
+        
+        list = map(lambda x: x[1].has_key('attributes'), inputs)        
+        uses = reduce(lambda x, y: x or y, list)
+        
+        return uses
 
 def usesPatchFeature(options):
-	return options.has_key('enablePatching') and options['enablePatching'] == 'true'
-		
+        return options.has_key('enablePatching') and options['enablePatching'] == 'true'
+                
 
 
 def createModuleSpec(id, options, numberOfInputs, numberOfOutputs):
-	return "mod_spec { " + "name=[" + id \
-		+ "] number_of_inputs=[" +  `numberOfInputs`  \
-		+ "] number_of_outputs=[" + `numberOfOutputs` \
-		+ "] deterministic=[" + options['deterministic'] + "] }"
+        return "mod_spec { " + "name=[" + id \
+                + "] number_of_inputs=[" +  `numberOfInputs`  \
+                + "] number_of_outputs=[" + `numberOfOutputs` \
+                + "] deterministic=[" + options['deterministic'] + "] }"
 
 def createInputSpec(input):
-	(name,options) = input
-	if options.has_key('default'):
-		default = 'default='+options['default']
-	else:
-		default = ''
+        (name,options) = input
+        if options.has_key('default'):
+                default = 'default='+options['default']
+        else:
+                default = ''
 
-	return "input_spec { type=" + options['type'] + \
-			    " const=" + options['const'] + \
-			    " strong_dependency=" + \
-			    options['strong_dependency'] + ' ' \
-			    + default + " } "
+        return "input_spec { type=" + options['type'] + \
+                            " const=" + options['const'] + \
+                            " strong_dependency=" + \
+                            options['strong_dependency'] + ' ' \
+                            + default + " } "
 
 def createInputSpecs(inputs):
-	specs = []
-	for i in range(0,len(inputs)):
-		spec = createInputSpec(inputs[i])
-		specs.append(spec)
+        specs = []
+        for i in range(0,len(inputs)):
+                spec = createInputSpec(inputs[i])
+                specs.append(spec)
 
-	return specs
+        return specs
 
 def createOutputSpec(input):
-	(name,options) = input
-	return "output_spec { type=" + options['type'] + " } "
+        (name,options) = input
+        return "output_spec { type=" + options['type'] + " } "
 
 def createOutputSpecs(outputs):
-	specs = []
-	for i in range(0,len(outputs)):
-		spec = createOutputSpec(outputs[i])
-		specs.append(spec)
+        specs = []
+        for i in range(0,len(outputs)):
+                spec = createOutputSpec(outputs[i])
+                specs.append(spec)
 
-	return specs
+        return specs
 
 def getTypeName(typeID):
-	return string.replace(typeID,'typ_','')
+        return string.replace(typeID,'typ_','')
 
 def getInputVarName(input):
-	id, options = input
-	return "in_" + id
-	
+        id, options = input
+        return "in_" + id
+        
 def getInputVarDecl(input):
-	id, options = input
-	return ' ' + getTypeName(options['type']) + '* ' + getInputVarName(input) + ';\n'
+        id, options = input
+        return ' ' + getTypeName(options['type']) + '* ' + getInputVarName(input) + ';\n'
 
 def getOutputVarName(output):
-	id, options = output
-	return "out_" + id
+        id, options = output
+        return "out_" + id
 
 def getOutputVarDecl(output):
-	id, options = output
-	return ' ' + getTypeName(options['type']) + '* ' + getOutputVarName(output) + ';\n'
+        id, options = output
+        return ' ' + getTypeName(options['type']) + '* ' + getOutputVarName(output) + ';\n'
 
 def createStruct(inputs, outputs):
        prelog =  "struct _MyInstance;\ntypedef struct _Instance\n{\n" \
-		 "struct _MyInstance* my;\n"
+                 "struct _MyInstance* my;\n"
        epilog = "} Instance, *InstancePtr;"
 
        if len(inputs) > 0:
-	       inputvars = reduce(lambda a, b: a + b,
-			   	  map(getInputVarDecl,inputs))
+               inputvars = reduce(lambda a, b: a + b,
+                                  map(getInputVarDecl,inputs))
        else:
-	       inputvars = '' 	
+               inputvars = ''   
 
        if len(outputs) > 0:
-	       outputvars = reduce(lambda a, b: a + b,
-       				   map(getOutputVarDecl,outputs))
+               outputvars = reduce(lambda a, b: a + b,
+                                   map(getOutputVarDecl,outputs))
        else:
-		outputvars = ''
+                outputvars = ''
 
        return prelog + inputvars + outputvars + epilog
 
-def createEnums(inputs, outputs):       	   	   	   	  
-	if len(inputs) > 0:
-		   prelog = "enum Inputs { "
-		   numbers = range(0,len(inputs))
-		   names = map(getInputVarName,inputs)
-		   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
-		   enumContent = reduce(lambda a, b: a + ', ' + b ,enumList)
-		   inputEnum = prelog + enumContent + ' };\n'
-			   	  
-	else:
-	       inputEnum = ''
+def createEnums(inputs, outputs):                                         
+        if len(inputs) > 0:
+                   prelog = "enum Inputs { "
+                   numbers = range(0,len(inputs))
+                   names = map(getInputVarName,inputs)
+                   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
+                   enumContent = reduce(lambda a, b: a + ', ' + b ,enumList)
+                   inputEnum = prelog + enumContent + ' };\n'
+                                  
+        else:
+               inputEnum = ''
 
-	if len(outputs) > 0:
-		   prelog = "enum Outputs { "
-		   numbers = range(0,len(outputs))
-		   names = map(getOutputVarName,outputs)
-		   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
-		   enumContent = reduce(lambda a, b: a + ', ' +  b ,enumList)
-		   outputEnum = prelog + enumContent + ' };\n'
-			   	  
-	else:
-	       outputEnum = '' 	
+        if len(outputs) > 0:
+                   prelog = "enum Outputs { "
+                   numbers = range(0,len(outputs))
+                   names = map(getOutputVarName,outputs)
+                   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
+                   enumContent = reduce(lambda a, b: a + ', ' +  b ,enumList)
+                   outputEnum = prelog + enumContent + ' };\n'
+                                  
+        else:
+               outputEnum = ''  
        
 
-	return inputEnum + outputEnum
+        return inputEnum + outputEnum
 
 
 def putInDict(dict, x):
-	dict[x] = 1
+        dict[x] = 1
 
 def make_unique(list):
-	dict = {}
-	map(lambda x, d=dict: putInDict(d,x), list)
-	return dict.keys()
+        dict = {}
+        map(lambda x, d=dict: putInDict(d,x), list)
+        return dict.keys()
 
 def createUsedTypes(inputs, outputs):
-	typelist = make_unique(map(lambda x: x[1]['type'],inputs+outputs))
-	return typelist
+        typelist = make_unique(map(lambda x: x[1]['type'],inputs+outputs))
+        return typelist
 
 def createTypeIncludes(inputs,outputs):
-	typelist = map(lambda x: string.lower(string.replace(x,'typ_','')),
-		       createUsedTypes(inputs,outputs))
+        typelist = map(lambda x: string.lower(string.replace(x,'typ_','')),
+                       createUsedTypes(inputs,outputs))
 
 
-	typeincludes = reduce(lambda a,b: a+ b,
-			       map(lambda x: '#include "' + x + '.h"\n',
-				   typelist))
+        typeincludes = reduce(lambda a,b: a+ b,
+                               map(lambda x: '#include "' + x + '.h"\n',
+                                   typelist))
 
-	return typeincludes
+        return typeincludes
 
 def createPrelog(xpmfile,inputs, outputs, fileprefix, id):
-	structinclude = '#include "' + fileprefix + '.h' + '"\n'
-	stdincludes = '#include <stdlib.h>\n//#include <assert.h>\n' \
-		      '//#include <stdio.h>\n//#include <string.h>\n' \
-		      '#include "dllutils.h"\n'
+        structinclude = '#include "' + fileprefix + '.h' + '"\n'
+        stdincludes = '#include <stdlib.h>\n//#include <assert.h>\n' \
+                      '//#include <stdio.h>\n//#include <string.h>\n' \
+                      '#include "dllutils.h"\n'
 
-	logstuffr = """
+        logstuffr = """
 static log2T s_log_function = 0;
 
 static void logger(int level, const char* msg)
@@ -352,141 +352,141 @@ static void logger(int level, const char* msg)
       s_log_function(level, \"XXX_MODULE_CLASS_NAME_XXX\", msg);
 }
 """
-	logstuff = string.replace(logstuffr,'XXX_MODULE_CLASS_NAME_XXX', id)
+        logstuff = string.replace(logstuffr,'XXX_MODULE_CLASS_NAME_XXX', id)
 
 
-	return structinclude + stdincludes + '#include "' + xpmfile + '"\n' + logstuff
-	
-	
+        return structinclude + stdincludes + '#include "' + xpmfile + '"\n' + logstuff
+        
+        
 def createSetInput(inputs):
-	prelog = "int setInput(void* instance,int index,void* typePointer)\n{"\
-		 "\n InstancePtr inst = (InstancePtr) instance;\n"\
-		 " switch(index) {\n"
-		
-	epilog = " } //switch(index) \n return 1;\n}"
+        prelog = "int setInput(void* instance,int index,void* typePointer)\n{"\
+                 "\n InstancePtr inst = (InstancePtr) instance;\n"\
+                 " switch(index) {\n"
+                
+        epilog = " } //switch(index) \n return 1;\n}"
 
-	caseList = []
-	for i in range(0,len(inputs)):
-		input = inputs[i]
-		caseList.append("  case " + `i` + ":\n   inst->" + \
-				getInputVarName(input) + \
-				' = (' + getTypeName(input[1]['type']) + \
-				' *) typePointer;\n  break;\n')
-	
-	if caseList != []:
-		cases = reduce(lambda a, b: a + b, caseList)
-	else:
-		cases = ''
+        caseList = []
+        for i in range(0,len(inputs)):
+                input = inputs[i]
+                caseList.append("  case " + `i` + ":\n   inst->" + \
+                                getInputVarName(input) + \
+                                ' = (' + getTypeName(input[1]['type']) + \
+                                ' *) typePointer;\n  break;\n')
+        
+        if caseList != []:
+                cases = reduce(lambda a, b: a + b, caseList)
+        else:
+                cases = ''
 
-	return prelog + cases + epilog
+        return prelog + cases + epilog
 
 
 def createSetOutput(outputs):
-	prelog = "int setOutput(void* instance,int index, void* typePointer)\n{"\
-		 "\n InstancePtr inst = (InstancePtr) instance;\n"\
-		 " switch(index) {\n"
-		
-	epilog = " } //switch(index) \n return 0;\n}"
+        prelog = "int setOutput(void* instance,int index, void* typePointer)\n{"\
+                 "\n InstancePtr inst = (InstancePtr) instance;\n"\
+                 " switch(index) {\n"
+                
+        epilog = " } //switch(index) \n return 0;\n}"
 
-	caseList = []
-	for i in range(0,len(outputs)):
-		output = outputs[i]
-		caseList.append("  case " + `i` + ":\n   inst->" + \
-				getOutputVarName(output) + \
-				' = (' + getTypeName(output[1]['type']) \
-				+ '* ) typePointer;\n  break;\n')
+        caseList = []
+        for i in range(0,len(outputs)):
+                output = outputs[i]
+                caseList.append("  case " + `i` + ":\n   inst->" + \
+                                getOutputVarName(output) + \
+                                ' = (' + getTypeName(output[1]['type']) \
+                                + '* ) typePointer;\n  break;\n')
 
-	if caseList != []:       
-		cases = reduce(lambda a, b: a + b, caseList)
-	else:
-		cases = ''
+        if caseList != []:       
+                cases = reduce(lambda a, b: a + b, caseList)
+        else:
+                cases = ''
 
-	return prelog + cases + epilog
+        return prelog + cases + epilog
 
 def createSpecFunctions(module_spec, input_specs, output_specs):
-	moduleFunc = 'const char* getSpec(void) {\n return "' \
-		     + 	module_spec + '";\n}'
+        moduleFunc = 'const char* getSpec(void) {\n return "' \
+                     +  module_spec + '";\n}'
 
-	inputSpecPrelog = 'const char* getInputSpec(int index) {\n' \
-		          + ' switch(index) {\n '
+        inputSpecPrelog = 'const char* getInputSpec(int index) {\n' \
+                          + ' switch(index) {\n '
 
-	caseList = []
-	for i in range(0,len(input_specs)):
-		caseList.append("  case " + `i` + ':\n    return "' + \
-				input_specs[i] + '";\n  break;\n')
+        caseList = []
+        for i in range(0,len(input_specs)):
+                caseList.append("  case " + `i` + ':\n    return "' + \
+                                input_specs[i] + '";\n  break;\n')
 
-	if caseList != []:
-		inputCases = reduce(lambda a, b: a + b, caseList)
-	else:
-		inputCases = ''
+        if caseList != []:
+                inputCases = reduce(lambda a, b: a + b, caseList)
+        else:
+                inputCases = ''
 
-	inputFunc = inputSpecPrelog + inputCases + ' }\n return 0;\n}'
+        inputFunc = inputSpecPrelog + inputCases + ' }\n return 0;\n}'
 
-	outputSpecPrelog = 'const char* getOutputSpec(int index) {\n' \
-		          + ' switch(index) {\n '
-	caseList = []
-	for i in range(0,len(output_specs)):
-		caseList.append("  case " + `i` + ':\n    return "' + \
-				output_specs[i] + '";\n  break;\n')
+        outputSpecPrelog = 'const char* getOutputSpec(int index) {\n' \
+                          + ' switch(index) {\n '
+        caseList = []
+        for i in range(0,len(output_specs)):
+                caseList.append("  case " + `i` + ':\n    return "' + \
+                                output_specs[i] + '";\n  break;\n')
 
-	if caseList != []:
-		outputCases = reduce(lambda a, b: a + b, caseList)
-	else:
-	 	outputCases = ''
+        if caseList != []:
+                outputCases = reduce(lambda a, b: a + b, caseList)
+        else:
+                outputCases = ''
 
-	outputFunc = outputSpecPrelog + outputCases + ' }\n return 0;\n}'
+        outputFunc = outputSpecPrelog + outputCases + ' }\n return 0;\n}'
 
-	return moduleFunc + '\n' + inputFunc + '\n' + outputFunc
+        return moduleFunc + '\n' + inputFunc + '\n' + outputFunc
 
 def isExtraInputArgument(name):
-	return not name in ['name','type','default','const','strong_dependency','attributes']
+        return not name in ['name','type','default','const','strong_dependency','attributes']
 
 def isExtraOutputArgument(name):
-	return not name in ['name','type']
+        return not name in ['name','type']
 
 def inputToInfo(input):
-	id,options = input
-	filteredOptions = filter(lambda x: isExtraInputArgument(x[0]),
-				 options.items())
+        id,options = input
+        filteredOptions = filter(lambda x: isExtraInputArgument(x[0]),
+                                 options.items())
 
-	if len(filteredOptions)	> 0:
-	  args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
-					       filteredOptions))
+        if len(filteredOptions) > 0:
+          args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
+                                               filteredOptions))
 
-	  return options['name'] + '{' + args + '} '
-	else:
-	  return options['name'] + ' '
+          return options['name'] + '{' + args + '} '
+        else:
+          return options['name'] + ' '
 
 def outputToInfo(output):
-	id,options = output
-	filteredOptions = filter(lambda x: isExtraOutputArgument(x[0]),
-				 options.items())
+        id,options = output
+        filteredOptions = filter(lambda x: isExtraOutputArgument(x[0]),
+                                 options.items())
  
-	if len(filteredOptions)	> 0:
-	  args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
-					       filteredOptions))
+        if len(filteredOptions) > 0:
+          args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
+                                               filteredOptions))
 
-	  return options['name'] + '{' + args + '} '
-	else:
-	  return options['name'] + ' '
-	
+          return options['name'] + '{' + args + '} '
+        else:
+          return options['name'] + ' '
+        
 def createInputInfoArray(inputs):
-	if len(inputs) == 0:
-		return '0'
-	else:
-		entries = reduce(lambda x, y: x + y,map(inputToInfo,inputs))
-		return `len(inputs)` + ' ' + entries
+        if len(inputs) == 0:
+                return '0'
+        else:
+                entries = reduce(lambda x, y: x + y,map(inputToInfo,inputs))
+                return `len(inputs)` + ' ' + entries
 
 def createOutputInfoArray(outputs):
-	if len(outputs) == 0:
-		return '0'
-	else:
-		entries = reduce(lambda x, y: x + y,map(outputToInfo,outputs))
-	    	return `len(outputs)` + ' ' + entries
+        if len(outputs) == 0:
+                return '0'
+        else:
+                entries = reduce(lambda x, y: x + y,map(outputToInfo,outputs))
+                return `len(outputs)` + ' ' + entries
 
 
 def createGetInfo(options,inputs,outputs):
-	template = """
+        template = """
 int getInfo(char* buf,int bufLen)
 {
   static const char* INFO = XXX_INFOSTRING_XXX;
@@ -498,47 +498,47 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(XXX_XPMNAME_XXX);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = XXX_XPMNAME_XXX[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = XXX_XPMNAME_XXX[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 """
-	inputArray = createInputInfoArray(inputs)
-	outputArray = createOutputInfoArray(outputs)
-	
-	
-	# TODO
-	infoString = '"info { name=[' + options['name'] + '] group=[' \
-		     + options['group'] + '] inputs=[' + inputArray + \
-		     '] outputs=[' + outputArray + '] type=xpm } "'
-	xpmName = string.replace(options['xpm'],'.xpm','_xpm');
-	return string.replace(string.replace(template,
-					     'XXX_XPMNAME_XXX', xpmName),
-			      'XXX_INFOSTRING_XXX',infoString)
+        inputArray = createInputInfoArray(inputs)
+        outputArray = createOutputInfoArray(outputs)
+        
+        
+        # TODO
+        infoString = '"info { name=[' + options['name'] + '] group=[' \
+                     + options['group'] + '] inputs=[' + inputArray + \
+                     '] outputs=[' + outputArray + '] type=xpm } "'
+        xpmName = string.replace(options['xpm'],'.xpm','_xpm');
+        return string.replace(string.replace(template,
+                                             'XXX_XPMNAME_XXX', xpmName),
+                              'XXX_INFOSTRING_XXX',infoString)
 
 def createCtorDtor(static):
-	template = """void* newInstance()
+        template = """void* newInstance()
 {
   Instance* inst = (Instance*) malloc(sizeof(Instance));
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\\n");
+          return 0;
   }
 
   inst->my = construct();
@@ -561,7 +561,7 @@ void deleteInstance(void* instance)
   free(inst);
 }
 """
-	templateStatic = """static struct _MyInstance* s_inst = 0;
+        templateStatic = """static struct _MyInstance* s_inst = 0;
 static int s_ref_count = 0;
 
 void* newInstance()
@@ -570,8 +570,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\\n");
+          return 0;
   }
 
   s_ref_count += 1;
@@ -587,7 +587,7 @@ void* newInstance()
     }
   }
   
-  inst->my = s_inst;	
+  inst->my = s_inst;    
 
   return inst;
 }
@@ -599,245 +599,245 @@ void deleteInstance(void* instance)
   s_ref_count -= 1;
 
   if (s_ref_count == 0)
-  	destruct(s_inst);
-	
+        destruct(s_inst);
+        
   free(inst);
 }
 """
 
-	if string.lower(static) == 'true':
-		return templateStatic
-	else:
-		return template
-		
-	
+        if string.lower(static) == 'true':
+                return templateStatic
+        else:
+                return template
+                
+        
 def createStrongDepFunc(inputs):
-	template = """void strongDependenciesCalculated(void* instance,int** neededInputs)
+        template = """void strongDependenciesCalculated(void* instance,int** neededInputs)
 {
   InstancePtr inst = (InstancePtr) instance;
 
   static int neededIns[X_NUMINS_X];
   *neededInputs = neededIns;
-	
+        
 X_INI_LIST_X
 
 
   strongDependencies(inst, neededIns);
 }
 """
-	names = map(getInputVarName,inputs)
-	list = []
-	for i in range(0,len(inputs)):
-		if inputs[i][1]['strong_dependency'] == 'true':
-			val = '0;\n'
-		else:
-			val = '1;\n'
-		list.append('\tneededIns[' + names[i] + '] = ' + val)
+        names = map(getInputVarName,inputs)
+        list = []
+        for i in range(0,len(inputs)):
+                if inputs[i][1]['strong_dependency'] == 'true':
+                        val = '0;\n'
+                else:
+                        val = '1;\n'
+                list.append('\tneededIns[' + names[i] + '] = ' + val)
 
-	iniList = reduce(lambda x,y: x + y, list)
-	return string.replace(string.replace(template,'X_NUMINS_X',
-					     `len(inputs)`),
-			      'X_INI_LIST_X',iniList)
+        iniList = reduce(lambda x,y: x + y, list)
+        return string.replace(string.replace(template,'X_NUMINS_X',
+                                             `len(inputs)`),
+                              'X_INI_LIST_X',iniList)
 
 def createPatchFunc(outputs):
-	template = """void getPatchLayout(void* instance,int** out2in)
+        template = """void getPatchLayout(void* instance,int** out2in)
 {
   InstancePtr inst = (InstancePtr) instance;
 
   static int out2in_[X_NUMOUTS_X];
   *out2in = out2in_;
-	
+        
 X_INI_LIST_X
 
 
   patchLayout(inst, out2in_);
 }
 """
-	names = map(getOutputVarName,outputs)
-	list = []
-	for i in range(0,len(outputs)):		
-		list.append('\tout2in_[' + names[i] + '] = -1;')
+        names = map(getOutputVarName,outputs)
+        list = []
+        for i in range(0,len(outputs)):         
+                list.append('\tout2in_[' + names[i] + '] = -1;')
 
-	iniList = reduce(lambda x,y: x + y, list)
-	return string.replace(string.replace(template,'X_NUMOUTS_X',
-					     `len(outputs)`),
-			      'X_INI_LIST_X',iniList)
+        iniList = reduce(lambda x,y: x + y, list)
+        return string.replace(string.replace(template,'X_NUMOUTS_X',
+                                             `len(outputs)`),
+                              'X_INI_LIST_X',iniList)
 
 
 def typeName2AttributeStruct(name):
-	return string.replace(string.replace(name,'Type','Attributes'),'typ_','')
+        return string.replace(string.replace(name,'Type','Attributes'),'typ_','')
 
 def createAttribDecls(inputs):
-	'creates declaration code for all fixed attributes'
+        'creates declaration code for all fixed attributes'
 
-	if len(inputs) == 0:
-		return ''
+        if len(inputs) == 0:
+                return ''
 
-	decls = []
-	for i in range(0,len(inputs)):		
-		if inputs[i][1].has_key('attributes'):
-			decls.append('static ' + typeName2AttributeStruct(inputs[i][1]['type'])\
-						 + ' attr' + `i` + ';\n')
+        decls = []
+        for i in range(0,len(inputs)):          
+                if inputs[i][1].has_key('attributes'):
+                        decls.append('static ' + typeName2AttributeStruct(inputs[i][1]['type'])\
+                                                 + ' attr' + `i` + ';\n')
 
-	return reduce(lambda x, y: x + y, decls)
+        return reduce(lambda x, y: x + y, decls)
 
 
 def createAttribBlock(val, name):
-	'creates init code for one fixed attribute'
-	code_ = string.replace(val,'~','=')
-	code = string.replace(code_,'a$', name)
+        'creates init code for one fixed attribute'
+        code_ = string.replace(val,'~','=')
+        code = string.replace(code_,'a$', name)
 
-	return code + '\n'
+        return code + '\n'
 
 def createAttribBlocks(inputs):
-	'creates init code for all fixed attributes'
-	
-	code = []
-	for i in range(0,len(inputs)):
-		if inputs[i][1].has_key('attributes'):
-			code.append(createAttribBlock(inputs[i][1]['attributes'], 'attr' + `i`))
-			code.append('\tattributes[' + `i` + '] = &attr' + `i` + ';'); 
-		else:
-			code.append('')
+        'creates init code for all fixed attributes'
+        
+        code = []
+        for i in range(0,len(inputs)):
+                if inputs[i][1].has_key('attributes'):
+                        code.append(createAttribBlock(inputs[i][1]['attributes'], 'attr' + `i`))
+                        code.append('\tattributes[' + `i` + '] = &attr' + `i` + ';'); 
+                else:
+                        code.append('')
 
-	return reduce(lambda x, y: x + y, code)
+        return reduce(lambda x, y: x + y, code)
 
-		
+                
 def createCFile(id,options,inputs,outputs,file,fileprefix):
-	prelog = createPrelog(options['xpm'],inputs,outputs,fileprefix,id)
+        prelog = createPrelog(options['xpm'],inputs,outputs,fileprefix,id)
 
-	static = options.get('static','false')
-	module_spec = createModuleSpec(id,options,len(inputs),len(outputs))
-	input_specs = createInputSpecs(inputs)
-	output_specs = createOutputSpecs(outputs)
-	ctor_dtor = createCtorDtor(static)
-	setInput = createSetInput(inputs)
-	setOutput = createSetOutput(outputs)
-	specFuncs = createSpecFunctions(module_spec,input_specs,output_specs)
-	getInfo = createGetInfo(options,inputs,outputs)
+        static = options.get('static','false')
+        module_spec = createModuleSpec(id,options,len(inputs),len(outputs))
+        input_specs = createInputSpecs(inputs)
+        output_specs = createOutputSpecs(outputs)
+        ctor_dtor = createCtorDtor(static)
+        setInput = createSetInput(inputs)
+        setOutput = createSetOutput(outputs)
+        specFuncs = createSpecFunctions(module_spec,input_specs,output_specs)
+        getInfo = createGetInfo(options,inputs,outputs)
 
-	if usesStrongDepFeature(inputs):
-		strongDepFunc = createStrongDepFunc(inputs)
-	else:
-		strongDepFunc = ''
+        if usesStrongDepFeature(inputs):
+                strongDepFunc = createStrongDepFunc(inputs)
+        else:
+                strongDepFunc = ''
 
-	if usesAttributesFeature(inputs):
-		attributeInitCode = 'initAttributes();'
-	else:
-		attributeInitCode = ''
+        if usesAttributesFeature(inputs):
+                attributeInitCode = 'initAttributes();'
+        else:
+                attributeInitCode = ''
 
-	initTemplate = """
+        initTemplate = """
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	XXX_ATTRIB_CODE
+        s_log_function = log_function;
+        
+        XXX_ATTRIB_CODE
 
-	return init(logger);
+        return init(logger);
 }
 """
-	initFunc = string.replace(initTemplate, 'XXX_ATTRIB_CODE', attributeInitCode)
+        initFunc = string.replace(initTemplate, 'XXX_ATTRIB_CODE', attributeInitCode)
 
-	file.write(prelog)
-	file.write('\n')
+        file.write(prelog)
+        file.write('\n')
 
-	file.write(specFuncs)
-	file.write('\n')
+        file.write(specFuncs)
+        file.write('\n')
 
-	file.write(ctor_dtor)
-	file.write('\n')
+        file.write(ctor_dtor)
+        file.write('\n')
 
-	file.write(setInput)
-	file.write('\n')
+        file.write(setInput)
+        file.write('\n')
 
-	file.write(setOutput)
-	file.write('\n')
+        file.write(setOutput)
+        file.write('\n')
 
-	file.write(getInfo)
-	file.write('\n')
+        file.write(getInfo)
+        file.write('\n')
 
-	file.write(strongDepFunc)
-	file.write('\n')
+        file.write(strongDepFunc)
+        file.write('\n')
 
-	if usesPatchFeature(options):
-		file.write(createPatchFunc(outputs))
-		file.write('\n')	
+        if usesPatchFeature(options):
+                file.write(createPatchFunc(outputs))
+                file.write('\n')        
 
-	
-	fixedAttributesTemplate = """static void* attributes[XXX_NUMINPUTS_XXX];
+        
+        fixedAttributesTemplate = """static void* attributes[XXX_NUMINPUTS_XXX];
 
 void initAttributes()
 {
-	XXX_DECLS_XXX
-	int i = 0;
+        XXX_DECLS_XXX
+        int i = 0;
 
-	for (i = 0; i < XXX_NUMINPUTS_XXX; ++i)
-		attributes[i] = 0;
+        for (i = 0; i < XXX_NUMINPUTS_XXX; ++i)
+                attributes[i] = 0;
 
-	XXX_BLOCKS_XXX	
+        XXX_BLOCKS_XXX  
 
 }
 
 void* getInputAttributes(int index)
 {
-	return attributes[index];
+        return attributes[index];
 }
-	"""
-	if usesAttributesFeature(inputs):	
-		
-		decls = createAttribDecls(inputs)
-		blocks = createAttribBlocks(inputs)
-		attributesCode__ = \
-			string.replace(fixedAttributesTemplate,'XXX_NUMINPUTS_XXX',`len(inputs)`)
-		attributesCode_ =  \
-			string.replace(attributesCode__,'XXX_BLOCKS_XXX',blocks)
-		attributesCode = \
-			string.replace(attributesCode_,'XXX_DECLS_XXX',decls)
-		
+        """
+        if usesAttributesFeature(inputs):       
+                
+                decls = createAttribDecls(inputs)
+                blocks = createAttribBlocks(inputs)
+                attributesCode__ = \
+                        string.replace(fixedAttributesTemplate,'XXX_NUMINPUTS_XXX',`len(inputs)`)
+                attributesCode_ =  \
+                        string.replace(attributesCode__,'XXX_BLOCKS_XXX',blocks)
+                attributesCode = \
+                        string.replace(attributesCode_,'XXX_DECLS_XXX',decls)
+                
 
-		file.write(attributesCode)
-		file.write('\n')
+                file.write(attributesCode)
+                file.write('\n')
 
 
-	file.write(initFunc)
-	
+        file.write(initFunc)
+        
 
 
 
 def createHFile(inputs,outputs,file,filename):
-	struct = createStruct(inputs,outputs)
-	enums = createEnums(inputs, outputs)
+        struct = createStruct(inputs,outputs)
+        enums = createEnums(inputs, outputs)
 
-	macroName = string.upper(string.replace(filename,'.','_'))
+        macroName = string.upper(string.replace(filename,'.','_'))
 
-	file.write('#ifndef INCLUDED_' + macroName + '\n')
-	file.write('#define INCLUDED_' + macroName + '\n')
-	file.write('\n')
-	file.write('#ifdef __cplusplus\nextern "C"\n{\n#endif\n');
-	file.write('#include "dllmodule.h"\n')
-	file.write(createTypeIncludes(inputs,outputs))
-	file.write('\n')
-	file.write(struct)
-	file.write('\n')
-	file.write(enums)
-	file.write('\n')
-	file.write('struct _MyInstance* construct(void);\n')
-	file.write('void destruct(struct _MyInstance*);\n')
-	file.write('int init(logT log_function);\n')
-	if usesStrongDepFeature(inputs):
-		file.write('void strongDependencies(Instance*,int[]);\n')
+        file.write('#ifndef INCLUDED_' + macroName + '\n')
+        file.write('#define INCLUDED_' + macroName + '\n')
+        file.write('\n')
+        file.write('#ifdef __cplusplus\nextern "C"\n{\n#endif\n');
+        file.write('#include "dllmodule.h"\n')
+        file.write(createTypeIncludes(inputs,outputs))
+        file.write('\n')
+        file.write(struct)
+        file.write('\n')
+        file.write(enums)
+        file.write('\n')
+        file.write('struct _MyInstance* construct(void);\n')
+        file.write('void destruct(struct _MyInstance*);\n')
+        file.write('int init(logT log_function);\n')
+        if usesStrongDepFeature(inputs):
+                file.write('void strongDependencies(Instance*,int[]);\n')
 
-	if usesPatchFeature(options):
-		file.write('void patchLayout(Instance*,int[]);\n')
+        if usesPatchFeature(options):
+                file.write('void patchLayout(Instance*,int[]);\n')
 
-	file.write('#ifdef __cplusplus\n}\n#endif\n');
+        file.write('#ifdef __cplusplus\n}\n#endif\n');
 
-	file.write('\n#endif\n')
+        file.write('\n#endif\n')
 
 def createSkelFile(file, fileprefix, inputs):
-	file.write('#include "' + fileprefix + '.h' + '"\n\n')
-#	file.write('#include "dllmodule.h"\n\n')
-	template = """static logT s_log;
+        file.write('#include "' + fileprefix + '.h' + '"\n\n')
+#       file.write('#include "dllmodule.h"\n\n')
+        template = """static logT s_log;
 
 typedef struct _MyInstance {
 
@@ -862,8 +862,8 @@ MyInstance* construct()
 
   if (my == 0)
   {
-	  s_log(0, "Could not allocate memory for MyInstance struct\\n");
-	  return 0;
+          s_log(0, "Could not allocate memory for MyInstance struct\\n");
+          return 0;
   }
 
   // Add your initialization here
@@ -886,38 +886,38 @@ void update(void* instance)
 }
 
 """
-	strongDepTemplate = """void strongDependencies(Instance* inst, int neededInputs[])
+        strongDepTemplate = """void strongDependencies(Instance* inst, int neededInputs[])
 {
-	// set the inputs to 0 that are not needed!
+        // set the inputs to 0 that are not needed!
 }
 
 """
 
-	patchTemplate = """void patchLayout(Instance* inst, int out2in[])
+        patchTemplate = """void patchLayout(Instance* inst, int out2in[])
 {
-	// set the outputs to the patched inputs
+        // set the outputs to the patched inputs
 }
 
 """
 
-	file.write(template);
-	if usesStrongDepFeature(inputs):
-		file.write(strongDepTemplate)
+        file.write(template);
+        if usesStrongDepFeature(inputs):
+                file.write(strongDepTemplate)
 
-	if usesPatchFeature(options):
-		file.write(patchTemplate)
-	
+        if usesPatchFeature(options):
+                file.write(patchTemplate)
+        
 
 def createAMFile(file, fileprefix, inputs, outputs):
-	template = """libdir = @libdir@/gephex/modules
+        template = """libdir = @libdir@/gephex/modules
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
 XXX_NAME_XXX_auto.c: XXX_NAME_XXX.spec XXX_NAME_XXX.h
-	$(PLUC) c @srcdir@/XXX_NAME_XXX.spec
+        $(PLUC) c @srcdir@/XXX_NAME_XXX.spec
 
 XXX_NAME_XXX.h: XXX_NAME_XXX.spec
-	$(PLUC) h @srcdir@/XXX_NAME_XXX.spec
+        $(PLUC) h @srcdir@/XXX_NAME_XXX.spec
 
 lib_LTLIBRARIES = XXX_NAME_XXX.la
 
@@ -937,24 +937,24 @@ XXX_TYPE_INCLUDES_XXX
 
 DISTCLEANFILES = XXX_NAME_XXX.h XXX_NAME_XXX_auto.c
 """
-	usedtypes = createUsedTypes(inputs,outputs)
-	typedirs = map(lambda y: string.replace(y,'typ_',''),
-		       usedtypes)
+        usedtypes = createUsedTypes(inputs,outputs)
+        typedirs = map(lambda y: string.replace(y,'typ_',''),
+                       usedtypes)
 
-	typeinclude = ''
+        typeinclude = ''
 
-	typeincludes = map(lambda x: '           -I@srcdir@/../../../types/src/' + 
-			   string.lower(x) +' ', typedirs)
-	typeinclude = reduce(lambda x,y: x + '\\\n' + y,typeincludes)
+        typeincludes = map(lambda x: '           -I@srcdir@/../../../types/src/' + 
+                           string.lower(x) +' ', typedirs)
+        typeinclude = reduce(lambda x,y: x + '\\\n' + y,typeincludes)
 
 
-	am = string.replace(string.replace(template,'XXX_NAME_XXX',fileprefix),
-			    'XXX_TYPE_INCLUDES_XXX',typeinclude)
+        am = string.replace(string.replace(template,'XXX_NAME_XXX',fileprefix),
+                            'XXX_TYPE_INCLUDES_XXX',typeinclude)
 
-	file.write(am)
+        file.write(am)
 
 def createDefFile(file,fileprefix,inputs,options):
-	template = """LIBRARY XXX_NAME_XXX
+        template = """LIBRARY XXX_NAME_XXX
 DESCRIPTION "description"
 EXPORTS
 
@@ -971,22 +971,22 @@ EXPORTS
  shutDown @11
 """
 
-	content = string.replace(template,'XXX_NAME_XXX',
-				  string.upper(fileprefix)) 
-	file.write(content)
+        content = string.replace(template,'XXX_NAME_XXX',
+                                  string.upper(fileprefix)) 
+        file.write(content)
 
-	if usesStrongDepFeature(inputs):
-		file.write('strongDependenciesCalculated @12\r\n')
-	
-	if usesAttributesFeature(inputs):
-		file.write('getInputAttributes @13\r\n')
-		
-	if usesPatchFeature(options):
-		file.write('getPatchLayout @14\r\n')
+        if usesStrongDepFeature(inputs):
+                file.write('strongDependenciesCalculated @12\r\n')
+        
+        if usesAttributesFeature(inputs):
+                file.write('getInputAttributes @13\r\n')
+                
+        if usesPatchFeature(options):
+                file.write('getPatchLayout @14\r\n')
 
 
 def createDspFile(file, fileprefix):
-	template = r"""# Microsoft Developer Studio Project File - Name="X_NAME_X" - Package Owner=<4>
+        template = r"""# Microsoft Developer Studio Project File - Name="X_NAME_X" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** NICHT BEARBEITEN **
 
@@ -1047,7 +1047,7 @@ LINK32=link.exe
 TargetPath=.\Release\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules      copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "X_NAME_X - Win32 Debug"
@@ -1080,7 +1080,7 @@ LINK32=link.exe
 TargetPath=.\Debug\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules      copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 !ENDIF 
 
@@ -1136,10 +1136,10 @@ InputPath=.\X_NAME_X.spec
 InputName=X_NAME_X
 
 BuildCmds= \
-	python ..\..\pluc.py c $(InputName).spec \
-	python ..\..\pluc.py h $(InputName).spec \
-	python ..\..\pluc.py def $(InputName).spec \
-	
+        python ..\..\pluc.py c $(InputName).spec \
+        python ..\..\pluc.py h $(InputName).spec \
+        python ..\..\pluc.py def $(InputName).spec \
+        
 
 "$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
    $(BuildCmds)
@@ -1158,10 +1158,10 @@ InputPath=.\X_NAME_X.spec
 InputName=X_NAME_X
 
 BuildCmds= \
-	python ..\..\pluc.py c $(InputName).spec \
-	python ..\..\pluc.py h $(InputName).spec \
-	python ..\..\pluc.py def $(InputName).spec \
-	
+        python ..\..\pluc.py c $(InputName).spec \
+        python ..\..\pluc.py h $(InputName).spec \
+        python ..\..\pluc.py def $(InputName).spec \
+        
 
 "$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
    $(BuildCmds)
@@ -1184,64 +1184,64 @@ SOURCE=.\X_NAME_X.xpm
 # End Project
 
 """
-	name = fileprefix	
+        name = fileprefix       
 
-	content = string.replace(template,'X_NAME_X',name)
+        content = string.replace(template,'X_NAME_X',name)
 
-	usedtypes = createUsedTypes(inputs,outputs)
-	typedirs = map(lambda y: string.replace(y,'typ_',''),
-		       usedtypes)
-	typeincludes = map(lambda x: '/I "../../../types/src/' + 
-			   string.lower(x) +'" ',
-			   typedirs)
-	typeinclude = reduce(lambda x,y: x + y,typeincludes)
+        usedtypes = createUsedTypes(inputs,outputs)
+        typedirs = map(lambda y: string.replace(y,'typ_',''),
+                       usedtypes)
+        typeincludes = map(lambda x: '/I "../../../types/src/' + 
+                           string.lower(x) +'" ',
+                           typedirs)
+        typeinclude = reduce(lambda x,y: x + y,typeincludes)
 
-	content = string.replace(content,'X_TYPEINCLUDES_X',typeinclude)
+        content = string.replace(content,'X_TYPEINCLUDES_X',typeinclude)
 
-	file.write(content)
+        file.write(content)
 
 def removeExtension(filename):
-	p = string.rfind(filename,'.')
-	if p != -1:
-		return filename[:p]
-	else:
-		return filename
+        p = string.rfind(filename,'.')
+        if p != -1:
+                return filename[:p]
+        else:
+                return filename
 
 def printUsage():
-	sys.stderr.write("""Usage: pluc.py <command> <specfile>
+        sys.stderr.write("""Usage: pluc.py <command> <specfile>
     where
      <command> ::= c|h|am|def|dsp|skel
      <specfile> ::= 'any filename'\n""")
 
 
 def scanSpecfile(specFile):
-	(id,options) = readBlock(specFile)
+        (id,options) = readBlock(specFile)
 
-	inputs = readRekBlock(specFile)
-	outputs = readRekBlock(specFile)
+        inputs = readRekBlock(specFile)
+        outputs = readRekBlock(specFile)
 
-	return ((id,options),inputs,outputs)
+        return ((id,options),inputs,outputs)
 
-if len(sys.argv) != 3:	
-	printUsage()
-	sys.exit(-1)
+if len(sys.argv) != 3:  
+        printUsage()
+        sys.exit(-1)
 
 
 cmd = sys.argv[1]
 specfileName = sys.argv[2]
 
 if not cmd in ['c','h','skel','am','def','dsp']:
-	sys.stderr.write('Error, wrong command: ' + cmd + '\n')
-	printUsage()
-	sys.exit(-1)
+        sys.stderr.write('Error, wrong command: ' + cmd + '\n')
+        printUsage()
+        sys.exit(-1)
 
 try:
-	specFile = open(specfileName,'r')
+        specFile = open(specfileName,'r')
 except IOError:
-	sys.stderr.write('Error, couldnt open ' + specfileName + '\n')
-	sys.exit(-1)
-	
-	
+        sys.stderr.write('Error, couldnt open ' + specfileName + '\n')
+        sys.exit(-1)
+        
+        
 ((id,options),inputs,outputs) = scanSpecfile(specFile)
 
 checkModuleOptions(id,options)
@@ -1252,45 +1252,45 @@ checkOutputs(outputs)
 fileprefix = removeExtension(filename_ext)
 
 if cmd == 'c':
-	filename = fileprefix + '_auto.c'
-	file = open(filename,'w')
-	print "Writing cfile to " + filename
-	createCFile(id,options,inputs,outputs,file,fileprefix)
-	file.close()
+        filename = fileprefix + '_auto.c'
+        file = open(filename,'w')
+        print "Writing cfile to " + filename
+        createCFile(id,options,inputs,outputs,file,fileprefix)
+        file.close()
 elif cmd == 'h':
-	filename = fileprefix + '.h'
-	file = open(filename,'w')
-	print "Writing header to " + filename
-	createHFile(inputs,outputs,file, filename)
-	file.close()
+        filename = fileprefix + '.h'
+        file = open(filename,'w')
+        print "Writing header to " + filename
+        createHFile(inputs,outputs,file, filename)
+        file.close()
 elif cmd == 'skel':
-	filename = fileprefix + '.c'
-	if os.access(filename,os.F_OK):
-		sys.stderr.write(filename + ' already exists! aborting.\n')
-		sys.exit(-1)
-	file = open(filename,'w')
-	print "Writing skel to " + filename
-	createSkelFile(file, fileprefix,inputs)
-	file.close()
+        filename = fileprefix + '.c'
+        if os.access(filename,os.F_OK):
+                sys.stderr.write(filename + ' already exists! aborting.\n')
+                sys.exit(-1)
+        file = open(filename,'w')
+        print "Writing skel to " + filename
+        createSkelFile(file, fileprefix,inputs)
+        file.close()
 elif cmd == 'am':
-	filename = 'Makefile.am'
-	file = open(filename,'w')
-	print "Writing  Makefile to  " + filename
-	createAMFile(file, fileprefix, inputs, outputs)
-	file.close()
+        filename = 'Makefile.am'
+        file = open(filename,'w')
+        print "Writing  Makefile to  " + filename
+        createAMFile(file, fileprefix, inputs, outputs)
+        file.close()
 elif cmd == 'def':
-	filename = fileprefix + '.def'	
-	file = open(filename,'w')
-	print "Writing def file to  " + filename
-	createDefFile(file, fileprefix,inputs,options)
-	file.close()
+        filename = fileprefix + '.def'  
+        file = open(filename,'w')
+        print "Writing def file to  " + filename
+        createDefFile(file, fileprefix,inputs,options)
+        file.close()
 elif cmd == 'dsp':
-	filename = fileprefix + '.dsp'
-	file = open(filename,'w')
-	print "Writing dsp file to  " + filename
-	createDspFile(file, fileprefix)
-	file.close()
-	
+        filename = fileprefix + '.dsp'
+        file = open(filename,'w')
+        print "Writing dsp file to  " + filename
+        createDspFile(file, fileprefix)
+        file.close()
+        
 else:
      sys.stderr.write("Command not implemented yet!\n");
 

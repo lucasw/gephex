@@ -36,6 +36,7 @@ public:
 class DriverFactory
 {
 public:
+	typedef std::list<IDriverConstructor*> CtorList;
 	DriverFactory() {};
 	~DriverFactory()
 	{
@@ -56,13 +57,17 @@ public:
 		ExtList el = ctor->supported_extensions();
 		for (ExtList::const_iterator it = el.begin(); it != el.end(); ++it)
 		{
-			if (m_ctors.count(*it) != 0)
+			CtorMap::iterator cit = m_ctors.find(*it);
+			if (cit != m_ctors.end())
 			{			
-				std::cout << "Driver for '" << *it << "' already claimed\n";
+				//std::cout << "Driver for '" << *it << "' already claimed\n";
+				cit->second.push_back(ctor);
 			}
 			else
 			{
-				m_ctors.insert(std::make_pair(*it, ctor));		
+				CtorList l;
+				l.push_back(ctor);
+				m_ctors.insert(std::make_pair(*it, l));
 			}
 		}
 
@@ -73,21 +78,20 @@ public:
 	/**
 	 * Returns 0 if there is no driver for this extension.
 	 */
-	VideoFileDriver* get_driver(const std::string& extension) const
+	std::list<IDriverConstructor*> get_drivers(const std::string& extension) const
 	{
 		CtorMap::const_iterator it = m_ctors.find(extension);
 		if (it == m_ctors.end())
-			return 0;
+			return CtorList();
 		else		
-			return it->second->create();
+			return it->second;
 		
 	}
 
-private:
-	typedef	std::map<std::string, IDriverConstructor*> CtorMap;
+private:	
+	typedef	std::map<std::string, CtorList> CtorMap;
 	CtorMap m_ctors;
 
-	typedef	std::list<IDriverConstructor*> CtorList;
 	CtorList m_ctor_list;
 };
 

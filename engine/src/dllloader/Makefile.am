@@ -26,8 +26,6 @@ libdllloader_a_SOURCES = \
 	c_outputplug.cpp \
 	c_type.cpp \
 	moduleinfoutils.cpp \
-	freeframeloader.cpp \
-	metamodule.cpp \
 	typedllloader.h \
 	c_functiontypes.h \
 	c_input.h \
@@ -42,11 +40,7 @@ libdllloader_a_SOURCES = \
 	moduleclassspec.h \
 	moduleinfoutils.h \
 	nameresolver.h \
-	freeframeloader.h \
-	freeframedefs.h \
-	metamodule.h \
 	module.h
-
 
 
 

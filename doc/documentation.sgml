@@ -92,13 +92,11 @@
 
 <itemizedlist>
 
-<listitem><para>The users view of a video-effect is a signal-flow graph with sources, modifiers and destinations. The signals in these effect-graphs are typed. That means the inputs and outputs of the module have types e.g. video-signal, color or number. The user can create complex effects by connecting inputs and outputs of the same type.</para></listitem>
+<listitem><para>The users view of a video-effect is a signal-flow graph with sources, modifiers and destinations. The signals in these effect-graphs are typed. That means the inputs and outputs of the modules have types e.g. video-signal, color or number. The user can create complex effects by connecting inputs and outputs of the same type.</para></listitem>
 
 <listitem><para>Not all inputs must be connected. The user can change the value directly at the inputs with the GUI. This allows the video jockey to save so called snapshots of effect-graphs and to switch between these parameter sets.</para></listitem>
 
 <listitem><para>The generation process can be influenced by the environment with two methods. Special source-modules inject data from hardware devices like midi-devices, webcam or joysticks. It is also possible to connect special GUI elements with the inputs of a module.</para></listitem>
-
-<listitem><para>An arrangement of effects on the timeline is possible with the sequence and playlist feature.</para></listitem>
 
 <listitem><para>Developers can extend the system with the plugin mechanism for modules and types.</para></listitem>
 
@@ -112,6 +110,9 @@
 
   <listitem><para>The project started in the late summer 2001.</para></listitem>
   <listitem><para>In autumn 2002 was the first public vjing session at the fmi party on the campus of the university of Passau, Germany.</para></listitem>
+
+  <listitem><para>In autumn 2003 there was another public session in vienna.
+  </para></listitem>
 
 </itemizedlist>
 
@@ -142,23 +143,39 @@ conf {
 module_dirs=[/usr/lib/gephex/modules/]
 type_dirs=[/usr/lib/gephex/types/]
 graph_dir=[/home/martin/.gephex/graphs/]
-sequence_dir=[/home/martin/.gephex/sequences/]
-playlist_dir=[/home/martin/.gephex/playlists/]
 ipc_type=[inet]
 ipc_unix_node_prefix=[/tmp/gephex_socket_]
 ipc_port=[6666]
 }
 </screen>
-<varname>module_dirs</varname> is the absolute path to the directory with the effect plugins. The shared libraries for the types are stored in the <varname>type_dirs</varname>. In future versions there should be the possibility for multiple paths for both directories. The triple <varname>graph_dir</varname>, <varname>sequence_dir</varname> and <varname>playlist_dir</varname> tells the engine the location, where to store the user created data objects. The user interface must connect to the engine with a ipc mechanism <varname>ipc_type</varname>. You can select between <literal>inet</literal> for a internet-protocol based communication, on Unix platforms <literal>unix</literal> for Unix domain sockets and <literal>namedpipe</literal> for named pipes on win32 systems. If engine and GUI run on the same host the usage of non ip based communication is preferred cause of the low latency behaviour. The parameters <literal>ipc_unix_node_prefix</literal> and <literal>ipc_port</literal> must equal to the ones in the <filename>~/.gephex/gui.conf</filename> file.</para>
+<varname>module_dirs</varname> is the absolute path to the directory with the effect plugins. The shared libraries for the types are stored in the <varname>type_dirs</varname>. In future versions there should be the possibility for multiple paths for both directories. The <varname>graph_dir</varname> variable tells the engine the location of the user created graphs. The user interface must connect to the engine with a ipc mechanism <varname>ipc_type</varname>. You can select between <literal>inet</literal> for a internet-protocol based communication, on Unix platforms <literal>unix</literal> for Unix domain sockets and <literal>namedpipe</literal> for named pipes on win32 systems. If engine and GUI run on the same host the usage of non ip based communication is preferred because of the low latency behaviour. The parameters <literal>ipc_unix_node_prefix</literal> and <literal>ipc_port</literal> must equal to the ones in the <filename>~/.gephex/gui.conf</filename> file.</para>
 </sect2>
 
-  </sect1>
+<sect2><title>The GUI (graphical user interface)</title>
+<para>The gui can be started on the console with the <filename>gephex-gui</filename> command. At the moment there are no command-line options and environment variables that influence the behaviour. All options are set in the configuration file <filename>~/.gephex/gui.conf</filename>. If no file exists a default configuration file is created.</para>
+
+<para>
+<screen>
+conf {
+ipc_type=[inet]
+ipc_inet_hostname=[localhost]
+ipc_namedpipe_servername=[.]
+ipc_unix_node_prefix=[/tmp/gephex_socket_]
+ipc_port=[6666]
+}
+</screen>
+The user interface must connect to the engine with a ipc mechanism <varname>ipc_type</varname>.
+You can select between <literal>inet</literal> for a internet-protocol based communication, on Unix platforms <literal>unix</literal> for Unix domain sockets and <literal>namedpipe</literal> for named pipes on win32 systems.
+If engine and GUI run on the same host the usage of non ip based communication is preferred cause of the low latency behaviour.
+The parameters <literal>ipc_unix_node_prefix</literal>, <literal>ipc_namedpipe_servername</literal>, and <literal>ipc_port</literal> must equal to the ones in the <filename>~/.gephex/gui.conf</filename> file.</para>
+</sect2>
+ </sect1>
  </chapter>
 
 
 <chapter><title>Installation</title>
 <para>Since GePhex is free software you can get the source code and compile it on you own.
-Or if you have one of our core platforms you can download the precompiled binaries from our <ulink url="http://gephex.sourceforge.net"><citetitle>website</citetitle></ulink>.</para>
+Or if you have one of our core platforms you can download the precompiled binaries from our <ulink url="http://gephex.org"><citetitle>website</citetitle></ulink>.</para>
 
 <sect1><title>Building from the Sources.</title>
   <para>
@@ -204,7 +221,7 @@ U GePhex/INSTALL
   <sect2> <title> Getting a Distribution-Tarball </title>
    <para>
       Visit our
-      <ulink url="http://gephex.sourceforge.net/index.php?page=downloads">
+      <ulink url="http://gephex.org/download.php">
         <citetitle>download page</citetitle>
       </ulink> and get a release.
        Let's assume the tarball is called 
@@ -300,6 +317,12 @@ See './configure --help' for available options
           <citetitle> libpng</citetitle></ulink>
         <ulink url="http://www.mesa3d.org/">
           <citetitle> mesa</citetitle></ulink>
+        <ulink url="http://avifile.sourceforge.net/">
+          <citetitle> avifile</citetitle></ulink>
+        <ulink url="http://alsa-project.org/">
+          <citetitle> alsa</citetitle></ulink>
+        <ulink url="http://aa-project.sourceforge.net/aalib/">
+          <citetitle> aalib</citetitle></ulink>
       </para></listitem>
     </itemizedlist>
   </para>
@@ -359,7 +382,7 @@ checking for g++... g++
 
   <para>
     Lets now start the actual build process.
-    Dependent on you system this could take a long time.
+    Depending on you system this could take a long time.
     <screen>
 bash@host:~/GePhex$ make
 make  all-recursive
@@ -421,11 +444,10 @@ If your Debian GNU/Linux distribution is testing or unstable you have to replace
 
 </chapter>
 
-
  <chapter><title>Basic Concepts</title>
   <sect1><title>The three States of Graphs in the Renderer</title>
 <para>
-The Renderer knows there states for an graph:
+The Renderer knows three states for a graph:
 <itemizedlist>
 <listitem><para>The graph is not loaded. No internal state of the modules is stored and obvious no calculation is done in this state.</para></listitem>
 <listitem><para>The graph is loaded in the renderer. The Modules remember their internal states e.g. the framebuffer of an xfader with loopback. But now calculation is allowed in this state.</para></listitem>
@@ -492,7 +514,7 @@ The Renderer knows there states for an graph:
      <sect2>  <title> WIN32 </title>
        <para>
           Just go into the bin directory of your GePhex directory and
-          execute the engine and the GUI (in that order).
+          execute the gephex-engine and gephex-gui (in that order).
        </para>
      </sect2>
  </sect1>
@@ -516,8 +538,8 @@ The Renderer knows there states for an graph:
         <itemizedlist>
           <listitem>
             <para>
-              1: Info-window. Used for properties of effects,
-              loading and saving effect-graphs, sequences, and playlists.
+              1: Info-window. Used for properties of effects and
+              for loading and saving effect-graphs,
             </para>
           </listitem>
           <listitem>
@@ -532,8 +554,8 @@ The Renderer knows there states for an graph:
           </listitem>
           <listitem>
             <para>
-              4: Message- and sequence-window. Used to display error
-              and warning messages and to edit sequences.
+              4: Message-window. Used to display error
+              and warning messages.
             </para>
           </listitem>  
         </itemizedlist>
@@ -547,10 +569,10 @@ The Renderer knows there states for an graph:
         perform a more complex effect.
      </para>
      <para>
-        Since GePhex works on graphs, we have to tell it which graph
+        Since GePhex works with graphs, we have to tell it which graph
         we want to edit.
-        Do this by clicking on the "Graphen" tab in the info-window.
-        To create a new graph, right-click on the "Graphen" item inside the
+        Do this by clicking on the "Graphs" tab in the info-window.
+        To create a new graph, right-click on the "Graphs" item inside the
         tab (see next image).
      </para>
      <mediaobject>
@@ -604,7 +626,7 @@ The Renderer knows there states for an graph:
        it is empty. So let's create some effects.
      </para>
      <para>
-       To do so, open the "Effekte" menu in the top-level menu-bar.
+       To do so, open the "Effects" menu in the top-level menu-bar.
        Choose "Sources"->"Image Source".
        Then click into the graph window as shown in the next image.
      </para>
@@ -616,8 +638,8 @@ The Renderer knows there states for an graph:
        <caption> <para> Adding an basic effect </para> </caption>
      </mediaobject>
      <para>
-       Do the same for "Effekte"->"Outputs"->"Image Output" 
-       and "Effekte"->"Filter"->"FlashFader".
+       Do the same for "Effects"->"Outputs"->"Image Output" 
+       and "Effects"->"Filter"->"FlashFader".
        Arrange them as in the next image (You can simply move them around with
        the mouse).
      </para>
@@ -639,12 +661,12 @@ The Renderer knows there states for an graph:
        The graph we have created so far is still very simple. In fact,
        you would not call such a graph an effect at all.
        What it does is simply loading a bitmap, eventually flashing it and
-       displaying it to screen.
+       displaying it to the screen.
      </para>
      <para>
        You can think of this graph in terms of data flow:
-       data comes from a source (the bitmap loader), flows through the
-       flash-fader filter and is displayed in the sink (the output).
+       data comes from a source (the image source), flows through the
+       flash-fader filter and is displayed in the sink (the image output).
      </para>
    </sect2>
    <sect2> <title> Configuring the Graph </title>
@@ -652,7 +674,7 @@ The Renderer knows there states for an graph:
         This is simple. We just choose a bitmap.
         Right-click on the "Image Source"-effect and choose "Properties"
         in the context menu. Now the info-window displays the properties
-        of the bitmap effect:
+        of the image source:
      </para>
      <mediaobject>
        <imageobject>
@@ -662,7 +684,7 @@ The Renderer knows there states for an graph:
        <caption> <para> Properties </para> </caption>
      </mediaobject>
      <para>
-       Click on the button next to "Dateiname" and choose a nice bmp file.
+       Click on the button next to "Filename" and choose a nice image file.
      </para>
    </sect2>
    <sect2> <title> Running and controlling the Graph </title>
@@ -697,7 +719,7 @@ The Renderer knows there states for an graph:
 
    <sect2> <title> Saving the Graph </title>
      <para>
-        Click on the "Graphen" tab in the info-window.
+        Click on the "Graphs" tab in the info-window.
         Right-click on "first" and choose "Save Graph".
         Done. The graph will be already there when you start next time.
      </para>
@@ -723,7 +745,7 @@ The Renderer knows there states for an graph:
   <para>
      Try to attach the frbinmodule (Image Source) module instead of the 
      isingnoize.
-     (Don't forget to choose a bitmap as shown in the Guided Tour).
+     (Don't forget to choose an image or video as shown in the Guided Tour).
   </para>
 </sect1>
 <sect1><title>Example2: Plasma</title>

@@ -46,6 +46,10 @@
 #include "sdloutput.h"
 #endif
 
+#if defined(HAVE_GLX)
+#include "gloutput.h"
+#endif
+
 static logT s_log;
 
 //------------------------------------------------------------------------
@@ -114,6 +118,13 @@ void shutDown(void)
       s_log(0, buffer);
     }
 #endif
+
+  /*#if defined (HAVE_GLX)
+  if(!GL_shutdown(buffer, sizeof(buffer)))
+  {
+  s_log(0, buffer);
+  }
+    #endif*/
 }
 
 MyInstance* construct()
@@ -132,6 +143,10 @@ MyInstance* construct()
 
   my->win_xpos    = 0;
   my->win_ypos    = 0;
+
+#if defined(HAVE_GLX)
+  printf("FOUND GLX SUPPORT!!!\n");
+#endif
   return my;
 }
 
@@ -158,8 +173,8 @@ void update(void* instance)
   int on_top		= options & 1;
   int monitor		= trim_int(inst->in_monitor->number, 0, 3);
   int caption		= options & 2;
-  int win_xsize		= trim_int(inst->in_xsize->number, 0, 1024);
-  int win_ysize		= trim_int(inst->in_ysize->number, 0, 1024);
+  int win_xsize		= trim_int(inst->in_xsize->number, 0, 2048);
+  int win_ysize		= trim_int(inst->in_ysize->number, 0, 2048);
   int fb_xsize		= inst->in_in->xsize;
   int fb_ysize		= inst->in_in->ysize;
   int mirrorx		= options & 4;
@@ -248,6 +263,13 @@ void update(void* instance)
 	  {
           my->drv = SDL_get_driver();
           s_log(2, "Using SDL output driver");
+	  }
+#endif
+#if defined(HAVE_GLX)
+        else if (strcmp(inst->in_driver->text, "GL") == 0)
+	  {
+	    my->drv = GL_get_driver();
+	    s_log(2, "Using GL output driver");
 	  }
 #endif
       else

@@ -28,7 +28,7 @@ SDL_IMAGE_sOURCES = \
 	sdlimagedriver.h \
 	sdlimagedriver.cpp
 
-SDL_IMAGE_lDFLAGS =  @SDL_LD_FLAGS@ -@SDL_IMAGE_LDFLAGS@
+SDL_IMAGE_lDFLAGS =  @SDL_LD_FLAGS@ @SDL_IMAGE_LDFLAGS@
 SDL_IMAGE_cFLAGS  =  @SDL_CFLAGS@
 endif
 
@@ -45,12 +45,18 @@ frbinmodule_la_SOURCES = \
 	framecache.h \
 	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES)
 
-frbinmodule_la_LDFLAGS = -module -avoid-version -no-undefined \
-	$(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS)
-frbinmodule_la_LIBADD = -lstdc++ 
+frbinmodule_la_LDFLAGS = \
+        -module -avoid-version -no-undefined \
+        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS)
 
-INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+frbinmodule_la_LIBADD = -lstdc++ -lscale
+
+frbinmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
+
+INCLUDES = 	\
+		-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../libscale \
 		-I @srcdir@/../../../types/src/numbertype \
 		-I @srcdir@/../../../types/src/stringtype \
 		-I @srcdir@/../../../types/src/framebuffertype \

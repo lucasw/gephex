@@ -17,15 +17,19 @@ namespace net {
   public:
     explicit SocketAdaptor(ISocket* socket = 0, IDataListener* listener = 0);
 
-    void setSocket(ISocket& socket);
+	/**
+	 * if socket is 0 then all data is lost
+	 */
+    void setSocket(ISocket* socket);
 
     void registerDataListener(IDataListener& listener);
 
     /**
      * Give control to the adaptor. This call is blocking
      * iff the underlying sockets receive method is blocking.
+	 * \returns the number of bytes received
      */
-    void run();
+    int run();
 
   private:
     ISocket* m_socket;

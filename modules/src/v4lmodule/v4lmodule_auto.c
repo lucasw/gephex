@@ -15,7 +15,7 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_v4lmodule] number_of_inputs=[8] number_of_outputs=[1] deterministic=[false] }";
+ return "mod_spec { name=[mod_v4lmodule] number_of_inputs=[9] number_of_outputs=[1] deterministic=[false] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
@@ -43,6 +43,9 @@ const char* getInputSpec(int index) {
   case 7:
     return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
   break;
+  case 8:
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
+  break;
  }
  return 0;
 }
@@ -60,8 +63,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   inst->my = construct();
@@ -112,6 +115,9 @@ int setInput(void* instance,int index,void* typePointer)
   case 7:
    inst->in_whiteness = (NumberType *) typePointer;
   break;
+  case 8:
+   inst->in_drops = (NumberType *) typePointer;
+  break;
  } //switch(index) 
  return 1;
 }
@@ -128,7 +134,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Video4Linux] group=[Sources] inputs=[8 Devicename{help=[Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)] file_mask=[*] widget_type=[file_selector] hidden=[true] file_mask_name=[Gerätedatei] } Größe(x){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Brigthness{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Hue{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Colour{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Contrast{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Whiteness{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Video4Linux] group=[Sources] inputs=[9 Devicename{help=[Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)] file_mask=[*] widget_type=[file_selector] hidden=[true] file_mask_name=[Gerätedatei] } Größe(x){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Brigthness{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Hue{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Colour{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] hidden=[true] } Contrast{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Whiteness{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] } Droprate{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[200] hidden=[true] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(v4lmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -137,32 +143,32 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(v4lmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = v4lmodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = v4lmodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

@@ -1,6 +1,9 @@
 #ifndef INCLUDED_DLL_SELECTOR_DIALOG_H
 #define INCLUDED_DLL_SELECTOR_DIALOG_H
 
+#include <map>
+#include <list>
+
 #include <qvariant.h>
 #include <qdialog.h>
 
@@ -39,8 +42,20 @@ public:
   
   void moduleClassNameExists(const std::string& moduleClassName);
 
+  void clear();
+
+  void syncStarted();
+  void syncFinished();
+
 signals:
 	void status(const std::string& s);
+
+	void closed();
+
+protected slots:
+  virtual void done( int r );
+  virtual void accept() ;
+  virtual void reject() ;
 
 private slots:
 	void loadModuleClass();
@@ -66,6 +81,11 @@ private:
     IModuleClassLoaderControlReceiver& m_loader;
 
   bool loadAll;
+  int m_num_module_classes;
+  int m_num_loaded_classes;
+
+  std::map<std::string, bool> m_loaded;
+  std::list<std::string> m_classes;
 
 };
 

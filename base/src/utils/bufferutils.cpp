@@ -20,9 +20,7 @@ namespace utils
       else if (hex >= 'a' && hex <= 'f')
 	return hex - 'a' + 0xa;
       else
-	assert(false);
-      /*      else
-	      throw std::runtime_error("no hexcode (utils::hex2int()");*/
+	    throw std::runtime_error("no hexcode (utils::hex2int()");
     }
   }
   

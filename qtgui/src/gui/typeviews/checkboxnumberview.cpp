@@ -81,17 +81,21 @@ namespace gui
       double raw;
       is >> raw;
 	
-      m_value = (int) floor(raw+0.5);
+	  int new_value = (int) floor(raw+0.5);
 
-      for (int i = 0; i < m_group->count(); ++i)
-        {
-          QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->find(i));
-          if (m_value & (1 << i))		
-            cb->setChecked(true);      
-          else
-            cb->setChecked(false);
-        }
-	  
+	  if (m_value != new_value)
+	  {
+		  m_value = new_value;
+		  
+		  for (int i = 0; i < m_group->count(); ++i)
+		  {
+			  QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->find(i));
+			  if (m_value & (1 << i))		
+				  cb->setChecked(true);      
+			  else
+				  cb->setChecked(false);
+		  }
+	  }
     }
 		
 private slots:
@@ -124,7 +128,7 @@ void boxToggled(int index)
   // constructor
 
   CheckBoxNumberViewConstructor::CheckBoxNumberViewConstructor():
-    TypeViewConstructor("Check Box", "check_box")
+    TypeViewConstructor("check box", "check_box")
   {
   }
 	

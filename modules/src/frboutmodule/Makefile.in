@@ -74,6 +74,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -96,8 +97,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -113,13 +115,19 @@ lib_LTLIBRARIES = frboutmodule.la
 
 @HAVE_SDL_TRUE@SDL_sOURCES = 	sdloutput.c 	sdloutput.h
 
-frboutmodule_la_SOURCES =          frboutmodule_auto.c         frboutmodule.c         frboutmodule.h         frboutmodule.spec         frboutmodule.xpm         outputdriver.h 	ximageoutput.h 	ximageoutput.c 	adjustutil.h 	adjustutil.c 	xshmoutput.h 	xshmoutput.c $(AALIB_sOURCES) $(SDL_sOURCES)
+# hier muss mal jemand gucken wegen HAVE_GL oder sowatt...:/
+@HAVE_GLX_TRUE@GLLIBS = -lGL
+@HAVE_GLX_TRUE@GL_sOURCES =         gloutput.h 	gloutput.c 	glutil.h 	glxutil.c
+
+frboutmodule_la_SOURCES =          frboutmodule_auto.c         frboutmodule.c         frboutmodule.h         frboutmodule.spec         frboutmodule.xpm         outputdriver.h 	ximageoutput.h 	ximageoutput.c 	adjustutil.h 	adjustutil.c 	xshmoutput.h 	xshmoutput.c $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
 
 
-frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib
-frboutmodule_la_LIBADD = -lX11 -lXext $(AALIB_lDFLAGS) @SDL_LIBS@
+frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale
+frboutmodule_la_LIBADD = -lscale -lX11 -lXext $(AALIB_lDFLAGS) @SDL_LD_FLAGS@ $(GLLIBS)
 
-INCLUDES = -I@srcdir@/../../../engine/src/engine            -I@srcdir@/../../../util/include            -I@srcdir@/../../../types/src/stringtype            -I@srcdir@/../../../types/src/framebuffertype            -I@srcdir@/../../../types/src/numbertype @SDL_CFLAGS@
+frboutmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
+
+INCLUDES = -I@srcdir@/../../../engine/src/engine            -I@srcdir@/../../../util/include 		   -I@srcdir@/../libscale            -I@srcdir@/../../../types/src/stringtype            -I@srcdir@/../../../types/src/framebuffertype            -I@srcdir@/../../../types/src/numbertype @SDL_CFLAGS@
 
 
 DISTCLEANFILES = frboutmodule.h frboutmodule_auto.c
@@ -137,24 +145,65 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
-@HAVE_AALIB_TRUE@frboutmodule_la_DEPENDENCIES = 
-@HAVE_AALIB_FALSE@frboutmodule_la_DEPENDENCIES = 
-@HAVE_AALIB_TRUE@@HAVE_SDL_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_AALIB_TRUE@@HAVE_SDL_FALSE@frboutmodule_auto.lo frboutmodule.lo \
-@HAVE_AALIB_TRUE@@HAVE_SDL_FALSE@ximageoutput.lo adjustutil.lo \
-@HAVE_AALIB_TRUE@@HAVE_SDL_FALSE@xshmoutput.lo aaoutput.lo
-@HAVE_AALIB_TRUE@@HAVE_SDL_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_AALIB_TRUE@@HAVE_SDL_TRUE@frboutmodule_auto.lo frboutmodule.lo \
-@HAVE_AALIB_TRUE@@HAVE_SDL_TRUE@ximageoutput.lo adjustutil.lo \
-@HAVE_AALIB_TRUE@@HAVE_SDL_TRUE@xshmoutput.lo aaoutput.lo sdloutput.lo
-@HAVE_AALIB_FALSE@@HAVE_SDL_TRUE@frboutmodule_la_OBJECTS =  \
-@HAVE_AALIB_FALSE@@HAVE_SDL_TRUE@frboutmodule_auto.lo frboutmodule.lo \
-@HAVE_AALIB_FALSE@@HAVE_SDL_TRUE@ximageoutput.lo adjustutil.lo \
-@HAVE_AALIB_FALSE@@HAVE_SDL_TRUE@xshmoutput.lo sdloutput.lo
-@HAVE_AALIB_FALSE@@HAVE_SDL_FALSE@frboutmodule_la_OBJECTS =  \
-@HAVE_AALIB_FALSE@@HAVE_SDL_FALSE@frboutmodule_auto.lo frboutmodule.lo \
-@HAVE_AALIB_FALSE@@HAVE_SDL_FALSE@ximageoutput.lo adjustutil.lo \
-@HAVE_AALIB_FALSE@@HAVE_SDL_FALSE@xshmoutput.lo
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@adjustutil.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@adjustutil.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo sdloutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@adjustutil.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@adjustutil.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@adjustutil.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@sdloutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@adjustutil.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@aaoutput.lo gloutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_TRUE@@HAVE_GLX_TRUE@glxutil.lo
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule_auto.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@frboutmodule.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@ximageoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@adjustutil.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@xshmoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@aaoutput.lo \
+@HAVE_SDL_TRUE@@HAVE_AALIB_TRUE@@HAVE_GLX_FALSE@sdloutput.lo
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_la_OBJECTS =  \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule_auto.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@frboutmodule.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@ximageoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@adjustutil.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@xshmoutput.lo \
+@HAVE_SDL_FALSE@@HAVE_AALIB_FALSE@@HAVE_GLX_TRUE@gloutput.lo glxutil.lo
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -307,7 +356,7 @@ frboutmodule.lo frboutmodule.o : frboutmodule.c frboutmodule.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
 	../../../util/include/basic_types.h ../../../config.h \
 	../../../types/src/numbertype/numbertype.h outputdriver.h \
-	ximageoutput.h xshmoutput.h aaoutput.h sdloutput.h
+	ximageoutput.h xshmoutput.h aaoutput.h sdloutput.h gloutput.h
 frboutmodule_auto.lo frboutmodule_auto.o : frboutmodule_auto.c \
 	frboutmodule.h ../../../engine/src/engine/dllmodule.h \
 	../../../types/src/stringtype/stringtype.h \
@@ -315,14 +364,21 @@ frboutmodule_auto.lo frboutmodule_auto.o : frboutmodule_auto.c \
 	../../../util/include/basic_types.h ../../../config.h \
 	../../../types/src/numbertype/numbertype.h \
 	../../../engine/src/engine/dllutils.h frboutmodule.xpm
+gloutput.lo gloutput.o : gloutput.c gloutput.h ../../../config.h \
+	glutil.h ../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h outputdriver.h
+glxutil.lo glxutil.o : glxutil.c glutil.h \
+	../../../types/src/framebuffertype/framebuffertype.h \
+	../../../util/include/basic_types.h ../../../config.h
 sdloutput.lo sdloutput.o : sdloutput.c sdloutput.h \
 	../../../types/src/framebuffertype/framebuffertype.h \
 	../../../util/include/basic_types.h ../../../config.h \
 	outputdriver.h
 ximageoutput.lo ximageoutput.o : ximageoutput.c ximageoutput.h \
-	outputdriver.h adjustutil.h ../../../util/include/basic_types.h
+	outputdriver.h ../libscale/libscale.h \
+	../../../util/include/basic_types.h
 xshmoutput.lo xshmoutput.o : xshmoutput.c xshmoutput.h outputdriver.h \
-	adjustutil.h ../../../util/include/basic_types.h
+	../libscale/libscale.h ../../../util/include/basic_types.h
 
 info-am:
 info: info-am

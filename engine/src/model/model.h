@@ -24,6 +24,7 @@
 #include "interfaces/imodelstatussender.h"
 
 namespace utils {
+  class ILogger;
   class Buffer;
 }
 
@@ -55,7 +56,8 @@ namespace model
     public IModelStatusSender
     {
     public:
-      Model(const std::string basepath_);
+      Model(const std::string basepath_,
+		    utils::AutoPtr<utils::ILogger>& logger);
       virtual ~Model();
 
       // from IModelControlReceiver
@@ -69,7 +71,7 @@ namespace model
 
       virtual void unSetModuleData(int moduleID,int type);
 
-      void newGraphWithID(const std::string& graphName,
+	  Graph* newGraphWithID(const std::string& graphName,
 			  const std::string& graphID);
 
       virtual void newGraph(const std::string& graphName);
@@ -87,6 +89,9 @@ namespace model
       virtual void newControllValueSet(const std::string& graphID,
 				       const std::string& SetNme);
 
+	  void newControllValueSetWithID(const std::string& graphID,
+		  const std::string& SetNme, const std::string& snapID);
+
       virtual void renameControllValueSet(const std::string& graphID,
 					  const std::string& snapID,
 					  const std::string& newSnapName);
@@ -100,6 +105,8 @@ namespace model
 
       //TODO: war mal const
       virtual void synchronize();
+
+	  void sendExistingGraphs();
 
       virtual void changeRenderedGraph(const std::string& graphName, const std::string& snapShot);
       virtual void changeEditGraph(const std::string& graphName, const std::string& snapShot);
@@ -161,6 +168,9 @@ namespace model
 
       std::map<std::string, bool> knownGraphIDs;
 	  std::map<std::string, bool> knownSnapIDs;
+
+	  utils::AutoPtr<utils::ILogger> m_logger;
+
       // helper functions
       void deleteModule(utils::AutoPtr<Graph>, int moduleID);      
 

@@ -11,9 +11,9 @@ namespace net {
   {
   }
 
-  void SocketAdaptor::setSocket(ISocket& socket)
+  void SocketAdaptor::setSocket(ISocket* socket)
   {
-    m_socket = &socket;
+    m_socket = socket;
   }
 
   void SocketAdaptor::registerDataListener(IDataListener& listener)
@@ -22,15 +22,17 @@ namespace net {
   }
 
 
-  void SocketAdaptor::run()
+  int SocketAdaptor::run()
   {
     if (m_socket == 0)
-      return;
+      return 0;
 
-    utils::Buffer b;
+    utils::Buffer b(1024);
     bool dataArrived = m_socket->receive(b);
 
     if (dataArrived && m_listener)
       m_listener->dataReceived(b);
+
+	return b.getLen();
   }
 }

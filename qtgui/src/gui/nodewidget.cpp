@@ -107,8 +107,8 @@ namespace gui
 	std::string keyName = stIntern.next("[");
 	std::string keyValue = stIntern.next("[]");
 
-	std::cout << "Parsed key '" << keyName << "[" << keyValue << "]'"
-		  << std::endl;
+	//std::cout << "Parsed key '" << keyName << "[" << keyValue << "]'"
+	//  << std::endl;
 
 	gui::Key k(keyName);
 	utils::Buffer
@@ -136,9 +136,9 @@ namespace gui
 	std::string keyValue1 = stIntern.next("[,");
 	std::string keyValue2 = stIntern.next(",]");
 
-	std::cout << "Parsed toggle_key '" << keyName 
-		  << "[" << keyValue1 << "," << keyValue2<< "]'"
-		  << std::endl;
+	//std::cout << "Parsed toggle_key '" << keyName 
+	//	  << "[" << keyValue1 << "," << keyValue2<< "]'"
+	//	  << std::endl;
 
 	try {
 	gui::Key k(keyName);
@@ -172,9 +172,10 @@ namespace gui
   static void removeKeyListeners(KeyListenerList& ll,
 				 KeyboardManager& kbManager)
   {
-    for (KeyListenerList::const_iterator it = ll.begin(); it != ll.end(); ++it)
+    for (KeyListenerList::const_iterator it = ll.begin();
+	     it != ll.end(); ++it)
       {
-	kbManager.removeListener(*(*it));
+	    kbManager.removeListener(*(*it));
       }
   }
 

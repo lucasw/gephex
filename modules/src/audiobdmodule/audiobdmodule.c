@@ -87,7 +87,7 @@ static struct bd_instance_t* exp_create(int hist_size, int local_size) {
   sh->local        = 0;
   sh->var          = 0;
 
-  printf("hf = %f, lf = %f\n", sh->hist_factor, sh->local_factor);
+  //  printf("hf = %f, lf = %f\n", sh->hist_factor, sh->local_factor);
   return (struct bd_instance_t*) sh;
 }
 

@@ -30,29 +30,17 @@ CPP_FILES = \
 	plugwidget.cpp \
 	inputplugwidget.cpp \
 	outputplugwidget.cpp \
-	sequenceeditor.cpp \
 	dllselectordialog.cpp \
-	sequencewidget.cpp \
-	scenewidget.cpp \
 	graphnameview.cpp \
-	sequencenameview.cpp \
-	playlist.cpp \
-	playlistnameview.cpp \
-	moduleclasstabview.cpp \
-	uebertab.cpp \
 	modulebutton.cpp \
-	videowallcontrollwidget.cpp \
 	guiconfig.cpp \
 	typeview.cpp \
 	typeviewfactory.cpp \
 	aboutdialog.cpp
 
 MOCED_FILES = \
-	playlist_moc.cpp \
 	dllselectordialog_moc.cpp \
-	sequenceeditor_moc.cpp \
 	plugwidget_moc.cpp \
-	sequencewidget_moc.cpp \
 	outputplugwidget_moc.cpp \
 	inputplugwidget_moc.cpp \
 	moduleclassview_moc.cpp \
@@ -60,14 +48,10 @@ MOCED_FILES = \
 	vjmainwindow_moc.cpp \
 	controlwidget_moc.cpp \
 	graphnameview_moc.cpp \
-	videowallcontrollwidget_moc.cpp \
 	picswitch_moc.cpp \
 	hidebutton_moc.cpp \
-	sequencenameview_moc.cpp \
 	nodewidget_moc.cpp \
-	playlistnameview_moc.cpp \
 	modulebutton_moc.cpp \
-	moduleclasstabview_moc.cpp \
 	typeview_moc.cpp
 
 BUILT_SOURCES = $(MOCED_FILES)
@@ -91,16 +75,7 @@ HEADER_FILES = \
 	plugwidget.h \
 	propertywidgetconstructor.h \
 	propertywidget.h \
-	scenewidget.h \
-	sequenceeditor.h \
-	sequencenameview.h \
-	sequencewidget.h \
-	videowallcontrollwidget.h \
 	vjmainwindow.h \
-	playlist.h \
-	playlistnameview.h \
-	moduleclasstabview.h \
-	uebertab.h \
 	guiconfig.h \
 	typeview.h \
 	typeviewfactory.h \
@@ -152,3 +127,4 @@ gephex_gui_DEPENDENCIES = \
 	@builddir@/typeviews/libtypeviews.a
 
 CLEANFILES = $(MOCED_FILES)
+

@@ -131,7 +131,11 @@ void update(void* instance)
 
 #if defined(OS_POSIX)
 #if defined(HAVE_SYS_SOUNDCARD_H)
-      if (m_driver_name == "oss"  || m_driver_name == "default")
+      if (m_driver_name == "oss" 
+#if !defined(HAVE_ALSA_ASOUNDLIB_H)
+          || m_driver_name == "default"
+#endif
+          )
 	{
 	  my->drv = new OSSOutDriver();
 	  s_log(2, "Using OSS driver");
@@ -139,7 +143,8 @@ void update(void* instance)
       else
 #endif
 #if defined(HAVE_ALSA_ASOUNDLIB_H)
-        if (m_driver_name == "alsa")
+        if (m_driver_name == "alsa"
+            || m_driver_name == "default")
 	{
 	  my->drv = new AlsaOutDriver();
 	  s_log(2, "Using alsa driver");

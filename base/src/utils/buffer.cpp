@@ -27,17 +27,41 @@ namespace utils
       m_buffer = new unsigned char[m_capacity];
   }
 
-  Buffer::Buffer(const unsigned char* b, int l, int maxLengthHint)
+  Buffer::Buffer(const unsigned char* b, int l,
+	             int maxLengthHint)
+    : m_len(l),
+      m_capacity(max(l,maxLengthHint))
+  {	
+       m_buffer = new unsigned char[m_capacity];
+       memcpy(m_buffer,b,m_len);
+  }
+
+  Buffer::Buffer(unsigned char* b, int l, bool owner, 
+	             int maxLengthHint)
     : m_len(l),
       m_capacity(max(l,maxLengthHint))
   {
-    m_buffer = new unsigned char[m_capacity];
-    memcpy(m_buffer,b,m_len);
+	if (!owner)
+	{
+       m_buffer = new unsigned char[m_capacity];
+       memcpy(m_buffer,b,m_len);
+	}
+	else
+	{
+	   m_buffer = b;
+	}
   }
 
   Buffer::Buffer(const Buffer& b)
     : m_buffer(new unsigned char[b.getLen()]), m_len(b.getLen()),
       m_capacity(m_len)
+  {
+    memcpy(m_buffer,b.getPtr(),m_len);
+  }
+
+  Buffer::Buffer(const Buffer& b, int maxLengthHint)
+    : m_buffer(new unsigned char[max(b.getLen(), maxLengthHint)]), m_len(b.getLen()),
+      m_capacity(max(b.getLen(), maxLengthHint))
   {
     memcpy(m_buffer,b.getPtr(),m_len);
   }
@@ -87,7 +111,7 @@ namespace utils
 
   Buffer Buffer::operator+(const Buffer& b) const
   {
-    Buffer newBuf(*this);
+    Buffer newBuf(*this, m_len + b.getLen());
     newBuf += b;
     return newBuf;
   }

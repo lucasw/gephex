@@ -187,7 +187,7 @@ namespace gui
 	};
 	
 	FontViewConstructor::FontViewConstructor()
-		: TypeViewConstructor("Schriftauswahl", "font_selector")
+		: TypeViewConstructor("font dialog", "font_selector")
 	{
 	}
 	

@@ -60,6 +60,8 @@ public:
 	 */
 	PropertyView(QWidget* parent);
 
+	~PropertyView();
+
 	/**
 	 * Zeigt die Eigenschaften an die in desc beschrieben sind.
 	 * Die entsprechenden Widgets werden mithilfe der IWidgetConstructor 
@@ -69,6 +71,8 @@ public:
 	 * @param desc Eine Beschreibung der Eigenschaften eines Objekts.
 	 */
 	void displayProperties(const IPropertyDescription& desc);
+
+	void undisplayProperties();
 
 private:
 	QTable* table;

@@ -14,7 +14,6 @@ AM_CPPFLAGS = \
 	-I @srcdir@/../renderer \
 	-I @srcdir@/../model \
 	-I @srcdir@/../dllloader \
-	-I @srcdir@/../sequencer \
 	-I @srcdir@/../../../base/src \
 	-I @builddir@/../../../base/src/interfaces \
 	-I @builddir@/../../../base/src \
@@ -37,18 +36,18 @@ gephex_engine_SOURCES = \
 	engineconfig.cpp \
 	engineconfig.h \
 	controller.h \
-	controller.cpp
+	controller.cpp \
+        bufferedsender.h \
+        bufferedsender.cpp
 
 gephex_engine_LDADD = \
 	-ldllloader \
-	-lsequencer \
 	-lmodel \
 	-lrenderer \
 	-lgphxnetwork \
 	-lnetinterfaces \
 	-lutils $(LIB_DL_FLAGS) $(LIB_SOCKET_FLAGS) $(LIB_POSIX4_FLAGS) $(LIB_EXTRA_FLAGS)\
 	-L@builddir@/../dllloader \
-	-L@builddir@/../sequencer \
 	-L@builddir@/../model \
 	-L@builddir@/../renderer \
 	-L$(libdir) \
@@ -60,7 +59,6 @@ gephex_engine_LDADD = \
 
 gephex_engine_DEPENDENCIES = \
 	@builddir@/../dllloader/libdllloader.a \
-	@builddir@/../sequencer/libsequencer.a \
 	@builddir@/../model/libmodel.a \
 	@builddir@/../renderer/librenderer.a \
 	@top_builddir@/base/src/net/libgphxnetwork.a \

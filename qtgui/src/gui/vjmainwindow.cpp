@@ -15,38 +15,36 @@
 #include "editor/editorwidget.h"
 
 #include "moduleclassview.h"
-//#include "moduleclasstabview.h"
+
 #include "graphnameview.h"
-#include "sequencenameview.h"
-#include "playlistnameview.h"
+
 #include "picswitch.h"
 
 #include "dllselectordialog.h"
-#include "playlist.h"
-
-#include "sequenceeditor.h"
 
 #include "aboutdialog.h"
 
 #include "interfaces/ienginecontrolreceiver.h"
 #include "interfaces/irenderercontrolreceiver.h"
-#include "interfaces/isequencercontrolreceiver.h"
 #include "interfaces/igraphnamesender.h"
 #include "interfaces/imoduleclassnamesender.h"
-#include "interfaces/isequencenamesender.h"
-#include "interfaces/isequenceupdatesender.h"
 #include "interfaces/ierrorsender.h"
 #include "interfaces/irendererstatussender.h"
-#include "interfaces/isequencerstatussender.h"
 
 #include "guimodel/enginewrapper.h"
 #include "guimodel/moduleclassmodel.h"
-#include "guimodel/actionsequencerwrapper.h"
 
 #include "rot_klein.xpm"
 #include "gruen_klein.xpm"
 
 #include "utils/structreader.h"
+
+#include "config.h"
+// for exec engine
+#ifdef OS_POSIX
+#include <sys/types.h>
+#include <unistd.h>
+#endif
 
 namespace gui
 {
@@ -58,8 +56,8 @@ namespace gui
     : QMainWindow(parent,name),
       engineWrapper(new EngineWrapper(ipcType, locator, port)),
       running(false), connected(false), 
-      moduleClassView(0), moduleClassTabView(0), sam(0), graphNameView(0),
-      sequenceNameView(0), sequencerWrapper(0), m_config(config),
+      moduleClassView(0), graphNameView(0),
+      m_config(config),
       m_kbManager(new KeyboardManager())
   {
     createWindows();
@@ -67,16 +65,18 @@ namespace gui
 
     buildMenuBar();
     
-    switcher = new PicSwitch(statusBar(),"switcher!",roter_mann,gruener_mann);
+    switcher = new PicSwitch(statusBar(), "switcher!",
+		                     roter_mann, gruener_mann);
+
     statusBar()->addWidget(switcher,0,TRUE);
     
     buildSceleton();
     
-    connect(switcher,SIGNAL(clicked(int)),this,SLOT(startStop()));
+    connect(switcher, SIGNAL(clicked(int)), this, SLOT(startStop()));
     
     QTimer* timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(pollNetwork()));
-    timer->start(5);
+    timer->start(20);
   }
 
 
@@ -84,22 +84,21 @@ namespace gui
   {
     delete engineWrapper;
     delete graphNameView;
-    delete sequenceNameView;
-    delete playlistNameView;
-    delete sequencerWrapper;
-    delete playlistWrapper;
+    
     delete m_kbManager;
   }
 
 
   void VJMainWindow::started()
   {
+	rendererStateAction->setOn(true);
     switcher->setPic(1);
     running = true;
   }
 
   void VJMainWindow::stopped()
   {
+	rendererStateAction->setOn(false);
     switcher->setPic(0);
     running = false;
   }
@@ -116,30 +115,44 @@ namespace gui
 	if (connected)
 	  engineWrapper->checkData();	 
       }
-    catch (std::runtime_error& e)
+    catch (std::exception& e)
       {
-	displayErrorMessage(e.what());
+    	displayErrorMessage(e.what());
+        disconnectFromEngine();
+      }
+    catch(...)
+      {
+	displayErrorMessage("AAAAAdArgHHHHHHHHHHHHHHH");
+        disconnectFromEngine();
       }
   }
 
   void VJMainWindow::connectToRealEngine() throw (std::runtime_error)
   {
     engineWrapper->connect();
-    connected=true;
     showPlugInManagerAction->setEnabled(true);
-    showPlayListAction->setEnabled(true);
+    
     rendererStateAction->setEnabled(true);
-	keyGrabStateAction->setEnabled(true);
+    keyGrabStateAction->setEnabled(true);
+
+    connectToEngineAction->setEnabled(false);
+    disConnectToEngineAction->setEnabled(true);
+    //synchronizeEngineAction->addTo(server);
+    shutDownEngineAction->setEnabled(true);
   }
 
   void VJMainWindow::disconnectFromRealEngine() throw (std::runtime_error)
   {
     engineWrapper->disconnect();
-    connected = false;
     showPlugInManagerAction->setEnabled(false);
-    showPlayListAction->setEnabled(false);
+    
     rendererStateAction->setEnabled(false);
-	keyGrabStateAction->setEnabled(false);
+    keyGrabStateAction->setEnabled(false);
+
+    connectToEngineAction->setEnabled(true);
+    disConnectToEngineAction->setEnabled(false);
+    //synchronizeEngineAction->addTo(server);
+    shutDownEngineAction->setEnabled(false);
   }
 
   void VJMainWindow::createActions()
@@ -160,14 +173,6 @@ namespace gui
     connect(showPlugInManagerAction,SIGNAL(toggled(bool)),
 	    m_dllSelector,SLOT(setShown ( bool )));  
     
-    showPlayListAction= new QAction(this,"ShowPlayListAction",false);
-    showPlayListAction->setText("Playlist");
-    showPlayListAction->setToolTip ("show the Playlist Dialog");
-    showPlayListAction->setEnabled(false);
-    showPlayListAction->setToggleAction ( true );
-    connect(showPlayListAction,SIGNAL(toggled(bool)),
-	    m_playlist,SLOT(setShown ( bool )));  
-
     
     rendererStateAction= new QAction(this,"RendererStateAction",false);
     rendererStateAction->setText("Render state");
@@ -235,8 +240,9 @@ namespace gui
 	connect(m_dllSelector, SIGNAL(status(const std::string&)),
 		    this, SLOT(displayStatusText(const std::string&)));
 
-    m_playlist = new Playlist(this, engineWrapper->playlistControlReceiver(),
-			      *playlistWrapper);
+	connect(m_dllSelector, SIGNAL(closed()),
+		    this, SLOT(dll_selector_closed()));
+    
   }
 
   
@@ -250,25 +256,23 @@ namespace gui
     menuBar()->insertItem("Server",server,2,2);
     connectToEngineAction->addTo(server);
     disConnectToEngineAction->addTo(server);
-    synchronizeEngineAction->addTo(server);
+    //synchronizeEngineAction->addTo(server);
     shutDownEngineAction->addTo(server);
 
     QPopupMenu* startstop = new QPopupMenu(this);
     menuBar()->insertItem("Engine",startstop,3,3);
     rendererStateAction->addTo(startstop);
 
-    QPopupMenu* keyboard = new QPopupMenu(this);
+    /*QPopupMenu* keyboard = new QPopupMenu(this);
     menuBar()->insertItem("Keyboard", keyboard,4,4);
-    keyGrabStateAction->addTo(keyboard);
-
+    keyGrabStateAction->addTo(keyboard);*/
 
     windows = new QPopupMenu(this);
     menuBar()->insertItem("Windows",windows,5,5);
-    showPlugInManagerAction->addTo(windows);
-    showPlayListAction->addTo(windows);
+    showPlugInManagerAction->addTo(windows);    
 
 	effectMenue = new QPopupMenu(this);
-    menuBar()->insertItem("Effekte",effectMenue,6,6);
+    menuBar()->insertItem("Effects",effectMenue,6,6);
 
 	help = new QPopupMenu(this);
 	menuBar()->insertItem("Help", help,7,7);
@@ -285,7 +289,6 @@ namespace gui
     moduleClassView = new ModuleClassView(effectMenue);
 
 
-
     engineWrapper->moduleClassNameSender().registerModuleClassNameReceiver(*m_dllSelector);
 
     // moduleClassView->show();
@@ -296,11 +299,16 @@ namespace gui
 
   void VJMainWindow::unbuildModuleBar()
   {
-    engineWrapper->moduleClassModel().unregisterModuleClassViews();
+	  // the dllselector and effectmenue clear themselves
+	  // when they receive the syncStarted call
+    engineWrapper->moduleClassModel().unregisterModuleClassViews();	
     //engineWrapper->moduleClassNameSender().unregisterModuleClassNameReceiver(); //TODO der wird beim naechsten register automatisch ueberschrieben
 
-    delete m_dllSelector;
+    //delete m_dllSelector;
     //delete effectMenue;
+
+	effectMenue->clear();
+	m_dllSelector->clear();
   }
 
   void VJMainWindow::buildSceleton()
@@ -343,44 +351,16 @@ namespace gui
     QVBoxLayout* topLayout = new QVBoxLayout(centralWidget);
     topLayout->addWidget(splitVertical);	
 
-    engineWrapper->rendererStatusSender().registerRendererStatusReceiver(*this);
+    centralWidget->show();
   }
 
   void VJMainWindow::fillSceleton(void)
   {
-    sequencerWrapper = new ActionSequencerWrapper();
-    playlistWrapper = new ActionSequencerWrapper();
-
-    sequenceEditor = new SequenceEditor(belowTab,"Sequencer",0,
-					engineWrapper->sequencerControlReceiver(),
-					*sequencerWrapper);
-
-    sequencerWrapper->registerSequencerControlReceiver(engineWrapper->sequencerControlReceiver());
-    sequencerWrapper->registerSceneChangeListener(*sequenceEditor);
-
-    engineWrapper->sequencerStatusSender().registerSequencerStatusReceiver(*sequenceEditor);
-
-    belowTab->addTab(sequenceEditor, "Sequencer");
-
-    engineWrapper->sequenceUpdateSender().registerSequenceUpdateReceiver(*sequencerWrapper);
 
     graphNameView = new GraphNameView(leftTab,
 				      engineWrapper->modelControlReceiver(),
-				      *sequencerWrapper,
                                       *logWindow);
-
-    sequenceNameView = 
-      new SequenceNameView(leftTab,
-			   engineWrapper->sequencerControlReceiver(),
-			   *playlistWrapper);
-
-    connect(sequenceEditor,SIGNAL(newEditSequence(const std::string&)),
-	    sequenceNameView->signalObject(),
-	    SLOT(editSequenceChanged(const std::string&)));
-
-    engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);
-
-    engineWrapper->sequenceNameSender().registerSequenceNameReceiver(*sequenceNameView);
+    engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);    
 
     editorWidget = new EditorWidget(editor,"Editorwidget",
 				    engineWrapper->graphModel(),
@@ -395,40 +375,22 @@ namespace gui
 
     editorWidget->show();
     QVBoxLayout* editorLayout = new QVBoxLayout(editor);
-    editorLayout->addWidget(editorWidget);
-
-
-    playlistWrapper->registerSceneChangeListener(*m_playlist);
-    playlistWrapper->registerSequencerControlReceiver(engineWrapper->playlistControlReceiver());
-
-    engineWrapper->playlistUpdateSender().registerSequenceUpdateReceiver(*playlistWrapper);
-
-    engineWrapper->playlistStatusSender().registerSequencerStatusReceiver(*m_playlist);
-    m_playlist->hide();
-
-    playlistNameView = 
-      new PlaylistNameView(leftTab,
-			   engineWrapper->playlistControlReceiver());
-
-    engineWrapper->playlistNameSender().registerSequenceNameReceiver(*playlistNameView);
-
-    connect( m_playlist, SIGNAL(editPlaylistChanged( const std::string& )),
-	     playlistNameView->signalObject(),
-	     SLOT(editPlaylistChanged( const std::string& )) );
-
+    editorLayout->addWidget(editorWidget);    
 
     propertyView = new PropertyView(leftTab);
     leftTab->addTab(propertyView,"Properties");
     propertyTabID = leftTab->currentPageIndex();
     leftTab->addTab(graphNameView->widget(),"Graphs");
-    leftTab->addTab(sequenceNameView->widget(),"Sequences");
-    leftTab->addTab(playlistNameView->widget(),"Playlists");
+    
     
     connect(editorWidget,SIGNAL(statusText(const std::string&)),
 	    this,SLOT(displayStatusText(const std::string&)));
 
-    connect(editorWidget,SIGNAL(properties(const IPropertyDescription&)),
+    connect(editorWidget,SIGNAL(displayProperties(const IPropertyDescription&)),
 	    this,SLOT(displayProperties(const IPropertyDescription&)));
+
+    connect(editorWidget,SIGNAL(undisplayProperties()),
+	    this,SLOT(undisplayProperties()));
 
     connect(editorWidget,SIGNAL(newEditGraph(const std::string&,
 					     const std::string&)),
@@ -438,17 +400,29 @@ namespace gui
     connect(this,SIGNAL(renderedGraphChangedSignal(const std::string&)),
 	    graphNameView->signalObject(),
 	    SLOT(renderedGraphChanged(const std::string&)));
+
+    connect(graphNameView->signalObject(), SIGNAL(undisplayProperties()),
+            this, SLOT(undisplayProperties()));
+
+    engineWrapper->rendererStatusSender().registerRendererStatusReceiver(*this);
   }
 
   void VJMainWindow::clearSceleton()
   {
+
+    if (graphNameView)
+      {
+        delete graphNameView;
+        graphNameView = 0;
+      }
+
     if (centralWidget) 
       {
-	this->removeChild(centralWidget);
+	//this->removeChild(centralWidget);
 	delete centralWidget;
 	centralWidget = 0;
+        buildSceleton();	
       }
-    buildSceleton();
   }
 
   /**
@@ -462,21 +436,44 @@ namespace gui
 	  {
 	    throw std::runtime_error("already connected");
 	  }
+	
+	statusBar()->message("connect to the rendering engine ...");
 
-	statusBar()->message("connect to the rendering engine ...");		
-		
+#ifdef OS_POSIX
+	try
+	  {
+#endif
+	    this->connectToRealEngine();
+#ifdef OS_POSIX
+	  }
+	catch(std::runtime_error& e) 
+	  {
+	    // start engine
+	    const pid_t pid( fork() );
+	    
+	    if (pid!=0)
+	      {
+		execlp("gephex-engine","gephex-engine",0);
+		exit(0);
+	      }
+
+	    this->connectToRealEngine();
+
+	  }
+#endif	
+	
 	buildModuleBar();
 
-	this->connectToRealEngine();
-				
 	fillSceleton();
-
+				
 	statusBar()->message("Ready");
-		
+
+        connected=true;
       } 
     catch(std::runtime_error& e) 
       {
 	displayErrorMessage(e.what());
+        connectToEngineAction->setEnabled(true);
       }
   }
 
@@ -485,8 +482,10 @@ namespace gui
   {
     if (!connected)
       {	
-	throw std::runtime_error("not connected with the engine");
+	displayErrorMessage("not connected with the engine");
+        return;
       }
+    connected = false;
 		
     this->disconnectFromRealEngine();
 
@@ -501,6 +500,7 @@ namespace gui
 
   void VJMainWindow::startStop()
   {
+     setRendererState(!running);
   }
 
 
@@ -515,6 +515,17 @@ namespace gui
     try {
       propertyView->displayProperties(pd);
       leftTab->setCurrentPage(propertyTabID);
+    }
+    catch (std::runtime_error& e)
+      {
+	displayErrorMessage(e.what());
+      }
+  }
+
+  void VJMainWindow::undisplayProperties()
+  {
+    try {
+      propertyView->undisplayProperties();      
     }
     catch (std::runtime_error& e)
       {
@@ -543,15 +554,20 @@ namespace gui
 
   void VJMainWindow::aboutSlot()
   {
-	  AboutDialog* dlg = new AboutDialog(this);
-	  dlg->show();
+    AboutDialog* dlg = new AboutDialog(this);
+    dlg->show();
+  }
+
+  void VJMainWindow::dll_selector_closed()
+  {
+    showPlugInManagerAction->setOn(false);
   }
 
 
   void VJMainWindow::shutDown()
   {
-    engineWrapper->engineControlReceiver().shutDown();
-    disconnectFromEngine();
+    if (connected)
+      engineWrapper->engineControlReceiver().shutDown();    
   }
 
 
@@ -566,7 +582,8 @@ namespace gui
 
   void VJMainWindow::setRendererState(bool state)
   {
-    assert(connected);
+    if (!connected)
+      return;
     
     try 
       {

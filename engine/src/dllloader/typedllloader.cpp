@@ -26,7 +26,7 @@ namespace dllloader
       return 1;
     }
 
-    void DconvertType(void*,void*,void*)
+    int DconvertType(void*,void*,void*)
     {
       throw std::runtime_error("Operation convertType() not supported by this "
 			       "type!");

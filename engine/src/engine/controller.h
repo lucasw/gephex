@@ -15,8 +15,6 @@
 #include "moduleclassnamereceivernet.h"
 #include "modelstatusreceivernet.h"
 #include "graphnamereceivernet.h"
-#include "sequenceupdatereceivernet.h"
-#include "sequencenamereceivernet.h"
 #include "errorreceivernet.h"
 #include "rendererstatusreceivernet.h"
 
@@ -25,7 +23,6 @@
 #include "tagutils.h"
 #include "protocol.h"
 #include "tagdispatcher.h"
-#include "socketadaptor.h"
 
 #include "tcpserversocket.h"
 
@@ -33,17 +30,16 @@
 #include "renderercontrolsendernet.h"
 #include "moduleclassloadercontrolsendernet.h"
 #include "enginecontrolsendernet.h"
-#include "sequencercontrolsendernet.h"
-#include "sequencerstatusreceivernet.h"
 
 #include "autoptr.h"
 #include "model.h"
 #include "renderer.h"
 #include "dllloader.h"
-#include "sequencer.h"
 #include "scheduler.h"
 
 #include "engineconfig.h"
+
+#include "bufferedsender.h"
 
 namespace utils
 {
@@ -62,10 +58,17 @@ namespace engine
   class NetPoller : public ITask
     {
     public:
-      NetPoller(net::SocketAdaptor& adaptor);
+		NetPoller(net::IDataListener& p, bool& connection_down);
+
+	  void set_socket(net::ISocket* socket);
+	  void set_sender(BufferedSender* sender);
+
       bool run(); 
     private:
-      net::SocketAdaptor* m_adaptor;
+      net::ISocket* m_socket;
+	  net::IDataListener& m_listener;
+	  BufferedSender* m_buffered_sender;
+	  bool& m_connection_down;
     };
 
   class Controller : public IEngineControlReceiver, public ITask
@@ -90,15 +93,11 @@ namespace engine
       CommandTagger tagger5;
       CommandTagger tagger6;
       CommandTagger tagger7;
-      CommandTagger tagger8;
-      CommandTagger tagger9;
+      
       CommandTagger tagger10;
-      CommandTagger tagger11;
-      CommandTagger tagger12;
+      
       CommandTagger tagger13;
-      CommandTagger tagger14;
-      CommandTagger tagger15;
-      CommandTagger tagger16;
+      CommandTagger tagger14;      
 
       PortTagger portTagger1;
       PortTagger portTagger2;
@@ -107,15 +106,11 @@ namespace engine
       PortTagger portTagger5;
       PortTagger portTagger6;
       PortTagger portTagger7;
-      PortTagger portTagger8;
-      PortTagger portTagger9;
+      
       PortTagger portTagger10;
-      PortTagger portTagger11;
-      PortTagger portTagger12;
+      
       PortTagger portTagger13;
-      PortTagger portTagger14;
-      PortTagger portTagger15;
-      PortTagger portTagger16;
+      PortTagger portTagger14;      
 
       utils::AutoPtr<net::IServerSocket> m_serverSocket;
   
@@ -123,17 +118,17 @@ namespace engine
       PortTagger portTagger;
       net::Protocol protocol;
 
-      net::ISocket* socket;
-      net::SocketAdaptor socketAdaptor;
+      net::ISocket* socket;      
       utils::AutoPtr<Acceptor> acceptor;
+	  utils::AutoPtr<BufferedSender> bufferedSender;
+
+	  bool connection_down;
       NetPoller netPoller;
 	
       ModelControlSenderNet modelControlSender;
       RendererControlSenderNet rendererControlSender;
       ModuleClassLoaderControlSenderNet moduleClassLoaderControlSender;
       EngineControlSenderNet engineControlSender;
-      SequencerControlSenderNet sequencerControlSender;
-      SequencerControlSenderNet playlistControlSender;
     
       ModuleConstructionDumbReceiverNet moduleReceiver;
       ModuleClassInfoReceiverNet moduleClassInfoReceiver;
@@ -143,29 +138,24 @@ namespace engine
       ModuleClassNameReceiverNet moduleClassNameReceiver;
 	
       GraphNameReceiverNet graphNameReceiver;
-      SequenceUpdateReceiverNet sequenceUpdateReceiver;
-      SequenceNameReceiverNet sequenceNameReceiver;
+
 	
       ErrorReceiverNet errorReceiver;
 	
-      SequenceUpdateReceiverNet playlistUpdateReceiver;
-      SequenceNameReceiverNet playlistNameReceiver;  
 	
       ModelStatusReceiverNet modelStatusReceiver;
       RendererStatusReceiverNet rendererStatusReceiver;
-      SequencerStatusReceiverNet sequencerStatusReceiver;
-      SequencerStatusReceiverNet playlistStatusReceiver;
 	
       utils::AutoPtr<utils::ILogger> logger;
 
       model::Model pModel;
       renderer::Renderer pRenderer;
       dllloader::DllLoader pDllLoader;
-      sequencer::Sequencer pSequencer;
-      sequencer::Sequencer pPlayList;
 	
       utils::AutoPtr<AutoTypeLoader> sf;
       engine::Scheduler scheduler;
+
+	  bool first_time;
     };
 
 }

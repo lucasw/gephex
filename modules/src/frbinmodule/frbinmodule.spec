@@ -16,7 +16,7 @@ inputs
         type              = typ_StringType
         const             = true
         strong_dependency = true
-        hidden            = true
+        hidden            = false
         widget_type       = file_selector
         file_mask1        = *.*
         file_mask1_name   = All files
@@ -64,6 +64,8 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 1024
+        display_format    = fixed
+        precision         = 0
         step_size         = 1
         default           = 0
         help              = If x_size and y_size > 0 the image is scaled
@@ -71,7 +73,7 @@ inputs
 
     y_size
     {
-        name              = Größe(y)
+        name              = Size(y)
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -79,6 +81,8 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 1024
+        display_format    = fixed
+        precision         = 0
         step_size         = 1
         default           = 0
         help              = If x_size and y_size > 0 the image is scaled

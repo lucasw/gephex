@@ -45,13 +45,19 @@ public:
   /**
    * Sets the sender which is used for forwarding the data. 
    * The sender has to be set before send() is called.
-   * @param sender The sender that is used for forwarding
+   * @param sender The sender that is used for forwarding, if 0 the data is lost
    */
-  void registerSender(ISender& sender);
+  void registerSender(ISender* sender);
 
   virtual int send(const utils::Buffer&);
 
   virtual void dataReceived(const utils::Buffer& buf);
+
+  /**
+   * Resets the protocol. All data in the buffer is discarded.
+   * Use with care!
+   */
+  void reset();
 
 private:
   ISender* m_sender;
@@ -61,6 +67,7 @@ private:
   unsigned char* bufferPos;
   unsigned char* bufferEnd;
 
+  bool m_silent_mode;
   void read(const unsigned char*& dataPos,const unsigned char* dataEnd,
 	    int bytesToRead, int& bytesLeft);
 };

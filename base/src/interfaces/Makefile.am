@@ -17,10 +17,6 @@ INTERFACE_FILES = \
 		modulestatisticssmart.if \
 		renderercontrol.if \
 		rendererstatus.if \
-		sequencename.if \
-		sequencercontrol.if \
-		sequencerstatus.if \
-		sequenceupdate.if \
 		serializedgraph.if \
 		smartcontrolvalue.if \
 		typeclass.if \

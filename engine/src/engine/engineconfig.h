@@ -11,16 +11,13 @@ namespace engine
     public:
       EngineConfig();
       utils::StructReader sr;
-      std::string graphDir;
-      std::string sequDir;
-      std::string plDir;
+      std::string graphDir;      
       std::string ipcType;
       std::string ipcUnixNodePrefix;
       std::string moduleDirs;
       std::string typeDirs;
       int rendererInterval;
-      int netInterval;
-      int sequencerInterval;
+      int netInterval;      
       int port;
     private:
       utils::StructReader readConfigFile();

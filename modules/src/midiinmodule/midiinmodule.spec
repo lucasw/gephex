@@ -16,11 +16,15 @@ inputs
     device
     {
         name              = Device
-        type              = typ_StringType
+        type              = typ_NumberType
         hidden            = true
-        default           = /dev/midi00
+        default           = 0
         strong_dependency = true
         const             = true
+		widget_type       = number_selector
+        lower_bound       = 0
+        higher_bound      = 256
+        step_size         = 1
     }
 }
 

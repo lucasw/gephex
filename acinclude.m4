@@ -406,7 +406,8 @@ LIBS="$saved_LIBS"
 ])
 # Configure paths for SDL
 # Adapted for GePhex 4/2003
-#  changes: added AC_HELP_STRING, SDL_PREFIX
+#  changes: -added AC_HELP_STRING, SDL_PREFIX
+#           -changed ASL_LIBS to SDL_LD_FLAGS
 
 # Sam Lantinga 9/21/99
 # stolen from Manish Singh
@@ -415,7 +416,7 @@ LIBS="$saved_LIBS"
 # Shamelessly stolen from Owen Taylor
 
 dnl AM_PATH_SDL([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
-dnl Test for SDL, and define SDL_CFLAGS, SDL_LIBS, and SDL_PREFIX
+dnl Test for SDL, and define SDL_CFLAGS, SDL_LD_FLAGS, and SDL_PREFIX
 dnl
 AC_DEFUN(AM_PATH_SDL,
 [dnl 
@@ -460,7 +461,7 @@ AC_ARG_ENABLE([sdltest],
   else
     SDL_PREFIX=`$SDL_CONFIG $sdlconf_args --prefix`
     SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
-    SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
+    SDL_LD_FLAGS=`$SDL_CONFIG $sdlconf_args --libs`
 
     sdl_major_version=`$SDL_CONFIG $sdl_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
@@ -472,7 +473,7 @@ AC_ARG_ENABLE([sdltest],
       ac_save_CFLAGS="$CFLAGS"
       ac_save_LIBS="$LIBS"
       CFLAGS="$CFLAGS $SDL_CFLAGS"
-      LIBS="$LIBS $SDL_LIBS"
+      LIBS="$LIBS $SDL_LD_FLAGS"
 dnl
 dnl Now check if the installed SDL is sufficiently new. (Also sanity
 dnl checks the results of sdl-config to some extent
@@ -556,7 +557,7 @@ int main (int argc, char *argv[])
        else
           echo "*** Could not run SDL test program, checking why..."
           CFLAGS="$CFLAGS $SDL_CFLAGS"
-          LIBS="$LIBS $SDL_LIBS"
+          LIBS="$LIBS $SDL_LD_FLAGS"
           AC_TRY_LINK([
 #include <stdio.h>
 #include "SDL.h"
@@ -585,12 +586,12 @@ int main(int argc, char *argv[])
      fi
      SDL_PREFIX=""
      SDL_CFLAGS=""
-     SDL_LIBS=""
+     SDL_LD_FLAGS=""
      ifelse([$3], , :, [$3])
   fi
   AC_SUBST(SDL_PREFIX)
   AC_SUBST(SDL_CFLAGS)
-  AC_SUBST(SDL_LIBS)
+  AC_SUBST(SDL_LD_FLAGS)
   rm -f conf.sdltest
 ])
 dnl tests wether the sstream header exists

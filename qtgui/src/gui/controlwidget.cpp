@@ -44,7 +44,7 @@ namespace gui
     //TODO qt paranoia!
     if (m_label)
       {
-	m_label->parentWidget()->removeChild(m_label);
+//	m_label->parentWidget()->removeChild(m_label);
 	delete m_label;
       }
   }
@@ -75,7 +75,7 @@ namespace gui
     if ( m_label != 0 )
       {		
 	parent = m_label->parentWidget();
-	parent->removeChild(m_label);
+//	parent->removeChild(m_label);
 	delete m_label;
 	m_label = 0;
       }

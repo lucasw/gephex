@@ -16,7 +16,9 @@ struct VideoInfo
 class VideoFileDriver
 {
  public:
-  
+
+  virtual ~VideoFileDriver() {}
+
   /**
    * Loads a video file
    *
@@ -27,10 +29,19 @@ class VideoFileDriver
    * \param VideoInfo a struct that is filled in with info about this
    *             video
    *
-   * \throws std::invalid_argument if file can't be opened as a video
+   * \throws std::invalid_argument if file can't be opened
+   * \throws std::runtime_error if file has wrong format
    */
   virtual void load_file(const std::string& file_name, VideoInfo& info) = 0;
-  
+
+  /**
+   * Closes the video file.
+   *
+   * Must not throw any exception.
+   */
+  virtual void close_file() = 0;
+
+  virtual bool is_open() const = 0;  
   
   /**
    * Decodes a frame into the framebuffer.
@@ -45,7 +56,7 @@ class VideoFileDriver
    * \throws std::runtime_error if something bad happens
    */
   virtual void decode_frame(unsigned int frame_number,
-                            uint_32* framebuffer) = 0;
+                            uint_32* framebuffer, int width, int height) = 0;
 };
 
 

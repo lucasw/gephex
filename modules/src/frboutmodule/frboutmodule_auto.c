@@ -23,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=2 } ";
   break;
   case 2:
     return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
@@ -66,8 +66,8 @@ void* newInstance()
 
   if (inst == 0)
   {
-	  logger(0, "Could not allocate memory for instance struct!\n");
-	  return 0;
+          logger(0, "Could not allocate memory for instance struct!\n");
+          return 0;
   }
 
   s_ref_count += 1;
@@ -83,7 +83,7 @@ void* newInstance()
     }
   }
   
-  inst->my = s_inst;	
+  inst->my = s_inst;    
 
   return inst;
 }
@@ -95,8 +95,8 @@ void deleteInstance(void* instance)
   s_ref_count -= 1;
 
   if (s_ref_count == 0)
-  	destruct(s_inst);
-	
+        destruct(s_inst);
+        
   free(inst);
 }
 
@@ -147,7 +147,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Rahmen,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[Bestimmt auf welchem Monitor der Output angezeigt wird] } OutputDriver{widget_type=[combo_box] values=[default,GDI,XImage,XShm,SDL,GL,aalib] hidden=[true] } Xserver{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is SERVER_HOSTNAME:XSERVER:SCREEN] } ] outputs=[0] type=xpm } ";
+  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Frame,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[Bestimmt auf welchem Monitor der Output angezeigt wird] } OutputDriver{widget_type=[combo_box] values=[default,GDI,XImage,XShm,SDL,GL,aalib] hidden=[true] } Xserver{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is SERVER_HOSTNAME:XSERVER:SCREEN] } ] outputs=[0] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(frboutmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -156,32 +156,32 @@ int getInfo(char* buf,int bufLen)
       int i;
       int lines = getNumberOfStringsXPM(frboutmodule_xpm);
       tmpBuf = (char*) malloc(reqLen);
-	  if (tmpBuf == 0)
-	  {
-	     printf("Could not allocate memory in getInfo\n");
-		 return 0;
-	  }
+          if (tmpBuf == 0)
+          {
+             printf("Could not allocate memory in getInfo\n");
+                 return 0;
+          }
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
-	{
-	  char* source = frboutmodule_xpm[i];
-	  memcpy(offset,source,strlen(source)+1);
-	  offset += strlen(source) + 1;
-	}			
+        {
+          char* source = frboutmodule_xpm[i];
+          memcpy(offset,source,strlen(source)+1);
+          offset += strlen(source) + 1;
+        }                       
       memcpy(buf,tmpBuf,reqLen);
       free(tmpBuf);
     }
-  return reqLen;	
+  return reqLen;        
 }
 
 
 
 int initSO(log2T log_function) 
 {
-	s_log_function = log_function;
-	
-	
+        s_log_function = log_function;
+        
+        
 
-	return init(logger);
+        return init(logger);
 }

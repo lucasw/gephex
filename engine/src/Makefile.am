@@ -1,3 +1,3 @@
-SUBDIRS = sequencer model dllloader renderer engine
+SUBDIRS = model dllloader renderer engine
 
 

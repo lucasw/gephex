@@ -28,17 +28,11 @@ namespace gui
   class ModuleClassView;
   class ModuleClassTabView;
   class GraphNameView;
-  class SequenceNameView;
-  class PlaylistNameView;
   class PropertyView;
   class IPropertyDescription;
   class EditorWidget;
-  class SequenceEditor;
-  class DllSelectorDialog;
-  class SequenceActionManager;
-  class LogWindow;
-  class Playlist;
-  class ActionSequencerWrapper;
+  class DllSelectorDialog;  
+  class LogWindow;  
   class KeyboardManager;
 
   class VJMainWindow : public QMainWindow, public IRendererStatusReceiver
@@ -73,6 +67,7 @@ namespace gui
       void displayStatusText(const std::string& s);
 
       void displayProperties(const IPropertyDescription&);
+	  void undisplayProperties();
       void displayErrorMessage(const std::string& text);
 
       void setCaption(const std::string&);
@@ -85,6 +80,7 @@ namespace gui
       void shutDown();
       void synchronize();
 	  void aboutSlot();
+	  void dll_selector_closed();
 	
     private:
       void createActions(void);
@@ -103,7 +99,7 @@ namespace gui
       // Actions
       QAction* quitAction;
       QAction* showPlugInManagerAction;
-      QAction* showPlayListAction;
+      
       QAction* rendererStateAction;
       QAction* connectToEngineAction;
       QAction* disConnectToEngineAction;
@@ -116,7 +112,6 @@ namespace gui
       QWidget* centralWidget;
       QSplitter* splitVertical;
       QSplitter* splitHorizontal;
-      SequenceEditor* sequenceEditor;
       EditorWidget* editorWidget;
       QTabWidget* leftTab;
       QTabWidget* belowTab;
@@ -129,16 +124,12 @@ namespace gui
       bool running;
       bool connected;	
 	
-      ModuleClassView* moduleClassView;
-      ModuleClassTabView* moduleClassTabView;
-      SequenceActionManager* sam;
-      GraphNameView* graphNameView;
-      SequenceNameView* sequenceNameView;
-      PlaylistNameView* playlistNameView;
+      ModuleClassView* moduleClassView;      
+      GraphNameView* graphNameView;      
 
       enum {CONNECT_ENGINE, 
 	    DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
-	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR, WINDOW_PLAYLIST,
+	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR,
 	    KEYGRAB_ON, KEYGRAB_OFF};
 	
       QPopupMenu* effectMenue;
@@ -152,11 +143,6 @@ namespace gui
       int propertyTabID;
 
       DllSelectorDialog* m_dllSelector;
-
-      Playlist* m_playlist;
-
-      ActionSequencerWrapper* sequencerWrapper;
-      ActionSequencerWrapper* playlistWrapper;
 
       StructReaderPtr m_config;
 

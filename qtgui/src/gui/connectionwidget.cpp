@@ -62,7 +62,7 @@ bool ConnectionWidget::isInside(QWidget* rel,const QPoint& y) const
   if (b < 0 || b > 1) // Innerhalb der Geraden?
     return false;
 
-  if (fabs(a) < 7) // Nah genug dran?
+  if (fabs(a) < 14) // Nah genug dran?
     return true;
 
   return false;

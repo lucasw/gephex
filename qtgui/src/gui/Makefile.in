@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -110,15 +112,15 @@ AM_CPPFLAGS =  	-I $(srcdir)/.. 	-I $(srcdir)/../.. 	-I $(srcdir)/../../../util/
 
 bin_PROGRAMS = gephex-gui
 
-CPP_FILES =  	nodewidget.cpp 	connectionwidget.cpp 	main.cpp 	vjmainwindow.cpp 	controlwidget.cpp 	moduleclassview.cpp 	propertywidget.cpp 	picswitch.cpp 	nodeproperty.cpp 	propertywidgetconstructor.cpp 	hidebuttonconstructor.cpp 	hidebutton.cpp 	plugwidget.cpp 	inputplugwidget.cpp 	outputplugwidget.cpp 	sequenceeditor.cpp 	dllselectordialog.cpp 	sequencewidget.cpp 	scenewidget.cpp 	graphnameview.cpp 	sequencenameview.cpp 	playlist.cpp 	playlistnameview.cpp 	moduleclasstabview.cpp 	uebertab.cpp 	modulebutton.cpp 	videowallcontrollwidget.cpp 	guiconfig.cpp 	typeview.cpp 	typeviewfactory.cpp 	aboutdialog.cpp
+CPP_FILES =  	nodewidget.cpp 	connectionwidget.cpp 	main.cpp 	vjmainwindow.cpp 	controlwidget.cpp 	moduleclassview.cpp 	propertywidget.cpp 	picswitch.cpp 	nodeproperty.cpp 	propertywidgetconstructor.cpp 	hidebuttonconstructor.cpp 	hidebutton.cpp 	plugwidget.cpp 	inputplugwidget.cpp 	outputplugwidget.cpp 	dllselectordialog.cpp 	graphnameview.cpp 	modulebutton.cpp 	guiconfig.cpp 	typeview.cpp 	typeviewfactory.cpp 	aboutdialog.cpp
 
 
-MOCED_FILES =  	playlist_moc.cpp 	dllselectordialog_moc.cpp 	sequenceeditor_moc.cpp 	plugwidget_moc.cpp 	sequencewidget_moc.cpp 	outputplugwidget_moc.cpp 	inputplugwidget_moc.cpp 	moduleclassview_moc.cpp 	propertywidget_moc.cpp 	vjmainwindow_moc.cpp 	controlwidget_moc.cpp 	graphnameview_moc.cpp 	videowallcontrollwidget_moc.cpp 	picswitch_moc.cpp 	hidebutton_moc.cpp 	sequencenameview_moc.cpp 	nodewidget_moc.cpp 	playlistnameview_moc.cpp 	modulebutton_moc.cpp 	moduleclasstabview_moc.cpp 	typeview_moc.cpp
+MOCED_FILES =  	dllselectordialog_moc.cpp 	plugwidget_moc.cpp 	outputplugwidget_moc.cpp 	inputplugwidget_moc.cpp 	moduleclassview_moc.cpp 	propertywidget_moc.cpp 	vjmainwindow_moc.cpp 	controlwidget_moc.cpp 	graphnameview_moc.cpp 	picswitch_moc.cpp 	hidebutton_moc.cpp 	nodewidget_moc.cpp 	modulebutton_moc.cpp 	typeview_moc.cpp
 
 
 BUILT_SOURCES = $(MOCED_FILES)
 
-HEADER_FILES =  	connectionwidget.h 	controlwidget.h 	dllselectordialog.h 	graphnameview.h 	hidebuttonconstructor.h 	hidebutton.h 	imoduleinfobasestation.h 	inputplugwidget.h 	modulebutton.h 	moduleclassview.h 	nodeproperty.h 	nodewidget.h 	outputplugwidget.h 	ownstyle.h 	picswitch.h 	plugwidget.h 	propertywidgetconstructor.h 	propertywidget.h 	scenewidget.h 	sequenceeditor.h 	sequencenameview.h 	sequencewidget.h 	videowallcontrollwidget.h 	vjmainwindow.h 	playlist.h 	playlistnameview.h 	moduleclasstabview.h 	uebertab.h 	guiconfig.h 	typeview.h 	typeviewfactory.h 	aboutdialog.h
+HEADER_FILES =  	connectionwidget.h 	controlwidget.h 	dllselectordialog.h 	graphnameview.h 	hidebuttonconstructor.h 	hidebutton.h 	imoduleinfobasestation.h 	inputplugwidget.h 	modulebutton.h 	moduleclassview.h 	nodeproperty.h 	nodewidget.h 	outputplugwidget.h 	ownstyle.h 	picswitch.h 	plugwidget.h 	propertywidgetconstructor.h 	propertywidget.h 	vjmainwindow.h 	guiconfig.h 	typeview.h 	typeviewfactory.h 	aboutdialog.h
 
 
 EXTRA_DIST =  	node.xpm 	inplugfree.xpm 	inplugbusy.xpm 	outplugfree.xpm 	outplugbusy.xpm 	rot_klein.xpm 	gruen_klein.xpm
@@ -154,25 +156,16 @@ moduleclassview.$(OBJEXT) propertywidget.$(OBJEXT) picswitch.$(OBJEXT) \
 nodeproperty.$(OBJEXT) propertywidgetconstructor.$(OBJEXT) \
 hidebuttonconstructor.$(OBJEXT) hidebutton.$(OBJEXT) \
 plugwidget.$(OBJEXT) inputplugwidget.$(OBJEXT) \
-outputplugwidget.$(OBJEXT) sequenceeditor.$(OBJEXT) \
-dllselectordialog.$(OBJEXT) sequencewidget.$(OBJEXT) \
-scenewidget.$(OBJEXT) graphnameview.$(OBJEXT) \
-sequencenameview.$(OBJEXT) playlist.$(OBJEXT) \
-playlistnameview.$(OBJEXT) moduleclasstabview.$(OBJEXT) \
-uebertab.$(OBJEXT) modulebutton.$(OBJEXT) \
-videowallcontrollwidget.$(OBJEXT) guiconfig.$(OBJEXT) \
+outputplugwidget.$(OBJEXT) dllselectordialog.$(OBJEXT) \
+graphnameview.$(OBJEXT) modulebutton.$(OBJEXT) guiconfig.$(OBJEXT) \
 typeview.$(OBJEXT) typeviewfactory.$(OBJEXT) aboutdialog.$(OBJEXT) \
-playlist_moc.$(OBJEXT) dllselectordialog_moc.$(OBJEXT) \
-sequenceeditor_moc.$(OBJEXT) plugwidget_moc.$(OBJEXT) \
-sequencewidget_moc.$(OBJEXT) outputplugwidget_moc.$(OBJEXT) \
-inputplugwidget_moc.$(OBJEXT) moduleclassview_moc.$(OBJEXT) \
-propertywidget_moc.$(OBJEXT) vjmainwindow_moc.$(OBJEXT) \
-controlwidget_moc.$(OBJEXT) graphnameview_moc.$(OBJEXT) \
-videowallcontrollwidget_moc.$(OBJEXT) picswitch_moc.$(OBJEXT) \
-hidebutton_moc.$(OBJEXT) sequencenameview_moc.$(OBJEXT) \
-nodewidget_moc.$(OBJEXT) playlistnameview_moc.$(OBJEXT) \
-modulebutton_moc.$(OBJEXT) moduleclasstabview_moc.$(OBJEXT) \
-typeview_moc.$(OBJEXT)
+dllselectordialog_moc.$(OBJEXT) plugwidget_moc.$(OBJEXT) \
+outputplugwidget_moc.$(OBJEXT) inputplugwidget_moc.$(OBJEXT) \
+moduleclassview_moc.$(OBJEXT) propertywidget_moc.$(OBJEXT) \
+vjmainwindow_moc.$(OBJEXT) controlwidget_moc.$(OBJEXT) \
+graphnameview_moc.$(OBJEXT) picswitch_moc.$(OBJEXT) \
+hidebutton_moc.$(OBJEXT) nodewidget_moc.$(OBJEXT) \
+modulebutton_moc.$(OBJEXT) typeview_moc.$(OBJEXT)
 gephex_gui_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -420,8 +413,8 @@ graphnameview.o: graphnameview.cpp graphnameview.h base/treeview.h \
 	../../../base/src/utils/autoptr.h \
 	../../../base/src/interfaces/imodelcontrolreceiver.h \
 	../../../base/src/interfaces/ierrorreceiver.h \
-	../guimodel/iscenesequencer.h base/askforstringdialog.h \
-	base/treeviewitem.h ../../../base/src/utils/stringtokenizer.h \
+	base/askforstringdialog.h base/treeviewitem.h \
+	../../../base/src/utils/stringtokenizer.h \
 	../../../base/src/utils/itokenizer.h
 graphnameview_moc.o: graphnameview_moc.cpp graphnameview.h \
 	base/treeview.h \
@@ -444,15 +437,6 @@ main.o: main.cpp ../../../config.h ownstyle.h vjmainwindow.h \
 	../../../base/src/utils/structreader.h
 modulebutton.o: modulebutton.cpp modulebutton.h
 modulebutton_moc.o: modulebutton_moc.cpp modulebutton.h
-moduleclasstabview.o: moduleclasstabview.cpp moduleclasstabview.h \
-	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
-	../../../base/src/utils/autoptr.h ../guimodel/moduleinfo.h \
-	../guimodel/pluginfo.h ../guimodel/xpm.h modulebutton.h \
-	uebertab.h
-moduleclasstabview_moc.o: moduleclasstabview_moc.cpp \
-	moduleclasstabview.h imoduleinfobasestation.h \
-	../guimodel/imoduleclassview.h \
-	../../../base/src/utils/autoptr.h
 moduleclassview.o: moduleclassview.cpp moduleclassview.h \
 	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
 	../../../base/src/utils/autoptr.h ../guimodel/moduleinfo.h \
@@ -484,24 +468,6 @@ outputplugwidget_moc.o: outputplugwidget_moc.cpp outputplugwidget.h \
 	plugwidget.h
 picswitch.o: picswitch.cpp picswitch.h
 picswitch_moc.o: picswitch_moc.cpp picswitch.h
-playlist.o: playlist.cpp playlist.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
-	../guimodel/iscenechangelistener.h \
-	../../../base/src/utils/autoptr.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	../guimodel/iscenesequencer.h base/askforstringdialog.h
-playlist_moc.o: playlist_moc.cpp playlist.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
-	../guimodel/iscenechangelistener.h \
-	../../../base/src/utils/autoptr.h
-playlistnameview.o: playlistnameview.cpp playlistnameview.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
-	../../../base/src/utils/autoptr.h base/treeview.h \
-	base/treeviewitem.h base/askforstringdialog.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h
-playlistnameview_moc.o: playlistnameview_moc.cpp playlistnameview.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
-	../../../base/src/utils/autoptr.h
 plugwidget.o: plugwidget.cpp plugwidget.h
 plugwidget_moc.o: plugwidget_moc.cpp plugwidget.h
 propertywidget.o: propertywidget.cpp propertywidget.h \
@@ -517,33 +483,6 @@ propertywidgetconstructor.o: propertywidgetconstructor.cpp \
 	../../../base/src/interfaces/icontrolvaluereceiver.h \
 	../../../base/src/utils/buffer.h \
 	../guimodel/controlvaluedispatcher.h ../guimodel/point.h
-scenewidget.o: scenewidget.cpp scenewidget.h
-sequenceeditor.o: sequenceeditor.cpp sequenceeditor.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
-	../guimodel/iscenechangelistener.h sequencewidget.h \
-	../../../base/src/utils/autoptr.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	../guimodel/iscenesequencer.h
-sequenceeditor_moc.o: sequenceeditor_moc.cpp sequenceeditor.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
-	../guimodel/iscenechangelistener.h
-sequencenameview.o: sequencenameview.cpp sequencenameview.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
-	../../../base/src/utils/autoptr.h base/treeview.h \
-	base/treeviewitem.h base/askforstringdialog.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
-	../guimodel/iscenesequencer.h
-sequencenameview_moc.o: sequencenameview_moc.cpp sequencenameview.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
-	../../../base/src/utils/autoptr.h
-sequencewidget.o: sequencewidget.cpp sequencewidget.h \
-	../../../base/src/utils/autoptr.h scenewidget.h \
-	../../../base/src/utils/stringtokenizer.h \
-	../../../base/src/utils/itokenizer.h
-sequencewidget_moc.o: sequencewidget_moc.cpp sequencewidget.h \
-	../../../base/src/utils/autoptr.h
 typeview.o: typeview.cpp typeview.h ../../../base/src/utils/buffer.h
 typeview_moc.o: typeview_moc.cpp typeview.h \
 	../../../base/src/utils/buffer.h
@@ -556,15 +495,6 @@ typeviewfactory.o: typeviewfactory.cpp typeviewfactory.h \
 	typeviews/comboboxstringview.h typeviews/filestringview.h \
 	typeviews/positionview.h typeviews/colorview.h \
 	typeviews/fontview.h
-uebertab.o: uebertab.cpp uebertab.h
-videowallcontrollwidget.o: videowallcontrollwidget.cpp \
-	videowallcontrollwidget.h propertywidget.h \
-	../../../base/src/interfaces/icontrolvaluereceiver.h \
-	../../../base/src/utils/buffer.h
-videowallcontrollwidget_moc.o: videowallcontrollwidget_moc.cpp \
-	videowallcontrollwidget.h propertywidget.h \
-	../../../base/src/interfaces/icontrolvaluereceiver.h \
-	../../../base/src/utils/buffer.h
 vjmainwindow.o: vjmainwindow.cpp vjmainwindow.h \
 	../../../base/src/interfaces/irendererstatusreceiver.h \
 	../../../base/src/utils/autoptr.h base/propertyview.h \
@@ -572,34 +502,21 @@ vjmainwindow.o: vjmainwindow.cpp vjmainwindow.h \
 	base/keyboardmanager.h editor/editorwidget.h moduleclassview.h \
 	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
 	graphnameview.h base/treeview.h \
-	../../../base/src/interfaces/igraphnamereceiver.h \
-	sequencenameview.h \
-	../../../base/src/interfaces/isequencenamereceiver.h \
-	playlistnameview.h picswitch.h dllselectordialog.h \
+	../../../base/src/interfaces/igraphnamereceiver.h picswitch.h \
+	dllselectordialog.h \
 	../../../base/src/interfaces/imoduleclassnamereceiver.h \
-	playlist.h \
-	../../../base/src/interfaces/isequencerstatusreceiver.h \
-	../guimodel/iscenechangelistener.h sequenceeditor.h \
-	../../../base/src/interfaces/isequenceupdatereceiver.h \
 	aboutdialog.h \
 	../../../base/src/interfaces/ienginecontrolreceiver.h \
 	../../../base/src/interfaces/irenderercontrolreceiver.h \
-	../../../base/src/interfaces/isequencercontrolreceiver.h \
 	../../../base/src/interfaces/igraphnamesender.h \
 	../../../base/src/interfaces/imoduleclassnamesender.h \
-	../../../base/src/interfaces/isequencenamesender.h \
-	../../../base/src/interfaces/isequenceupdatesender.h \
 	../../../base/src/interfaces/ierrorsender.h \
 	../../../base/src/interfaces/irendererstatussender.h \
-	../../../base/src/interfaces/isequencerstatussender.h \
 	../guimodel/enginewrapper.h ../../../util/include/basic_types.h \
 	../guimodel/moduleclassmodel.h \
 	../../../base/src/interfaces/imoduleclassinforeceiver.h \
-	../guimodel/actionsequencerwrapper.h \
-	../guimodel/iscenesequencer.h \
-	../../../base/src/interfaces/isequencercontrolsender.h \
 	rot_klein.xpm gruen_klein.xpm \
-	../../../base/src/utils/structreader.h
+	../../../base/src/utils/structreader.h ../../../config.h
 vjmainwindow_moc.o: vjmainwindow_moc.cpp vjmainwindow.h \
 	../../../base/src/interfaces/irendererstatusreceiver.h \
 	../../../base/src/utils/autoptr.h

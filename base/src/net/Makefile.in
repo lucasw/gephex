@@ -75,6 +75,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
+GLX_LDFLAGS = @GLX_LDFLAGS@
 HAVE_LIB = @HAVE_LIB@
 LIB = @LIB@
 LIBTOOL = @LIBTOOL@
@@ -97,8 +98,9 @@ RC = @RC@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_IMAGE_LDFLAGS = @SDL_IMAGE_LDFLAGS@
-SDL_LIBS = @SDL_LIBS@
+SDL_LD_FLAGS = @SDL_LD_FLAGS@
 SDL_PREFIX = @SDL_PREFIX@
+SDL_TTF_LDFLAGS = @SDL_TTF_LDFLAGS@
 STRIP = @STRIP@
 UIC = @UIC@
 VERSION = @VERSION@
@@ -309,6 +311,11 @@ domainclientsocket.o: domainclientsocket.cpp domainclientsocket.h \
 domainserversocket.o: domainserversocket.cpp domainserversocket.h \
 	iserversocket.h sotimeout.h ../../../config.h netexceptions.h \
 	socketutils.h fdsocket.h isocket.h isender.h ../utils/buffer.h
+domainsockettest.o: domainsockettest.cpp domainsockettest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h \
+	idatalistener.h isocket.h netexceptions.h isender.h sotimeout.h \
+	domainserversocket.h iserversocket.h domainclientsocket.h \
+	iclientsocket.h block.h ../../../config.h ../utils/buffer.h
 fdsocket.o: fdsocket.cpp fdsocket.h isocket.h netexceptions.h isender.h \
 	sotimeout.h ../../../config.h socketutils.h ../utils/buffer.h
 isocket.o: isocket.cpp isocket.h netexceptions.h isender.h sotimeout.h
@@ -316,12 +323,25 @@ netexceptions.o: netexceptions.cpp netexceptions.h
 protocol.o: protocol.cpp protocol.h idatalistener.h isender.h \
 	../../../config.h ../utils/buffer.h \
 	../../../util/include/basic_types.h
+protocoltest.o: protocoltest.cpp protocoltest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h isender.h \
+	protocol.h idatalistener.h block.h ../../../config.h \
+	../utils/buffer.h
 socketadaptor.o: socketadaptor.cpp socketadaptor.h isocket.h \
 	netexceptions.h isender.h sotimeout.h idatalistener.h \
 	../utils/buffer.h
 socketutils.o: socketutils.cpp socketutils.h ../../../config.h \
 	netexceptions.h
 sotimeout.o: sotimeout.cpp sotimeout.h
+tagdispatchertest.o: tagdispatchertest.cpp tagdispatchertest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h \
+	tagdispatcher.h itaginterpreter.h tagdispatcher.cpp \
+	idatalistener.h block.h ../../../config.h ../utils/buffer.h
+taggertest.o: taggertest.cpp taggertest.h ../TestFramework/LeafTest.h \
+	../TestFramework/Test.h isender.h itaginterpreter.h tagger.h \
+	itagger.h idatalistener.h ../net/tagger.cpp ../net/tagger.h \
+	tagutils.h ../../../util/include/basic_types.h block.h \
+	../../../config.h ../utils/buffer.h ../utils/bufferutils.h
 tagutils.o: tagutils.cpp tagutils.h ../../../util/include/basic_types.h \
 	../utils/buffer.h
 tcpclientsocket.o: tcpclientsocket.cpp tcpclientsocket.h iclientsocket.h \
@@ -330,6 +350,16 @@ tcpclientsocket.o: tcpclientsocket.cpp tcpclientsocket.h iclientsocket.h \
 tcpserversocket.o: tcpserversocket.cpp tcpserversocket.h iserversocket.h \
 	sotimeout.h ../../../config.h netexceptions.h socketutils.h \
 	fdsocket.h isocket.h isender.h ../utils/buffer.h
+tcpsockettest.o: tcpsockettest.cpp tcpsockettest.h \
+	../TestFramework/LeafTest.h ../TestFramework/Test.h \
+	idatalistener.h isocket.h netexceptions.h isender.h sotimeout.h \
+	tcpserversocket.h iserversocket.h tcpclientsocket.h \
+	iclientsocket.h block.h ../../../config.h ../utils/buffer.h
+testmain.o: testmain.cpp ../../../config.h \
+	../TestFramework/CompositeTest.h ../TestFramework/Test.h \
+	../TestFramework/Tester.h protocoltest.h \
+	../TestFramework/LeafTest.h tcpsockettest.h domainsockettest.h \
+	taggertest.h tagdispatchertest.h
 
 check-TESTS: $(TESTS)
 	@failed=0; all=0; \

@@ -112,7 +112,7 @@ public slots:
   // constructor klass
 
   PositionViewConstructor::PositionViewConstructor():
-    TypeViewConstructor("Positionsfeld","pos_field")
+    TypeViewConstructor("position input","pos_field")
   {
   }
 		

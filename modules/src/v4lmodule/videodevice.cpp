@@ -83,7 +83,7 @@ VideoDevice::~VideoDevice()
   close(fd);
 }
 
-void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
+void VideoDevice::grabImage(Frame& frame, bool drop) throw (std::runtime_error)
 {
   // the default size is minimum size
   if (frame.xSize==0)
@@ -256,31 +256,36 @@ void VideoDevice::grabImage(Frame& frame) throw (std::runtime_error)
   videoMMap.width = initFrame.xSize;
   videoMMap.height = initFrame.ySize;
   videoMMap.format =  initFrame.type;
-  int errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
-  if(errorCode==-1)
+  int errorCode=0;
+  if (!drop)
     {
-      std::ostringstream errorMsg; 
-      errorMsg << "error while starting capture next buffer: ";
-      errorMsg << 0;
-      errorMsg << " errno= " << errno;
-      errorMsg << " errorstring= " << strerror(errno);
-      throw std::runtime_error(errorMsg.str());
+      errorCode= ioctl(fd, VIDIOCMCAPTURE, &videoMMap);
+      if(errorCode==-1)
+	{
+	  std::ostringstream errorMsg; 
+	  errorMsg << "error while starting capture next buffer: ";
+	  errorMsg << 0;
+	  errorMsg << " errno= " << errno;
+	  errorMsg << " errorstring= " << strerror(errno);
+	  throw std::runtime_error(errorMsg.str());
+	}
+  
+      std::swap(frontbf,backbf);
+ 
+      errorCode = ioctl(fd, VIDIOCSYNC, &backbf);  
     }
-  
-  std::swap(frontbf,backbf);
-  
-  errorCode = ioctl(fd, VIDIOCSYNC, &backbf);  
+
   frame.frameptr=frameptr[backbf];
   frame.type=initFrame.type;
   if(errorCode==-1)
-     {
+    {
       std::ostringstream errorMsg;
       errorMsg << "error while cyncing with last buffer: ";
       errorMsg << backbf << " !!!";
       errorMsg << " errno= " << errno;
       errorMsg << " errorstring= " << strerror(errno);
       throw std::runtime_error(errorMsg.str());
-     }
+    }
 }
 
 void VideoDevice::setProperties(int brightness,int hue,int colour,

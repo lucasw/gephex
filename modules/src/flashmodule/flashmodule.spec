@@ -25,7 +25,7 @@ inputs
 
     src
     {
-        name              = Bild
+        name              = Image
         type              = typ_FrameBufferType
         const             = true
         strong_dependency = true
@@ -78,7 +78,7 @@ outputs
 {
     r
     {
-        name = Bild
+        name = Image
         type = typ_FrameBufferType
     }
 }

@@ -23,8 +23,9 @@ namespace gui
 						    IControlValueReceiver& r)
   {
     std::list<IControlValueReceiver*>& l = this->find(nodeID,inputIndex);
-	m_model->syncInputValue(nodeID,inputIndex);
     l.push_back(&r);
+
+    m_model->syncInputValue(nodeID,inputIndex);
   }
 
   void ControlValueDispatcher::unregisterValueReceiver(int nodeID,
@@ -74,10 +75,14 @@ namespace gui
     //TODO
   }
 
-	void ControlValueDispatcher::syncInputValuesFinished()
+  void ControlValueDispatcher::syncInputValuesFinished()
   {
     //TODO
   }
 
-
+  void ControlValueDispatcher::clear()
+  {
+    receivers.clear();
+  }
 }
+

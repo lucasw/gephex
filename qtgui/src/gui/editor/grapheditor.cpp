@@ -15,6 +15,7 @@
 #include <qtimer.h>
 
 #include "interfaces/imodelcontrolreceiver.h"
+#include "interfaces/ierrorreceiver.h"
 #include "guimodel/graphmodel.h"
 
 #include "imoduleinfobasestation.h"
@@ -64,9 +65,11 @@ namespace gui
     nodePixmaps[NodeWidget::OUTPUTPLUG_WIDGET_BUSY_PIC] 
       = QPixmap(outplugbusy_xpm);
 	
-    QTimer* timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(displayTimings()));
-    timer->start(2500);
+	// no need to start timer, we don't display the timings
+	// for the moment
+    //QTimer* timer = new QTimer(this);
+    //connect(timer,SIGNAL(timeout()),this,SLOT(displayTimings()));
+    //timer->start(2500);
   }
 
   GraphEditor::~GraphEditor()
@@ -437,7 +440,7 @@ namespace gui
 	  }
 	catch (std::exception& err)
 	  {
-	    QMessageBox::information( 0, "Error", err.what() );
+	    m_log.error(err.what() );
 	  }
       }
   }
@@ -462,7 +465,7 @@ namespace gui
       }
     catch (std::exception& err)
       {
-	QMessageBox::information( 0, "Error", err.what() );
+	m_log.error(err.what() );
       }
   }
 
@@ -523,7 +526,7 @@ namespace gui
 	    }
 	  catch (std::exception& err)
 	    {
-	      QMessageBox::information( 0, "Error", err.what() );
+	      m_log.error(err.what() );
 	    }
 	}
 	break;
@@ -538,17 +541,17 @@ namespace gui
 	    }
 	  catch (std::exception& err)
 	    {
-	      QMessageBox::information( 0, "Error", err.what() );
+	      m_log.error(err.what() );
 	    }
 	}
 	break;
       case NODEWIDGET_PROPERTIES:
 	{
-	  emit properties(currentNode->getProperties());
+	  emit displayProperties(currentNode->getProperties());
 	}
 	break;
       default:
-	QMessageBox::information( 0, "Error", "what?" );
+	m_log.error("what?" );
       }
   }
 
@@ -601,12 +604,12 @@ namespace gui
 	    }
 	  catch (std::runtime_error& e)
 	    {
-	      QMessageBox::information( 0, "Error", e.what() );
+	      m_log.error(e.what() );
 	    }
 	}
 	break;
       default:
-	QMessageBox::information( 0, "Error", "Leider noch nicht "
+	m_log.error("Leider noch nicht "
 				  "implementiert. Aber für nen 1000er "
 				  "mehr laesst sich da schon was machen..." );
       }
@@ -633,12 +636,12 @@ namespace gui
 	    }
 	  catch (std::exception& err)
 	    {
-	      QMessageBox::information( 0, "Error", err.what() );
+	      m_log.error(err.what() );
 	    }
 	}
 	break;
       default:
-	QMessageBox::information( 0, "Error", "what?" );
+	m_log.error("what?" );
       }
   }
 
@@ -674,7 +677,8 @@ namespace gui
   ////////////////////////////////////////////////////////////////////////////
   // events:
 
-  void GraphEditor::mousePressEvent(QMouseEvent* e){
+  void GraphEditor::mousePressEvent(QMouseEvent* e)
+  {
     //grabKeyboard(); //TODO
     //lastMousePos = e->pos();
 	
@@ -724,7 +728,8 @@ namespace gui
 	  }
 	catch (std::exception& err)
 	  {
-	    QMessageBox::information( 0, "Error", err.what() );
+	    //m_log.error(err.what() );
+		m_log.error(err.what());
 	  }
       }
   }
@@ -817,6 +822,8 @@ namespace gui
   void GraphEditor::editGraphChanged( const std::string& graphID,
 				      const std::string& snapID )
   {
+	emit undisplayProperties();
+	clickedPos = QPoint(-1,-1);
     emit newEditGraph( graphID, snapID );
   }
 

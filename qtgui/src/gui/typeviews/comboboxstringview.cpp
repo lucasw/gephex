@@ -54,9 +54,10 @@ namespace gui
 			
       if (it == m_values.end())
 	{
-	  throw std::runtime_error("Invalid combobox value: '" + str + "'");
+	  //bad idea! don't throw!!
+//	throw std::runtime_error("Invalid combobox value: '" + str + "'");
 	}
-			
+	else
       m_box->setCurrentItem(it->second);
     }
 
@@ -78,7 +79,7 @@ void comboboxChanged(const QString& s)
   // constructor
 
   ComboboxStringViewConstructor::ComboboxStringViewConstructor()
-    : TypeViewConstructor("Combobox", "combo_box")
+    : TypeViewConstructor("combo box", "combo_box")
   {
   }
 

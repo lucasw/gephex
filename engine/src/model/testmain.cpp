@@ -3,7 +3,7 @@
 #include "TestFramework/CompositeTest.h"
 #include "TestFramework/Tester.h"
 //#include "modeltest.h"
-#include "datatreetest.h"
+//#include "datatreetest.h"
 
 void doTests()
 {
@@ -12,8 +12,8 @@ void doTests()
 	/*ModelTest mt;
 	AllTests.addTest(mt);*/
 
-	DataTreeTest dtt;
-	AllTests.addTest(dtt);
+	//DataTreeTest dtt;
+	//AllTests.addTest(dtt);
 	
 	TesterStream ts(std::cout);
 	AllTests.action(ts);

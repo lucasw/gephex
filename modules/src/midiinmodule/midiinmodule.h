@@ -7,13 +7,13 @@ extern "C"
 #endif
 #include "dllmodule.h"
 #include "miditype.h"
-#include "stringtype.h"
+#include "numbertype.h"
 
 struct _MyInstance;
 typedef struct _Instance
 {
 struct _MyInstance* my;
- StringType* in_device;
+ NumberType* in_device;
  MidiType* out_r;
 } Instance, *InstancePtr;
 enum Inputs { in_device = 0 };

@@ -79,6 +79,7 @@ inputs
 
 outputs
 {
+   
     r
     {
        name = AddiertesSignal

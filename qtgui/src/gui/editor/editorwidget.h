@@ -44,14 +44,16 @@ namespace gui
 
 public slots:
 void displayStatusText(const std::string& s);
-    void displayProperties(const IPropertyDescription& pd);	
+    void displayProperties_(const IPropertyDescription& pd);	
+	void undisplayProperties_();
 
     void newEditGraphSlot(const std::string&,const std::string&);
     void newRenderedGraphSlot(const std::string&);
 
     signals:
     void statusText(const std::string&);
-    void properties(const IPropertyDescription& pd);	
+    void displayProperties(const IPropertyDescription& pd);	
+	void undisplayProperties();
 
     void newEditGraph( const std::string&, const std::string& );
     void newRenderedGraph( const std::string& );

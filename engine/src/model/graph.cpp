@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+  Copyright (C) 2001-2003 
+
+  Georg Seidel <georg@gephex.org> 
+  Martin Bayer <martin@gephex.org> 
+  Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "graph.h"
 
 #include <stdexcept>
@@ -12,24 +34,26 @@
 
 namespace model
 {
-  Graph::Graph(const std::string& id_, const std::string& name_)
-    : m_id(id_), m_name(name_),m_maxModuleID(0)/*, m_specs(spec_)*/
+  
+  Graph::Graph(const std::string& id, const std::string& name)
+    : m_id(id), m_name(name),m_maxModuleID(0)
   {
   }
-
+  
+  
   Graph::~Graph()
   {   
   }
-
+  
 
   void Graph::addModule(const IModuleClassSpec& spec, int moduleID)
   {	
     if (moduleID > m_maxModuleID)
       m_maxModuleID = moduleID;
-
+    
     utils::AutoPtr<GraphNode> 
       newNode ( new GraphNode(spec,moduleID) );
-
+    
     m_nodes.push_back( newNode );
 
     // add all default controll values to snapshots
@@ -318,9 +342,9 @@ namespace model
   {
     // the ids start at 1, after removal of nodes there may be gaps
     ++m_maxModuleID;
-
+    
     this->addModule(spec,m_maxModuleID);	
-
+    
     return m_maxModuleID;
   }
 

@@ -22,9 +22,10 @@ struct _MyInstance* my;
  NumberType* in_colour;
  NumberType* in_contrast;
  NumberType* in_whiteness;
+ NumberType* in_drops;
  FrameBufferType* out_r;
 } Instance, *InstancePtr;
-enum Inputs { in_devicefile = 0, in_x_size = 1, in_y_size = 2, in_brightness = 3, in_hue = 4, in_colour = 5, in_contrast = 6, in_whiteness = 7 };
+enum Inputs { in_devicefile = 0, in_x_size = 1, in_y_size = 2, in_brightness = 3, in_hue = 4, in_colour = 5, in_contrast = 6, in_whiteness = 7, in_drops = 8 };
 enum Outputs { out_r = 0 };
 
 struct _MyInstance* construct(void);

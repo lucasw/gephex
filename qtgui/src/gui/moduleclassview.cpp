@@ -117,4 +117,32 @@ ModuleClassView::getModuleInfo(const std::string& moduleClassName) const
 	return *it->second;
 }
 
+void ModuleClassView::clear()
+{
+	infos.clear();
+	mClassID2Name.clear();
+	m_itemIDs.clear();	
+
+	/*for (std::map<std::string,QPopupMenu*>::iterator it = groups.begin();
+	     it != groups.end(); ++it)
+	{
+		delete it->second;
+	}*/
+
+	groups.clear();
+	menues.clear();
+
+	m_menu->clear();
+
+}
+
+void ModuleClassView::syncStarted()
+{
+	clear();
+}
+
+void ModuleClassView::syncFinished()
+{
+}
+
 } // end of namespace gui
