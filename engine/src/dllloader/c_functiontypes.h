@@ -1,7 +1,7 @@
 #ifndef INCLUDED_FUNCTION_TYPES_H
 #define INCLUDED_FUNCTION_TYPES_H
 
-typedef int (*initT)(void (*)(int,const char*));
+typedef int (*initT)(void (*)(int,const char*,const char*));
 typedef void (*shutDownT)();
 
 typedef void*  (*newInstanceT) ();

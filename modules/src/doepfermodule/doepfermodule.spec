@@ -3,12 +3,12 @@
 mod_doepfermodule
 {
 	name          = Doepferl
-	group	      = Quellen
+	group	      = Midi
 	deterministic = true
 	xpm	      = doepfermodule.xpm
 	author        = Mel Duran
-    version       = 1000.65-prealpha
-	static = false
+        version       = 1000.65-prealpha
+	static        = false
 }
 
 inputs
@@ -21,17 +21,17 @@ inputs
 		const	=	true
 		strong_dependency = true
 		hidden	= true
-		widget_type	=	number_selector
-		lower_bound	= 1
-		higher_bound = 16
-		default	= 1
-		absolute	= true
+		widget_type	=  number_selector
+		lower_bound	= 0
+		higher_bound = 15
+		step_size = 1
+		default	= 0
 		help	= Midi Kanal
 	}
 
 	button_group
 	{
-		name = MIDI_Mode
+		name = Key_Group
 		type = typ_NumberType
 		const	=	true
 		strong_dependency = true
@@ -39,8 +39,8 @@ inputs
 		widget_type	=	number_selector
 		lower_bound	= 0
 		higher_bound = 5
+		step_size = 1
 		default	= 0
-		absolute	= true
 		help	= balh
 	}
 

@@ -26,8 +26,10 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
+libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
+includedir = @includedir@
 oldincludedir = /usr/include
 
 DESTDIR =
@@ -36,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -58,52 +60,73 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
-PYTHON = @PYTHON@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
-baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/utils
-libdir = @libdir@/gephex
+TESTS = utilstest
 
-noinst_PROGRAMS = utilstest
+check_PROGRAMS = utilstest
 
-lib_LIBRARIES = libutils.a
+noinst_LIBRARIES = libutils.a
 
 libutils_a_SOURCES =  		stringtokenizer.cpp 		structscanner.cpp 		filesystem.cpp 		structreader.cpp 		buffer.cpp 		itokenizer.cpp 		streamtokenizer.cpp 		bufferutils.cpp 		xmlutils.cpp 		streamlogger.cpp 		outbytestream.cpp 		inbytestream.cpp 		outbytestreamutils.cpp 		inbytestreamutils.cpp 		bufferstream.cpp 		string_.cpp 		sharedlibrary.cpp 		timing.cpp
 
 
-include_HEADERS =  		autoptr.h 		buffer.h 		bufferutils.h 		filesystem.h 		ilogger.h 		istructtokenlistener.h 		itokenizer.h 		streamlogger.h 		streamtokenizer.h 		stringtokenizer.h 		structreader.h 		structscanner.h 		xmlutils.h 		outbytestream.h 		inbytestream.h 		outbytestreamutils.h 		inbytestreamutils.h 		bufferstream.h 		block.h 		string_.h 		sharedlibrary.h 		timing.h
+noinst_HEADERS =  		autoptr.h 		buffer.h 		bufferutils.h 		filesystem.h 		ilogger.h 		istructtokenlistener.h 		itokenizer.h 		streamlogger.h 		streamtokenizer.h 		stringtokenizer.h 		structreader.h 		structscanner.h 		xmlutils.h 		outbytestream.h 		inbytestream.h 		outbytestreamutils.h 		inbytestreamutils.h 		bufferstream.h 		block.h 		string_.h 		sharedlibrary.h 		timing.h
 
 
-INCLUDES = -I .. #-I $(baseincludedir) 
-
-utilstest_SOURCES =  		testmain.cpp 		stringtokenizertest.cpp 		structreadertest.cpp 		streamtokenizertest.cpp 		structscannertest.cpp 		buffertest.cpp 		filesystemtest.cpp 	        autoptrtest.cpp 	        bytestreamtest.cpp 		bufferstreamtest.cpp 		sharedlibrarytest.cpp 		autoptrtest.h 		bufferstreamtest.h 		buffertest.h 		bytestreamtest.h 		filesystemtest.h 		streamtokenizertest.h 		stringtokenizertest.h 		structreadertest.h 		structscannertest.h 		sharedlibrarytest.h
+INCLUDES =  	-I @srcdir@/.. 	-I@top_srcdir@/util/include 	-I@top_builddir@/util/include
 
 
-utilstest_LDADD = ../TestFramework/libtestframework.la libutils.a -ldl
+utilstest_SOURCES =  	testmain.cpp 	stringtokenizertest.cpp 	structreadertest.cpp 	streamtokenizertest.cpp 	structscannertest.cpp 	buffertest.cpp 	filesystemtest.cpp         autoptrtest.cpp         bytestreamtest.cpp 	bufferstreamtest.cpp 	sharedlibrarytest.cpp 	autoptrtest.h 	bufferstreamtest.h 	buffertest.h 	bytestreamtest.h 	filesystemtest.h 	streamtokenizertest.h 	stringtokenizertest.h 	structreadertest.h 	structscannertest.h 	sharedlibrarytest.h
+
+
+@NEED_DL_TRUE@LIB_DL_FLAGS = -ldl
+
+utilstest_LDADD =  	-L@builddir@/../TestFramework 	-L@builddir@         -ltestframework 	-lutils $(LIB_DL_FLAGS)
+
+
+utilstest_DEPENDENCIES =  	@builddir@/../TestFramework/libtestframework.a 	@builddir@/libutils.a
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-LIBRARIES =  $(lib_LIBRARIES)
+LIBRARIES =  $(noinst_LIBRARIES)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libutils_a_LIBADD = 
 libutils_a_OBJECTS =  stringtokenizer.$(OBJEXT) structscanner.$(OBJEXT) \
 filesystem.$(OBJEXT) structreader.$(OBJEXT) buffer.$(OBJEXT) \
@@ -113,16 +136,12 @@ inbytestream.$(OBJEXT) outbytestreamutils.$(OBJEXT) \
 inbytestreamutils.$(OBJEXT) bufferstream.$(OBJEXT) string_.$(OBJEXT) \
 sharedlibrary.$(OBJEXT) timing.$(OBJEXT)
 AR = ar
-noinst_PROGRAMS =  utilstest$(EXEEXT)
-PROGRAMS =  $(noinst_PROGRAMS)
-
+check_PROGRAMS =  utilstest$(EXEEXT)
 utilstest_OBJECTS =  testmain.$(OBJEXT) stringtokenizertest.$(OBJEXT) \
 structreadertest.$(OBJEXT) streamtokenizertest.$(OBJEXT) \
 structscannertest.$(OBJEXT) buffertest.$(OBJEXT) \
 filesystemtest.$(OBJEXT) autoptrtest.$(OBJEXT) bytestreamtest.$(OBJEXT) \
 bufferstreamtest.$(OBJEXT) sharedlibrarytest.$(OBJEXT)
-utilstest_DEPENDENCIES =  ../TestFramework/libtestframework.la \
-libutils.a
 utilstest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -134,7 +153,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-HEADERS =  $(include_HEADERS)
+HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -143,17 +162,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/autoptrtest.P .deps/buffer.P .deps/bufferstream.P \
-.deps/bufferstreamtest.P .deps/buffertest.P .deps/bufferutils.P \
-.deps/bytestreamtest.P .deps/filesystem.P .deps/filesystemtest.P \
-.deps/inbytestream.P .deps/inbytestreamutils.P .deps/itokenizer.P \
-.deps/outbytestream.P .deps/outbytestreamutils.P .deps/sharedlibrary.P \
-.deps/sharedlibrarytest.P .deps/streamlogger.P .deps/streamtokenizer.P \
-.deps/streamtokenizertest.P .deps/string_.P .deps/stringtokenizer.P \
-.deps/stringtokenizertest.P .deps/structreader.P \
-.deps/structreadertest.P .deps/structscanner.P \
-.deps/structscannertest.P .deps/testmain.P .deps/timing.P \
-.deps/xmlutils.P
 SOURCES = $(libutils_a_SOURCES) $(utilstest_SOURCES)
 OBJECTS = $(libutils_a_OBJECTS) $(utilstest_OBJECTS)
 
@@ -161,44 +169,24 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/utils/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps base/src/utils/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-mostlyclean-libLIBRARIES:
+mostlyclean-noinstLIBRARIES:
 
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
+clean-noinstLIBRARIES:
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
-distclean-libLIBRARIES:
+distclean-noinstLIBRARIES:
 
-maintainer-clean-libLIBRARIES:
+maintainer-clean-noinstLIBRARIES:
 
-install-libLIBRARIES: $(lib_LIBRARIES)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	@list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p; \
-	  else :; fi; \
-	done
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(RANLIB) $(DESTDIR)$(libdir)/$$p"; \
-	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
-	  else :; fi; \
-	done
-
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(libdir)/$$p; \
-	done
+.c.o:
+	$(COMPILE) -c $<
 
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
@@ -222,6 +210,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
@@ -243,14 +234,14 @@ libutils.a: $(libutils_a_OBJECTS) $(libutils_a_DEPENDENCIES)
 	$(AR) cru libutils.a $(libutils_a_OBJECTS) $(libutils_a_LIBADD)
 	$(RANLIB) libutils.a
 
-mostlyclean-noinstPROGRAMS:
+mostlyclean-checkPROGRAMS:
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+clean-checkPROGRAMS:
+	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
 
-distclean-noinstPROGRAMS:
+distclean-checkPROGRAMS:
 
-maintainer-clean-noinstPROGRAMS:
+maintainer-clean-checkPROGRAMS:
 
 utilstest$(EXEEXT): $(utilstest_OBJECTS) $(utilstest_DEPENDENCIES)
 	@rm -f utilstest$(EXEEXT)
@@ -261,21 +252,6 @@ utilstest$(EXEEXT): $(utilstest_OBJECTS) $(utilstest_DEPENDENCIES)
 	$(CXXCOMPILE) -c `cygpath -w $<`
 .cpp.lo:
 	$(LTCXXCOMPILE) -c $<
-
-install-includeHEADERS: $(include_HEADERS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(includedir)
-	@list='$(include_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p; \
-	done
-
-uninstall-includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	list='$(include_HEADERS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(includedir)/$$p; \
-	done
 
 tags: TAGS
 
@@ -308,14 +284,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/utils
+subdir = base/src/utils
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/utils/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -326,82 +297,80 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+buffer.o: buffer.cpp buffer.h ../../../util/include/minmax.h
+bufferstream.o: bufferstream.cpp bufferstream.h buffer.h
+bufferutils.o: bufferutils.cpp bufferutils.h buffer.h xmlutils.h
+filesystem.o: filesystem.cpp filesystem.h ../../../config.h
+inbytestream.o: inbytestream.cpp inbytestream.h buffer.h
+inbytestreamutils.o: inbytestreamutils.cpp inbytestreamutils.h \
+	inbytestream.h buffer.h
+itokenizer.o: itokenizer.cpp itokenizer.h
+outbytestream.o: outbytestream.cpp outbytestream.h buffer.h
+outbytestreamutils.o: outbytestreamutils.cpp outbytestreamutils.h \
+	outbytestream.h buffer.h
+sharedlibrary.o: sharedlibrary.cpp sharedlibrary.h ../../../config.h
+streamlogger.o: streamlogger.cpp streamlogger.h ilogger.h
+streamtokenizer.o: streamtokenizer.cpp streamtokenizer.h itokenizer.h
+string_.o: string_.cpp string_.h xmlutils.h
+stringtokenizer.o: stringtokenizer.cpp stringtokenizer.h itokenizer.h
+structreader.o: structreader.cpp structreader.h istructtokenlistener.h \
+	structscanner.h
+structscanner.o: structscanner.cpp structscanner.h \
+	istructtokenlistener.h stringtokenizer.h itokenizer.h
+timing.o: timing.cpp timing.h ../../../config.h
+xmlutils.o: xmlutils.cpp xmlutils.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
+	    all=`expr $$all + 1`; \
+	    echo "PASS: $$tst"; \
+	  elif test $$? -ne 77; then \
+	    all=`expr $$all + 1`; \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  banner="All $$all tests passed"; \
+	else \
+	  banner="$$failed of $$all tests failed"; \
+	fi; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"; \
+	test "$$failed" -eq 0
 info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-libLIBRARIES
+install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-includeHEADERS
+install-data-am:
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-libLIBRARIES uninstall-includeHEADERS
+uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -413,52 +382,47 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-noinstPROGRAMS \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-checkPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
-		clean-noinstPROGRAMS clean-tags clean-depend \
-		clean-generic mostlyclean-am
+clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool \
+		clean-checkPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-libLIBRARIES distclean-compile \
-		distclean-libtool distclean-noinstPROGRAMS \
-		distclean-tags distclean-depend distclean-generic \
-		clean-am
+distclean-am:  distclean-noinstLIBRARIES distclean-compile \
+		distclean-libtool distclean-checkPROGRAMS \
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-libLIBRARIES \
+maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-noinstPROGRAMS maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-checkPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-libLIBRARIES distclean-libLIBRARIES \
-clean-libLIBRARIES maintainer-clean-libLIBRARIES uninstall-libLIBRARIES \
-install-libLIBRARIES mostlyclean-compile distclean-compile \
-clean-compile maintainer-clean-compile mostlyclean-libtool \
-distclean-libtool clean-libtool maintainer-clean-libtool \
-mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
-clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
-uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+.PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
+clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool mostlyclean-checkPROGRAMS \
+distclean-checkPROGRAMS clean-checkPROGRAMS \
+maintainer-clean-checkPROGRAMS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir check-TESTS info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

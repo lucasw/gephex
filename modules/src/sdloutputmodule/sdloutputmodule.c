@@ -5,17 +5,18 @@
 #include "SDL.h"
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
+#define rmask 0x0000ff00
+#define gmask 0x00ff0000
+#define bmask 0xff000000
+#define amask 0x000000ff
 #else
-    rmask = 0x000000ff;
-    gmask = 0x0000ff00;
-    bmask = 0x00ff0000;
-    amask = 0xff000000;
+#define rmask 0x00ff0000
+#define gmask 0x0000ff00
+#define bmask 0x000000ff
+#define amask 0xff000000
 #endif
 
+static logT s_log;
 typedef struct _MyInstance {
 
   SDL_Surface* Screen;
@@ -29,6 +30,8 @@ typedef struct _MyInstance {
 
 int init(logT log_function)
 {
+  s_log = log_function;
+
   if(SDL_WasInit(SDL_INIT_VIDEO) == 0)
     {
     if(SDL_Init(SDL_INIT_VIDEO) == -1)
@@ -60,8 +63,7 @@ MyInstance* construct()
 
   my->scaledFrb = 0;
 
-  //  my->Screen = SDL_SetVideoMode(my->width,my->height,32,
-  //				SDL_HWSURFACE|SDL_DOUBLEBUF);
+  my->Screen = 0;
 
   return my;
 }
@@ -103,25 +105,32 @@ void update(void* instance)
       new_xsize = inst->in_xsize->number;
       new_ysize = inst->in_ysize->number;		
     }
+
   if (new_xsize != my->width || new_ysize != my->height || my->Screen == 0)
     {
+      char buffer[128];
       // according to the sdl docu, the surface that is created
       // by SDL_SetVideoMode does not have to be freed.
       //      SDL_FreeSurface(my->Screen);
       
-      printf("SDL Output: Changing from %ix%i to %ix%i\n",
-	     my->width, my->height, new_xsize, new_ysize);
+      snprintf(buffer, sizeof(buffer),
+               "Resizing from %ix%i to %ix%i",
+               my->width, my->height, new_xsize, new_ysize);
+      s_log(2, buffer);
 
-      my->width = new_xsize;
+      my->width  = new_xsize;
       my->height = new_ysize;
 
-      my->Screen = SDL_SetVideoMode(my->width,my->height,32,
-				    SDL_HWSURFACE|SDL_DOUBLEBUF);
+      my->Screen = SDL_SetVideoMode(my->width, my->height,
+                                    32,
+				    SDL_SWSURFACE | SDL_DOUBLEBUF);
 
       
       if (my->Screen == 0)
 	{
-	  printf("%s\n",SDL_GetError());
+          char buffer[128];
+	  snprintf(buffer, sizeof(buffer), "%s", SDL_GetError());
+          s_log(0, buffer);
 	  return;
 	} 
     }
@@ -130,7 +139,7 @@ void update(void* instance)
   if (inst->my->height != inst->in_in->ysize
       || inst->my->width != inst->in_in->xsize)
     {
-      //input needs to be scaled      
+      //input needs to be scaled
       if (my->scaledFrb == 0)
 	my->scaledFrb = framebuffer_newInstance();
       
@@ -160,19 +169,23 @@ void update(void* instance)
 
   if (tmp == 0)
     {
-      printf("%s\n",SDL_GetError());
+      char buffer[128];
+      snprintf(buffer, sizeof(buffer), "%s", SDL_GetError());
+      s_log(0, buffer);
       return;
     }
   
   tmp2 = SDL_DisplayFormat(tmp);
   if (tmp2 == 0)
     {
-      printf("%s\n",SDL_GetError());
+      char buffer[128];
+      snprintf(buffer, sizeof(buffer), "%s", SDL_GetError());
+      s_log(0, buffer);
       SDL_FreeSurface(tmp);
       return;
     }
 
-  SDL_BlitSurface(tmp2,NULL,my->Screen,NULL);
+  SDL_BlitSurface(tmp2, NULL, my->Screen, NULL);
   SDL_Flip(my->Screen);
   
   SDL_FreeSurface(tmp2);

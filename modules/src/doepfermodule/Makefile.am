@@ -1,19 +1,31 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 doepfermodule_auto.c: doepfermodule.spec doepfermodule.h
-	python $(top_builddir)/pluc.py c doepfermodule.spec
+	$(PLUC) c @srcdir@/doepfermodule.spec
 
 doepfermodule.h: doepfermodule.spec
-	python $(top_builddir)/pluc.py h doepfermodule.spec
+	$(PLUC) h @srcdir@/doepfermodule.spec
 
 lib_LTLIBRARIES = doepfermodule.la
-doepfermodule_la_SOURCES = doepfermodule_auto.c doepfermodule.c doepfermodule.h doepfermodule.spec doepfermodule.xpm
 
-doepfermodule_la_LDFLAGS = -module -avoid-version -no-undefined -L../libmidi
+doepfermodule_la_SOURCES = 	doepfermodule_auto.c \
+				doepfermodule.c \
+				doepfermodule.h \
+				doepfermodule.spec \
+				doepfermodule.xpm
 
-doepfermodule_la_LIBADD = -lmidi
+doepfermodule_la_LIBADD = -lmidi -L@builddir@/../libmidi
 
-#INCLUDES  =  -I$(top_builddir)/../engine/src/engine 
-INCLUDES  =  -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine -I ../libmidi
+doepfermodule_la_DEPENDENCIES = @builddir@/../libmidi/libmidi.a
 
-.PHONY: clean
-clean:
-	rm -f doepfermodule.h doepfermodule_auto.c
+doepfermodule_la_LDFLAGS = -module -avoid-version -no-undefined
+
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/miditype \
+		-I @srcdir@/../libmidi
+
+DISTCLEANFILES = doepfermodule.h doepfermodule_auto.c

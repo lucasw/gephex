@@ -26,8 +26,10 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
+libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
+includedir = @includedir@
 oldincludedir = /usr/include
 
 DESTDIR =
@@ -36,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -58,53 +60,69 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
-PYTHON = @PYTHON@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
-baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/net
-libdir = @libdir@/gephex
+TESTS = nettest
 
-noinst_PROGRAMS = nettest
-lib_LIBRARIES = libnetwork.a
+check_PROGRAMS = nettest
+noinst_LIBRARIES = libnetwork.a
 
 libnetwork_a_SOURCES =  		netexceptions.cpp 		protocol.cpp 		tagutils.cpp 		isocket.cpp 		sotimeout.cpp 		socketutils.cpp 		tcpserversocket.cpp 		tcpclientsocket.cpp 		fdsocket.cpp 		socketadaptor.cpp 		domainserversocket.cpp 		domainclientsocket.cpp
 
-#commandmux.cpp netdispatcher.cpp  fileprotocol.cpp netprotocol.cpp clientnetsocket.cpp ervernetsocket.cpp tcpsocket.cpp udpsocket.cpp netdispatcher2.cpp
 
-include_HEADERS =  		protocol.h 		idatalistener.h 		isender.h 		netexceptions.h 		itagger.h 		itaginterpreter.h 		tagger.h 		tagger.cpp 		tagutils.h 		isocket.h 		socketutils.h 		sotimeout.h 		iclientsocket.h 		iserversocket.h 		tcpclientsocket.h 		tcpserversocket.h 		fdsocket.h 		socketadaptor.h 		tagdispatcher.h 		tagdispatcher.cpp 		domainserversocket.h 		domainclientsocket.h 		protocoltest.h 		tcpsockettest.h 		tagdispatchertest.h 		taggertest.h 		domainsockettest.h
+noinst_HEADERS =  		protocol.h 		idatalistener.h 		isender.h 		netexceptions.h 		itagger.h 		itaginterpreter.h 		tagger.h 		tagger.cpp 		tagutils.h 		isocket.h 		socketutils.h 		sotimeout.h 		iclientsocket.h 		iserversocket.h 		tcpclientsocket.h 		tcpserversocket.h 		fdsocket.h 		socketadaptor.h 		tagdispatcher.h 		tagdispatcher.cpp 		domainserversocket.h 		domainclientsocket.h 		protocoltest.h 		tcpsockettest.h 		tagdispatchertest.h 		taggertest.h 		domainsockettest.h
 
 
-INCLUDES = -I .. #${baseincludedir}
+INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
 
 nettest_SOURCES =  		testmain.cpp 		block.h 		tcpsockettest.cpp 		protocoltest.cpp 		taggertest.cpp 		tagdispatchertest.cpp 		domainsockettest.cpp 		tcpsockettest.h 		protocoltest.h 		taggertest.h 		tagdispatchertest.h 		domainsockettest.h
 
 
-nettest_LDFLAGS = -L../TestFramework -L../utils -L.
-nettest_LDADD = -ltestframework -lnetwork -lutils 
+nettest_LDADD =  	-L@builddir@/../TestFramework 	-L@builddir@/../utils 	-L@builddir@ 	-ltestframework 	-lnetwork 	-lutils 
+
+
+nettest_DEPENDENCIES =  	@builddir@/../TestFramework/libtestframework.a 	@builddir@/../utils/libutils.a  	@builddir@/libnetwork.a
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-LIBRARIES =  $(lib_LIBRARIES)
+LIBRARIES =  $(noinst_LIBRARIES)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libnetwork_a_LIBADD = 
 libnetwork_a_OBJECTS =  netexceptions.$(OBJEXT) protocol.$(OBJEXT) \
 tagutils.$(OBJEXT) isocket.$(OBJEXT) sotimeout.$(OBJEXT) \
@@ -112,13 +130,11 @@ socketutils.$(OBJEXT) tcpserversocket.$(OBJEXT) \
 tcpclientsocket.$(OBJEXT) fdsocket.$(OBJEXT) socketadaptor.$(OBJEXT) \
 domainserversocket.$(OBJEXT) domainclientsocket.$(OBJEXT)
 AR = ar
-noinst_PROGRAMS =  nettest$(EXEEXT)
-PROGRAMS =  $(noinst_PROGRAMS)
-
+check_PROGRAMS =  nettest$(EXEEXT)
 nettest_OBJECTS =  testmain.$(OBJEXT) tcpsockettest.$(OBJEXT) \
 protocoltest.$(OBJEXT) taggertest.$(OBJEXT) tagdispatchertest.$(OBJEXT) \
 domainsockettest.$(OBJEXT)
-nettest_DEPENDENCIES = 
+nettest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -129,7 +145,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-HEADERS =  $(include_HEADERS)
+HEADERS =  $(noinst_HEADERS)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -138,13 +154,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/domainclientsocket.P .deps/domainserversocket.P \
-.deps/domainsockettest.P .deps/fdsocket.P .deps/isocket.P \
-.deps/netexceptions.P .deps/protocol.P .deps/protocoltest.P \
-.deps/socketadaptor.P .deps/socketutils.P .deps/sotimeout.P \
-.deps/tagdispatchertest.P .deps/taggertest.P .deps/tagutils.P \
-.deps/tcpclientsocket.P .deps/tcpserversocket.P .deps/tcpsockettest.P \
-.deps/testmain.P
 SOURCES = $(libnetwork_a_SOURCES) $(nettest_SOURCES)
 OBJECTS = $(libnetwork_a_OBJECTS) $(nettest_OBJECTS)
 
@@ -152,44 +161,24 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/net/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps base/src/net/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-mostlyclean-libLIBRARIES:
+mostlyclean-noinstLIBRARIES:
 
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
+clean-noinstLIBRARIES:
+	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
 
-distclean-libLIBRARIES:
+distclean-noinstLIBRARIES:
 
-maintainer-clean-libLIBRARIES:
+maintainer-clean-noinstLIBRARIES:
 
-install-libLIBRARIES: $(lib_LIBRARIES)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	@list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/$$p; \
-	  else :; fi; \
-	done
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo " $(RANLIB) $(DESTDIR)$(libdir)/$$p"; \
-	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
-	  else :; fi; \
-	done
-
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	list='$(lib_LIBRARIES)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(libdir)/$$p; \
-	done
+.c.o:
+	$(COMPILE) -c $<
 
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
@@ -213,6 +202,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
@@ -234,14 +226,14 @@ libnetwork.a: $(libnetwork_a_OBJECTS) $(libnetwork_a_DEPENDENCIES)
 	$(AR) cru libnetwork.a $(libnetwork_a_OBJECTS) $(libnetwork_a_LIBADD)
 	$(RANLIB) libnetwork.a
 
-mostlyclean-noinstPROGRAMS:
+mostlyclean-checkPROGRAMS:
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+clean-checkPROGRAMS:
+	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
 
-distclean-noinstPROGRAMS:
+distclean-checkPROGRAMS:
 
-maintainer-clean-noinstPROGRAMS:
+maintainer-clean-checkPROGRAMS:
 
 nettest$(EXEEXT): $(nettest_OBJECTS) $(nettest_DEPENDENCIES)
 	@rm -f nettest$(EXEEXT)
@@ -252,21 +244,6 @@ nettest$(EXEEXT): $(nettest_OBJECTS) $(nettest_DEPENDENCIES)
 	$(CXXCOMPILE) -c `cygpath -w $<`
 .cpp.lo:
 	$(LTCXXCOMPILE) -c $<
-
-install-includeHEADERS: $(include_HEADERS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(includedir)
-	@list='$(include_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p; \
-	done
-
-uninstall-includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	list='$(include_HEADERS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(includedir)/$$p; \
-	done
 
 tags: TAGS
 
@@ -299,14 +276,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/net
+subdir = base/src/net
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/net/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -317,82 +289,85 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+domainclientsocket.o: domainclientsocket.cpp domainclientsocket.h \
+	iclientsocket.h sotimeout.h ../../../config.h netexceptions.h \
+	socketutils.h fdsocket.h isocket.h isender.h ../utils/buffer.h
+domainserversocket.o: domainserversocket.cpp domainserversocket.h \
+	iserversocket.h sotimeout.h ../../../config.h netexceptions.h \
+	socketutils.h fdsocket.h isocket.h isender.h ../utils/buffer.h
+fdsocket.o: fdsocket.cpp fdsocket.h isocket.h netexceptions.h isender.h \
+	sotimeout.h ../../../config.h socketutils.h ../utils/buffer.h
+isocket.o: isocket.cpp isocket.h netexceptions.h isender.h sotimeout.h
+netexceptions.o: netexceptions.cpp netexceptions.h
+protocol.o: protocol.cpp protocol.h idatalistener.h isender.h \
+	../utils/buffer.h ../../../util/include/basic_types.h \
+	../../../config.h ../../../util/include/minmax.h
+socketadaptor.o: socketadaptor.cpp socketadaptor.h isocket.h \
+	netexceptions.h isender.h sotimeout.h idatalistener.h \
+	../utils/buffer.h
+socketutils.o: socketutils.cpp socketutils.h ../../../config.h \
+	netexceptions.h
+sotimeout.o: sotimeout.cpp sotimeout.h
+tagutils.o: tagutils.cpp tagutils.h ../../../util/include/basic_types.h \
+	../utils/buffer.h
+tcpclientsocket.o: tcpclientsocket.cpp tcpclientsocket.h iclientsocket.h \
+	sotimeout.h ../../../config.h netexceptions.h socketutils.h \
+	fdsocket.h isocket.h isender.h ../utils/buffer.h
+tcpserversocket.o: tcpserversocket.cpp tcpserversocket.h iserversocket.h \
+	sotimeout.h ../../../config.h netexceptions.h socketutils.h \
+	fdsocket.h isocket.h isender.h ../utils/buffer.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
+	    all=`expr $$all + 1`; \
+	    echo "PASS: $$tst"; \
+	  elif test $$? -ne 77; then \
+	    all=`expr $$all + 1`; \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  banner="All $$all tests passed"; \
+	else \
+	  banner="$$failed of $$all tests failed"; \
+	fi; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"; \
+	test "$$failed" -eq 0
 info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-libLIBRARIES
+install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-includeHEADERS
+install-data-am:
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-libLIBRARIES uninstall-includeHEADERS
+uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(LIBRARIES) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -404,52 +379,47 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-libLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-noinstPROGRAMS \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-checkPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-libLIBRARIES clean-compile clean-libtool \
-		clean-noinstPROGRAMS clean-tags clean-depend \
-		clean-generic mostlyclean-am
+clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool \
+		clean-checkPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-libLIBRARIES distclean-compile \
-		distclean-libtool distclean-noinstPROGRAMS \
-		distclean-tags distclean-depend distclean-generic \
-		clean-am
+distclean-am:  distclean-noinstLIBRARIES distclean-compile \
+		distclean-libtool distclean-checkPROGRAMS \
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-libLIBRARIES \
+maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-noinstPROGRAMS maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-checkPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-libLIBRARIES distclean-libLIBRARIES \
-clean-libLIBRARIES maintainer-clean-libLIBRARIES uninstall-libLIBRARIES \
-install-libLIBRARIES mostlyclean-compile distclean-compile \
-clean-compile maintainer-clean-compile mostlyclean-libtool \
-distclean-libtool clean-libtool maintainer-clean-libtool \
-mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
-clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
-uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+.PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
+clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool mostlyclean-checkPROGRAMS \
+distclean-checkPROGRAMS clean-checkPROGRAMS \
+maintainer-clean-checkPROGRAMS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir check-TESTS info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

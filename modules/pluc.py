@@ -486,7 +486,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(XXX_XPMNAME_XXX);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -699,14 +699,28 @@ def createCFile(id,options,inputs,outputs,file,fileprefix):
 	else:
 		attributeInitCode = ''
 
-	initFunc = string.replace("""int initSO(logT log_function) 
+	initTemplate = """
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
-	XXX_ATTRIB_CODE
-	return init(log_function);
+   if (s_log_function)
+      s_log_function(level, \"XXX_MODULE_CLASS_NAME_XXX\", msg);
 }
-""", 'XXX_ATTRIB_CODE', attributeInitCode)
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-		
+	XXX_ATTRIB_CODE
+
+	return init(logger);
+}
+"""
+	initFunc = string.replace(string.replace(initTemplate,
+						 'XXX_ATTRIB_CODE',
+						 attributeInitCode),
+				  'XXX_MODULE_CLASS_NAME_XXX', id)
 
 	file.write(prelog)
 	file.write('\n')
@@ -807,7 +821,9 @@ def createHFile(inputs,outputs,file,filename):
 def createSkelFile(file, fileprefix, inputs):
 	file.write('#include "' + fileprefix + '.h' + '"\n\n')
 #	file.write('#include "dllmodule.h"\n\n')
-	template = """typedef struct _MyInstance {
+	template = """static logT s_log;
+
+typedef struct _MyInstance {
 
  int dummy; // replace this with your favourite vars
 
@@ -815,6 +831,8 @@ def createSkelFile(file, fileprefix, inputs):
 
 int init(logT log_function)
 {
+  s_log = log_function;
+  
   return 1;
 }
 
@@ -869,23 +887,33 @@ void update(void* instance)
 	
 
 def createAMFile(file, fileprefix, inputs, outputs):
-	template = """XXX_NAME_XXX_auto.c: XXX_NAME_XXX.spec XXX_NAME_XXX.h
-	python $(top_builddir)/pluc.py c XXX_NAME_XXX.spec
+	template = """libdir = @libdir@/gephex/modules
+
+PLUC=python @top_srcdir@/modules/pluc.py
+
+XXX_NAME_XXX_auto.c: XXX_NAME_XXX.spec XXX_NAME_XXX.h
+	$(PLUC) c @srcdir@/XXX_NAME_XXX.spec
 
 XXX_NAME_XXX.h: XXX_NAME_XXX.spec
-	python $(top_builddir)/pluc.py h XXX_NAME_XXX.spec
+	$(PLUC) h @srcdir@/XXX_NAME_XXX.spec
 
 lib_LTLIBRARIES = XXX_NAME_XXX.la
-XXX_NAME_XXX_la_SOURCES = XXX_NAME_XXX_auto.c XXX_NAME_XXX.c XXX_NAME_XXX.h XXX_NAME_XXX.spec XXX_NAME_XXX.xpm
+
+XXX_NAME_XXX_la_SOURCES = \\
+        XXX_NAME_XXX_auto.c \\
+        XXX_NAME_XXX.c \\
+        XXX_NAME_XXX.h \\
+        XXX_NAME_XXX.spec \\
+        XXX_NAME_XXX.xpm
 
 XXX_NAME_XXX_la_LDFLAGS = -module -avoid-version -no-undefined
 
-#INCLUDES  =  -I$(top_builddir)/../engine/src/engine XXX_TYPE_INCLUDES_XXX
-INCLUDES  =  -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine
+INCLUDES = -I@srcdir@/../../../engine/src/engine \\
+           -I@srcdir@/../../../util/include \\
+XXX_TYPE_INCLUDES_XXX
 
-.PHONY: clean
-clean:
-	rm -f XXX_NAME_XXX.h XXX_NAME_XXX_auto.c
+
+DISTCLEANFILES = XXX_NAME_XXX.h XXX_NAME_XXX_auto.c
 """
 	usedtypes = createUsedTypes(inputs,outputs)
 	typedirs = map(lambda y: string.replace(y,'typ_',''),
@@ -893,9 +921,9 @@ clean:
 
 	typeinclude = ''
 
-#	typeincludes = map(lambda x: '-I$(top_builddir)/../types/src/' + 
-#			   string.lower(x) +' ', typedirs)
-#	typeinclude = reduce(lambda x,y: x + y,typeincludes)
+	typeincludes = map(lambda x: '           -I@srcdir@/../../../types/src/' + 
+			   string.lower(x) +' ', typedirs)
+	typeinclude = reduce(lambda x,y: x + '\\\n' + y,typeincludes)
 
 
 	am = string.replace(string.replace(template,'XXX_NAME_XXX',fileprefix),
@@ -976,12 +1004,12 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../../dlls/modules"
+# PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 X_TYPEINCLUDES_X /I "../../../engine/src/engine" /I "../../../util/include" /I "../.." /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /D "WIN32" /D "NDEBUG" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 X_TYPEINCLUDES_X /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /D "WIN32" /D "NDEBUG" /D "HAVE_CONFIG_H" /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -993,6 +1021,12 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+# Begin Special Build Tool
+TargetPath=.\Release\X_NAME_X.dll
+SOURCE="$(InputPath)"
+PostBuild_Desc=Kopiere Dll...
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "X_NAME_X - Win32 Debug"
 
@@ -1003,12 +1037,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../../dlls/modules"
+# PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /W2 /Gm /GX /ZI /Od  X_TYPEINCLUDES_X /I "../../../engine/src/engine" /I "../../../util/include" /I "../../" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /D "WIN32" /D "_DEBUG" /YX /FD /GZ /c
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W2 /Gm /GX /ZI /Od X_TYPEINCLUDES_X /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "X_NAME_X_EXPORTS" /D "WIN32" /D "_DEBUG" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
@@ -1020,7 +1054,12 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no
-
+# Begin Special Build Tool
+TargetPath=.\Debug\X_NAME_X.dll
+SOURCE="$(InputPath)"
+PostBuild_Desc=Kopiere Dll...
+PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+# End Special Build Tool
 !ENDIF 
 
 # Begin Target
@@ -1072,6 +1111,7 @@ SOURCE=.\X_NAME_X.spec
 
 # Begin Custom Build
 InputPath=.\X_NAME_X.spec
+InputName=X_NAME_X
 
 BuildCmds= \
 	python ..\..\pluc.py c $(InputName).spec \
@@ -1093,6 +1133,7 @@ BuildCmds= \
 
 # Begin Custom Build
 InputPath=.\X_NAME_X.spec
+InputName=X_NAME_X
 
 BuildCmds= \
 	python ..\..\pluc.py c $(InputName).spec \
@@ -1145,7 +1186,7 @@ def removeExtension(filename):
 		return filename
 
 def printUsage():
-	sys.stderr.write("""Usage: pluc.y <command> <specfile>
+	sys.stderr.write("""Usage: pluc.py <command> <specfile>
     where
      <command> ::= c|h|am|def|dsp|skel
      <specfile> ::= 'any filename'\n""")

@@ -24,4 +24,9 @@ namespace net
   {
   }
 
+  BrokenPipeException::BrokenPipeException(const std::string& text)
+    : std::runtime_error(text.c_str())
+  {
+  }
+
 } // end of namesapce net

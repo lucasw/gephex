@@ -37,6 +37,7 @@ namespace gui
   class LogWindow;
   class Playlist;
   class ActionSequencerWrapper;
+  class KeyboardManager;
 
   class VJMainWindow : public QMainWindow, public IRendererStatusReceiver
     {
@@ -118,7 +119,8 @@ namespace gui
 
       enum {FILE_QUIT, CONNECT_ENGINE, 
 	    DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
-	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR, WINDOW_PLAYLIST};
+	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR, WINDOW_PLAYLIST,
+	    KEYGRAB_ON, KEYGRAB_OFF};
 	
       QPopupMenu* effectMenue;
       PicSwitch* switcher;
@@ -137,6 +139,8 @@ namespace gui
       ActionSequencerWrapper* playlistWrapper;
 
       StructReaderPtr m_config;
+
+      KeyboardManager* m_kbManager;
     };
 
 } // end of namespace gui

@@ -1,14 +1,26 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 blurmodule_auto.c: blurmodule.spec blurmodule.h
-	python $(top_builddir)/pluc.py c blurmodule.spec
+	$(PLUC) c @srcdir@/blurmodule.spec
 
 blurmodule.h: blurmodule.spec
-	python $(top_builddir)/pluc.py h blurmodule.spec
+	$(PLUC) h @srcdir@/blurmodule.spec
 
 lib_LTLIBRARIES = blurmodule.la
-blurmodule_la_SOURCES = blurmodule_auto.c blurmodule.c blurmodule.h blurmodule.spec blurmodule.xpm
 
+blurmodule_la_SOURCES = 	blurmodule_auto.c \
+				blurmodule.c \
+				blurmodule.h \
+				blurmodule.spec \
+				blurmodule.xpm
 
 blurmodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I$(baseincludedir) -I$(baseincludedir)/types -I$(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/framebuffertype 
 
+DISTCLEANFILES = blurmodule.h blurmodule_auto.c

@@ -48,7 +48,8 @@ namespace net
     if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR,
 		   &yes, sizeof(yes)) == SOCKET_ERROR)
       {
-	throw SocketException("Could not set socket options");
+	//TODO: ignore for now
+	//throw SocketException("Could not set socket options");
       }
 
     sockaddr_in local_sin;

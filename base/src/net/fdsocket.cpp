@@ -40,6 +40,11 @@ namespace net
   int FDSocket::send(const utils::Buffer& data) 
     /*const throw (IOException,UnknownHostException)*/
   {
+#if defined(OS_LINUX)
+	  static const int SEND_FLAGS = MSG_NOSIGNAL;
+#else
+	  static const int SEND_FLAGS = 0;
+#endif
     if (!m_isConnected)
       throw IOException("Socket not connected at FDSocket::send!");
 
@@ -52,7 +57,8 @@ namespace net
     int left = len;
     int sent = 0;
     do {
-      len = ::send(m_fd, reinterpret_cast<const char*>(buf), left, 0);
+      len = ::send(m_fd, reinterpret_cast<const char*>(buf), left,
+		   SEND_FLAGS);
       if ( len > 0 ) 
 	{
 	  sent += len;
@@ -60,10 +66,13 @@ namespace net
 	  buf += len;
 	}
       else if (len == -1 && errno != EINTR)
-	{	  
+	{
 	  std::string msg = "Couldnt send: ";
-	  msg += strerror(errno);		  
-	  throw IOException(msg);
+	  msg += strerror(errno);
+	  if (errno == EPIPE)
+	    throw BrokenPipeException(msg);
+	  else
+	    throw IOException(msg);
 	}
     }
 #if defined(OS_WIN32)

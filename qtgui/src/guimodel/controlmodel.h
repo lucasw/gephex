@@ -29,14 +29,17 @@ namespace gui
   class ControlModel : public IModuleDataReceiver
   {
   public:
+    typedef std::map<std::string, std::string> ParamMap;
     ControlModel(IModelControlReceiver& );
     virtual ~ControlModel();
 
     void registerControlView(IControlView&);
     void registerControlConnectView(IControlConnectView&);
 
-    virtual void addControl(const Point& pos, const std::string& name,int nodeID,int inputIndex,
-			    const std::string& widgetType);
+    virtual void addControl(const Point& pos, const std::string& name,
+			    int nodeID, int inputIndex,
+			    const std::string& widgetType,
+			    const ParamMap& params);
 	
     virtual void delControl(int controlID);
 

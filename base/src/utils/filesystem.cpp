@@ -45,6 +45,7 @@ void FileSystem::makeDir(const std::string& path) throw (std::runtime_error)
   int error = _mkdir(path.c_str());
 #elif defined(OS_POSIX)
   mode_t mt;
+  mt=0777;
   int error = mkdir(path.c_str(),mt);
 #else
 #error "Unknown OS!"

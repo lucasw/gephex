@@ -65,16 +65,23 @@ namespace sequencer
 
   std::list<std::pair<std::string, std::string> > SequenceFileSystem::getIDsAndNames()
   {
-    std::list<utils::DirEntry> entries;
-    utils::FileSystem::listDir(m_basePath,entries);
 
     std::list<std::pair<std::string, std::string> > sequenceNames;
+    
+    if (!utils::FileSystem::exists(m_basePath))
+      {
+	utils::FileSystem::makeDir(m_basePath);
+      }
+    else
+      {
+	std::list<utils::DirEntry> entries;
+	utils::FileSystem::listDir(m_basePath,entries);
 
-    std::for_each(entries.begin(), entries.end(),
-		  PutSequenceIntoList(sequenceNames,
-				      fileNames,
-				      m_basePath));
-
+	std::for_each(entries.begin(), entries.end(),
+		      PutSequenceIntoList(sequenceNames,
+					  fileNames,
+					  m_basePath));
+      }
     return sequenceNames;
   }
 		

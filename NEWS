@@ -1,0 +1,34 @@
+0.0.4_alpha_1:
+	
+	* NumberType changed from unsigned int (32 bit) to
+	  IEEE 64 bit floating point value.
+	  This changes nearly all effects.
+	
+	* Many bugfixes
+	
+	* Color-format and framebuffer orientation fixed to
+	  BGRA top down (i.e. first line in memory ist upper most line)
+	
+	* Ported some effects from EffecTV
+	
+	* Improved the build system (library tests etc.)
+	
+	* Midiinput now works for Linux and WIN32
+	
+	* Updated the documentation
+
+	* Avifile support for Linux
+
+	* Isingnoize and IFS effects
+
+	* Better control- and propertywidgets (refactored them to use common
+	  code)
+
+	
+Version 0.0.3
+	
+	* Bugs, Bugs, Bugs
+	
+	* Reworked network code (support for unix domain sockets + namedpipes)
+
+	

@@ -26,7 +26,6 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
-libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
@@ -38,7 +37,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ..
+top_builddir = ../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -60,28 +59,55 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
-baseincludedir = @baseincludedir@
-includedir = @includedir@
-libdir = @libdir@
+YACC = @YACC@
 
-SUBDIRS = libgrid 	libmidi 	colorcyclermodule 	addmodule 	resultmodule 	numbermodule 	xfademodule 	plasma 	bmpmodule 	rotozoommodule 	invertmodule 	blurmodule 	tunnelmodule 	signalgenmodules 	bwmodule 	imgsubmodule 	imgaddmodule 	imgmulmodule 	staticcolormodule 	functions 	numposmodule 	posnummodule 	flashmodule 	cubesmodule 	starfield 	gloutmodule 	sdloutputmodule 	joystickmodule 	avifilemodule 	netcontrol 	v4lmodule 	midiinmodule 	doepfermodule
+libdir = @libdir@/gephex/modules
+
+@EFFECTV_TRUE@EFFECTV_DIRS = 	libeffectv 	effecttvedgemodule 	effectvfiremodule 	effectvlensmodule 	effectvpuzzlemodule 	effectvlifemodule 	effectvagingmodule 	effectvburnmodule
+
+@HAVE_SDL_TRUE@SDL_DIRS = 	sdloutputmodule 	joystickmodule
+
+@HAVE_AVIFILE_TRUE@AVIFILE_DIRS = avifilemodule
+
+# commented out for the release (does not work on all tested computers)
+@HAVE_MPEG3_TRUE@MPEG3_DIRS = #libmpeg3module
+
+@HAVE_GLX_TRUE@GLX_DIRS = gloutmodule
+
+@HAVE_PNG_TRUE@PNG_DIRS = imagewritermodule
+
+@WITH_V4L_TRUE@V4L_DIRS = v4lmodule
+
+SUBDIRS = libgrid 	libmidi 	addmodule 	bwmodule 	submodule 	resultmodule 	numbermodule 	xfademodule 	plasma 	bmpmodule 	rotozoommodule 	imagebuffermodule 	invertmodule 	blurmodule 	tunnelmodule 	planemodule 	signalgenmodules 	imgsubmodule 	staticcolormodule 	functions 	numposmodule 	posnummodule 	flashmodule 	ifsgenmodule 	ifsxfadermodule 	netcontrolmodule 	midiinmodule 	doepfermodule 	fpsmodule 	ifsmodule 	isingnoizemodule 	flipflopmodule 	diffmodule 	number2color 	overlaymodule 	color2number 	rangeconvertmodule         x11outmodule $(EFFECTV_DIRS) $(SDL_DIRS) $(AVIFILE_DIRS) $(MPEG3_DIRS) $(GLX_DIRS) $(V4L_DIRS) $(PNG_DIRS)
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../config.h
+CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -90,12 +116,23 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
+DIST_SUBDIRS =  libgrid libmidi addmodule bwmodule submodule \
+resultmodule numbermodule xfademodule plasma bmpmodule rotozoommodule \
+imagebuffermodule invertmodule blurmodule tunnelmodule planemodule \
+signalgenmodules imgsubmodule staticcolormodule functions numposmodule \
+posnummodule flashmodule ifsgenmodule ifsxfadermodule netcontrolmodule \
+midiinmodule doepfermodule fpsmodule ifsmodule isingnoizemodule \
+flipflopmodule diffmodule number2color overlaymodule color2number \
+rangeconvertmodule x11outmodule libeffectv effecttvedgemodule \
+effectvfiremodule effectvlensmodule effectvpuzzlemodule \
+effectvlifemodule effectvagingmodule effectvburnmodule sdloutputmodule \
+joystickmodule avifilemodule gloutmodule v4lmodule imagewritermodule
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps modules/src/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -191,14 +228,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src
+subdir = modules/src
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -209,7 +241,7 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-	for subdir in $(SUBDIRS); do \
+	for subdir in $(DIST_SUBDIRS); do \
 	  if test "$$subdir" = .; then :; else \
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \
@@ -288,6 +320,11 @@ uninstall-am uninstall all-redirect all-am all installdirs-am \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+# commented out for the release because they don't work
+#	imgaddmodule \
+#	imgmulmodule \
+#	starfield \
+#	libmpeg3module
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

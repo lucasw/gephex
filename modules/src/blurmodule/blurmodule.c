@@ -74,7 +74,7 @@ void update(void* instance)
     (unsigned char*)(inst->in_b->framebuffer + maxPixelOffset-1-(2*xsize));
 
   unsigned char* result = (unsigned char*) (inst->out_r->framebuffer + maxPixelOffset-1-(2*xsize));
-  int blurFactor = 4* ((int) ((100.* (double)inst->in_x->number) / (double) UINT_MAX));
+  int blurFactor = trim_int(inst->in_x->number, 0, 400);
 
 
   // TODO: ersten zwei und letzten zwei zeilen erstmal rausgelassen

@@ -7,16 +7,20 @@
 #include <qsplitter.h>
 #include <qtimer.h>
 
+#include "base/propertyview.h"
+#include "base/logwindow.h"
+#include "base/keyboardmanager.h"
+
+#include "editor/editorwidget.h"
+
 #include "moduleclassview.h"
 //#include "moduleclasstabview.h"
 #include "graphnameview.h"
 #include "sequencenameview.h"
 #include "playlistnameview.h"
-#include "editorwidget.h"
 #include "picswitch.h"
-#include "propertyview.h"
+
 #include "dllselectordialog.h"
-#include "logwindow.h"
 #include "playlist.h"
 
 #include "sequenceeditor.h"
@@ -52,7 +56,8 @@ namespace gui
       engineWrapper(new EngineWrapper(ipcType, locator, port)),
       running(false), connected(false), 
       moduleClassView(0), moduleClassTabView(0), sam(0), graphNameView(0),
-      sequenceNameView(0), sequencerWrapper(0), m_config(config)
+      sequenceNameView(0), sequencerWrapper(0), m_config(config),
+      m_kbManager(new KeyboardManager())
   {
     buildMenuBar();
 
@@ -77,6 +82,7 @@ namespace gui
     delete playlistNameView;
     delete sequencerWrapper;
     delete playlistWrapper;
+    delete m_kbManager;
   }
 
   void VJMainWindow::started()
@@ -137,7 +143,6 @@ namespace gui
     menuBar()->insertItem("File",file);
     connect(file,SIGNAL(activated(int)),this,SLOT(action(int)));
 
-    //TODO: removed "advanced" options
     QPopupMenu* server = new QPopupMenu(this);
     server->insertItem("connect",CONNECT_ENGINE);
     server->insertItem("disconnect",DISCONNECT_ENGINE);
@@ -146,11 +151,16 @@ namespace gui
     menuBar()->insertItem("Server",server);
     connect(server,SIGNAL(activated(int)),this,SLOT(action(int)));
 
-    //TODO: removed "advanced" options
-        QPopupMenu* startstop = new QPopupMenu(this);
+    QPopupMenu* startstop = new QPopupMenu(this);
     startstop->insertItem("start/stop",STARTSTOP_ENGINE);
     menuBar()->insertItem("Engine",startstop);
     connect(startstop,SIGNAL(activated(int)),this,SLOT(action(int)));
+
+    QPopupMenu* keyboard = new QPopupMenu(this);
+    keyboard->insertItem("keygrab on", KEYGRAB_ON);
+    keyboard->insertItem("keygrab off", KEYGRAB_OFF);
+    menuBar()->insertItem("Keyboard", keyboard);
+    connect(keyboard,SIGNAL(activated(int)),this,SLOT(action(int)));
 
     windows = new QPopupMenu(this);
     windows->insertItem("Dlls Laden/Entladen",WINDOW_DLL_SELECTOR);
@@ -268,7 +278,8 @@ namespace gui
 					/* *moduleClassTabView,*/
 				    engineWrapper->controlValueDispatcher(),
 				    engineWrapper->moduleStatisticsSender(),
-				    engineWrapper->modelStatusSender());
+				    engineWrapper->modelStatusSender(),
+				    *m_kbManager, *logWindow);
 
     editorWidget->show();
     QVBoxLayout* editorLayout = new QVBoxLayout(editor);
@@ -402,7 +413,7 @@ namespace gui
 
   void VJMainWindow::displayErrorMessage(const std::string& text)
   {
-    logWindow->exceptionThrown(text);
+    logWindow->error(text);
   }
 
   void VJMainWindow::setCaption(const std::string& text)
@@ -462,6 +473,12 @@ namespace gui
 	{
 	  m_playlist->show();
 	} break;
+      case KEYGRAB_ON:
+	m_kbManager->turnOn();
+	break;
+      case KEYGRAB_OFF:
+	m_kbManager->turnOff();
+	break;
       default:
 	throw std::runtime_error("unbekannter Befehl");
       }	  

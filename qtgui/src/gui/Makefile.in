@@ -26,6 +26,7 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
+libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
@@ -37,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -59,85 +60,104 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
-SUBDIRS = controlwidgets propertywidgets
+SUBDIRS = base editor typeviews
 
-baseincludedir = @includedir@/gephex
-libdir = @libdir@/gephex
+AM_CPPFLAGS =  	-I $(srcdir)/.. 	-I $(srcdir)/../.. 	-I $(srcdir)/../../../util/include 	-I @builddir@/../../../util/include 	-I $(srcdir)/../../../base/src/ 	-I $(srcdir)/../../../base/src/utils 	-I @builddir@/../../../base/src/ 	-I $(srcdir)/../../../base/src/net 	-I $(srcdir)/../../../base/src/netinterfaces 	$(QT_CXXFLAGS)
 
-INCLUDES = -I.. -I$(QTDIR)/include -I/usr/include/qt/ -I$(baseincludedir)
 
-MOC = moc
+bin_PROGRAMS = gephex-gui
 
-bin_PROGRAMS = gui
+CPP_FILES =  	nodewidget.cpp 	connectionwidget.cpp 	main.cpp 	vjmainwindow.cpp 	controlwidget.cpp 	moduleclassview.cpp 	propertywidget.cpp 	picswitch.cpp 	nodeproperty.cpp 	propertywidgetconstructor.cpp 	hidebuttonconstructor.cpp 	hidebutton.cpp 	plugwidget.cpp 	inputplugwidget.cpp 	outputplugwidget.cpp 	sequenceeditor.cpp 	dllselectordialog.cpp 	sequencewidget.cpp 	scenewidget.cpp 	graphnameview.cpp 	sequencenameview.cpp 	playlist.cpp 	playlistnameview.cpp 	moduleclasstabview.cpp 	uebertab.cpp 	modulebutton.cpp 	videowallcontrollwidget.cpp 	guiconfig.cpp 	typeview.cpp 	typeviewfactory.cpp
 
-CPP_FILES = treeview.cpp treeviewitem.cpp  nodewidget.cpp connectionwidget.cpp main.cpp grapheditor.cpp vjmainwindow.cpp controlwidget.cpp controleditor.cpp controlwidgetfactory.cpp moduleclassview.cpp editorwidget.cpp propertywidgetfactory.cpp propertywidget.cpp picswitch.cpp propertyview.cpp nodeproperty.cpp propertywidgetconstructor.cpp grapheditorwindow.cpp controleditorwindow.cpp hidebuttonconstructor.cpp hidebutton.cpp plugwidget.cpp inputplugwidget.cpp outputplugwidget.cpp sequenceeditor.cpp dllselectordialog.cpp sequencewidget.cpp scenewidget.cpp graphnameview.cpp sequencenameview.cpp askforstringdialog.cpp logwindow.cpp playlist.cpp playlistnameview.cpp moduleclasstabview.cpp uebertab.cpp modulebutton.cpp videowallcontrollwidget.cpp
 
-MOCED_FILES = playlist_moc.cpp askforstringdialog_moc.cpp dllselectordialog_moc.cpp sequenceeditor_moc.cpp plugwidget_moc.cpp sequencewidget_moc.cpp outputplugwidget_moc.cpp inputplugwidget_moc.cpp moduleclassview_moc.cpp vjmainwindow_moc.cpp controlwidget_moc.cpp graphnameview_moc.cpp videowallcontrollwidget_moc.cpp picswitch_moc.cpp hidebutton_moc.cpp sequencenameview_moc.cpp editorwidget_moc.cpp controleditor_moc.cpp grapheditor_moc.cpp nodewidget_moc.cpp playlistnameview_moc.cpp modulebutton_moc.cpp moduleclasstabview_moc.cpp
+MOCED_FILES =  	playlist_moc.cpp 	dllselectordialog_moc.cpp 	sequenceeditor_moc.cpp 	plugwidget_moc.cpp 	sequencewidget_moc.cpp 	outputplugwidget_moc.cpp 	inputplugwidget_moc.cpp 	moduleclassview_moc.cpp 	propertywidget_moc.cpp 	vjmainwindow_moc.cpp 	controlwidget_moc.cpp 	graphnameview_moc.cpp 	videowallcontrollwidget_moc.cpp 	picswitch_moc.cpp 	hidebutton_moc.cpp 	sequencenameview_moc.cpp 	nodewidget_moc.cpp 	playlistnameview_moc.cpp 	modulebutton_moc.cpp 	moduleclasstabview_moc.cpp 	typeview_moc.cpp
 
-HEADER_FILES = askforstringdialog.h connectionwidget.h controleditor.h controleditorwindow.h controlwidgetfactory.h controlwidget.h dllselectordialog.h editorwidget.h grapheditor.h grapheditorwindow.h graphnameview.h hidebuttonconstructor.h hidebutton.h imoduleinfobasestation.h inputplugwidget.h ipropertydescription.h iwidgetconstructor.h  logwindow.h modulebutton.h moduleclassview.h nodeproperty.h nodewidget.h outputplugwidget.h ownstyle.h picswitch.h plugwidget.h propertyview.h  propertywidgetconstructor.h propertywidgetfactory.h propertywidget.h scenewidget.h sequenceeditor.h sequencenameview.h sequencewidget.h videowallcontrollwidget.h vjmainwindow.h playlist.h treeview.h treeviewitem.h playlistnameview.h moduleclasstabview.h uebertab.h
 
-EXTRA_DIST = node.xpm inplugfree.xpm inplugbusy.xpm outplugfree.xpm outplugbusy.xpm rot_klein.xpm gruen_klein.xpm
+BUILT_SOURCES = $(MOCED_FILES)
 
-gui_SOURCES = $(CPP_FILES) $(MOCED_FILES) $(HEADER_FILES)
+HEADER_FILES =  	connectionwidget.h 	controlwidget.h 	dllselectordialog.h 	graphnameview.h 	hidebuttonconstructor.h 	hidebutton.h 	imoduleinfobasestation.h 	inputplugwidget.h 	modulebutton.h 	moduleclassview.h 	nodeproperty.h 	nodewidget.h 	outputplugwidget.h 	ownstyle.h 	picswitch.h 	plugwidget.h 	propertywidgetconstructor.h 	propertywidget.h 	scenewidget.h 	sequenceeditor.h 	sequencenameview.h 	sequencewidget.h 	videowallcontrollwidget.h 	vjmainwindow.h 	playlist.h 	playlistnameview.h 	moduleclasstabview.h 	uebertab.h 	guiconfig.h 	typeview.h 	typeviewfactory.h
 
-gui_LDFLAGS = -L$(QTDIR)/lib -L$(libdir) -L../guimodel
-gui_LDADD = -lqt  -lguimodel -lnetwork -lnetinterfaces controlwidgets/libcontrolwidgets.a propertywidgets/libpropertywidgets.a -lutils
+
+EXTRA_DIST =  	node.xpm 	inplugfree.xpm 	inplugbusy.xpm 	outplugfree.xpm 	outplugbusy.xpm 	rot_klein.xpm 	gruen_klein.xpm
+
+
+gephex_gui_SOURCES = $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
+
+gephex_gui_LDADD =  	$(QT_LIBS) 	-lguimodel 	-lnetwork 	-lnetinterfaces 	-lguibase 	-lguieditor 	-ltypeviews 	-lutils 	-L@builddir@/../guimodel 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L@builddir@/../../../base/src/utils 	-L@builddir@/base 	-L@builddir@/editor 	-L@builddir@/typeviews
+
+
+gephex_gui_DEPENDENCIES =  	@builddir@/../guimodel/libguimodel.a 	@builddir@/../../../base/src/net/libnetwork.a 	@builddir@/../../../base/src/netinterfaces/libnetinterfaces.a 	@builddir@/../../../base/src/utils/libutils.a 	@builddir@/base/libguibase.a 	@builddir@/editor/libguieditor.a 	@builddir@/typeviews/libtypeviews.a
+
+
+CLEANFILES = $(MOCED_FILES)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  gui$(EXEEXT)
+bin_PROGRAMS =  gephex-gui$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-gui_OBJECTS =  treeview.$(OBJEXT) treeviewitem.$(OBJEXT) \
-nodewidget.$(OBJEXT) connectionwidget.$(OBJEXT) main.$(OBJEXT) \
-grapheditor.$(OBJEXT) vjmainwindow.$(OBJEXT) controlwidget.$(OBJEXT) \
-controleditor.$(OBJEXT) controlwidgetfactory.$(OBJEXT) \
-moduleclassview.$(OBJEXT) editorwidget.$(OBJEXT) \
-propertywidgetfactory.$(OBJEXT) propertywidget.$(OBJEXT) \
-picswitch.$(OBJEXT) propertyview.$(OBJEXT) nodeproperty.$(OBJEXT) \
-propertywidgetconstructor.$(OBJEXT) grapheditorwindow.$(OBJEXT) \
-controleditorwindow.$(OBJEXT) hidebuttonconstructor.$(OBJEXT) \
-hidebutton.$(OBJEXT) plugwidget.$(OBJEXT) inputplugwidget.$(OBJEXT) \
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
+gephex_gui_OBJECTS =  nodewidget.$(OBJEXT) connectionwidget.$(OBJEXT) \
+main.$(OBJEXT) vjmainwindow.$(OBJEXT) controlwidget.$(OBJEXT) \
+moduleclassview.$(OBJEXT) propertywidget.$(OBJEXT) picswitch.$(OBJEXT) \
+nodeproperty.$(OBJEXT) propertywidgetconstructor.$(OBJEXT) \
+hidebuttonconstructor.$(OBJEXT) hidebutton.$(OBJEXT) \
+plugwidget.$(OBJEXT) inputplugwidget.$(OBJEXT) \
 outputplugwidget.$(OBJEXT) sequenceeditor.$(OBJEXT) \
 dllselectordialog.$(OBJEXT) sequencewidget.$(OBJEXT) \
 scenewidget.$(OBJEXT) graphnameview.$(OBJEXT) \
-sequencenameview.$(OBJEXT) askforstringdialog.$(OBJEXT) \
-logwindow.$(OBJEXT) playlist.$(OBJEXT) playlistnameview.$(OBJEXT) \
-moduleclasstabview.$(OBJEXT) uebertab.$(OBJEXT) modulebutton.$(OBJEXT) \
-videowallcontrollwidget.$(OBJEXT) playlist_moc.$(OBJEXT) \
-askforstringdialog_moc.$(OBJEXT) dllselectordialog_moc.$(OBJEXT) \
-sequenceeditor_moc.$(OBJEXT) plugwidget_moc.$(OBJEXT) \
-sequencewidget_moc.$(OBJEXT) outputplugwidget_moc.$(OBJEXT) \
-inputplugwidget_moc.$(OBJEXT) moduleclassview_moc.$(OBJEXT) \
+sequencenameview.$(OBJEXT) playlist.$(OBJEXT) \
+playlistnameview.$(OBJEXT) moduleclasstabview.$(OBJEXT) \
+uebertab.$(OBJEXT) modulebutton.$(OBJEXT) \
+videowallcontrollwidget.$(OBJEXT) guiconfig.$(OBJEXT) \
+typeview.$(OBJEXT) typeviewfactory.$(OBJEXT) playlist_moc.$(OBJEXT) \
+dllselectordialog_moc.$(OBJEXT) sequenceeditor_moc.$(OBJEXT) \
+plugwidget_moc.$(OBJEXT) sequencewidget_moc.$(OBJEXT) \
+outputplugwidget_moc.$(OBJEXT) inputplugwidget_moc.$(OBJEXT) \
+moduleclassview_moc.$(OBJEXT) propertywidget_moc.$(OBJEXT) \
 vjmainwindow_moc.$(OBJEXT) controlwidget_moc.$(OBJEXT) \
 graphnameview_moc.$(OBJEXT) videowallcontrollwidget_moc.$(OBJEXT) \
 picswitch_moc.$(OBJEXT) hidebutton_moc.$(OBJEXT) \
-sequencenameview_moc.$(OBJEXT) editorwidget_moc.$(OBJEXT) \
-controleditor_moc.$(OBJEXT) grapheditor_moc.$(OBJEXT) \
-nodewidget_moc.$(OBJEXT) playlistnameview_moc.$(OBJEXT) \
-modulebutton_moc.$(OBJEXT) moduleclasstabview_moc.$(OBJEXT)
-gui_DEPENDENCIES =  controlwidgets/libcontrolwidgets.a \
-propertywidgets/libpropertywidgets.a
+sequencenameview_moc.$(OBJEXT) nodewidget_moc.$(OBJEXT) \
+playlistnameview_moc.$(OBJEXT) modulebutton_moc.$(OBJEXT) \
+moduleclasstabview_moc.$(OBJEXT) typeview_moc.$(OBJEXT)
+gephex_gui_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -155,43 +175,16 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/askforstringdialog.P .deps/askforstringdialog_moc.P \
-.deps/connectionwidget.P .deps/controleditor.P \
-.deps/controleditor_moc.P .deps/controleditorwindow.P \
-.deps/controlwidget.P .deps/controlwidget_moc.P \
-.deps/controlwidgetfactory.P .deps/dllselectordialog.P \
-.deps/dllselectordialog_moc.P .deps/editorwidget.P \
-.deps/editorwidget_moc.P .deps/grapheditor.P .deps/grapheditor_moc.P \
-.deps/grapheditorwindow.P .deps/graphnameview.P \
-.deps/graphnameview_moc.P .deps/hidebutton.P .deps/hidebutton_moc.P \
-.deps/hidebuttonconstructor.P .deps/inputplugwidget.P \
-.deps/inputplugwidget_moc.P .deps/logwindow.P .deps/main.P \
-.deps/modulebutton.P .deps/modulebutton_moc.P \
-.deps/moduleclasstabview.P .deps/moduleclasstabview_moc.P \
-.deps/moduleclassview.P .deps/moduleclassview_moc.P \
-.deps/nodeproperty.P .deps/nodewidget.P .deps/nodewidget_moc.P \
-.deps/outputplugwidget.P .deps/outputplugwidget_moc.P .deps/picswitch.P \
-.deps/picswitch_moc.P .deps/playlist.P .deps/playlist_moc.P \
-.deps/playlistnameview.P .deps/playlistnameview_moc.P \
-.deps/plugwidget.P .deps/plugwidget_moc.P .deps/propertyview.P \
-.deps/propertywidget.P .deps/propertywidgetconstructor.P \
-.deps/propertywidgetfactory.P .deps/scenewidget.P \
-.deps/sequenceeditor.P .deps/sequenceeditor_moc.P \
-.deps/sequencenameview.P .deps/sequencenameview_moc.P \
-.deps/sequencewidget.P .deps/sequencewidget_moc.P .deps/treeview.P \
-.deps/treeviewitem.P .deps/uebertab.P .deps/videowallcontrollwidget.P \
-.deps/videowallcontrollwidget_moc.P .deps/vjmainwindow.P \
-.deps/vjmainwindow_moc.P
-SOURCES = $(gui_SOURCES)
-OBJECTS = $(gui_OBJECTS)
+SOURCES = $(gephex_gui_SOURCES)
+OBJECTS = $(gephex_gui_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/gui/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps qtgui/src/gui/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -221,6 +214,9 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
+.c.o:
+	$(COMPILE) -c $<
+
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
 .c.obj:
@@ -243,6 +239,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
@@ -259,9 +258,9 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-gui$(EXEEXT): $(gui_OBJECTS) $(gui_DEPENDENCIES)
-	@rm -f gui$(EXEEXT)
-	$(CXXLINK) $(gui_LDFLAGS) $(gui_OBJECTS) $(gui_LDADD) $(LIBS)
+gephex-gui$(EXEEXT): $(gephex_gui_OBJECTS) $(gephex_gui_DEPENDENCIES)
+	@rm -f gephex-gui$(EXEEXT)
+	$(CXXLINK) $(gephex_gui_LDFLAGS) $(gephex_gui_OBJECTS) $(gephex_gui_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
 .cpp.obj:
@@ -360,14 +359,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/gui
+subdir = qtgui/src/gui
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/gui/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -388,57 +382,208 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-hook
+connectionwidget.o: connectionwidget.cpp connectionwidget.h \
+	inputplugwidget.h plugwidget.h outputplugwidget.h
+controlwidget.o: controlwidget.cpp controlwidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h typeview.h \
+	../../../base/src/utils/buffer.h
+controlwidget_moc.o: controlwidget_moc.cpp controlwidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h
+dllselectordialog.o: dllselectordialog.cpp dllselectordialog.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	../guimodel/imoduleclassview.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h
+dllselectordialog_moc.o: dllselectordialog_moc.cpp dllselectordialog.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	../guimodel/imoduleclassview.h
+graphnameview.o: graphnameview.cpp graphnameview.h base/treeview.h \
+	../../../base/src/interfaces/igraphnamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../guimodel/iscenesequencer.h base/askforstringdialog.h \
+	base/treeviewitem.h
+graphnameview_moc.o: graphnameview_moc.cpp graphnameview.h \
+	base/treeview.h \
+	../../../base/src/interfaces/igraphnamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+guiconfig.o: guiconfig.cpp guiconfig.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/filesystem.h
+hidebutton.o: hidebutton.cpp hidebutton.h inputplugwidget.h plugwidget.h
+hidebutton_moc.o: hidebutton_moc.cpp hidebutton.h
+hidebuttonconstructor.o: hidebuttonconstructor.cpp \
+	hidebuttonconstructor.h base/iwidgetconstructor.h hidebutton.h
+inputplugwidget.o: inputplugwidget.cpp inputplugwidget.h plugwidget.h
+inputplugwidget_moc.o: inputplugwidget_moc.cpp inputplugwidget.h \
+	plugwidget.h
+main.o: main.cpp ../../../config.h ownstyle.h vjmainwindow.h \
+	../../../base/src/interfaces/irendererstatusreceiver.h \
+	../../../base/src/utils/autoptr.h guiconfig.h \
+	../../../base/src/utils/structreader.h
+modulebutton.o: modulebutton.cpp modulebutton.h
+modulebutton_moc.o: modulebutton_moc.cpp modulebutton.h
+moduleclasstabview.o: moduleclasstabview.cpp moduleclasstabview.h \
+	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../guimodel/moduleinfo.h ../guimodel/pluginfo.h \
+	../guimodel/xpm.h modulebutton.h uebertab.h
+moduleclasstabview_moc.o: moduleclasstabview_moc.cpp \
+	moduleclasstabview.h imoduleinfobasestation.h \
+	../guimodel/imoduleclassview.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+moduleclassview.o: moduleclassview.cpp moduleclassview.h \
+	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../guimodel/moduleinfo.h ../guimodel/pluginfo.h \
+	../guimodel/xpm.h
+moduleclassview_moc.o: moduleclassview_moc.cpp moduleclassview.h \
+	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+nodeproperty.o: nodeproperty.cpp nodeproperty.h \
+	base/ipropertydescription.h ../../../base/src/utils/autoptr.h \
+	../../../config.h typeviewfactory.h propertywidgetconstructor.h \
+	base/iwidgetconstructor.h hidebuttonconstructor.h \
+	inputplugwidget.h plugwidget.h ../guimodel/moduleinfo.h \
+	../guimodel/pluginfo.h ../../../base/src/utils/structreader.h
+nodewidget.o: nodewidget.cpp nodewidget.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	nodeproperty.h base/ipropertydescription.h \
+	../guimodel/moduleinfo.h ../guimodel/pluginfo.h \
+	../guimodel/xpm.h ../../../base/src/utils/stringtokenizer.h \
+	../../../base/src/utils/itokenizer.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/buffer.h inputplugwidget.h plugwidget.h \
+	outputplugwidget.h base/keyboardmanager.h base/ikeylistener.h \
+	base/key.h ../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/interfaces/ierrorreceiver.h
+nodewidget_moc.o: nodewidget_moc.cpp nodewidget.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+outputplugwidget.o: outputplugwidget.cpp outputplugwidget.h plugwidget.h
+outputplugwidget_moc.o: outputplugwidget_moc.cpp outputplugwidget.h \
+	plugwidget.h
+picswitch.o: picswitch.cpp picswitch.h
+picswitch_moc.o: picswitch_moc.cpp picswitch.h
+playlist.o: playlist.cpp playlist.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../guimodel/iscenechangelistener.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../guimodel/iscenesequencer.h base/askforstringdialog.h
+playlist_moc.o: playlist_moc.cpp playlist.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../guimodel/iscenechangelistener.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+playlistnameview.o: playlistnameview.cpp playlistnameview.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	base/treeview.h base/treeviewitem.h base/askforstringdialog.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h
+playlistnameview_moc.o: playlistnameview_moc.cpp playlistnameview.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+plugwidget.o: plugwidget.cpp plugwidget.h
+plugwidget_moc.o: plugwidget_moc.cpp plugwidget.h
+propertywidget.o: propertywidget.cpp propertywidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h typeview.h
+propertywidget_moc.o: propertywidget_moc.cpp propertywidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h
+propertywidgetconstructor.o: propertywidgetconstructor.cpp \
+	propertywidgetconstructor.h base/iwidgetconstructor.h \
+	propertywidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h \
+	../guimodel/controlvaluedispatcher.h ../guimodel/point.h
+scenewidget.o: scenewidget.cpp scenewidget.h
+sequenceeditor.o: sequenceeditor.cpp sequenceeditor.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../guimodel/iscenechangelistener.h sequencewidget.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../guimodel/iscenesequencer.h
+sequenceeditor_moc.o: sequenceeditor_moc.cpp sequenceeditor.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../guimodel/iscenechangelistener.h
+sequencenameview.o: sequencenameview.cpp sequencenameview.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	base/treeview.h base/treeviewitem.h base/askforstringdialog.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../guimodel/iscenesequencer.h
+sequencenameview_moc.o: sequencenameview_moc.cpp sequencenameview.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+sequencewidget.o: sequencewidget.cpp sequencewidget.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	scenewidget.h ../../../base/src/utils/stringtokenizer.h \
+	../../../base/src/utils/itokenizer.h
+sequencewidget_moc.o: sequencewidget_moc.cpp sequencewidget.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+typeview.o: typeview.cpp typeview.h ../../../base/src/utils/buffer.h
+typeview_moc.o: typeview_moc.cpp typeview.h \
+	../../../base/src/utils/buffer.h
+typeviewfactory.o: typeviewfactory.cpp typeviewfactory.h \
+	../../../config.h typeview.h ../../../base/src/utils/buffer.h \
+	typeviews/boundednumberview.h ../gui/typeview.h \
+	typeviews/unboundednumberview.h typeviews/slidernumberview.h \
+	typeviews/dialnumberview.h typeviews/radionumberview.h \
+	typeviews/stringview.h typeviews/comboboxstringview.h \
+	typeviews/filestringview.h typeviews/positionview.h \
+	typeviews/colorview.h typeviews/fontview.h
+uebertab.o: uebertab.cpp uebertab.h
+videowallcontrollwidget.o: videowallcontrollwidget.cpp \
+	videowallcontrollwidget.h propertywidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h
+videowallcontrollwidget_moc.o: videowallcontrollwidget_moc.cpp \
+	videowallcontrollwidget.h propertywidget.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h
+vjmainwindow.o: vjmainwindow.cpp vjmainwindow.h \
+	../../../base/src/interfaces/irendererstatusreceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	base/propertyview.h base/logwindow.h \
+	../../../base/src/interfaces/ierrorreceiver.h \
+	base/keyboardmanager.h editor/editorwidget.h moduleclassview.h \
+	imoduleinfobasestation.h ../guimodel/imoduleclassview.h \
+	graphnameview.h base/treeview.h \
+	../../../base/src/interfaces/igraphnamereceiver.h \
+	sequencenameview.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	playlistnameview.h picswitch.h dllselectordialog.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	playlist.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../guimodel/iscenechangelistener.h sequenceeditor.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/interfaces/ienginecontrolreceiver.h \
+	../../../base/src/interfaces/irenderercontrolreceiver.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../../../base/src/interfaces/igraphnamesender.h \
+	../../../base/src/interfaces/imoduleclassnamesender.h \
+	../../../base/src/interfaces/isequencenamesender.h \
+	../../../base/src/interfaces/isequenceupdatesender.h \
+	../../../base/src/interfaces/ierrorsender.h \
+	../../../base/src/interfaces/irendererstatussender.h \
+	../../../base/src/interfaces/isequencerstatussender.h \
+	../guimodel/enginewrapper.h ../../../util/include/basic_types.h \
+	../guimodel/moduleclassmodel.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	../guimodel/actionsequencerwrapper.h \
+	../guimodel/iscenesequencer.h \
+	../../../base/src/interfaces/isequencercontrolsender.h \
+	rot_klein.xpm gruen_klein.xpm \
+	../../../base/src/utils/structreader.h
+vjmainwindow_moc.o: vjmainwindow_moc.cpp vjmainwindow.h \
+	../../../base/src/interfaces/irendererstatusreceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
 info-am:
 info: info-recursive
 dvi-am:
@@ -470,34 +615,35 @@ installdirs-am:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-libtool mostlyclean-tags \
 		mostlyclean-generic
 
 mostlyclean: mostlyclean-recursive
 
 clean-am:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
+		clean-generic mostlyclean-am
 
 clean: clean-recursive
 
 distclean-am:  distclean-binPROGRAMS distclean-compile distclean-libtool \
-		distclean-tags distclean-depend distclean-generic \
-		clean-am
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-recursive
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -513,25 +659,21 @@ uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs-am installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs-am \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-treeview.o: treeview_moc.cpp
-treeview_moc.cpp: treeview.cpp
-	$(MOC) -o treeview_moc.cpp treeview.cpp
+dist-hook:
+	rm -f $(distdir)/*_moc.cpp
+
+Makefile: $(BUILT_SOURCES)
 
 %_moc.cpp: %.h
 	$(MOC) -o $@ $<
-
-clean:
-	rm -f *_moc.cpp
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

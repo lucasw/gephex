@@ -110,10 +110,10 @@ namespace {
 namespace dllloader
 {
 
-  utils::Buffer ModuleInfo::enrichInfo(const char* data,int len,
+  utils::Buffer ModuleInfo::enrichInfo(const char* data, int len,
 				       const std::string& name,
-				       const std::vector<std::string>& inNames,
-				       const std::vector<std::string>& outNames)
+				       const std::vector<std::string>&inNames,
+				       const std::vector<std::string>&outNames)
   {
     utils::StructReader sr(data);
 

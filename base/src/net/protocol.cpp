@@ -7,7 +7,11 @@
 
 #include "basic_types.h"
 
+#if defined(HAVE_CONFIG_H)
 #include "config.h"
+#endif
+
+#include "minmax.h"
 
 
 //TODO: alles plattformabhängig ab hier

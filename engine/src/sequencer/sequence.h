@@ -78,6 +78,8 @@ namespace sequencer
 
       bool running() const;
 
+      bool paused() const;
+
       void jumpTo(int newTime);
 
     private:

@@ -2,18 +2,21 @@
 #define INCLUDED_ITASK_H
 
 /**
- * Interfaces for non-preemptive tasks.
+ * simple interface for non-preemptive tasks.
  */
 class ITask
 {
-public:
+ public:
+
   /**
-   * This method gives control to the task. It is expected, that
-   * the task gives back control (by returning) soon.
-   * @return true if everything went fin, false if the task doesnt
-   *         want to be called again
+   * This method executes one slice of the task. The run method must return
+   * control as soon as possible(non-preemptive).
+   *
+   * \returns the thread finished status. 
+   *          It is true if there are task slices left to be executed and 
+   *          false if the scheduler mustn't call the run method again.
    */
-	virtual bool run() = 0;
+  virtual bool run() = 0;
 };
 
 #endif

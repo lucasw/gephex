@@ -13,8 +13,9 @@ typedef struct _Instance
 {
 struct _MyInstance* my;
  NumberType* in_in;
+ NumberType* in_shut_up;
 } Instance, *InstancePtr;
-enum Inputs { in_in = 0 };
+enum Inputs { in_in = 0, in_shut_up = 1 };
 
 struct _MyInstance* construct(void);
 void destruct(struct _MyInstance*);

@@ -12,13 +12,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
     return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
   break;
   case 2:
-    return "input_spec { type=typ_PositionType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_PositionType const=true strong_dependency=true default=[0.5 0.5] } ";
   break;
   case 3:
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
@@ -114,7 +114,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Tunnel] group=[GrafikEffekte] inputs=[8 Bewegung Drehung Position Bild Groesse(X){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Groesse(Y){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Radius Shading{absolute=[true] hidden=[true] higher_bound=[10] widget_type=[number_selector] lower_bound=[0] help=[Stärke des Shadings] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Tunnel] group=[GrafikEffekte] inputs=[8 Bewegung{lower_bound=[-1.6] higher_bound=[1.6] widget_type=[number_selector] } Drehung{lower_bound=[0] higher_bound=[360] step_size=[0.5] } Position Bild Groesse(X){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Groesse(Y){hidden=[true] higher_bound=[1024] step_size=[1] widget_type=[number_selector] lower_bound=[0] help=[Größe des Outputs in Pixeln] } Radius{lower_bound=[0] higher_bound=[1] step_size=[0.01] widget_type=[number_selector] } Shading{hidden=[true] higher_bound=[10] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Stärke des Shadings] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(tunnelmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -122,7 +122,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(tunnelmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -159,8 +159,20 @@ void* getInputAttributes(int index)
 	return attributes[index];
 }
 	
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_tunnelmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
+	
 	initAttributes();
-	return init(log_function);
+
+	return init(logger);
 }

@@ -36,7 +36,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -58,65 +58,92 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
-baseincludedir = @includedir@/gephex
-includedir = $(baseincludedir)/engine
+includedir = @includedir@/gephex
 libdir = @libdir@/gephex
 
-include_HEADERS = dllmodule.h dlltype.h dllutils.h
+# Defines needed by some source files:
 
-INCLUDES =  		-I.. 		-I$(baseincludedir)
-
-
-bin_PROGRAMS = engine
-
-engine_SOURCES =  		main.cpp 		scheduler.cpp 		netlogger.cpp 		netlogger.h 		scheduler.h
+include_HEADERS =  	dllmodule.h 	dlltype.h 	dllutils.h
 
 
-engine_LDADD =  		-ldllloader 		-lsequencer 		-lmodel 		-lrenderer 		-lnetwork 		-lnetinterfaces 		-lutils 		-ldl
+AM_CPPFLAGS =  	-DINST_INSTALL_PREFIX=\"$(prefix)\" 	-I @srcdir@/.. 	-I @srcdir@/../renderer 	-I @srcdir@/../model 	-I @srcdir@/../dllloader 	-I @srcdir@/../sequencer 	-I @srcdir@/../../../base/src 	-I @builddir@/../../../base/src/interfaces 	-I @builddir@/../../../base/src 	-I @srcdir@/../../../base/src/interfaces 	-I @srcdir@/../../../base/src/netinterfaces 	-I @builddir@/../../../base/src/netinterfaces 	-I @srcdir@/../../../base/src/net 	-I @srcdir@/../../../base/src/utils 	-I @srcdir@/../../../util/include
 
 
-engine_LDFLAGS =  		-L../dllloader 		-L../sequencer 		-L../model 		-L../renderer 		-L$(libdir) 		-L/sw/lib
+bin_PROGRAMS = gephex-engine
+
+gephex_engine_SOURCES =  	main.cpp 	scheduler.cpp 	netlogger.cpp 	netlogger.h 	scheduler.h 	engineconfig.cpp 	engineconfig.h 	controller.h 	controller.cpp
 
 
-noinst_PROGRAMS = enginetest
+@NEED_DL_TRUE@LIB_DL_FLAGS = -ldl
 
-enginetest_SOURCES = testmain.cpp 			schedulertest.cpp 			scheduler.cpp 			schedulertest.h
+gephex_engine_LDADD =  	-ldllloader 	-lsequencer 	-lmodel 	-lrenderer 	-lnetwork 	-lnetinterfaces 	-lutils $(LIB_DL_FLAGS) 	-L@builddir@/../dllloader 	-L@builddir@/../sequencer 	-L@builddir@/../model 	-L@builddir@/../renderer 	-L$(libdir) 	-L@builddir@/../../../base/src/TestFramework 	-L@builddir@/../../../base/src/utils 	-L@builddir@/../../../base/src/net 	-L@builddir@/../../../base/src/netinterfaces 	-L/sw/lib
 
 
-enginetest_LDFLAGS = -L$(libdir)
-enginetest_LDADD = -ltestframework -lutils
+gephex_engine_DEPENDENCIES =  	@builddir@/../dllloader/libdllloader.a 	@builddir@/../sequencer/libsequencer.a 	@builddir@/../model/libmodel.a 	@builddir@/../renderer/librenderer.a 	@top_builddir@/base/src/net/libnetwork.a 	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a 	@top_builddir@/base/src/utils/libutils.a
+
+
+TESTS = enginetest
+
+check_PROGRAMS = enginetest
+
+enginetest_SOURCES = testmain.cpp 		     schedulertest.cpp 		     scheduler.cpp 		     schedulertest.h
+
+
+enginetest_LDADD = -ltestframework                    -lutils 		   -L$(libdir) 	           -L@builddir@/../../../base/src/TestFramework 	           -L@builddir@/../../../base/src/utils
+
+
+enginetest_DEPENDENCIES =  	@top_builddir@/base/src/TestFramework/libtestframework.a 	@top_builddir@/base/src/utils/libutils.a
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
-bin_PROGRAMS =  engine$(EXEEXT)
-noinst_PROGRAMS =  enginetest$(EXEEXT)
-PROGRAMS =  $(bin_PROGRAMS) $(noinst_PROGRAMS)
+bin_PROGRAMS =  gephex-engine$(EXEEXT)
+check_PROGRAMS =  enginetest$(EXEEXT)
+PROGRAMS =  $(bin_PROGRAMS)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-engine_OBJECTS =  main.$(OBJEXT) scheduler.$(OBJEXT) netlogger.$(OBJEXT)
-engine_DEPENDENCIES = 
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
+gephex_engine_OBJECTS =  main.$(OBJEXT) scheduler.$(OBJEXT) \
+netlogger.$(OBJEXT) engineconfig.$(OBJEXT) controller.$(OBJEXT)
+gephex_engine_LDFLAGS = 
 enginetest_OBJECTS =  testmain.$(OBJEXT) schedulertest.$(OBJEXT) \
 scheduler.$(OBJEXT)
-enginetest_DEPENDENCIES = 
+enginetest_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -136,18 +163,16 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/main.P .deps/netlogger.P .deps/scheduler.P \
-.deps/schedulertest.P .deps/testmain.P
-SOURCES = $(engine_SOURCES) $(enginetest_SOURCES)
-OBJECTS = $(engine_OBJECTS) $(enginetest_OBJECTS)
+SOURCES = $(gephex_engine_SOURCES) $(enginetest_SOURCES)
+OBJECTS = $(gephex_engine_OBJECTS) $(enginetest_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/engine/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps engine/src/engine/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -177,14 +202,17 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
-mostlyclean-noinstPROGRAMS:
+mostlyclean-checkPROGRAMS:
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+clean-checkPROGRAMS:
+	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
 
-distclean-noinstPROGRAMS:
+distclean-checkPROGRAMS:
 
-maintainer-clean-noinstPROGRAMS:
+maintainer-clean-checkPROGRAMS:
+
+.c.o:
+	$(COMPILE) -c $<
 
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
@@ -208,6 +236,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
@@ -224,9 +255,9 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-engine$(EXEEXT): $(engine_OBJECTS) $(engine_DEPENDENCIES)
-	@rm -f engine$(EXEEXT)
-	$(CXXLINK) $(engine_LDFLAGS) $(engine_OBJECTS) $(engine_LDADD) $(LIBS)
+gephex-engine$(EXEEXT): $(gephex_engine_OBJECTS) $(gephex_engine_DEPENDENCIES)
+	@rm -f gephex-engine$(EXEEXT)
+	$(CXXLINK) $(gephex_engine_LDFLAGS) $(gephex_engine_OBJECTS) $(gephex_engine_LDADD) $(LIBS)
 
 enginetest$(EXEEXT): $(enginetest_OBJECTS) $(enginetest_DEPENDENCIES)
 	@rm -f enginetest$(EXEEXT)
@@ -284,14 +315,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/engine
+subdir = engine/src/engine
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/engine/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -302,62 +328,243 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+controller.o: controller.cpp controller.h \
+	../../../base/src/interfaces/ienginecontrolreceiver.h \
+	../../../base/src/interfaces/itypeclassnamereceiver.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	../../../base/src/interfaces/itask.h \
+	../../../base/src/net/isocket.h \
+	../../../base/src/net/netexceptions.h \
+	../../../base/src/net/isender.h \
+	../../../base/src/net/sotimeout.h \
+	../../../base/src/netinterfaces/moduleconstructiondumbreceivernet.h \
+	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
+	../../../base/src/netinterfaces/moduleclassinforeceivernet.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	../../../base/src/netinterfaces/moduledatareceivernet.h \
+	../../../base/src/interfaces/imoduledatareceiver.h \
+	../../../base/src/netinterfaces/controlvaluereceivernet.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/netinterfaces/modulestatisticsreceivernet.h \
+	../../../base/src/interfaces/imodulestatisticsreceiver.h \
+	../../../base/src/netinterfaces/moduleclassnamereceivernet.h \
+	../../../base/src/netinterfaces/modelstatusreceivernet.h \
+	../../../base/src/interfaces/imodelstatusreceiver.h \
+	../../../base/src/netinterfaces/graphnamereceivernet.h \
+	../../../base/src/interfaces/igraphnamereceiver.h \
+	../../../base/src/netinterfaces/sequenceupdatereceivernet.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/netinterfaces/sequencenamereceivernet.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/netinterfaces/errorreceivernet.h \
+	../../../base/src/interfaces/ierrorreceiver.h \
+	../../../base/src/netinterfaces/rendererstatusreceivernet.h \
+	../../../base/src/interfaces/irendererstatusreceiver.h \
+	../../../base/src/utils/buffer.h ../../../base/src/net/tagger.h \
+	../../../base/src/net/itagger.h \
+	../../../base/src/net/idatalistener.h \
+	../../../base/src/net/tagger.cpp \
+	../../../base/src/net/tagutils.h \
+	../../../util/include/basic_types.h \
+	../../../base/src/net/protocol.h \
+	../../../base/src/net/tagdispatcher.h \
+	../../../base/src/net/itaginterpreter.h \
+	../../../base/src/net/tagdispatcher.cpp \
+	../../../base/src/net/socketadaptor.h \
+	../../../base/src/net/tcpserversocket.h \
+	../../../base/src/net/iserversocket.h \
+	../../../base/src/netinterfaces/modelcontrolsendernet.h \
+	../../../base/src/interfaces/imodelcontrolsender.h \
+	../../../base/src/netinterfaces/renderercontrolsendernet.h \
+	../../../base/src/interfaces/irenderercontrolsender.h \
+	../../../base/src/netinterfaces/moduleclassloadercontrolsendernet.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolsender.h \
+	../../../base/src/netinterfaces/enginecontrolsendernet.h \
+	../../../base/src/interfaces/ienginecontrolsender.h \
+	../../../base/src/netinterfaces/sequencercontrolsendernet.h \
+	../../../base/src/interfaces/isequencercontrolsender.h \
+	../../../base/src/netinterfaces/sequencerstatusreceivernet.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../model/model.h ../model/specmap.h \
+	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
+	../../../base/src/interfaces/imoduleclassspecreceiver.h \
+	../../../base/src/interfaces/igraphnamesender.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/interfaces/imoduleconstructionsmartsender.h \
+	../../../base/src/interfaces/imoduledatasender.h \
+	../../../base/src/interfaces/iserializedgraphsender.h \
+	../../../base/src/interfaces/ismartcontrolvaluereceiver.h \
+	../../../base/src/interfaces/icontrolvaluesender.h \
+	../../../base/src/interfaces/imodulestatisticssender.h \
+	../../../base/src/interfaces/imodulestatisticssmartreceiver.h \
+	../../../base/src/interfaces/imodelstatussender.h \
+	../renderer/renderer.h \
+	../../../base/src/interfaces/irenderercontrolreceiver.h \
+	../../../base/src/interfaces/imoduleclassreceiver.h \
+	../../../base/src/interfaces/itypeclassreceiver.h \
+	../../../base/src/interfaces/imoduleconstructionsmartreceiver.h \
+	../../../base/src/interfaces/ismartcontrolvaluesender.h \
+	../../../base/src/interfaces/imodulestatisticssmartsender.h \
+	../../../base/src/interfaces/irendererstatussender.h \
+	../dllloader/dllloader.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/imoduleclassinfosender.h \
+	../../../base/src/interfaces/imoduleclasssender.h \
+	../../../base/src/interfaces/imoduleclassspecsender.h \
+	../../../base/src/interfaces/imoduleclassnamesender.h \
+	../../../base/src/interfaces/itypeclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/itypeclassinfosender.h \
+	../../../base/src/interfaces/itypeclasssender.h \
+	../../../base/src/interfaces/itypeclassnamesender.h \
+	../sequencer/sequencer.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../../../base/src/interfaces/isequenceupdatesender.h \
+	../../../base/src/interfaces/isequencenamesender.h \
+	../../../base/src/interfaces/isequencerstatussender.h \
+	scheduler.h engineconfig.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/net/domainserversocket.h netlogger.h \
+	../../../base/src/utils/ilogger.h \
+	../../../base/src/utils/filesystem.h
+engineconfig.o: engineconfig.cpp engineconfig.h \
+	../../../base/src/utils/structreader.h ../../../config.h \
+	../../../base/src/utils/filesystem.h \
+	../../../base/src/utils/autoptr.h
+main.o: main.cpp ../../../config.h engineconfig.h \
+	../../../base/src/utils/structreader.h controller.h \
+	../../../base/src/interfaces/ienginecontrolreceiver.h \
+	../../../base/src/interfaces/itypeclassnamereceiver.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	../../../base/src/interfaces/itask.h \
+	../../../base/src/net/isocket.h \
+	../../../base/src/net/netexceptions.h \
+	../../../base/src/net/isender.h \
+	../../../base/src/net/sotimeout.h \
+	../../../base/src/netinterfaces/moduleconstructiondumbreceivernet.h \
+	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
+	../../../base/src/netinterfaces/moduleclassinforeceivernet.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	../../../base/src/netinterfaces/moduledatareceivernet.h \
+	../../../base/src/interfaces/imoduledatareceiver.h \
+	../../../base/src/netinterfaces/controlvaluereceivernet.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/netinterfaces/modulestatisticsreceivernet.h \
+	../../../base/src/interfaces/imodulestatisticsreceiver.h \
+	../../../base/src/netinterfaces/moduleclassnamereceivernet.h \
+	../../../base/src/netinterfaces/modelstatusreceivernet.h \
+	../../../base/src/interfaces/imodelstatusreceiver.h \
+	../../../base/src/netinterfaces/graphnamereceivernet.h \
+	../../../base/src/interfaces/igraphnamereceiver.h \
+	../../../base/src/netinterfaces/sequenceupdatereceivernet.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/netinterfaces/sequencenamereceivernet.h \
+	../../../base/src/interfaces/isequencenamereceiver.h \
+	../../../base/src/netinterfaces/errorreceivernet.h \
+	../../../base/src/interfaces/ierrorreceiver.h \
+	../../../base/src/netinterfaces/rendererstatusreceivernet.h \
+	../../../base/src/interfaces/irendererstatusreceiver.h \
+	../../../base/src/utils/buffer.h ../../../base/src/net/tagger.h \
+	../../../base/src/net/itagger.h \
+	../../../base/src/net/idatalistener.h \
+	../../../base/src/net/tagger.cpp \
+	../../../base/src/net/tagutils.h \
+	../../../util/include/basic_types.h \
+	../../../base/src/net/protocol.h \
+	../../../base/src/net/tagdispatcher.h \
+	../../../base/src/net/itaginterpreter.h \
+	../../../base/src/net/tagdispatcher.cpp \
+	../../../base/src/net/socketadaptor.h \
+	../../../base/src/net/tcpserversocket.h \
+	../../../base/src/net/iserversocket.h \
+	../../../base/src/netinterfaces/modelcontrolsendernet.h \
+	../../../base/src/interfaces/imodelcontrolsender.h \
+	../../../base/src/netinterfaces/renderercontrolsendernet.h \
+	../../../base/src/interfaces/irenderercontrolsender.h \
+	../../../base/src/netinterfaces/moduleclassloadercontrolsendernet.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolsender.h \
+	../../../base/src/netinterfaces/enginecontrolsendernet.h \
+	../../../base/src/interfaces/ienginecontrolsender.h \
+	../../../base/src/netinterfaces/sequencercontrolsendernet.h \
+	../../../base/src/interfaces/isequencercontrolsender.h \
+	../../../base/src/netinterfaces/sequencerstatusreceivernet.h \
+	../../../base/src/interfaces/isequencerstatusreceiver.h \
+	../../../base/src/utils/autoptr.h ../model/model.h \
+	../model/specmap.h \
+	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
+	../../../base/src/interfaces/imoduleclassspecreceiver.h \
+	../../../base/src/interfaces/igraphnamesender.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/interfaces/imoduleconstructionsmartsender.h \
+	../../../base/src/interfaces/imoduledatasender.h \
+	../../../base/src/interfaces/iserializedgraphsender.h \
+	../../../base/src/interfaces/ismartcontrolvaluereceiver.h \
+	../../../base/src/interfaces/icontrolvaluesender.h \
+	../../../base/src/interfaces/imodulestatisticssender.h \
+	../../../base/src/interfaces/imodulestatisticssmartreceiver.h \
+	../../../base/src/interfaces/imodelstatussender.h \
+	../renderer/renderer.h \
+	../../../base/src/interfaces/irenderercontrolreceiver.h \
+	../../../base/src/interfaces/imoduleclassreceiver.h \
+	../../../base/src/interfaces/itypeclassreceiver.h \
+	../../../base/src/interfaces/imoduleconstructionsmartreceiver.h \
+	../../../base/src/interfaces/ismartcontrolvaluesender.h \
+	../../../base/src/interfaces/imodulestatisticssmartsender.h \
+	../../../base/src/interfaces/irendererstatussender.h \
+	../dllloader/dllloader.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/imoduleclassinfosender.h \
+	../../../base/src/interfaces/imoduleclasssender.h \
+	../../../base/src/interfaces/imoduleclassspecsender.h \
+	../../../base/src/interfaces/imoduleclassnamesender.h \
+	../../../base/src/interfaces/itypeclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/itypeclassinfosender.h \
+	../../../base/src/interfaces/itypeclasssender.h \
+	../../../base/src/interfaces/itypeclassnamesender.h \
+	../sequencer/sequencer.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../../../base/src/interfaces/isequenceupdatesender.h \
+	../../../base/src/interfaces/isequencenamesender.h \
+	../../../base/src/interfaces/isequencerstatussender.h \
+	scheduler.h
+netlogger.o: netlogger.cpp netlogger.h ../../../base/src/utils/ilogger.h \
+	../../../base/src/interfaces/ierrorreceiver.h
+scheduler.o: scheduler.cpp scheduler.h ../../../base/src/utils/autoptr.h \
+	../../../config.h ../../../base/src/interfaces/itask.h \
+	../../../base/src/utils/timing.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
+	    all=`expr $$all + 1`; \
+	    echo "PASS: $$tst"; \
+	  elif test $$? -ne 77; then \
+	    all=`expr $$all + 1`; \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  banner="All $$all tests passed"; \
+	else \
+	  banner="$$failed of $$all tests failed"; \
+	fi; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"; \
+	test "$$failed" -eq 0
 info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
@@ -389,29 +596,27 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-noinstPROGRAMS \
+mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-checkPROGRAMS \
 		mostlyclean-compile mostlyclean-libtool \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-binPROGRAMS clean-noinstPROGRAMS clean-compile \
-		clean-libtool clean-tags clean-depend clean-generic \
-		mostlyclean-am
+clean-am:  clean-binPROGRAMS clean-checkPROGRAMS clean-compile \
+		clean-libtool clean-tags clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-binPROGRAMS distclean-noinstPROGRAMS \
+distclean-am:  distclean-binPROGRAMS distclean-checkPROGRAMS \
 		distclean-compile distclean-libtool distclean-tags \
-		distclean-depend distclean-generic clean-am
+		distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
-		maintainer-clean-noinstPROGRAMS \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-checkPROGRAMS maintainer-clean-compile \
+		maintainer-clean-libtool maintainer-clean-tags \
 		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
@@ -420,20 +625,19 @@ maintainer-clean: maintainer-clean-am
 
 .PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
-mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
-clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
-mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool uninstall-includeHEADERS \
-install-includeHEADERS tags mostlyclean-tags distclean-tags clean-tags \
-maintainer-clean-tags distdir mostlyclean-depend distclean-depend \
-clean-depend maintainer-clean-depend info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+mostlyclean-checkPROGRAMS distclean-checkPROGRAMS clean-checkPROGRAMS \
+maintainer-clean-checkPROGRAMS mostlyclean-compile distclean-compile \
+clean-compile maintainer-clean-compile mostlyclean-libtool \
+distclean-libtool clean-libtool maintainer-clean-libtool \
+uninstall-includeHEADERS install-includeHEADERS tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir check-TESTS \
+info-am info dvi-am dvi check check-am installcheck-am installcheck \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+	-I @builddir@/../../../util/include
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

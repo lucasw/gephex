@@ -3,11 +3,11 @@
 
 #include "framebuffertype.h"
 
-int initOutput(char* caption, int xsize, int ysize,int bpp);
+int initOutput(const char* caption, int xsize, int ysize, int bpp);
 
 void resizeOutput(int new_xsize, int new_ysize);
 
-void updateOutput(uint_32* framebuffer);
+void updateOutput(const uint_32* framebuffer);
 
 void shutdownOutput();
 

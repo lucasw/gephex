@@ -4,8 +4,12 @@
 #include "config.h"
 #endif
 
+static logT s_log;
+
 #if defined(OS_POSIX)
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <errno.h>
@@ -23,6 +27,7 @@ typedef struct _MyInstance {
 
 int init(logT log_function)
 {
+  s_log = log_function;
   return 1;
 }
 
@@ -42,7 +47,7 @@ MyInstance* construct()
 
 void destruct(MyInstance* my)
 {
-  // Add your cleanup here
+  string_destroyInstance(&my->oldDevice);
   free(my);
 }
 
@@ -69,10 +74,14 @@ static int openDevice(const char* device_name, int* fd)
 
   // open the OSS device for reading
   *fd = open(device_name, O_RDONLY, 0);
-  if (*fd < 0) {
-    printf("Error: cannot open '%s' (midiinmodule)\n", device_name);
-    return 0;
-  }
+  if (*fd < 0)
+    {
+      char buffer[128];
+      snprintf(buffer, sizeof(buffer),
+               "Error: cannot open '%s' (midiinmodule)", device_name);
+      s_log(0, buffer);
+      return 0;
+    }
 
   return 1;
 }
@@ -108,21 +117,23 @@ static void readData(int fd, MidiType* buffer)
   if (FD_ISSET(fd, &readfds))
     {
       errno = 0;
-      do
+      //      do
 	{
 	  len = read(fd, buf, MAX_MSG_LEN);
-	  
 	  if (len == -1 && errno != EINTR)
 	    {
-	      fprintf(stderr,"Fehler bei midiinmodule::read!\n errno=%i\n",
-		      errno);
+              char buffer[64];
+	      snprintf(buffer, sizeof(buffer),
+                       "Fehler bei midiinmodule::read -> errno = %i",
+                       errno);
+              s_log(0, buffer);
 	    }
 	  else
 	    {
 	      //TODO: convert the midi stream?
-		  midi_set_buffer(buffer, buf, len);
+              midi_set_buffer(buffer, buf, len);
 	    }
-	} while (errno != EINTR);
+        }// while (errno != EINTR);
     }
   else
     {
@@ -134,6 +145,8 @@ static void readData(int fd, MidiType* buffer)
 #elif defined(OS_WIN32)
 
 #include <windows.h>
+
+#include "midiutil.h"
 
 static HMIDIIN s_midi_in;
 static MIDIHDR s_midi_hdr;
@@ -149,6 +162,8 @@ static int s_midi_buf_len;
 
 static CRITICAL_SECTION s_critical_section;
 
+#define snprintf _snprintf
+
 typedef struct _MyInstance {
 	int dummy;
 } MyInstance, *MyInstancePtr;
@@ -160,19 +175,31 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 	int init(logT log_function)
 	{
 		MMRESULT res;
+        int numDevs;
 
-		InitializeCriticalSection(&s_critical_section);
+		numDevs = midiInGetNumDevs();
+
+		if (numDevs == 0)
+		{		  
+		  s_log(0, "No Midi Devices found - aborting");
+		  return 0;		  
+		}
+
+		s_log = log_function;
 
 		s_midi_buf_len = 0;
 
 		res = midiInOpen(&s_midi_in, 0, (DWORD) midiCallBack, (DWORD) 
 			0, CALLBACK_FUNCTION);
 		
-		if(MMSYSERR_NOERROR != res)
+		if (MMSYSERR_NOERROR != res)
 		{
+			char buffer[256];
 			TCHAR errorText[256];
 			midiInGetErrorText(res,errorText,255);
-			printf("Failed to open MIDI input device: %s\n", errorText);		
+			snprintf(buffer, sizeof(buffer),
+					 "Failed to open MIDI input device: %s", errorText);		
+			s_log(0, buffer);
 			return 0;
 		}  		
 
@@ -183,10 +210,12 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		res = midiInPrepareHeader(s_midi_in, &s_midi_hdr, sizeof(s_midi_hdr));
 		if (MMSYSERR_NOERROR != res)
 		{		
+			char buffer[256];
 			TCHAR errorText[256];
 			midiInGetErrorText(res,errorText,255);
-			printf("Failed to prepare MIDI header: %s\n", errorText);		
-			
+			snprintf(buffer, sizeof(buffer),
+				     "Failed to prepare MIDI header: %s", errorText);		
+			s_log(0, buffer);
 			midiInReset(s_midi_in);
 			midiInClose(s_midi_in);
 			return 0;
@@ -196,10 +225,13 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		res = midiInAddBuffer(s_midi_in, &s_midi_hdr, sizeof(s_midi_hdr));
 		if (MMSYSERR_NOERROR != res)
 		{		
+			char buffer[256];
 			TCHAR errorText[256];
 			midiInGetErrorText(res,errorText,255);
-			printf("Failed to add MIDI buffer: %s\n", errorText);		
-			
+			snprintf(buffer, sizeof(buffer),
+				     "Failed to add MIDI buffer: %s", errorText);		
+			s_log(0, buffer);
+
 			midiInUnprepareHeader(s_midi_in, &s_midi_hdr, sizeof(s_midi_hdr));
 			midiInReset(s_midi_in);
 			midiInClose(s_midi_in);
@@ -209,9 +241,13 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		res = midiInStart(s_midi_in);
 		if (MMSYSERR_NOERROR != res)
 		{		
+			char buffer[128];
 			TCHAR errorText[256];
 			midiInGetErrorText(res,errorText,255);
-			printf("Failed to start MIDI input device: %s\n", errorText);		
+			snprintf(buffer, sizeof(buffer),
+				     "Failed to start MIDI input device: %s", errorText);		
+
+			s_log(0, buffer);
 			
 			midiInUnprepareHeader(s_midi_in, &s_midi_hdr, sizeof(s_midi_hdr));
 			midiInReset(s_midi_in);
@@ -219,9 +255,16 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 			return 0;
 		}  
 
+		{
+		  char buffer[128];
+		  snprintf(buffer, sizeof(buffer),"Number of MIDI Devices: %d",
+			       numDevs);
+		  s_log(2, buffer);
+		  snprintf(buffer, sizeof(buffer),"Initialization ... Success!!");
+		  s_log(2, buffer);
+		}
 
-		printf("<midiinmodule> Number of MIDI Devices: %d\n", midiInGetNumDevs());  	
-		printf("<midiinmodule> Initialization ... Success!!\n");
+		InitializeCriticalSection(&s_critical_section);
 				
 		return 1;
 	}
@@ -280,7 +323,12 @@ static void put_byte(unsigned char byte)
 	if (s_midi_buf_len < MIDI_BUF_SIZE)
 		s_midi_buf[s_midi_buf_len++] = byte;
 	else
-		fprintf(stderr, "Buffer overflow at midiinmodule::put_byte, ignoring %i\n", byte);
+	{
+		char buffer[64];
+		snprintf(buffer, sizeof(buffer),
+			     "Buffer overflow at midiinmodule::put_byte, ignoring %i", byte);
+		s_log(0, buffer);
+	}
 	LeaveCriticalSection(&s_critical_section);
 }
 
@@ -295,8 +343,13 @@ static void put_block(unsigned char* block, int len)
 		s_midi_buf_len += len;		
 	}
 	else
-		fprintf(stderr, "Buffer overflow at midiinmodule::put_block, ignoring %i bytes\n",
-				len);
+	{
+		char buffer[64];
+		snprintf(buffer, sizeof(buffer),
+			     "Buffer overflow at midiinmodule::put_block, ignoring %i bytes",
+				 len);
+		s_log(0, buffer);
+	}
 	LeaveCriticalSection(&s_critical_section);
 }
 
@@ -308,9 +361,10 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 	unsigned char midiParam2; /* je nach commando andere bedeutung */
 
 	MidiType* buffer = (MidiType*) dwInstance;
-	midiStat   = (dwParam1 & 0x000000ff) >> 0;	
-	midiParam1 = (dwParam1 & 0x0000ff00) >> 8;
-	midiParam2 = (dwParam1 & 0x00ff0000) >> 16;
+	midiStat   = (unsigned char) ((dwParam1 & 0x000000ff) >> 0);
+	midiParam1 = (unsigned char) ((dwParam1 & 0x0000ff00) >> 8);
+	midiParam2 = (unsigned char) ((dwParam1 & 0x00ff0000) >> 16);
+
 	switch(wMsg)
 	{
 	case MIM_OPEN:
@@ -318,7 +372,10 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		
 	case MIM_ERROR:
 		{
-			fprintf(stderr, "wMsg == MIM_ERROR at midiinmodule::midiCallBack!\n");
+			char buffer[64];
+			snprintf(buffer, sizeof(buffer),
+				     "wMsg == MIM_ERROR at midiinmodule::midiCallBack!");
+			s_log(0, buffer);
 		} break;
 		
 	case MIM_DATA:
@@ -326,7 +383,10 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		int len = midi_length_of_message(midiStat);
 		if (len < 0)
 		{
-			fprintf(stderr,"midi: unbekannt: %i %i %i \n", midiStat,midiParam1,midiParam2);
+            char buffer[64];
+			snprintf(buffer, sizeof(buffer),
+				     "midi: unbekannt: %i %i %i", midiStat, midiParam1, midiParam2);
+			s_log(0, buffer);
 			return;
 		}
 		switch (len)
@@ -344,7 +404,12 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 			put_byte(midiParam2);
 			break;
 		default:
-			fprintf(stderr,"unknown length at midiinmodule::midiCallBack: %i\n", len);
+			{
+			  char buffer[64];
+			  snprintf(buffer, sizeof(buffer),
+				       "unknown length at midiinmodule::midiCallBack: %i", len);
+			  s_log(0, buffer);
+			}
 		}		
 	} break;
 	case MIM_LONGDATA:
@@ -357,7 +422,12 @@ void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		}break;
 		
 	default:
-		fprintf(stderr, "Unknown wMsg at midiinmodule::midiCallBack: %i\n", wMsg);
+		{
+			char buffer[64];
+			snprintf(buffer, sizeof(buffer),
+					 "Unknown wMsg at midiinmodule::midiCallBack: %i", wMsg);
+			s_log(0, buffer);
+		}
 	}
 }
 

@@ -1,4 +1,7 @@
-INCLUDES  =  -I$(baseincludedir) -I$(baseincludedir)/engine
+includedir = @includedir@/gephex/types
+libdir = @libdir@/gephex/types
+INCLUDES  = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../base/src
 
 lib_LTLIBRARIES = stringtype.la
 

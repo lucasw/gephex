@@ -1,9 +1,6 @@
-baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/netinterfaces
-libdir = @libdir@/gephex
+INCLUDES= -I @builddir@/.. -I @srcdir@/.. -I @top_srcdir@/util/include
 
-# bin_PROGRAMS = netinterfacetest
-lib_LIBRARIES = libnetinterfaces.a
+noinst_LIBRARIES = libnetinterfaces.a
 
 libnetinterfaces_a_SOURCES = \
 		sequencercontrolsendernet.cpp \
@@ -43,7 +40,7 @@ libnetinterfaces_a_SOURCES = \
 		rendererstatusreceivernet.cpp \
 		rendererstatussendernet.cpp
 
-include_HEADERS = \
+noinst_HEADERS = \
 		controlvaluereceivernet.h \
 		controlvaluesendernet.h \
 		enginecontrolreceivernet.h \
@@ -82,26 +79,37 @@ include_HEADERS = \
 		rendererstatusreceivernet.h \
 		rendererstatussendernet.h
 
-INCLUDES= -I .. #-I $(baseincludedir)
-
-#classinfotest.h
-
-# netinterfacetest_SOURCES = testmain.cpp classinfotest.cpp nodelcontrolreceivertest.cpp
-
-# netinterfacetest_LDADD = ../TestFramework/libtestframework.la libnetinterfaces.a ../utils/libutils.a
 
 
 %receivernet.h: ../interfaces/%.if
-	python $(top_builddir)/nic.py nrh . $<
+	python @srcdir@/../../nic.py nrh . $<
 
 %receivernet.cpp: ../interfaces/%.if %receivernet.h
-	python $(top_builddir)/nic.py nrc . $<
+	python @srcdir@/../../nic.py nrc . $<
 
 %sendernet.h: ../interfaces/%.if
-	python $(top_builddir)/nic.py nsh . $<
+	python @srcdir@/../../nic.py nsh . $<
 
 %sendernet.cpp: ../interfaces/%.if %sendernet.h
-	python $(top_builddir)/nic.py nsc . $<
+	python @srcdir@/../../nic.py nsc . $<
 
-clean:
-	rm -f *sendernet.cpp *sendernet.h *receivernet.cpp *receivernet.h
+DISTCLEANFILES = *sendernet.cpp *sendernet.h *receivernet.cpp *receivernet.h
+
+# TESTS=netinterfacetest
+# check_PROGRAMS = netinterfacetest
+# netinterfacetest_SOURCES = testmain.cpp classinfotest.cpp nodelcontrolreceivertest.cpp classinfotest.h
+# netinterfacetest_LDADD = ../TestFramework/libtestframework.la libnetinterfaces.a ../utils/libutils.a
+
+
+
+
+
+
+
+
+
+
+
+
+
+

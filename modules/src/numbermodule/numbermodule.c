@@ -3,7 +3,7 @@
 #include <limits.h>
 
 typedef struct _MyInstance {
-int schrott;
+  double lastnoise;
 } MyInstance, *MyInstancePtr;
 
 int init(logT log_function)
@@ -32,11 +32,28 @@ void destruct(MyInstance* my)
 
 void update(void* instance)
 {
+  double newnoise;
+  double feedback;
+  double min;
+  double max;
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
 
-  // Add your effect here!
-  inst->out_r->number = (unsigned int) ((double) UINT_MAX * ((double) rand() / (double)  RAND_MAX));	
+  feedback=trim_double(inst->in_tpf->number,0.0,1.0);
+  min= inst->in_min->number;
+  max= inst->in_max->number;
+
+  newnoise=(((double)rand() / (double)RAND_MAX));
+  
+  my->lastnoise =((1.0-feedback)*newnoise) + (feedback)*my->lastnoise;
+  if (min<max)
+    {
+  inst->out_r->number =min+my->lastnoise*(max-min);
+    }
+  else
+    {
+  inst->out_r->number =max+my->lastnoise*(min-max);
+    }
 
 }
 

@@ -43,9 +43,11 @@ namespace net
      *
      * @throw IOException if there is an IO Error
      * @throw SocketException: is thrown if the socket is invalid
+     * @throw BrokenPipeException: is thrown if the remote side
+     *            closed the connection
      */
     virtual int send(const utils::Buffer& data) 
-      /*const throw (IOException,SocketException)*/ = 0;
+      /*const throw (IOException,SocketException,BrokenPipeException)*/ = 0;
 
 
     /**

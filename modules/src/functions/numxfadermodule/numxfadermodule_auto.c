@@ -12,13 +12,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=false  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=false default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=false  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=false default=0 } ";
   break;
  }
  return 0;
@@ -84,7 +84,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Zahlen Crossfader] group=[Mixer] inputs=[3 Fader Signal_1 Signal_2 ] outputs=[1 Gemischtes_Signal ] type=xpm } ";
+  static const char* INFO = "info { name=[Zahlen Crossfader] group=[Signale] inputs=[3 Fader{lower_value=[0] higher_value=[1] step_size=[0.01] widget_type=[number_selector] } Signal_1{widget_type=[unboundednumber_selector] } Signal_2{widget_type=[unboundednumber_selector] } ] outputs=[1 Gemischtes_Signal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(numxfadermodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -92,7 +92,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(numxfadermodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -123,8 +123,20 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
   strongDependencies(inst, neededIns);
 }
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_numxfademodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

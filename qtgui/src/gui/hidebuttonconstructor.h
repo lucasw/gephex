@@ -1,7 +1,7 @@
 #ifndef INCLUDED_HIDE_BUTTON_CONSTRUCTOR_H
 #define INCLUDED_HIDE_BUTTON_CONSTRUCTOR_H
 
-#include "iwidgetconstructor.h"
+#include "base/iwidgetconstructor.h"
 
 namespace gui
 {

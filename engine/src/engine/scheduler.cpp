@@ -99,8 +99,7 @@ namespace engine
 	      }
 	  }
 	else if (diffMax < -5)
-	  {
-	    //TODO ganz ueble sache???
+	  {	    
 	    utils::Timing::sleep(-diffMax);
 	  }	  
 

@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <ctime>
+#include <stdexcept>
 
 #include "sequence.h"
 #include "sequencefilesystem.h"
@@ -30,13 +31,13 @@ namespace sequencer
 	
   namespace
   {
-    void performAction(const std::string& command,
+    void performAction(const std::string& action,
 		       IModelControlReceiver* mcr,
 		       Sequence& currentSequence)
     {
       if (mcr)
 	{
-	  utils::StringTokenizer st(command);
+	  utils::StringTokenizer st(action);
 			
 	  std::string command = st.next(":");
 			
@@ -73,7 +74,7 @@ namespace sequencer
 	    }
 	  else
 	    {
-	      throw std::runtime_error("Command not supported at "
+	      throw std::runtime_error("Command '" + command + "' not supported at "
 				       "sequencer::performAction()");
 	    }
 	}
@@ -163,7 +164,7 @@ namespace sequencer
       {
 	utils::AutoPtr<Sequence> newSequence( new Sequence(id,"") );
 	fileSystem->loadSequence(id, *newSequence);
-	allSequences[id] = newSequence;			
+	allSequences.insert(std::make_pair(id, newSequence));
 
 	it = allSequences.find(id);
       }
@@ -171,10 +172,18 @@ namespace sequencer
     assert( it != allSequences.end() );
 		
     if (current)
-      sendSequenceDestruction(*current,sur);
+      {
+	if (current->running())
+	  pause();
+
+	sendSequenceDestruction(*current,sur);
+      }
 		
     current = it->second;
-		
+
+    if (current->paused())
+      start();
+
     sendSequenceConstruction(*current,sur);
     
     if (ssr)

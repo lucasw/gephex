@@ -84,7 +84,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Video4Linux] group=[Quellen] inputs=[3 Devicename{file_mask_name=[Gerätedatei] help=[Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)] file_mask=[*] hidden=[true] widget_type=[file_selector] } Größe(x){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Video4Linux] group=[Quellen] inputs=[3 Devicename{file_mask_name=[Gerätedatei] help=[Gerätedatei der Video 4 Linux Gerätes (z.B. /dev/video0)] file_mask=[*] hidden=[true] widget_type=[file_selector] } Größe(x){hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } Größe(y){hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(v4lmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -92,7 +92,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(v4lmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -108,8 +108,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_v4lmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

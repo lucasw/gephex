@@ -1,9 +1,11 @@
-/************************************************************************/
-/*  Library to provide functionality for modules to interpolate over	*/
-/*  a given grid on a texture (or whatever).							*/
-/************************************************************************/
 #ifndef INCLUDED_LIBGRID_H
 #define INCLUDED_LIBGRID_H
+
+/************************************************************************/
+/*  Library to provide functionality for modules to interpolate over	*/
+/*  a given grid on a texture (or whatever).          			*/
+/************************************************************************/
+
 
 #define LIBGRID_GRIDSIZE 8
 
@@ -33,8 +35,7 @@ typedef struct Grid_
 	
 	int xsize_dst;
 	int ysize_dst;
-
-	void* int_func;
+        void (*int_func)(struct Grid_*, int, int);
 } Grid;
 
 
@@ -77,6 +78,5 @@ void grid_interpolate_block(Grid* grid, int x, int y);
  * Interpolates the whole grid.
  */
 void grid_interpolate(Grid* grid);
-
 
 #endif

@@ -31,6 +31,11 @@ public:
   UnknownHostException(const std::string& text);
 };
 
+class BrokenPipeException : public std::runtime_error
+{
+public:
+  BrokenPipeException(const std::string& text);
+};
 
 } // end of namespace net
 

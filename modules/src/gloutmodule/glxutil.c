@@ -11,8 +11,20 @@ static GLXContext s_cx;
 static int s_xsize;
 static int s_ysize;
 
+static void print_visual(XVisualInfo* vinfo)
+{
+  printf("Visual %i: {\n", vinfo->visualid);
+  printf("\tDepth\t\t: %i\n", vinfo->depth);
+  printf("\tclass\t\t: %i\n", vinfo->class);
+  printf("\tred_mask\t\t: %.8x\n", vinfo->red_mask);
+  printf("\tgreen_mask\t\t: %.8x\n", vinfo->green_mask);
+  printf("\tblue_mask\t\t: %.8x\n", vinfo->blue_mask);
+  printf("\tcolormap_size\t\t: %.8x\n", vinfo->colormap_size);
+  printf("\tbits_per_rgb\t\t: %i\n", vinfo->bits_per_rgb);
+  printf("}\n");
+}
 // init a opengl window by the native windowsystem
-int initOutput(char* caption, int xres, int yres, int bpp)
+int initOutput(const char* caption, int xres, int yres, int bpp)
 {
   int dummy; // only to trick the glxquery fun
   XVisualInfo  *vi; // to store some info abot the screen
@@ -34,6 +46,9 @@ int initOutput(char* caption, int xres, int yres, int bpp)
 
   /* Get an appropriate visual */
   vi = glXChooseVisual(s_dpy, DefaultScreen(s_dpy), AttributeList);
+
+  print_visual(vi);
+
 
   /* Create a GLX context */
   s_cx = glXCreateContext(s_dpy, vi, 0, GL_TRUE);
@@ -80,9 +95,12 @@ void resizeOutput(int new_xsize, int new_ysize)
   s_ysize = new_ysize;
 }
 
-void updateOutput(uint_32* framebuffer)
+void updateOutput(const uint_32* framebuffer)
 {
-  glDrawPixels(s_xsize, s_ysize, GL_RGBA, GL_UNSIGNED_BYTE, framebuffer);
+  glRasterPos2d(-1.0,1.0);
+  glPixelZoom(1,-1);
+  glDrawPixels(s_xsize, s_ysize, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+               framebuffer);
 
   glXSwapBuffers(s_dpy,s_win);
 }

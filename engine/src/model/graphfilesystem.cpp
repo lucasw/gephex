@@ -70,13 +70,22 @@ namespace model
     utils::FileSystem::removeFile(fileName);
   }
 
-  GraphFileSystem::IDNameList
+  GraphFileSystem::IDNameList 
   GraphFileSystem::getNames(const SpecMap& specMap)
   {
-    // get filenames fromBasepath
-    std::list<utils::DirEntry> entries;
-    utils::FileSystem::listDir(basePath,entries);
     IDNameList retList;
+
+    if (!utils::FileSystem::exists(basePath))
+      {
+	utils::FileSystem::makeDir(basePath);
+      }
+    else
+      {
+	// get filenames fromBasepath
+	std::list<utils::DirEntry> entries;
+
+    utils::FileSystem::listDir(basePath,entries);
+
     for (std::list<utils::DirEntry>::const_iterator
 	   it=entries.begin();it!=entries.end();++it)
       {
@@ -141,6 +150,7 @@ namespace model
 #endif
 	      }
 	  }
+      }
       }
     return retList;
   }

@@ -84,7 +84,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Bitmap Loader] group=[Quellen] inputs=[3 Dateiname{file_mask_name=[Bild] help=[Name und Pfad des Bildes] file_mask=[*.bmp] hidden=[true] widget_type=[file_selector] } Größe(x){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert] } Größe(y){absolute=[true] hidden=[true] higher_bound=[1024] widget_type=[number_selector] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Bitmap Loader] group=[Quellen] inputs=[3 Dateiname{file_mask_name=[Bild] help=[Name und Pfad des Bildes] file_mask=[*.bmp] hidden=[true] widget_type=[file_selector] } Größe(x){hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert] } Größe(y){hidden=[true] higher_bound=[1024] widget_type=[number_selector] step_size=[1] lower_bound=[0] help=[Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(bmpmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -92,7 +92,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(bmpmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -108,8 +108,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_bmpmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

@@ -3,15 +3,13 @@
 
 #include "interfaces/imodule.h"
 
-class IModule;
-class IOutputPlug;
-class IType;
-class CModule;
 class ITypeFactory;
 
 namespace utils {
 	class Buffer;
 }
+
+class CInputVTable;
 
 class CInput : public IInput
 {
@@ -22,8 +20,9 @@ public:
 	* among all modules of the same kind.
 	*/
 	CInput(int _typeID,bool _const,bool _strong,
-	       CModule&, int index, const ITypeFactory& factory_,
-		   const TypeAttributes* attr, IType& defaultValue);
+	       IModule&, int index, const ITypeFactory& factory_,
+		   const TypeAttributes* attr, IType& defaultValue,
+		   const CInputVTable& vtable, void* instance);
 
 	virtual ~CInput();
 
@@ -33,7 +32,8 @@ public:
 
 	//	virtual bool hasChanged() const;
 
-	virtual void plugIn(IOutputPlug&) throw (std::runtime_error);
+	virtual void plugIn(utils::AutoPtr<IOutputPlug>& oPlug)
+	  throw (std::runtime_error);
 
 	virtual void unPlug();
 
@@ -59,17 +59,18 @@ private:
 	IType* m_defaultValue; // default value
 	const IType* data; // pointer to the valid value this is returned to the module
 	IType* internalData;	
-	IOutputPlug* oPlug;
+	utils::AutoPtr<IOutputPlug> oPlug;
 	int typeID;
 	bool _isConst;
 	bool _isStrong;
-	CModule* mod;
+	IModule* mod;
   int m_index;
 	//	mutable bool changed;
 	const ITypeFactory* factory;
 	const TypeAttributes* m_attr;
 
-
+	const CInputVTable* m_vtable;
+	void* m_instance;
 };
 
 #endif

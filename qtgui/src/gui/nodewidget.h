@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 
 #include <qwidget.h>
 #include <qpixmap.h>
@@ -10,6 +11,7 @@
 #include "utils/autoptr.h"
 
 class IModelControlReceiver;
+class IErrorReceiver;
 
 namespace gui
 {
@@ -20,6 +22,9 @@ namespace gui
   class NodeProperty;
   class ControlValueDispatcher;
   class IPropertyDescription;
+
+  class IKeyListener;
+  class KeyboardManager;
 
   class NodeWidget : public QWidget
   {
@@ -41,6 +46,12 @@ namespace gui
     utils::AutoPtr<IPropertyDescription> m_properties;
     double m_time;
 
+    KeyboardManager& m_kbManager;
+
+    typedef std::list<utils::AutoPtr<IKeyListener> > KeyListenerList;
+    KeyListenerList m_keyListeners;
+
+	IErrorReceiver& m_log;
     //private slots:
 //void moveInputToProperties(int);
 
@@ -64,12 +75,16 @@ namespace gui
     void openPopup(InputPlugWidget*);
     void mouseOverInputPlug(const InputPlugWidget*);
     void mouseOverOutputPlug(const OutputPlugWidget*);
+  
+	void error(const std::string& errorText);
 
   public:
     NodeWidget(QWidget* parent,const char* name, WFlags fl,
 	       int id,const ModuleInfo& _info, 
 	       const std::vector<QPixmap>& picz,
-	       ControlValueDispatcher&, IModelControlReceiver&);
+	       ControlValueDispatcher&, IModelControlReceiver&,
+	       KeyboardManager& kbManager,
+		   IErrorReceiver& log);
     ~NodeWidget();
 
     std::vector<OutputPlugWidget*> getOutputs() const;
@@ -89,6 +104,7 @@ namespace gui
     enum {NODE_WIDGET_PIC=0,INPUTPLUG_WIDGET_FREE_PIC = 1,
 	  INPUTPLUG_WIDGET_BUSY_PIC = 2,OUTPUTPLUG_WIDGET_FREE_PIC = 3,
 	  OUTPUTPLUG_WIDGET_BUSY_PIC = 4};
+	
 
  public slots:
  // schleifen nur signale von inputs/outputs durch
@@ -100,6 +116,7 @@ namespace gui
     void openPopup_( InputPlugWidget*);
     void mouseOverInputPlug_(const InputPlugWidget*);
     void mouseOverOutputPlug_(const OutputPlugWidget*);
+	
   };
 
 

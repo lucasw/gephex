@@ -4,6 +4,7 @@
 #include "config.h"
 #endif
 
+
 #if defined(OS_WIN32)
 #include <windows.h>
 #elif defined(OS_POSIX)
@@ -17,6 +18,24 @@
 #include <netdb.h>
 #include <fcntl.h> 
 #include <errno.h>
+#endif
+
+#if defined(OS_SOLARIS)
+
+// Solaris seems to redefine connect which interferes with
+// the connect method...
+
+#ifdef connect
+#undef connect
+
+extern "C" {
+  static int connect(int fd, const struct sockaddr *a, socklen_t l)
+  {
+    return __xnet_connect(fd, a, l);
+  }
+}
+#endif
+
 #endif
 
 #include <cassert>

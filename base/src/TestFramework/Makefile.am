@@ -1,22 +1,18 @@
-includedir = @includedir@/gephex/TestFramework
-libdir = @libdir@/gephex
+noinst_LIBRARIES = libtestframework.a
 
-lib_LTLIBRARIES = libtestframework.la
-
-libtestframework_la_SOURCES = \
+libtestframework_a_SOURCES = \
 		CompositeTest.cpp \
 		LeafTest.cpp \
 		Tester.cpp \
 		easytest.cpp \
 		easytest.h
 
-
-include_HEADERS = \
+noinst_HEADERS = \
 		CompositeTest.h \
 		easytest.h \
 		LeafTest.h \
 		Tester.h \
 		Test.h
 
-libtestframework_la_LDFLAGS = -avoid-version
+
 

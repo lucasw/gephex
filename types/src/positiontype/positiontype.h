@@ -9,8 +9,8 @@
 
 typedef struct PositionType_
 {
-	uint_32 x;
-	uint_32 y;
+	double x;
+	double y;
 } PositionType;
 
 static __inline void pos_initInstance(PositionType* newType)
@@ -36,13 +36,13 @@ static __inline void pos_deleteInstance(PositionType* pos)
 	free(pos);
 }
 
-static __inline int pos_serialize(PositionType* pos, char* buffer, int bufferLen)
+static __inline int pos_serialize(const PositionType* pos, char* buffer, int bufferLen)
 {
 	if (buffer == 0 || bufferLen < 26)
 		return 26;
 	else
 	{
-		sprintf(buffer,"%u %u",pos->x, pos->y);
+		sprintf(buffer,"%g %g",pos->x, pos->y);
 		return strlen(buffer)+1;	
 	}
 }
@@ -55,7 +55,10 @@ static __inline void pos_deSerialize(const char* buffer,int len, PositionType* p
 	}
 	else
 	{
-		sscanf(buffer,"%u %u",&pos->x, &pos->y);
+	  char* endptr;
+
+	  pos->x = strtod(buffer, &endptr);
+	  pos->y = strtod(endptr, 0);
 	}
 }
 

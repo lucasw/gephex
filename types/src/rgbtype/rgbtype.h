@@ -35,13 +35,14 @@ static __inline void rgb_deleteInstance(RGBType* rgb)
 	free(rgb);
 }
 
-static __inline int rgb_serialize(RGBType* rgb, char* buffer, int bufferLen)
+static __inline int rgb_serialize(const RGBType* rgb, char* buffer,
+				  int bufferLen)
 {
 	int reqLen = 5*3 + 2 + 1;
 
 	if (bufferLen >= reqLen && buffer != 0)
 	{
-		sprintf(buffer,"%.3f %.3f %.3f",rgb->b, rgb->g, rgb->r);
+	  sprintf(buffer,"%.3f %.3f %.3f", rgb->r, rgb->g, rgb->b);
 	}
 
 	return reqLen;
@@ -55,6 +56,6 @@ static __inline void rgb_deSerialize(const char* buffer, int len, RGBType* rgb)
 	}
 	else
 	{
-		sscanf(buffer,"%f %f %f",&rgb->b, &rgb->g, &rgb->r);
+		sscanf(buffer,"%f %f %f",&rgb->r, &rgb->g, &rgb->b);
 	}
 }

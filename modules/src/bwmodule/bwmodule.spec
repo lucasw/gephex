@@ -2,22 +2,22 @@
 
 mod_bwmodule
 {
-	name          = Schwarz Weiss
-	deterministic = true
-	group	      = Filter
-	xpm	      = bwmodule.xpm
-	author        = Turnvater Jan
-    	version       = ich bin froh daﬂ ich ein alpha bin
+    name          = Schwarz Weiss
+    deterministic = true
+    group         = Filter
+    xpm	          = bwmodule.xpm
+    author        = Turnvater Jan
+    version       = ich bin froh daﬂ ich ein alpha bin
 }
 
 inputs
 {
     1
     {
-	name 			= Bild
-        type             	= typ_FrameBufferType
-	const             	= true
-	strong_dependency 	= true
+       name  	         = Bild
+       type              = typ_FrameBufferType
+       const             = true
+       strong_dependency = true
     }
 }
 
@@ -25,7 +25,7 @@ outputs
 {
     r
     {
-	name = Bild
-	type = typ_FrameBufferType
+       name              = Bild
+       type              = typ_FrameBufferType
     }
 }

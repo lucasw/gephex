@@ -1,14 +1,10 @@
 #include "flashmodule.h"
 
-#define ATTACK 3
-#define SUSTAIN 2
-#define DECAY 10
-
-#define MAX_COUNT (ATTACK + DECAY + SUSTAIN)
-
 typedef struct _MyInstance {
 
+ double old_trigger;
  int counter;
+ int dont_update;
 
 } MyInstance, *MyInstancePtr;
 
@@ -26,6 +22,8 @@ MyInstance* construct()
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
   my->counter = 0;
+  my->old_trigger = 0;
+  my->dont_update = 0;
 
   return my;
 }
@@ -40,53 +38,55 @@ void update(void* instance)
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
 
-  int trigger = inst->in_trigger->number;  
-
   FrameBufferAttributes attribs;
 
   int fadeValue;
   int negfadeValue;
   int xsize = inst->in_src->xsize;
   int ysize = inst->in_src->ysize;
-  int c;
+  int c;  
 
-  if (trigger == 0 && my->counter == 0)
-  {
+  int attack  = trim_int(inst->in_attack->number, 0, 10);
+  int sustain = trim_int(inst->in_sustain->number, 0, 10);
+  int decay   = trim_int(inst->in_decay->number, 0, 25);
+  int maxcount = attack + sustain + decay;
+
+  double trigger = inst->in_trigger->number;
+
+  if (my->dont_update)
 	  return;
-  }
 
   attribs.xsize = xsize;
   attribs.ysize = ysize;
   framebuffer_changeAttributes(inst->out_r, &attribs);
 
-  if (trigger != 0 && my->counter == 0)
+  if (trigger != my->old_trigger)
   {
-	  my->counter = MAX_COUNT;
+	  my->counter = maxcount;
+	  my->old_trigger = trigger;
   }
 
+  c = maxcount - my->counter;
 
-  c = MAX_COUNT - my->counter;
-
-  if (c <= ATTACK)
+  if (c < attack)
   {
 
-	  fadeValue = (int) ((255.* c)
-			/ (double) (ATTACK));
+	  fadeValue = (int) ((255.* c) / (double) attack);
       negfadeValue = 255 - fadeValue;
   }
-  else if (c <= ATTACK + SUSTAIN)
+  else if (c < attack + sustain)
   {
 	  fadeValue = 255;
 	  negfadeValue = 0;
   }
-  else
+  else //decay
   {
-	fadeValue = (int) ((255.* my->counter)/ (double) (DECAY));
-      negfadeValue = 255 - fadeValue;
+	fadeValue = (int) ((255.* my->counter)/ (double) decay);
+	negfadeValue = 255 - fadeValue;
   }
   
-
-  fadeValue *= 255;
+  
+  fadeValue *= 255; // 8 bit fixed point arithmetic
 
   {
 	unsigned char* result    = (unsigned char*) inst->out_r->framebuffer;
@@ -111,17 +111,21 @@ void update(void* instance)
 	  }
   }
 
-  my->counter = my->counter - 1;
+  my->counter -= 1;
+  if (my->counter < 0)
+	  my->counter = 0;
 	  
 }
 
 void patchLayout(Instance* inst, int out2in[])
 {
-   int trigger = inst->in_trigger->number;
+   double trigger = inst->in_trigger->number;
 
-   if (trigger == 0 && inst->my->counter == 0)
+   if (trigger == inst->my->old_trigger && inst->my->counter == 0)
    {
+	   inst->my->dont_update = 1;
 	   out2in[out_r] = in_src;
    }
+   else
+	   inst->my->dont_update = 0;
 }
-

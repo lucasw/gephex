@@ -12,7 +12,6 @@ was die max leute sich wuenschen<martin>
 	Ketten von Sequenzen = Playlist ? (Georg)
 	// komplexeres Fontmodul * KÜMMER MICH DRUM, coma
 
-   // beim verbinden alte verbindung loeschen * FERTIG, sagt georg :)
   // groessere inputs und outputs //Start->Systemsteuerung->Eingabehilfen->FürBlödis
   unnoetige module/Controlls/Menuoptionen entfernen (z.B. reconnecten)
 		eventuell expert/novice mode oder sowas
@@ -31,11 +30,6 @@ model:
 	dafür muss aber ne überprüfung rein, daß copy nicht gemacht wird, wenns
 	den graph/snapshot schon gibt
 
-seqeuncer:
-	wenn man einen graphen oder snapshot umbenennt,
-	was passiert dann mit den sequencen, die diesen graphen/snapshot
-	verwenden?
-
 engine:
 	irendererstatusreceiver und imodelstatusreceiver verwenden
 
@@ -43,18 +37,12 @@ model:
 	IModuleClassSpec aus Graph und GraphNode rausziehen: Der Graph soll nur den Namen der
 	Module-Klasse speichern. Dann kann man den operator<<() auch wieder verwenden.	
 
-net:
-	Das NetProtocol und das Portprotocol irgendwie (ueber ein Template?) "zusammenfaktorisieren".	
-
 
 model, renderer, dllloader, sequencer:
 	Wann duerfen die Methoden die in den interfaces festgelegt sind
 	(z.B. IControlValueReceiver::controlValueChanged())
 	Exceptions schmeissen? Und wer fängt die ab bzw. leitet
 	die Fehlermeldung weiter? (An wen?)
-
-linux:
-	fuer modules und types extra projekte machen
 
 ganze engine:
 	Interfaces entzerren, vor allem die ControlReceiver Interfaces
@@ -68,16 +56,9 @@ model
 		weiterleiden von nachrichten je nach zustand (rendergraph editgraph)
 
 module:
-	//konverter
-	//	number<->color done(coma)
-
 	signalgenerator
 		nicht periodisch (trigger ueber flanke am eingang)
 			so eine art gaussglocke
-	// aviplayer
-	//	wenigstens einigermassen echtzeit :) done(georg)
-	// dshow output window, also nur win32 momentan, hähähä
-
 skriptsprache:
 	machen!
 
@@ -88,9 +69,6 @@ was ich mir dazu selbst wuensche<martin>
 
 		export/import von sequencen/graphen/snapshots
     export/import videos/grafiken
-
-    property/controlls vereinheitlichen gemeinsame codebasis
-		
 
 		controlls/properties:
 			xfader mit interner rückkopplung für number und position type
@@ -122,28 +100,9 @@ was ich mir dazu selbst wuensche<martin>
 Was ich mir Wünsche <coma>:
 
 -Den Weltfrieden
--Einen Titanium Labtop
+-Einen Titanium Labtop (das neue 12 zoll titanium)
 -Freiheit für Andreas Baader
 -Einen Bierkasten der niemals leer wird
 -Eine Kuh die goldene Eier scheisst (Georg)
 
 
--pluc.py: richtige code generation optionen fuer release target
-	
--keyboard zeug in die .spec files und in die gui einbauen
- Z.B.:
-
- ...
- inputs
- {
-    trigger
-    {
-	name		  = Trigger
-        type              = typ_NumberType
-	const             = true
-	strong_dependency = true
-	widget_type	  = keyboard
-	toggle_keys       = f[0,1];q[11,2];...
-	keys		  = a[50];...
-        ...
-    }

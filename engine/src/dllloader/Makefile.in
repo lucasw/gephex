@@ -36,7 +36,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -58,20 +58,33 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
 baseincludedir = @includedir@/gephex
 includedir = $(baseincludedir)/dllloader
@@ -79,27 +92,34 @@ libdir = @libdir@/gephex
 
 noinst_HEADERS = dllloader.h
 
-INCLUDES = -I .. -I $(baseincludedir) -I /sw/include
+INCLUDES =  	-I @srcdir@/.. 	-I @srcdir@/../../../base/src 	-I @builddir@/../../../base/src 	-I @top_srcdir@/util/include 	-I @top_builddir@/util/include
+
 
 noinst_LIBRARIES = libdllloader.a
 
-libdllloader_a_SOURCES =  			c_moduleclass.cpp 			dllloader.cpp 			nameresolver.cpp 			c_module.cpp 			c_input.cpp 			c_output.cpp 			c_typeclass.cpp 			moduleclassspec.cpp 			c_outputplug.cpp 			c_type.cpp 			moduleinfoutils.cpp 			c_functiontypes.h 			c_input.h 			c_moduleclass.h 			c_module.h 			c_moduletables.h 			c_output.h 			c_outputplug.h 			c_typeclass.h 			c_type.h 			c_typetables.h 			moduleclassspec.h 			moduleinfoutils.h 			nameresolver.h
+libdllloader_a_SOURCES =  	typedllloader.cpp 	c_moduleclass.cpp 	dllloader.cpp 	nameresolver.cpp 	c_module.cpp 	c_input.cpp 	c_output.cpp 	c_typeclass.cpp 	moduleclassspec.cpp 	c_outputplug.cpp 	c_type.cpp 	moduleinfoutils.cpp 	freeframeloader.cpp 	metamodule.cpp 	typedllloader.h 	c_functiontypes.h 	c_input.h 	c_moduleclass.h 	c_module.h 	c_moduletables.h 	c_output.h 	c_outputplug.h 	c_typeclass.h 	c_type.h 	c_typetables.h 	moduleclassspec.h 	moduleinfoutils.h 	nameresolver.h 	freeframeloader.h 	freeframedefs.h 	metamodule.h 	module.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
 LIBRARIES =  $(noinst_LIBRARIES)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libdllloader_a_LIBADD = 
-libdllloader_a_OBJECTS =  c_moduleclass.$(OBJEXT) dllloader.$(OBJEXT) \
-nameresolver.$(OBJEXT) c_module.$(OBJEXT) c_input.$(OBJEXT) \
-c_output.$(OBJEXT) c_typeclass.$(OBJEXT) moduleclassspec.$(OBJEXT) \
-c_outputplug.$(OBJEXT) c_type.$(OBJEXT) moduleinfoutils.$(OBJEXT)
+libdllloader_a_OBJECTS =  typedllloader.$(OBJEXT) \
+c_moduleclass.$(OBJEXT) dllloader.$(OBJEXT) nameresolver.$(OBJEXT) \
+c_module.$(OBJEXT) c_input.$(OBJEXT) c_output.$(OBJEXT) \
+c_typeclass.$(OBJEXT) moduleclassspec.$(OBJEXT) c_outputplug.$(OBJEXT) \
+c_type.$(OBJEXT) moduleinfoutils.$(OBJEXT) freeframeloader.$(OBJEXT) \
+metamodule.$(OBJEXT)
 AR = ar
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -120,10 +140,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/c_input.P .deps/c_module.P .deps/c_moduleclass.P \
-.deps/c_output.P .deps/c_outputplug.P .deps/c_type.P \
-.deps/c_typeclass.P .deps/dllloader.P .deps/moduleclassspec.P \
-.deps/moduleinfoutils.P .deps/nameresolver.P
 SOURCES = $(libdllloader_a_SOURCES)
 OBJECTS = $(libdllloader_a_OBJECTS)
 
@@ -131,9 +147,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/dllloader/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps engine/src/dllloader/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -146,6 +162,9 @@ clean-noinstLIBRARIES:
 distclean-noinstLIBRARIES:
 
 maintainer-clean-noinstLIBRARIES:
+
+.c.o:
+	$(COMPILE) -c $<
 
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
@@ -168,6 +187,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
@@ -227,14 +249,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/dllloader
+subdir = engine/src/dllloader
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/dllloader/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -245,57 +262,87 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+c_input.o: c_input.cpp c_input.h ../../../base/src/interfaces/imodule.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/interfaces/itypefactory.h \
+	../../../base/src/interfaces/itype.h c_moduletables.h \
+	c_functiontypes.h
+c_module.o: c_module.cpp c_module.h \
+	../../../base/src/interfaces/imodule.h \
+	../../../base/src/utils/autoptr.h ../../../config.h c_input.h \
+	c_output.h c_moduletables.h c_functiontypes.h \
+	../../../base/src/interfaces/itype.h \
+	../../../base/src/interfaces/itypefactory.h
+c_moduleclass.o: c_moduleclass.cpp c_moduleclass.h \
+	../../../base/src/interfaces/imoduleclass.h \
+	../../../base/src/utils/autoptr.h ../../../config.h c_module.h \
+	../../../base/src/interfaces/imodule.h c_moduletables.h \
+	c_functiontypes.h ../renderer/typefactory.h \
+	../../../base/src/interfaces/itypefactory.h \
+	../../../base/src/interfaces/itype.h
+c_output.o: c_output.cpp c_output.h \
+	../../../base/src/interfaces/imodule.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	c_outputplug.h ../../../base/src/interfaces/itype.h \
+	c_moduletables.h c_functiontypes.h
+c_outputplug.o: c_outputplug.cpp c_outputplug.h \
+	../../../base/src/interfaces/imodule.h \
+	../../../base/src/utils/autoptr.h ../../../config.h
+c_type.o: c_type.cpp c_type.h ../../../base/src/interfaces/itype.h \
+	c_typetables.h c_functiontypes.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/utils/sharedlibrary.h \
+	../../../base/src/utils/buffer.h
+c_typeclass.o: c_typeclass.cpp c_typeclass.h \
+	../../../base/src/interfaces/itypeclass.h c_typetables.h \
+	c_functiontypes.h ../../../base/src/utils/autoptr.h \
+	../../../config.h ../../../base/src/utils/sharedlibrary.h \
+	c_type.h ../../../base/src/interfaces/itype.h
+dllloader.o: dllloader.cpp dllloader.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/imoduleclassinfosender.h \
+	../../../base/src/interfaces/imoduleclasssender.h \
+	../../../base/src/interfaces/imoduleclassspecsender.h \
+	../../../base/src/interfaces/imoduleclassnamesender.h \
+	../../../base/src/interfaces/itypeclassloadercontrolreceiver.h \
+	../../../base/src/interfaces/itypeclassinfosender.h \
+	../../../base/src/interfaces/itypeclasssender.h \
+	../../../base/src/interfaces/itypeclassnamesender.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	nameresolver.h typedllloader.h c_typetables.h c_functiontypes.h \
+	../../../base/src/utils/sharedlibrary.h c_moduletables.h \
+	c_typeclass.h ../../../base/src/interfaces/itypeclass.h \
+	c_moduleclass.h ../../../base/src/interfaces/imoduleclass.h \
+	moduleinfoutils.h moduleclassspec.h \
+	../../../base/src/interfaces/imoduleclassspec.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/ilogger.h \
+	../../../base/src/interfaces/imoduleclassreceiver.h \
+	../../../base/src/interfaces/imoduleclassspecreceiver.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	../../../base/src/interfaces/imoduleclassnamereceiver.h \
+	../../../base/src/interfaces/itypeclassreceiver.h \
+	../../../base/src/interfaces/itypeclassinforeceiver.h \
+	../../../base/src/interfaces/itypeclassnamereceiver.h
+freeframeloader.o: freeframeloader.cpp freeframeloader.h \
+	../../../base/src/utils/sharedlibrary.h freeframedefs.h \
+	../../../util/include/basic_types.h metamodule.h module.h
+metamodule.o: metamodule.cpp metamodule.h
+moduleclassspec.o: moduleclassspec.cpp moduleclassspec.h \
+	../../../base/src/interfaces/imoduleclassspec.h \
+	../../../base/src/utils/buffer.h
+moduleinfoutils.o: moduleinfoutils.cpp moduleinfoutils.h \
+	c_moduletables.h c_functiontypes.h \
+	../../../base/src/utils/stringtokenizer.h \
+	../../../base/src/utils/itokenizer.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/buffer.h
+nameresolver.o: nameresolver.cpp nameresolver.h
+typedllloader.o: typedllloader.cpp typedllloader.h c_typetables.h \
+	c_functiontypes.h ../../../base/src/utils/autoptr.h \
+	../../../config.h ../../../base/src/utils/sharedlibrary.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
 info-am:
 info: info-am
 dvi-am:
@@ -332,27 +379,27 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-libtool mostlyclean-tags \
 		mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
 clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
+		clean-generic mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-noinstLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-depend \
-		distclean-generic clean-am
+		distclean-libtool distclean-tags distclean-generic \
+		clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -363,14 +410,12 @@ clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile mostlyclean-libtool distclean-libtool \
 clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -1,9 +1,7 @@
-baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/net
-libdir = @libdir@/gephex
+TESTS=nettest
 
-noinst_PROGRAMS = nettest
-lib_LIBRARIES = libnetwork.a
+check_PROGRAMS = nettest
+noinst_LIBRARIES = libnetwork.a
 
 libnetwork_a_SOURCES = \
 		netexceptions.cpp \
@@ -18,10 +16,8 @@ libnetwork_a_SOURCES = \
 		socketadaptor.cpp \
 		domainserversocket.cpp \
 		domainclientsocket.cpp
-#commandmux.cpp netdispatcher.cpp  fileprotocol.cpp netprotocol.cpp clientnetsocket.cpp ervernetsocket.cpp tcpsocket.cpp udpsocket.cpp netdispatcher2.cpp
 
-
-include_HEADERS = \
+noinst_HEADERS = \
 		protocol.h \
 		idatalistener.h \
 		isender.h \
@@ -50,7 +46,7 @@ include_HEADERS = \
 		taggertest.h \
 		domainsockettest.h
 
-INCLUDES = -I .. #${baseincludedir}
+INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
 
 nettest_SOURCES = \
 		testmain.cpp \
@@ -66,6 +62,15 @@ nettest_SOURCES = \
 		tagdispatchertest.h \
 		domainsockettest.h
 
+nettest_LDADD = \
+	-L@builddir@/../TestFramework \
+	-L@builddir@/../utils \
+	-L@builddir@ \
+	-ltestframework \
+	-lnetwork \
+	-lutils 
 
-nettest_LDFLAGS = -L../TestFramework -L../utils -L.
-nettest_LDADD =  -ltestframework -lnetwork -lutils 
+nettest_DEPENDENCIES = \
+	@builddir@/../TestFramework/libtestframework.a \
+	@builddir@/../utils/libutils.a  \
+	@builddir@/libnetwork.a

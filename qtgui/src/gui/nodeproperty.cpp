@@ -1,19 +1,18 @@
 #include "nodeproperty.h"
 
+#include <iostream>
+
 #include <qtable.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 //#include <qslider.h>
 
-#include "propertywidgetfactory.h"
+#include "typeviewfactory.h"
 #include "propertywidgetconstructor.h"
 #include "hidebuttonconstructor.h"
-//#include "propertywidget.h"
-//#include "nodewidget.h"
 #include "inputplugwidget.h"
 
 #include "guimodel/moduleinfo.h"
-//#include "guimodel/controlvaluedispatcher.h"
 
 #include "utils/structreader.h"
 
@@ -21,13 +20,12 @@
 namespace gui
 {
 
-
 NodeProperty::NodeProperty(const ModuleInfo& _info, 
 			   std::vector<utils::AutoPtr<InputPlugWidget> >& ins,
 			   ControlValueDispatcher& dispatcher,
 			   IModelControlReceiver& mcr)
   : info(_info), inPlugs(ins),
-    factory(new PropertyWidgetFactory()) //TODO: is this wanted???
+    factory(new TypeViewFactory()) //TODO: is this wanted???
 {
 	
   const std::vector<PlugInfo>& in = _info.getInputs();
@@ -59,16 +57,17 @@ void NodeProperty::addProperty(InputPlugWidget& in,
   std::string widgetTypeStr = "";
   try
     {
-      widgetTypeStr = sr.getStringValue("widget_type");      
+      widgetTypeStr = sr.getStringValue("widget_type");
     }
   catch(...)
-    { 
+    {
       try
 	{
-	  const std::list<PropertyWidgetInfo>& compWidgets 
-	    = factory->getCompatibleWidgetTypes(in.getType());
+	  TypeViewFactory::TypeViewInfoList compWidgets 
+	    = factory->getCompatibleViews(in.getType());
 	
-	  widgetTypeStr = compWidgets.begin()->getName();
+	  if (!compWidgets.empty())
+	    widgetTypeStr = compWidgets.begin()->getID();
 	}
       catch(...)
 	{
@@ -78,21 +77,27 @@ void NodeProperty::addProperty(InputPlugWidget& in,
   if (widgetTypeStr == "")
     return;
 
+  try
+    {
+      TypeViewConstructor* con = factory->getConstructor(widgetTypeStr);
 
-  int nodeID = in.getID();
-  m_ctorsList.push_back(std::list<const IWidgetConstructor*>());
-  std::list<const IWidgetConstructor*>& ctors = m_ctorsList.back();
-  
-  ctors.push_back(new PropertyWidgetConstr(widgetTypeStr,
-						current.params,
-						nodeID,inputIndex,-1,
-						*factory, dispatcher,
-						model));
+      int nodeID = in.getID();
+      m_ctorsList.push_back(std::list<const IWidgetConstructor*>());
+      std::list<const IWidgetConstructor*>& ctors = m_ctorsList.back();
 
-  ctors.push_back(new HideButtonConstructor(in));
+      ctors.push_back(new PropertyWidgetConstr(con,
+					       current.params,
+					       nodeID,inputIndex,-1,
+					       dispatcher,  model));
+
+      ctors.push_back(new HideButtonConstructor(in));
       
-  m_entries.push_back(PropertyEntry(current.name,ctors));
-
+      m_entries.push_back(PropertyEntry(current.name,ctors));
+    }
+  catch (std::runtime_error& e)
+    {
+      std::cerr << e.what() << std::endl; //TODO
+    }
 
 }
 

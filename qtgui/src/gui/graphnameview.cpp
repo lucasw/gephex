@@ -13,9 +13,9 @@
 
 #include "guimodel/iscenesequencer.h"
 
-#include "askforstringdialog.h"
+#include "base/askforstringdialog.h"
 
-#include "treeviewitem.h"
+#include "base/treeviewitem.h"
 
 
 namespace gui
@@ -110,9 +110,27 @@ namespace gui
     GraphItem(const std::string& graphID,
 	      const std::string& graphName,
 	      IModelControlReceiver& model)
-      :      m_graphID(graphID), m_graphName(graphName), m_model(model) {}
+      :      m_graphID(graphID), m_graphName(graphName), m_model(model),
+	     m_numberOfSnaps(0) {}
 
     virtual ~GraphItem() {}
+
+    // must be called when a snapshot is added to this graph
+    void snapAdded()
+    {
+      m_numberOfSnaps++;
+    }
+
+    // must be called when a snapshot is removed from this graph
+    void snapRemoved()
+    {
+      m_numberOfSnaps--;
+    }
+
+    int numberOfSnaps() const
+    {
+      return m_numberOfSnaps;
+    }
 
     virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
     {
@@ -196,6 +214,8 @@ namespace gui
     std::string m_graphName;
 
     IModelControlReceiver& m_model;
+
+    int m_numberOfSnaps;
 
     enum {NEW_GRAPH, NEW_SNAPSHOT,
 	  SAVE_GRAPH, KILL_GRAPH,RENAME_GRAPH, COPY_GRAPH};
@@ -424,6 +444,7 @@ namespace gui
 
     m_snaps[std::make_pair(graphID,snapID)] = tmp;
     m_treeView->insertItem(*tmp,&*it->second);
+    it->second->snapAdded();
   }
 
   void GraphNameView::graphNoLongerExists(const std::string& graphID,
@@ -434,19 +455,26 @@ namespace gui
 	
     if (it == m_graphs.end() || it2 == m_snaps.end())
       {
-	throw std::runtime_error("Graph doesnt exist at "
+	throw std::runtime_error("Graph '" + graphID + ":" + snapID + "' doesnt exist at "
 				 "GraphNameView::graphNoLongerExists()");
       }
 
+	if (editSnap->snapName() == it2->second->snapName())
+		editSnap = SnapItemPtr(0);
+
     m_treeView->removeItem(*it2->second);
     m_snaps.erase(it2);
+    it->second->snapRemoved();
 
-    //TODO: remove graph if it has no snaps left
-    //if (it3->second->childCount() == 0)
-    //{
-    //m_treeView->removeItem(*it2->second);
-    //m_graphs.erase(it);
-    //}
+    // remove graph if it has no snaps left
+    if (it->second->numberOfSnaps() == 0)
+    {
+	  if (renderedGraph->graphName() == it->second->graphName())
+		  renderedGraph = GraphItemPtr(0);
+
+      m_treeView->removeItem(*it->second);
+      m_graphs.erase(it);
+    }
   }
 
 

@@ -2,24 +2,22 @@
 
 #include <stdexcept>
 
-#include "propertywidgetfactory.h"
 #include "propertywidget.h"
 #include "guimodel/controlvaluedispatcher.h"
 
 namespace gui
 {
   
-  PropertyWidgetConstr::PropertyWidgetConstr(const std::string& widgetType,
+  PropertyWidgetConstr::PropertyWidgetConstr(const TypeViewConstructor* con,
 					     const std::map<std::string,
 					     std::string>& params,
 					     int nodeID,int inIndex,
 					     int controlID,
-					     const PropertyWidgetFactory& factory,
 					     ControlValueDispatcher& dispatcher,
 					     IModelControlReceiver& mcr_)
-    : m_widgetType(widgetType), m_params(params),
+    : m_viewConstructor(con), m_params(params),
       m_nodeID(nodeID), m_inputIndex(inIndex), m_controlID(controlID),
-      m_factory(factory), m_dispatcher(dispatcher), mcr(mcr_)
+      m_dispatcher(dispatcher), mcr(mcr_)
   {
     /*    w = m_factory.createPropertyWidget(0,m_params,
 				       m_widgetType,m_nodeID,
@@ -34,10 +32,10 @@ namespace gui
 
   QWidget* PropertyWidgetConstr::constructWidget(QWidget* parent) const
   {
-    PropertyWidget* w = m_factory.createPropertyWidget(parent,m_params,
-						       m_widgetType,m_nodeID,
-						       m_inputIndex,
-						       m_controlID,mcr);
+    PropertyWidget* w = new PropertyWidget(parent,"", 0,
+					   m_nodeID, m_inputIndex,
+					   m_controlID, mcr, m_params,
+					   *m_viewConstructor);
 
     //    w->reparent(parent, QPoint(0,0));
 

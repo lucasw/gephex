@@ -1,0 +1,197 @@
+#include "positionview.h"
+
+#include <sstream>
+#include <iostream>
+
+#include <qlayout.h>
+#include <qpainter.h>
+
+
+#include "utils/buffer.h"
+
+namespace gui
+{
+
+
+  class KleinesFeld : public QWidget
+  {
+    Q_OBJECT
+  public:
+    KleinesFeld(QWidget* parent, int xsize_, int ysize_);
+    void setPos(const QPoint& p);
+
+  signals:
+    void posChanged(const QPoint&);
+
+  protected:
+    void paintEvent(QPaintEvent* pe);
+    void mouseMoveEvent(QMouseEvent* e);
+
+  private:
+    void drawCuteLittleCross(const QPoint& p, QPainter& painter);
+    QPoint pos, oldPos;
+    QPainter mainPainter;
+    int xsize;
+    int ysize;
+  };
+
+
+  class PositionView : public gui::TypeView
+  {
+    Q_OBJECT
+  public:
+    PositionView(QWidget* parent, const ParamMap& params)
+      : TypeView(parent, params), m_setValueCalled(false)
+    {
+      this->resize(160, 120);
+
+      m_mausFresser = new KleinesFeld(this,width()-10,height()-10);
+      m_mausFresser->show();
+
+      QBoxLayout* layout = new QBoxLayout(this, QBoxLayout::TopToBottom);
+
+      layout->addWidget(m_mausFresser);
+
+      connect(m_mausFresser, SIGNAL(posChanged(const QPoint&)),
+	      this, SLOT(kleinesfeldChanged(const QPoint&)));
+    }
+
+    virtual void valueChange(const utils::Buffer& newValue)
+    {
+      std::istringstream is(reinterpret_cast<const char*>(newValue.getPtr()));
+    
+      double x;
+      double y;
+      is >> x;
+      is >> y;
+
+      int x_ = (int) (m_mausFresser->width()  * x);
+
+      int y_ = (int) (m_mausFresser->height() * y);
+
+      m_setValueCalled = true;
+      m_mausFresser->setPos(QPoint(x_,y_));
+    }
+
+public slots:
+   void kleinesfeldChanged(const QPoint& p)
+    {
+    if (!m_setValueCalled)
+      {
+	if(p.x()<0 || p.x() >= width() || p.y() < 0 || p.y() >= height())
+	  {
+	    return;
+	  }
+	
+	double x = ((double) p.x() / m_mausFresser->width());
+	double y = ((double) p.y() / m_mausFresser->height());
+		
+	std::ostringstream os;
+		
+	os << x << " " << y;
+	std::string str = os.str();
+	const char* txt = str.c_str();
+	utils::Buffer
+	  b = utils::Buffer(reinterpret_cast<const unsigned char*>(txt),
+			    str.length() + 1);
+	emit valueChanged(b);
+      }
+    else
+      {
+	m_setValueCalled = false;
+      }
+    }
+
+  private:
+    KleinesFeld* m_mausFresser;
+    bool m_setValueCalled;
+  };
+
+  // constructor klass
+
+  PositionViewConstructor::PositionViewConstructor():
+    TypeViewConstructor("Positionsfeld","pos_field")
+  {
+  }
+		
+  TypeView*
+  PositionViewConstructor::construct(QWidget* parent,
+				     const ParamMap& params) const
+  {
+    return new PositionView(parent,params);
+  }
+
+
+
+  KleinesFeld::KleinesFeld(QWidget* parent, int xsize_, int ysize_)
+    : QWidget(parent,"kleines feld"), oldPos(-100,-100),
+      xsize(xsize_), ysize(ysize_)
+  {
+    this->resize(xsize,ysize);
+  }
+
+  /**************************************************************************/
+
+  void KleinesFeld::paintEvent(QPaintEvent* /*pe*/)
+  {
+    mainPainter.begin(this);
+    QPen pen1(SolidLine);
+    pen1.setColor(QColor(0,0,0));
+    mainPainter.setPen(pen1);
+    RasterOp rop = mainPainter.rasterOp();
+    mainPainter.setRasterOp(Qt::CopyROP);
+    this->drawCuteLittleCross(pos,mainPainter);
+    mainPainter.setRasterOp(rop);
+    mainPainter.end();	
+  }
+
+
+  void KleinesFeld::mouseMoveEvent(QMouseEvent* e)
+  {
+    setPos(e->pos());
+    QWidget::mouseMoveEvent(e);
+  }
+
+
+  void KleinesFeld::drawCuteLittleCross(const QPoint& p, QPainter& painter)
+  {
+    static const int SIZE = 3;
+    painter.drawLine(p.x()-SIZE, p.y()-SIZE, p.x()+SIZE, p.y()+SIZE);
+    painter.drawLine(p.x()-SIZE, p.y()+SIZE, p.x()+SIZE, p.y()-SIZE);
+  }
+
+  void KleinesFeld::setPos(const QPoint& p)
+  {		
+    pos = p;	
+    mainPainter.begin(this);
+    QPen pen1(SolidLine);
+    pen1.setColor(this->backgroundColor());
+
+    mainPainter.setPen(pen1);
+    RasterOp rop = mainPainter.rasterOp();
+
+    mainPainter.setRasterOp(Qt::XorROP);
+		
+    if (oldPos != pos)
+      {
+	this->drawCuteLittleCross(oldPos,mainPainter);
+	this->drawCuteLittleCross(pos,mainPainter);
+      }
+
+    mainPainter.setRasterOp(rop);
+		
+    mainPainter.end();
+
+    oldPos = pos;
+
+    //    std::cout << "New position = (" << pos.x() << "," << pos.y()
+    //      << ")" << std::endl;
+	
+    emit posChanged(pos);
+    //repaint();
+  }
+
+
+}
+
+#include "positionview_moc.cpp"

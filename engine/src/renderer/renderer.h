@@ -24,6 +24,7 @@ class ITypeClass;
 
 namespace utils {
   class Buffer;
+  class ILogger;
 }
 
 namespace renderer
@@ -44,7 +45,7 @@ namespace renderer
     public ITask
   {
   public:
-    Renderer();
+    Renderer(utils::AutoPtr<utils::ILogger>& logger);
 
     virtual ~Renderer();
 
@@ -116,6 +117,8 @@ namespace renderer
 
 
     utils::AutoPtr<RuntimeSystem> find(const std::string& graphID) const;
+
+    utils::AutoPtr<utils::ILogger> m_logger;
   };
 
 }

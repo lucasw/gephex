@@ -1,4 +1,4 @@
 SUBDIRS = src
 
-EXTRA_DIST=debian
+EXTRA_DIST=nic.py
 

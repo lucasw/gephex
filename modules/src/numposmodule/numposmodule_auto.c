@@ -12,10 +12,10 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
   break;
  }
  return 0;
@@ -78,7 +78,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[X+Y->Position] group=[Signale] inputs=[2 X-Position Y-Position ] outputs=[1 Ergebniss-Position ] type=xpm } ";
+  static const char* INFO = "info { name=[X+Y->Position] group=[Position] inputs=[2 X-Position{higher_bound=[1] lower_bound=[0] step_size=[0.01] } Y-Position{higher_bound=[1] lower_bound=[0] step_size=[0.01] } ] outputs=[1 Ergebnis-Position ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(numposmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -86,7 +86,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(numposmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -102,8 +102,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_num2pos", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

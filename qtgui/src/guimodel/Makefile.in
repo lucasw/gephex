@@ -26,8 +26,10 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
+libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
+includedir = @includedir@
 oldincludedir = /usr/include
 
 DESTDIR =
@@ -36,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -58,44 +60,64 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+AVIFILE_CONFIG = @AVIFILE_CONFIG@
+AVIFILE_CXXFLAGS = @AVIFILE_CXXFLAGS@
+AVIFILE_LDFLAGS = @AVIFILE_LDFLAGS@
 CC = @CC@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EFFECTV_SRC_DIR = @EFFECTV_SRC_DIR@
 EXEEXT = @EXEEXT@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+MOC = @MOC@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
+QT_CXXFLAGS = @QT_CXXFLAGS@
+QT_LIBS = @QT_LIBS@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 STRIP = @STRIP@
+UIC = @UIC@
 VERSION = @VERSION@
+YACC = @YACC@
 
-baseincludedir = @includedir@/gephex
-includedir = $(baseincludedir)/guimodel
-libdir = @libdir@/gephex
+INCLUDES = -I @srcdir@/../../../base/src 	   -I @builddir@/../../../base/src 	   -I @srcdir@/../../../util/include
 
-INCLUDES = -I $(baseincludedir)
 
 noinst_LIBRARIES = libguimodel.a
-libguimodel_a_SOURCES = controlmodel.cpp moduleinfo.cpp moduleclassmodel.cpp point.cpp graphmodel.cpp xpm.cpp controlvaluedispatcher.cpp moduledatadispatcher.cpp enginewrapper.cpp actionsequencerwrapper.cpp controlmodel.h controlvaluedispatcher.h enginewrapper.h graphmodel.h icontrolconnectview.h  icontrolview.h igraphview.h  imoduleclassview.h moduleclassmodel.h moduledatadispatcher.h moduleinfo.h pluginfo.h point.h xpm.h actionsequencerwrapper.h  iscenesequencer.h iscenechangelistener.h
+libguimodel_a_SOURCES =  	controlmodel.cpp 	moduleinfo.cpp 	moduleclassmodel.cpp 	point.cpp 	graphmodel.cpp 	xpm.cpp 	controlvaluedispatcher.cpp 	moduledatadispatcher.cpp 	enginewrapper.cpp 	actionsequencerwrapper.cpp 	controlmodel.h 	controlvaluedispatcher.h 	enginewrapper.h 	graphmodel.h 	icontrolconnectview.h 	icontrolview.h 	igraphview.h 	imoduleclassview.h 	moduleclassmodel.h 	moduledatadispatcher.h 	moduleinfo.h 	pluginfo.h 	point.h 	xpm.h 	actionsequencerwrapper.h 	iscenesequencer.h 	iscenechangelistener.h
 
-noinst_PROGRAMS = guimodeltest
-guimodeltest_SOURCES = testmain.cpp actionsequencerwrapper.cpp actionsequencerwrappertest.cpp actionsequencerwrappertest.h
 
-guimodeltest_LDADD = -L$(libdir) -ltestframework -lutils
+TESTS = guimodeltest
+
+check_PROGRAMS = guimodeltest
+
+guimodeltest_SOURCES =  	testmain.cpp 	actionsequencerwrapper.cpp 	actionsequencerwrappertest.cpp 	actionsequencerwrappertest.h
+
+
+guimodeltest_LDADD = -L../../../base/src/TestFramework -ltestframework 			-L../../../base/src/utils -lutils
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
 LIBRARIES =  $(noinst_LIBRARIES)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I../..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
 libguimodel_a_LIBADD = 
 libguimodel_a_OBJECTS =  controlmodel.$(OBJEXT) moduleinfo.$(OBJEXT) \
 moduleclassmodel.$(OBJEXT) point.$(OBJEXT) graphmodel.$(OBJEXT) \
@@ -103,9 +125,7 @@ xpm.$(OBJEXT) controlvaluedispatcher.$(OBJEXT) \
 moduledatadispatcher.$(OBJEXT) enginewrapper.$(OBJEXT) \
 actionsequencerwrapper.$(OBJEXT)
 AR = ar
-noinst_PROGRAMS =  guimodeltest$(EXEEXT)
-PROGRAMS =  $(noinst_PROGRAMS)
-
+check_PROGRAMS =  guimodeltest$(EXEEXT)
 guimodeltest_OBJECTS =  testmain.$(OBJEXT) \
 actionsequencerwrapper.$(OBJEXT) actionsequencerwrappertest.$(OBJEXT)
 guimodeltest_DEPENDENCIES = 
@@ -127,11 +147,6 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/actionsequencerwrapper.P \
-.deps/actionsequencerwrappertest.P .deps/controlmodel.P \
-.deps/controlvaluedispatcher.P .deps/enginewrapper.P .deps/graphmodel.P \
-.deps/moduleclassmodel.P .deps/moduledatadispatcher.P \
-.deps/moduleinfo.P .deps/point.P .deps/testmain.P .deps/xpm.P
 SOURCES = $(libguimodel_a_SOURCES) $(guimodeltest_SOURCES)
 OBJECTS = $(libguimodel_a_OBJECTS) $(guimodeltest_OBJECTS)
 
@@ -139,9 +154,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/guimodel/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps qtgui/src/guimodel/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -154,6 +169,9 @@ clean-noinstLIBRARIES:
 distclean-noinstLIBRARIES:
 
 maintainer-clean-noinstLIBRARIES:
+
+.c.o:
+	$(COMPILE) -c $<
 
 # FIXME: We should only use cygpath when building on Windows,
 # and only if it is available.
@@ -177,6 +195,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
 .s.lo:
 	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
@@ -198,14 +219,14 @@ libguimodel.a: $(libguimodel_a_OBJECTS) $(libguimodel_a_DEPENDENCIES)
 	$(AR) cru libguimodel.a $(libguimodel_a_OBJECTS) $(libguimodel_a_LIBADD)
 	$(RANLIB) libguimodel.a
 
-mostlyclean-noinstPROGRAMS:
+mostlyclean-checkPROGRAMS:
 
-clean-noinstPROGRAMS:
-	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+clean-checkPROGRAMS:
+	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
 
-distclean-noinstPROGRAMS:
+distclean-checkPROGRAMS:
 
-maintainer-clean-noinstPROGRAMS:
+maintainer-clean-checkPROGRAMS:
 
 guimodeltest$(EXEEXT): $(guimodeltest_OBJECTS) $(guimodeltest_DEPENDENCIES)
 	@rm -f guimodeltest$(EXEEXT)
@@ -248,14 +269,9 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/guimodel
+subdir = qtgui/src/guimodel
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/guimodel/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -266,62 +282,142 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
+actionsequencerwrapper.o: actionsequencerwrapper.cpp \
+	actionsequencerwrapper.h iscenesequencer.h \
+	../../../base/src/interfaces/isequenceupdatereceiver.h \
+	../../../base/src/interfaces/isequencercontrolsender.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	iscenechangelistener.h
+controlmodel.o: controlmodel.cpp controlmodel.h point.h \
+	../../../base/src/interfaces/imoduledatareceiver.h \
+	../../../base/src/utils/autoptr.h ../../../config.h \
+	icontrolview.h icontrolconnectview.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/utils/bufferstream.h \
+	../../../base/src/utils/string_.h \
+	../../../base/src/utils/structreader.h
+controlvaluedispatcher.o: controlvaluedispatcher.cpp \
+	controlvaluedispatcher.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h point.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h
+enginewrapper.o: enginewrapper.cpp ../../../config.h enginewrapper.h \
+	../../../base/src/utils/autoptr.h \
+	../../../util/include/basic_types.h \
+	../../../base/src/netinterfaces/controlvaluesendernet.h \
+	../../../base/src/interfaces/icontrolvaluesender.h \
+	../../../base/src/net/itaginterpreter.h \
+	../../../base/src/netinterfaces/modulestatisticssendernet.h \
+	../../../base/src/interfaces/imodulestatisticssender.h \
+	../../../base/src/netinterfaces/moduleclassnamesendernet.h \
+	../../../base/src/interfaces/imoduleclassnamesender.h \
+	../../../base/src/netinterfaces/moduleclassinfosendernet.h \
+	../../../base/src/interfaces/imoduleclassinfosender.h \
+	../../../base/src/netinterfaces/moduledatasendernet.h \
+	../../../base/src/interfaces/imoduledatasender.h \
+	../../../base/src/netinterfaces/moduleconstructiondumbsendernet.h \
+	../../../base/src/interfaces/imoduleconstructiondumbsender.h \
+	../../../base/src/netinterfaces/graphnamesendernet.h \
+	../../../base/src/interfaces/igraphnamesender.h \
+	../../../base/src/netinterfaces/sequenceupdatesendernet.h \
+	../../../base/src/interfaces/isequenceupdatesender.h \
+	../../../base/src/netinterfaces/sequencenamesendernet.h \
+	../../../base/src/interfaces/isequencenamesender.h \
+	../../../base/src/netinterfaces/errorsendernet.h \
+	../../../base/src/interfaces/ierrorsender.h \
+	../../../base/src/netinterfaces/modelstatussendernet.h \
+	../../../base/src/interfaces/imodelstatussender.h \
+	../../../base/src/netinterfaces/sequencerstatussendernet.h \
+	../../../base/src/interfaces/isequencerstatussender.h \
+	../../../base/src/netinterfaces/rendererstatussendernet.h \
+	../../../base/src/interfaces/irendererstatussender.h \
+	../../../base/src/netinterfaces/modelcontrolreceivernet.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/netinterfaces/renderercontrolreceivernet.h \
+	../../../base/src/interfaces/irenderercontrolreceiver.h \
+	../../../base/src/netinterfaces/moduleclassloadercontrolreceivernet.h \
+	../../../base/src/interfaces/imoduleclassloadercontrolreceiver.h \
+	../../../base/src/netinterfaces/enginecontrolreceivernet.h \
+	../../../base/src/interfaces/ienginecontrolreceiver.h \
+	../../../base/src/netinterfaces/sequencercontrolreceivernet.h \
+	../../../base/src/interfaces/isequencercontrolreceiver.h \
+	../../../base/src/net/isocket.h \
+	../../../base/src/net/netexceptions.h \
+	../../../base/src/net/isender.h \
+	../../../base/src/net/sotimeout.h \
+	../../../base/src/net/protocol.h \
+	../../../base/src/net/idatalistener.h \
+	../../../base/src/net/tagger.h ../../../base/src/net/itagger.h \
+	../../../base/src/net/tagger.cpp \
+	../../../base/src/net/tagutils.h \
+	../../../base/src/net/tagdispatcher.h \
+	../../../base/src/net/tagdispatcher.cpp \
+	../../../base/src/net/socketadaptor.h \
+	../../../base/src/net/tcpclientsocket.h \
+	../../../base/src/net/iclientsocket.h \
+	../../../base/src/net/domainclientsocket.h graphmodel.h point.h \
+	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
+	../../../base/src/interfaces/imoduledatareceiver.h \
+	controlmodel.h moduleclassmodel.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	controlvaluedispatcher.h \
+	../../../base/src/interfaces/icontrolvaluereceiver.h \
+	../../../base/src/utils/buffer.h moduledatadispatcher.h
+graphmodel.o: graphmodel.cpp graphmodel.h point.h \
+	../../../base/src/interfaces/imodelcontrolreceiver.h \
+	../../../base/src/interfaces/imoduleconstructiondumbreceiver.h \
+	../../../base/src/interfaces/imoduledatareceiver.h igraphview.h \
+	../../../base/src/utils/buffer.h \
+	../../../base/src/utils/bufferstream.h
+moduleclassmodel.o: moduleclassmodel.cpp moduleclassmodel.h \
+	../../../base/src/interfaces/imoduleclassinforeceiver.h \
+	imoduleclassview.h moduleinfo.h pluginfo.h \
+	../../../base/src/utils/autoptr.h ../../../config.h xpm.h \
+	../../../base/src/utils/structreader.h \
+	../../../base/src/utils/stringtokenizer.h \
+	../../../base/src/utils/itokenizer.h \
+	../../../base/src/utils/buffer.h
+moduledatadispatcher.o: moduledatadispatcher.cpp moduledatadispatcher.h \
+	../../../base/src/interfaces/imoduledatareceiver.h
+moduleinfo.o: moduleinfo.cpp moduleinfo.h pluginfo.h \
+	../../../base/src/utils/autoptr.h ../../../config.h xpm.h
+point.o: point.cpp point.h
+xpm.o: xpm.cpp xpm.h
 
-DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
-
--include $(DEP_FILES)
-
-mostlyclean-depend:
-
-clean-depend:
-
-distclean-depend:
-	-rm -rf .deps
-
-maintainer-clean-depend:
-
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
-%.o: %.cpp
-	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.cpp
-	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+check-TESTS: $(TESTS)
+	@failed=0; all=0; \
+	srcdir=$(srcdir); export srcdir; \
+	for tst in $(TESTS); do \
+	  if test -f $$tst; then dir=.; \
+	  else dir="$(srcdir)"; fi; \
+	  if $(TESTS_ENVIRONMENT) $$dir/$$tst; then \
+	    all=`expr $$all + 1`; \
+	    echo "PASS: $$tst"; \
+	  elif test $$? -ne 77; then \
+	    all=`expr $$all + 1`; \
+	    failed=`expr $$failed + 1`; \
+	    echo "FAIL: $$tst"; \
+	  fi; \
+	done; \
+	if test "$$failed" -eq 0; then \
+	  banner="All $$all tests passed"; \
+	else \
+	  banner="$$failed of $$all tests failed"; \
+	fi; \
+	dashes=`echo "$$banner" | sed s/./=/g`; \
+	echo "$$dashes"; \
+	echo "$$banner"; \
+	echo "$$dashes"; \
+	test "$$failed" -eq 0
 info-am:
 info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
@@ -336,7 +432,7 @@ install-am: all-am
 install: install-am
 uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(LIBRARIES) $(PROGRAMS)
+all-am: Makefile $(LIBRARIES)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
@@ -353,30 +449,28 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-noinstPROGRAMS \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-libtool mostlyclean-checkPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
 clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool \
-		clean-noinstPROGRAMS clean-tags clean-depend \
-		clean-generic mostlyclean-am
+		clean-checkPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-noinstLIBRARIES distclean-compile \
-		distclean-libtool distclean-noinstPROGRAMS \
-		distclean-tags distclean-depend distclean-generic \
-		clean-am
+		distclean-libtool distclean-checkPROGRAMS \
+		distclean-tags distclean-generic clean-am
 	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
 		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-noinstPROGRAMS maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-checkPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -386,11 +480,10 @@ maintainer-clean: maintainer-clean-am
 clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool mostlyclean-noinstPROGRAMS \
-distclean-noinstPROGRAMS clean-noinstPROGRAMS \
-maintainer-clean-noinstPROGRAMS tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir mostlyclean-depend \
-distclean-depend clean-depend maintainer-clean-depend info-am info \
+clean-libtool maintainer-clean-libtool mostlyclean-checkPROGRAMS \
+distclean-checkPROGRAMS clean-checkPROGRAMS \
+maintainer-clean-checkPROGRAMS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir check-TESTS info-am info \
 dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
 install-exec install-data-am install-data install-am install \
 uninstall-am uninstall all-redirect all-am all installdirs \

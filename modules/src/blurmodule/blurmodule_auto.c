@@ -12,7 +12,7 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
@@ -78,7 +78,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Verwischer] group=[GrafikEffekte] inputs=[2 Wischkraft Bild ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Verwischer] group=[GrafikEffekte] inputs=[2 Wischkraft{lower_bound=[0] higher_bound=[400] step_size=[1] } Bild ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(blurmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -86,7 +86,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(blurmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -102,8 +102,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_blurmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

@@ -1,10 +1,11 @@
 #include "buffer.h"
-#include <algorithm>
 
+#include <algorithm>
 #include <cstring>
-#include "config.h"
+
 //#include <iostream>
 
+#include "minmax.h"
 namespace
 {
   const double GROW_FACTOR = 1.2;

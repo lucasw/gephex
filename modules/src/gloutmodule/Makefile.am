@@ -1,8 +1,12 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 gloutmodule_auto.c: gloutmodule.spec gloutmodule.h
-	python $(top_builddir)/pluc.py c gloutmodule.spec
+	$(PLUC) c @srcdir@/gloutmodule.spec
 
 gloutmodule.h: gloutmodule.spec
-	python $(top_builddir)/pluc.py h gloutmodule.spec
+	$(PLUC) h @srcdir@/gloutmodule.spec
 
 lib_LTLIBRARIES = gloutmodule.la
 gloutmodule_la_SOURCES = \
@@ -18,5 +22,11 @@ gloutmodule_la_LIBADD = -lGL
 
 gloutmodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I $(baseincludedir) -I $(baseincludedir)/types  -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/framebuffertype 
 
+ 
+
+DISTCLEANFILES = gloutmodule.h gloutmodule_auto.c

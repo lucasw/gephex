@@ -13,27 +13,27 @@ const char* getSpec(void)
   return "typ_spec { name=typ_RGBType; }";
 }
 
-void* newInstance(void)
+TypeInstanceID newInstance(void)
 {
   return rgb_newInstance();
 }
 
-void assign(void* dst,const void* src)
+void assign(TypeInstanceID dst,TypeInstanceID src)
 {
   rgb_assign((RGBType*)dst,(const RGBType*)src);
 }
 
-void deleteInstance(void* rgb)
+void deleteInstance(TypeInstanceID rgb)
 {
   rgb_deleteInstance((RGBType*) rgb);
 }
 
-int serialize(void* type, char* buffer, int bufferLen)
+int serialize(TypeInstanceID type, char* buffer, int bufferLen)
 {
   return rgb_serialize((RGBType*)type, buffer, bufferLen);
 }
 
-void deSerialize(const char* buffer,int len, void* type)
+void deSerialize(const char* buffer,int len, TypeInstanceID type)
 {
   rgb_deSerialize(buffer,len,(RGBType*) type);
 }

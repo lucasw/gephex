@@ -1,5 +1,6 @@
 #include "structreader.h"
 
+#include <iostream>
 #include <sstream>
 
 #include "istructtokenlistener.h"
@@ -60,19 +61,17 @@ StructReader:: ~StructReader()
 {
 }
 
-std::string StructReader::find(const std::string& name) const
+bool StructReader::find(const std::string& name, std::string& value) const
 {
-  ConfigMap::const_iterator it = 
-    m_values.find(name);
+  ConfigMap::const_iterator it = m_values.find(name);
 
   if (it == m_values.end())
   {
-	  std::string msg = "Variable ";
-	  msg += name + " existiert nicht.";
-    throw std::runtime_error(msg.c_str());
+	  return false;
   }
 
-  return it->second;
+  value = it->second;
+  return true;
 }
 
 std::string StructReader::getName() const
@@ -83,7 +82,10 @@ std::string StructReader::getName() const
 bool StructReader::getBoolValue(const std::string& name) const
   throw (std::runtime_error)
 {
-  std::string value = find(name);
+  std::string value;
+  bool found = this->find(name, value);
+  if (!found)
+	  throw std::runtime_error("Value not found!");
 
   if (value == "true")
     return true;
@@ -97,10 +99,35 @@ bool StructReader::getBoolValue(const std::string& name) const
     }
 }
 
+double StructReader::getDoubleValue(const std::string& name) const
+  throw (std::runtime_error)
+{
+  std::string value;
+  bool found = this->find(name, value);
+  if (!found)
+	  throw std::runtime_error("Value not found!");
+  
+  std::istringstream s(value);
+  double val;
+  s >> val;
+
+  if (!s)
+    {
+      std::string msg = "Ungueltiger Double Typ: name = '";
+      msg += name + "', value = '" + value + "'";
+      throw std::runtime_error(msg.c_str());
+    }
+
+  return val;
+}
+
 int StructReader::getIntValue(const std::string& name) const
   throw (std::runtime_error)
 {
-  std::string value = find(name);
+  std::string value;
+  bool found = this->find(name, value);
+  if (!found)
+	  throw std::runtime_error("Value not found!");
   
   std::istringstream s(value);
   int val;
@@ -108,8 +135,8 @@ int StructReader::getIntValue(const std::string& name) const
 
   if (!s)
     {
-      std::string msg = "Ungueltiger Int Typ: name = ";
-      msg += name + ", value = " + value;
+      std::string msg = "Ungueltiger Int Typ: name = '";
+      msg += name + "', value = '" + value + "'";
       throw std::runtime_error(msg.c_str());
     }
 
@@ -119,7 +146,10 @@ int StructReader::getIntValue(const std::string& name) const
 std::string StructReader::getStringValue(const std::string& name) const
   throw (std::runtime_error)
 {
-  std::string value = find(name);
+  std::string value;
+  bool found = this->find(name, value);
+  if (!found)
+	  throw std::runtime_error("Value not found!");
 
   return value;
 }
@@ -138,6 +168,17 @@ bool StructReader::getBoolValue(const std::string& name, bool defaultValue) cons
 	}
 
 	return ret;
+}
+
+double StructReader::getDoubleValue(const std::string& name,
+				    double defaultValue) const
+{
+  std::string value;
+  bool found = this->find(name, value);
+  if (!found)
+	  return defaultValue;
+  else	
+	  return getDoubleValue(name);
 }
 
 int StructReader::getIntValue(const std::string& name, int defaultValue) const

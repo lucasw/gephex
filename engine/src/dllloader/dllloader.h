@@ -19,11 +19,12 @@
 
 #include "utils/autoptr.h"
 
-namespace utils {
+namespace utils 
+{
   class Buffer;
   class SharedLibrary;
+  class ILogger;
 }
-
 
 class NameResolver;
 class CTypeFunctionTable;
@@ -32,97 +33,97 @@ class CModuleFunctionTable;
 namespace dllloader
 {
 
-/**
- * Die Klasse Dllloader kuemmert sich um das dynamische Nachladen
- * von Typ und Modul dlls.
- */
-class DllLoader: 
-	public IModuleClassLoaderControlReceiver,
-	public ITypeClassLoaderControlReceiver,
-	public IModuleClassInfoSender, 
-	public IModuleClassSpecSender, 
-	public IModuleClassSender, 
-	public ITypeClassInfoSender, 
-	public ITypeClassSender,
-	public IModuleClassNameSender,
-	public ITypeClassNameSender
-{
-
-public:
   /**
-   * Erzeugt neuen DllLoader.
-   * @param mc Der ModuleConstructor mit dem ein geladenes Modul
-   *           in die engine integriert wird.
+   * Die Klasse Dllloader kuemmert sich um das dynamische Nachladen
+   * von Typ und Modul dlls.
    */
-  DllLoader();
+  class DllLoader: 
+    public IModuleClassLoaderControlReceiver,
+    public ITypeClassLoaderControlReceiver,
+    public IModuleClassInfoSender, 
+    public IModuleClassSpecSender, 
+    public IModuleClassSender, 
+    public ITypeClassInfoSender, 
+    public ITypeClassSender,
+    public IModuleClassNameSender,
+    public ITypeClassNameSender
+    {
 
-  virtual ~DllLoader();
+    public:
+      /**
+       * Erzeugt neuen DllLoader.
+       * @param logger used for reporting errors
+       */
+      DllLoader(utils::AutoPtr<utils::ILogger>& logger);
 
-  /**
-   * Liest und verarbeitet die module und die typ dateien.
-   * Davor sollte der ModuleClassNameReceiver registriert sein !!
-   */
-  void readDlls(const std::vector<std::string>& modules,
-		const std::vector<std::string>& types);
+      virtual ~DllLoader();
 
-  virtual void loadModuleClass(const std::string& name);
-  virtual void unloadModuleClass(const std::string& name);
+      /**
+       * Liest und verarbeitet die module und die typ dateien.
+       * Davor sollte der ModuleClassNameReceiver registriert sein !!
+       */
+      void readDlls(const std::vector<std::string>& modules,
+		    const std::vector<std::string>& types);
 
-    //TODO: war mal const
-  virtual void synchronize();
+      virtual void loadModuleClass(const std::string& name);
+      virtual void unloadModuleClass(const std::string& name);
 
-  /**
-   * Unloads all module and type dlls. Should be called before
-   * the listeners are destroyed.
-   */
-  void unloadAll();
+      //TODO: war mal const
+      virtual void synchronize();
+
+      /**
+       * Unloads all module and type dlls. Should be called before
+       * the listeners are destroyed.
+       */
+      void unloadAll();
   
-  virtual void registerModuleClassInfoReceiver(IModuleClassInfoReceiver&);
-  virtual void registerModuleClassSpecReceiver(IModuleClassSpecReceiver&);
-  virtual void registerModuleClassReceiver(IModuleClassReceiver&);
-  virtual void registerModuleClassNameReceiver(IModuleClassNameReceiver&);
+      virtual void registerModuleClassInfoReceiver(IModuleClassInfoReceiver&);
+      virtual void registerModuleClassSpecReceiver(IModuleClassSpecReceiver&);
+      virtual void registerModuleClassReceiver(IModuleClassReceiver&);
+      virtual void registerModuleClassNameReceiver(IModuleClassNameReceiver&);
 
-  virtual void loadTypeClass(const std::string& name);
-  virtual void unloadTypeClass(const std::string& name);
-  virtual void registerTypeClassInfoReceiver(ITypeClassInfoReceiver&);
-  virtual void registerTypeClassReceiver(ITypeClassReceiver&);
-  virtual void registerTypeClassNameReceiver(ITypeClassNameReceiver&);
+      virtual void loadTypeClass(const std::string& name);
+      virtual void unloadTypeClass(const std::string& name);
+      virtual void registerTypeClassInfoReceiver(ITypeClassInfoReceiver&);
+      virtual void registerTypeClassReceiver(ITypeClassReceiver&);
+      virtual void registerTypeClassNameReceiver(ITypeClassNameReceiver&);
 
-private:
-  typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
+    private:
+      typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
 
-	SharedLibraryPtr loadDll(const std::string& filename);
-	std::string getDllName(const std::string& filename);
+      SharedLibraryPtr loadDll(const std::string& filename);
+      std::string getDllName(const std::string& filename);
 
-	void loadModule(SharedLibraryPtr);
-	void loadType(SharedLibraryPtr);
+      void loadModule(SharedLibraryPtr,
+                      const std::string& moduleName);
 
-	void processModFile(const std::string&);
-	void processTypFile(const std::string&);
+      void processModFile(const std::string&);
+      void processTypFile(const std::string&);
 	
-	void constructModuleClass(CModuleFunctionTable* fTable,
-				  SharedLibraryPtr sl);
+      void constructModuleClass(CModuleFunctionTable* fTable,
+				SharedLibraryPtr sl,
+                                const std::string& moduleName);
 
-	void constructTypeClass(CTypeFunctionTable* fTable,
-				SharedLibraryPtr sl);
+      NameResolver* resolver;
 
-	NameResolver* resolver;
+      IModuleClassInfoReceiver* m_infoReceiver;
+      IModuleClassReceiver* m_classReceiver;
+      IModuleClassSpecReceiver* m_specReceiver;
+      IModuleClassNameReceiver* m_nameReceiver;
 
-	IModuleClassInfoReceiver* m_infoReceiver;
-	IModuleClassReceiver* m_classReceiver;
-	IModuleClassSpecReceiver* m_specReceiver;
-	IModuleClassNameReceiver* m_nameReceiver;
+      ITypeClassInfoReceiver* m_typeInfoReceiver;
+      ITypeClassReceiver* m_typeClassReceiver;
+      ITypeClassNameReceiver* m_typeNameReceiver;
 
-	ITypeClassInfoReceiver* m_typeInfoReceiver;
-	ITypeClassReceiver* m_typeClassReceiver;
-	ITypeClassNameReceiver* m_typeNameReceiver;
+      std::map<std::string,std::string> m_mod2fileName;
+      std::map<std::string,std::string> m_typ2fileName;
+      std::map<std::string,SharedLibraryPtr> m_moduleHandles;
+      std::map<std::string,utils::AutoPtr<utils::Buffer> > m_moduleInfos;
 
-	std::map<std::string,std::string> m_mod2fileName;
-	std::map<std::string,std::string> m_typ2fileName;
-	std::map<std::string,SharedLibraryPtr> m_moduleHandles;
-	std::map<std::string,utils::AutoPtr<utils::Buffer> > m_moduleInfos;
-	std::map<std::string,SharedLibraryPtr> m_typeHandles;
-};
+      //std::map<std::string,SharedLibraryPtr> m_typeHandles;
+
+      utils::AutoPtr<utils::ILogger> m_logger;
+    };
 
 }
 

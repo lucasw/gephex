@@ -1,14 +1,28 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 numposmodule_auto.c: numposmodule.spec numposmodule.h
-	python $(top_builddir)/pluc.py c numposmodule.spec
+	$(PLUC) c @srcdir@/numposmodule.spec
 
 numposmodule.h: numposmodule.spec
-	python $(top_builddir)/pluc.py h numposmodule.spec 
+	$(PLUC) h @srcdir@/numposmodule.spec 
 
 lib_LTLIBRARIES = numposmodule.la
-numposmodule_la_SOURCES = numposmodule_auto.c numposmodule.c numposmodule.h numposmodule.spec numposmodule.xpm
 
+numposmodule_la_SOURCES = 	numposmodule_auto.c \
+				numposmodule.c \
+				numposmodule.h \
+				numposmodule.spec \
+				numposmodule.xpm
 
 numposmodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/positiontype
 
+ 
+
+DISTCLEANFILES = numposmodule.h numposmodule_auto.c

@@ -1,8 +1,9 @@
 #ifndef INCLUDED_TYPE_TABLES_H
 #define INCLUDED_TYPE_TABLES_H
 
-
 #include "c_functiontypes.h"
+#include "utils/autoptr.h"
+#include "utils/sharedlibrary.h"
 
 /**
  * Tabelle der virtual Member-Funktionen einer DLL-'Klasse'.
@@ -10,6 +11,8 @@
 class CTypeVTable
 {
 public:
+  CTypeVTable(utils::AutoPtr<utils::SharedLibrary> sl_)
+    :sl(sl_){};
   newInstanceT newInstance;
   deSerializeT deSerialize;
 
@@ -18,8 +21,10 @@ public:
   assignT assign;
   serializeT serialize;
 
-  	attributesEqualT attributesEqual;
-	convertTypeT convertType;
+  attributesEqualT attributesEqual;
+  convertTypeT convertType;
+ private:
+  utils::AutoPtr<utils::SharedLibrary> sl;
 };
 
 /**
@@ -28,7 +33,9 @@ public:
  */
 class CTypeFunctionTable : public CTypeVTable
 {
-public:
+ public:
+  CTypeFunctionTable(utils::AutoPtr<utils::SharedLibrary> sl_)
+    :CTypeVTable(sl_){};
   initT init;
   shutDownT shutDown;
   

@@ -10,7 +10,7 @@
 #include "utils/buffer.h"
 #include "utils/bufferstream.h"
 #include "utils/string_.h"
-
+#include "utils/structreader.h"
 
 namespace gui
 {
@@ -24,13 +24,17 @@ namespace gui
     //int controlNodeID; //associated module in engine
     int _inputIndex;
     std::string _widgetType; // see controlwidgetfactory
+    ControlModel::ParamMap _params;
     int magicNumber;
 		
   public:
+    typedef ControlModel::ParamMap ParamMap;
+
     ControlElement(const std::string& name,
 		   const Point&,int _nodeID,
 		   int _inputIndex,
-		   const std::string& _widgetType);
+		   const std::string& _widgetType,
+		   const ParamMap& params);
 		
     std::string name() const
     {
@@ -66,12 +70,26 @@ namespace gui
     {
       _pos = p;
     }
+
+    ParamMap params() const
+    {
+      return _params;
+    }
+
+    const void setParams(const ParamMap& params)
+    {
+      _params = params;
+    }
+    
   };
 	
-  ControlElement::ControlElement(const std::string& name, const Point& pos,int nodeID,
-				 int inputIndex, const std::string& widgetType)
+  ControlElement::ControlElement(const std::string& name,
+				 const Point& pos,int nodeID,
+				 int inputIndex,
+				 const std::string& widgetType,
+				 const ParamMap& params)
     : m_name(name),_pos(pos), _nodeID(nodeID), _inputIndex(inputIndex), 
-    _widgetType(widgetType)
+    _widgetType(widgetType), _params(params)
   {
   }
 	
@@ -104,10 +122,17 @@ namespace gui
 
       os << utils::String(cElem.name()) << ' ' << cElem.nodeID() << ' ' 
 	 << cElem.inputIndex() << ' '  << utils::String(cElem.widgetType())
-	 << ' ' << cElem.position();
+	 << ' ' << cElem.position() << "|";
 	  
       os.flush();
-      return ob;
+
+      utils::Buffer ob2(100);
+      utils::OBufferStream os2(ob2);
+      utils::StructReader sr(cElem.params());
+      sr.serialize(os2);
+      os2.flush();
+
+      return ob + ob2;
     }
 
     ControlElement buffer2CElem(const utils::Buffer& b)
@@ -120,18 +145,33 @@ namespace gui
       utils::String widgetType;
 		
       is >> name >> nodeID >> inputIndex >> widgetType >> p;
-		
-      return ControlElement(name, p,nodeID,inputIndex,widgetType);
+
+      std::string allText(reinterpret_cast<const char*>(b.getPtr()),
+			  b.getLen());
+
+      std::string::size_type pos = allText.find('|');
+      
+      utils::StructReader::ConfigMap params;
+      if (pos != std::string::npos)
+	{
+	  allText = allText.substr(pos+1);
+	  utils::StructReader sr(allText);
+	  
+	  params = sr.getMap();
+	}
+
+      return ControlElement(name, p, nodeID, inputIndex, widgetType, params);
     }
   }
 	
   void ControlModel::addControl(const Point& pos, const std::string& name,
 				int nodeID,int inputIndex,
-				const std::string& widgetType)
+				const std::string& widgetType,
+				const ParamMap& params)
   {
     int controlID = ++lastControlID;
 		
-    ControlElement temp(name, pos, nodeID, inputIndex, widgetType);
+    ControlElement temp(name, pos, nodeID, inputIndex, widgetType, params);
 		
     mcr->setModuleData(nodeID,controlID,
 		       cElem2Buffer(temp));
@@ -189,8 +229,9 @@ namespace gui
 	  cElem ( new ControlElement(buffer2CElem(buf)) );
 
 	controls[controlID] = cElem;
-	view->controlAdded(controlID,cElem->name(),cElem->nodeID(),cElem->inputIndex(),
-			   cElem->widgetType());
+	view->controlAdded(controlID,cElem->name(),cElem->nodeID(),
+			   cElem->inputIndex(), cElem->widgetType(),
+			   cElem->params());
 			
 	view->controlMoved(controlID,cElem->position());
 			

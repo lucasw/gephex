@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <list>
 #include <cassert>
-#include <ctime>
+
 #include <algorithm>
 
 #include "interfaces/imodule.h"
@@ -18,6 +18,7 @@
 #include "modulefactory.h"
 
 #include "utils/buffer.h"
+#include "utils/timing.h"
 
 namespace renderer
 {
@@ -36,6 +37,7 @@ namespace renderer
     std::list<int> m_times;
     int m_lastTime;
     std::vector<bool> m_inputHasChanged;
+	int m_lastUpdated;
 		
 		
     ModuleControlBlock(const ModuleControlBlock&); //nicht impl.
@@ -47,8 +49,9 @@ namespace renderer
      */
     ModuleControlBlock(IModule* module)
       : m_module(module), m_active(false), m_activationCount(0),
-	m_times(AVG_LEN), m_lastTime(0), 
-	m_inputHasChanged(module->getInputs().size(), true)
+	m_times(AVG_LEN), m_lastTime(0),
+	m_inputHasChanged(module->getInputs().size(), true),
+	m_lastUpdated(-1)
     {
     }
 		
@@ -63,7 +66,7 @@ namespace renderer
     void setChanged(int input)
     {
       assert(input >= 0 && input < (int) m_inputHasChanged.size());
-      m_inputHasChanged[input] = time;
+      m_inputHasChanged[input] = 1;
     }
 		
     bool hasChanged(int input) const
@@ -139,8 +142,24 @@ namespace renderer
 	{
 	  aTime += *i;
 	}
-      return (1000.*aTime) / (num*CLOCKS_PER_SEC);
+      return aTime / (double) num;
     }
+
+	/**
+	 * returns the framecount, when the module was last updated
+	 */
+	int lastUpdated() const
+	{
+	return m_lastUpdated;
+	}
+
+	/**
+	* sets the time when the module was last updated
+	*/
+	void updated(int frameCount)
+	{
+		m_lastUpdated = frameCount;
+	}
 
   };
 	
@@ -210,8 +229,8 @@ namespace renderer
     IModule::IOutputPtr out = m1->getOutputs()[outputNumber];
     IModule::IInputPtr in = m2->getInputs()[inputNumber];
 		
-    IOutputPlug* plug = out->plugIn(*in);
-    in->plugIn(*plug);
+    utils::AutoPtr<IOutputPlug> plug = out->plugIn(*in);
+    in->plugIn(plug);
 		
     it2->second->setChanged(inputNumber);
 
@@ -225,14 +244,17 @@ namespace renderer
   void RuntimeSystem::disconnect(int moduleID,int inputNumber)
   {
     ControlBlockMap::iterator i = m_modules.find(moduleID);
-    if (i==m_modules.end()) throw std::runtime_error("module does not exist (RuntimeSystem::disconnect)");
+    if (i == m_modules.end())
+      throw std::runtime_error("module does not exist "
+			       "(RuntimeSystem::disconnect)");
 		
     IModule* m = i->second->module();
 		
-    IModule::IInputPtr in = m->getInputs()[inputNumber]; // input number is unchecked
-		
+    //TODO: input number is unchecked
+    IModule::IInputPtr in = m->getInputs()[inputNumber];
+
     in->unPlug();
-		
+
     i->second->hasChanged(inputNumber);
   }
 	
@@ -262,7 +284,8 @@ namespace renderer
 	    {
 	      IInput* in = *jz;
 	      const IType* t = in->getData();
-	      utils::Buffer buf = t->serialize();
+	      utils::Buffer buf;
+	      bool success = t->serialize(buf);
 	      int moduleID = in->getModule()->getID();
 	      int inputIndex = in->getIndex();
 				
@@ -275,7 +298,7 @@ namespace renderer
 	      b->setChanged(inputIndex);
 	      
 	      //TODO: catch exceptions!!!!!
-	      if (cvr != 0 /*&& (frameCount & 7) == 7*/)
+	      if (success && cvr != 0 /*&& (frameCount & 7) == 7*/)
 		{
 		  cvr->controlValueChanged(moduleID, inputIndex, buf);
 		}
@@ -327,7 +350,8 @@ namespace renderer
 					
 		ModuleControlBlockPtr current = getControlBlock(temp);
 		// nur module hinzufügen die noch nicht im stack sind
-		if (!current->isActive())
+		// und noch nicht in diesem frame gerechnet wurden
+		if (!current->isActive() && current->lastUpdated() != frameCount)
 		  {
 		    current->activate();
 		    stack.push_front(current);
@@ -348,11 +372,13 @@ namespace renderer
 		//call update for all needed inputs
 		//updateInputs(block, frameCount);
 			
-		clock_t t1 = clock();
+		unsigned long t1 = utils::Timing::getTimeInMillis();
 		m->update();
 
 		// check patched outputs
-		const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
+		//TODO: this seems to be a bug, the same is already done in CModule::update()!
+		// commented it out
+/*		const std::vector<IModule::IOutputPtr>& outs = m->getOutputs();
 		for (int i = 0; i < outs.size(); ++i)
 		  {
 		    IInput* patchedInput = outs[i]->getPatchedInput();
@@ -364,9 +390,9 @@ namespace renderer
 		      }
 		    else
 		      out->unPatch();
-		  }
+		  }*/
 
-		clock_t t2 = clock();
+		unsigned long t2 = utils::Timing::getTimeInMillis();
 		block->addTime(t2-t1);
 			
 		if (msr != 0 && (frameCount & 7) == 7)
@@ -381,11 +407,11 @@ namespace renderer
 		
 	    stack.pop_front();
 	    block->reset();
+		block->updated(frameCount);
 	  }
 	}
 		
     ++frameCount;
-
 #if (ENGINE_VERBOSITY > 2)
     std::cout << "finished with updating" << std::endl;
 #endif
@@ -402,7 +428,9 @@ namespace renderer
 		
     ModuleControlBlockPtr block = it->second;  
     IModule* n = block->module();
-		
+
+    // disconnect all modules that are connected to an ouput of the
+    // deleted module
     for (ControlBlockMap::iterator i = m_modules.begin(); 
 	 i != m_modules.end(); ++i)
       {
@@ -415,14 +443,19 @@ namespace renderer
 	    if (in->getConnectedModule() == n) 
 	      {
 		in->unPlug();
+		block->hasChanged(j);
 	      }
 	  }
       }
-		
+
+    // disconnect all modules that are connected to an input of
+    // the deleted module
     for (unsigned int j = 0; j < n->getInputs().size(); ++j)
       {
 	IModule::IInputPtr in = n->getInputs()[j];
-	in->unPlug();
+
+	if (in->getConnectedModule() != 0)
+	  in->unPlug();
       }
 		
     if (n->getOutputs().size() == 0)
@@ -467,9 +500,12 @@ namespace renderer
     DoSync(IControlValueReceiver* cvr_) : cvr(cvr_) {};
     void operator()(const IModule::IInputPtr& in)
     {
-      utils::Buffer b = in->getData()->serialize();
-      cvr->controlValueChanged(in->getModule()->getID(),
-			       in->getIndex(),b);
+      utils::Buffer b;
+      bool success = in->getData()->serialize(b);
+
+      if (success)
+	cvr->controlValueChanged(in->getModule()->getID(),
+				 in->getIndex(),b);
     }
 		
   private:

@@ -36,8 +36,8 @@ inputs
 		widget_type	=	number_selector
 		lower_bound	= 0
 		higher_bound = 1024
+		step_size = 1
 		default	= 0
-		absolute = true
 		help	= Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert
 	}
 
@@ -51,8 +51,8 @@ inputs
 		widget_type	=	number_selector
 		lower_bound	= 0
 		higher_bound = 1024
+		step_size = 1
 		default	= 0
-		absolute	= true
 		help	= Wenn x_size und y_size > 0, wird das bild beim Laden auf xsize x ysize skaliert
 	}
 

@@ -14,11 +14,11 @@ typedef struct _Instance
 struct _MyInstance* my;
  NumberType* in_in;
  NumberType* in_thr;
- NumberType* in_upper;
  NumberType* in_lower;
+ NumberType* in_upper;
  NumberType* out_r;
 } Instance, *InstancePtr;
-enum Inputs { in_in = 0, in_thr = 1, in_upper = 2, in_lower = 3 };
+enum Inputs { in_in = 0, in_thr = 1, in_lower = 2, in_upper = 3 };
 enum Outputs { out_r = 0 };
 
 struct _MyInstance* construct(void);

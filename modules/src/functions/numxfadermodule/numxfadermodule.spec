@@ -2,11 +2,11 @@
 
 mod_numxfademodule
 {
-	name          = Zahlen Crossfader
-	deterministic = true
-	group	      = Mixer
+    name          = Zahlen Crossfader
+    deterministic = true
+    group         = Signale
     xpm           = numxfadermodule.xpm
-	author        = Don Bosco
+    author        = Don Bosco
     version       = 0.65-pregamma
 }
 
@@ -14,26 +14,35 @@ inputs
 {
     x
     {
-	name		  = Fader
-    type              = typ_NumberType
-	const             = true
-	strong_dependency = true
+        name              = Fader
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        widget_type       = number_selector
+	lower_value       = 0
+	higher_value      = 1
+	step_size         = 0.01
+        default           = 0
     }
 
     1
     {
-	name 			= Signal_1
-    type             	= typ_NumberType
-	const             	= true
-	strong_dependency 	= false
+        name              = Signal_1
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = false
+        widget_type       = unboundednumber_selector
+        default           = 0
     }
 
     2
     {
-	name 			= Signal_2
-    type             	= typ_NumberType
-	const             	= true
-	strong_dependency 	= false
+        name              = Signal_2
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = false
+        widget_type       = unboundednumber_selector
+        default           = 0
     }
 }
 
@@ -41,7 +50,7 @@ outputs
 {
     r
     {
-	name = Gemischtes_Signal
-	type = typ_NumberType
+        name = Gemischtes_Signal
+        type = typ_NumberType
     }
 }

@@ -1,10 +1,8 @@
-baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/utils
-libdir = @libdir@/gephex
+TESTS=utilstest
 
-noinst_PROGRAMS = utilstest
+check_PROGRAMS = utilstest
 
-lib_LIBRARIES = libutils.a
+noinst_LIBRARIES = libutils.a
 
 libutils_a_SOURCES = \
 		stringtokenizer.cpp \
@@ -26,7 +24,7 @@ libutils_a_SOURCES = \
 		sharedlibrary.cpp \
 		timing.cpp
 
-include_HEADERS = \
+noinst_HEADERS = \
 		autoptr.h \
 		buffer.h \
 		bufferutils.h \
@@ -50,29 +48,49 @@ include_HEADERS = \
 		sharedlibrary.h \
 		timing.h
 
-INCLUDES = -I .. #-I $(baseincludedir) 
+INCLUDES = \
+	-I @srcdir@/.. \
+	-I@top_srcdir@/util/include \
+	-I@top_builddir@/util/include
 
 utilstest_SOURCES = \
-		testmain.cpp \
-		stringtokenizertest.cpp \
-		structreadertest.cpp \
-		streamtokenizertest.cpp \
-		structscannertest.cpp \
-		buffertest.cpp \
-		filesystemtest.cpp \
-	        autoptrtest.cpp \
-	        bytestreamtest.cpp \
-		bufferstreamtest.cpp \
-		sharedlibrarytest.cpp \
-		autoptrtest.h \
-		bufferstreamtest.h \
-		buffertest.h \
-		bytestreamtest.h \
-		filesystemtest.h \
-		streamtokenizertest.h \
-		stringtokenizertest.h \
-		structreadertest.h \
-		structscannertest.h \
-		sharedlibrarytest.h
+	testmain.cpp \
+	stringtokenizertest.cpp \
+	structreadertest.cpp \
+	streamtokenizertest.cpp \
+	structscannertest.cpp \
+	buffertest.cpp \
+	filesystemtest.cpp \
+        autoptrtest.cpp \
+        bytestreamtest.cpp \
+	bufferstreamtest.cpp \
+	sharedlibrarytest.cpp \
+	autoptrtest.h \
+	bufferstreamtest.h \
+	buffertest.h \
+	bytestreamtest.h \
+	filesystemtest.h \
+	streamtokenizertest.h \
+	stringtokenizertest.h \
+	structreadertest.h \
+	structscannertest.h \
+	sharedlibrarytest.h
 
-utilstest_LDADD = ../TestFramework/libtestframework.la libutils.a -ldl
+if NEED_DL
+LIB_DL_FLAGS = -ldl
+endif
+
+utilstest_LDADD = \
+	-L@builddir@/../TestFramework \
+	-L@builddir@ \
+        -ltestframework \
+	-lutils $(LIB_DL_FLAGS)
+
+utilstest_DEPENDENCIES = \
+	@builddir@/../TestFramework/libtestframework.a \
+	@builddir@/libutils.a
+
+
+
+
+

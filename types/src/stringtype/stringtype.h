@@ -20,32 +20,35 @@ static __inline void string_charAssign(StringType* dst,const char* src)
 
 static __inline void string_initInstance(StringType* newString)
 {
+	newString->text = 0;
 	string_charAssign(newString,"null");	
 }
 
 static __inline StringType* string_newInstance(void)
 {
-	StringType* newType = (StringType*) malloc(sizeof(StringType));
-	newType->text = 0;
+	StringType* newType = (StringType*) malloc(sizeof(StringType));	
 
 	string_initInstance(newType);
 	return newType;
 }
-
 
 static __inline void string_assign(StringType* dst,const StringType* src)
 {
 	string_charAssign(dst,src->text);
 }
 
+static __inline void string_destroyInstance(StringType* num)
+{
+   free(num->text);
+}
+
 static __inline void string_deleteInstance(StringType* num)
 {
-	free(num->text);
+	string_destroyInstance(num);
 	free(num);
 }
 
-
-static __inline int string_serialize(StringType* string, char* buffer,
+static __inline int string_serialize(const StringType* string, char* buffer,
 				     int bufferLen)
 {
 	int reqLen = strlen(string->text) + 1;
@@ -61,7 +64,6 @@ static __inline int string_serialize(StringType* string, char* buffer,
 static __inline void string_deSerialize(const char* buffer, int len,
 					StringType* string)
 {
-
 	if (buffer[0] == 0)
 	{
 		string_initInstance(string);

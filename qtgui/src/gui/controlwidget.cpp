@@ -2,6 +2,9 @@
 
 #include <qtooltip.h>
 #include <qlabel.h>
+#include <qlayout.h>
+
+#include "typeview.h"
 
 namespace gui
 {
@@ -9,30 +12,54 @@ namespace gui
   ControlWidget::ControlWidget(QWidget* parent, 
 			       const std::string& name,
 			       int controlID, int nodeID,
-			       int inIndex)
+			       int inIndex,
+			       const ParamMap& params,
+			       const TypeViewConstructor* con)
     : QFrame(parent,name.c_str(),0), m_name(name),
       m_controlID(controlID), m_nodeID(nodeID),
-      m_inputIndex(inIndex), m_label(0)
+      m_inputIndex(inIndex), m_label(0), m_view(0)
   {
     setFrameStyle(QFrame::Box|QFrame::Sunken);
     setLineWidth(2);
     setMidLineWidth(0);
-    setName(name);
+    //    setName(name);
+
+    m_view = con->construct(this, params);
+
+    QSize size = m_view->size();
+    this->resize(QSize(size.width()+4, size.height()+4));
+    //    m_view->move(1,1);
+    //    m_view->show();
+
+    QHBoxLayout* l = new QHBoxLayout(this,2);
+    l->addWidget(m_view);
+
+    this->show();
+    connect(m_view, SIGNAL(valueChanged(const utils::Buffer&)),
+	    this, SLOT(changeValue(const utils::Buffer&)));
   }
 
   ControlWidget::~ControlWidget()
   {
     //TODO qt paranoia!
-    m_label->parentWidget()->removeChild(m_label);
-    delete m_label;
+    if (m_label)
+      {
+	m_label->parentWidget()->removeChild(m_label);
+	delete m_label;
+      }
   }
 
+  void ControlWidget::controlValueChanged(int /*nodeID*/,int /*intputIndex*/,
+					  const utils::Buffer& newValue)
+  {
+    m_view->valueChange(newValue);
+  }
   QWidget* ControlWidget::getLabel()
   {
     return m_label;
   }
 
-  void ControlWidget::valueChanged(const utils::Buffer& b)
+  void ControlWidget::changeValue(const utils::Buffer& b)
   {
     emit valueChanged(m_nodeID, m_inputIndex, b);
   }
@@ -106,37 +133,4 @@ namespace gui
   {
   }
 
-  //---------------------------
-  //  ControlWidgetConstructor
-  //---------------------------
-
-
-  ControlWidgetConstructor::ControlWidgetConstructor(const std::string& type,
-						     const std::string& name,
-						     const std::string& id):
-    m_type(type),m_name(name),m_id(id)
-  {
-  }
-
-  const std::string& ControlWidgetConstructor::getType()
-  {
-    return m_type;
-  }
-
-  const std::string& ControlWidgetConstructor::getName()
-  {
-    return m_name;
-  }
-
-  const std::string& ControlWidgetConstructor::getID()
-  {
-    return m_id;
-  }
-
-
-  ControlWidgetConstructor::~ControlWidgetConstructor()
-  {
-  }
-
 }
-

@@ -3,10 +3,15 @@
 
 #include "interfaces/itype.h"
 
-COutput::COutput(IModule& mod,int _typeID, IType* _data)
+#include "c_moduletables.h"
+
+COutput::COutput(IModule& mod,int _typeID, IType* _data, int index,
+				 const COutputVTable& vtable, void* instance)
   : m_module(&mod), /*isChanged(true),*/ m_typeID(_typeID), m_plugs(),
-    m_data(_data), m_patchedInput(0)
+    m_data(_data), m_patchedInput(0), m_index(index),
+	m_vtable(&vtable), m_instance(instance)
 {
+	m_vtable->setOutput(m_instance,m_index,m_data->getPointer());
 }
 
 COutput::~COutput()
@@ -17,7 +22,7 @@ COutput::~COutput()
 /*void COutput::setData(const IType* _data) //TODO: remove?
 {
   	data = _data;
-	for (std::list<IOutputPlug*>::iterator i = plugs.begin();
+	for (PlugList::iterator i = plugs.begin();
 	     i != plugs.end(); ++i)
 	  {
 	    (*i)->setData(_data);
@@ -30,9 +35,9 @@ IModule* COutput::getModule() const
 	return m_module;
 }
 
-IOutputPlug* COutput::plugIn(IInput& in)
+utils::AutoPtr<IOutputPlug> COutput::plugIn(IInput& in)
 {
-	IOutputPlug* plug = new COutputPlug(*this,in);
+	IOutputPlugPtr plug (new COutputPlug(*this,in));
 	m_plugs.push_back(plug);
 	plug->setData(m_data);
 	return plug;
@@ -40,10 +45,10 @@ IOutputPlug* COutput::plugIn(IInput& in)
 
 void COutput::unPlug(IInput& in)
 {
-	for (std::list<IOutputPlug*>::iterator it = m_plugs.begin();
+	for (PlugList::iterator it = m_plugs.begin();
 	it != m_plugs.end(); ++it)
     {
-		IOutputPlug* current = *it;
+		IOutputPlugPtr current = *it;
 		if (current->getInput() == &in)
 		{
 			m_plugs.erase(it);
@@ -61,10 +66,10 @@ std::list<IInput*> COutput::getConnectedInputs() const
 {
   std::list<IInput*> inputs;
   
-  for (std::list<IOutputPlug*>::const_iterator it = m_plugs.begin();
+  for (PlugList::const_iterator it = m_plugs.begin();
        it != m_plugs.end(); ++it)
     {
-      IOutputPlug* current = *it;
+      IOutputPlugPtr current = *it;
       inputs.push_back(current->getInput());
     }
 
@@ -80,11 +85,13 @@ IInput* COutput::getPatchedInput() const
 void COutput::setPatchedInput(IInput* in)
 {	
 	m_patchedInput = in;
-	for (std::list<IOutputPlug*>::iterator it = m_plugs.begin();
+	for (PlugList::iterator it = m_plugs.begin();
 	it != m_plugs.end(); ++it)
 	{
 		(*it)->setData(in->getData());		
     }
+
+	m_vtable->setOutput(m_instance,m_index,in->getData()->getPointer());
 }
 
 void COutput::unPatch()
@@ -92,10 +99,11 @@ void COutput::unPatch()
 	if (m_patchedInput != 0)
 	{
 		m_patchedInput = 0;
-		for (std::list<IOutputPlug*>::iterator it = m_plugs.begin();
+		for (PlugList::iterator it = m_plugs.begin();
 		it != m_plugs.end(); ++it)
 		{
 			(*it)->setData(m_data);
 		}
 	}
+	m_vtable->setOutput(m_instance,m_index,m_data->getPointer());
 }

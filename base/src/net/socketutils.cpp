@@ -5,6 +5,7 @@
 #elif defined(OS_POSIX)
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/time.h> //needed for struct timeval in netbsd
 #include <sys/socket.h>
 #include <errno.h>
 #endif

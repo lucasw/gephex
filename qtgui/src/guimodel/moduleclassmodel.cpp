@@ -144,8 +144,7 @@ namespace gui
     }
 	
     ModuleInfo parseModuleInfo(const utils::Buffer& buf)
-    {
-		
+    {		
       utils::StructReader sr(reinterpret_cast<const char*>(buf.getPtr()));
       try
 	{
@@ -179,7 +178,6 @@ namespace gui
 	    {
 	      std::cerr << "Buffer = <" << buf.getPtr() << ">" << std::endl;
 	    }
-			
 	}
       catch (std::runtime_error& e)
 	{
@@ -189,6 +187,7 @@ namespace gui
 	}
     }
   }
+
   ModuleClassModel::~ModuleClassModel()
   {
   }

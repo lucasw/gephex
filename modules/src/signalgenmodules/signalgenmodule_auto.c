@@ -7,15 +7,15 @@
 #include "signalgenmodule.xpm"
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_signalmodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[false] }";
+ return "mod_spec { name=[mod_signalmodule] number_of_inputs=[6] number_of_outputs=[1] deterministic=[false] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
   break;
   case 2:
     return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
@@ -25,6 +25,9 @@ const char* getInputSpec(int index) {
   break;
   case 4:
     return "input_spec { type=typ_StringType const=true strong_dependency=true default=sinus } ";
+  break;
+  case 5:
+    return "input_spec { type=typ_StringType const=true strong_dependency=true default=real } ";
   break;
  }
  return 0;
@@ -78,7 +81,10 @@ int setInput(void* instance,int index,void* typePointer)
    inst->in_Position = (NumberType *) typePointer;
   break;
   case 4:
-   inst->in_Signal = (StringType *) typePointer;
+   inst->in_signal = (StringType *) typePointer;
+  break;
+  case 5:
+   inst->in_mode = (StringType *) typePointer;
   break;
  } //switch(index) 
  return 1;
@@ -96,7 +102,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[SignalGenerator] group=[Signale] inputs=[5 Amplitude Frequenz Phase Position Signal{values=[sinus,saegezahn,rechteck] hidden=[true] widget_type=[combo_box] } ] outputs=[1 Signal ] type=xpm } ";
+  static const char* INFO = "info { name=[SignalGenerator] group=[Signale] inputs=[6 Amplitude{hidden=[true] widget_type=[unboundednumber_selector] } Frequenz{hidden=[true] widget_type=[unboundednumber_selector] } Phase{higher_bound=[1] hidden=[true] lower_bound=[0] step_size=[0.01] widget_type=[number_selector] } Position{hidden=[true] widget_type=[unboundednumber_selector] } Signal{values=[sinus,saegezahn,rampe,rechteck,noize] hidden=[true] widget_type=[combo_box] } Modus{help                = Gibt den Modus an: real = Systemzeit, relativ=[Einheitliche Zeit unabhaengig von den FPS] values=[real,relativ] hidden=[true] widget_type=[combo_box] } ] outputs=[1 Signal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(signalgenmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -104,7 +110,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(signalgenmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -120,8 +126,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_signalmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

@@ -13,31 +13,30 @@ const char* getSpec(void)
   return "typ_spec { name=typ_MidiType; }";
 }
 
-void* newInstance(void)
+TypeInstanceID newInstance(void)
 {
   return midi_newInstance();
 }
 
-void assign(void* dst,const void* src)
+void assign(TypeInstanceID dst,TypeInstanceID src)
 {
   midi_assign((MidiType*)dst,(const MidiType*)src);
 }
 
-void deleteInstance(void* num)
+void deleteInstance(TypeInstanceID num)
 {
   midi_deleteInstance((MidiType*) num);
 }
 
-int serialize(void* type, char* buffer, int bufferLen)
+int serialize(TypeInstanceID type, char* buffer, int bufferLen)
 {
 	return midi_serialize((MidiType*)type,buffer,bufferLen);
 }
 
-void deSerialize(const char* buffer, int len,void* type)
+void deSerialize(const char* buffer, int len,TypeInstanceID type)
 {
-  /* MidiType* pos = (MidiType*) type;
-     midi_deSerialize(buffer,len,pos);*/
-
+   MidiType* pos = (MidiType*) type;
+    midi_deSerialize(buffer,len,pos);
 }
 
 void shutDown(void)

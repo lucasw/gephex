@@ -19,14 +19,11 @@ MyInstance* construct()
 {
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
-  // Add your initialization here
-
   return my;
 }
 
 void destruct(MyInstance* my)
 {
-  // Add your cleanup here
   free(my);
 }
 
@@ -34,16 +31,25 @@ void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
   //MyInstancePtr my = inst->my;
-
-  // Add your effect here!
+  
 
   int xsize, ysize; 
-  int *src, *dst;
+  uint_32 *src, *dst;
   int xysize, i;
 
   src = (int*)inst->in_1->framebuffer;
-  xsize = inst->out_r->xsize;
-  ysize = inst->out_r->ysize;
+  xsize = inst->in_1->xsize;
+  ysize = inst->in_1->ysize;
+
+
+  {
+    FrameBufferAttributes attr;
+    attr.xsize = xsize;
+    attr.ysize = ysize;
+
+    framebuffer_changeAttributes(inst->out_r, &attr);
+  }
+
   dst = inst->out_r->framebuffer;
 
   xysize = xsize * ysize;
@@ -52,7 +58,7 @@ void update(void* instance)
   for(i=xysize; --i;)
     {
       int tmpbw;
-      char* tmpc = (char*)src;
+      unsigned char* tmpc = (unsigned char*)src;
       tmpbw = (tmpc[0] + tmpc[1] + tmpc[2]) / 3;
       *dst = (tmpbw << 16) | (tmpbw << 8) | tmpbw;
       ++dst;

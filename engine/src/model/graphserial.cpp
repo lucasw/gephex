@@ -144,7 +144,9 @@ namespace model
 					it = specMap.find(moduleClassName);
 				if (it == specMap.end())
 				{
-					//TODO
+					std::string errorText = "No such module class: '" + moduleClassName +
+						"'" ;
+					throw std::runtime_error(errorText);
 				}
 				else
 					graph.addModule(*it->second,moduleID) ;

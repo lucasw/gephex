@@ -176,7 +176,7 @@ namespace gui
 	scr->changeActionTime(nopID, sumLength + length);
       }
 	  
-    scr->addAction(content, sumLength);
+    scr->addAction("changeGraph:" + content, sumLength);
   }
   
   void ActionSequencerWrapper::deleteScene(int id)
@@ -327,14 +327,14 @@ namespace gui
 		  
 	if (i+1 == pos)
 	  {
-	    //scene does not move
+	    // scene does not move
 	    assert(oldBefore == before && oldNext == next);
 	  }
 	else
 	  {
-	    //scene must be moved
+	    // scene must be moved
 	    assert(i+1 != pos);
-	    //			  assert(oldBefore != before && oldNext != next);
+	    // assert(oldBefore != before && oldNext != next);
 			  
 	    if (i < pos)
 	      {	    
@@ -441,10 +441,12 @@ namespace gui
 	    if (pos != 0) //was it inserted at the end, but not at the start?
 	      {
 		// yes, dont't tell the view about it (the size is undefined!)
-		// instead tell the view, that the scene before has been inserted
+		// instead tell the view, that the scene before has 
+		// been inserted
 		ActionSequencerWrapper::ActionList::iterator 
 		  before = findElemAt(m_sortedActions.begin(), 
 				      m_sortedActions.end(), pos-1);
+
 		assert( before != m_sortedActions.end() );
 				  
 		int id_ = (*before)->id;

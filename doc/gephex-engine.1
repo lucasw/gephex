@@ -1,0 +1,78 @@
+.\" This -*- nroff -*- file has been generated from
+.\" DocBook SGML with docbook-to-man on Debian GNU/Linux.
+...\"
+...\"	transcript compatibility for postscript use.
+...\"
+...\"	synopsis:  .P! <file.ps>
+...\"
+.de P!
+\\&.
+.fl			\" force out current output buffer
+\\!%PB
+\\!/showpage{}def
+...\" the following is from Ken Flowers -- it prevents dictionary overflows
+\\!/tempdict 200 dict def tempdict begin
+.fl			\" prolog
+.sy cat \\$1\" bring in postscript file
+...\" the following line matches the tempdict above
+\\!end % tempdict %
+\\!PE
+\\!.
+.sp \\$2u	\" move below the image
+..
+.de pF
+.ie     \\*(f1 .ds f1 \\n(.f
+.el .ie \\*(f2 .ds f2 \\n(.f
+.el .ie \\*(f3 .ds f3 \\n(.f
+.el .ie \\*(f4 .ds f4 \\n(.f
+.el .tm ? font overflow
+.ft \\$1
+..
+.de fP
+.ie     !\\*(f4 \{\
+.	ft \\*(f4
+.	ds f4\"
+'	br \}
+.el .ie !\\*(f3 \{\
+.	ft \\*(f3
+.	ds f3\"
+'	br \}
+.el .ie !\\*(f2 \{\
+.	ft \\*(f2
+.	ds f2\"
+'	br \}
+.el .ie !\\*(f1 \{\
+.	ft \\*(f1
+.	ds f1\"
+'	br \}
+.el .tm ? font underflow
+..
+.ds f1\"
+.ds f2\"
+.ds f3\"
+.ds f4\"
+'\" t 
+.ta 8n 16n 24n 32n 40n 48n 56n 64n 72n  
+.TH "gephex-engine" "1" 
+.SH "NAME" 
+gephex-engine \(em backend for the video effect software 
+.SH "Description" 
+.PP 
+\fBgephex-engine\fP is the main component of the interactive video effect system GePhex. You have to start the engine and can then connect with the \fBgephex-gui\fP\fB(1)\fP. 
+.PP 
+The projects main intent is to create a framework that allows videojockeys to design complex realtime video effects. The user can influence parameters  
+and data flow with interactive controls like joysticks or mididevices. 
+.SH "Files" 
+.PP 
+\fB~/.gephex/engine.conf\fP 
+.SH "See also" 
+.PP 
+\fBgephex-gui\fP\fB(1)\fP 
+.PP 
+http://gephex.sourceforge.net for the original source and main  
+CVS archive. 
+ 
+.SH "Authors" 
+.PP 
+Martin Bayer bayer@fmi.uni-passau.de 
+...\" created by instant / docbook-to-man, Tue 22 Apr 2003, 11:10 

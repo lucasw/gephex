@@ -4,7 +4,7 @@
 //#include <stdio.h>
 //#include <string.h>
 #include "dllutils.h"
-#include "addmodule_icon.xpm"
+#include "addmodule.xpm"
 
 const char* getSpec(void) {
  return "mod_spec { name=[mod_addmodule] number_of_inputs=[2] number_of_outputs=[1] deterministic=[true] }";
@@ -12,10 +12,10 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -78,20 +78,20 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Addierer] group=[shit] inputs=[2 Summand1 Summand2 ] outputs=[1 Summe ] type=xpm } ";
+  static const char* INFO = "info { name=[Addierer] group=[Signale] inputs=[2 Summand1{widget_type=[unboundednumber_selector] } Summand2{widget_type=[unboundednumber_selector] } ] outputs=[1 Summe ] type=xpm } ";
   char* tmpBuf;
-  int reqLen = 1 + strlen(INFO) + getSizeOfXPM(addmodule_icon_xpm);
+  int reqLen = 1 + strlen(INFO) + getSizeOfXPM(addmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
     {
       char* offset;
       int i;
-      int lines = getNumberOfStringsXPM(addmodule_icon_xpm);
-      tmpBuf = malloc(reqLen);
+      int lines = getNumberOfStringsXPM(addmodule_xpm);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
 	{
-	  char* source = addmodule_icon_xpm[i];
+	  char* source = addmodule_xpm[i];
 	  memcpy(offset,source,strlen(source)+1);
 	  offset += strlen(source) + 1;
 	}			
@@ -102,8 +102,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_addmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

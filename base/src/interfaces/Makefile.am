@@ -1,10 +1,3 @@
-#noinst_PROGRAMS = utilstest
-
-
-#noinst_LIBRARIES = libutils.a
-
-includedir = @includedir@/gephex/interfaces
-
 INTERFACE_FILES = \
 		controlvalue.if \
 		enginecontrol.if \
@@ -35,10 +28,9 @@ INTERFACE_FILES = \
 		typeclassloadercontrol.if \
 		typeclassname.if
 
-
 GENERATED_H =  $(INTERFACE_FILES:%.if=i%receiver.h) $(INTERFACE_FILES:%.if=i%sender.h)
 
-include_HEADERS = \
+noinst_HEADERS = \
 		$(GENERATED_H) \
 		imoduleclass.h \
 		imoduleclassspec.h \
@@ -50,10 +42,9 @@ include_HEADERS = \
 
 
 i%receiver.h: %.if
-	python $(top_builddir)/nic.py ir . $<
+	python @srcdir@/../../nic.py ir . $<
 
 i%sender.h: %.if
-	python $(top_builddir)/nic.py is . $<
+	python @srcdir@/../../nic.py is . $<
 
-clean:
-	rm -f $(GENERATED_H)
+DISTCLEANFILES = $(GENERATED_H)

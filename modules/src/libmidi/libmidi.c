@@ -31,7 +31,7 @@ struct MidiParser* midi_create_parser(midi_noteoffT noteoff,
 				      midi_systemexclusiveT systemexclusive,
 				      void* data)
 {
-  struct MidiParser* self = malloc(sizeof(*self));
+  struct MidiParser* self = (struct MidiParser* ) malloc(sizeof(*self));
 
   self->noteoff = noteoff;
   self->noteon = noteon;
@@ -93,24 +93,35 @@ static int parse_twobytemsg(const unsigned char* buf, int len, int* overflow,
       return 0;
     }
 
-  while (is_system_realtime(buf[index]))
+  while (index < len && is_system_realtime(buf[index]))
     ++index; //TODO: ignore system realtime for now
   
+  if (index >= len)
+    {
+      *overflow = 1;
+      return 0;
+    }
+
   // no it must be a data byte, no status byte allowed here
   if (midi_is_status(buf[index]))
     return -1;
   
   *b1 = buf[index++];
 
-  while (is_system_realtime(buf[index]))
+  while (index < len && is_system_realtime(buf[index]))
     ++index; //TODO: ignore system realtime for now
   
+  if (index >= len)
+    {
+      *overflow = 1;
+      return 0;
+    }
+
   // no it must be a data byte, no status byte allowed here
   if (midi_is_status(buf[index]))
     return -1;
   
   *b2 = buf[index++];
-
 
   return index;
 }
@@ -177,14 +188,11 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
   int index = 0;
   int overflow = 0;
 
-  if (len == 0)
-    return 0;
-
-  for (;;)
+  while (index < len)
     {
       int length;
-      int status_upper_nibble;
-      int status_lower_nibble;
+      unsigned char status_upper_nibble;
+      unsigned char status_lower_nibble;
 
       status = buf[index];
       if (!midi_is_status((unsigned char) status))
@@ -205,7 +213,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	  unsigned char b1, b2;
 
 	  case MIDI_NOTE_OFF:
-	  length = parse_twobytemsg(buf + index, len-index-1, &overflow,
+	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->noteoff)
 	    {
@@ -213,7 +221,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	    }
 	  break;
 	case MIDI_NOTE_ON:
-	  length = parse_twobytemsg(buf + index, len-index-1, &overflow,
+	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->noteon)
 	    {
@@ -221,7 +229,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	    }
 	  break;
 	case MIDI_AFTERTOUCH:
-	  length = parse_twobytemsg(buf + index, len-index-1, &overflow,
+	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->aftertouch)
 	    {
@@ -229,7 +237,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	    }
 	  break;
 	case MIDI_CTRLCHANGE:
-	  length = parse_twobytemsg(buf + index, len-index-1, &overflow,
+	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->controlchange)
 	    {
@@ -237,21 +245,21 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	    }
 	  break;
 	case MIDI_PROGCHANGE:
-	  length = parse_onebytemsg(buf + index, len-index-1, &overflow, &b1);
+	  length = parse_onebytemsg(buf + index, len-index, &overflow, &b1);
 	  if (length != -1 && self->programchange)
 	    {
 	      self->programchange(status_lower_nibble, b1, self->data);
 	    }
 	  break;
 	case MIDI_CHANNEL_AFTERTOUCH:
-	  length = parse_onebytemsg(buf + index, len-index-1, &overflow, &b1);
+	  length = parse_onebytemsg(buf + index, len-index, &overflow, &b1);
 	  if (length != -1 && self->channelaftertouch)
 	    {
 	      self->channelaftertouch(status_lower_nibble, b1, self->data);
 	    }
 	  break;
 	case MIDI_PITCHBEND:
-	  length = parse_twobytemsg(buf + index, len-index-1, &overflow,
+	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->pitchbend)
 	    {
@@ -260,12 +268,12 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	  break;
 	case MIDI_SYSTEM:
 	  length = parse_system(self, status_lower_nibble,
-				buf + index, len-index-1, &overflow);
+				buf + index, len-index, &overflow);
 	  break;
 	default:
 	  fprintf(stderr, "Unknown midi status: %i (midi_parse_data)",
 		  status);
-	  length = 0; // try the next byte
+	  length = 1; // try the next byte
 	}
 
       if (overflow == 1)
@@ -276,7 +284,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 	  return index-1;
 	}
 
-      if (index == -1)
+      if (length == -1)
 	{
 	  fprintf(stderr, "Parse error (midi_parse_data)\n");
 	  //advance to next byte if not at a statusbyte
@@ -286,7 +294,8 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
       else
 	index += length;	
     }
-  return 0;
+
+  return index-1;
 }
 
 void midi_set_noteoff_handler(struct MidiParser* self,

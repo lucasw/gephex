@@ -1,81 +1,114 @@
-#ifndef INCLUDED_DLL_MODULE_H
-#define INCLUDED_DLL_MODULE_H
-// DLL Schnittstelle
+#ifndef INCLUDED_DLLMODULE_H
+#define INCLUDED_DLLMODULE_H
 
-typedef void (*logT) (int,const char*);
-// wird aufgerufen wenn die dll reingeladen wird
-// optional
-int init(logT);
+// This header defines the interface for new effect modules
+// Module plugins must implement these function
 
-// wird aufgerufen wenn die dll entladen wird
-// optional
+// a detailed description on implementing new effect modules for GePhex
+// is located in the sgml documenation in the doc subdir
+
+/**
+ * Every instance of the effect module is identified by an unique ID. 
+ * It is up to the caller not to mix the IDs of different effect modules.
+ */
+typedef void* ModuleInstanceID;
+
+/**
+ * datatypes, attributes and their operations are defined in dlltype.h
+ */
+typedef void* TypeInstanceID;
+typedef void* TypeAttributesInstanceID;
+
+/**
+ * callback functions to log messages out of the effect module
+ */
+typedef void (*logT) (int, const char*);
+typedef void (*log2T) (int, const char*, const char*);
+
+/** 
+ * Initializes the effect module library. It must be called before any other 
+ * method is called. Registers the logging callbackfunction in the module.
+ */
+int init(logT callback);
+
+/** 
+ * Closes the module library. Call this method before unloading the shared 
+ * library and after destruction of all module instances. After calling 
+ * shutdown you mustn't call any method of this module plugin.
+ */
 void shutDown();
 
-// Liefert Informationen über das Modul zurück (bis jetzt nur den Namen
-// für die GUI als string)
-// erforderlich
-int getInfo(char* buf,int bufLen);
-
-// zum Empfangen von Informationen direkt von der GUI
-// optional
-void parseInput(void* instance,const char* buf,int bufLen);
-
-// Format:
-// "input_spec { type="typ_"<string>; const=<bool>; 
-//               strong_dependency=<bool>; }
-// (Reihenfolge egal)
-const char* getInputSpec (int index);
-
-
-// Format:
-// "output_spec { type="typ_"<string>; }
-const char* getOutputSpec (int index);
-
-// Format:
-// "mod_spec { name="mod_"<string>; number_of_inputs=<uint>; 
-//             number_of_outputs=<uint>;
-//             deterministic=<bool> }"
-// (Reihenfolge egal)
+/** 
+ * Querys the specification of the type. At the moment the only property 
+ * a unique string that identifies the type.
+ * "mod_spec { name="mod_"<string>; number_of_inputs=<uint>; 
+ *             number_of_outputs=<uint>;
+ *             deterministic=<bool> }"
+ */
 const char* getSpec(void);
 
-// optional
-void strongDependenciesCalculated(void* instance,int** neededInputs);
+/** 
+ * Querys infos for the user presentation. At the moment the only property 
+ * is a short description of the type.
+ */
+int getInfo(char* buffer, int bufferLen);
 
-// Eine neue Instanz des Moduls anlegen und einen Pointer auf dieselbe
-// zurückgeben.
-// erforderlich
-void* newInstance(void);
+/**
+ * Query specification for one input.
+ * "input_spec { type="typ_"<string>; const=<bool>; 
+ *               strong_dependency=<bool>; }
+ */
+const char* getInputSpec (int index);
 
-// Eine Instanz löschen
-// optional
-void deleteInstance(void* instance);
+/**
+ * Query specification for one output
+ * "output_spec { type="typ_"<string>; }
+ */
+const char* getOutputSpec (int index);
 
-// Der Input Nummer index einer Instanz bekommt einen Pointer
-// auf die Daten mit denen das Modul rechnet
-// optional
-int setInput(void* instance,int index,void* typePointer);
+/**
+ * Querys if one input needs fixed attributes
+ * returns 0 if the input has no fixed attribute
+ */
+TypeAttributesInstanceID getInputAttributes(int index);
 
-// Pointer auf die Daten des Outputs Nummer index einer Instanz 
-// zurückgeben.
-// optional
-int setOutput (void* instance,int index, void* typePointer);
+/** 
+ * Creates a new instance of the effect module and returns an unique identifier
+ * for that.
+ */
+ModuleInstanceID newInstance(void);
 
+/** 
+ * Deletes an module instance
+ */
+void deleteInstance(ModuleInstanceID instance);
 
-// Liefert die Lister der zuordnungen von Ausgängen zu Eingängen
-// für jeden Ausgang -1(keine zuordnung) oder nr des inputs
-// muss von der engine direkt vor update aufgerufen werden
-// optional
-void getPatchLayout(void* instance, int** out2in);
+/**
+ * Set the input to a new the type instance 
+ */
+int setInput(ModuleInstanceID instance,int index, TypeInstanceID typePointer);
 
-// Die eigtl. Berechung. Wenn update() von der Engine aufgerufen
-// wird hat die Engine vorher schon alle Inputs mit setInput() auf
-// die richtigen Werte gesetzt.
-// erforderlich
-void update(void* instance);
+/**
+ * Set the output to a new the type instance 
+ */
+int setOutput (ModuleInstanceID instance,int index, TypeInstanceID typePointer);
+/**
+ * query the patch layout of inputs and outputs
+ * sets for each output the corresponding input index 
+ * or -1 if no patch is requested
+ */
+void getPatchLayout(ModuleInstanceID instance, int** out2in);
 
+/**
+ * calculate the effect and assign the results to the output type instances
+ */
+void update(ModuleInstanceID instance);
 
-// returns 0 if the input has no fixed attribute
-// optional (wenn keine fixierten attribute vorkommen)
-void* getInputAttributes(int index);
+/**
+ * returns a set of inputs that need to be calculated before calculation
+ * of the effect
+ */
+void strongDependenciesCalculated(ModuleInstanceID instance,
+				  int** neededInputs);
 
 #endif

@@ -12,7 +12,7 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_RGBType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_RGBType const=true strong_dependency=true default=[0.5 0.5 0.5] } ";
   break;
   case 1:
     return "input_spec { type=typ_NumberType const=true strong_dependency=true default=320 } ";
@@ -84,7 +84,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Static Color] group=[Quellen] inputs=[3 Farbe{hidden=[true] widget_type=[color_selector] } xsize{absolute=[true] higher_bound=[4096] hidden=[true] lower_bound=[0] widget_type=[number_selector] } ysize{absolute=[true] higher_bound=[4096] hidden=[true] lower_bound=[0] widget_type=[number_selector] } ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Static Color] group=[Quellen] inputs=[3 Farbe{hidden=[true] widget_type=[color_selector] } xsize{higher_bound=[4096] hidden=[true] lower_bound=[0] step_size=[1] widget_type=[number_selector] } ysize{higher_bound=[4096] hidden=[true] lower_bound=[0] step_size=[1] widget_type=[number_selector] } ] outputs=[1 Bild ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(staticcolormodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -92,7 +92,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(staticcolormodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -108,8 +108,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_staticcolormodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

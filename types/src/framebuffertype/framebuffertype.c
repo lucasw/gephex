@@ -2,37 +2,40 @@
 
 #include "dlltype.h"
 
+typedef TypeInstanceID FrameBufferInstanceID;
+typedef TypeAttributesInstanceID FrameBufferAttributesInstanceID;
+
 int init(void)
 {
-	return 1;
+  return 1;
 }
 
 const char* getSpec(void)
 {
-	return "typ_spec { name=typ_FrameBufferType; }";
+  return "typ_spec { name=typ_FrameBufferType; }";
 }
 
-void* newInstance(void)
+FrameBufferInstanceID newInstance(void)
 {
-	return framebuffer_newInstance();
+  return framebuffer_newInstance();
 }
 
-void assign(void* dst,const void* src)
+void assign(FrameBufferInstanceID dst, FrameBufferInstanceID src)
 {
-	framebuffer_assign((FrameBufferType*)dst,(FrameBufferType*)src);
+  framebuffer_assign((FrameBufferType*)dst,(FrameBufferType*)src);
 }
 
-void deleteInstance(void* num)
+void deleteInstance(FrameBufferInstanceID num)
 {
-	framebuffer_deleteInstance((FrameBufferType*) num);
+  framebuffer_deleteInstance((FrameBufferType*) num);
 }
 
-int serialize(void* type, char* buffer, int bufferLen)
+int serialize(FrameBufferInstanceID type, char* buffer, int bufferLen)
 {
   return framebuffer_serialize(type, buffer, bufferLen);
 }
 
-void deSerialize(const char* buffer, int len, void* type)
+void deSerialize(const char* buffer, int len, FrameBufferInstanceID type)
 {
   framebuffer_deSerialize(buffer,len,type);
 }
@@ -40,7 +43,6 @@ void deSerialize(const char* buffer, int len, void* type)
 void shutDown(void)
 {
 }
-
 
 
 // Liefert Informationen über den Typ zurueck.
@@ -57,24 +59,28 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int attributesEqual(void* type_, void* attributes_)
+int attributesEqual(FrameBufferInstanceID type_, 
+		    FrameBufferAttributesInstanceID attributes_)
 {
-	FrameBufferType* type = (FrameBufferType*) type_;
-	FrameBufferAttributes* attributes = (FrameBufferAttributes*) attributes_;
+  FrameBufferType* type = (FrameBufferType*) type_;
+  FrameBufferAttributes* attributes = (FrameBufferAttributes*) attributes_;
 
-	return framebuffer_attributesEqual(type, attributes);
+  return framebuffer_attributesEqual(type, attributes);
 }
 
 
-void convertType(void* dstType_,void* srcType_, void* attributes_)
+void convertType(FrameBufferInstanceID dstType_,
+		 FrameBufferInstanceID srcType_, 
+		 FrameBufferAttributesInstanceID attributes_)
 {
-	framebuffer_convertType((FrameBufferType*) dstType_,
-						    (FrameBufferType*) srcType_,
-							(FrameBufferAttributes*) attributes_);	
+  framebuffer_convertType((FrameBufferType*) dstType_,
+			  (const FrameBufferType*) srcType_,
+			  (FrameBufferAttributes*) attributes_);	
 }
 
-void changeAttributes(void* fb_, void* attributes_)
+void changeAttributes(FrameBufferInstanceID fb_, 
+		      FrameBufferAttributesInstanceID attributes_)
 {
-	framebuffer_changeAttributes((FrameBufferType*) fb_,
-								 (FrameBufferAttributes*) attributes_);
+  framebuffer_changeAttributes((FrameBufferType*) fb_,
+			       (FrameBufferAttributes*) attributes_);
 }

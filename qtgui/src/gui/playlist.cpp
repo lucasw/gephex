@@ -12,7 +12,7 @@
 
 #include "interfaces/isequencercontrolreceiver.h"
 #include "guimodel/iscenesequencer.h"
-#include "askforstringdialog.h"
+#include "base/askforstringdialog.h"
 
 namespace gui
 {

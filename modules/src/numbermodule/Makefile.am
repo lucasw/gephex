@@ -1,12 +1,26 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 numbermodule_auto.c: numbermodule.spec numbermodule.h
-	python $(top_builddir)/pluc.py c numbermodule.spec
+	$(PLUC) c @srcdir@/numbermodule.spec
 
 numbermodule.h: numbermodule.spec
-	python $(top_builddir)/pluc.py h numbermodule.spec
+	$(PLUC) h @srcdir@/numbermodule.spec
 
 lib_LTLIBRARIES = numbermodule.la
-numbermodule_la_SOURCES = numbermodule_auto.c numbermodule.c numbermodule.h numbermodule.spec  numbermodule_icon.xpm
+numbermodule_la_SOURCES = 	numbermodule_auto.c \
+				numbermodule.c \
+				numbermodule.h \
+				numbermodule.spec \
+				numbermodule_icon.xpm
 
 numbermodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I $(baseincludedir) -I $(baseincludedir)/types  -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype 
+
+ 
+
+DISTCLEANFILES = numbermodule.h numbermodule_auto.c

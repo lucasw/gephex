@@ -1,6 +1,8 @@
 #include "sharedlibrary.h"
 
+#if defined(HAVE_CONFIG_H)
 #include "config.h"
+#endif
 
 #if defined(OS_WIN32)
 #include <windows.h>

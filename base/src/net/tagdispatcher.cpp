@@ -22,7 +22,7 @@ namespace net {
   template <typename Tag>
   void TagDispatcher<Tag>::dataReceived(const Tag& tag, const utils::Buffer& b)
   {
-    ListenerMap::const_iterator it = m_listeners.find(tag);
+    typename ListenerMap::const_iterator it = m_listeners.find(tag);
     if (it == m_listeners.end())
       {
 	std::ostringstream os;

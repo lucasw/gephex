@@ -7,7 +7,7 @@ COutputPlug::COutputPlug(IOutput& out,IInput& in)
 
 COutputPlug::~COutputPlug()
 {
-	output->unPlug(*this->getInput());
+  //	output->unPlug(*this->getInput());
 }
 
 void COutputPlug::setData(const IType* _data)

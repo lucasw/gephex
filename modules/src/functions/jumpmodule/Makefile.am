@@ -1,14 +1,27 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../../pluc.py
+
 jumpmodule_auto.c: jumpmodule.spec jumpmodule.h
-	python $(top_builddir)/pluc.py c jumpmodule.spec
+	$(PLUC) c @srcdir@/jumpmodule.spec
 
 jumpmodule.h: jumpmodule.spec
-	python $(top_builddir)/pluc.py h jumpmodule.spec
+	$(PLUC) h @srcdir@/jumpmodule.spec
 
 lib_LTLIBRARIES = jumpmodule.la
-jumpmodule_la_SOURCES = jumpmodule_auto.c jumpmodule.c jumpmodule.h jumpmodule.spec jumpmodule.xpm
 
+jumpmodule_la_SOURCES = 	jumpmodule_auto.c \
+				jumpmodule.c \
+				jumpmodule.h \
+				jumpmodule.spec \
+				jumpmodule.xpm
 
 jumpmodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../../engine/src/engine \
+		-I @srcdir@/../../../../util/include \
+		-I @srcdir@/../../../../types/src/numbertype 
 
+ 
+
+DISTCLEANFILES = jumpmodule.h jumpmodule_auto.c

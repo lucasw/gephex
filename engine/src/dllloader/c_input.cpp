@@ -1,23 +1,25 @@
 #include "c_input.h"
-#include "c_module.h"
+
+#include <cassert>
+
+//#include "c_module.h"
 
 #include "interfaces/itypefactory.h"
 #include "interfaces/itype.h"
 
-#undef NDEBUG
-#include <cassert>
-
-
+#include "c_moduletables.h"
 
 
 CInput::CInput(int _typeID,
 			   bool _const,
 			   bool _strong,
-			   CModule& cmod,
+			   IModule& cmod,
 			   int index, 
 			   const ITypeFactory& factory_,
 			   const TypeAttributes* attr,  
-			   IType& defaultValue)
+			   IType& defaultValue,
+			   const CInputVTable& vtable,
+			   void* instance)
 			   : m_isConnected(false), // not connected use default value 
 			   m_defaultValue(0),			   
 			   oPlug(0), 
@@ -27,7 +29,9 @@ CInput::CInput(int _typeID,
 			   mod(&cmod), 
 			   m_index(index), 
 			   factory(&factory_), 
-			   m_attr(attr)
+			   m_attr(attr),
+			   m_vtable(&vtable),
+			   m_instance(instance)
 {
 	// set input to default value
 	{
@@ -74,30 +78,35 @@ IModule* CInput::getConnectedModule() const
 		return 0;
 }
 
-void CInput::plugIn(IOutputPlug& newOPlug) throw (std::runtime_error)
+void CInput::plugIn(utils::AutoPtr<IOutputPlug>& newOPlug)
+  throw (std::runtime_error)
 {
-	assert(!m_isConnected);
-	assert(oPlug==0);	
+  assert(!m_isConnected); //TODO
+  assert(oPlug == 0); //TODO
 	
-	oPlug = &newOPlug;
+  oPlug = newOPlug;
 
-	m_isConnected=true;
+  m_isConnected = true;
 }
 
 
 void CInput::unPlug()
 {
-	delete oPlug;
-	oPlug = 0;
+  if (m_isConnected)
+    {
+      oPlug->getOutput()->unPlug(*this);
+      oPlug = utils::AutoPtr<IOutputPlug>(0);
 
-	
-	assert(internalData!=0);
-	// default value einspielen and convert if neccesary
-	internalData->assign(m_defaultValue);
-	data = internalData;
-	m_isConnected=false;
-	mod->setData(this);
-	
+      assert(internalData != 0);
+      // set default value and convert if neccesary
+      internalData->assign(m_defaultValue);
+      data = internalData;
+      m_isConnected = false;
+    
+      m_vtable->setInput(m_instance, m_index, data->getPointer());	
+    }
+  else
+    throw std::runtime_error("Unplugging unconnected input!!!!!");
 }
 
 int CInput::getType() const
@@ -149,55 +158,52 @@ const TypeAttributes* CInput::getTypeAttributes() const
 
 void CInput::update()
 {
-	const IType* oldValuePtr = data; // remember to check if ptr has changed	
+  const IType* oldValuePtr = data; // remember to check if ptr has changed
 
-	
-	
-	if (m_isConnected)
+  if (m_isConnected)
     { // input is connected
-		assert(oPlug != 0);
-		const IType* connectedData = oPlug->getData();
-
-		assert(connectedData!=0);
-		if (m_attr != 0 && !connectedData->equalAttributes(*m_attr))
-		{  // input attribs are fixed and differ a conversion is needed
-			assert(internalData!=0);
+      assert(oPlug != 0);
+      const IType* connectedData = oPlug->getData();
+      
+      assert(connectedData!=0);
+      if (m_attr != 0 && !connectedData->equalAttributes(*m_attr))
+	{ // input attribs are fixed and differ a conversion is needed
+	  assert(internalData != 0);
 			
-			internalData->convert(*connectedData, *m_attr);
-			data=internalData;
-		}
-		else
-		{ // no conversion needed
-			data=connectedData;
-		}
+	  internalData->convert(*connectedData, *m_attr);
+	  data = internalData;
+	}
+      else
+	{ // no conversion needed
+	  data = connectedData;
+	}
     }
-	else
+  else
     { // no input is connected
 		
-		assert(oPlug==0);
-		assert(internalData!=0);
-		/*
-		if (internalData == 0)
-		{ // lazy initialisation of internal buffer
-		internalData = factory->buildNew(typeID);
-		// default value einspielen
-		internalData->assign(&m_defaultValue);
-		}
+      assert(oPlug==0);
+      assert(internalData!=0);
+      /*
+	if (internalData == 0)
+	{ // lazy initialisation of internal buffer
+	internalData = factory->buildNew(typeID);
+	// default value einspielen
+	internalData->assign(&m_defaultValue);
+	}
 		
-		  if (m_attr != 0 && !internalData->equalAttributes(*m_attr))
-		  { // module has fixed attribs and they differ from  conversion needed
-		  IType* temp = factory->buildNew(typeID);
-		  temp->convert(*internalData,*m_attr);
-		  delete internalData;
-		  internalData = temp;
-		  }
-		*/
-		data = internalData;
+	if (m_attr != 0 && !internalData->equalAttributes(*m_attr))
+	{ // module has fixed attribs and they differ from  conversion needed
+	IType* temp = factory->buildNew(typeID);
+	temp->convert(*internalData,*m_attr);
+	delete internalData;
+	internalData = temp;
+	}
+      */
+      data = internalData;
     }
-	
-	
-	mod->setData(this);
-	
-	assert(data!=0);
-	assert(m_attr == 0 || data->equalAttributes(*m_attr));
+
+  m_vtable->setInput(m_instance, m_index, data->getPointer());	
+
+  assert(data != 0);
+  assert(m_attr == 0 || data->equalAttributes(*m_attr));
 }

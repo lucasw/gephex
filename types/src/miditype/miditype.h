@@ -36,7 +36,7 @@ static __inline void midi_resize(MidiType* dst, int newSize)
   if (newSize < dst->len)
     return;
 
-  newData = malloc(newSize);
+  newData = (unsigned char*) malloc(newSize);
   
   if (dst->data != 0)
     {
@@ -87,7 +87,7 @@ static __inline void midi_deleteInstance(MidiType* dst)
   free(dst);
 }
 
-static __inline int midi_serialize(MidiType* pos, char* buffer, int bufferLen)
+static __inline int midi_serialize(const MidiType* pos, char* buffer, int bufferLen)
 {
   return 0;
 }

@@ -18,6 +18,8 @@
 #include "interfaces/imodulestatisticsreceiver.h"
 #include "interfaces/imodulestatisticssmartreceiver.h"
 
+#include "utils/ilogger.h"
+
 namespace renderer
 {
 
@@ -77,10 +79,10 @@ namespace renderer
   };
 
 
-  Renderer::Renderer()
+  Renderer::Renderer(utils::AutoPtr<utils::ILogger>& logger)
     : isStarted(false), activeGraph(0),  cvr(0), msr(0),
       rendererStatusReceiver(0), moduleFactory(new ModuleFactory()),
-      typeFactory(new TypeFactory())
+      typeFactory(new TypeFactory()), m_logger(logger)
   {
   }
 
@@ -147,8 +149,12 @@ namespace renderer
 	  RuntimeSystemMap::iterator it = graphs.find(graphID);
 
 	  if (it == graphs.end())
-		  throw std::runtime_error("name doesnt exist "
-					   "(Renderer::graphDeleted)");
+	    {
+	      m_logger->error("Renderer::graphDeleted",
+			      "Graph with id = '" + graphID +
+			      "' does not exist.");
+	      return;
+	    }
 
 	  if (activeGraphName == graphID)
 	  {

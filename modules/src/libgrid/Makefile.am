@@ -1,4 +1,6 @@
+libdir = @libdir@/gephex/modules
 noinst_LIBRARIES = libgrid.a
 libgrid_a_SOURCES = libgrid.c libgrid.h
 
-INCLUDES = -I$(baseincludedir)
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include

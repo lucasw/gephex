@@ -3,14 +3,14 @@
 
 #include <string>
 #include <map>
-#include "iwidgetconstructor.h"
+#include "base/iwidgetconstructor.h"
 
 class IModelControlReceiver;
 
 namespace gui
 {
 
-  class PropertyWidgetFactory;
+  class TypeViewConstructor;
   class ControlValueDispatcher;
   class PropertyWidget;
 
@@ -22,12 +22,11 @@ namespace gui
 class PropertyWidgetConstr : public IWidgetConstructor
 {
 public:
-  PropertyWidgetConstr(const std::string& widgetType,
-			    const std::map<std::string, std::string>& params,
-			    int nodeID,int inIndex, int controlID,
-			    const PropertyWidgetFactory& factory,
-			    ControlValueDispatcher& cvd,
-				IModelControlReceiver&);
+  PropertyWidgetConstr(const TypeViewConstructor* con,
+		       const std::map<std::string, std::string>& params,
+		       int nodeID,int inIndex, int controlID,
+		       ControlValueDispatcher& cvd,
+		       IModelControlReceiver&);
 
   virtual ~PropertyWidgetConstr();
 
@@ -36,12 +35,11 @@ public:
   virtual void destroyWidget(QWidget* w) const;
 
 private:
-  std::string m_widgetType;
+  const TypeViewConstructor* m_viewConstructor;
   const std::map<std::string, std::string>& m_params;
   int m_nodeID;
   int m_inputIndex;
   int m_controlID;
-  const PropertyWidgetFactory& m_factory;
   ControlValueDispatcher& m_dispatcher;
   IModelControlReceiver& mcr;
   PropertyWidget* w;

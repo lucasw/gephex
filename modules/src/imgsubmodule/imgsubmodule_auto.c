@@ -7,18 +7,21 @@
 #include "imgsubmodule.xpm"
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_imgsubmodule] number_of_inputs=[3] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_imgsubmodule] number_of_inputs=[4] number_of_outputs=[1] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
   break;
   case 2:
     return "input_spec { type=typ_FrameBufferType const=true strong_dependency=true  } ";
+  break;
+  case 3:
+    return "input_spec { type=typ_StringType const=true strong_dependency=true default=regular } ";
   break;
  }
  return 0;
@@ -68,6 +71,9 @@ int setInput(void* instance,int index,void* typePointer)
   case 2:
    inst->in_input2 = (FrameBufferType *) typePointer;
   break;
+  case 3:
+   inst->in_routine = (StringType *) typePointer;
+  break;
  } //switch(index) 
  return 1;
 }
@@ -84,7 +90,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Bild-Subtrahierer] group=[Mixer] inputs=[3 Amount Bild1 Bild2 ] outputs=[1 Bild1-Bild2 ] type=xpm } ";
+  static const char* INFO = "info { name=[Bild-Subtrahierer] group=[Mixer] inputs=[4 Amount{lower_bound=[0] higher_bound=[1] step_size=[0.01] widget_type=[hslider] } Bild1 Bild2 Fade-Routine{values=[regular,mmx] hidden=[true] widget_type=[combo_box] } ] outputs=[1 Bild1-Bild2 ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(imgsubmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -92,7 +98,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(imgsubmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -108,8 +114,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_imgsubmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }

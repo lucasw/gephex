@@ -8,17 +8,17 @@ class IErrorReceiver;
 namespace engine
 {
 
-	class NetLogger : public utils::ILogger
-	{
-	public:
-		NetLogger(IErrorReceiver& ier);
-		virtual void log(const std::string& sender, const std::string& msg);
-		virtual void warning(const std::string& sender, const std::string& msg);
-		virtual void error(const std::string& sender, const std::string& msg);
+  class NetLogger : public utils::ILogger
+    {
+    public:
+      NetLogger(IErrorReceiver& ier);
+      virtual void log(const std::string& sender, const std::string& msg);
+      virtual void warning(const std::string& sender, const std::string& msg);
+      virtual void error(const std::string& sender, const std::string& msg);
 
-	private:
-		IErrorReceiver& m_receiver;
-	};
+    private:
+      IErrorReceiver& m_receiver;
+    };
 }
 
 #endif

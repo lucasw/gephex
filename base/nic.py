@@ -406,14 +406,15 @@ def createNetIfaceSendImpl(file, name_, interface):
 	sendCodes = map(lambda x: createSendCode(x), newInterface)
 	sendCode = reduce(lambda x,y: x + '\telse ' + y, sendCodes) + \
 		   '\t else\n\t {\n\t\tstd::ostringstream stream;\n' \
-		   '\t\tstream << "Laenge: " << command.length();\n' \
+		   '\t\tstream << "Laenge: " << command.length() << std::endl;\n' \
 		   '\t\tstream << "Received invalid command: <"' \
 		   ' \n\t\t\t<< command << "> at X_NAME_X";\n' \
 		   '\t\tstream << std::endl << "Haeh?" << std::endl;\n' \
 		   '\t\tstream.flush();\n' \
 		   '\t\tthrow std::runtime_error(stream.str().c_str());'\
 		   '\n\t }\n'
-	file.write(string.replace(temp1,'X_CODE_X',sendCode))
+	file.write(string.replace(string.replace(temp1,'X_CODE_X',sendCode),
+               'X_NAME_X', name_))
 
 def printUsage():
 	sys.stderr.write("""Usage: nic.py <command> <outputpath> <interface-file>

@@ -1,4 +1,1 @@
-SUBDIRS = src
-
-EXTRA_DIST=debian
-
+SUBDIRS = src include

@@ -6,18 +6,9 @@
 #endif
 
 #include <algorithm>
-#include <ctime>
-#include <cassert>
+#include <stdexcept>
 
-namespace
-{
- int clock2Ms(int clock)
-  {
-    return static_cast<int>((1000. * clock) 
-			    / static_cast<double>(CLOCKS_PER_SEC));
-
-  } 
-}
+#include "utils/timing.h"
 	
 namespace sequencer
 {
@@ -160,14 +151,14 @@ namespace sequencer
 #endif
     if (!m_running && !m_paused)
       {
-	m_startTime = clock2Ms(clock());
+	m_startTime = utils::Timing::getTimeInMillis();
 	m_running = true;
       }
     else if (m_paused)
       {
 	m_paused = false;
 	m_running = true;
-	m_startTime += clock2Ms(clock()) - m_pausedTime;
+	m_startTime += utils::Timing::getTimeInMillis() - m_pausedTime;
       }
   }
 	
@@ -191,7 +182,7 @@ namespace sequencer
 #endif
     if (m_running && !m_paused)
       {
-	m_pausedTime = clock2Ms(clock());
+	m_pausedTime = utils::Timing::getTimeInMillis();
 	m_paused = true;      
 	m_running = false;
       }
@@ -199,7 +190,7 @@ namespace sequencer
 	
   int Sequence::pendingActions(std::list<std::string>& actions)
   {
-    int time = (clock2Ms(clock()) - m_startTime);//% getLength();
+    int time = (utils::Timing::getTimeInMillis() - m_startTime);//% getLength();
 
     for (std::vector<ActionPair>::const_iterator it = m_sortedActions.begin();
 	 it != m_sortedActions.end(); ++it)
@@ -231,9 +222,14 @@ namespace sequencer
     return m_running;
   }
 
+  bool Sequence::paused() const
+  {
+    return m_paused;
+  }
+
   void Sequence::jumpTo(int newTime)
   {
-    m_startTime = clock2Ms(clock()) - newTime;
+    m_startTime = utils::Timing::getTimeInMillis() - newTime;
     m_oldTime = m_startTime;
 
     //TODO: check wether the time is in range or something

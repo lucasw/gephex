@@ -36,7 +36,7 @@ public:
 
   virtual void parseInput(const char*,int);
 
-  void setData(const IInput*/*,const IType**/);
+  //void setData(const IInput*/*,const IType**/);
 
 private:
 

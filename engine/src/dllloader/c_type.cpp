@@ -5,42 +5,51 @@
 #include "utils/buffer.h"
 #include "utils/autoptr.h"
 
-CType::CType(void* instance_, CTypeVTable& ftab,bool isOwner)
+CType::CType(void* instance_ , const CTypeVTable& ftab ,bool isOwner)
   :	vTab(&ftab), instance(instance_), amOwner(isOwner)
 {
 }
 
 CType::~CType()
 {	
-	if (amOwner)
-	{		
-		vTab->deleteInstance(instance);
-	}
+  if (amOwner)
+    {		
+      vTab->deleteInstance(instance);
+    }
 }
 
 void CType::assign(const IType* t_)
 {	
+  // assign is only allowed if both types are equal
+  assert(vTab==static_cast<const CType*>(t_)->vTab);
+
   const CType* t = static_cast<const CType*>(t_);
-  assert(t == dynamic_cast<const CType*>(t_)); //HACK
-  vTab->assign(instance,t->getPointer());
+
+  vTab->assign(instance,t->instance);
 }
 		
-utils::Buffer CType::serialize() const
+bool CType::serialize(utils::Buffer& b) const
 {
-  if (vTab->serialize != 0)
-    {
-      int neededLen = vTab->serialize(instance,0,0);
-      utils::AutoPtr<char> data(new char[neededLen]);
-      vTab->serialize(instance,data.c_ptr(),neededLen);
-      
-      utils::Buffer ret(reinterpret_cast<const unsigned char*>(data.c_ptr()),
-			neededLen);
+  if (vTab->serialize == 0)
+    return false;
 
-      return ret;
-    }
-  else
+  int neededLen = vTab->serialize(instance,0,0);
+  if (neededLen <= 0)
+    return false;
+
+  char* data = new char[neededLen];
+  try
     {
-      return utils::Buffer(reinterpret_cast<const unsigned char*>(""),1);
+      int len = vTab->serialize(instance, data, neededLen);
+      
+      b = utils::Buffer(reinterpret_cast<const unsigned char*>(data), len);
+      delete[] data;
+      return true;
+    }
+  catch(...)
+    {
+      delete[] data;
+      throw;
     }
 }
 

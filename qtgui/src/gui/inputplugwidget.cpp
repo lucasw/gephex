@@ -7,10 +7,11 @@ namespace gui
 
   InputPlugWidget::InputPlugWidget(QWidget* parent, const char* name,
 				   const QPixmap& free_, const QPixmap& busy_, 
-				   std::string _name, std::string _type, 
+				   std::string _name, std::string _type,
+				   const ParamMap& params,
 				   int _index, int _ID, bool _inP)
     : PlugWidget(parent,name,_name,_type,_index,_ID, free_, busy_),
-      inPropertyDialog(_inP)
+      inPropertyDialog(_inP), m_params(params)
   {
     std::string toolTipText = _name + ":" + _type;
     QToolTip::add(this,toolTipText.c_str());
@@ -69,6 +70,10 @@ namespace gui
     return !inPropertyDialog;
   }
 
+  const InputPlugWidget::ParamMap& InputPlugWidget::getParams() const
+  {
+    return m_params;
+  }
   
   void InputPlugWidget::mousePressEvent(QMouseEvent* e)
   {

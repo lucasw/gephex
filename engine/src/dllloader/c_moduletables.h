@@ -7,18 +7,27 @@
 
 class TypeAttributes;
 
+class COutputVTable
+{
+public:
+	setOutputT setOutput;
+};
+
+class CInputVTable
+{
+public:
+	 setInputT setInput;
+};
+
 /**
  * Tabelle der virtual Member-Funktionen einer DLL-'Klasse'.
  */
-class CModuleVTable
+class CModuleVTable : public COutputVTable, public CInputVTable
 {
 public:
 	newInstanceT newInstance;
 	deleteInstanceT deleteInstance;
-	
-	setInputT setInput;
-	setOutputT setOutput;
-	
+			
 	updateT update;
 	
 	parseInputT parseInput;

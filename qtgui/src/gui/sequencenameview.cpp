@@ -6,10 +6,10 @@
 
 #include <qpopupmenu.h>
 
-#include "treeview.h"
-#include "treeviewitem.h"
+#include "base/treeview.h"
+#include "base/treeviewitem.h"
 
-#include "askforstringdialog.h"
+#include "base/askforstringdialog.h"
 #include "interfaces/isequencercontrolreceiver.h"
 
 #include "guimodel/iscenesequencer.h"

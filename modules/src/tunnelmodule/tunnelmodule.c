@@ -93,10 +93,10 @@ void update(void* instance)
 	
 	TexturePoint* gridpointer;	
 	
-	int xres = inst->in_xres->number;
-	int yres = inst->in_yres->number;
+	int xres = trim_int(inst->in_xres->number, 0, 1024);
+	int yres = trim_int(inst->in_yres->number, 0, 1024);
 
-	double radius = ((160.*inst->in_radius->number) / (double)UINT32_MAX )  + 40.;
+	double radius = 160.*inst->in_radius->number  + 40.;
 
 	double shading_factor;
 
@@ -125,11 +125,11 @@ void update(void* instance)
 	}
 	
 	//set up viewpoint
-	origin.x = (inst->in_pos->x/(double)(UINT32_MAX)*(radius*1.5) - radius*0.75);
-	origin.y = (inst->in_pos->y/(double)(UINT32_MAX)*(radius*1.5) - radius*0.75);
-	origin.z = (inst->in_t->number/(double)(UINT32_MAX)*(-2000.)) +1000.;
+	origin.x = (inst->in_pos->x*(radius*1.5) - radius*0.75);
+	origin.y = (inst->in_pos->y*(radius*1.5) - radius*0.75);
+	origin.z = (inst->in_t->number*(-2000.)) +1000.;
 	
-	rot_angle = ((inst->in_rot->number/(double)(UINT32_MAX)) * 2* M_PI) - M_PI;
+	rot_angle = ((inst->in_rot->number/360) * 2* M_PI) - M_PI;
 	cosa = cos(rot_angle);
 	sina = sin(rot_angle);
 	

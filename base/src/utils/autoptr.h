@@ -4,7 +4,9 @@
 #include <stdexcept>
 #include <cassert>
 
+#if defined(HAVE_CONFIG_H)
 #include "config.h"
+#endif
 
 namespace utils
 {
@@ -89,9 +91,9 @@ namespace utils
 		return *this;
 	}
 
-	// this is needed because windows cant handle template constructors 
+	// this is needed because vc6 can't handle template constructors 
 	// correctly
-#ifndef OS_WIN32
+#if !defined(COMP_VC)
 	template <typename U>
     AutoPtr<T>(const AutoPtr<U>& ap)
 	: m_ref(ap.ref()), m_ptr(ap.c_ptr())

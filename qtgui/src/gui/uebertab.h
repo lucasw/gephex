@@ -9,24 +9,30 @@ class QHButtonGroup;
 
 class Uebertab : public QTabBar
 {
-private:
-	QHButtonGroup* daGroup;
-	
-public:
-	
-	/**
-	* This class is a derivate of the tabbar provided by qt.
-	* It simply holds an automatic layout to group the buttons.
-	* @param parent Parent Widget...
-	*/
-	Uebertab(QTabWidget* parent);
-	~Uebertab();
-	/**
-	* Add a new button to the tab and group it automatically
-	*/
-	int insertItem(QToolButton*, int);
-	QHButtonGroup* buttonGroup();
+ public:
+  /**
+   * This class is a derivate of the tabbar provided by qt.
+   * It simply holds an automatic layout to group the buttons.
+   * @param parent Parent Widget...
+   */
+  Uebertab(QTabWidget* parent);
+  
+  /** 
+   * Destructs the Widget
+   */
+  ~Uebertab();
+  
+  /**
+   * Add a new button to the tab and group it automatically
+   */
+  int insertItem(QToolButton*, int);
+  
+  /**
+   */
+  QHButtonGroup* buttonGroup();
+  
+ private:
+  QHButtonGroup* daGroup;
 };
-
 
 #endif

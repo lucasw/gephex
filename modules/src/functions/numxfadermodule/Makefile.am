@@ -1,13 +1,27 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../../pluc.py
+
 numxfadermodule_auto.c: numxfadermodule.spec numxfadermodule.h
-	python $(top_builddir)/pluc.py c numxfadermodule.spec
+	$(PLUC) c @srcdir@/numxfadermodule.spec
 
 numxfadermodule.h: numxfadermodule.spec
-	python $(top_builddir)/pluc.py h numxfadermodule.spec
+	$(PLUC) h @srcdir@/numxfadermodule.spec
 
 lib_LTLIBRARIES = numxfadermodule.la
-numxfadermodule_la_SOURCES = numxfadermodule_auto.c numxfadermodule.c numxfadermodule.h numxfadermodule.spec numxfadermodule.xpm
+
+numxfadermodule_la_SOURCES = 	numxfadermodule_auto.c \
+				numxfadermodule.c \
+				numxfadermodule.h \
+				numxfadermodule.spec \
+				numxfadermodule.xpm
 
 numxfadermodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../../engine/src/engine \
+		-I @srcdir@/../../../../util/include \
+		-I @srcdir@/../../../../types/src/numbertype 
 
+ 
+
+DISTCLEANFILES = numxfadermodule.h numxfadermodule_auto.c

@@ -36,10 +36,10 @@ void update(void* instance)
   //MyInstancePtr my = inst->my;
 
   // Add your effect here!
-  unsigned int input = inst->in_in->number;
-  unsigned int thr = inst->in_thr->number;
-  unsigned int lowval = inst->in_lower->number;
-  unsigned int highval = inst->in_upper->number;
+  double input   = inst->in_in->number;
+  double thr     = inst->in_thr->number;
+  double lowval  = inst->in_lower->number;
+  double highval = inst->in_upper->number;
   
   if (input > thr)
     {

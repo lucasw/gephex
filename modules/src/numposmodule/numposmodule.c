@@ -19,21 +19,19 @@ MyInstance* construct()
 {
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
-  // Add your initialization here
-
   return my;
 }
 
 void destruct(MyInstance* my)
 {
-  // Add your cleanup here
   free(my);
 }
 
 void update(void* instance)
 {
-	InstancePtr inst = (InstancePtr) instance;
-	inst->out_result->x = inst->in_xpos->number;
-	inst->out_result->y = inst->in_ypos->number;
+  InstancePtr inst = (InstancePtr) instance;
+  inst->out_result->x = trim_double(inst->in_xpos->number,0,1);
+  inst->out_result->y = trim_double(inst->in_ypos->number,0,1);
 }
+
 

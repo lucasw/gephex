@@ -1,0 +1,4681 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The GePhex Book</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"></HEAD
+><BODY
+CLASS="BOOK"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+>The GePhex Book</A
+></H1
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN4"
+></A
+>Martin Bayer</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+><CODE
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:bayer@fmi.uni-passau.de"
+>bayer@fmi.uni-passau.de</A
+>&#62;</CODE
+></P
+></DIV
+></DIV
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN10"
+></A
+>Georg Seidel</H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+><CODE
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:georg.seidel@web.de"
+>georg.seidel@web.de</A
+>&#62;</CODE
+></P
+></DIV
+></DIV
+><P
+CLASS="COPYRIGHT"
+>Copyright &copy; 2002, 2003 Martin Bayer</P
+><DIV
+><DIV
+CLASS="ABSTRACT"
+><P
+></P
+><A
+NAME="AEN26"
+></A
+><P
+>GePhex is an interactive effect system for video jockeys. The effects can be controlled via external devices like joysticks, webcams or midi-devices. New effects are designed in a GUI (Graphical User Interface) by composing basic effect into more complex ones.</P
+><P
+>This book gives new users an introduction to the GePhex system.  The basic concept of effect-graphs is described. The reader learns how to use the system and the steps to create new effects. One section is for developers who want to create new effect and type plugins.</P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="LEGALNOTICE"
+><P
+></P
+><A
+NAME="AEN16"
+></A
+><P
+>    This document is free; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version. 
+    </P
+><P
+>    This document is distributed in the hope that it will be useful,
+    but <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>WITHOUT ANY WARRANTY</I
+></SPAN
+>; without even the
+    implied warranty of <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE</I
+></SPAN
+>. See the GNU General Public License
+    for more details.
+    </P
+><P
+>    You should have received a copy of the GNU General Public
+    License along with this program; if not, write to the Free
+    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+    MA 02111-1307 USA
+    </P
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>1. <A
+HREF="#AEN29"
+>Introduction</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN31"
+>What is GePhex</A
+></DT
+><DT
+><A
+HREF="#AEN46"
+>GePhex's History</A
+></DT
+><DT
+><A
+HREF="#AEN54"
+>GePhex's Features</A
+></DT
+><DT
+><A
+HREF="#AEN61"
+>Security Note</A
+></DT
+><DT
+><A
+HREF="#AEN64"
+>GePhex's Components</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN66"
+>The Engine</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>2. <A
+HREF="#AEN85"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN90"
+>Building from the Sources.</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN94"
+>Getting the latest CVS Snapshot</A
+></DT
+><DT
+><A
+HREF="#AEN100"
+>Getting a Distribution-Tarball</A
+></DT
+><DT
+><A
+HREF="#AEN107"
+>Bootstrapping</A
+></DT
+><DT
+><A
+HREF="#AEN136"
+>Configure and Build</A
+></DT
+><DT
+><A
+HREF="#AEN163"
+>Installation</A
+></DT
+><DT
+><A
+HREF="#AEN174"
+>Create your own Debian Packages</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN179"
+>Precompiled Versions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN181"
+>Using our APT Repository</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>3. <A
+HREF="#AEN186"
+>Basic Concepts</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN188"
+>The three States of Graphs in the Renderer</A
+></DT
+><DT
+><A
+HREF="#AEN198"
+>Convention for tagging Releases in CVS</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="#AEN219"
+>Guided Tour</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN221"
+>Starting GePhex</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN223"
+>UN*X</A
+></DT
+><DT
+><A
+HREF="#AEN229"
+>WIN32</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN232"
+>The GePhex Graphical User Interface</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN241"
+>Structure of the GUI</A
+></DT
+><DT
+><A
+HREF="#AEN253"
+>The First Graph</A
+></DT
+><DT
+><A
+HREF="#AEN283"
+>Adding Effects to the Graph</A
+></DT
+><DT
+><A
+HREF="#AEN306"
+>Configuring the Graph</A
+></DT
+><DT
+><A
+HREF="#AEN317"
+>Running and controlling the Graph</A
+></DT
+><DT
+><A
+HREF="#AEN331"
+>Saving the Graph</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>5. <A
+HREF="#AEN334"
+>Example Graphs</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN336"
+>Installing the Examles</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN338"
+>Win32</A
+></DT
+><DT
+><A
+HREF="#AEN344"
+>Un*x</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN350"
+>Note on the examples</A
+></DT
+><DT
+><A
+HREF="#AEN354"
+>Example1: Tunnel-Vision</A
+></DT
+><DT
+><A
+HREF="#AEN359"
+>Example2: Plasma</A
+></DT
+><DT
+><A
+HREF="#AEN362"
+>Example3: A simple Feedback Loop</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="#AEN365"
+>Module Reference</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN367"
+>Generators</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN369"
+>ifsmodule</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN381"
+>Input Modules</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN384"
+>libmpeg3module</A
+></DT
+><DT
+><A
+HREF="#AEN388"
+>v4lmodule</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>7. <A
+HREF="#AEN410"
+>Type Reference</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN412"
+>NumberType</A
+></DT
+><DT
+><A
+HREF="#AEN415"
+>FrameBufferType</A
+></DT
+></DL
+></DD
+><DT
+>8. <A
+HREF="#AEN418"
+>Developer Information</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN423"
+>Adding new data types</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN439"
+>The c-API</A
+></DT
+><DT
+><A
+HREF="#AEN839"
+>An example for a new datatype</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="#AEN872"
+>Adding new effect modules</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="#AEN875"
+>The C-API</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>9. <A
+HREF="#AEN1165"
+>Old text describing GePhex</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Tables</B
+></DT
+><DT
+>3-1. <A
+HREF="#AEN201"
+>Tags for the 0.0.4 Release Cycle</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN29"
+></A
+>Chapter 1. Introduction</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN31"
+>What is GePhex</A
+></H2
+><P
+>GePhex is a software-based interactive video-effect system. Video jockeys can use this system to modify or recombine existing footage or create new video effects in an interactive process. External devices like joysticks, midi-keyboards or webcams can influence the realtime video generation.</P
+><P
+>The software allows the construction and modification of video-effects on different levels:
+
+<P
+></P
+><UL
+><LI
+><P
+>The users view of a video-effect is a signal-flow graph with sources, modifiers and destinations. The signals in these effect-graphs are typed. That means the inputs and outputs of the module have types e.g. video-signal, color or number. The user can create complex effects by connecting inputs and outputs of the same type.</P
+></LI
+><LI
+><P
+>Not all inputs must be connected. The user can change the value directly at the inputs with the GUI. This allows the video jockey to save so called snapshots of effect-graphs and to switch between these parameter sets.</P
+></LI
+><LI
+><P
+>The generation process can be influenced by the environment with two methods. Special source-modules inject data from hardware devices like midi-devices, webcam or joysticks. It is also possible to connect special GUI elements with the inputs of a module.</P
+></LI
+><LI
+><P
+>An arrangement of effects on the timeline is possible with the sequence and playlist feature.</P
+></LI
+><LI
+><P
+>Developers can extend the system with the plugin mechanism for modules and types.</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN46"
+>GePhex's History</A
+></H2
+><P
+>&#13;<P
+></P
+><UL
+><LI
+><P
+>The project started in the late summer 2001.</P
+></LI
+><LI
+><P
+>In autumn 2002 was the first public vjing session at the fmi party on the campus of the university of Passau, Germany.</P
+></LI
+></UL
+>&#13;</P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN54"
+>GePhex's Features</A
+></H2
+><P
+></P
+><UL
+><LI
+><P
+>It is Free Software. You can use, distribute and modify GePhex under the terms of the GPL.</P
+></LI
+><LI
+><P
+>GePhex is a multi platform project. Supported operating systems are Win32 and Linux. Ports to the BSD operating systems are planned.</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN61"
+>Security Note</A
+></H2
+><P
+>With the default configuration the GePhex engine listens at the tcp port 6666. The GUI connects to this port and controls the engine. There is no authentification necessary to connect to the engine.
+This could be a security hole if used in a hostile environment. Never start this software as root and don't use it in an network that is connected to the internet without protection (e.g. a firewall).</P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN64"
+>GePhex's Components</A
+></H2
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN66"
+>The Engine</A
+></H3
+><P
+>The engine can be started on the console with the <TT
+CLASS="FILENAME"
+>gephex-engine</TT
+> command. At the moment there are no command-line options and environment variables that influence the behaviour. All options are set in the configuration file <TT
+CLASS="FILENAME"
+>~/.gephex/engine.conf</TT
+>. If no file exists a default configuration file is created.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>conf {
+module_dirs=[/usr/lib/gephex/modules/]
+type_dirs=[/usr/lib/gephex/types/]
+graph_dir=[/home/martin/.gephex/graphs/]
+sequence_dir=[/home/martin/.gephex/sequences/]
+playlist_dir=[/home/martin/.gephex/playlists/]
+ipc_type=[inet]
+ipc_unix_node_prefix=[/tmp/gephex_socket_]
+ipc_port=[6666]
+}</PRE
+></TD
+></TR
+></TABLE
+>
+<VAR
+CLASS="VARNAME"
+>module_dirs</VAR
+> is the absolute path to the directory with the effect plugins. The shared libraries for the types are stored in the <VAR
+CLASS="VARNAME"
+>type_dirs</VAR
+>. In future versions there should be the possibility for multiple paths for both directories. The triple <VAR
+CLASS="VARNAME"
+>graph_dir</VAR
+>, <VAR
+CLASS="VARNAME"
+>sequence_dir</VAR
+> and <VAR
+CLASS="VARNAME"
+>playlist_dir</VAR
+> tells the engine the location, where to store the user created data objects. The user interface must connect to the engine with a ipc mechanism <VAR
+CLASS="VARNAME"
+>ipc_type</VAR
+>. You can select between <VAR
+CLASS="LITERAL"
+>inet</VAR
+> for a internet-protocol based communication, on Unix platforms <VAR
+CLASS="LITERAL"
+>unix</VAR
+> for Unix domain sockets and <VAR
+CLASS="LITERAL"
+>namedpipe</VAR
+> for named pipes on win32 systems. If engine and GUI run on the same host the usage of non ip based communication is preferred cause of the low latency behaviour. The parameters <VAR
+CLASS="LITERAL"
+>ipc_unix_node_prefix</VAR
+> and <VAR
+CLASS="LITERAL"
+>ipc_port</VAR
+> must equal to the ones in the <TT
+CLASS="FILENAME"
+>~/.gephex/gui.conf</TT
+> file.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN85"
+></A
+>Chapter 2. Installation</H1
+><P
+>Since GePhex is free software you can get the source code and compile it on you own.
+Or if you have one of our core platforms you can download the precompiled binaries from our <A
+HREF="http://gephex.sourceforge.net"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>website</I
+></A
+>.</P
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN90"
+>Building from the Sources.</A
+></H2
+><P
+>    It is not very difficult to compile your own version of GePhex.
+    If you already installed software with "configure" and "make install"
+    there should be no big surprises for you here.
+  </P
+><P
+>    Before we can start we must get a version of the GePhex source code.
+    There are official releases as tarballs on the website and the
+    developer versions available via CVS.
+  </P
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN94"
+>Getting the latest CVS Snapshot</A
+></H3
+><P
+>      To get the developer version from the cvs you need to connect to the
+      server. When prompted for the password of the anonymous user,
+      leave that empty and press the enter key.
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~$ cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/gephex login
+Logging in to :pserver:anonymous@cvs.sourceforge.net:2401/cvsroot/gephex
+CVS password:
+bash@host:~$ 
+      </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>      The sources are stored in the GePhex module.
+      To get a clean copy use the checkout command. This creates the
+      GePhex subdirectory with the source tree.
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~$ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/gephex co GePhex
+cvs server: Updating GePhex
+U GePhex/AUTHORS
+U GePhex/BUGS
+U GePhex/ChangeLog
+U GePhex/INSTALL
+...
+      </PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN100"
+>Getting a Distribution-Tarball</A
+></H3
+><P
+>      Visit our
+      <A
+HREF="http://gephex.sourceforge.net/index.php?page=downloads"
+TARGET="_top"
+>        <I
+CLASS="CITETITLE"
+>download page</I
+>
+      </A
+> and get a release.
+       Let's assume the tarball is called 
+       <TT
+CLASS="FILENAME"
+>gephex-0.0.4.tar.gz</TT
+>.
+      Just unpack the file.
+     <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~$ tar xvzf gephex-0.0.4.tar.gz
+gephex-0.0.4/AUTHORS
+gephex-0.0.4/BUGS
+gephex-0.0.4/ChangeLog
+gephex-0.0.4/INSTALL
+...
+     </PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN107"
+>Bootstrapping</A
+></H3
+><P
+>     This step is only necessary when you got the sources from CVS. The
+     distributed tarballs are already "bootstrapped".
+   </P
+><P
+>      To do the bootstrapping, you need some additional software.
+      This includes autoconf and automake and some additional packages
+      to build the documentation etc.
+   </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="/usr/share/sgml/docbook/stylesheet/dsssl/modular/images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>       When installing from a tarball, this software is *not* needed!
+     </P
+><P
+>   </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+></P
+><UL
+><LI
+><P
+>       <A
+HREF="http://www.gnu.org/software/autoconf/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> autoconf</I
+></A
+>
+       <A
+HREF="http://www.gnu.org/software/automake/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> automake</I
+></A
+>
+       <A
+HREF="http://www.gnu.org/software/libtool/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> libtool</I
+></A
+>
+     </P
+></LI
+><LI
+><P
+>       <A
+HREF="http://www.python.org/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> python</I
+></A
+>
+     </P
+></LI
+><LI
+><P
+>       <A
+HREF="http://sgmltools-lite.sourceforge.net/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> sgmltools-lite</I
+></A
+>
+       <A
+HREF="http://sources.redhat.com/docbook-tools/"
+TARGET="_top"
+>         <I
+CLASS="CITETITLE"
+> docbook-utils</I
+></A
+>
+     </P
+></LI
+></UL
+><P
+>  GePhex uses autoconf and automake for the configuration and generation of
+  the Makefiles.
+  Use the script <TT
+CLASS="FILENAME"
+>bootstrap.sh</TT
+> to create the
+  build-system without further intervention.
+  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~$ cd GePhex
+bash@host:~/GePhex$./bootstrap.sh
+running aclocal ...
+running libtoolize --force ...
+running autoheader ...
+running automake --add-missing --copy ...
+running autoconf ...
+
+./configure has been succesfully built!
+See './configure --help' for available options 
+  </PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN136"
+>Configure and Build</A
+></H3
+><P
+>    This step configures the build system for your system.
+    You need the following libraries to get all the features of GePhex:
+
+    <P
+></P
+><UL
+><LI
+><P
+>        <A
+HREF="http://doc.trolltech.com/3.1/index.html"
+TARGET="_top"
+>          <I
+CLASS="CITETITLE"
+> libqt</I
+></A
+>
+        <A
+HREF="http://www.xfree.org/"
+TARGET="_top"
+>          <I
+CLASS="CITETITLE"
+> xlib</I
+></A
+>
+      </P
+></LI
+><LI
+><P
+>        <A
+HREF="http://www.libsdl.org/index.php"
+TARGET="_top"
+>          <I
+CLASS="CITETITLE"
+> libsdl</I
+></A
+>
+        <A
+HREF="http://www.libpng.org/pub/png/libpng.html"
+TARGET="_top"
+>          <I
+CLASS="CITETITLE"
+> libpng</I
+></A
+>
+        <A
+HREF="http://www.mesa3d.org/"
+TARGET="_top"
+>          <I
+CLASS="CITETITLE"
+> mesa</I
+></A
+>
+      </P
+></LI
+></UL
+>
+  </P
+><P
+>    At the very least you should have libqt and xlib installed.
+    If not the GUI will not be built.
+  </P
+><P
+>    At this point you can choose the location where the software should be
+    installed. Some special options to include/exclude features can
+    also be activated here.
+    E.g. if you have a recent x86 processor you could enable the faster MMX
+    implementation for some modules.
+  </P
+><P
+>    To see the available options you can use the
+    <TT
+CLASS="FILENAME"
+> configure </TT
+> script:
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~/GePhex$./configure --help
+`configure' configures this package to adapt to many kinds of systems.
+...
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+...
+Optional Features:
+...
+  --enable-mmx            Turn on MMX support. Still runs on x86 that don't
+                          have MMX!
+  --enable-serialize-framebuffer
+                          Serialize the framebuffer type (for previews in the
+                          gui).
+
+ Optional Packages:
+...
+  --with-effectv=dir      Compile with effectv. Needs effectv source files.
+                          You must provide the effectv src dir. Example:
+                          --with-effectv=/home/georg/effectv-0.38
+     
+...
+    </PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>    So let's do the actual configuration:
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~/GePhex$ ./configure --enable-mmx --with-v4l --prefix=/usr
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for g++... g++
+...
+    </PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><P
+>    Lets now start the actual build process.
+    Dependent on you system this could take a long time.
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~/GePhex$ make
+make  all-recursive
+make[1]: Entering directory `/home/martin/code/gephex/GePhex'
+Making all in base
+make[2]: Entering directory `/home/martin/code/gephex/GePhex/base'
+Making all in src
+make[3]: Entering directory `/home/martin/code/gephex/GePhex/base/src'
+...
+    </PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN163"
+>Installation</A
+></H3
+><P
+>    The following command installs the software on your system.
+    The two binaries for the user interface <TT
+CLASS="FILENAME"
+>gephex-gui</TT
+>
+    and the rendering engine <TT
+CLASS="FILENAME"
+>gephex-engine</TT
+> will be
+    installed in the <TT
+CLASS="FILENAME"
+>PREFIX/bin</TT
+> directory and the
+    location of the plugins is in <TT
+CLASS="FILENAME"
+>PREFIX/lib/gephex</TT
+>.
+    <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~/GePhex# make install
+    </PRE
+></TD
+></TR
+></TABLE
+>
+  </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="/usr/share/sgml/docbook/stylesheet/dsssl/modular/images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>      You might need to be root to install (depending on the 
+      installation prefix you chose).
+    </P
+><P
+>  </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN174"
+>Create your own Debian Packages</A
+></H3
+><P
+>  TODO: Does this work in the sources from a dist tar.gz, too?</P
+><P
+>Users of the Debian GNU/Linux OS can create Debian binary packages from the source and install these with dpkg. Just change in the root to the Source tree and invoke the dpkg-buildpackages. After a successful build you can install the generated packages.
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~/GePhex$ fakeroot dpkg-buildpackages
+bash@host:~/GePhex$ sudo dpkg -i ../gephex*.deb</PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN179"
+>Precompiled Versions</A
+></H2
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN181"
+>Using our APT Repository</A
+></H3
+><P
+>The Debian binary package format is the common way to install software on a Debian GNU/Linux system. Using the dpkg, a medium-level tool to install, build, remove and manage Debian GNU/Linux packages, the system stays in a consistent state after changes to the software installation or configuration. The proper deinstallation and upgrade to a other version of the application package is guaranteed.</P
+><P
+>Add the GePhex apt repository lines to your /etc/apt/sources.list and install GePhex with apt-get:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="SCREEN"
+>bash@host:~$ sudo cat &#62;&#62; /etc/apt/sources.list
+deb http://gephex.sourceforge.net/debian/ stable main 
+bash@host:~$ sudo apt-get install gephex</PRE
+></TD
+></TR
+></TABLE
+>
+If your Debian GNU/Linux distribution is testing or unstable you have to replace the stable in the apt line with your distribution name.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN186"
+></A
+>Chapter 3. Basic Concepts</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN188"
+>The three States of Graphs in the Renderer</A
+></H2
+><P
+>The Renderer knows there states for an graph:
+<P
+></P
+><UL
+><LI
+><P
+>The graph is not loaded. No internal state of the modules is stored and obvious no calculation is done in this state.</P
+></LI
+><LI
+><P
+>The graph is loaded in the renderer. The Modules remember their internal states e.g. the framebuffer of an xfader with loopback. But now calculation is allowed in this state.</P
+></LI
+><LI
+><P
+>Only in the state active are any calculations done.</P
+></LI
+></UL
+></P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN198"
+>Convention for tagging Releases in CVS</A
+></H2
+><P
+> All release-related tags should start with RELEASE followed by the
+ version number and one of the states alpha, beta and release followed by
+ a sub-state number for the pre-release states.</P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AEN201"
+></A
+><P
+><B
+>Table 3-1. Tags for the 0.0.4 Release Cycle</B
+></P
+><TABLE
+BORDER="1"
+FRAME="border"
+RULES="all"
+CLASS="CALSTABLE"
+><COL><TBODY
+><TR
+><TD
+>name of the release tag</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_alpha_1</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_alpha_2</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_beta_1</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_beta_2</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_beta_3</TD
+></TR
+><TR
+><TD
+>RELEASE_0_0_4_released</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN219"
+></A
+>Chapter 4. Guided Tour</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN221"
+>Starting GePhex</A
+></H2
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN223"
+>UN*X</A
+></H3
+><P
+>          You can start GePhex by executing 
+          <TT
+CLASS="FILENAME"
+>gephex-engine</TT
+> and
+          <TT
+CLASS="FILENAME"
+>gephex-gui</TT
+> in a shell (in that order).
+       </P
+><P
+>          If you chose your own prefix for the install, make sure the 
+          binaries are in the path.
+       </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN229"
+>WIN32</A
+></H3
+><P
+>          Just go into the bin directory of your GePhex directory and
+          execute the engine and the GUI (in that order).
+       </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN232"
+>The GePhex Graphical User Interface</A
+></H2
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_1.jpg"><DIV
+CLASS="CAPTION"
+><P
+> The GUI (just started). </P
+></DIV
+></P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN241"
+>Structure of the GUI</A
+></H3
+><P
+>        As you can see in the image, the GUI (Graphical User Interface)
+        is divided into four major areas.
+        The areas are marked with a red pen.
+        <P
+></P
+><UL
+><LI
+><P
+>              1: Info-window. Used for properties of effects,
+              loading and saving effect-graphs, sequences, and playlists.
+            </P
+></LI
+><LI
+><P
+>              2: Graph-window. Used to edit effect-graphs.
+            </P
+></LI
+><LI
+><P
+>              3: Control-window. Used to control running effect-graphs.
+            </P
+></LI
+><LI
+><P
+>              4: Message- and sequence-window. Used to display error
+              and warning messages and to edit sequences.
+            </P
+></LI
+></UL
+>
+     </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN253"
+>The First Graph</A
+></H3
+><P
+>        The most important concept for using GePhex is that of an effect-graph.
+        An effect-graph is a number of simple basic effects, combined to
+        perform a more complex effect.
+     </P
+><P
+>        Since GePhex works on graphs, we have to tell it which graph
+        we want to edit.
+        Do this by clicking on the "Graphen" tab in the info-window.
+        To create a new graph, right-click on the "Graphen" item inside the
+        tab (see next image).
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_2.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Creating a graph </P
+></DIV
+></P
+></DIV
+><P
+>        When the context-menu opens up, just select "New Graph".
+        Enter "first" in the dialog.
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_3.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Choosing the name of the graph </P
+></DIV
+></P
+></DIV
+><P
+>       Now you see another item called "first" in the tree-view below
+       "default". This is our new graph.
+       To activate it, click on the arrow (or plus symbol) left to "first".
+       Click on the appearing child item "default".
+     </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="/usr/share/sgml/docbook/stylesheet/dsssl/modular/images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>         This child item is a "snapshot" of the graph. For now you just
+         need to know, that you need one active graph with one active snapshot
+         in order to create an effect.
+       </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>       The letters "r" and "e"
+       tell you that graph "first" is active (with current snapshot "default").
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_4.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Activating the graph </P
+></DIV
+></P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN283"
+>Adding Effects to the Graph</A
+></H3
+><P
+>       Now we have created a new graph. But it is not very useful yet, because
+       it is empty. So let's create some effects.
+     </P
+><P
+>       To do so, open the "Effekte" menu in the top-level menu-bar.
+       Choose "Quellen"-&#62;"Bitmap Loader".
+       Then click into the graph window as shown in the next image.
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_5.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Adding an basic effect </P
+></DIV
+></P
+></DIV
+><P
+>       Do the same for "Effekte"-&#62;"Outputs"-&#62;"X11 Output" 
+       (or "GDI Output" on win32) and "Effekte"-&#62;"Filter"-&#62;"FlashFader".
+       Arrange them as in the next image (You can simply move them around with
+       the mouse).
+     </P
+><P
+>       The red boxes on the left side of the basic effects are
+       inputs, the blue buttons on the right are outputs.
+     </P
+><P
+>       Connect the effects as shown in the next picture:
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_6.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Connecting effects </P
+></DIV
+></P
+></DIV
+><P
+>       The graph we have created so far is still very simple. In fact,
+       you would not call such a graph an effect at all.
+       What it does is simply loading a bitmap, eventually flashing it and
+       displaying it to screen.
+     </P
+><P
+>       You can think of this graph in terms of data flow:
+       data comes from a source (the bitmap loader), flows through the
+       flash-fader filter and is displayed in the sink (the output).
+     </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN306"
+>Configuring the Graph</A
+></H3
+><P
+>        This is simple. We just choose a bitmap.
+        Right-click on the "Bitmap-loader"-effect and choose "Properties"
+        in the context menu. Now the info-window displays the properties
+        of the bitmap effect:
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_7.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Properties </P
+></DIV
+></P
+></DIV
+><P
+>       Click on the button next to "Dateiname" and choose a nice bmp file.
+     </P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN317"
+>Running and controlling the Graph</A
+></H3
+><P
+>        Simple again. Just click on the little red fellow on the bottom right.
+        You should see the output window opening and displaying the bmp file
+        you chose.
+        To inform you that it is running, GePhex turns the red fellow to a
+        green fellow.
+     </P
+><P
+>        To control the flash-fader effect we must add a control at the upper
+        input of the flash-fader.
+        The following picture explains how you can add a control to an input: 
+     </P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/gui_8.jpg"><DIV
+CLASS="CAPTION"
+><P
+> Creating a control </P
+></DIV
+></P
+></DIV
+><P
+>       Just try it!
+     </P
+><DIV
+CLASS="NOTE"
+><P
+></P
+><TABLE
+CLASS="NOTE"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="/usr/share/sgml/docbook/stylesheet/dsssl/modular/images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>         GePhex must be running for the control changes to take effect!.
+       </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN331"
+>Saving the Graph</A
+></H3
+><P
+>        Click on the "Graphen" tab in the info-window.
+        Right-click on "first" and choose "Save Graph".
+        Done. The graph will be already there when you start next time.
+     </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN334"
+></A
+>Chapter 5. Example Graphs</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN336"
+>Installing the Examles</A
+></H2
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN338"
+>Win32</A
+></H3
+><P
+>  All following paths are relative to your GePhex distribution dir
+  (for example <TT
+CLASS="FILENAME"
+>c:\programs\GePhex-0.0.4alpha\</TT
+>).
+  Just copy the files in <TT
+CLASS="FILENAME"
+>examples\graphs</TT
+>
+  into <TT
+CLASS="FILENAME"
+>graphs</TT
+> and restart GePhex if it is running.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN344"
+>Un*x</A
+></H3
+><P
+>   Copy the files in
+   <TT
+CLASS="FILENAME"
+>[your gephex source dir]/examples/graphs</TT
+>
+   to <TT
+CLASS="FILENAME"
+>~/.gephex/graphs</TT
+>.
+   The <TT
+CLASS="FILENAME"
+>~/.gephex</TT
+> directory is created the first
+   time you start GePhex.
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN350"
+>Note on the examples</A
+></H2
+><P
+>    The example graphs are not complete. To use them, you must
+    add an output module. For Un*x, we suggest the X11Output.
+    For Win32 we suggest the GDIOutput.
+  </P
+><P
+>    The output module should be connected to the rightmost module of each
+    example graph.
+  </P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN354"
+>Example1: Tunnel-Vision</A
+></H2
+><P
+>     Shows how to use the tunnel.
+  </P
+><P
+>     Try to attach the bitmap module instead of the isingnoize.
+     (Don't forget to choose a bitmap as shown in the Guided Tour).
+  </P
+><P
+>     Of course you can attach an avimodule too, to watch your favourite
+     movie inside the tunnel...
+  </P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN359"
+>Example2: Plasma</A
+></H2
+><P
+>     Simple plasma effect graph.
+  </P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN362"
+>Example3: A simple Feedback Loop</A
+></H2
+><P
+>     Try to change the zoom and rotation of the rotozoom-module.
+     If you choose the right parameters, it should look like if you film
+     a monitor that displays what you film...
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN365"
+></A
+>Chapter 6. Module Reference</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN367"
+>Generators</A
+></H2
+><DIV
+CLASS="SECT2"
+><H3
+CLASS="SECT2"
+><A
+NAME="AEN369"
+>ifsmodule</A
+></H3
+><P
+>Linear iterated function systems are a fractal type. The module renders these kind of ifs parameter sets to a image.</P
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="images/ifs.jpg"><DIV
+CLASS="CAPTION"
+><P
+>      This IFS fractal is rendered in gray scale mode.
+      </P
+></DIV
+></P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN381"
+>Input Modules</A
+></H2
+><P
+>In this section all modules are listed, who's main goal is to inject data in from external sources in signal graph.</P
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN384"
+>libmpeg3module</A
+></H3
+><P
+>This module has only one input. This is the name of a video file. The module opens and decodes this. The frames are exported to the output. The resolution is the original of the video stream.</P
+><P
+>Supported file formats are mpeg1 and mpeg2 ...</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN388"
+>v4lmodule</A
+></H3
+><P
+>Video4linux is the original video capture/overlay API of the linux kernel. It is based on the API introduced by the bttv driver. It seems that v4l will be replaced in the next stable linux kernel by its successor <A
+HREF=" http://bytesex.org/v4l/spec/"
+TARGET="_top"
+> <I
+CLASS="CITETITLE"
+>Video for Linux Two</I
+></A
+> but at the moment no distribution has support for that API in its precompiled kernels. Support for this API is planned.</P
+><P
+>The first input is the filename of the video device. This is normally /dev/videoX where X is the number of the device. It is possible to switch the device during rendering. An invalid device results in a black output screen. The device is opened the first time the output of the module is used and closed with quit of the gephex-engine. A manual unloading of the module can also free the device handles. The other two inputs force the size of the grabbed image. If the device doesn't support that resolution a black frame is generated. A resolution 0,0 forces the module to choose any capable resolution. The output is either the grabbed frame from the v4l device or in case of an error a black, fully transparent 1x1 image.</P
+><P
+>The current version of this module is tested with the 2.4.20 kernel drivers of the the <A
+HREF="http://www.smcc.demon.nl/webcam/"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>usb webcam PCVC740K "ToUCam Pro"</I
+></A
+> from Phillips and the <A
+HREF="http://bytesex.org/bttv/"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>pci bttv848 frame-grabber card win-TV radio</I
+></A
+>.</P
+><P
+>known bugs:
+<P
+></P
+><UL
+><LI
+><P
+>A error in the yuv2rgb conversion function creates sometimes  a broken bottom line.</P
+></LI
+><LI
+><P
+>The capturing process is not while one update of the module. it is between two updates. If update isn't called every frame e.g. cause the branch isn't needed the module delivers one old frame with the first update. One solution is the check system time and check for dropped frames</P
+></LI
+><LI
+><P
+>the memory of the output frame is allocated in the module and not the resize code of the framebuffertype is called</P
+></LI
+></UL
+></P
+><P
+>Further informations about video4linux driver- and user-space programming can be found in the kernel documentation (kernel-source-2.4.20/Documentation/video4linux/API.html and kernel-source-2.4.20/Documentation/DocBook/videobook.tmpl) and in the <A
+HREF="https://listman.redhat.com/mailman/listinfo/video4linux-list"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>video4linux mailing list</I
+></A
+>.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN410"
+></A
+>Chapter 7. Type Reference</H1
+><DIV
+CLASS="SECT1"
+><H2
+CLASS="SECT1"
+><A
+NAME="AEN412"
+>NumberType</A
+></H2
+><P
+>    64 bit IEEE floating-point value.
+  </P
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN415"
+>FrameBufferType</A
+></H2
+><P
+>     32-bit BGRA Framebuffertype.
+     Orientation is top-down (topmost line is first line in memory).
+  </P
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN418"
+></A
+>Chapter 8. Developer Information</H1
+><P
+>The last chapter described the core effect-modules and data-types included with the GePhex package. None of these are hard-coded in the GePhex engine. All of them are plugins that are loaded at startup time.</P
+><P
+>This part describes the design for the plugin interfaces.</P
+><P
+>The main design goal for these two interfaces was simplicity. It should be possible for a programmer to create a new effect within hours and not days. For the modules there exists a code generator which generates Makefiles, stub code and templates to free the programmer from cut and copy operations.</P
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN423"
+>Adding new data types</A
+></H2
+><P
+>The focus of the GePhex Framework are streams of video-data. The video streams flow from video sources to the output sinks. To control this flow other types of streams are needed. From simple numbers for controlling the video mixers to complex data types for some special effects, we need different types in the data-flow graph.</P
+><P
+>The system must be extendible to audio, color-palettes and whatever will be interesting in the future. The types in GePhex are just plugins. You can extend the gephex system with support for new types by providing a shared library, that exports the implementation of a special c-API. The GePhex system loads this library at runtime and creates a type class.</P
+><P
+>Recently the midi-type was added. And now we have a module that injects the incoming data from the midi interface into the signal graph. Another module converts the midi-type stream and several number-type outputs. This way, effects with number-types as inputs can be controlled via midi-devices. No changes or rebuilds of the GePhex base system were necessary to add this functionality.</P
+><P
+>The modules receive typed values and generate others. Why does the engine need to know anything about the types? Isn't it enough that the affected modules know about the type?</P
+><P
+>It is right that the engine doesn't need many internals of the types to do its job, but there are some actions the engine must take care of:</P
+><P
+><P
+></P
+><UL
+><LI
+><P
+>Provide some informations like the name to the user</P
+></LI
+><LI
+><P
+>The renderer must create default values for unconnected inputs</P
+></LI
+><LI
+><P
+>The value of type objects must be transfered in a serialised form to the user front-end</P
+></LI
+></UL
+></P
+><P
+>These the type plugins are like the module plugins shared libraries. They export pointers to functions. The engine then calls these functions if necessary. The symbol names, the signature and the semantic of these are described in the next section.</P
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN439"
+>The c-API</A
+></H3
+><P
+>A GePhex data type plugin is a shared library. There is exact one data type in each library file. The file suffix is .so on the Unix platforms and .dll on ms windows system. Each library exports a set of function symbols as defined in the following section.</P
+><P
+>The GePhex type API consists of a required and an additional part. Every type plugin must implement the required part. The loader of a type plugin must ignore plugins that don't export these symbols. By implementing functions of the additional part the serialisation and automatic subtype conversion functionality can be enabled. But not for all effects these features are necessary.</P
+><P
+>The first group of function are independent of type instances. The functions <CODE
+CLASS="FUNCTION"
+>init</CODE
+> and <CODE
+CLASS="FUNCTION"
+>shutdown</CODE
+> handle the (un)loading of the plugin. <CODE
+CLASS="FUNCTION"
+>getInfo</CODE
+> and <CODE
+CLASS="FUNCTION"
+>getSpec</CODE
+> allow the host application to query information about the type from the plugin.</P
+><P
+>The second group is instance based. There are functions to create and destroy type objects like <CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> and <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+>. Others <CODE
+CLASS="FUNCTION"
+>assign</CODE
+> and <CODE
+CLASS="FUNCTION"
+>convertType</CODE
+> instances. The created instances are identified by objects of the type TypeInstanceID this is a unique id with the size of a pointer. It is up to the user of the type plugin to ensure not to mix type object identifier and functions of different types.</P
+><P
+>There are two optional features a type can provide: (de)serialisation and type attributes.</P
+><P
+> &#13;</P
+><P
+>Type attributes describe different representations of values and allow to convert between them. A color is can be in the RGB, YUV or HSV color-space. The color doesn't change if the convert between them. It is just the representation that changes. A color type can have a attribute color-space and some functions to convert transparent from one space to another. Types that have attributes must implement <CODE
+CLASS="FUNCTION"
+>convertType</CODE
+> and <CODE
+CLASS="FUNCTION"
+>attributesEqual</CODE
+>.</P
+><P
+>To store type instances or to transfer them via network it isn't enough to store/transfer the TypeInstanceID we must store the real value not the identifier. The functions <CODE
+CLASS="FUNCTION"
+>serialize</CODE
+> and <CODE
+CLASS="FUNCTION"
+>deSerialize</CODE
+> convert type instances to a byte-stream and back.</P
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN461"
+>Required methods</A
+></H4
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="#TYPE-API-INIT"
+>init</A
+>&nbsp;--&nbsp;initializes the type plugin</DT
+><DT
+><A
+HREF="#TYPE-API-SHUTDOWN"
+>shutDown</A
+>&nbsp;--&nbsp;destructs the type plugin.</DT
+><DT
+><A
+HREF="#TYPE-API-GETINFO"
+>getInfo</A
+>&nbsp;--&nbsp;querys the user description of the type</DT
+><DT
+><A
+HREF="#TYPE-API-GETSPEC"
+>getSpec</A
+>&nbsp;--&nbsp;Returns the spec string of type.</DT
+><DT
+><A
+HREF="#TYPE-API-NEWINSTANCE"
+>newInstance</A
+>&nbsp;--&nbsp;creates a new instance of the type</DT
+><DT
+><A
+HREF="#TYPE-API-DELETEINSTANCE"
+>deleteInstance</A
+>&nbsp;--&nbsp;deletes a instance of the type</DT
+><DT
+><A
+HREF="#TYPE-API-ASSIGN"
+>assign</A
+>&nbsp;--&nbsp;      Assigns the value of the source to the destination typeobject.
+    </DT
+></DL
+></DIV
+><H1
+><A
+NAME="TYPE-API-INIT"
+></A
+>init</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN464"
+></A
+><H2
+>Name</H2
+>init&nbsp;--&nbsp;initializes the type plugin</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN467"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN468"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int init</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN474"
+></A
+><H2
+>Description</H2
+><P
+>This function initializes the type plugin. It must be called by the shared library loader after resolving all symbols. It may not be called if any error occures while loading the plugin.  No other method of this type class may be called before calling this.</P
+><P
+>You can e.g. allocate static memory common to all types in this function to use a memory pool.</P
+><P
+>All resources allocated in init must be deallaocated in the shutDown function.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN479"
+></A
+><H2
+>Return Value</H2
+><P
+>The init function returns a 1 if the type could be initialized and 0 in case of an error. In case of an error no other function (not even the shutdown) may be called.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-SHUTDOWN"
+></A
+>shutDown</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN483"
+></A
+><H2
+>Name</H2
+>shutDown&nbsp;--&nbsp;destructs the type plugin.</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN486"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN487"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void shutDown</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN493"
+></A
+><H2
+>Description</H2
+><P
+>This function closes the type library. Before calling it all type instances must be destructed. It must be called before unloading the dll.  After calling shutdown no other method of the type plugin may be called.</P
+><P
+>You should free all resources (memory, devices) allocated in init here.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-GETINFO"
+></A
+>getInfo</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN498"
+></A
+><H2
+>Name</H2
+>getInfo&nbsp;--&nbsp;querys the user description of the type</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN501"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN502"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int getInfo</CODE
+>(char* buf, int bufLen);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN510"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>buf</VAR
+></DT
+><DD
+><P
+>This is a pointer to a buffer of size bufLen. This buffer can be modified by the method. If the buffer is big enough the info string is written in it.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>bufLen</VAR
+></DT
+><DD
+><P
+>bufLen is the size of the buffer buf in bytes.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN523"
+></A
+><H2
+>Description</H2
+><P
+>The getInfo function allows the caller to query some information about the type plugin. These are intended for the user presentation and not needed for rendering an effect. At the moment the caller can get a short description of the type. In the future extensions for i18n, icons and color information will be supported.</P
+><P
+>The semantic of this function is that the caller provides a pointer to an allocated array buf of size bufLen. If the infostring fits in that array the string is written in the buffer and the size of the zero-terminated string is returned. If the buffer is to small no changes to the buffer are applied and the needed size is returned.</P
+><P
+>The format of the information string is composed like the following example.</P
+><P
+>  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>    "info { name=Palette }"
+  </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+> &lt;INFOSTRING&gt; := info { (&lt;ATTRIBUTENAME&gt;=&lt;ATTRIBUTEVALUE&gt;)+ }</P
+><P
+>At the moment name ist the only attribute that is used.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN532"
+></A
+><H2
+>Return Value</H2
+><P
+>It returns the size of the 0 terminated string written in the buffer. If the buffer was to small to store all requested information the needed size is returned and the buffer stays unchanged.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-GETSPEC"
+></A
+>getSpec</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN536"
+></A
+><H2
+>Name</H2
+>getSpec&nbsp;--&nbsp;Returns the spec string of type.</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN539"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN540"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>const char* getSpec</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN546"
+></A
+><H2
+>Description</H2
+><P
+>This method returns the specification string of type. This is a c-string with some properties about the type. At the moment this is just the identifier of the type. It is neccessary that this id string is unique cause the type checking in the engine is based on this property.</P
+><P
+>For a type called IntType the c-string would look like this:</P
+><P
+> <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>  "typ_spec { name=typ_IntType; }" 
+ </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+> &lt;SPECSTRING&gt; := typ_spec { (&lt;ATTRIBUTENAME&gt;=&lt;ATTRIBUTEVALUE&gt;)+ }</P
+><P
+>The name attribute is the only type property used in this version of the api.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN554"
+></A
+><H2
+>Return Value</H2
+><P
+>The method returns the specification data encoded as a zero terminated string. The pointer to this string is valid till calling shutDown.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-NEWINSTANCE"
+></A
+>newInstance</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN558"
+></A
+><H2
+>Name</H2
+>newInstance&nbsp;--&nbsp;creates a new instance of the type</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN561"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN562"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>TypeInstanceID newInstance</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN568"
+></A
+><H2
+>Description</H2
+><P
+>The <CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> function creates a new instance of the type. The return value is an identifier with the same memory layout as a pointer. It identifies the typeobject in subsequent calls to the functions of the same type. In most cases this will be a pointer to the memory area allocated to hold the value of the object, but it is not garanteed that this is true. There are different identification mechanisms possible.</P
+><P
+>The type objects created by this constructor must be destroyed with a call to the same types <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+> function. Before calling <CODE
+CLASS="FUNCTION"
+>shutDown</CODE
+> all instances must be deleted.</P
+><P
+></P
+><P
+>The created type object has a value, the default value.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN577"
+></A
+><H2
+>Return Value</H2
+><P
+>The function <CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> returns a object with the size of a pointer that identifies the type object. This should only passed as an identifier to the type api methods of the same plugin. The caller must ensure not to mix these identifier with the ones of different types.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-DELETEINSTANCE"
+></A
+>deleteInstance</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN582"
+></A
+><H2
+>Name</H2
+>deleteInstance&nbsp;--&nbsp;deletes a instance of the type</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN585"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN586"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void deleteInstance</CODE
+>(TypeInstanceID instance);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN593"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>instance</VAR
+></DT
+><DD
+><P
+>This is the identifier of the instance to delete.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN601"
+></A
+><H2
+>Description</H2
+><P
+>After using a type object for the last time it must be deleted to free all reserved resources like memory or temporary discspace. <VAR
+CLASS="VARNAME"
+>instance</VAR
+> identifies the type object created with the <CODE
+CLASS="FUNCTION"
+>createInstance</CODE
+> function of the same type. The caller must ensure not to mix the type identifiers of one type with the functions of another type. After calling this method the object <VAR
+CLASS="VARNAME"
+>instance</VAR
+> is invalid. The instance identifier mustn't used anymore. All type instances created with <CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> must be destroyed with <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+> before calling <CODE
+CLASS="FUNCTION"
+>shutDown</CODE
+> of their type.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-ASSIGN"
+></A
+>assign</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN611"
+></A
+><H2
+>Name</H2
+>assign&nbsp;--&nbsp;      Assigns the value of the source to the destination typeobject.
+    </DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN614"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN615"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void assign</CODE
+>(TypeInstanceID destination, TypeInstanceID source);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN624"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>destination</VAR
+></DT
+><DD
+><P
+>The value of this type instance will be changed to the value of <VAR
+CLASS="PARAMETER"
+>source</VAR
+>.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>source</VAR
+></DT
+><DD
+><P
+>The value of this type instance is assigned to the <VAR
+CLASS="PARAMETER"
+>destination</VAR
+> instance. The value of <VAR
+CLASS="PARAMETER"
+>source</VAR
+> stays unchanged.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN640"
+></A
+><H2
+>Description</H2
+><P
+><VAR
+CLASS="VARNAME"
+>source</VAR
+> and <VAR
+CLASS="VARNAME"
+>destination</VAR
+> are identifier for two type objects of the same type as the typeclass. After a call to this function the value of the source object stays unchanged and the value of destination is changed to the one of source. It is the callers task to ensure that both instances and the <CODE
+CLASS="FUNCTION"
+>assign</CODE
+> function have the same type.</P
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN646"
+>Optional methods</A
+></H4
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="#TYPE-API-SERIALIZE"
+>serialize</A
+>&nbsp;--&nbsp;serialize the value</DT
+><DT
+><A
+HREF="#TYPE-API-DESERIALIZE"
+>deSerialize</A
+>&nbsp;--&nbsp;assign the type instance the serilaized value </DT
+><DT
+><A
+HREF="#TYPE-API-ATTRIBUTESEQUAL"
+>attributesEqual</A
+>&nbsp;--&nbsp;      compares attributes with the of one type instance
+    </DT
+><DT
+><A
+HREF="#TYPE-API-CONVERTTYPE"
+>convertType</A
+>&nbsp;--&nbsp;      Assigns the value from src to dst and changes the attributes while doing that.
+    </DT
+></DL
+></DIV
+><H1
+><A
+NAME="TYPE-API-SERIALIZE"
+></A
+>serialize</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN649"
+></A
+><H2
+>Name</H2
+>serialize&nbsp;--&nbsp;serialize the value</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN652"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN653"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int serialize</CODE
+>(TypeInstanceID instance, char* buffer, int bufferLen);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN664"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>instance</VAR
+></DT
+><DD
+><P
+>The value of this type instance will be serialized in the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+>. The value of <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> stays unchanged.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>buffer</VAR
+></DT
+><DD
+><P
+>This is a pointer to an buffer with the size <VAR
+CLASS="PARAMETER"
+>bufferLen</VAR
+>. If the buffer is big enough the value of <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> will be stored serialized in this buffer.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>bufferLen</VAR
+></DT
+><DD
+><P
+>This is the size of the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+> in bytes.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN687"
+></A
+><H2
+>Description</H2
+><P
+>The function serializes the value of <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> into the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+> with the size <VAR
+CLASS="PARAMETER"
+>bufferLen</VAR
+>. If the buffer provided by the caller isn't big enough for the serialized value the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+> is not changed and the required size is returned. In the other case the value of <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> is written as a bytesequence to the front of the buffer and the number of used bytes is returned.</P
+><P
+>This method is optional. If you want to provide the (de)serialisation functionality you must also implement the <CODE
+CLASS="FUNCTION"
+>deSerialize</CODE
+> method.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN697"
+></A
+><H2
+>Return Value</H2
+><P
+>If the buffer is big enough the number of written bytes is returned. In the other case the return value is the number of needed bytes.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-DESERIALIZE"
+></A
+>deSerialize</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN701"
+></A
+><H2
+>Name</H2
+>deSerialize&nbsp;--&nbsp;assign the type instance the serilaized value </DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN704"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN705"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void deSerialize</CODE
+>(const char* buffer, int bufferLen, TypeInstanceID instance);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN716"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>instance</VAR
+></DT
+><DD
+><P
+>The value of this type instance will be changed to the one of the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+>.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>buffer</VAR
+></DT
+><DD
+><P
+>This is a pointer to an buffer of size <VAR
+CLASS="PARAMETER"
+>bufferLen</VAR
+>. The buffer holds the value that is assigned to the <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> type object. The buffer will not be changed.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>bufferLen</VAR
+></DT
+><DD
+><P
+>This is the size of the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+> in bytes.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN738"
+></A
+><H2
+>Description</H2
+><P
+>The function <CODE
+CLASS="FUNCTION"
+>deSerialize</CODE
+> gets a <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+> with a serialized value of the type and a instance of the same type. After calling this function the value of type instance is changed to the one in the serialized buffer. The caller must ensure that the value in the <VAR
+CLASS="PARAMETER"
+>buffer</VAR
+>, the <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> typeobject and the <CODE
+CLASS="FUNCTION"
+>deSerialize</CODE
+> function have the same type.</P
+><P
+>This function is optional. A type plugin that provides (de)serialisation functionality must also implement the inverse function <CODE
+CLASS="FUNCTION"
+>serialize</CODE
+>.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-ATTRIBUTESEQUAL"
+></A
+>attributesEqual</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN749"
+></A
+><H2
+>Name</H2
+>attributesEqual&nbsp;--&nbsp;      compares attributes with the of one type instance
+    </DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN752"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN753"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;
+typedef void* TypeAttributesInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void attributesEqual</CODE
+>(TypeInstanceID instance, TypeAttributesInstanceID attributes);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN762"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>instance</VAR
+></DT
+><DD
+><P
+>The attributes of this type object are compared with the second parameter <VAR
+CLASS="PARAMETER"
+>attributes</VAR
+></P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>attributes</VAR
+></DT
+><DD
+><P
+>These attributes are compared with the attributes of the <VAR
+CLASS="PARAMETER"
+>instance</VAR
+>.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN777"
+></A
+><H2
+>Description</H2
+><P
+>The <CODE
+CLASS="FUNCTION"
+>attributesEqual</CODE
+> function compares the attributes of <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> with the <VAR
+CLASS="PARAMETER"
+>attributes</VAR
+>.</P
+><P
+>An example for an datatype with attributes is the framebuffer type. The resolution is an attribute of the type. There are also other attributes thinkable like colormodel (RGB, BGR, YUV) or the memory layout of the pixels. It must be possible to change the attributes without changing the abstract value of the type instance</P
+><P
+>This function is optional. Types with attributes must also provide the <CODE
+CLASS="FUNCTION"
+>convertType</CODE
+> function.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN786"
+></A
+><H2
+>Return Value</H2
+><P
+>The funtion returns 1 if the attributes are equal and 0 in the other cases.</P
+></DIV
+><H1
+><A
+NAME="TYPE-API-CONVERTTYPE"
+></A
+>convertType</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN790"
+></A
+><H2
+>Name</H2
+>convertType&nbsp;--&nbsp;      Assigns the value from src to dst and changes the attributes while doing that.
+    </DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN793"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN794"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void* TypeInstanceID;
+typedef void* TypeAttributesInstanceID;</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void convertType</CODE
+>(TypeInstanceID destination, TypeInstanceID source, TypeAttributesInstanceID attributes);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN805"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>destination</VAR
+></DT
+><DD
+><P
+>The value of this type object is changed to the one of <VAR
+CLASS="PARAMETER"
+>destination</VAR
+> and the attributes of <VAR
+CLASS="PARAMETER"
+>source</VAR
+> will then equal <VAR
+CLASS="PARAMETER"
+>attributes</VAR
+>.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>source</VAR
+></DT
+><DD
+><P
+>The value of this type objects is assigned to <VAR
+CLASS="PARAMETER"
+>destination</VAR
+> while changing the attributes to <VAR
+CLASS="PARAMETER"
+>attributes</VAR
+>. The type insance <VAR
+CLASS="PARAMETER"
+>source</VAR
+> stays unchanged.</P
+></DD
+><DT
+><VAR
+CLASS="PARAMETER"
+>attributes</VAR
+></DT
+><DD
+><P
+>These attributes are the new attributes of <VAR
+CLASS="PARAMETER"
+>destination</VAR
+>.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN830"
+></A
+><H2
+>Description</H2
+><P
+>The <CODE
+CLASS="FUNCTION"
+>changeAttributes</CODE
+> converts the value of the <VAR
+CLASS="PARAMETER"
+>source</VAR
+> type instance to the <VAR
+CLASS="PARAMETER"
+>attributes</VAR
+> and assigns the result to the <VAR
+CLASS="PARAMETER"
+>destination</VAR
+> instance.</P
+><P
+>This function is optional. Types with attributes must also implement the <CODE
+CLASS="FUNCTION"
+>attributesEqual</CODE
+> function.</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN839"
+>An example for a new datatype</A
+></H3
+><P
+>The following chapter describes the necessary steps to implement a new datatype plugin. The new type will be a color palette. Mathematically this is is a mapping from an interval to the color-space. Since the standard color-space in the GePhex is the red-green-blue color-model with 256 discrete steps from each color-channel and a source space with 256 elements the palette can easily implemented as a array with 256 RGBA entries.</P
+><P
+>The implementation of the new type is split up in two files: palettetype.h and palettetype.c. The .c file includes the header and will be compiled to the shared library. In the .c files are the exported functions defined. The memory layout of the type and all helper methods resists in the header-file, cause all modules that use the type include the header and do not link with the shared library.</P
+><P
+>We define the memory layout of the new type in the header in a straight forward way:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>typedef struct PaletteType_
+{
+  uint_32 pal[256];
+} PaletteType;</PRE
+></TD
+></TR
+></TABLE
+>
+
+uint_32 is a typedef for an unsigned integer with 32 bit size. It is defined in the header <TT
+CLASS="FILENAME"
+>basic_types.h</TT
+>. The 32 bits of the integer are composed by the 4 color components red, green, blue and alpha.</P
+><P
+>The next step is to define the functions of the shared library. To keep it simple we'll implement only the necessary core methods: <CODE
+CLASS="FUNCTION"
+>getInfo</CODE
+>,<CODE
+CLASS="FUNCTION"
+>getSpec</CODE
+>,<CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+>,<CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> and <CODE
+CLASS="FUNCTION"
+>assign</CODE
+></P
+><P
+>The implementation of getInfo and getSpec are similarly for all types  their propose is to deliver type-specific info strings to the caller. For the new type we set these two strings to:</P
+><P
+> "typ_spec { name=typ_PaletteType; }" and "info { name=Palette }".</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>const char* getSpec(void)
+{
+  // return the specification string
+  return "typ_spec { name=typ_PaletteType; }";
+}
+
+int getInfo (char* buf,int bufLen)
+{
+  static const char* INFO = "info { name=Palette }";
+  int reqLen = strlen(INFO) + 1;
+  // check if the buffer is big enough
+  if (buf != 0 &#38;&#38; reqLen &#60;= bufLen)
+    {
+      // the string fits in, copy it
+      memcpy(buf,INFO,reqLen);
+    }
+  return reqLen;</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>The other three mandatory functions are the constructor, the destructor and assignment method. In the .c file we place simple wrappers to the real methods in the header. This ensures that modules and the engine use the same implementation since the modules include the type-headers and the engine loads the shared libraries.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>void* newInstance(void)
+{
+  return palette_newInstance();
+}
+
+void assign(void* dst,const void* src)
+{
+  palette_assign((PaletteType*)dst,(const PaletteType*)src);
+}
+
+void deleteInstance(void* pal)
+{
+  palette_deleteInstance((PaletteType*) pal);
+}</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+> The actual implementation of the functions <CODE
+CLASS="FUNCTION"
+>palette_newInstance</CODE
+>, <CODE
+CLASS="FUNCTION"
+>palette_assign</CODE
+> and <CODE
+CLASS="FUNCTION"
+>palette_deleteInstance</CODE
+> is in the header.</P
+><P
+>The creation of a new type object is split into two functions: one for memory allocation and the other for initialisation it with the default value.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+// initialise a palette with the default value
+static __inline void number_initInstance(PaletteType* newType)
+{
+  int i;
+  for(i=0;i!=256;++i)
+    {
+      newType-&#62;palette[i] = 0x00000000;
+    }
+}
+
+// allocate memory for a new palette type-object and initialise it
+static __inline PaletteType* palette_newInstance(void)
+{
+  PaletteType* newType = (PaletteType*) malloc(sizeof(PaletteType));
+  palette_initInstance(newType);
+  return newType;
+}</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>The assign method just copies the entries of the source array to the destination.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+// assign the value of the source palette to the destination palette
+static __inline void palette_assign(PaletteType* dst,const PaletteType* src)
+{ 
+  dst-&#62;palette = src-&#62;palette;
+int i;
+  for(i=0;i!=256;++i)
+    {
+      dst-&#62;palette[i] = src-&#62;palette[i];
+    }
+}</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>The type allocates memory the destructor must free this resource for reuse.</P
+><P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+> 
+/* frees the allocated memory for a palette type object */
+static __inline void palette_deleteInstance(PaletteType* pal)
+{
+  free(pal);
+}</PRE
+></TD
+></TR
+></TABLE
+> </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN872"
+>Adding new effect modules</A
+></H2
+><P
+>The outputs are always initialised then update is called by the renderer. If you need an output with different attributes e.g. a frame with a different size you need to call the changeattribs? function. This will soon change. In future versions of the module API the renderer will query the outputs from the module and the renderer will change these before calling the update. This new behaviour will reduce code size in many modules with framebuffer I/O and fixes possible problems with modules and core created with different compilers using incompatible heap allocation strategies.</P
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN875"
+>The C-API</A
+></H3
+><P
+>A module is a shared library that exports some c functions. In the following section the necessary and the optional methods and their semantics are described.</P
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN878"
+>The Core Methods</A
+></H4
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="#MODULE-API-INIT"
+>init</A
+>&nbsp;--&nbsp;initialize the plugin</DT
+><DT
+><A
+HREF="#MODULE-API-SHUTDOWN"
+>shutDown</A
+>&nbsp;--&nbsp;closes the module plugin</DT
+><DT
+><A
+HREF="#MODULE-API-GETSPEC"
+>getSpec</A
+>&nbsp;--&nbsp;querys the spefification from the module</DT
+><DT
+><A
+HREF="#MODULE-API-GETINFO"
+>getInfo</A
+>&nbsp;--&nbsp;query information for the user interface</DT
+><DT
+><A
+HREF="#MODULE-API-GETINPUTSPEC"
+>getInputSpec</A
+>&nbsp;--&nbsp;query a description of an input</DT
+><DT
+><A
+HREF="#MODULE-API-GETOUTPUTSPEC"
+>getOutputSpec</A
+>&nbsp;--&nbsp;query the specification of an output</DT
+><DT
+><A
+HREF="#MODULE-API-NEWINSTANCE"
+>newInstance</A
+>&nbsp;--&nbsp;create a new instance of the module</DT
+><DT
+><A
+HREF="#MODULE-API-DELETEINSTANCE"
+>deleteInstance</A
+>&nbsp;--&nbsp;deletes a module instance</DT
+><DT
+><A
+HREF="#MODULE-API-SETINPUT"
+>setInput</A
+>&nbsp;--&nbsp;Sets the reference to the typeobject with the input value</DT
+><DT
+><A
+HREF="#MODULE-API-SETOUTPUT"
+>setOutput</A
+>&nbsp;--&nbsp;sets the referenz to the typeobject to assign the output value</DT
+><DT
+><A
+HREF="#MODULE-API-UPDATE"
+>update</A
+>&nbsp;--&nbsp;process the inputs and assigns the results to the outputs</DT
+><DT
+><A
+HREF="#MODULE-API-GETINPUTATTRIBUTES"
+>getInputAttributes</A
+>&nbsp;--&nbsp;get type-attributes for input</DT
+></DL
+></DIV
+><P
+> Every module must implement these functions and export their symbol. The loader of the shared library must ignore modules with missing symbols.</P
+><H1
+><A
+NAME="MODULE-API-INIT"
+></A
+>init</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN882"
+></A
+><H2
+>Name</H2
+>init&nbsp;--&nbsp;initialize the plugin</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN885"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN886"
+></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>typedef void (*logT) (int, const char*);</PRE
+></TD
+></TR
+></TABLE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int init</CODE
+>(logT logger);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN893"
+></A
+><H2
+>Arguments</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><VAR
+CLASS="PARAMETER"
+>logger</VAR
+></DT
+><DD
+><P
+>Callback to send log messages from the module plugin to the host application.</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN901"
+></A
+><H2
+>Description</H2
+><P
+>The <CODE
+CLASS="FUNCTION"
+>init</CODE
+> function initialises the module plugin. It is the first function called after loading the shared library. No other method may be called before calling this. It is only allowed to call this function once. The propose is to initialise resources common to all instances of this module class. For example allocation of a memory pool or querys for i/o devices.</P
+><P
+>If the return value signals an error the caller is not allowed to call another function. The proper handling of such a situation is unloading the shared library.</P
+><P
+><VAR
+CLASS="PARAMETER"
+>logger</VAR
+> is a pointer to a function that is used to send log messages from the module to the engine. The first parameter of this function is the log level and the second is a const char pointer to the log message as c-string.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN908"
+></A
+><H2
+>Return Value</H2
+><P
+>The return value is 1 if the module could be initialised and 0 in case of an error.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-SHUTDOWN"
+></A
+>shutDown</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN912"
+></A
+><H2
+>Name</H2
+>shutDown&nbsp;--&nbsp;closes the module plugin</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN915"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN916"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void shutDown</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN921"
+></A
+><H2
+>Description</H2
+><P
+>This function must be called before unloading the shared library. After invoking <CODE
+CLASS="FUNCTION"
+>shutdown</CODE
+> no other methods of the module may be called. In this method all class-wide resources allocated e.g. by the <CODE
+CLASS="FUNCTION"
+>init</CODE
+> function must be released. Before calling this method all instances created with <CODE
+CLASS="FUNCTION"
+>newInstance</CODE
+> must be deleted by calling <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+></P
+></DIV
+><H1
+><A
+NAME="MODULE-API-GETSPEC"
+></A
+>getSpec</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN929"
+></A
+><H2
+>Name</H2
+>getSpec&nbsp;--&nbsp;querys the spefification from the module</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN932"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN933"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char* getSpec</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN938"
+></A
+><H2
+>Description</H2
+><P
+>This function querys a specification string from the modules plugin. It stores the unique string identifier of the module, the number of inputs and outputs</P
+><P
+>  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>mod_spec 
+   { 
+     name = mod_STRING; 
+     number_of_inputs = UINT; 
+     number_of_outputs = UINT; 
+     deterministic = BOOL 
+   }</PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN943"
+></A
+><H2
+>Return Value</H2
+><P
+>The module specification string is returned as a pointer to a zero terminated char array. This pointer stays valid until calling <CODE
+CLASS="FUNCTION"
+>shutDown</CODE
+>.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-GETINFO"
+></A
+>getInfo</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN948"
+></A
+><H2
+>Name</H2
+>getInfo&nbsp;--&nbsp;query information for the user interface</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN951"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN952"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int getInfo</CODE
+>(char* buffer, int bufLen);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN960"
+></A
+><H2
+>Description</H2
+><P
+>For the dynamic creation of the user interface several information about the module class are necessary:</P
+><P
+>  <P
+></P
+><UL
+><LI
+><P
+>icon, name, effect-group</P
+></LI
+><LI
+><P
+>information about the inputs</P
+></LI
+><LI
+><P
+>information about the outputs</P
+></LI
+></UL
+></P
+><P
+>These information are const that means subsequent calls to this function must return the same value.</P
+><P
+>The semantic of this function is that the caller gives a pointer to a
+already allocated array buf of size bufLen and if the info string fits
+in that array the string is copied and the size of the 0 terminated
+string is returned. If the buffer is to small no changes to the buffer
+are applied and the needed size is returned.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN973"
+></A
+><H2
+>Return Value</H2
+><P
+>The function returns the number of written bytes or if the provided buffer was to small the minimum buffer size to store the info string</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-GETINPUTSPEC"
+></A
+>getInputSpec</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN977"
+></A
+><H2
+>Name</H2
+>getInputSpec&nbsp;--&nbsp;query a description of an input</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN980"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN981"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char* getInputSpec</CODE
+>(int index);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN987"
+></A
+><H2
+>Description</H2
+><P
+>This function returns a pointer to a c-string which describes the input with the <VAR
+CLASS="PARAMETER"
+>index</VAR
+> number. The format of this specification string looks similar to a structure with default values in programming languages. The structure is called <VAR
+CLASS="LITERAL"
+>input_spec</VAR
+> in it has the attributes type,const, default and strong_dependency. 
+<SPAN
+CLASS="RETURNVALUE"
+> 
+"input_spec { type="typ_STRING"; const=BOOL; strong_dependency=BOOL; default=STRING}"</SPAN
+> 
+The order of the attributes is irrelevant. <VAR
+CLASS="LITERAL"
+>type</VAR
+> is the unique identifier for the type-class of that input. With the <VAR
+CLASS="LITERAL"
+>const</VAR
+> attribute signals the modules to the engine if it wants to change the value of the type object in the <CODE
+CLASS="FUNCTION"
+>update</CODE
+> function. If the input has set <VAR
+CLASS="LITERAL"
+>strong_dependency</VAR
+> to true the engine must always set/update this input before calling <CODE
+CLASS="FUNCTION"
+>update</CODE
+>. The <VAR
+CLASS="LITERAL"
+>default</VAR
+> attribute is the default value of the input when the module is new created. The format to specify this value is the format defined by the <CODE
+CLASS="FUNCTION"
+>serialise</CODE
+> and <CODE
+CLASS="FUNCTION"
+>deserialise</CODE
+> functions of the type-class.
+The specification for some input could look like this :<VAR
+CLASS="LITERAL"
+>"input_spec { type=typ_NumberType const=true strong_dependency=true default=0 }"</VAR
+></P
+></DIV
+><H1
+><A
+NAME="MODULE-API-GETOUTPUTSPEC"
+></A
+>getOutputSpec</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1003"
+></A
+><H2
+>Name</H2
+>getOutputSpec&nbsp;--&nbsp;query the specification of an output</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1006"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1007"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>char* getOutputSpec</CODE
+>(int index);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1013"
+></A
+><H2
+>Description</H2
+><P
+>Format:
+"output_spec { type="typ_STRING"; }"</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-NEWINSTANCE"
+></A
+>newInstance</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1017"
+></A
+><H2
+>Name</H2
+>newInstance&nbsp;--&nbsp;create a new instance of the module</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1020"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1021"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void* newInstance</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1026"
+></A
+><H2
+>Description</H2
+><P
+>By calling this method a new instance of the module class is created. The return value is a pointer to the instance. This pointer may only be used by the methods of the same module class. The caller must always ensure that these instance pointers fit to the corresponding functions. There needn't be any internal type check in the module implementation. After using this instance the allocated resources must be released by calling <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+>.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-DELETEINSTANCE"
+></A
+>deleteInstance</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1031"
+></A
+><H2
+>Name</H2
+>deleteInstance&nbsp;--&nbsp;deletes a module instance</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1034"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1035"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void deleteInstance</CODE
+>(void* instance);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1041"
+></A
+><H2
+>Description</H2
+><P
+>To free the allocated module instance resources the engine calls <CODE
+CLASS="FUNCTION"
+>deleteInstance</CODE
+>. It must call this destructor after last usage of the module instance. The <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> pointer is invalid after this call and may not be used for further calls.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-SETINPUT"
+></A
+>setInput</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1047"
+></A
+><H2
+>Name</H2
+>setInput&nbsp;--&nbsp;Sets the reference to the typeobject with the input value</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1050"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1051"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int setInput</CODE
+>(void* instance, int inputIndex, void* typeObject);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1061"
+></A
+><H2
+>Description</H2
+><P
+>The <VAR
+CLASS="PARAMETER"
+>typeObject</VAR
+> that holds the value for the input with index <VAR
+CLASS="PARAMETER"
+>inputIndex</VAR
+> of the module <VAR
+CLASS="PARAMETER"
+>instance</VAR
+> are set with this function. If the input is declared as const the module may not change the value of the type object because the engine can in this case provide it to another module as input.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-SETOUTPUT"
+></A
+>setOutput</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1068"
+></A
+><H2
+>Name</H2
+>setOutput&nbsp;--&nbsp;sets the referenz to the typeobject to assign the output value</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1071"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1072"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int setOutput</CODE
+>(void* instance, int outputIndex, void* typeObject);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1082"
+></A
+><H2
+>Description</H2
+><P
+>A module doesn't create an output type-object with an <CODE
+CLASS="FUNCTION"
+>update</CODE
+>. It assigns the calculated values to the output objects provided by the caller. This method sets the <VAR
+CLASS="PARAMETER"
+>type-object</VAR
+> for the output with index <VAR
+CLASS="PARAMETER"
+>outputIndex</VAR
+> of the module <VAR
+CLASS="PARAMETER"
+>instance</VAR
+>.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-UPDATE"
+></A
+>update</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1090"
+></A
+><H2
+>Name</H2
+>update&nbsp;--&nbsp;process the inputs and assigns the results to the outputs</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1093"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1094"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void update</CODE
+>(void* instance);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1100"
+></A
+><H2
+>Description</H2
+><P
+>After all necessary inputs and outputs are set with the <CODE
+CLASS="FUNCTION"
+>setInput</CODE
+> and <CODE
+CLASS="FUNCTION"
+>setOutput</CODE
+> the engine can call <CODE
+CLASS="FUNCTION"
+>update</CODE
+> to assign the results to the outputs. </P
+></DIV
+><H1
+><A
+NAME="MODULE-API-GETINPUTATTRIBUTES"
+></A
+>getInputAttributes</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1107"
+></A
+><H2
+>Name</H2
+>getInputAttributes&nbsp;--&nbsp;get type-attributes for input</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1110"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1111"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void* getInputAttributes</CODE
+>(int inputIndex);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1117"
+></A
+><H2
+>Description</H2
+><P
+>If the type-class of an input supports type attributes an module can force an automatic conversion to fixed attributes. This method returns these attributes. If it returns 0 the input has no fixed attribute or the type doesn't support attributes. inputIndex is the number of the input the caller want to obtain the information.</P
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN1120"
+>Optional Methods</A
+></H4
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="#MODULE-API-GETPATCHLAYOUT"
+>getPatchLayout</A
+>&nbsp;--&nbsp;returns the patch-layout for the next update</DT
+><DT
+><A
+HREF="#MODULE-API-STRONGDEPENDENCIESCALCULATED"
+>strongDependenciesCalculated</A
+>&nbsp;--&nbsp;query the needed inputs</DT
+></DL
+></DIV
+><P
+>To enable additional functionality the shared library must export some of the the following methods. The functions are used for optimisation:
+<P
+></P
+><UL
+><LI
+><P
+>In some cases not all inputs of a module need to be calculated. A switch for example has three inputs and one output. The control input decides which of the two other inputs should be assigned to the output. If the control input is known there is only one of the two inputs needed. We can eliminate the costs for calculating the subtree starting at the unused input by first calculation the control input and when we know its value only calculating one of the two other inputs.</P
+></LI
+><LI
+><P
+>To copy big type objects like images is expensive. In some cases we know that a module copies the value of an input to an output and makes no or little changes. In this case the engine can eliminate a copy if the input object is exclusively used by only one module.</P
+></LI
+></UL
+></P
+><H1
+><A
+NAME="MODULE-API-GETPATCHLAYOUT"
+></A
+>getPatchLayout</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1129"
+></A
+><H2
+>Name</H2
+>getPatchLayout&nbsp;--&nbsp;returns the patch-layout for the next update</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1132"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1133"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void getPatchLayout</CODE
+>(void* instance, int** out2in);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1141"
+></A
+><H2
+>Description</H2
+><P
+>This function returns the patch-layout for the next update. This is a mapping of all outputs to the inputs. If an output is mapped to an input the engine must ensure that before the <CODE
+CLASS="FUNCTION"
+>update</CODE
+> the output has the same value as the input. If no mapping is requested for an output there are no guarantees for the value of the output object. It must be called direct before <CODE
+CLASS="FUNCTION"
+>update</CODE
+>. Every output entry holds the index of the input that should be patched to the output. The array has entries for every output. Every output entry holds the index of the input that should be patched to the output. It the entry is -1 the no patching is requested.</P
+></DIV
+><H1
+><A
+NAME="MODULE-API-STRONGDEPENDENCIESCALCULATED"
+></A
+>strongDependenciesCalculated</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN1147"
+></A
+><H2
+>Name</H2
+>strongDependenciesCalculated&nbsp;--&nbsp;query the needed inputs</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN1150"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN1151"
+></A
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void strongDependenciesCalculated</CODE
+>(void* instance, int** neededInputs);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1159"
+></A
+><H2
+>Description</H2
+><P
+>This function returns the needed inputs for the next call to <CODE
+CLASS="FUNCTION"
+>update</CODE
+>. Before calling <CODE
+CLASS="FUNCTION"
+>strongDependenciesCalculated</CODE
+> the strong-dependency inputs must be updated. The caller provides an array of ints with the same number of elements as inputs. An 0 entry means the value is needed and must be up to date before calling <CODE
+CLASS="FUNCTION"
+>update</CODE
+>. If the entry for an input is 0 the input needn't be calculated.</P
+></DIV
+></DIV
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="CHAPTER"
+><HR><H1
+><A
+NAME="AEN1165"
+></A
+>Chapter 9. Old text describing GePhex</H1
+><P
+>GePhex is a modular video effect framework. It is written in C++. Supported operating systems are Win32 and Linux, but ports to the BSD operating systems are planned. We use a client server architecture to separate the graphical user interface (client) from the core application (server). Client and server communicate via TCP. The GUI is based on QT. The core uses an OpenGl plugin for video output. Different plugins (as a GDI output under windows or an SDL output under Linux) exist, too. Even more outputs (for example aalib for video or an output to control lighting hardware) are planned.</P
+><P
+>A new video effect is created by editing a data flow graph. The graph nodes consist of effect modules and interactive control widgets. The effect modules are plugins realized as shared libraries. There are simple effects like plasma, invert, video sources and picture sources. The control widgets are used to change parameters of these effects. These nodes are connected via strong typed data "pipes". The data types that can be used are plugins as well.</P
+><P
+>Audio input and processing can also be realized with plugins. Possible usage is a beat detector for music. We plan to support a wide range of input devices like joysticks, midi devices.</P
+><P
+>When finished, we intend GePhex to be highly interactive. The user we have in mind is some kind of a video jockey.</P
+><P
+></P
+></DIV
+></DIV
+></BODY
+></HTML
+>

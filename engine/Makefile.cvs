@@ -1,6 +1,0 @@
-all:
-	aclocal
-	libtoolize --force
-	autoheader	
-	automake --add-missing
-	autoconf

@@ -1,47 +1,30 @@
-
-#include <qapplication.h>
-
-#include <fstream>
-#include <iostream>
-
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
 
+#include <qapplication.h>
+#include <qmessagebox.h>
+#include <qsound.h>
+
 #ifdef OS_WIN32
 #include <qwindowsstyle.h>
 #else
+#if QT_VERSION < 300
 #include <qmotifstyle.h>
 #endif
+#endif
 
-#include "qmessagebox.h"
+#if defined(OS_WIN32)
+static const char* INTRO_PATH = "../data/intro.wav";
+#elif defined(OS_POSIX)
+//TODO: prefix!
+static const char* INTRO_PATH = "../share/gephex/sounds/intro.wav";
+#endif
 
 #include "ownstyle.h"
 #include "vjmainwindow.h"
-
-#include "utils/structreader.h"
-#include "utils/autoptr.h"
-
-typedef utils::AutoPtr<utils::StructReader> StructReaderPtr;
-typedef utils::StructReader::ConfigMap ConfigMap;
-static StructReaderPtr readConfigFile(const std::string& fileName)
-{
-  std::ifstream file(fileName.c_str());
-	
-  if (!file)
-    throw std::runtime_error("Konnte Config file '" + fileName
-			     + "' nicht öffnen.");
-	
-  std::string text;
-	
-  std::getline(file,text,(char) 255);
-	
-  file.close();
-	
-  StructReaderPtr sr(new utils::StructReader(text));
-	
-  return sr;
-}
+#include "guiconfig.h"
+#include <iostream>
 
 int main( int argc, char** argv )
 {
@@ -55,57 +38,26 @@ int main( int argc, char** argv )
   app.setStyle( new gui::OwnStyle<QMotifStyle>() );
 #endif
 
-
-#if QT_VERSION >= 300
-  // qt3 doesnt like the style template
-  //app.setStyle( new gui::OwnStyle<QMotifStyle>() );
-#endif
-
   try
     {
-    std::string configFileName;
-#ifdef OS_WIN32
-    configFileName = "../guiw.conf";
-#endif
-#ifdef OS_POSIX
-      std::string home = getenv("HOME");
-      configFileName = home + "/.gephex/gui.conf";
-#endif
-      StructReaderPtr sr = readConfigFile(configFileName);
-      std::string ipcLocator;
+      gui::GuiConfig config = gui::createGuiConfig();
 
-      std::string ipcType = sr->getStringValue("ipc_type");
-	 if (ipcType == "inet")
-	{
-	  ipcLocator = sr->getStringValue("ipc_inet_hostname");
-	}
-     else if (ipcType == "unix")
-	{
-	  ipcLocator = sr->getStringValue("ipc_unix_node_prefix");
-	}
-      
-	  else if (ipcType == "namedpipe")
-	  {
-	   ipcLocator = sr->getStringValue("ipc_namedpipe_servername");
-	  }
-      else
-	{
-	  throw std::runtime_error("Unknown IPC Type: " + ipcType);
-	}
-      
-      int port = sr->getIntValue("ipc_port");
-
-      gui::VJMainWindow *mainWin = new gui::VJMainWindow(0,"HauptFenster",
-							 ipcType,
-							 ipcLocator, port,
-							 sr);
+      gui::VJMainWindow *mainWin = new gui::VJMainWindow(0,
+							 "HauptFenster",
+							 config.ipcType,
+							 config.ipcLocator,
+							 config.port,
+							 config.sr);
     
-      //mainWin->setFixedSize(640, 480);
-
       app.connect(mainWin,SIGNAL(quitSignal(void)), &app,SLOT(quit(void)));
       app.setMainWidget(mainWin);
       mainWin->resize(640, 480);
       mainWin->show();
+
+    /*  if (QSound::available())
+	QSound::play(INTRO_PATH);
+      else
+	std::cerr << "KEIN SOUND!!!" << std::endl;*/
 
       mainWin->connectToEngine();
 

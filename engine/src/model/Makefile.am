@@ -2,7 +2,13 @@ baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
 includedir = $(baseincludedir)/model
 
-INCLUDES= -I.. -I $(baseincludedir)
+INCLUDES= \
+	-I @srcdir@/.. \
+	-I @srcdir@/../../../base/src \
+	-I @builddir@/../../../base/src \
+	-I @top_srcdir@/util/include \
+	-I @top_builddir@/util/include
+
 
 noinst_LIBRARIES = libmodel.a
 
@@ -35,8 +41,10 @@ libmodel_a_SOURCES = model.cpp \
 
 noinst_HEADERS = model.h
 
-noinst_PROGRAMS = modeltest
+TESTS=modeltest
+
+check_PROGRAMS = modeltest
 modeltest_SOURCES = testmain.cpp datatreetest.cpp datatreetest.h
-modeltest_LDFLAGS = -L$(libdir)
+modeltest_LDFLAGS = -L$(libdir) -L../../../base/src/TestFramework -L../../../base/src/utils
 modeltest_LDADD = -ltestframework libmodel.a -lutils
 

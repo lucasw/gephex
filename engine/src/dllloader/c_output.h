@@ -5,20 +5,24 @@
 
 #include "interfaces/imodule.h"
 
+#include "utils/autoptr.h"
+
 class COutputPlug;
-class IType;
+
+class COutputVTable;
 
 class COutput : public IOutput
 {
 public:
-	COutput(IModule& mod,int _typeID, IType* data);
+	COutput(IModule& mod,int _typeID, IType* data, int index,
+			const COutputVTable& vtable, void* instance);
 	virtual ~COutput();
 
 	//virtual void setData(const IType* data); //TODO: remove?
 
 	virtual IModule* getModule() const;
 
-	virtual IOutputPlug* plugIn(IInput&);
+	virtual utils::AutoPtr<IOutputPlug> plugIn(IInput&);
 
 	virtual void unPlug(IInput &);
 
@@ -37,11 +41,16 @@ public:
 private:
 	IModule* m_module;
 	int m_typeID;
-	std::list<IOutputPlug*> m_plugs;
+	typedef utils::AutoPtr<IOutputPlug> IOutputPlugPtr;
+	typedef std::list<IOutputPlugPtr> PlugList;
+	PlugList m_plugs;
 	IType* m_data;
 
 	IInput* m_patchedInput;
 
+	int m_index;
+	const COutputVTable* m_vtable;
+	void* m_instance;
 };
 
 #endif

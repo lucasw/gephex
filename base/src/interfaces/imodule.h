@@ -40,7 +40,8 @@ public:
 	* @exception std::runtime_error falls der Input schon
 	*                               mit einem Output verbunden ist.
 	*/
-	virtual void plugIn(IOutputPlug& p) throw (std::runtime_error) = 0;
+	virtual void plugIn(utils::AutoPtr<IOutputPlug>& p)
+	  throw (std::runtime_error) = 0;
 
 	/**
 	* Löst die Verbindung des Inputs.
@@ -80,8 +81,8 @@ public:
 	 * (if this input is needed and the connected module has changed).
 	 * Can be used to implicitly convert types etc. pp.
 	 *
-	 * This piece of dokumentation seems very weird to me. I think it should
-	 * be marked as deprecated or obsolete.
+	 * This piece of documentation seems very weird to me.
+	 * I think it should be marked as deprecated or obsolete.
 	 */
 	virtual void update() = 0;
 };
@@ -109,7 +110,7 @@ public:
 	 * OutputPlug erzeugt. 
 	 * @param i Der Input der mit dem Output verbunden wird.
 	 */
-	virtual IOutputPlug* plugIn(IInput& i) = 0;
+	virtual utils::AutoPtr<IOutputPlug> plugIn(IInput& i) = 0;
 
 	/**
 	 * Entfernt einen OutputPlug und damit die Verbindung zum 

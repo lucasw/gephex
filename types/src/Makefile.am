@@ -1,1 +1,7 @@
-SUBDIRS = framebuffertype numbertype stringtype positiontype rgbtype miditype
+SUBDIRS = 	framebuffertype \
+		numbertype \
+		stringtype \
+		positiontype \
+		ifstype \
+		rgbtype \
+		miditype

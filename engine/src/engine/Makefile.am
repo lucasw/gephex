@@ -1,49 +1,95 @@
-baseincludedir = @includedir@/gephex
-includedir = $(baseincludedir)/engine
+includedir = @includedir@/gephex
 libdir = @libdir@/gephex
 
-include_HEADERS = dllmodule.h dlltype.h dllutils.h
+# Defines needed by some source files:
 
-INCLUDES= \
-		-I.. \
-		-I$(baseincludedir)
+include_HEADERS = \
+	dllmodule.h \
+	dlltype.h \
+	dllutils.h
 
-bin_PROGRAMS = engine
+AM_CPPFLAGS = \
+	-DINST_INSTALL_PREFIX=\"$(prefix)\" \
+	-I @srcdir@/.. \
+	-I @srcdir@/../renderer \
+	-I @srcdir@/../model \
+	-I @srcdir@/../dllloader \
+	-I @srcdir@/../sequencer \
+	-I @srcdir@/../../../base/src \
+	-I @builddir@/../../../base/src/interfaces \
+	-I @builddir@/../../../base/src \
+	-I @srcdir@/../../../base/src/interfaces \
+	-I @srcdir@/../../../base/src/netinterfaces \
+	-I @builddir@/../../../base/src/netinterfaces \
+	-I @srcdir@/../../../base/src/net \
+	-I @srcdir@/../../../base/src/utils \
+	-I @srcdir@/../../../util/include
+	-I @builddir@/../../../util/include
 
-engine_SOURCES = \
-		main.cpp \
-		scheduler.cpp \
-		netlogger.cpp \
-		netlogger.h \
-		scheduler.h
+bin_PROGRAMS = gephex-engine
 
-engine_LDADD = \
-		-ldllloader \
-		-lsequencer \
-		-lmodel \
-		-lrenderer \
-		-lnetwork \
-		-lnetinterfaces \
-		-lutils \
-		-ldl
+gephex_engine_SOURCES = \
+	main.cpp \
+	scheduler.cpp \
+	netlogger.cpp \
+	netlogger.h \
+	scheduler.h \
+	engineconfig.cpp \
+	engineconfig.h \
+	controller.h \
+	controller.cpp
 
-engine_LDFLAGS = \
-		-L../dllloader \
-		-L../sequencer \
-		-L../model \
-		-L../renderer \
-		-L$(libdir) \
-		-L/sw/lib
+if NEED_DL
+LIB_DL_FLAGS = -ldl
+endif
 
-noinst_PROGRAMS =  enginetest
+gephex_engine_LDADD = \
+	-ldllloader \
+	-lsequencer \
+	-lmodel \
+	-lrenderer \
+	-lnetwork \
+	-lnetinterfaces \
+	-lutils $(LIB_DL_FLAGS) \
+	-L@builddir@/../dllloader \
+	-L@builddir@/../sequencer \
+	-L@builddir@/../model \
+	-L@builddir@/../renderer \
+	-L$(libdir) \
+	-L@builddir@/../../../base/src/TestFramework \
+	-L@builddir@/../../../base/src/utils \
+	-L@builddir@/../../../base/src/net \
+	-L@builddir@/../../../base/src/netinterfaces \
+	-L/sw/lib
 
-enginetest_SOURCES = 	testmain.cpp \
-			schedulertest.cpp \
-			scheduler.cpp \
-			schedulertest.h
+gephex_engine_DEPENDENCIES = \
+	@builddir@/../dllloader/libdllloader.a \
+	@builddir@/../sequencer/libsequencer.a \
+	@builddir@/../model/libmodel.a \
+	@builddir@/../renderer/librenderer.a \
+	@top_builddir@/base/src/net/libnetwork.a \
+	@top_builddir@/base/src/netinterfaces/libnetinterfaces.a \
+	@top_builddir@/base/src/utils/libutils.a
 
-enginetest_LDFLAGS = -L$(libdir)
-enginetest_LDADD = -ltestframework -lutils
 
+TESTS = enginetest
+
+check_PROGRAMS = enginetest
+
+
+enginetest_SOURCES = testmain.cpp \
+		     schedulertest.cpp \
+		     scheduler.cpp \
+		     schedulertest.h
+
+enginetest_LDADD = -ltestframework \
+                   -lutils \
+		   -L$(libdir) \
+	           -L@builddir@/../../../base/src/TestFramework \
+	           -L@builddir@/../../../base/src/utils
+
+enginetest_DEPENDENCIES = \
+	@top_builddir@/base/src/TestFramework/libtestframework.a \
+	@top_builddir@/base/src/utils/libutils.a
 
 

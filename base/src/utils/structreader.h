@@ -72,12 +72,32 @@ class StructReader
   /**
    * Gibt den Wert der Variablen mit Namen name als bool zurueck.
    * @param name Name der Variablen
-   * @param defaultValue Wert der zurückgegeben wird, falls die Variable nicht vorkommt,
+   * @param defaultValue Wert der zurückgegeben wird, falls die Variable
+   *        nicht vorkommt,
    *                     oder keinen bool wert hat (true, false).
    * @return true falls name="true" in der struct vorkommt,
    *         false falls name="false" vorkommt.
    */
   bool getBoolValue(const std::string& name, bool defaultValue) const;    
+
+  /**
+   * Gibt den Wert der Variablen mit Namen name als double zurueck.
+   * @param name Name der Variablen
+   * @return die Zahl x falls name="x" in der struct vorkommt.
+   * @throw std::runtime_error Falls die Variable nicht in der c-struct
+   *         existiert oder keinen Zahlenwert hat.
+   */
+  double getDoubleValue(const std::string& name) const
+    throw (std::runtime_error);
+
+  /**
+   * Gibt den Wert der Variablen mit Namen name als double zurueck.
+   * @param name Name der Variablen
+   * @param defaultValue Wert der zurückgegeben wird, falls die Variable
+   *         nicht vorkommt, oder keinen numerischen wert hat.
+   * @return die Zahl x falls name="x" in der struct vorkommt.
+   */
+  double getDoubleValue(const std::string& name, double defaultValue) const;
 
   /**
    * Gibt den Wert der Variablen mit Namen name als int zurueck.
@@ -128,7 +148,7 @@ class StructReader
   //  StructReader(const StructReader&); // nicht impl.
   //  const StructReader& operator=(const StructReader&); // nicht impl.
 
-  std::string find(const std::string& name) const;
+  bool find(const std::string& name, std::string& value) const;
 };
 
 } // end of namespace utils

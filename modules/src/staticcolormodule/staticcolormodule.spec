@@ -20,6 +20,7 @@ inputs
 	strong_dependency = true
 	hidden            = true
         widget_type       = color_selector
+	default           = [0.5 0.5 0.5]
     }
 
 	xsize
@@ -32,8 +33,8 @@ inputs
 		default = 320
 		widget_type	=	number_selector
 		lower_bound	= 0
-		higher_bound = 4096
-		absolute	= true
+		higher_bound    = 4096
+                step_size       = 1
 	}
 
 	ysize
@@ -47,7 +48,7 @@ inputs
 		widget_type	=	number_selector
 		lower_bound	= 0
 		higher_bound = 4096
-		absolute	= true
+                step_size       = 1
 	}
 
 }

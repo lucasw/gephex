@@ -45,16 +45,18 @@ void destruct(MyInstance* my)
 }
 
 
-__inline int fx(int xres, int yres,int x,int y,int t, double a, double b)
+__inline int fx(int xres, int yres,int x,int y, double t, double a, double b)
 {	
+	double time = fmod(t, 2*M_PI);
 	double d = (-4./((xres-1)*(double)(xres-1))*x + 4./((double) (xres-1)))*x;
-	return (int) x + a*(xres/4)* d * sin(b*y/yres + t*(2*M_PI-1)/255);
+	return (int) (x + a*(xres/4)* d * sin(b*y/yres + time));
 }
 
-__inline int fy(int xres, int yres, int x,int y,int t, double a, double b)
+__inline int fy(int xres, int yres, int x,int y,double t, double a, double b)
 {
+	double time = fmod(t, 2*M_PI);
 	double d = (-4./((yres-1)*(double)(yres-1))*y + 4./((double)(yres-1)))*y;
-	return (int) y + a*(yres/4)*d * sin(b*x/xres + t*(2*M_PI-1)/255);
+	return (int) (y + a*(yres/4)*d * sin(b*x/xres + time));
 }	
 
 
@@ -63,19 +65,18 @@ void update(void* instance)
 {
 	InstancePtr inst = (InstancePtr) instance;
 	MyInstancePtr my = inst->my;
-	
-	
+		
 	int x, y, newx, newy, u=0, v=0;
 	
-	int time = inst->in_time->number >> 24;
-	double amplitude = inst->in_amp->number / (double) UINT_MAX;
-	double frequence = inst->in_frq->number / (double) UINT_MAX; 
-	int xsize = inst->in_b->xsize;
-	int ysize = inst->in_b->ysize;
-	
+	double time = inst->in_time->number;
+	double amplitude = trim_double(inst->in_amp->number, 0, 1);
+	double frequence = inst->in_frq->number; 
+	int xsize = trim_int(inst->in_b->xsize,1,FRAMEBUFFER_X_MAX);
+	int ysize = trim_int(inst->in_b->ysize,1,FRAMEBUFFER_Y_MAX);
+
 	FrameBufferAttributes attribs;
 
-	TexturePoint* grid_points;
+	TexturePoint* grid_points;	
 	
 	attribs.xsize = xsize;
 	attribs.ysize = ysize;

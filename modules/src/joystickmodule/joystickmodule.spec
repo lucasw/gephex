@@ -3,7 +3,7 @@
 mod_joystickmodule
 {
     name          = Joystick
-    group         = Quellen
+    group         = Input
     deterministic = false
     xpm           = joystickmodule.xpm
     author        = A PATHETIC HUMAN
@@ -24,7 +24,7 @@ inputs
     widget_type =   number_selector
     lower_bound = 0
     higher_bound = 4
-    absolute = true
+    step_size = 1
     default = 0
     }
 }
@@ -55,4 +55,10 @@ outputs
     name = Button_2
     type = typ_NumberType
     }
+
+	midi
+	{
+		name = midiOut
+		type = typ_MidiType
+	}
 }

@@ -4,27 +4,190 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <iostream>
 
 #include "nodeproperty.h"
 
 #include "guimodel/moduleinfo.h"
 #include "guimodel/xpm.h"
 
+#include "utils/stringtokenizer.h"
 #include "utils/structreader.h"
+#include "utils/buffer.h"
 
 #include "inputplugwidget.h"
 #include "outputplugwidget.h"
 
+#include "base/keyboardmanager.h"
+#include "base/ikeylistener.h"
+#include "base/key.h"
+
+#include "interfaces/imodelcontrolreceiver.h"
+#include "interfaces/ierrorreceiver.h"
+
 namespace gui
 {
+
+  class FixedValueKeyListener : public IKeyListener
+  {
+  public:
+    FixedValueKeyListener(IModelControlReceiver& model,
+			  int moduleID, int inputIndex,
+			  const utils::Buffer& inputValue)
+      : m_model(model), m_moduleID(moduleID), m_inputIndex(inputIndex),
+	m_inputValue(inputValue)
+    {
+    }
+
+    virtual ~FixedValueKeyListener() {}
+    virtual void keyPressed(const Key& key) {
+      m_model.setInputValue(m_moduleID, m_inputIndex, m_inputValue);
+    }
+    virtual void keyReleased(const Key& key) {}
+
+  private:
+    IModelControlReceiver& m_model;
+    int m_moduleID;
+    int m_inputIndex;
+    utils::Buffer m_inputValue;
+  };
+
+  class ToggleValueKeyListener : public IKeyListener
+  {
+  public:
+    ToggleValueKeyListener(IModelControlReceiver& model,
+			   int moduleID, int inputIndex,
+			   const utils::Buffer& inputValue1,
+			   const utils::Buffer& inputValue2)
+
+      : m_model(model), m_moduleID(moduleID), m_inputIndex(inputIndex),
+	m_inputValue1(inputValue1), m_inputValue2(inputValue2),
+	m_state(true)
+    {
+    }
+
+    virtual ~ToggleValueKeyListener() {}
+
+    virtual void keyPressed(const Key& key) {
+      if (m_state)
+	m_model.setInputValue(m_moduleID, m_inputIndex, m_inputValue1);
+      else
+	m_model.setInputValue(m_moduleID, m_inputIndex, m_inputValue2);
+
+      m_state = !m_state;
+    }
+    virtual void keyReleased(const Key& key) {}
+
+  private:
+    IModelControlReceiver& m_model;
+    int m_moduleID;
+    int m_inputIndex;
+    utils::Buffer m_inputValue1;
+    utils::Buffer m_inputValue2;
+    bool m_state;
+  };
+
+  typedef std::list<utils::AutoPtr<IKeyListener> > KeyListenerList;
+  static void insertKeyListeners(KeyListenerList& ll,
+				 const std::string& keys,
+				 const std::string& toggle_keys,
+				 KeyboardManager& kbManager,
+				 int moduleID, int inputIndex,
+				 IModelControlReceiver& model,
+				 IErrorReceiver& log)
+  {
+    utils::StringTokenizer st(keys);
+    std::string token = st.next(";");
+    while (token != "")
+      {
+	utils::StringTokenizer stIntern(token);
+
+	std::string keyName = stIntern.next("[");
+	std::string keyValue = stIntern.next("[]");
+
+	std::cout << "Parsed key '" << keyName << "[" << keyValue << "]'"
+		  << std::endl;
+
+	gui::Key k(keyName);
+	utils::Buffer
+	  value(reinterpret_cast<const unsigned char*>(keyValue.c_str()),
+		keyValue.length() + 1);
+
+	utils::AutoPtr<IKeyListener> 
+	  kl (new FixedValueKeyListener(model, moduleID, inputIndex,
+					value));
+
+	ll.push_back(kl);
+
+	kbManager.registerListener(*kl, k);
+	
+	token = st.next(";");
+      }
+
+    utils::StringTokenizer stt(toggle_keys);
+    token = stt.next(";");
+    while (token != "")
+      {
+	utils::StringTokenizer stIntern(token);
+
+	std::string keyName = stIntern.next("[");
+	std::string keyValue1 = stIntern.next("[,");
+	std::string keyValue2 = stIntern.next(",]");
+
+	std::cout << "Parsed toggle_key '" << keyName 
+		  << "[" << keyValue1 << "," << keyValue2<< "]'"
+		  << std::endl;
+
+	try {
+	gui::Key k(keyName);
+	utils::Buffer
+	  value1(reinterpret_cast<const unsigned char*>(keyValue1.c_str()),
+		keyValue1.length() + 1);
+
+	utils::Buffer
+	  value2(reinterpret_cast<const unsigned char*>(keyValue2.c_str()),
+		 keyValue2.length() + 1);
+
+	utils::AutoPtr<IKeyListener> 
+	  kl (new ToggleValueKeyListener(model, moduleID, inputIndex,
+					 value1, value2));
+
+	ll.push_back(kl);
+
+	kbManager.registerListener(*kl, k);
+	}
+	catch(std::runtime_error& e) {
+		//TODO we need a logger here!:
+		//nWidget->displayErrorMessage(e.what());
+		log.error(e.what());
+		std::cerr << e.what() << std::endl;
+	}
+
+	token = stt.next(";");
+      }
+  }
+
+  static void removeKeyListeners(KeyListenerList& ll,
+				 KeyboardManager& kbManager)
+  {
+    for (KeyListenerList::const_iterator it = ll.begin(); it != ll.end(); ++it)
+      {
+	kbManager.removeListener(*(*it));
+      }
+  }
+
+
+
 
   NodeWidget::NodeWidget(QWidget* parent,const char* name,
 			 WFlags fl,int _id,const ModuleInfo& _info,
 			 const std::vector<QPixmap>& picz,
 			 ControlValueDispatcher& dispatcher, 
-			 IModelControlReceiver& mcr)
+			 IModelControlReceiver& mcr,
+			 KeyboardManager& kbManager,
+			 IErrorReceiver& log)
     : QWidget(parent,name,fl), id(_id), pictures(picz), dragMode(false),
-      m_time(0)
+      m_time(0), m_kbManager(kbManager), m_log(log)
   {
     setFixedSize(50, 50);
     setBackgroundPixmap(pictures[NODE_WIDGET_PIC]);
@@ -39,15 +202,14 @@ namespace gui
     for(unsigned int i=0;i < _info.getInputs().size(); ++i)
       {
 	utils::StructReader sr(_info.getInputs()[i].params);
-	bool inPropertyDialog;	
-	try 
-	  {
-	    inPropertyDialog = sr.getBoolValue("hidden");
-	  }
-	catch (...)
-	  {
-	    inPropertyDialog = false;
-	  }
+
+	std::string keys = sr.getStringValue("keys", "");
+	std::string toggle_keys = sr.getStringValue("toggle_keys", "");
+
+	insertKeyListeners(m_keyListeners, keys, toggle_keys, m_kbManager,
+			   id, i, mcr, m_log);
+
+	bool inPropertyDialog = sr.getBoolValue("hidden", false);
 		
 	utils::AutoPtr<InputPlugWidget> 
 	  newInput (new InputPlugWidget(this, 0, 
@@ -55,6 +217,7 @@ namespace gui
 					pictures[INPUTPLUG_WIDGET_BUSY_PIC],
 					_info.getInputs()[i].name,
 					_info.getInputs()[i].type,
+					_info.getInputs()[i].params,
 					i,id,inPropertyDialog));
 		
 	inputs.push_back(newInput);
@@ -134,6 +297,7 @@ namespace gui
 
   NodeWidget::~NodeWidget()     
   {
+    removeKeyListeners(m_keyListeners, m_kbManager);
   }
 
   void NodeWidget::mouseMoveEvent(QMouseEvent* e)
@@ -272,7 +436,5 @@ namespace gui
       }
     return 0;
   }
-
-
 
 } // end of namespace gui

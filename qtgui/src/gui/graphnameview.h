@@ -5,7 +5,7 @@
 
 #include <qobject.h>
 
-#include "treeview.h"
+#include "base/treeview.h"
 
 #include "interfaces/igraphnamereceiver.h"
 

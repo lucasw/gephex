@@ -13,27 +13,27 @@ const char* getSpec(void)
 	return "typ_spec { name=typ_StringType; }";
 }
 
-void* newInstance(void)
+TypeInstanceID newInstance(void)
 {
 	return string_newInstance();
 }
 
-void assign(void* dst,const void* src)
+void assign(TypeInstanceID dst,TypeInstanceID src)
 {
 	string_assign((StringType*) dst, (const StringType*) src);
 }
 
-void deleteInstance(void* num)
+void deleteInstance(TypeInstanceID num)
 {
 	string_deleteInstance((StringType*) num);
 }
 
-int serialize(void* type, char* buffer, int bufferLen)
+int serialize(TypeInstanceID type, char* buffer, int bufferLen)
 {
 	return string_serialize((StringType*) type,buffer,bufferLen);
 }
 
-void deSerialize(const char* buffer, int len, void* type)
+void deSerialize(const char* buffer, int len,TypeInstanceID type)
 {
 	string_deSerialize(buffer,len,(StringType*)type);
 }

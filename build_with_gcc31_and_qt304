@@ -1,1 +1,0 @@
-LD_LIBRARY_PATH=/usr/local/gcc-3.1/lib make -j3 MOC=/usr/local/qt-3.0.4//bin/moc CXX=distcc g++-3.1 CC=ccache gcc-3.1 build

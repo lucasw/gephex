@@ -1,16 +1,25 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
 flashmodule_auto.c: flashmodule.spec flashmodule.h
-	python $(top_builddir)/pluc.py c flashmodule.spec
+	$(PLUC) c @srcdir@/flashmodule.spec
 
 flashmodule.h: flashmodule.spec
-	python $(top_builddir)/pluc.py h flashmodule.spec
+	$(PLUC) h @srcdir@/flashmodule.spec
 
 lib_LTLIBRARIES = flashmodule.la
-flashmodule_la_SOURCES = flashmodule_auto.c flashmodule.c flashmodule.h flashmodule.spec flashmodule.xpm
+flashmodule_la_SOURCES = 	flashmodule_auto.c \
+				flashmodule.c \
+				flashmodule.h \
+				flashmodule.spec \
+				flashmodule.xpm
 
 flashmodule_la_LDFLAGS = -module -avoid-version -no-undefined
 
-INCLUDES  =  -I $(baseincludedir) -I $(baseincludedir)/types -I $(baseincludedir)/engine
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/framebuffertype 
 
-.PHONY: clean
-clean:
-	rm -f flashmodule.h flashmodule_auto.c
+DISTCLEANFILES = flashmodule.h flashmodule_auto.c

@@ -13,31 +13,30 @@ const char* getSpec(void)
   return "typ_spec { name=typ_PositionType; }";
 }
 
-void* newInstance(void)
+TypeInstanceID newInstance(void)
 {
   return pos_newInstance();
 }
 
-void assign(void* dst,const void* src)
+void assign(TypeInstanceID dst,TypeInstanceID src)
 {
   pos_assign((PositionType*)dst,(const PositionType*)src);
 }
 
-void deleteInstance(void* num)
+void deleteInstance(TypeInstanceID num)
 {
   pos_deleteInstance((PositionType*) num);
 }
 
-int serialize(void* type, char* buffer, int bufferLen)
+int serialize(TypeInstanceID type, char* buffer, int bufferLen)
 {
 	return pos_serialize((PositionType*)type,buffer,bufferLen);
 }
 
-void deSerialize(const char* buffer, int len,void* type)
+void deSerialize(const char* buffer, int len,TypeInstanceID type)
 {
   PositionType* pos = (PositionType*) type;
   pos_deSerialize(buffer,len,pos);
-
 }
 
 void shutDown(void)

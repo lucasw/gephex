@@ -2,17 +2,20 @@
 #define INCLUDED_CONTROL_WIDGET_H
 
 #include <string>
+#include <map>
+
 #include <qframe.h>
 
 #include "interfaces/icontrolvaluereceiver.h"
 
-namespace utils
-{
+namespace utils {
   class Buffer;
 }	
 
 namespace gui
 {
+  class TypeViewConstructor;
+  class TypeView;
 
   class ControlWidget : public QFrame, 
 			public IControlValueReceiver
@@ -20,8 +23,12 @@ namespace gui
 
     Q_OBJECT
   public:
+    typedef std::map<std::string, std::string> ParamMap;
+
     ControlWidget(QWidget* parent, const std::string& name, int controlID,
-		  int nodeID, int inputIndex);
+		  int nodeID, int inputIndex,
+		  const ParamMap& params,
+		  const TypeViewConstructor* con);
 
     virtual ~ControlWidget();
 
@@ -35,7 +42,7 @@ namespace gui
     void setName(const std::string& newName);	
 
     virtual void controlValueChanged(int nodeID,int intputIndex,
-				     const utils::Buffer& newValue) = 0;
+				     const utils::Buffer& newValue);
 
     virtual void syncInputValuesStarted();
     virtual void syncInputValuesFinished();
@@ -46,7 +53,7 @@ namespace gui
     virtual void mouseReleaseEvent(QMouseEvent* e);
 
 protected slots:
-void valueChanged(const utils::Buffer&);
+void changeValue(const utils::Buffer&);
 	
 
     signals:
@@ -65,26 +72,7 @@ void valueChanged(int,int,const utils::Buffer&);
     bool dragMode;
     QPoint clickedPos;
     QWidget* m_label;
+    TypeView* m_view;
   };
-
-  class ControlWidgetConstructor
-  {
-  public:
-    ControlWidgetConstructor(const std::string& type,const std::string& name,
-			     const std::string& id);
-    virtual ~ControlWidgetConstructor();
-    const std::string& getType();
-    const std::string& getName();
-    const std::string& getID();
-    virtual ControlWidget* construct(QWidget* parent,
-				     const std::string& name, int controlID,
-				     int nodeID, int inputIndex)=0;
-  private:
-    const std::string m_type;
-    const std::string m_name;
-    const std::string m_id;
-  };
-
 }
-
 #endif

@@ -1,16 +1,16 @@
 #include "dllloader.h"
 
+#include "config.h"
+
 #include <cassert>
 #include <string>
 #include <sstream>
-
-#include "config.h"
-
 #include <stdexcept>
-
 #include <iostream>
 
 #include "nameresolver.h"
+
+#include "typedllloader.h"
 
 #include "c_moduletables.h"
 #include "c_typetables.h"
@@ -24,6 +24,7 @@
 #include "utils/buffer.h"
 #include "utils/autoptr.h"
 #include "utils/sharedlibrary.h"
+#include "utils/ilogger.h"
 
 #include "interfaces/imoduleclassreceiver.h"
 #include "interfaces/imoduleclassspecreceiver.h"
@@ -35,10 +36,37 @@
 #include "interfaces/itypeclassnamereceiver.h"
 
 
+
 namespace dllloader
-{	
+{
+  extern "C" 
+  {
+    void moduleLog(int level, const char* sender, const char* msg);
+  };
+
+  //TODO: ugly
+  static utils::AutoPtr<utils::ILogger> s_logger(0);
+
+  void moduleLog(int level, const char* sender, const char* msg)
+  {
+    if (!s_logger)
+      return;
+
+    switch(level)
+      {
+      case 0:
+	s_logger->error(sender, msg);
+	break;
+      case 1:
+	s_logger->warning(sender, msg);
+	break;
+      default:
+	s_logger->log(sender, msg);
+      }
+  }
+
   // Default functions
-  int Dinit(void (*)(int,const char*))
+  int Dinit(void (*)(int,const char*, const char*))
   {
     return 1;
   }
@@ -53,30 +81,10 @@ namespace dllloader
 			     "module!");
   }
 	
-	
-  int DattributesEqual(void*,void*)
-  {
-    /*throw std::runtime_error("Operation attributesEqual() not "
-      "supported by this module!");*/
-
-    return 1;
-  }
-
-  void DconvertType(void*,void*,void*)
-  {
-    throw std::runtime_error("Operation convertType() not supported by this "
-			     "type!");
-  }
-
   void* DgetInputAttributes(int)
   {
     return 0;
   }
-
-  /*  void DgetPatchLayout(void* instance, int** out2in)
-  {
-	*out2in=0;
-	}*/
 
   namespace
   {
@@ -105,32 +113,14 @@ namespace dllloader
 
     }
 	
-    void postLoadType(CTypeFunctionTable& ft)
-    {
-      if (ft.newInstance == 0 || ft.deleteInstance == 0
-	  || ft.getSpec == 0 || ft.getInfo == 0) //TODO
-	throw std::runtime_error("Benoetigte Funktion fehlt");
-		
-      if (ft.init == 0)
-	ft.init = Dinit;
-		
-      if (ft.shutDown == 0)
-	ft.shutDown = DshutDown;
-		
-
-      if(ft.attributesEqual == 0)
-	ft.attributesEqual = DattributesEqual;
-
-      if(ft.convertType == 0)
-	ft.convertType = DconvertType;
-      // TODO: Konsistenz testen
-    }
   }
 	
-  DllLoader::DllLoader()
+  DllLoader::DllLoader(utils::AutoPtr<utils::ILogger>& logger)
     : resolver(new NameResolver()), m_infoReceiver(0), m_classReceiver(0),
-      m_specReceiver(0), m_typeInfoReceiver(0), m_typeClassReceiver(0)
+      m_specReceiver(0), m_typeInfoReceiver(0), m_typeClassReceiver(0),
+	  m_logger(logger)
   {
+    s_logger = logger;
   }
 	
   DllLoader::~DllLoader()
@@ -192,7 +182,8 @@ namespace dllloader
   }
 	
   //TODO: Fehlerbehandlung!
-  void DllLoader::loadModule(SharedLibraryPtr sl)
+  void DllLoader::loadModule(SharedLibraryPtr sl,
+                             const std::string& moduleName)
   {
     CModuleFunctionTable fTable;
 		
@@ -232,77 +223,42 @@ namespace dllloader
     try
       {
 	postLoadModule(fTable);			
-	this->constructModuleClass(&fTable, sl);
+	this->constructModuleClass(&fTable, sl, moduleName);
       }
     catch (std::runtime_error& e)
-      {
-	//TODO
-	throw e;
+      {	
+		m_logger->error("DllLoader::loadModule", e.what());
       }
   }
-	
-	
-  void DllLoader::loadType(SharedLibraryPtr sl)
-  {
-    CTypeFunctionTable* fTable = new CTypeFunctionTable(); //TODO: memory leak
-		
-    fTable->newInstance = (newInstanceT) sl->loadSymbol("newInstance");
-		
-    fTable->deleteInstance = (deleteInstanceT) sl->loadSymbol("deleteInstance");
-		
-    fTable->init = (initT) sl->loadSymbol("init");
-		
-    fTable->shutDown = (shutDownT) sl->loadSymbol("shutDown");
-		
-    fTable->getSpec = (getSpecT) sl->loadSymbol("getSpec");
-    fTable->getInfo = (getInfoT) sl->loadSymbol("getInfo");
-		
-    fTable->assign = (assignT) sl->loadSymbol("assign");
-		
-    fTable->serialize = (serializeT) sl->loadSymbol("serialize");
-		
-    fTable->deSerialize = (deSerializeT) sl->loadSymbol("deSerialize");
-
-    fTable->attributesEqual = (attributesEqualT)
-      sl->loadSymbol("attributesEqual");
-
-    fTable->convertType = (convertTypeT) sl->loadSymbol("convertType");
-		
-    try
-      {
-	postLoadType(*fTable);
-		
-	this->constructTypeClass(fTable, sl);
-      }
-    catch (std::runtime_error& e)
-      {
-	std::cerr << "Fehler!!!!!!!!!!!!!!" << std::endl;
-	throw e;
-      }
-  }
-	
 	
   void DllLoader::loadModuleClass(const std::string& moduleName)
   {		
-    std::map<std::string,std::string>::const_iterator it = 
-      m_mod2fileName.find(moduleName);
+	  try 
+	  {
+		std::map<std::string,std::string>::const_iterator it = 
+		m_mod2fileName.find(moduleName);
 
-    if (it == m_mod2fileName.end())
-      {
-	throw std::runtime_error("ModulClass gibts halt nicht");
-      }
-
-    std::string filename = it->second;
-
-    SharedLibraryPtr sl = this->loadDll(filename);
-    if (sl->loadSymbol("update") != 0)
-      {
-	loadModule(sl);	
-      }
-    else
-      {
-	throw std::runtime_error("Unbekannter Dll Type.");
-      }
+		if (it == m_mod2fileName.end())
+		{
+			throw std::runtime_error("ModulClass gibts halt nicht");
+		}
+		
+		std::string filename = it->second;
+		
+		SharedLibraryPtr sl = this->loadDll(filename);
+		if (sl->loadSymbol("update") != 0)
+		{
+			loadModule(sl, moduleName);	
+		}
+		else
+		{
+			throw std::runtime_error("Unbekannter Dll Type.");
+		}
+	  }
+	  catch (std::runtime_error& e)
+	  {
+		m_logger->error("LoadModuleClass", e.what());
+	  }
   }
 	
   void DllLoader::unloadModuleClass(const std::string& name)
@@ -366,27 +322,44 @@ namespace dllloader
 	
   void DllLoader::loadTypeClass(const std::string& typeName)
   {
+    // get the filename of the type
     std::map<std::string,std::string>::const_iterator it = 
       m_typ2fileName.find(typeName);
-
+    
     if (it == m_typ2fileName.end())
       {
-	throw std::runtime_error("TypeClass '" + typeName +
-				 "' gibts halt nicht");
+	throw std::runtime_error("unknown type:" + typeName);
       }
 
     std::string filename = it->second;
 
-    SharedLibraryPtr sl = this->loadDll(filename);
+    // load the type and create class
+    CTypeFunctionTable ft = loadTypeDll(filename);
 
-    if (sl->loadSymbol("assign") != 0)
-      {
-	loadType(sl);
-      }
-    else
-      {
-	throw std::runtime_error("Unbekannter Dll Type.");
-      }
+    // lets get the name of the type
+    utils::StructReader spec(ft.getSpec());
+    std::string name = spec.getStringValue("name");
+
+    // and the typeinfo
+    int bufLen = ft.getInfo(0,0); // how big is it?
+    char* data = new char[bufLen];
+    ft.getInfo(data,bufLen);
+    // no exception thrower
+    utils::Buffer mi(reinterpret_cast<unsigned char*>(data),bufLen);
+    delete[] data;
+
+    // register typename and get a unique id
+    int id = resolver->registerObject(name);
+
+    CTypeClass tc(ft, name, id);
+    
+    // distribute the new typeclass to the typefactory
+    if ( m_typeClassReceiver != 0 )
+      m_typeClassReceiver->typeClassLoaded(id, tc);
+
+    // broadcast that there is a new type
+    if ( m_typeInfoReceiver != 0 )
+      m_typeInfoReceiver->typeClassLoaded(id,mi);
   }
 	
   void DllLoader::unloadTypeClass(const std::string& name)
@@ -430,13 +403,15 @@ namespace dllloader
   }
 	
   void DllLoader::constructModuleClass(CModuleFunctionTable* fTable,
-				       SharedLibraryPtr sl) 
+				       SharedLibraryPtr sl,
+                                       const std::string& moduleName) 
   {
     if (fTable->init != 0)
       {
-	if (fTable->init(0) == 0)
+	if (fTable->init(moduleLog) == 0)
 	  {
-	    throw std::runtime_error("Initialisierung gescheitert");
+	    throw std::runtime_error("init of plugin " + moduleName
+                                     + " failed");
 	  }
       }
 		
@@ -625,42 +600,6 @@ namespace dllloader
     
   }
   
-  void DllLoader::constructTypeClass(CTypeFunctionTable* fTable,
-				     SharedLibraryPtr sl)
-  {
-    if (fTable->init != 0)
-      {
-	if (fTable->init(0) == 0)
-	  {
-	    throw std::runtime_error("Das geht nicht!!!");
-	  }
-      }
-	  
-    std::string typeSpec = fTable->getSpec();
-    utils::StructReader spec(typeSpec);
-	  
-    std::string name = spec.getStringValue("name");
-	
-#if (ENGINE_VERBOSITY > 0)
-    std::cout << "Registriere Typ: \"" << name << '"' << std::endl;
-#endif	  
-	  
-    int bufLen = fTable->getInfo(0,0);
-    char* data = new char[bufLen];
-    fTable->getInfo(data,bufLen);
-    utils::Buffer mi(reinterpret_cast<unsigned char*>(data),bufLen);
-    delete[] data;
-	  
-    int id = resolver->registerObject(name);
-
-    m_typeHandles.insert(std::make_pair(name, sl));
-	  
-    if (m_typeInfoReceiver != 0)
-      m_typeInfoReceiver->typeClassLoaded(id,mi);
-	  
-    CTypeClass tc(*fTable);
-    m_typeClassReceiver->typeClassLoaded(id, tc);
-  }
 
   DllLoader::SharedLibraryPtr DllLoader::loadDll(const std::string& filename)
   {
@@ -718,7 +657,8 @@ namespace dllloader
 
     if (it != m_mod2fileName.end())
       {
-	throw std::runtime_error("Modulname doppelt bei processModFile");
+	throw std::runtime_error("Modulname '" + name 
+				 + "'doppelt bei processModFile");
       }
 
     m_mod2fileName[name] = fname;

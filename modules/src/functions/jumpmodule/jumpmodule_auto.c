@@ -12,16 +12,16 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0.5 } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=0 } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType const=true strong_dependency=true  } ";
+    return "input_spec { type=typ_NumberType const=true strong_dependency=true default=1 } ";
   break;
  }
  return 0;
@@ -69,10 +69,10 @@ int setInput(void* instance,int index,void* typePointer)
    inst->in_thr = (NumberType *) typePointer;
   break;
   case 2:
-   inst->in_upper = (NumberType *) typePointer;
+   inst->in_lower = (NumberType *) typePointer;
   break;
   case 3:
-   inst->in_lower = (NumberType *) typePointer;
+   inst->in_upper = (NumberType *) typePointer;
   break;
  } //switch(index) 
  return 1;
@@ -90,7 +90,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Jump Signal] group=[Signale] inputs=[4 Eingangssignal Schwellwert Oberer_Wert Unterer_Wert ] outputs=[1 Ausgangssignal ] type=xpm } ";
+  static const char* INFO = "info { name=[Jump Signal] group=[Signale] inputs=[4 Eingangssignal{widget_type=[unboundednumber_selector] } Schwellwert{hidden=[true] widget_type=[unboundednumber_selector] } Unterer_Wert{hidden=[true] widget_type=[unboundednumber_selector] } Oberer_Wert{hidden=[true] widget_type=[unboundednumber_selector] } ] outputs=[1 Ausgangssignal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(jumpmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -98,7 +98,7 @@ int getInfo(char* buf,int bufLen)
       char* offset;
       int i;
       int lines = getNumberOfStringsXPM(jumpmodule_xpm);
-      tmpBuf = malloc(reqLen);
+      tmpBuf = (char*) malloc(reqLen);
       memcpy(tmpBuf,INFO,strlen(INFO)+1);
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
@@ -114,8 +114,20 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-int initSO(logT log_function) 
+
+static log2T s_log_function = 0;
+
+static void logger(int level, const char* msg)
 {
+   if (s_log_function)
+      s_log_function(level, "mod_jumpmodule", msg);
+}
+
+int initSO(log2T log_function) 
+{
+	s_log_function = log_function;
 	
-	return init(log_function);
+	
+
+	return init(logger);
 }
