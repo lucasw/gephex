@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getInputAttributes">
+  
+  <refnamediv>
+    <refname>getInputAttributes</refname>
+    <refpurpose>get type-attributes for input</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void* <function>getInputAttributes</function></funcdef>
+        <paramdef>int <parameter>inputIndex</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>If the type-class of an input supports type attributes an module can force an automatic conversion to fixed attributes. This method returns these attributes. If it returns 0 the input has no fixed attribute or the type doesn't support attributes. inputIndex is the number of the input the caller want to obtain the information.</para>
+
+  </refsect1>
+</refentry>

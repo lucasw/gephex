@@ -1,0 +1,30 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvcyclemodule.mak
+
+.\effectvcyclemodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\utils.h"\
+	".\cycle.c"\
+	".\effectvcyclemodule.h"\
+	
+
+.\effectvcyclemodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvcyclemodule.h"\
+	".\effectvcyclemodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvcyclemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvcyclemodule - Win32 Debug"
+
+!ENDIF 
+

@@ -193,7 +193,10 @@ static double div_op(double lhs, double rhs) {
 }
 
 static double mod_op(double lhs, double rhs) {
-  return fmod(lhs,rhs);
+  if (fabs(rhs) < 0.0000000001)
+    return 0;
+  else
+    return fmod(lhs,rhs);
 }
 
 static double pow_op(double lhs, double rhs) {

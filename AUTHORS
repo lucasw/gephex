@@ -1,3 +1,27 @@
 Georg Seidel <georg@gephex.org>
 Martin Bayer <martin@gephex.org>
 Phillip Promesberger <coma@gephex.org>
+
+Some files inside effectvmodules are from the EffecTV project
+(all paths relative to 'effectvmodules/src/'):
+
+effectvagingmodule/aging.c
+effectvburnmodule/burn.c
+effectvcyclemodule/cycle.c
+effectvdotmodule/dot.c
+effectvdotmodule/heart.inc
+effectvedgemodule/edge.c
+effectvfiremodule/fire.c
+effectvlensmodule/lens.c
+effectvlifemodule/life.c
+effectvpuzzlemodule/puzzle.c
+effectvquarkmodule/quark.c
+effectvsparkmodule/spark.c
+
+libeffectv/libeffectv.c (contains some wrapper code)
+
+The files are taken from the 0.3.8 and 0.3.9 release.
+All files except libeffectv.c are unmodified.
+
+Please look at these files and http://effectv.sourceforge.net
+for the copyright.

@@ -23,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_NumberType id=device const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=alsa } ";
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
   break;
  }
  return 0;
@@ -105,7 +105,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[In] group=[Audio] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Treiber{widget_type=[combo_box] values=[default,wavein,oss,alsa] hidden=[true] } ] outputs=[1 Audio-Strom ] type=xpm } ";
+  static const char* INFO = "info { name=[In] group=[Audio] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Driver{widget_type=[combo_box] values=[default,wavein,oss,alsa] hidden=[true] } ] outputs=[1 audio stream ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(audioinmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -2,19 +2,26 @@ datadir = $(prefix)/share/gephex/
 icondir = $(prefix)/share/gephex/icon
 
 icon_DATA    = gephex-gui.xpm gephex-engine.xpm
-data_DATA    = gephex.conf.default
+data_DATA    = gephex.conf.default run_in_terminal.sh
 bin_SCRIPTS  = gephex-wrapper
 
-EXTRA_DIST = $(icon_DATA) gephex-wrapper.template gephex.conf.default.template
+EXTRA_DIST = $(icon_DATA) run_in_terminal.sh gephex-wrapper.in gephex.conf.default.in gephexw.conf.default
 
-gephex.conf.default: gephex.conf.default.template
-	cat gephex.conf.default.template | sed s:__PREFIX__:$(prefix):g - > gephex.conf.default
-
-gephex-wrapper: gephex-wrapper.template	
-	cat gephex-wrapper.template | sed s:__PREFIX__:$(prefix):g - > gephex-wrapper
 install-exec-hook:
-	chmod ug+x $(bindir)/gephex-wrapper
-	rm -rf $(bindir)/gephex-engine
-	rm -rf $(bindir)/gephex-gui
-	ln -s $(bindir)/gephex-wrapper $(bindir)/gephex-engine
-	ln -s $(bindir)/gephex-wrapper $(bindir)/gephex-gui
+	chmod ug+x $(DESTDIR)$(bindir)/gephex-wrapper
+	rm -rf $(DESTDIR)$(bindir)/gephex-engine
+	rm -rf $(DESTDIR)$(bindir)/gephex-gui
+	rm -rf $(DESTDIR)$(bindir)/gephex
+	ln -s $(DESTDIR)$(bindir)/gephex-wrapper $(DESTDIR)$(bindir)/gephex-engine
+	ln -s $(DESTDIR)$(bindir)/gephex-wrapper $(DESTDIR)$(bindir)/gephex-gui
+	ln -s $(DESTDIR)$(bindir)/gephex-wrapper $(DESTDIR)$(bindir)/gephex
+
+install-data-hook:
+	chmod u+x $(DESTDIR)$(datadir)/run_in_terminal.sh
+
+uninstall-hook:
+	rm -rf $(DESTDIR)$(bindir)/gephex-engine
+	rm -rf $(DESTDIR)$(bindir)/gephex-gui
+	rm -rf $(DESTDIR)$(bindir)/gephex
+
+DISTCLEANFILES = gephex-wrapper gephex.conf.default

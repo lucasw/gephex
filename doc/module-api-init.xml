@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-init">
+  
+  <refnamediv>
+    <refname>init</refname>
+    <refpurpose>initialize the plugin</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void (*logT) (int, const char*);</funcsynopsisinfo>
+      <funcprototype>
+        <funcdef>int <function>init</function></funcdef>
+        <paramdef>logT <parameter>logger</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>logger</parameter></term>
+	<listitem>
+<para>Callback to send log messages from the module plugin to the host application.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>The <function>init</function> function initialises the module plugin. It is the first function called after loading the shared library. No other method may be called before calling this. It is only allowed to call this function once. The propose is to initialise resources common to all instances of this module class. For example allocation of a memory pool or querys for i/o devices.</para>
+
+<para>If the return value signals an error the caller is not allowed to call another function. The proper handling of such a situation is unloading the shared library.</para>
+
+<para><parameter>logger</parameter> is a pointer to a function that is used to send log messages from the module to the engine. The first parameter of this function is the log level and the second is a const char pointer to the log message as c-string.</para>
+  
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>The return value is 1 if the module could be initialised and 0 in case of an error.</para>    
+
+  </refsect1>
+</refentry>

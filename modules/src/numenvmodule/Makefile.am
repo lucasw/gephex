@@ -26,3 +26,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = numenvmodule.h numenvmodule_auto.c
+EXTRA_DIST = numenvmodule.dsp numenvmodule.mak numenvmodule.dep

@@ -48,14 +48,19 @@ struct OutputDriver {
    * If an error occurs, 0 is returned and error_text is set.
    */
   struct DriverInstance* (*new_instance)(const char* server_name,
-	                                     int xpos, int ypos,
+                                         int xpos, int ypos,
                                          int width, int height,
                                          char* error_txt, int buflen);
 
   void (*destroy)(struct DriverInstance* self);
 
+  /**
+   * Note that resize can be called more often than needed.
+   * The driver should check if a resize is necessary
+   * and only perform one in that case.
+   */
   int  (*resize)(struct DriverInstance* self, int width, int height,
-			     char* error_text, int text_len);
+                 char* error_text, int text_len);
 
   /**
    * The driver is responsible for scaling, if (width, height) is not equal
@@ -77,25 +82,25 @@ struct OutputDriver {
    * Returns the window position in *xpos, *ypos
    */
   int (*window_pos)(struct DriverInstance* self, int* xpos, int* ypos,
-	                char* error_text, int text_len);
+                    char* error_text, int text_len);
 
   /**
    * Shows/hides the window frame (including titlebar)
    */
   int (*frame)(struct DriverInstance* self, int frame_visible,
-				  char* error_text, int text_len);
+               char* error_text, int text_len);
 
   /**
    * Sets the output window to "always on top"
    */
   int (*always_on_top)(struct DriverInstance* self, int on_top,
-	                   char* error_text, int text_len);
+                       char* error_text, int text_len);
 
   /**
    * Moves the output window to a specific monitor.
    */
   int (*to_monitor)(struct DriverInstance* self, int monitor,
-	                char* error_text, int text_len);
+                    char* error_text, int text_len);
 
 
 };

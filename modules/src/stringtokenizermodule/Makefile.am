@@ -26,3 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = stringtokenizermodule.h stringtokenizermodule_auto.c
+EXTRA_DIST = stringtokenizermodule.dsp stringtokenizermodule.mak stringtokenizermodule.dep

@@ -1,0 +1,38 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von audiosynthmodule.mak
+
+.\audiosynthmodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\envtype\envtype.h"\
+	"..\..\..\types\src\lfotype\lfotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiosynthmodule.h"\
+	".\synth.h"\
+	
+
+.\audiosynthmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\envtype\envtype.h"\
+	"..\..\..\types\src\lfotype\lfotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiosynthmodule.h"\
+	".\audiosynthmodule.xpm"\
+	
+
+.\synth.cpp : \
+	".\synth.h"\
+	
+
+!IF  "$(CFG)" == "audiosynthmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "audiosynthmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von numarithmodule.mak
+
+.\numarithmodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numarithmodule.h"\
+	
+
+.\numarithmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numarithmodule.h"\
+	".\numarithmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "numarithmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "numarithmodule - Win32 Debug"
+
+!ENDIF 
+

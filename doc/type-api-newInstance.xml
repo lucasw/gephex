@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-newInstance">
+  <refnamediv>
+    <refname>newInstance</refname>
+    <refpurpose>creates a new instance of the type</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;</funcsynopsisinfo>
+      <funcprototype>
+        <funcdef>TypeInstanceID <function>newInstance</function></funcdef>
+        <paramdef>void</paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>  
+
+<para>The <function>newInstance</function> function creates a new instance of the type. The return value is an identifier with the same memory layout as a pointer. It identifies the typeobject in subsequent calls to the functions of the same type. In most cases this will be a pointer to the memory area allocated to hold the value of the object, but it is not garanteed that this is true. There are different identification mechanisms possible.</para>
+
+<para>The type objects created by this constructor must be destroyed with a call to the same types <function>deleteInstance</function> function. Before calling <function>shutDown</function> all instances must be deleted.</para>
+
+<para>The created type object has a value, the default value.</para>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+<para>The function <function>newInstance</function> returns a object with the size of a pointer that identifies the type object. This should only passed as an identifier to the type api methods of the same plugin. The caller must ensure not to mix these identifier with the ones of different types.</para>
+  </refsect1>
+
+</refentry>

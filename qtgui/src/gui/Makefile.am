@@ -88,14 +88,16 @@ EXTRA_DIST= \
 	node.xpm \
 	outplugbusy.xpm \
 	outplugfree.xpm \
-	rot_klein.xpm
+	rot_klein.xpm \
+	gui.dsp gui.mak gui.dep \
+	logo.ico \
+	Skript1.rc resource.h
 
-gephex_gui_real_SOURCES =  $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
+gephex_gui_real_SOURCES =  $(CPP_FILES) $(HEADER_FILES)
+nodist_gephex_gui_real_SOURCES = $(BUILT_SOURCES)
 
-dist-hook:
-	rm -f $(distdir)/*_moc.cpp
-
-Makefile: $(BUILT_SOURCES)
+#dist-hook:
+#	rm -f $(distdir)/*_moc.cpp
 
 %_moc.cpp: %.h
 	$(MOC) -o $@ $<

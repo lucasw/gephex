@@ -1,0 +1,43 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von capturemodule.mak
+
+.\capturemodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\capturedriver.h"\
+	".\capturemodule.h"\
+	".\dshowcapturedriver.h"\
+	
+
+.\capturemodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\capturemodule.h"\
+	".\capturemodule.xpm"\
+	
+
+.\dshowcapturedriver.cpp : \
+	"..\..\..\..\..\DXSDK\Include\audevcod.h"\
+	"..\..\..\..\..\DXSDK\Include\dshow.h"\
+	"..\..\..\..\..\DXSDK\Include\dxtrans.h"\
+	"..\..\..\..\..\DXSDK\Include\qedit.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libdshow\dshowutils.h"\
+	"..\libdshow\samplecallback.h"\
+	"..\libscale\libscale.h"\
+	".\capturedriver.h"\
+	".\dshowcapturedriver.h"\
+	
+
+!IF  "$(CFG)" == "capturemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "capturemodule - Win32 Debug"
+
+!ENDIF 
+

@@ -22,3 +22,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = flipflopmodule.h flipflopmodule_auto.c
+EXTRA_DIST = flipflopmodule.dsp flipflopmodule.mak flipflopmodule.dep

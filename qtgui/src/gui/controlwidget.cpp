@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "controlwidget.h"
 
 #include <qtooltip.h>
@@ -17,7 +39,7 @@ namespace gui
 			       const TypeViewConstructor* con)
     : QFrame(parent,name.c_str(),0), m_name(name),
       m_controlID(controlID), m_nodeID(nodeID),
-      m_inputIndex(inIndex), m_label(0), m_view(0)
+      m_inputIndex(inIndex), dragMode(false), m_label(0), m_view(0)
   {
     setFrameStyle(QFrame::Box|QFrame::Sunken);
     setLineWidth(2);
@@ -54,6 +76,7 @@ namespace gui
   {
     m_view->valueChange(newValue);
   }
+
   QWidget* ControlWidget::getLabel()
   {
     return m_label;
@@ -97,11 +120,11 @@ namespace gui
 
   void ControlWidget::mouseMoveEvent(QMouseEvent* e)
   {
-    if(dragMode){
-      emit moved(this, mapToParent(e->pos()-clickedPos));
-    }	
+    if (dragMode)
+      {
+        emit moved(this, e->globalPos()-clickedPos);
+      }
   }
-
 
   void ControlWidget::mousePressEvent(QMouseEvent* e)
   {
@@ -109,10 +132,11 @@ namespace gui
     if(e->button() == LeftButton)
       {
 	dragMode = true;
+        this->raise();
       }
     else if (e->button() == RightButton)
       {
-	emit beenRightClicked(this, e->pos());
+	emit beenRightClicked(this, e->globalPos());
       }
   }
 
@@ -121,7 +145,7 @@ namespace gui
     if (dragMode)
       {
 	dragMode = false;
-	emit released(this,mapToParent(e->pos()-clickedPos));
+	emit released(this, e->globalPos()-clickedPos);
       }
   }
 

@@ -24,3 +24,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = resultmodule.h resultmodule_auto.c
+EXTRA_DIST = resultmodule.dsp resultmodule.mak resultmodule.dep

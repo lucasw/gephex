@@ -1,3 +1,4 @@
+EXTRA_DIST = base.dsp base.mak base.dep
 noinst_LIBRARIES = libguibase.a
 
 CPP_FILES = \
@@ -26,12 +27,8 @@ HEADER_FILES = \
 	ikeylistener.h \
 	keyboardmanager.h
 
-libguibase_a_SOURCES =  $(CPP_FILES) $(HEADER_FILES) $(MOCED_FILES)
-
-dist-hook:
-	rm -f $(distdir)/*_moc.cpp
-
-Makefile: $(BUILT_SOURCES)
+libguibase_a_SOURCES =  $(CPP_FILES) $(HEADER_FILES)
+nodist_libguibase_a_SOURCES =  $(MOCED_FILES)
 
 #treeview.o: treeview_moc.cpp
 treeview_moc.cpp: treeview.cpp
@@ -70,4 +67,3 @@ guibasetest_LDADD = \
 	-lguibase
 
 CLEANFILES = $(BUILT_SOURCES)
-

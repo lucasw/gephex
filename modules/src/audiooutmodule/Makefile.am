@@ -11,19 +11,18 @@ audiooutmodule.h: audiooutmodule.spec
 lib_LTLIBRARIES = audiooutmodule.la
 
 
-if HAVE_ASOUNDLIB
+if WITH_ASOUNDLIB
 ALSALIB_sOURCES = \
         alsaoutdriver.cpp \
 	alsaoutdriver.h
 ALSALIB_lDFLAGS = -lasound
 endif
 
-if HAVE_OSS
+if WITH_OSS
 OSS_sOURCES = \
 	ossoutdriver.cpp \
 	ossoutdriver.h
 endif
-
 
 audiooutmodule_la_SOURCES = \
         audiooutmodule_auto.c \
@@ -42,5 +41,7 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../types/src/numbertype \
            -I@srcdir@/../../../types/src/stringtype 
 
-
 DISTCLEANFILES = audiooutmodule.h audiooutmodule_auto.c
+EXTRA_DIST = audiooutmodule.dsp audiooutmodule.mak audiooutmodule.dep \
+	waveoutdriver.cpp waveoutdriver.h \
+	outbuffer.c outbuffer.h

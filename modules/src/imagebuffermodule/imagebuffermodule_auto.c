@@ -104,7 +104,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Buffer] group=[Filter] inputs=[4 Puffergroesse{lower_bound=[1] widget_type=[number_selector] step_size=[1] higher_bound=[250] help=[Groesse des Puffers in Frames] } Pufferposition{lower_bound=[0] widget_type=[number_selector] help                    = Position im Puffer: 0 = aeltestes Bild, 1=[neustes Bild] higher_bound=[1] } Aufnehmen{widget_type=[radio_button] false_value=[0] true_value=[1] help=[Neue Bilder aufnehmen oder alte beibehalten] } Bild ] outputs=[1 Bild ] type=xpm } ";
+  static const char* INFO = "info { name=[Buffer] group=[Filter] inputs=[4 Buffersize{lower_bound=[1] widget_type=[number_selector] step_size=[1] higher_bound=[250] help=[Size of the buffer (in frames)] } Position{lower_bound=[0] help                    = Position in the buffer: 0 = oldest image, 1=[newest image] widget_type=[number_selector] higher_bound=[1] } Record{widget_type=[radio_button] false_value=[0] true_value=[1] help=[Record new images or keep the old ones] } Image ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(imagebuffermodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

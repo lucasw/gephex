@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-assign">
+  <refnamediv>
+    <refname>assign</refname>
+    <refpurpose>
+      Assigns the value of the source to the destination typeobject.
+    </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;</funcsynopsisinfo>
+      <funcprototype>
+	<funcdef>void <function>assign</function></funcdef>
+	<paramdef>TypeInstanceID <parameter>destination</parameter></paramdef>
+	<paramdef>TypeInstanceID <parameter>source</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>destination</parameter></term>
+	<listitem>
+<para>The value of this type instance will be changed to the value of <parameter>source</parameter>.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>source</parameter></term>
+	<listitem>
+<para>The value of this type instance is assigned to the <parameter>destination</parameter> instance. The value of <parameter>source</parameter> stays unchanged.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  
+  <refsect1>
+    <title>Description</title>
+
+<para><varname>source</varname> and <varname>destination</varname> are identifier for two type objects of the same type as the typeclass. After a call to this function the value of the source object stays unchanged and the value of destination is changed to the one of source. It is the callers task to ensure that both instances and the <function>assign</function> function have the same type.</para>
+
+  </refsect1>
+</refentry>

@@ -1,0 +1,29 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von plasmamodule.mak
+
+.\plasmamodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libgrid\libgrid.h"\
+	".\plasmamodule.h"\
+	
+
+.\plasmamodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\plasmamodule.h"\
+	".\plasmamodule.xpm"\
+	
+
+!IF  "$(CFG)" == "plasmamodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "plasmamodule - Win32 Debug"
+
+!ENDIF 
+

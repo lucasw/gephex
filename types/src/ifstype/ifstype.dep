@@ -1,0 +1,7 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von ifstype.mak
+
+.\ifstype.c : \
+	"..\..\..\engine\src\engine\dlltype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\ifstype.h"\
+	

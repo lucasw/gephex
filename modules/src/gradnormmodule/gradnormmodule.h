@@ -6,16 +6,20 @@ extern "C"
 {
 #endif
 #include "dllmodule.h"
+#include "stringtype.h"
 #include "framebuffertype.h"
+#include "numbertype.h"
 
 struct _MyInstance;
 typedef struct _Instance
 {
 struct _MyInstance* my;
  FrameBufferType* in_b;
+ NumberType* in_scale;
+ StringType* in_algo;
  FrameBufferType* out_r;
 } Instance, *InstancePtr;
-enum Inputs { in_b = 0 };
+enum Inputs { in_b = 0, in_scale = 1, in_algo = 2 };
 enum Outputs { out_r = 0 };
 
 struct _MyInstance* construct(void);

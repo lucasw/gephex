@@ -1,0 +1,27 @@
+name: GraphData
+
+ /**
+  * TODO: descr. of the interface
+  */
+  
+   /**
+   * Teilt dem Receiver mit, dass irgendwas...
+   */
+  graphDataSet int type, buffer buf
+
+   /**
+   * Teilt dem Receiver mit, dass irgendwas...
+   */
+  graphDataUnSet int type
+
+  /**
+   * 
+   */
+  syncGraphDataStarted
+
+  /**
+   * 
+   */
+  syncGraphDataFinished
+
+

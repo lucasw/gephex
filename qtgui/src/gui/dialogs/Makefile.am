@@ -1,3 +1,5 @@
+EXTRA_DIST = dialogs.dsp dialogs.mak dialogs.dep
+
 baseincludedir = @includedir@/gephex
 
 noinst_LIBRARIES = libdialogs.a
@@ -22,9 +24,9 @@ libdialogs_a_SOURCES = \
 	dllselectordialog.cpp \
 	dllselectordialog.h \
 	newgraphdialog.cpp \
-	newgraphdialog.h $(BUILT_SOURCES)
+	newgraphdialog.h
 
-Makefile: $(BUILT_SOURCES)
+nodist_libdialogs_a_SOURCES = $(BUILT_SOURCES)
 
 %_h_moc.cpp: %.h
 	$(MOC) -o $@ $<

@@ -33,3 +33,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = xfademodule.h xfademodule_auto.c
+EXTRA_DIST = xfademodule.dsp xfademodule.mak xfademodule.dep

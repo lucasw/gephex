@@ -1,3 +1,5 @@
+EXTRA_DIST = renderer.dsp renderer.mak renderer.dep
+
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
 includedir = $(baseincludedir)/renderer

@@ -1,0 +1,11 @@
+name: TypeClassName
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ typeClassNameExists string s
+

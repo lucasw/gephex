@@ -1,0 +1,309 @@
+<graph>
+<id>IDSTART/gephexwin32ENDID</id>
+<name>gephexwin32</name>
+<data>
+<dataitem> <key>1031</key> <buf>72 41 ~3cstr~3e~3cl~3e11~3c/l~3e~3cd~3eTemperature~3c/d~3e~3c/str~3e</buf> </dataitem>
+<dataitem> <key>1032</key> <buf>170 116 ~3cstr~3e~3cl~3e8~3c/l~3e~3cd~3ePosition~3c/d~3e~3c/str~3e</buf> </dataitem>
+</data>
+<nodes>
+<node> <id>3</id> <type>mod_frboutmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>373 91</buf> </dataitem>
+</data>
+</node>
+<node> <id>4</id> <type>mod_tunnelmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>191 110</buf> </dataitem>
+<dataitem> <key>1025</key> <buf>~3cstr~3e~3cl~3e15~3c/l~3e~3cd~3eTunnel:Position~3c/d~3e~3c/str~3e 4 2 ~3cstr~3e~3cl~3e9~3c/l~3e~3cd~3epos_field~3c/d~3e~3c/str~3e 211 5| {  } </buf> </dataitem>
+</data>
+</node>
+<node> <id>5</id> <type>mod_isingnoizemodule</type>
+<data>
+<dataitem> <key>0</key> <buf>6 150</buf> </dataitem>
+<dataitem> <key>1024</key> <buf>~3cstr~3e~3cl~3e22~3c/l~3e~3cd~3eIsingnoize:Temperature~3c/d~3e~3c/str~3e 5 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3ehslider~3c/d~3e~3c/str~3e 32 8| { help=[Relative temperature]; higher_bound=[6]; lower_bound=[0]; widget_type=[unboundednumber_selector];  } </buf> </dataitem>
+</data>
+</node>
+<node> <id>6</id> <type>mod_font3dmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>243 88</buf> </dataitem>
+</data>
+</node>
+<node> <id>12</id> <type>mod_effectvedgemodule</type>
+<data>
+<dataitem> <key>0</key> <buf>81 144</buf> </dataitem>
+</data>
+</node>
+<node> <id>14</id> <type>mod_effectvagingmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>301 77</buf> </dataitem>
+</data>
+</node>
+<node> <id>15</id> <type>mod_signalmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>30 -13</buf> </dataitem>
+</data>
+</node>
+<node> <id>16</id> <type>mod_num2pos</type>
+<data>
+<dataitem> <key>0</key> <buf>80 90</buf> </dataitem>
+</data>
+</node>
+<node> <id>17</id> <type>mod_signalmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>5 58</buf> </dataitem>
+</data>
+</node>
+<node> <id>18</id> <type>mod_signalmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>6 109</buf> </dataitem>
+</data>
+</node>
+<node> <id>19</id> <type>mod_xfademodule</type>
+<data>
+<dataitem> <key>0</key> <buf>147 146</buf> </dataitem>
+</data>
+</node>
+<node> <id>20</id> <type>mod_effectvagingmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>216 176</buf> </dataitem>
+</data>
+</node>
+<node> <id>21</id> <type>mod_signalmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>6 205</buf> </dataitem>
+</data>
+</node>
+<node> <id>22</id> <type>mod_xfademodule</type>
+<data>
+<dataitem> <key>0</key> <buf>287 171</buf> </dataitem>
+</data>
+</node>
+<node> <id>23</id> <type>mod_signalmodule</type>
+<data>
+<dataitem> <key>0</key> <buf>47 39</buf> </dataitem>
+</data>
+</node>
+</nodes>
+<connections>
+<connect>
+<from> <node_id>14</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>3</node_id> <plug_id>in</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>15</node_id> <plug_id>Signal</plug_id> </from>
+<to> <node_id>4</node_id> <plug_id>t</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>23</node_id> <plug_id>Signal</plug_id> </from>
+<to> <node_id>4</node_id> <plug_id>rot</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>16</node_id> <plug_id>result</plug_id> </from>
+<to> <node_id>4</node_id> <plug_id>pos</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>19</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>4</node_id> <plug_id>b</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>21</node_id> <plug_id>Signal</plug_id> </from>
+<to> <node_id>5</node_id> <plug_id>temp</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>20</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>6</node_id> <plug_id>b</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>5</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>12</node_id> <plug_id>b</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>22</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>14</node_id> <plug_id>b</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>17</node_id> <plug_id>Signal</plug_id> </from>
+<to> <node_id>16</node_id> <plug_id>xpos</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>18</node_id> <plug_id>Signal</plug_id> </from>
+<to> <node_id>16</node_id> <plug_id>ypos</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>12</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>19</node_id> <plug_id>1</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>19</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>19</node_id> <plug_id>2</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>4</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>20</node_id> <plug_id>b</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>6</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>22</node_id> <plug_id>1</plug_id> </to>
+</connect>
+<connect>
+<from> <node_id>22</node_id> <plug_id>r</plug_id> </from>
+<to> <node_id>22</node_id> <plug_id>2</plug_id> </to>
+</connect>
+</connections>
+<snapshots>
+<snapshot> <id>IDSTART/gephexwin32ENDID</id> <name>default</name>
+<values>
+<value><plug> <node_id>3</node_id> <plug_id>in</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>options</plug_id> </plug>
+<buf>2~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>xsize</plug_id> </plug>
+<buf>640~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>ysize</plug_id> </plug>
+<buf>480~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>brightness</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>contrast</plug_id> </plug>
+<buf>1~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>gamma</plug_id> </plug>
+<buf>1~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>monitor</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>driver</plug_id> </plug>
+<buf>default~00</buf></value>
+<value><plug> <node_id>3</node_id> <plug_id>server</plug_id> </plug>
+<buf>default~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>t</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>rot</plug_id> </plug>
+<buf>32.4706~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>pos</plug_id> </plug>
+<buf>0.5 0.5~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>b</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>xres</plug_id> </plug>
+<buf>320~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>yres</plug_id> </plug>
+<buf>240~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>radius</plug_id> </plug>
+<buf>1~00</buf></value>
+<value><plug> <node_id>4</node_id> <plug_id>shading</plug_id> </plug>
+<buf>10~00</buf></value>
+<value><plug> <node_id>5</node_id> <plug_id>temp</plug_id> </plug>
+<buf>1.88235~00</buf></value>
+<value><plug> <node_id>5</node_id> <plug_id>border_growth</plug_id> </plug>
+<buf>4~00</buf></value>
+<value><plug> <node_id>5</node_id> <plug_id>spont_growth</plug_id> </plug>
+<buf>8~00</buf></value>
+<value><plug> <node_id>5</node_id> <plug_id>outx</plug_id> </plug>
+<buf>320~00</buf></value>
+<value><plug> <node_id>5</node_id> <plug_id>outy</plug_id> </plug>
+<buf>240~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>text</plug_id> </plug>
+<buf>GePhex~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>pos</plug_id> </plug>
+<buf>0.40367 0.563025~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>font</plug_id> </plug>
+<buf>{Tahoma} 0 16 700 false false~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>block</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>color</plug_id> </plug>
+<buf>0.49 0 0~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>xrot</plug_id> </plug>
+<buf>1~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>yrot</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>zrot</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>6</node_id> <plug_id>b</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>12</node_id> <plug_id>b</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>14</node_id> <plug_id>b</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>Amplitude</plug_id> </plug>
+<buf>4~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>Frequenz</plug_id> </plug>
+<buf>0.005~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>Phase</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>Position</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>signal</plug_id> </plug>
+<buf>noize~00</buf></value>
+<value><plug> <node_id>15</node_id> <plug_id>mode</plug_id> </plug>
+<buf>real~00</buf></value>
+<value><plug> <node_id>16</node_id> <plug_id>xpos</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>16</node_id> <plug_id>ypos</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>Amplitude</plug_id> </plug>
+<buf>.8~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>Frequenz</plug_id> </plug>
+<buf>.01~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>Phase</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>Position</plug_id> </plug>
+<buf>.1~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>signal</plug_id> </plug>
+<buf>noize~00</buf></value>
+<value><plug> <node_id>17</node_id> <plug_id>mode</plug_id> </plug>
+<buf>real~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>Amplitude</plug_id> </plug>
+<buf>.8~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>Frequenz</plug_id> </plug>
+<buf>.1~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>Phase</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>Position</plug_id> </plug>
+<buf>0.1~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>signal</plug_id> </plug>
+<buf>noize~00</buf></value>
+<value><plug> <node_id>18</node_id> <plug_id>mode</plug_id> </plug>
+<buf>real~00</buf></value>
+<value><plug> <node_id>19</node_id> <plug_id>x</plug_id> </plug>
+<buf>0.470588~00</buf></value>
+<value><plug> <node_id>19</node_id> <plug_id>1</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>19</node_id> <plug_id>2</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>19</node_id> <plug_id>routine</plug_id> </plug>
+<buf>mmx~00</buf></value>
+<value><plug> <node_id>20</node_id> <plug_id>b</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>Amplitude</plug_id> </plug>
+<buf>5~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>Frequenz</plug_id> </plug>
+<buf>0.01~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>Phase</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>Position</plug_id> </plug>
+<buf>0.5~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>signal</plug_id> </plug>
+<buf>noize~00</buf></value>
+<value><plug> <node_id>21</node_id> <plug_id>mode</plug_id> </plug>
+<buf>real~00</buf></value>
+<value><plug> <node_id>22</node_id> <plug_id>x</plug_id> </plug>
+<buf>0.552941~00</buf></value>
+<value><plug> <node_id>22</node_id> <plug_id>1</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>22</node_id> <plug_id>2</plug_id> </plug>
+<buf>~00</buf></value>
+<value><plug> <node_id>22</node_id> <plug_id>routine</plug_id> </plug>
+<buf>mmx~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>Amplitude</plug_id> </plug>
+<buf>180~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>Frequenz</plug_id> </plug>
+<buf>0.05~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>Phase</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>Position</plug_id> </plug>
+<buf>0~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>signal</plug_id> </plug>
+<buf>noize~00</buf></value>
+<value><plug> <node_id>23</node_id> <plug_id>mode</plug_id> </plug>
+<buf>real~00</buf></value>
+</values>
+</snapshot>
+</snapshots>
+</graph>

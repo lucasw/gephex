@@ -57,6 +57,14 @@ public:
 	*/
 	virtual void unSetModuleData( int moduleID, int type ) = 0;
 
+        /**
+         */
+	virtual void setEditGraphData( int type, const utils::Buffer& buf ) = 0;
+
+        /**
+         */
+	virtual void unSetEditGraphData( int type ) = 0;
+
 	/**
 	* legt neuen gr an, alter graph bleibt aktiv
 	*/

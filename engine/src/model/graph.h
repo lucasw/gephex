@@ -30,11 +30,7 @@
 #include <iosfwd>
 
 #include "utils/autoptr.h"
-
-namespace utils 
-{
-  class Buffer;
-}
+#include "utils/buffer.h"
 
 class IModuleClassSpec;
 
@@ -113,6 +109,10 @@ namespace model
        */
       void clear();
 
+      // graph data
+      void setData(int type, const utils::Buffer& buf);
+      void unSetData(int type);
+
       // ModuleData
       void setModuleData(ModuleID moduleID,int type,const utils::Buffer& buf);
       void unSetModuleData(ModuleID moduleID,int type);
@@ -143,6 +143,8 @@ namespace model
       std::string getOutputID(int moduleID, int outputIndex) const;
       std::string getInputID(int moduleID, int inputIndex) const;
 
+      const std::map<int, utils::Buffer>& data() const;
+
     private:
       Graph(const Graph&); //not impl.
       Graph& operator=(const Graph&); //not impl.
@@ -157,6 +159,8 @@ namespace model
 
       // controll Value Sets
       ValueSetMap valueSets;
+
+      std::map<int, utils::Buffer> m_data;
     };  
 }
 

@@ -18,7 +18,8 @@ audioenergymodule_la_SOURCES = \
         audioenergymodule.xpm \
 	fft.hh
 
-EXTRA_DIST = fft.cpp
+EXTRA_DIST = fft.cpp \
+             audioenergymodule.dsp audioenergymodule.mak audioenergymodule.dep
 
 audioenergymodule_la_LDFLAGS = -module -avoid-version -no-undefined
 
@@ -29,3 +30,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = audioenergymodule.h audioenergymodule_auto.c
+

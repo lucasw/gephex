@@ -6,3 +6,4 @@ libmidi_a_SOURCES = libmidi.c \
 		    midiutil.h
 
 INCLUDES = -I$(baseincludedir)
+EXTRA_DIST = libmidi.dsp libmidi.mak libmidi.dep

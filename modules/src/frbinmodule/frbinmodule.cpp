@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "frbinmodule.h"
 
 #include <string>
@@ -5,7 +27,7 @@
 #include <algorithm> 
 #include <cctype> // tolower
 #include <stdlib.h>
-#include <iostream>
+//#include <iostream>
 #include <fstream>
 #include <list>
 #include <map>
@@ -25,20 +47,20 @@ using std::tolower;
 
 #include "videofiledriver.h"
 
-#if defined(OS_POSIX)
+#if defined(OS_WIN32)
+#include "vfwdriver.h"
+#include "dshowdriver.h"
+#endif
 
-#if defined(HAVE_AVIFILE)
+#if defined(WITH_AVIFILE)
 #include "avifiledriver.h"
 #endif
-#if defined(HAVE_MPEG3)
+
+#if defined(WITH_MPEG3)
 #include "mpeg3driver.h"
 #endif
-#elif defined(OS_WIN32)
-#include "vfwdriver.h"
-//#include "dshowdriver.h"
-#endif
 
-#if defined(HAVE_SDL_IMAGE)
+#if defined(WITH_SDL_IMAGE)
 #include "sdlimagedriver.h"
 #endif
 
@@ -94,30 +116,32 @@ int init(logT log_function)
   s_cache = new FrameCache(CACHE_SIZE_IN_MB);
   s_factory = new DriverFactory();
 
-#if defined(OS_POSIX)
-#if defined(HAVE_MPEG3)
-  //  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
-  //  = new DriverConstructor<Mpeg3Driver>();
-  //s_factory->register_driver(mpeg3_ctor);
+#if defined(OS_WIN32)
+  DriverConstructor<VFWDriver>* vFW_ctor = new DriverConstructor<VFWDriver>();
+  s_factory->register_driver(vFW_ctor);
+  DriverConstructor<DSHOWDriver>* DSHOW_ctor = new DriverConstructor<DSHOWDriver>();
+    s_factory->register_driver(DSHOW_ctor);
 #endif
-#if defined(HAVE_AVIFILE)
+
+#if defined(WITH_MPEG3)
+  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
+    = new DriverConstructor<Mpeg3Driver>();
+  s_factory->register_driver(mpeg3_ctor);
+#endif
+
+#if defined(WITH_AVIFILE)
   DriverConstructor<AviFileDriver>* aviFile_ctor 
     = new DriverConstructor<AviFileDriver>();
   s_factory->register_driver(aviFile_ctor);
 
 #endif
-#elif defined(OS_WIN32)
-  /*DriverConstructor<DSHOWDriver>* DSHOW_ctor = new DriverConstructor<DSHOWDriver>();
-    s_factory->register_driver(DSHOW_ctor);*/
-  DriverConstructor<VFWDriver>* vFW_ctor = new DriverConstructor<VFWDriver>();
-  s_factory->register_driver(vFW_ctor);
-#endif
 
-#if defined (HAVE_SDL) && defined(HAVE_SDL_IMAGE)
+#if defined(WITH_SDL_IMAGE)
   DriverConstructor<SDLImageDriver>* sdlimage_ctor 
     = new DriverConstructor<SDLImageDriver>();
   s_factory->register_driver(sdlimage_ctor);
 #endif  
+
   DriverConstructor<BMPDriver>* bMP_ctor = new DriverConstructor<BMPDriver>();
   s_factory->register_driver(bMP_ctor);
   return 1;
@@ -184,19 +208,19 @@ static std::list<std::string> path_to_dirs(const std::string& media_path)
   std::string::size_type old_pos = 0;
 
   std::list<std::string> dir_list;
-  std::cout << "path = " << media_path << "\n";
+  //  std::cout << "path = " << media_path << "\n";
   while ( (pos = media_path.find_first_of(";", old_pos)) != std::string::npos )
     {
       if (old_pos < pos)
 	{
-	  std::string dir = media_path.substr(old_pos, pos - old_pos -1);
+	  std::string dir = media_path.substr(old_pos, pos - old_pos);
 #if defined(OS_WIN32)
           dir += "\\";
 #else
           dir += "/";
 #endif
 	  dir_list.push_back(dir);
-	  std::cout << "... " << dir << "\n";
+          //          std::cout << "... " << dir << "\n";
 	}
       old_pos = pos+1;
     }
@@ -209,7 +233,7 @@ static std::list<std::string> path_to_dirs(const std::string& media_path)
 #endif
   dir_list.push_back(dir);
 
-  std::cout << "... " << dir << "\n";
+  //  std::cout << "... " << dir << "\n";
   return dir_list;
 }
 
@@ -261,7 +285,7 @@ static VideoFileDriver* load_file(const std::string& short_file_name,
     {
       const std::string fullfilename (*it+short_file_name);
       std::ifstream teststream(fullfilename.c_str());
-      std::cout <<"filename: "<< fullfilename << std::endl;
+      //      std::cout <<"filename: "<< fullfilename << std::endl;
       if(teststream)
 	break;
       ++it;
@@ -270,7 +294,7 @@ static VideoFileDriver* load_file(const std::string& short_file_name,
   if(it==path.end())
     {
       // file not found
-      throw std::runtime_error("file not fould");
+      throw std::runtime_error("file not found");
     }
 
   const std::string file_name( *it + short_file_name );
@@ -448,7 +472,7 @@ void update(void* instance)
                 {
                   my->drv = load_file(m_file_name, *s_factory, my->info);
                   m_known_infos.insert(std::make_pair(m_file_name,
-                                                      my->info));				  
+                                                      my->info));
                 }
 
               my->drv->decode_frame(pos, frb, xsize, ysize);

@@ -24,3 +24,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = isingnoizemodule.h isingnoizemodule_auto.c
+EXTRA_DIST = isingnoizemodule.dsp isingnoizemodule.mak isingnoizemodule.dep

@@ -1,0 +1,23 @@
+name: ControlValue
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+
+ /**
+  *
+  */
+  controlValueChanged int nodeID,int intputIndex,buffer newValue
+
+ /**
+  *
+  */
+  syncInputValuesStarted
+
+ /**
+  *
+  */
+  syncInputValuesFinished
+
+

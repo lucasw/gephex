@@ -1,0 +1,73 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von funparsemodule.mak
+
+.\builtin_functions.c : \
+	".\builtin_functions.h"\
+	
+
+.\env.c : \
+	".\env.h"\
+	".\slist.h"\
+	".\string_copy.h"\
+	
+
+.\expression.c : \
+	".\env.h"\
+	".\expression.h"\
+	".\slist.h"\
+	".\string_copy.h"\
+	
+
+.\expresso.c : \
+	".\env.h"\
+	".\expression.h"\
+	".\expresso.h"\
+	".\parser.h"\
+	".\slist.h"\
+	
+
+.\funparsemodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\env.h"\
+	".\expresso.h"\
+	".\funparsemodule.h"\
+	
+
+.\funparsemodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\funparsemodule.h"\
+	".\funparsemodule.xpm"\
+	
+
+.\parser.tab.c : \
+	".\builtin_functions.h"\
+	".\env.h"\
+	".\expression.h"\
+	".\parser.h"\
+	".\slist.h"\
+	
+
+.\scanner.c : \
+	".\parser.tab.h"\
+	
+
+.\slist.c : \
+	".\slist.h"\
+	
+
+.\string_copy.c : \
+	".\string_copy.h"\
+	
+
+!IF  "$(CFG)" == "funparsemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "funparsemodule - Win32 Debug"
+
+!ENDIF 
+

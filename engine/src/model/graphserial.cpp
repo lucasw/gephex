@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 #include "graph.h"
 #include "graphnode.h"
 #include "graphconnection.h"
-#include "controllvalueset.h"
+#include "controlvalueset.h"
 
 #include "graphparser.h"
 
@@ -209,13 +209,25 @@ namespace model
     std::string graph_id = g.getID();
     std::string graph_name = g.getName();
     
+    std::list<gparser::SDataItem> gditems;
+    const std::map<int, utils::Buffer>& gdata = g.data();
+    for (std::map<int, utils::Buffer>::const_iterator it = gdata.begin();
+         it != gdata.end(); ++it)
+      {
+        std::string key = int_to_string(it->first);
+        //        std::cout << "key = " << key << "\n";
+        std::string val = buffer_to_string(it->second);
+        //        std::cout << "val = " << val << "\n";
+
+        gditems.push_back(gparser::SDataItem(key, val));
+      }
+
     std::list<gparser::SNode> ns;
     const Graph::GraphNodeList& nodes = g.nodes();
     for ( Graph::GraphNodeList::const_iterator node = nodes.begin();
 	  node != nodes.end(); ++node)
       {
 	ns.push_back( node_to_syntax(**node) );
-        
       }
 
     std::list<gparser::SConnection> cs;
@@ -257,7 +269,7 @@ namespace model
         snaps.push_back(gparser::SSnapshot(snap_id, snap_name, values));
       }
     
-    return gparser::SGraph(graph_id, graph_name, ns, cs, snaps);
+    return gparser::SGraph(graph_id, graph_name, gditems, ns, cs, snaps);
   }
 
   std::ostream& operator<< (std::ostream& s, const model::Graph& graph)
@@ -283,6 +295,20 @@ namespace model
     // parse and build
     graph.setID(sg.id());
     graph.setName(sg.name());
+
+    for (std::list<gparser::SDataItem>::const_iterator 
+           di_it = sg.dataitems().begin();
+         di_it != sg.dataitems().end();
+         ++di_it)
+          {
+            const gparser::SDataItem& di = *di_it;
+	    int key = string_to_int(di.key());
+	    utils::Buffer value = string_to_buffer(di.value());
+	    if (nodummy)
+              {
+                graph.setData(key, value);
+              }
+	  } // dataitems
 
     for (std::list<gparser::SNode>::const_iterator nit = sg.nodes().begin();
          nit != sg.nodes().end(); ++nit)

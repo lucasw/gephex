@@ -1,0 +1,29 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von isingnoizemodule.mak
+
+.\isingnoizemodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\..\..\util\src\misc\crandgen.h"\
+	".\isingnoizemodule.h"\
+	
+
+.\isingnoizemodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\isingnoizemodule.h"\
+	".\isingnoizemodule.xpm"\
+	
+
+!IF  "$(CFG)" == "isingnoizemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "isingnoizemodule - Win32 Debug"
+
+!ENDIF 
+

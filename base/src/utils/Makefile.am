@@ -1,3 +1,5 @@
+EXTRA_DIST = utils.dsp utils.mak utils.dep
+
 TESTS=utilstest
 
 check_PROGRAMS = utilstest

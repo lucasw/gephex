@@ -1,0 +1,14 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von cpuinfo.mak
+
+.\cpuinfo.c : \
+	"..\..\..\config.h"\
+	"..\..\include\basic_types.h"\
+	".\cpuinfo.h"\
+	
+
+!IF  "$(CFG)" == "cpuinfo - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "cpuinfo - Win32 Debug"
+
+!ENDIF 
+

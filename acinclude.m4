@@ -1,9 +1,9 @@
-running cat aclocal/avifile.m4 aclocal/qt.m4 aclocal/sdl.m4 aclocal/sstream.m4 aclocal/v4l.m4 ...
 # AM_PATH_AVIFILE 0.1.0
 # CXXFLAGS and LIBS for avifile
 
 # modified from the below version by georg for GePhex
 # changes: perform ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
+#          filter out -Wl,-rpath,... option in AVIFILE_LDFLAGS
 
 # taken from Autostar Sandbox, http://autostars.sourceforge.net/
 # constructed by careful cross-pollination from various sources and lots of
@@ -23,7 +23,7 @@ dnl - working C++ compiler
 dnl - usable libstdc++
 dnl - AC_PATH_XTRA
 
-AC_DEFUN(AM_PATH_AVIFILE,
+AC_DEFUN([AM_PATH_AVIFILE],
 [
     AC_REQUIRE([AC_PROG_CXX])
     AC_REQUIRE([AC_PATH_XTRA])
@@ -34,7 +34,10 @@ AC_DEFUN(AM_PATH_AVIFILE,
     min_avifile_version=ifelse([$1], ,0.7.0, $1)
     if test "x$AVIFILE_CONFIG" != "xno"; then
 	dnl now that we have it, we need to save libs and cflags
-	AVIFILE_LDFLAGS=`avifile-config --libs`
+        dnl we remove the -rpath flag from the LD_FLAGS, because
+        dnl debian does not like this
+	AVIFILE_LDFLAGS=`avifile-config --libs | \
+            sed 's/-Wl,-rpath,[[^ ]]* //g'`
 	AVIFILE_CXXFLAGS=`avifile-config --cflags`
 	AC_SUBST(AVIFILE_LDFLAGS)
 	AC_SUBST(AVIFILE_CXXFLAGS)
@@ -141,6 +144,79 @@ decoder = Creators::CreateVideoDecoder(bh) ],
     fi
     rm -f conf.avifiletest
 ])
+
+dnl 
+dnl CHECK_EXTRA_LIB([LIB-NAME], [LIB-CHECK], [DEFAULT],
+dnl                 [WITH_VAR_NAME], [TEST_VAR_NAME], [USE_VAR_NAME],
+dnl                 [ACTION_IF_USED])
+dnl
+dnl Checks for a library and sets automake conditionals and C defines in
+dnl config.h based on the result.
+dnl
+dnl LIB-NAME:  the name used for output, the AM_CONDITIONAL and the AC_DEFINE
+dnl LIB-CHECK: the autoconf code to perform the check for the library.
+dnl            it must set the variable TEST_VAR_NAME to yes or no
+dnl DEFAULT:   yes if the library should be used by default, no if not
+dnl WITH_VAR_NAME: the name of the variable that should be set to indicate
+dnl                wether the user wants this library (as specified with
+dnl                a --with-LIB-NAME option to configure)
+dnl TEST_VAR_NAME: the name of the variable that is set by LIB-CHECK to
+dnl                indicate wether the library is present
+dnl USE_VAR_NAME:  the name of the variable that is set to yes if
+dnl                WITH_VAR_NAME = yes and TEST_VAR_NAME = yes (otherwise
+dnl                it is set to no)
+dnl ACTION_IF_USED: [optional] an action to be performed if USE_VAR_NAME=yes
+dnl
+dnl This macro first adds a command line switch to configure (with
+dnl AC_ARG_WITH) which allows the user to turn the use of the library 
+dnl on or off.
+dnl If the library should be used, the LIB-CHECK is performed to check
+dnl wether the library is available.
+dnl If this test is successful, an AC_DEFINE "WITH_<LIB-NAME>" is set to 1
+dnl and the optional ACTION-IF-USED is performed.
+dnl In any case, an AM_CONDITIONAL "WITH_<LIB-NAME>" is set depending on
+dnl the value of USE_VAR_NAME.
+dnl
+AC_DEFUN([CHECK_EXTRA_LIB],
+[
+AC_MSG_NOTICE([checking for $1])
+
+AC_ARG_WITH([$1],
+	    [AC_HELP_STRING([--with-$1],
+		            [Turn on $1 support (default=$3).])],
+            [case "${withval}" in
+       yes)
+       	 AC_MSG_NOTICE([$1 support turned on])
+         [$4]=yes
+       ;;
+       no)
+	 AC_MSG_NOTICE([$1 support turned off])
+         [$4]=no
+       ;;
+       *)
+         AC_MSG_ERROR([bad value ${withval} for --with-$1])
+       ;;
+     esac],[[$4]=[$3]])
+
+
+if test "x$[$4]" = "xyes"; then
+  ifelse([$2], , :, [$2])
+  if test "x$[$5]" = "xyes"; then
+    [$6]=yes
+    AC_DEFINE([WITH_$1], [1], [build with $1 support])
+    ifelse([$7], , :, [$7])
+    AC_MSG_NOTICE([$1 is active])
+  else
+    [$6]=no
+    AC_MSG_WARN([No $1 support found.])
+    AC_MSG_NOTICE([$1 is not active])
+  fi
+else
+  [$6]=no
+  AC_MSG_NOTICE([$1 is not active])
+fi
+
+])
 dnl qt.m4
 dnl Adapted to GePhex by Georg Seidel <georg.seidel@web.de>
 dnl Changes made: 
@@ -154,7 +230,7 @@ dnl Original version from Rik Hemsley:
 dnl   Copyright (C) 2001 Rik Hemsley (rikkus) <rik@kde.org>
 
 dnl AM_PATH_QT(MINIMUM_VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-AC_DEFUN(AM_PATH_QT,
+AC_DEFUN([AM_PATH_QT],
 [
 AC_CHECKING([for Qt ...])
 
@@ -411,10 +487,11 @@ LIBS="$saved_LIBS"
 rm -f conf.qttest
 ])
 # Configure paths for SDL
+#
 # Adapted for GePhex 4/2003
 #  changes: -added AC_HELP_STRING, SDL_PREFIX
-#           -changed ASL_LIBS to SDL_LD_FLAGS
-
+#           -changed SDL_LIBS to SDL_LD_FLAGS
+#
 # Sam Lantinga 9/21/99
 # stolen from Manish Singh
 # stolen back from Frank Belew
@@ -424,7 +501,7 @@ rm -f conf.qttest
 dnl AM_PATH_SDL([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl Test for SDL, and define SDL_CFLAGS, SDL_LD_FLAGS, and SDL_PREFIX
 dnl
-AC_DEFUN(AM_PATH_SDL,
+AC_DEFUN([AM_PATH_SDL],
 [dnl 
 dnl Get the cflags and libraries from the sdl-config script
 dnl
@@ -602,7 +679,7 @@ int main(int argc, char *argv[])
 ])
 dnl tests wether the sstream header exists
 dnl AM_PATH_SSTREAM([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-AC_DEFUN(AM_PATH_SSTREAM,
+AC_DEFUN([AM_PATH_SSTREAM],
 [
 AC_MSG_CHECKING(for sstream header...)
 
@@ -625,14 +702,14 @@ AC_LANG_RESTORE()
 ])
 dnl tests wether the v4l videodev header exists
 dnl AM_PATH_V4L([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-AC_DEFUN(AM_PATH_V4L,
+AC_DEFUN([AM_PATH_V4L],
 [
 AC_MSG_CHECKING(for v4l header...)
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-dnl AC_CHECK_HEADERS([modules/src/v4lmodule/videodev.h],have_videodev_header=yes,have_videodev_header=no)
+dnl AC_CHECK_HEADER([modules/src/v4lmodule/videodev.h],have_videodev_header=yes,have_videodev_header=no)
 
 dnl if test "x$have_videodev_header" = "xyes"
 dnl then

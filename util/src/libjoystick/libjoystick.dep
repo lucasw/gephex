@@ -1,0 +1,48 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libjoystick.mak
+
+.\libjoystick.cpp : \
+	"..\..\..\config.h"\
+	".\joystickdriver.h"\
+	".\libjoystick.h"\
+	".\win32joystickdriver.h"\
+	
+
+.\sdljoystickdriver.cpp : \
+	"..\..\..\..\sdl\include\begin_code.h"\
+	"..\..\..\..\sdl\include\close_code.h"\
+	"..\..\..\..\sdl\include\sdl.h"\
+	"..\..\..\..\sdl\include\sdl_active.h"\
+	"..\..\..\..\sdl\include\sdl_audio.h"\
+	"..\..\..\..\sdl\include\sdl_byteorder.h"\
+	"..\..\..\..\sdl\include\sdl_cdrom.h"\
+	"..\..\..\..\sdl\include\sdl_error.h"\
+	"..\..\..\..\sdl\include\sdl_events.h"\
+	"..\..\..\..\sdl\include\sdl_getenv.h"\
+	"..\..\..\..\sdl\include\sdl_joystick.h"\
+	"..\..\..\..\sdl\include\sdl_keyboard.h"\
+	"..\..\..\..\sdl\include\sdl_keysym.h"\
+	"..\..\..\..\sdl\include\sdl_main.h"\
+	"..\..\..\..\sdl\include\sdl_mouse.h"\
+	"..\..\..\..\sdl\include\sdl_mutex.h"\
+	"..\..\..\..\sdl\include\sdl_quit.h"\
+	"..\..\..\..\sdl\include\sdl_rwops.h"\
+	"..\..\..\..\sdl\include\sdl_timer.h"\
+	"..\..\..\..\sdl\include\sdl_types.h"\
+	"..\..\..\..\sdl\include\sdl_version.h"\
+	"..\..\..\..\sdl\include\sdl_video.h"\
+	".\joystickdriver.h"\
+	".\sdljoystickdriver.h"\
+	
+
+.\win32joystickdriver.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\joystickdriver.h"\
+	".\win32joystickdriver.h"\
+	
+
+!IF  "$(CFG)" == "libjoystick - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "libjoystick - Win32 Debug"
+
+!ENDIF 
+

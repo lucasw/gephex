@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-deleteInstance">
+
+  <refnamediv>
+    <refname>deleteInstance</refname>
+    <refpurpose>deletes a module instance</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv> 
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>deleteInstance</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>To free the allocated module instance resources the engine calls <function>deleteInstance</function>. It must call this destructor after last usage of the module instance. The <parameter>instance</parameter> pointer is invalid after this call and may not be used for further calls.</para>
+
+  </refsect1>
+
+</refentry>

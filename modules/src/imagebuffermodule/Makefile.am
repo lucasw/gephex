@@ -23,3 +23,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = imagebuffermodule.h imagebuffermodule_auto.c
+EXTRA_DIST = imagebuffermodule.dsp imagebuffermodule.mak imagebuffermodule.dep

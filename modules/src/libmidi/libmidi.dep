@@ -1,0 +1,10 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libmidi.mak
+
+.\libmidi.c : \
+	".\libmidi.h"\
+	".\midiutil.h"\
+	
+
+.\midiutil.c : \
+	".\midiutil.h"\
+	

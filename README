@@ -10,18 +10,7 @@ EffecTV
 
 This release contains effects that have been ported from EffecTV
 (http://effectv.sf.net).
-If this is a binary release, the dlls are included and will show up under
-"EffecTV" in the "Effects" menue.
-
-If this is a source release, you will need the original effectv sources in
-order to build those effects. We did not include them, just our wrapper code
-to make them work with GePhex.
-
-To use the EffecTV effects download effectv-0.3.8 and untar it somwehere,
-for example $HOME/effectv-0.3.8 (no need to build it!).
-Then, when configuring GePhex, add --with-effectv=$HOME/effectv-0.3.8 to the 
-configure commandline parameters.
-For details see configure --help.
+The sources are in './effectvmodules'.
 
 Thanks to the EffecTV people for their cool effects!
 
@@ -29,7 +18,16 @@ Thanks to the EffecTV people for their cool effects!
 Important note:
 ---------------
 
- Graphs that have been created with 0.0.4beta2 cannot be opened.
- The graph format has changed. 
+ 1/ Graphs that have been created with 0.0.4beta2 cannot be opened.
+  The graph format has changed. 
 
-For documentation, please have a look at http://www.gephex.org.
+ 2/ Note: on unix platforms, if you upgrade from gephex-0.0.4,
+  it's best to uninstall it first, to backup your graphs in 
+  "~/.gephex/graphs" and to remove "~/.gephex".
+  After you started the new gephex for the first time, you can restore
+  your old graphs into "~/.gephex/graphs".
+  This makes sure that the old configuration files don't get in the way.
+
+
+For documentation, please have a look at doc/documentation.html 
+or http://www.gephex.org.

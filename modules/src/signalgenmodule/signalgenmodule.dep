@@ -1,0 +1,28 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von signalgenmodule.mak
+
+.\signalgenmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\..\..\util\src\misc\crandgen.h"\
+	".\signalgenmodule.h"\
+	
+
+.\signalgenmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\signalgenmodule.h"\
+	".\signalgenmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "signalgenmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "signalgenmodule - Win32 Debug"
+
+!ENDIF 
+

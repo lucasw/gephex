@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-init">
+  <refnamediv>
+    <refname>init</refname>
+    <refpurpose>initializes the type plugin</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>int <function>init</function></funcdef>
+        <paramdef><parameter>void</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This function initializes the type plugin. It must be called by the shared library loader after resolving all symbols. It may not be called if any error occures while loading the plugin.  No other method of this type class may be called before calling this.</para>
+
+<para>You can e.g. allocate static memory common to all types in this function to use a memory pool.</para>
+
+<para>All resources allocated in init must be deallaocated in the shutDown function.</para>
+ </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>The init function returns a 1 if the type could be initialized and 0 in case of an error. In case of an error no other function (not even the shutdown) may be called.</para>
+
+  </refsect1>
+</refentry>
+

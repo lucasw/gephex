@@ -25,3 +25,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = twolayermodule.h twolayermodule_auto.c
+EXTRA_DIST = twolayermodule.dsp twolayermodule.mak twolayermodule.dep

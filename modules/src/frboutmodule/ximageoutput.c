@@ -1,8 +1,31 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "ximageoutput.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include <math.h>
 
 #include <X11/Xlib.h>
@@ -13,7 +36,7 @@
 #include "x11stuff.h"
 #include "libscale.h"
 
-#define EPS 0.0001
+#define EPS 0.001
 
 struct DriverInstance {
   Display* display;
@@ -29,6 +52,7 @@ struct DriverInstance {
   ls_adjust_pal pal;
 };
 
+/*
 static void print_visual(XVisualInfo* vinfo)
 {
   printf("Visual %li: {\n", vinfo->visualid);
@@ -40,7 +64,7 @@ static void print_visual(XVisualInfo* vinfo)
   printf("\tcolormap_size\t\t: %.8x\n", vinfo->colormap_size);
   printf("\tbits_per_rgb\t\t: %i\n", vinfo->bits_per_rgb);
   printf("}\n");
-}
+}*/
 
 /* find the best visual  
  */  
@@ -168,7 +192,7 @@ XImage_new_instance(const char* server_name,
   int screen;
 
   const char* server_name_ptr;
-  if (strcmp(server_name,"default")==0)
+  if (strcmp(server_name, "default") == 0)
     server_name_ptr=0; // use the DISPLAY environment variable
   else
     server_name_ptr=server_name; // use the userdefined display
@@ -231,11 +255,13 @@ static void XImage_destroy(struct DriverInstance* sh)
 static int XImage_resize(struct DriverInstance* sh, int width, int height,
                          char* error_text, int text_len)
 { 
-  XResizeWindow(sh->display, sh->win, width, height);
+  if (sh->width != width || sh->height != height)
+    {
+      XResizeWindow(sh->display, sh->win, width, height);
 
-  sh->width  = width;
-  sh->height = height;
-
+      sh->width  = width;
+      sh->height = height;
+    }
   return 1;
 }
 

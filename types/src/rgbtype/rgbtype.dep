@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von rgbtype.mak
+
+.\rgbtype.c : \
+	"..\..\..\engine\src\engine\dlltype.h"\
+	".\rgbtype.h"\
+	

@@ -36,3 +36,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = joystickmodule.h joystickmodule_auto.c
+EXTRA_DIST = joystickmodule.dsp joystickmodule.mak joystickmodule.dep

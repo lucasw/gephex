@@ -28,3 +28,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = ifsgenmodule.h ifsgenmodule_auto.c
+EXTRA_DIST = ifsgenmodule.dsp ifsgenmodule.mak ifsgenmodule.dep

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "controleditor.h"
 
 #include <stdexcept>
@@ -7,6 +29,8 @@
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
 
+#include "mouseover.h"
+
 #include "interfaces/imodelcontrolreceiver.h"
 
 #include "guimodel/controlmodel.h"
@@ -15,18 +39,24 @@
 #include "typeviewfactory.h"
 #include "controlwidget.h"
 
+#include "labelwidget.h"
+
+#include "base/askforstringdialog.h"
+
 namespace gui
 {
+
+  //------------------------------------------------------------------------
 
   ControlEditor::ControlEditor(QWidget* parent, const char* name, WFlags fl,
 			       ControlModel& cModel, 
 			       IModelControlReceiver& model,
-				   const utils::AutoPtr<ControlValueDispatcher>& disp,
+                               const utils::AutoPtr<ControlValueDispatcher>& disp,
 			       const std::string& media_path)
     : QWidget(parent,name,fl),  m_controller(&cModel), 
-    m_model(&model), m_factory(new TypeViewFactory(media_path)),
-    currentNodeID(-1), currentInputIndex(-1), currentWidgetType(""),
-    currentControl(0), m_controlValueDispatcher(disp)
+      m_model(&model), m_factory(new TypeViewFactory(media_path)),
+      currentNodeID(-1), currentInputIndex(-1), currentWidgetType(""),
+      currentControl(0), m_controlValueDispatcher(disp)
   {
   }
 
@@ -47,12 +77,15 @@ namespace gui
 				   const ParamMap& params)
   {
     TypeViewConstructor* con = 0;
-    try {
-      con = m_factory->getConstructor(widgetType);
-    } catch(std::runtime_error& e) {
-      //TODO
-      std::cerr << e.what() << std::endl;
-      return;
+    try
+      {
+        con = m_factory->getConstructor(widgetType);
+      }
+    catch(std::runtime_error& e)
+      {
+        //TODO
+        std::cerr << e.what() << std::endl;
+        return;
     }
     ControlWidget*
       cWidget = new ControlWidget(this, name, controlID,nodeID,
@@ -66,14 +99,14 @@ namespace gui
 		  << std::endl;
 	return;
       }
-	
+    
     widgets[controlID] = cWidget;
 
     QObject::connect(cWidget,
 		     SIGNAL(valueChanged(int,int,const utils::Buffer&)),
 		     this,
 		     SLOT(controlChanged(int,int,const utils::Buffer&)));
-	
+    
     connect(cWidget,SIGNAL(moved(ControlWidget*,const QPoint&)),
 	    this,SLOT(controlWidgetMoved(ControlWidget*,const QPoint&)));
 	
@@ -85,9 +118,18 @@ namespace gui
 
     m_controlValueDispatcher->registerValueReceiver(nodeID,inputIndex,
 						    *cWidget);
-	
-    this->controlWidgetMoved(cWidget,QPoint(clickedPos.x(), clickedPos.y()));
-	
+
+    this->controlWidgetMoved(cWidget, 
+                             mapToGlobal(QPoint(clickedPos.x(),
+                                                clickedPos.y())));
+
+    // add a mouseover object to detect wether the mouse is over the
+    // controlwidget
+    
+    MouseOver* mo = new MouseOver(cWidget);
+    connect(mo, SIGNAL(mouseOver(QWidget*)),
+            this, SLOT(mouseOverControl(QWidget*)));
+
     cWidget->show();
   }
 
@@ -111,9 +153,7 @@ namespace gui
     if(cewit == widgets.end())
       {
 	//TODO
-	std::cerr << "Das Control gibts nicht, das gelöscht wurde"
-		  << std::endl;
-
+	std::cerr << "No such control at ControlEditor::controlDeleted()\n";
 	return;
       }
 
@@ -141,16 +181,87 @@ namespace gui
     cewit->second->setName(name);
   }
 
+  void ControlEditor::labelAdded(int labelID, const std::string& text)
+  {
+    //    std::cout << "label " << labelID << " added: '" << text << "'\n";
+
+    LabelWidget* lWidget = new LabelWidget(this, labelID, text);
+
+    if (lWidget == 0)
+      {
+	//TODO
+	std::cerr << "Could not create LabelWidget at " 
+		  << "ControlEditor::labelAdded()" 
+		  << std::endl;
+	return;
+      }
+    
+    labels.insert(std::make_pair(labelID, lWidget));
+
+    connect(lWidget,SIGNAL(moved(LabelWidget*,const QPoint&)),
+	    this, SLOT(labelWidgetMoved(LabelWidget*,const QPoint&)));
+	
+    connect(lWidget,SIGNAL(released(LabelWidget*,const QPoint&)),
+	    this, SLOT(labelWidgetReleased(LabelWidget*,const QPoint&)));
+	
+    connect(lWidget,SIGNAL(beenRightClicked(LabelWidget*, const QPoint&)),
+	    this, SLOT(openLabelPopup(LabelWidget*, const QPoint&)));
+
+    this->labelWidgetMoved(lWidget,
+                           mapToGlobal(QPoint(clickedPos.x(),
+                                              clickedPos.y())));
+	
+    lWidget->show();
+  }
+
+  void ControlEditor::labelMoved(int labelID, const Point& p)
+  {
+    //    std::cout << "label " << labelID << " moved\n";
+
+    std::map<int,LabelWidget*>::iterator lewit = labels.find(labelID);
+    if(lewit == labels.end())
+      {
+	//TODO
+	std::cerr << "No such label at ControlEditor::labelMoved()"
+		  << std::endl;
+	return;
+      }
+    LabelWidget* which = lewit->second;
+
+    which->move(p.x(), p.y());
+  }
+
+  void ControlEditor::labelDeleted(int labelID)
+  {
+    //    std::cout << "label " << labelID << " deleted\n";
+
+    std::map<int, LabelWidget*>::iterator lewit = labels.find(labelID);
+    if(lewit == labels.end())
+      {
+	//TODO
+	std::cerr << "No such label at ControlEditor::labelDeleted()"
+		  << std::endl;
+
+	return;
+      }
+
+    delete lewit->second;
+    labels.erase(lewit);
+  }
+
   void ControlEditor::selectWidgetType(const std::string& name,
 				       const std::string& type,int nodeID,
 				       int inputIndex,
 				       const ParamMap& params,
 				       const QPoint& pos)
   {
-    currentNodeID = nodeID;
+    currentNodeID     = nodeID;
     currentInputIndex = inputIndex;
-    currentName = name;
-    currentParams = params;
+    currentName       = name;
+    currentParams     = params;
+
+    if (currentNodeID == -1)
+      return;
 
     TypeViewFactory::TypeViewInfoList infos 
       =  m_factory->getCompatibleViews(type);
@@ -207,14 +318,14 @@ namespace gui
 
   void ControlEditor::mousePressEvent(QMouseEvent* e)
   {
+    clickedPos = Point( e->pos().x(), e->pos().y() );
+
     if (e->button() == LeftButton)
       {
 	try
 	  {
-		  		  
 	    if (currentNodeID != -1 && currentInputIndex != -1)
 	      {
-		Point clickedPos( e->pos().x(), e->pos().y() );
 		m_controller->addControl(clickedPos,currentName,currentNodeID,
 					 currentInputIndex,currentWidgetType,
 					 currentParams);
@@ -228,6 +339,16 @@ namespace gui
 	    QMessageBox::information( 0, "Error", err.what() );
 	  }
       }
+    else if (e->button() == RightButton)
+      {
+        QPopupMenu *popme = new QPopupMenu(0, "contextpop");
+        popme->insertItem("Add Label", LABEL_ADD);
+	
+        connect(popme,SIGNAL(activated(int)),this,
+                SLOT(contextPopupActivated(int)));
+
+        popme->popup(this->mapToGlobal(e->pos()));        
+      }
   }
 
   void ControlEditor::controlWidgetMoved(ControlWidget* n, const QPoint& pos)
@@ -235,15 +356,16 @@ namespace gui
     /*    QWidget* label = n->getLabel();
     label->move(QPoint(pos.x(), pos.y() - label->height()));
     label->show();*/
-    n->move(pos);
+    n->move(mapFromGlobal(pos));
   }
 
   void ControlEditor::controlWidgetReleased(ControlWidget* n,const QPoint& pos)
   {
+    QPoint p = mapFromGlobal(pos);
     try
       {
 	m_controller->moveControl(n->controlID(),
-				  Point(pos.x(),pos.y()));
+				  Point(p.x(),p.y()));
       }
     catch (std::exception& err)
       {
@@ -260,7 +382,42 @@ namespace gui
     connect(popme,SIGNAL(activated(int)),this,
 	    SLOT(controlPopupActivated(int)));
 
-    popme->popup(which->mapToGlobal(pos));
+    popme->popup(pos);
+  }
+
+
+  void ControlEditor::labelWidgetMoved(LabelWidget* n, const QPoint& pos)
+  {
+    /*    QWidget* label = n->getLabel();
+    label->move(QPoint(pos.x(), pos.y() - label->height()));
+    label->show();*/
+    n->move(mapFromGlobal(pos));
+  }
+
+  void ControlEditor::labelWidgetReleased(LabelWidget* n,const QPoint& pos)
+  {
+    QPoint p = mapFromGlobal(pos);
+    try
+      {
+	m_controller->moveLabel(n->id(),
+                                Point(p.x(),p.y()));
+      }
+    catch (std::exception& err)
+      {
+	QMessageBox::information( 0, "Error", err.what() );
+      }
+  }
+
+  void ControlEditor::openLabelPopup(LabelWidget* which, const QPoint& pos)
+  {
+    QPopupMenu *popme = new QPopupMenu(0, "labelpop");
+    popme->insertItem("Kill", LABEL_KILL);
+	
+    currentLabel = which;
+    connect(popme,SIGNAL(activated(int)),this,
+	    SLOT(labelPopupActivated(int)));
+
+    popme->popup(pos);
   }
 
   void ControlEditor::controlPopupActivated(int action)
@@ -283,6 +440,59 @@ namespace gui
       default:
 	QMessageBox::information( 0, "Error", "what?" );
       }
+  }
+
+  void ControlEditor::labelPopupActivated(int action)
+  {
+    switch(action)
+      {
+      case LABEL_KILL:
+	{
+	  int labelID = currentLabel->id();
+	  try
+	    {
+	      m_controller->delLabel(labelID);
+	    }
+	  catch (std::exception& err)
+	    {
+	      QMessageBox::information( 0, "Error", err.what() );
+	    }
+	}
+	break;
+      default:
+	QMessageBox::information( 0, "Error", "what?" );
+      }
+  }
+
+  void ControlEditor::contextPopupActivated(int action)
+  {
+    switch(action)
+      {
+      case LABEL_ADD:
+	{
+          const std::string
+            text = AskForStringDialog::open(0, "New Label",
+                                            "Enter label text");
+
+          m_controller->addLabel(clickedPos, text);
+	}
+	break;
+      default:
+	QMessageBox::information( 0, "Error", "what?" );
+      }
+  }
+
+
+  void ControlEditor::mouseOverControl(QWidget* w)
+  {
+    ControlWidget* cw = dynamic_cast<ControlWidget*>(w);
+    if (cw == 0)
+      {
+        QMessageBox::information( 0, "Error", "mouseOverControl fu'ed up" );
+        return;
+      }
+
+    emit inputSelected(cw->nodeID(), cw->inputIndex());
   }
 
 } // end of namespace gui

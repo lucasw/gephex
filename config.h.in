@@ -7,220 +7,136 @@
 #define COMP_GCC
 #endif
 
-/* 
-   Intel x86 compatible CPU >= 386 */
+/* Intel x86 compatible CPU >= 386 */
 #undef CPU_I386
 
-/* 
-   Size of the cache the frbinmodule uses (in
-   MB) */
+/* Size of the cache the frbinmodule uses (in MB) */
 #undef FRBINMODULE_CACHE_SIZE
 
-/* 
-   Define to 1 if you have the <aalib.h>
-   header file. */
-#undef HAVE_AALIB_H
-
-/* 
-   Define to 1 if you have the <alsa/asoundlib.h>
-   header file. */
-#undef HAVE_ALSA_ASOUNDLIB_H
-
-/* 
-   Does libavifile exist on the system? */
-#undef HAVE_AVIFILE
-
-/* 
-   Define to 1 if you have the <dlfcn.h>
-   header file. */
+/* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* 
-   build with gl output driver support */
-#undef HAVE_GLX
-
-/* 
-   Define to 1 if you have the <GL/glx.h>
-   header file. */
-#undef HAVE_GL_GLX_H
-
-/* 
-   Define to 1 if you have the <inttypes.h>
-   header file. */
+/* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* 
-   Define to 1 if you have the <libmpeg3.h>
-   header file. */
-#undef HAVE_LIBMPEG3_H
-
-/* 
-   Define to 1 if you have the `socket'
-   library (-lsocket). */
+/* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
 
-/* 
-   Define to 1 if you have the <linux/joystick.h>
-   header file. */
-#undef HAVE_LINUX_JOYSTICK_H
-
-/* 
-   Define to 1 if you have the <memory.h>
-   header file. */
+/* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* 
-   build with libmpeg3 support */
-#undef HAVE_MPEG3
-
-/* 
-   Define to 1 if you have the <png.h>
-   header file. */
-#undef HAVE_PNG_H
-
-/* 
-   build with sdl support */
-#undef HAVE_SDL
-
-/* 
-   build with libsdl_image support */
-#undef HAVE_SDL_IMAGE
-
-/* 
-   Define to 1 if you have the <SDL/SDL_image.h>
-   header file. */
-#undef HAVE_SDL_SDL_IMAGE_H
-
-/* 
-   Define to 1 if you have the <SDL/SDL_ttf.h>
-   header file. */
-#undef HAVE_SDL_SDL_TTF_H
-
-/* 
-   build with libsdl true type font support */
-#undef HAVE_SDL_TTF
-
-/* 
-   Define to 1 if you have the <stdint.h>
-   header file. */
+/* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
-/* 
-   Define to 1 if you have the <stdlib.h>
-   header file. */
+/* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
-/* 
-   Define to 1 if you have the <strings.h>
-   header file. */
+/* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
-/* 
-   Define to 1 if you have the <string.h>
-   header file. */
+/* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* 
-   Define to 1 if you have the <sys/soundcard.h>
-   header file. */
-#undef HAVE_SYS_SOUNDCARD_H
-
-/* 
-   Define to 1 if you have the <sys/stat.h>
-   header file. */
+/* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
-/* 
-   Define to 1 if you have the <sys/types.h>
-   header file. */
+/* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* 
-   Define to 1 if you have the <unistd.h>
-   header file. */
+/* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* 
-   build with x11 support */
+/* build with x11 support */
 #undef HAVE_X11
 
-/* 
-   Include MMX support (only for x86 compatible CPUs)
-   */
+/* Include MMX support (only for x86 compatible CPUs) */
 #undef OPT_INCLUDE_MMX
 
-/* 
-   Serialize the FrameBuffer-Type */
+/* Serialize the FrameBuffer-Type */
 #undef OPT_SERIALIZE_FRAMEBUFFER
 
-/* 
-   *BSD */
+/* *BSD build */
 #undef OS_BSD
 
-/* 
-   CYGWIN halt */
+/* CYGWIN build */
 #undef OS_CYGWIN
 
-/* 
-   Darwin */
+/* Darwin build */
 #undef OS_DARWIN
 
-/* 
-   Linux */
+/* Linux build */
 #undef OS_LINUX
 
-/* 
-   Any Posix compliant system */
+/* Any Posix compliant system */
 #undef OS_POSIX
 
-/* 
-   Sun Solaris */
+/* Sun Solaris build */
 #undef OS_SOLARIS
 
-/* 
-   Windows halt */
+/* native win32 build */
 #undef OS_WIN32
 
-/* 
-   Name of package */
+/* Name of package */
 #undef PACKAGE
 
-/* 
-   Define to the address where bug reports for
-   this package should be sent. */
+/* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
-/* 
-   Define to the full name of this package.
-   */
+/* Define to the full name of this package. */
 #undef PACKAGE_NAME
 
-/* 
-   Define to the full name and version of
-   this package. */
+/* Define to the full name and version of this package. */
 #undef PACKAGE_STRING
 
-/* 
-   Define to the one symbol short name of
-   this package. */
+/* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
-/* 
-   Define to the version of this package. */
+/* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* 
-   Define to 1 if you have the ANSI
-   C header files. */
+/* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* 
-   Version number of package */
+/* Version number of package */
 #undef VERSION
 
-/* 
-   Define to 1 if the X Window System
-   is missing or not being used. */
+/* build with AALIB support */
+#undef WITH_AALIB
+
+/* build with ASOUNDLIB support */
+#undef WITH_ASOUNDLIB
+
+/* build with AVIFILE support */
+#undef WITH_AVIFILE
+
+/* build with GL support */
+#undef WITH_GL
+
+/* build with LIBPNG support */
+#undef WITH_LIBPNG
+
+/* build with LINUX_JOYSTICK support */
+#undef WITH_LINUX_JOYSTICK
+
+/* build with MPEG3 support */
+#undef WITH_MPEG3
+
+/* build with OSS support */
+#undef WITH_OSS
+
+/* build with SDL support */
+#undef WITH_SDL
+
+/* build with SDL_IMAGE support */
+#undef WITH_SDL_IMAGE
+
+/* build with SDL_TTF support */
+#undef WITH_SDL_TTF
+
+/* build with V4L support */
+#undef WITH_V4L
+
+/* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING
 
 #endif

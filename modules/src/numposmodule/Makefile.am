@@ -26,3 +26,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = numposmodule.h numposmodule_auto.c
+EXTRA_DIST = numposmodule.dsp numposmodule.mak numposmodule.dep

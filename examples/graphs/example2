@@ -1,11 +1,14 @@
 <graph>
 <id>IDSTART/example2ENDID</id>
 <name>example2</name>
+<data>
+<dataitem> <key>1025</key> <buf>76 21 ~3cstr~3e~3cl~3e8~3c/l~3e~3cd~3eFilename~3c/d~3e~3c/str~3e</buf> </dataitem>
+</data>
 <nodes>
 <node> <id>1</id> <type>mod_frbinmodule</type>
 <data>
 <dataitem> <key>0</key> <buf>24 95</buf> </dataitem>
-<dataitem> <key>1024</key> <buf>~3cstr~3e~3cl~3e21~3c/l~3e~3cd~3eImage Source:Filename~3c/d~3e~3c/str~3e 1 0 ~3cstr~3e~3cl~3e9~3c/l~3e~3cd~3eline_edit~3c/d~3e~3c/str~3e 49 31| { file_mask1=[*.*]; file_mask1_name=[All files]; file_mask2=[*.bmp;*.jpg;*.png;*.tiff;*.ppm;*.pcx;*.gif;*.jpeg;*.xpm]; file_mask2_name=[Images]; file_mask3=[*.avi;*.mpg;*.mpeg;*.divx;*.rm;*.mov;*.wmv]; file_mask3_name=[Videos]; hidden=[false]; widget_type=[file_selector];  } </buf> </dataitem>
+<dataitem> <key>1024</key> <buf>~3cstr~3e~3cl~3e21~3c/l~3e~3cd~3eImage Source:Filename~3c/d~3e~3c/str~3e 1 0 ~3cstr~3e~3cl~3e9~3c/l~3e~3cd~3eline_edit~3c/d~3e~3c/str~3e 40 44| { file_mask1=[*.*]; file_mask1_name=[All files]; file_mask2=[*.bmp;*.jpg;*.png;*.tiff;*.ppm;*.pcx;*.gif;*.jpeg;*.xpm]; file_mask2_name=[Images]; file_mask3=[*.avi;*.mpg;*.mpeg;*.divx;*.rm;*.mov;*.wmv]; file_mask3_name=[Videos]; hidden=[false]; widget_type=[file_selector];  } </buf> </dataitem>
 </data>
 </node>
 <node> <id>2</id> <type>mod_frboutmodule</type>

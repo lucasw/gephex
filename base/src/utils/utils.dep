@@ -1,0 +1,99 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von utils.mak
+
+.\buffer.cpp : \
+	"..\..\..\config.h"\
+	".\buffer.h"\
+	
+
+.\bufferstream.cpp : \
+	".\buffer.h"\
+	".\bufferstream.h"\
+	
+
+.\bufferutils.cpp : \
+	".\buffer.h"\
+	".\bufferutils.h"\
+	".\xmlutils.h"\
+	
+
+.\circularbuffer.cpp : \
+	".\buffer.h"\
+	".\circularbuffer.h"\
+	
+
+.\configfile.cpp : \
+	".\autoptr.h"\
+	".\configfile.h"\
+	".\structreader.h"\
+	
+
+.\filesystem.cpp : \
+	"..\..\..\config.h"\
+	".\filesystem.h"\
+	
+
+.\itokenizer.cpp : \
+	".\itokenizer.h"\
+	
+
+.\sharedlibrary.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\config.h"\
+	".\sharedlibrary.h"\
+	
+
+.\spawn.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\config.h"\
+	".\spawn.h"\
+	
+
+.\streamlogger.cpp : \
+	".\ilogger.h"\
+	".\streamlogger.h"\
+	
+
+.\streamtokenizer.cpp : \
+	".\itokenizer.h"\
+	".\streamtokenizer.h"\
+	
+
+.\string_.cpp : \
+	".\string_.h"\
+	".\xmlutils.h"\
+	
+
+.\stringtokenizer.cpp : \
+	".\itokenizer.h"\
+	".\stringtokenizer.h"\
+	
+
+.\structreader.cpp : \
+	".\istructtokenlistener.h"\
+	".\structreader.h"\
+	".\structscanner.h"\
+	
+
+.\structscanner.cpp : \
+	".\istructtokenlistener.h"\
+	".\itokenizer.h"\
+	".\stringtokenizer.h"\
+	".\structscanner.h"\
+	
+
+.\timing.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\config.h"\
+	".\timing.h"\
+	
+
+.\xmlutils.cpp : \
+	".\xmlutils.h"\
+	
+
+!IF  "$(CFG)" == "utils - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "utils - Win32 Debug"
+
+!ENDIF 
+

@@ -1,31 +1,27 @@
 SUBDIRS = images
 
-man_MANS = gephex-gui.1 gephex-engine.1
-
 htmldir = $(prefix)/share/doc/gephex/html
 html_DATA = documentation.html
 
-SGML_FILES = \
-        documentation.sgml \
-        gephex-engine.sgml \
-        gephex-gui.sgml
+man_MANS = gephex.1 gephex-engine.1 gephex-gui.1
 
-# include this stuff in the dist
+# include this prebuild stuff (and its sources) in the dist
+EXTRA_DIST     =  $(html_DATA)  $(man_MANS) $(srcdir)/documentation.xml $(srcdir)/module-api*.xml  $(srcdir)/type-api*.xml $(srcdir)/gephex.xml $(srcdir)/gephex-engine.xml $(srcdir)/gephex-gui.xml
+DISTCLEANFILES = documentation.html gephex.1 gephex-engine.1 gephex-gui.1
 
-EXTRA_DIST = $(man_MANS) $(html_DATA) $(SGML_FILES)
+gephex.1: $(srcdir)/gephex.xml
+	docbook2x-man $(srcdir)/gephex.xml > gephex.1
 
-DISTCLEANFILES=gephex-gui.1 gephex-engine.1 documentation.html
+gephex-engine.1: $(srcdir)/gephex-engine.xml
+	docbook2x-man $(srcdir)/gephex-engine.xml > gephex-engine.1
 
-all-local: documentation.html
+gephex-gui.1: $(srcdir)/gephex-gui.xml
+	docbook2x-man $(srcdir)/gephex-gui.xml > gephex-gui.1
 
-gephex-engine.1: $(srcdir)/gephex-engine.sgml
-	docbook-to-man $(srcdir)/gephex-engine.sgml > gephex-engine.1
+all-local: documentation.html gephex.1 gephex-engine.1 gephex-gui.1
 
-gephex-gui.1: $(srcdir)/gephex-gui.sgml
-	docbook-to-man $(srcdir)/gephex-gui.sgml > gephex-gui.1
-
-documentation.html: $(srcdir)/documentation.sgml $(srcdir)/images/*.png
-	sgmltools -b onehtml $(srcdir)/documentation.sgml
+documentation.html: $(srcdir)/documentation.xml  $(srcdir)/module-api*.xml  $(srcdir)/type-api*.xml $(srcdir)/images/*.png
+	xsltproc --xinclude --param shade.verbatim 1 -o documentation.html /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl $(srcdir)/documentation.xml
 
 
 

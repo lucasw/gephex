@@ -1,0 +1,11 @@
+name: ModuleClassName
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+/**
+*
+*/
+moduleClassNameExists string name
+

@@ -35,3 +35,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = rotozoommodule.h rotozoommodule_auto.c
+EXTRA_DIST = rotozoommodule.dsp rotozoommodule.mak rotozoommodule.dep

@@ -1,0 +1,13 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von joystick_midi_net.mak
+
+.\joystick_midi_net.cpp : \
+	"..\..\..\config.h"\
+	"..\libjoystick\libjoystick.h"\
+	
+
+!IF  "$(CFG)" == "joystick_midi_net - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "joystick_midi_net - Win32 Debug"
+
+!ENDIF 
+

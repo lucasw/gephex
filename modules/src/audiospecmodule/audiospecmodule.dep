@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von audiospecmodule.mak
+
+.\audiospecmodule.cpp : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiospecmodule.h"\
+	".\fft.cpp"\
+	".\fft.hh"\
+	
+
+.\audiospecmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiospecmodule.h"\
+	".\audiospecmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "audiospecmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "audiospecmodule - Win32 Debug"
+
+!ENDIF 
+

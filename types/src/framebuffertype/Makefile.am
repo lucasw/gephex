@@ -1,3 +1,5 @@
+EXTRA_DIST = framebuffertype.dsp framebuffertype.mak framebuffertype.dep framebuffertype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  = 	-I @srcdir@/../../../engine/src/engine \

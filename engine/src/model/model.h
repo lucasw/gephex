@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #ifndef __INCLUDED_MODEL_H__
 #define __INCLUDED_MODEL_H__
 
@@ -15,6 +37,7 @@
 #include "interfaces/imoduleconstructionsmartsender.h" 
 #include "interfaces/imoduleconstructiondumbsender.h"
 #include "interfaces/imoduledatasender.h"
+#include "interfaces/igraphdatasender.h"
 #include "interfaces/iserializedgraphsender.h"
 #include "interfaces/ismartcontrolvaluereceiver.h"
 #include "interfaces/icontrolvaluesender.h"
@@ -47,6 +70,7 @@ namespace model
     public IModuleConstructionDumbSender, 
     public IGraphNameSender,
     public IModuleDataSender,
+    public IGraphDataSender,
     public ISerializedGraphSender,
     public ISmartControlValueReceiver,
     public IControlValueSender,
@@ -72,6 +96,9 @@ namespace model
 
       virtual void unSetModuleData(int moduleID,int type);
 
+      virtual void setEditGraphData(int type, const utils::Buffer& buf);
+      virtual void unSetEditGraphData(int type);
+
       void newGraphWithID(const std::string& graphName,
                           const std::string& graphID,
                           bool notifyAndCreate = true);
@@ -91,19 +118,20 @@ namespace model
       virtual void newControlValueSet(const std::string& graphID,
 				       const std::string& SetNme);
 
-	  void newControlValueSetWithID(const std::string& graphID,
-		  const std::string& SetNme, const std::string& snapID);
+      void newControlValueSetWithID(const std::string& graphID,
+                                    const std::string& SetNme,
+                                    const std::string& snapID);
 
       virtual void renameControlValueSet(const std::string& graphID,
-					  const std::string& snapID,
-					  const std::string& newSnapName);
+                                         const std::string& snapID,
+                                         const std::string& newSnapName);
 
       virtual void copyControlValueSet(const std::string& graphID,
-					const std::string& snapID,
-					const std::string& newSnapName);
+                                       const std::string& snapID,
+                                       const std::string& newSnapName);
 
       virtual void deleteControlValueSet(const std::string& graphID,
-					  const std::string& snapID);
+                                         const std::string& snapID);
 
       //TODO: war mal const
       virtual void synchronize();
@@ -127,6 +155,9 @@ namespace model
       virtual void registerModuleConstructionSmartReceiver(IModuleConstructionSmartReceiver&);
       virtual void registerGraphNameReceiver(IGraphNameReceiver&);
       virtual void registerModuleDataReceiver(IModuleDataReceiver&);
+
+      virtual void registerGraphDataReceiver(IGraphDataReceiver&);
+
       virtual void registerSerializedGraphReceiver(ISerializedGraphReceiver&);
       virtual void registerRendererControlReceiver(IRendererControlReceiver&);
 
@@ -177,6 +208,7 @@ namespace model
       ISerializedGraphReceiver* serializedGraphReceiver;
       IRendererControlReceiver* rendererControlReceiver;
       IModuleDataReceiver* dr;
+      IGraphDataReceiver* gr;
       IControlValueReceiver* controlValueReceiver;
       IModuleStatisticsReceiver* moduleStatisticsReceiver;
       IModelStatusReceiver* modelStatusReceiver;

@@ -1,0 +1,19 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libdshow.mak
+
+.\dshowutils.cpp : \
+	"..\..\..\..\..\dxsdk\include\audevcod.h"\
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\..\..\dxsdk\include\dshow.h"\
+	"..\..\..\..\..\dxsdk\include\dxtrans.h"\
+	"..\..\..\..\..\dxsdk\include\qedit.h"\
+	".\dshowutils.h"\
+	
+
+.\samplecallback.cpp : \
+	"..\..\..\..\..\dxsdk\include\audevcod.h"\
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\..\..\dxsdk\include\dshow.h"\
+	"..\..\..\..\..\dxsdk\include\dxtrans.h"\
+	"..\..\..\..\..\dxsdk\include\qedit.h"\
+	".\samplecallback.h"\
+	

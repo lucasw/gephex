@@ -78,13 +78,35 @@ void ModelControlReceiverNet::unSetModuleData( int moduleID, int type )
 
 }
 
+void ModelControlReceiverNet::setEditGraphData( int type, const utils::Buffer& buf )
+{
+	utils::Buffer temp_buf_(32);
+	utils::OBufferStream bs(temp_buf_);
+	bs << type << ' '  << buf;
+	bs.flush();
+	m_tagger->setTag( "0006" );
+	m_tagger->send( temp_buf_ );
+
+}
+
+void ModelControlReceiverNet::unSetEditGraphData( int type )
+{
+	utils::Buffer temp_buf_(16);
+	utils::OBufferStream bs(temp_buf_);
+	bs << type;
+	bs.flush();
+	m_tagger->setTag( "0007" );
+	m_tagger->send( temp_buf_ );
+
+}
+
 void ModelControlReceiverNet::newGraph( const std::string& name )
 {
 	utils::Buffer temp_buf_(16);
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(name);
 	bs.flush();
-	m_tagger->setTag( "0006" );
+	m_tagger->setTag( "0008" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -95,7 +117,7 @@ void ModelControlReceiverNet::renameGraph( const std::string& graphID, const std
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(newName);
 	bs.flush();
-	m_tagger->setTag( "0007" );
+	m_tagger->setTag( "0009" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -106,7 +128,7 @@ void ModelControlReceiverNet::copyGraph( const std::string& graphID, const std::
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(newName);
 	bs.flush();
-	m_tagger->setTag( "0008" );
+	m_tagger->setTag( "0010" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -117,7 +139,7 @@ void ModelControlReceiverNet::saveGraph( const std::string& graphID )
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID);
 	bs.flush();
-	m_tagger->setTag( "0009" );
+	m_tagger->setTag( "0011" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -128,7 +150,7 @@ void ModelControlReceiverNet::deleteGraph( const std::string& graphID )
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID);
 	bs.flush();
-	m_tagger->setTag( "0010" );
+	m_tagger->setTag( "0012" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -136,7 +158,7 @@ void ModelControlReceiverNet::deleteGraph( const std::string& graphID )
 void ModelControlReceiverNet::synchronize(  )
 {
 	utils::Buffer temp_buf_((unsigned char*) "",1);
-	m_tagger->setTag( "0011" );
+	m_tagger->setTag( "0013" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -147,7 +169,7 @@ void ModelControlReceiverNet::changeRenderedGraph( const std::string& graphID, c
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(snapID);
 	bs.flush();
-	m_tagger->setTag( "0012" );
+	m_tagger->setTag( "0014" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -158,7 +180,7 @@ void ModelControlReceiverNet::changeEditGraph( const std::string& graphID, const
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(snapID);
 	bs.flush();
-	m_tagger->setTag( "0013" );
+	m_tagger->setTag( "0015" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -169,7 +191,7 @@ void ModelControlReceiverNet::newControlValueSet( const std::string& graphID, co
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(newSnapName);
 	bs.flush();
-	m_tagger->setTag( "0014" );
+	m_tagger->setTag( "0016" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -180,7 +202,7 @@ void ModelControlReceiverNet::renameControlValueSet( const std::string& graphID,
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(snapID) << ' '  << utils::String(newSnapName);
 	bs.flush();
-	m_tagger->setTag( "0015" );
+	m_tagger->setTag( "0017" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -191,7 +213,7 @@ void ModelControlReceiverNet::copyControlValueSet( const std::string& graphID, c
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(snapID) << ' '  << utils::String(newSnapName);
 	bs.flush();
-	m_tagger->setTag( "0016" );
+	m_tagger->setTag( "0018" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -202,7 +224,7 @@ void ModelControlReceiverNet::deleteControlValueSet( const std::string& graphID,
 	utils::OBufferStream bs(temp_buf_);
 	bs << utils::String(graphID) << ' '  << utils::String(snapID);
 	bs.flush();
-	m_tagger->setTag( "0017" );
+	m_tagger->setTag( "0019" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -213,7 +235,7 @@ void ModelControlReceiverNet::setInputValue( int moduleID, int inputIndex, const
 	utils::OBufferStream bs(temp_buf_);
 	bs << moduleID << ' '  << inputIndex << ' '  << buf;
 	bs.flush();
-	m_tagger->setTag( "0018" );
+	m_tagger->setTag( "0020" );
 	m_tagger->send( temp_buf_ );
 
 }
@@ -224,7 +246,7 @@ void ModelControlReceiverNet::syncInputValue( int moduleID, int inputIndex )
 	utils::OBufferStream bs(temp_buf_);
 	bs << moduleID << ' '  << inputIndex;
 	bs.flush();
-	m_tagger->setTag( "0019" );
+	m_tagger->setTag( "0021" );
 	m_tagger->send( temp_buf_ );
 
 }

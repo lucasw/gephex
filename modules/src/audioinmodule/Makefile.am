@@ -10,14 +10,14 @@ audioinmodule.h: audioinmodule.spec
 
 lib_LTLIBRARIES = audioinmodule.la
 
-if HAVE_ASOUNDLIB
+if WITH_ASOUNDLIB
 ALSALIB_sOURCES = \
         alsadriver.cpp \
 	alsadriver.h
 ALSALIB_lDFLAGS = -lasound
 endif
 
-if HAVE_OSS
+if WITH_OSS
 OSS_sOURCES = \
 	ossdriver.cpp \
 	ossdriver.h
@@ -41,3 +41,6 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../types/src/stringtype 
 
 DISTCLEANFILES = audioinmodule.h audioinmodule_auto.c
+EXTRA_DIST = audioinmodule.dsp audioinmodule.mak audioinmodule.dep \
+	waveindriver.cpp waveindriver.h \
+	audiobuffer.c audiobuffer.h

@@ -1,3 +1,6 @@
+EXTRA_DIST = positiontype.dsp positiontype.mak positiontype.dep \
+	positiontype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \

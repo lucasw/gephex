@@ -30,7 +30,7 @@
 
 #include "interfaces/imoduleclassspec.h"
 
-#include "controllvalueset.h"
+#include "controlvalueset.h"
 
 namespace model
 {
@@ -144,6 +144,15 @@ namespace model
 		
   }
 
+  void Graph::setData(int type, const utils::Buffer& buf)
+  {
+    m_data[type] = buf;
+  }
+
+  void Graph::unSetData(int type)
+  {
+    m_data.erase(type);
+  }
 
   void Graph::setModuleData(int moduleID,int type, const utils::Buffer& buf)
   {
@@ -229,13 +238,12 @@ namespace model
   {
     // clear the graph    
 
+    m_data.clear();
     m_nodes.clear();
     m_connections.clear();
     valueSets.clear();
-
-
     
-    // the ids start at 1, after removal of nodes the may be gaps
+    // the ids start at 1, after removal of nodes there may be gaps
     m_maxModuleID = 0;
   }
 
@@ -375,5 +383,10 @@ namespace model
       }
 
     throw std::runtime_error("module does not exist");
+  }
+
+  const std::map<int, utils::Buffer>& Graph::data() const
+  {
+    return m_data;
   }
 } // end of namespace model

@@ -1,0 +1,99 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von model.mak
+
+.\controlvalueset.cpp : \
+	".\controlvalueset.h"\
+	
+
+.\graph.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\controlvalueset.h"\
+	".\graph.h"\
+	".\graphconnection.h"\
+	".\graphnode.h"\
+	
+
+.\graphconnection.cpp : \
+	".\graphconnection.h"\
+	
+
+.\graphfilesystem.cpp : \
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\filesystem.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	"..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\base\src\utils\stringtokenizer.h"\
+	".\controlvalueset.h"\
+	".\graph.h"\
+	".\graphfilesystem.h"\
+	".\graphserial.h"\
+	".\specmap.h"\
+	
+
+.\graphnode.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	".\graphnode.h"\
+	
+
+.\graphparser.cpp : \
+	"..\..\..\base\src\utils\xmlutils.h"\
+	".\graphparser.h"\
+	
+
+.\graphserial.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	".\controlvalueset.h"\
+	".\graph.h"\
+	".\graphconnection.h"\
+	".\graphnode.h"\
+	".\graphparser.h"\
+	".\graphserial.h"\
+	".\specmap.h"\
+	
+
+.\model.cpp : \
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluesender.h"\
+	"..\..\..\base\src\interfaces\igraphdatareceiver.h"\
+	"..\..\..\base\src\interfaces\igraphdatasender.h"\
+	"..\..\..\base\src\interfaces\igraphnamereceiver.h"\
+	"..\..\..\base\src\interfaces\igraphnamesender.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
+	"..\..\..\base\src\interfaces\imodelstatussender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspecreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructiondumbsender.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructionsmartreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructionsmartsender.h"\
+	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
+	"..\..\..\base\src\interfaces\imoduledatasender.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticssender.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticssmartreceiver.h"\
+	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\irenderercontrolsender.h"\
+	"..\..\..\base\src\interfaces\iserializedgraphreceiver.h"\
+	"..\..\..\base\src\interfaces\iserializedgraphsender.h"\
+	"..\..\..\base\src\interfaces\ismartcontrolvaluereceiver.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	".\controlvalueset.h"\
+	".\graph.h"\
+	".\graphconnection.h"\
+	".\graphfilesystem.h"\
+	".\graphnode.h"\
+	".\graphserial.h"\
+	".\model.h"\
+	".\specmap.h"\
+	
+
+!IF  "$(CFG)" == "model - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "model - Win32 Debug"
+
+!ENDIF 
+

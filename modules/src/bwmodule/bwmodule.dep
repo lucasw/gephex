@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von bwmodule.mak
+
+.\bwmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\bwmodule.h"\
+	
+
+.\bwmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\bwmodule.h"\
+	".\bwmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "bwmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "bwmodule - Win32 Debug"
+
+!ENDIF 
+

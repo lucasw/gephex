@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-deleteInstance">
+  <refnamediv>
+    <refname>deleteInstance</refname>
+    <refpurpose>deletes a instance of the type</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;</funcsynopsisinfo>
+      <funcprototype>
+	<funcdef>void <function>deleteInstance</function></funcdef>
+        <paramdef>TypeInstanceID <parameter>instance</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>instance</parameter></term>
+	<listitem>
+<para>This is the identifier of the instance to delete.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+
+  <refsect1>
+    <title>Description</title>
+
+<para>After using a type object for the last time it must be deleted to free all reserved resources like memory or temporary discspace. <varname>instance</varname> identifies the type object created with the <function>createInstance</function> function of the same type. The caller must ensure not to mix the type identifiers of one type with the functions of another type. After calling this method the object <varname>instance</varname> is invalid. The instance identifier mustn't used anymore. All type instances created with <function>newInstance</function> must be destroyed with <function>deleteInstance</function> before calling <function>shutDown</function> of their type.</para>
+
+  </refsect1>
+</refentry>

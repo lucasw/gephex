@@ -1,0 +1,108 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von frbinmodule.mak
+
+.\bmpdriver.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libscale\libscale.h"\
+	".\bmpdriver.h"\
+	".\videofiledriver.h"\
+	
+
+.\dshowdriver.cpp : \
+	"..\..\..\..\..\dxsdk\include\audevcod.h"\
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\..\..\dxsdk\include\dshow.h"\
+	"..\..\..\..\..\dxsdk\include\dxtrans.h"\
+	"..\..\..\..\..\dxsdk\include\qedit.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libdshow\dshowutils.h"\
+	"..\libscale\libscale.h"\
+	".\dshowdriver.h"\
+	".\timer.h"\
+	".\videofiledriver.h"\
+	
+
+.\framecache.cpp : \
+	"..\..\..\util\include\basic_types.h"\
+	".\framecache.h"\
+	
+
+.\frbinmodule.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\bmpdriver.h"\
+	".\driverfactory.h"\
+	".\dshowdriver.h"\
+	".\framecache.h"\
+	".\frbinmodule.h"\
+	".\sdlimagedriver.h"\
+	".\vfwdriver.h"\
+	".\videofiledriver.h"\
+	
+
+.\frbinmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\frbinmodule.h"\
+	".\frbinmodule.xpm"\
+	
+
+.\sdlimagedriver.cpp : \
+	"..\..\..\..\sdl\include\begin_code.h"\
+	"..\..\..\..\sdl\include\close_code.h"\
+	"..\..\..\..\sdl\include\sdl.h"\
+	"..\..\..\..\sdl\include\sdl_active.h"\
+	"..\..\..\..\sdl\include\sdl_audio.h"\
+	"..\..\..\..\sdl\include\sdl_byteorder.h"\
+	"..\..\..\..\sdl\include\sdl_cdrom.h"\
+	"..\..\..\..\sdl\include\sdl_error.h"\
+	"..\..\..\..\sdl\include\sdl_events.h"\
+	"..\..\..\..\sdl\include\sdl_getenv.h"\
+	"..\..\..\..\sdl\include\sdl_joystick.h"\
+	"..\..\..\..\sdl\include\sdl_keyboard.h"\
+	"..\..\..\..\sdl\include\sdl_keysym.h"\
+	"..\..\..\..\sdl\include\sdl_main.h"\
+	"..\..\..\..\sdl\include\sdl_mouse.h"\
+	"..\..\..\..\sdl\include\sdl_mutex.h"\
+	"..\..\..\..\sdl\include\sdl_quit.h"\
+	"..\..\..\..\sdl\include\sdl_rwops.h"\
+	"..\..\..\..\sdl\include\sdl_timer.h"\
+	"..\..\..\..\sdl\include\sdl_types.h"\
+	"..\..\..\..\sdl\include\sdl_version.h"\
+	"..\..\..\..\sdl\include\sdl_video.h"\
+	"..\..\..\..\sdl_image\include\sdl_image.h"\
+	"..\..\..\config.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libscale\libscale.h"\
+	".\sdlimagedriver.h"\
+	".\videofiledriver.h"\
+	
+
+.\timer.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\timer.h"\
+	
+
+.\vfwdriver.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\vfwdriver.h"\
+	".\videofiledriver.h"\
+	
+
+!IF  "$(CFG)" == "frbinmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "frbinmodule - Win32 Debug"
+
+!ENDIF 
+

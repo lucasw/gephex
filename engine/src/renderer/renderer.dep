@@ -1,0 +1,56 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von renderer.mak
+
+.\modulefactory.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\modulefactory.h"\
+	
+
+.\renderer.cpp : \
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructionsmartreceiver.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticssmartreceiver.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticssmartsender.h"\
+	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\irendererstatusreceiver.h"\
+	"..\..\..\base\src\interfaces\irendererstatussender.h"\
+	"..\..\..\base\src\interfaces\ismartcontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\ismartcontrolvaluesender.h"\
+	"..\..\..\base\src\interfaces\itask.h"\
+	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	".\modulefactory.h"\
+	".\renderer.h"\
+	".\runtimesystem.h"\
+	".\typefactory.h"\
+	
+
+.\runtimesystem.cpp : \
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	"..\..\..\base\src\utils\timing.h"\
+	".\modulefactory.h"\
+	".\runtimesystem.h"\
+	
+
+.\typefactory.cpp : \
+	"..\..\..\base\src\interfaces\itypeclass.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\typefactory.h"\
+	
+
+!IF  "$(CFG)" == "renderer - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "renderer - Win32 Debug"
+
+!ENDIF 
+

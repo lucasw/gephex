@@ -1,3 +1,5 @@
+EXTRA_DIST = model.dsp model.mak model.dep
+
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
 includedir = $(baseincludedir)/model
@@ -18,11 +20,11 @@ libmodel_a_SOURCES = \
         graph.cpp \
         graphnode.cpp \
         graphconnection.cpp \
-        controllvalueset.cpp \
+        controlvalueset.cpp \
         graphfilesystem.cpp \
         graphserial.cpp \
 	graphparser.cpp \
-        controllvalueset.h \
+        controlvalueset.h \
         graphconnection.h \
         graphfilesystem.h \
         graph.h \

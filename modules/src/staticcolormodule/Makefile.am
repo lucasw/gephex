@@ -34,3 +34,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = staticcolormodule.h staticcolormodule_auto.c
+EXTRA_DIST = staticcolormodule.dsp staticcolormodule.mak staticcolormodule.dep

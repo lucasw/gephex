@@ -1,0 +1,43 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von audiooutmodule.mak
+
+.\audiooutmodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiooutdriver.h"\
+	".\audiooutmodule.h"\
+	".\waveoutdriver.h"\
+	
+
+.\audiooutmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audiooutmodule.h"\
+	".\audiooutmodule.xpm"\
+	
+
+.\outbuffer.c : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\outbuffer.h"\
+	
+
+.\waveoutdriver.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\audiooutdriver.h"\
+	".\outbuffer.h"\
+	".\waveoutdriver.h"\
+	
+
+!IF  "$(CFG)" == "audiooutmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "audiooutmodule - Win32 Debug"
+
+!ENDIF 
+

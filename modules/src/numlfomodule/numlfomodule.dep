@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von numlfomodule.mak
+
+.\numlfomodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\lfotype\lfotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numlfomodule.h"\
+	
+
+.\numlfomodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\lfotype\lfotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numlfomodule.h"\
+	".\numlfomodule.xpm"\
+	
+
+!IF  "$(CFG)" == "numlfomodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "numlfomodule - Win32 Debug"
+
+!ENDIF 
+

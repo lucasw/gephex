@@ -30,6 +30,10 @@ public:
 
 	void unSetModuleData( int moduleID, int type );
 
+	void setEditGraphData( int type, const utils::Buffer& buf );
+
+	void unSetEditGraphData( int type );
+
 	void newGraph( const std::string& name );
 
 	void renameGraph( const std::string& graphID, const std::string& newName );

@@ -59,6 +59,8 @@ namespace gui
   class KeyboardManager;
   struct GuiConfig;
 
+  class ProxyErrorReceiver;
+
   class VJMainWindow : public QMainWindow, public IRendererStatusReceiver
     {
       Q_OBJECT
@@ -146,6 +148,7 @@ namespace gui
 
       LogWindow* logWindow;
 
+      std::auto_ptr<ProxyErrorReceiver> m_error_proxy;
       std::auto_ptr<EngineWrapper> engineWrapper;
 
       bool running;

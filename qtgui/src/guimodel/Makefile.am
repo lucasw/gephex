@@ -1,3 +1,5 @@
+EXTRA_DIST = guimodel.dsp guimodel.mak guimodel.dep
+
 INCLUDES = -I @srcdir@/../../../base/src \
 	   -I @builddir@/../../../base/src \
 	   -I @srcdir@/../../../util/include

@@ -1,3 +1,5 @@
+EXTRA_DIST = stringtype.dsp stringtype.mak stringtype.dep stringtype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  = 	-I @srcdir@/../../../engine/src/engine \

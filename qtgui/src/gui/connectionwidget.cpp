@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "connectionwidget.h"
 #include <cmath>
 #include <qpainter.h>
@@ -10,68 +32,78 @@
 namespace gui
 {
 
-ConnectionWidget::ConnectionWidget( InputPlugWidget& _in,
-				    OutputPlugWidget& _out)
-  : in(_in), out(_out)
-{
-  //setBackgroundMode(PaletteForeground);
-}
+  ConnectionWidget::ConnectionWidget( InputPlugWidget& _in,
+                                      OutputPlugWidget& _out)
+    : in(_in), out(_out)
+  {
+    //setBackgroundMode(PaletteForeground);
+  }
 
+  static QPoint global_pos(const QWidget& w)
+  {
+    QWidget* parent = w.parentWidget();
 
-bool ConnectionWidget::isInside(QWidget* rel,const QPoint& y) const
-{
-  QPoint p1 = in.mapTo(rel,in.pos()) - in.pos();
-  QPoint p2 = out.mapTo(rel,out.pos()) - out.pos();
+    QPoint rel_pos = w.pos();
 
-  //TODO Bounding Box check
+    if (parent == 0)
+      return rel_pos;
 
-  // Richtungsvektor der Geraden
-  double d1 = p2.x() - p1.x();
-  double d2 = p2.y() - p1.y();
+    return parent->mapToGlobal(rel_pos);
+  }
 
-  // Normalenvektor ausrechnen
-  double n1;
-  double n2;
+  QPoint mid_point_global(const QWidget& w)
+  {
+    return global_pos(w) + QPoint(w.width()/2, w.height()/2);
+  }
 
-  if (d1 == 0)
-    {
-      n1 = 1.;
-      n2 = 0.;
-    }
-  else 
-    {
-      double alpha = d2 / d1;
-      n1 = sin(alpha);
-      n2 = cos(alpha);
-    }
+  double euklid(const QPoint& p1, const QPoint& p2)
+  {
+    int dx = p2.x() - p1.x();
+    int dy = p2.y() - p1.y();
 
-  double b;
-  double a;
-  if (fabs(n1 - 0.) < 0.0000001)
-    {
-      b = (y.x() - p1.x()) / d1;
-      a = (p1.y() - y.y() + d2 * b) / n2;
-    }
-  else
-    {
-      b = (y.y() - p1.y() + (n2/n1)*(p1.x()-y.x())) / (d2 - (n2/n1)*d1);
+    return sqrt(dx*dx + dy*dy);
+  }
 
-      a = (p1.x() - y.x() + d1*b) / n1;
-    }
+  double ConnectionWidget::dist(const QPoint& y) const
+  {
+    QPoint p1 = mid_point_global(in);
+    QPoint p2 = mid_point_global(out);
 
-  if (b < 0 || b > 1) // Innerhalb der Geraden?
-    return false;
+    // Richtungsvektor der Geraden
+    double d1 = p2.x() - p1.x();
+    double d2 = p2.y() - p1.y();
 
-  if (fabs(a) < 14) // Nah genug dran?
-    return true;
+    // Normalenvektor ausrechnen
+    double n1 = -d2;
+    double n2 = d1;
 
-  return false;
-}
+    double ln = sqrt(n1*n1 + n2*n2);
+    n1 /= ln;
+    n2 /= ln;
 
-void ConnectionWidget::draw(QWidget* rel, QPainter& painter) const
-{
-  painter.drawLine(in.mapTo(rel,in.pos())-in.pos() + QPoint(in.width()/2, in.height()/2),
-		   out.mapTo(rel,out.pos())-out.pos() + QPoint(in.width()/2, in.height()/2));
-}
+    double p1y1 = y.x() - p1.x();
+    double p1y2 = y.y() - p1.y();
+
+    double dist = fabs(p1y1 * n1 + p1y2 * n2);
+
+    double ld = sqrt(d1*d1 + d2*d2);
+    d1 /= ld;
+    d2 /= ld;
+    double k = p1y1 * d1 + p1y2 * d2;
+
+    if (k < 0)
+      return euklid(p1, y);
+    else if (k > ld)
+      return euklid(p2, y);
+
+    return dist;
+  }
+
+  void ConnectionWidget::draw(QWidget* rel, QPainter& painter) const
+  {
+    QPoint in_pos  = rel->mapFromGlobal(mid_point_global(in));
+    QPoint out_pos = rel->mapFromGlobal(mid_point_global(out));
+    painter.drawLine(in_pos, out_pos);
+  }
 
 } // end of namespace gui

@@ -1,0 +1,58 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von sdlfontmodule.mak
+
+.\sdlfontmodule.cpp : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\..\sdl\include\begin_code.h"\
+	"..\..\..\..\sdl\include\close_code.h"\
+	"..\..\..\..\sdl\include\sdl.h"\
+	"..\..\..\..\sdl\include\sdl_active.h"\
+	"..\..\..\..\sdl\include\sdl_audio.h"\
+	"..\..\..\..\sdl\include\sdl_byteorder.h"\
+	"..\..\..\..\sdl\include\sdl_cdrom.h"\
+	"..\..\..\..\sdl\include\sdl_error.h"\
+	"..\..\..\..\sdl\include\sdl_events.h"\
+	"..\..\..\..\sdl\include\sdl_getenv.h"\
+	"..\..\..\..\sdl\include\sdl_joystick.h"\
+	"..\..\..\..\sdl\include\sdl_keyboard.h"\
+	"..\..\..\..\sdl\include\sdl_keysym.h"\
+	"..\..\..\..\sdl\include\sdl_main.h"\
+	"..\..\..\..\sdl\include\sdl_mouse.h"\
+	"..\..\..\..\sdl\include\sdl_mutex.h"\
+	"..\..\..\..\sdl\include\sdl_quit.h"\
+	"..\..\..\..\sdl\include\sdl_rwops.h"\
+	"..\..\..\..\sdl\include\sdl_timer.h"\
+	"..\..\..\..\sdl\include\sdl_types.h"\
+	"..\..\..\..\sdl\include\sdl_version.h"\
+	"..\..\..\..\sdl\include\sdl_video.h"\
+	"..\..\..\..\sdl_ttf\sdl_ttf.h"\
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\positiontype\positiontype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\sdlfontmodule.h"\
+	
+
+.\sdlfontmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\positiontype\positiontype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\sdlfontmodule.h"\
+	".\sdlfontmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "sdlfontmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "sdlfontmodule - Win32 Debug"
+
+!ENDIF 
+

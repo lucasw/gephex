@@ -1,0 +1,104 @@
+
+The following programs and libraries are needed
+to compile gephex on win32:
+
+  * msvc 6
+  * python
+  * nasm
+  * libqt (2.3nc)
+  * sdl
+  * sdl-image
+  * sdl-ttf
+  * directx sdk
+
+The python, nasm and qt (uic, moc) binaries must be in the PATH.
+You need to set up the following environment variables:
+
+  * SDL_DIR       : base dir of sdl
+  * SDL_IMAGE_DIR : base dir of sdl-image
+  * SDL_TTF_DIR   : base dir of sdl-ttf
+  * QTDIR         : base dir of qt
+  * DXSDK_DIR     : base dir of directx sdk
+
+There are two ways to build gephex
+(all paths are relative to your gephex dir):
+
+ 1/ via the vs6 ide
+ ------------------
+
+ Create the following empty folders in your gephex dir:
+
+   <gephex-dir>/dlls
+   <gephex-dir>/dlls/modules
+   <gephex-dir>/dlls/types
+   <gephex-dir>/graphs
+
+ Copy <gephex-dir>/data/gephexw.conf.default to <gephex-dir>/gephex.conf
+
+ Copy <gephex-dir>/config_h.win32 to <gephex-dir>/config.h
+
+ Optionally, copy the graphs in <gephex-dir>/examples/graphs to
+ <gephex-dir>/graphs
+ 
+ Fire up vs6 and open <gephex-dir>/build/gephex.dsw.
+
+ Choose your configuration (Release/Debug).
+
+ You have to build three projects:
+   * engine
+   * gui
+   * dummy (builds all modules and types)
+
+
+ 2/ via the commandline
+ -----------------------
+
+ Unfortunately, vs6 puts hard paths into .mak files and .dep files.
+ Although the dsp files are controlled by the above environment variables,
+ the console build will probably only work if you have your libraries
+ installed into the following directories:
+
+  SDL_DIR       = c:/code/sdl
+  SDL_IMAGE_DIR = c:/code/sdl_image
+  SDL_TTF_DIR   = c:/code/sdl_ttf
+  QTDIR         = c:/code/qt
+  DXSDK_DIR     = c:/dxsdk
+
+ (If anybody knows a better way to create the .mak and .dep files, please
+  tell us!)
+
+
+ The batch file <gephex-dir>/build/make_all.bat should build everything.
+ cd into build and type
+
+   > make_all Release
+
+ Note: nmake does seem to crash when called from inside cygwin.
+ Use the windows command line.
+
+
+
+Important:
+----------
+In both cases you need to make sure that the dlls of the libraries
+are found when gephex is started. The easiest thing is to put them
+into <gephex-dir>/bin. The following dlls are needed:
+
+  from sdl:
+    - sdl.dll
+
+  from sdl_ttf:
+    - sdl_ttf.dll
+
+  from sdl_image:
+    - sdl_image.dll
+    - jpeg.dll
+    - libpng1.dll
+    - zlib.dll
+
+  from qt:
+    - qt-mt230nc.dll
+
+
+ Good luck!
+

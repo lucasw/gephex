@@ -17,24 +17,25 @@ X11_sOOURCES = \
 	ximageoutput.h \
 	xshmoutput.h \
 	x11stuff.h \
-	x11stuff.c
+	x11stuff.c \
+	vloopbackoutput.h \
+	vloopbackoutput.c
 endif
 
-if HAVE_AALIB
+if WITH_AALIB
 AALIB_sOURCES = \
 	aaoutput.c \
 	aaoutput.h
 AALIB_lDFLAGS = -laa
 endif
 
-if HAVE_SDL
+if WITH_SDL
 SDL_sOURCES = \
 	sdloutput.c \
 	sdloutput.h
 endif
 
-# hier muss mal jemand gucken wegen HAVE_GL oder sowatt...:/
-if HAVE_GLX
+if WITH_GL
 GLLIBS = -lGL
 GL_sOURCES = \
         gloutput.h \
@@ -49,7 +50,9 @@ frboutmodule_la_SOURCES = \
         frboutmodule.h \
         frboutmodule.spec \
         frboutmodule.xpm \
-        outputdriver.h $(X11_sOOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
+        outputdriver.h \
+	slist.h \
+	slist.c $(X11_sOOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
 
 
 frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale
@@ -66,3 +69,6 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = frboutmodule.h frboutmodule_auto.c
+EXTRA_DIST = frboutmodule.dsp frboutmodule.mak frboutmodule.dep \
+	gdioutput.c gdioutput.h \
+	multimonitor.c multimonitor.h

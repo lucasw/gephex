@@ -1,0 +1,142 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von dllloader.mak
+
+.\c_input.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_functiontypes.h"\
+	".\c_input.h"\
+	".\c_moduletables.h"\
+	
+
+.\c_module.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_functiontypes.h"\
+	".\c_input.h"\
+	".\c_module.h"\
+	".\c_moduletables.h"\
+	".\c_output.h"\
+	
+
+.\c_moduleclass.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\renderer\typefactory.h"\
+	".\c_functiontypes.h"\
+	".\c_module.h"\
+	".\c_moduleclass.h"\
+	".\c_moduletables.h"\
+	
+
+.\c_output.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\c_output.h"\
+	".\c_outputplug.h"\
+	
+
+.\c_outputplug.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_outputplug.h"\
+	
+
+.\c_type.cpp : \
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_type.h"\
+	".\c_typetables.h"\
+	
+
+.\c_typeclass.cpp : \
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypeclass.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_type.h"\
+	".\c_typeclass.h"\
+	".\c_typetables.h"\
+	
+
+.\dllloader.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassnamereceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclasssender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspecreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspecsender.h"\
+	"..\..\..\base\src\interfaces\itypeclass.h"\
+	"..\..\..\base\src\interfaces\itypeclassinforeceiver.h"\
+	"..\..\..\base\src\interfaces\itypeclassinfosender.h"\
+	"..\..\..\base\src\interfaces\itypeclassloadercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\itypeclassnamereceiver.h"\
+	"..\..\..\base\src\interfaces\itypeclassnamesender.h"\
+	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
+	"..\..\..\base\src\interfaces\itypeclasssender.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	"..\..\..\base\src\utils\structreader.h"\
+	"..\..\..\config.h"\
+	".\c_functiontypes.h"\
+	".\c_moduleclass.h"\
+	".\c_moduletables.h"\
+	".\c_typeclass.h"\
+	".\c_typetables.h"\
+	".\dllloader.h"\
+	".\moduleclassspec.h"\
+	".\moduleinfoutils.h"\
+	".\nameresolver.h"\
+	".\typedllloader.h"\
+	
+
+.\moduleclassspec.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	".\moduleclassspec.h"\
+	
+
+.\moduleinfoutils.cpp : \
+	"..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\..\..\base\src\utils\structreader.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\moduleinfoutils.h"\
+	
+
+.\nameresolver.cpp : \
+	".\nameresolver.h"\
+	
+
+.\typedllloader.cpp : \
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_typetables.h"\
+	".\typedllloader.h"\
+	
+
+!IF  "$(CFG)" == "dllloader - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dllloader - Win32 Debug"
+
+!ENDIF 
+

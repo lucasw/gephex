@@ -26,3 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = audioaddmodule.h audioaddmodule_auto.c
+EXTRA_DIST = audioaddmodule.dsp audioaddmodule.mak audioaddmodule.dep

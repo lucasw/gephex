@@ -1,0 +1,888 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von typeviews.mak
+
+.\boundednumberview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qframe.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrangecontrol.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qspinbox.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvalidator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\boundednumberview.h"\
+	".\boundednumberview_moc_cpp.cpp"\
+	
+
+.\checkboxnumberview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qbuttongroup.h"\
+	"..\..\..\..\..\qt\include\qcheckbox.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qframe.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qgroupbox.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qvbuttongroup.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\checkboxnumberview.h"\
+	".\checkboxnumberview_moc_cpp.cpp"\
+	
+
+.\colorview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qcolordialog.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qdialog.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qiconset.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpixmap.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpushbutton.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtimer.h"\
+	"..\..\..\..\..\qt\include\qtooltip.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\typeview.h"\
+	".\colorview.h"\
+	".\colorview_moc_cpp.cpp"\
+	
+
+.\comboboxstringview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qcombobox.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\comboboxstringview.h"\
+	".\comboboxstringview_moc_cpp.cpp"\
+	
+
+.\dialnumberview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qdial.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrangecontrol.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\dialnumberview.h"\
+	".\dialnumberview_moc_cpp.cpp"\
+	
+
+.\filestringview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qdatetime.h"\
+	"..\..\..\..\..\qt\include\qdialog.h"\
+	"..\..\..\..\..\qt\include\qdict.h"\
+	"..\..\..\..\..\qt\include\qdir.h"\
+	"..\..\..\..\..\qt\include\qdrawutil.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfile.h"\
+	"..\..\..\..\..\qt\include\qfiledialog.h"\
+	"..\..\..\..\..\qt\include\qfileinfo.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qframe.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qiconset.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlineedit.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qlistbox.h"\
+	"..\..\..\..\..\qt\include\qlistview.h"\
+	"..\..\..\..\..\qt\include\qmessagebox.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qnetworkprotocol.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpainter.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpen.h"\
+	"..\..\..\..\..\qt\include\qpixmap.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpointarray.h"\
+	"..\..\..\..\..\qt\include\qpushbutton.h"\
+	"..\..\..\..\..\qt\include\qqueue.h"\
+	"..\..\..\..\..\qt\include\qrangecontrol.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qscrollbar.h"\
+	"..\..\..\..\..\qt\include\qscrollview.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtimer.h"\
+	"..\..\..\..\..\qt\include\qtooltip.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qurl.h"\
+	"..\..\..\..\..\qt\include\qurlinfo.h"\
+	"..\..\..\..\..\qt\include\qurloperator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\..\qt\include\qwmatrix.h"\
+	"..\..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\..\..\config.h"\
+	"..\typeview.h"\
+	".\filestringview.h"\
+	".\filestringview_moc_cpp.cpp"\
+	
+
+.\fontview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qdialog.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontdialog.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qiconset.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpixmap.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpushbutton.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtimer.h"\
+	"..\..\..\..\..\qt\include\qtooltip.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\typeview.h"\
+	".\fontview.h"\
+	".\fontview_moc_cpp.cpp"\
+	
+
+.\frameview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qframe.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qiconset.h"\
+	"..\..\..\..\..\qt\include\qimage.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlabel.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpainter.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpen.h"\
+	"..\..\..\..\..\qt\include\qpixmap.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpointarray.h"\
+	"..\..\..\..\..\qt\include\qpushbutton.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtimer.h"\
+	"..\..\..\..\..\qt\include\qtooltip.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\..\qt\include\qwmatrix.h"\
+	"..\typeview.h"\
+	".\frameview.h"\
+	".\frameview_moc_cpp.cpp"\
+	
+
+.\positionview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpainter.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpen.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpointarray.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsignalslotimp.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\..\qt\include\qwmatrix.h"\
+	"..\typeview.h"\
+	".\positionview.h"\
+	".\positionview_moc_cpp.cpp"\
+	
+
+.\radionumberview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qbutton.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qradiobutton.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\radionumberview.h"\
+	".\radionumberview_moc_cpp.cpp"\
+	
+
+.\slidernumberview.cpp : \
+	"..\..\..\..\..\qt\include\qabstractlayout.h"\
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlayout.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrangecontrol.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qslider.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\slidernumberview.h"\
+	".\slidernumberview_moc_cpp.cpp"\
+	
+
+.\stringview.cpp : \
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlineedit.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvalidator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\stringview.h"\
+	".\stringview_moc_cpp.cpp"\
+	
+
+.\unboundednumberview.cpp : \
+	"..\..\..\..\..\qt\include\qapplication.h"\
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qasciidict.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcollection.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qconnection.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qcursor.h"\
+	"..\..\..\..\..\qt\include\qdatastream.h"\
+	"..\..\..\..\..\qt\include\qevent.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qgdict.h"\
+	"..\..\..\..\..\qt\include\qglist.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qintdict.h"\
+	"..\..\..\..\..\qt\include\qiodevice.h"\
+	"..\..\..\..\..\qt\include\qlineedit.h"\
+	"..\..\..\..\..\qt\include\qlist.h"\
+	"..\..\..\..\..\qt\include\qmetaobject.h"\
+	"..\..\..\..\..\qt\include\qmime.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobject.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpalette.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregexp.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qsizepolicy.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qstringlist.h"\
+	"..\..\..\..\..\qt\include\qstrlist.h"\
+	"..\..\..\..\..\qt\include\qstyle.h"\
+	"..\..\..\..\..\qt\include\qtranslator.h"\
+	"..\..\..\..\..\qt\include\qvalidator.h"\
+	"..\..\..\..\..\qt\include\qvaluelist.h"\
+	"..\..\..\..\..\qt\include\qwidget.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\base\src\utils\structreader.h"\
+	"..\typeview.h"\
+	".\unboundednumberview.h"\
+	".\unboundednumberview_moc_cpp.cpp"\
+	
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "typeviews - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "typeviews - Win32 Debug"
+
+!ENDIF 
+

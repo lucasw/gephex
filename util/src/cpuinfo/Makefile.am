@@ -1,3 +1,5 @@
+EXTRA_DIST = cpuinfo.dsp cpuinfo.mak cpuinfo.dep
+
 noinst_LIBRARIES = libcpuinfo.a
 
 libcpuinfo_a_SOURCES = cpuinfo.c

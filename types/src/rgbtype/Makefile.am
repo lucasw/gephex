@@ -1,3 +1,5 @@
+EXTRA_DIST = rgbtype.dsp rgbtype.mak rgbtype.dep rgbtype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  = 	-I @srcdir@/../../../engine/src/engine \

@@ -30,7 +30,7 @@ inputs
 
     audio
     {
-        name              = Audio-Strom
+        name              = Audio-Stream
         type              = typ_AudioType
         strong_dependency = true
         const             = true
@@ -38,7 +38,7 @@ inputs
 
     latency
     {
-        name              = Latenz(ms)
+        name              = Latency(ms)
         type              = typ_NumberType
         hidden            = true
         const             = true
@@ -48,12 +48,12 @@ inputs
         lower_bound       = 0
         higher_bound      = 1000
         step_size         = 1
-        help              = [Latenz in Millisekunden - erhoehen wenn es oft zu Aussetzern kommt]
+        help              = [Latency in ms - increase if you have gaps in the playback]
     }
 
     driver
     {
-        name              = Treiber
+        name              = Driver
         type              = typ_StringType
         const             = true
         strong_dependency = true

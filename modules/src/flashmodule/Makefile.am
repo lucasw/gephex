@@ -23,3 +23,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/framebuffertype 
 
 DISTCLEANFILES = flashmodule.h flashmodule_auto.c
+EXTRA_DIST = flashmodule.dsp flashmodule.mak flashmodule.dep

@@ -1,6 +1,28 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "sdlfontmodule.h"
 
-#include <iostream>
+//#include <iostream>
 #include <fstream>
 #include <list>
 #include <string>
@@ -188,19 +210,19 @@ static std::list<std::string> path_to_dirs(const std::string& media_path)
   std::string::size_type old_pos = 0;
 
   std::list<std::string> dir_list;
-  std::cout << "path = " << media_path << "\n";
+  //  std::cout << "path = " << media_path << "\n";
   while ( (pos = media_path.find_first_of(";", old_pos)) != std::string::npos )
     {
       if (old_pos < pos)
 	{
-	  std::string dir = media_path.substr(old_pos, pos - old_pos -1);
+	  std::string dir = media_path.substr(old_pos, pos - old_pos);
 #if defined(OS_WIN32)
           dir += "\\";
 #else
           dir += "/";
 #endif
 	  dir_list.push_back(dir);
-	  std::cout << "... " << dir << "\n";
+          //	  std::cout << "... " << dir << "\n";
 	}
       old_pos = pos+1;
     }
@@ -213,7 +235,7 @@ static std::list<std::string> path_to_dirs(const std::string& media_path)
 #endif
   dir_list.push_back(dir);
 
-  std::cout << "... " << dir << "\n";
+  //  std::cout << "... " << dir << "\n";
   return dir_list;
 }
 
@@ -254,7 +276,7 @@ static std::string get_real_filename(const std::string& fname)
     {
       const std::string fullfilename (*it+fname);
       std::ifstream teststream(fullfilename.c_str());
-      std::cout <<"filename: "<< fullfilename << std::endl;
+      //      std::cout <<"filename: "<< fullfilename << std::endl;
       if (teststream)
 	return fullfilename;
     }

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-strongDependenciesCalculated">
+  
+  <refnamediv>
+    <refname>strongDependenciesCalculated</refname>
+    <refpurpose>query the needed inputs</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv> 
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>strongDependenciesCalculated</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+        <paramdef>int** <parameter>neededInputs</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv> 
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This function returns the needed inputs for the next call to <function>update</function>. Before calling <function>strongDependenciesCalculated</function> the strong-dependency inputs must be updated. The caller provides an array of ints with the same number of elements as inputs. An 0 entry means the value is needed and must be up to date before calling <function>update</function>. If the entry for an input is 0 the input needn't be calculated.</para>
+
+  </refsect1>
+</refentry>

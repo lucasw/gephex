@@ -435,7 +435,7 @@ void update(void* instance)
 
 	assert(my->op);
 
-	if (my->binary) {
+	if (my->binary && amount != 0) {
 		scale_framebuffers(inst->in_input1, inst->in_input2,
 			&my->scaledFb, &fb1, &fb2,
 			&xsize, &ysize, &didScale);
@@ -462,11 +462,17 @@ void update(void* instance)
 	assert(inst->out_result->xsize == xsize
 	       && inst->out_result->ysize == ysize);	
 	
-	my->op(xsize*ysize*4,
-           (const unsigned char*) fb1,
-		   (const unsigned char*) fb2,
-		   (unsigned char*) inst->out_result->framebuffer,
-		   amount);
+        if (amount == 0 && my->binary == 1)
+          {
+            memcpy(inst->out_result->framebuffer,
+                   fb1, xsize*ysize*4);
+          }
+        else
+          my->op(xsize*ysize*4,
+                 (const unsigned char*) fb1,
+                 (const unsigned char*) fb2,
+                 (unsigned char*) inst->out_result->framebuffer,
+                 amount);
 
 	// delete scaled framebuffer if we didn't need it this time
 	if (didScale == 0 && my->scaledFb != 0)
@@ -478,9 +484,15 @@ void update(void* instance)
 
 void strongDependencies(Instance* inst, int neededInputs[])
 {
-	MyInstancePtr my = inst->my;
-	if (my->binary == 0)
-		neededInputs[in_input2] = 0;
+  MyInstancePtr my = inst->my;
+  if (my->binary == 0)
+    neededInputs[in_input2] = 0;
+  else 
+    {
+      int amount = (int)(255.0 * trim_double(inst->in_amount->number, 0, 1));
+      if (amount == 0)
+        neededInputs[in_input2] = 0;
+    }
 }
 
 //------------------------------------------------------------------------

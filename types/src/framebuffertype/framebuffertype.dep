@@ -1,0 +1,15 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von framebuffertype.mak
+
+.\framebuffertype.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dlltype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\framebuffertype.h"\
+	
+
+!IF  "$(CFG)" == "framebuffertype - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "framebuffertype - Win32 Debug"
+
+!ENDIF 
+

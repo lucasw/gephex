@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "audioinmodule.h"
 
 #include <string>
@@ -9,19 +31,18 @@
 
 #include "audioindriver.h"
 
-#if defined(OS_POSIX)
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
+#if defined(WITH_ASOUNDLIB)
 #include "alsadriver.h"
 #endif
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(WITH_OSS)
 #include "ossdriver.h"
 #endif
-#elif defined(OS_WIN32)
+
+#if defined(OS_WIN32)
 #include "waveindriver.h"
 #endif
 
 static logT s_log;
-
 
 static const int SAMPLE_RATE = 44100;
 static const AudioInDriver::sample_format 
@@ -108,8 +129,7 @@ void update(void* instance)
           my->drv = 0;
         }
 
-#if defined(OS_POSIX)
-#if defined(HAVE_SYS_SOUNDCARD_H)
+#if defined(WITH_OSS)
       if (m_driver_name == "oss"  || m_driver_name == "default")
 	{
 	  my->drv = new OSSDriver();
@@ -117,27 +137,24 @@ void update(void* instance)
 	}
       else
 #endif
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
+#if defined(WITH_ASOUNDLIB)
         if (m_driver_name == "alsa")
 	{
 	  my->drv = new AlsaDriver();
 	  s_log(2, "Using alsa driver");
 	}
 #endif
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
+#if defined(WITH_ASOUNDLIB)
       else
 	{
 	  my->drv = new AlsaDriver();
 	  s_log(2, "Unkown driver - using alsa driver");
 	}
-#elif defined(HAVE_SYS_SOUNDCARD_H)
+#elif defined(WITH_OSS)
 	{
 	  my->drv = new OSSDriver();
 	  s_log(2, "Unkown driver - using OSS driver");
 	}
-#else
-#error OSS or alsa support needed
-#endif
 #elif defined(OS_WIN32)
       if (m_driver_name == "wavein" || m_driver_name == "default")
 	{
@@ -149,6 +166,8 @@ void update(void* instance)
 	  my->drv = new WaveInDriver();
 	  s_log(2, "Unkown driver - using WaveIn driver");
 	}
+#else
+#error No sound driver!
 #endif
 
     }

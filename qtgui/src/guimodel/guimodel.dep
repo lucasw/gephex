@@ -1,0 +1,137 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von guimodel.mak
+
+.\controlmodel.cpp : \
+	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
+	"..\..\..\base\src\interfaces\igraphdatareceiver.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\bufferstream.h"\
+	"..\..\..\base\src\utils\string_.h"\
+	"..\..\..\base\src\utils\structreader.h"\
+	".\controlmodel.h"\
+	".\icontrolconnectview.h"\
+	".\icontrolview.h"\
+	".\point.h"\
+	
+
+.\controlvaluedispatcher.cpp : \
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	".\controlvaluedispatcher.h"\
+	".\point.h"\
+	
+
+.\enginewrapper.cpp : \
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluesender.h"\
+	"..\..\..\base\src\interfaces\ienginecontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\ierrorsender.h"\
+	"..\..\..\base\src\interfaces\igraphdatareceiver.h"\
+	"..\..\..\base\src\interfaces\igraphdatasender.h"\
+	"..\..\..\base\src\interfaces\igraphnamesender.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imodelstatussender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
+	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructiondumbsender.h"\
+	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
+	"..\..\..\base\src\interfaces\imoduledatasender.h"\
+	"..\..\..\base\src\interfaces\imodulestatisticssender.h"\
+	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\irendererstatussender.h"\
+	"..\..\..\base\src\net\iclientsocket.h"\
+	"..\..\..\base\src\net\idatalistener.h"\
+	"..\..\..\base\src\net\isender.h"\
+	"..\..\..\base\src\net\isocket.h"\
+	"..\..\..\base\src\net\itagger.h"\
+	"..\..\..\base\src\net\itaginterpreter.h"\
+	"..\..\..\base\src\net\namedpipeclientsocket.h"\
+	"..\..\..\base\src\net\netexceptions.h"\
+	"..\..\..\base\src\net\socketadaptor.h"\
+	"..\..\..\base\src\net\sotimeout.h"\
+	"..\..\..\base\src\net\tagdispatcher.cpp"\
+	"..\..\..\base\src\net\tagdispatcher.h"\
+	"..\..\..\base\src\net\tagger.cpp"\
+	"..\..\..\base\src\net\tagger.h"\
+	"..\..\..\base\src\net\tagutils.h"\
+	"..\..\..\base\src\net\tcpclientsocket.h"\
+	"..\..\..\base\src\netinterfaces\controlvaluesendernet.h"\
+	"..\..\..\base\src\netinterfaces\enginecontrolreceivernet.h"\
+	"..\..\..\base\src\netinterfaces\errorsendernet.h"\
+	"..\..\..\base\src\netinterfaces\graphdatasendernet.h"\
+	"..\..\..\base\src\netinterfaces\graphnamesendernet.h"\
+	"..\..\..\base\src\netinterfaces\modelcontrolreceivernet.h"\
+	"..\..\..\base\src\netinterfaces\modelstatussendernet.h"\
+	"..\..\..\base\src\netinterfaces\moduleclassinfosendernet.h"\
+	"..\..\..\base\src\netinterfaces\moduleclassloadercontrolreceivernet.h"\
+	"..\..\..\base\src\netinterfaces\moduleclassnamesendernet.h"\
+	"..\..\..\base\src\netinterfaces\moduleconstructiondumbsendernet.h"\
+	"..\..\..\base\src\netinterfaces\moduledatasendernet.h"\
+	"..\..\..\base\src\netinterfaces\modulestatisticssendernet.h"\
+	"..\..\..\base\src\netinterfaces\renderercontrolreceivernet.h"\
+	"..\..\..\base\src\netinterfaces\rendererstatussendernet.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\config.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\controlmodel.h"\
+	".\controlvaluedispatcher.h"\
+	".\enginewrapper.h"\
+	".\graphmodel.h"\
+	".\moduleclassmodel.h"\
+	".\moduledatadispatcher.h"\
+	".\point.h"\
+	
+
+.\graphmodel.cpp : \
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
+	"..\..\..\base\src\utils\bufferstream.h"\
+	".\graphmodel.h"\
+	".\igraphview.h"\
+	".\point.h"\
+	
+
+.\moduleclassmodel.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\itokenizer.h"\
+	"..\..\..\base\src\utils\stringtokenizer.h"\
+	"..\..\..\base\src\utils\structreader.h"\
+	".\imoduleclassview.h"\
+	".\moduleclassmodel.h"\
+	".\moduleinfo.h"\
+	".\pluginfo.h"\
+	".\xpm.h"\
+	
+
+.\moduledatadispatcher.cpp : \
+	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
+	".\moduledatadispatcher.h"\
+	
+
+.\moduleinfo.cpp : \
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\moduleinfo.h"\
+	".\pluginfo.h"\
+	".\xpm.h"\
+	
+
+.\point.cpp : \
+	".\point.h"\
+	
+
+.\xpm.cpp : \
+	".\xpm.h"\
+	
+
+!IF  "$(CFG)" == "guimodel - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "guimodel - Win32 Debug"
+
+!ENDIF 
+

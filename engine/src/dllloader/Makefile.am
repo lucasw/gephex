@@ -1,3 +1,5 @@
+EXTRA_DIST = dllloader.dsp dllloader.mak dllloader.dep
+
 baseincludedir = @includedir@/gephex
 includedir = $(baseincludedir)/dllloader
 libdir = @libdir@/gephex

@@ -1,11 +1,12 @@
-SUBDIRS = 	framebuffertype \
-		numbertype \
-		stringtype \
-		positiontype \
-		ifstype \
-		rgbtype \
-		miditype \
-                audiotype \
-		envtype \
-		lfotype
-
+SUBDIRS = \
+        audiotype \
+	envtype \
+	fonttype \
+	framebuffertype \
+	ifstype \
+	lfotype \
+	miditype \
+	numbertype \
+	positiontype \
+	rgbtype \
+	stringtype

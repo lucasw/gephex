@@ -29,12 +29,12 @@ inputs
 
     driver
     {
-        name              = Treiber
+        name              = Driver
         type              = typ_StringType
         const             = true
         strong_dependency = true
         hidden            = true
-        default           = alsa
+        default           = default
         widget_type       = combo_box
         values            = default,wavein,oss,alsa
     }
@@ -44,7 +44,7 @@ outputs
 {
     r
     {
-        name = Audio-Strom
+        name = audio stream
         type = typ_AudioType
     }
 }

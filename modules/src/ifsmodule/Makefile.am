@@ -29,3 +29,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = ifsmodule.h ifsmodule_auto.c
+EXTRA_DIST = ifsmodule.dsp ifsmodule.mak ifsmodule.dep

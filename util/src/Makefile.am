@@ -1,13 +1,13 @@
 includedir = @includedir@/gephex
 
-if HAVE_JOYSTICK
+if WITH_JOYSTICK
 JOYSTICK_DIRS = \
 	libjoystick \
-        joystick_net_midi
+        joystick_midi_net
 endif
 
 SUBDIRS = cpuinfo \
 	libgeo \
-	misc $(JOYSTICK_DIRS) # idlc
+	misc $(JOYSTICK_DIRS)
 
 

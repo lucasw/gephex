@@ -1,67 +1,73 @@
+EXTRA_DIST = netinterfaces.dsp netinterfaces.mak netinterfaces.dep
+
 INCLUDES= -I @builddir@/.. -I @srcdir@/.. -I @top_srcdir@/util/include
 
 noinst_LIBRARIES = libnetinterfaces.a
 
 libnetinterfaces_a_SOURCES = \
-		enginecontrolsendernet.cpp \
-		enginecontrolreceivernet.cpp \
-		moduleclassloadercontrolsendernet.cpp \
-		moduleclassloadercontrolreceivernet.cpp \
-		renderercontrolreceivernet.cpp \
-		renderercontrolsendernet.cpp \
-		modelcontrolreceivernet.cpp \
-		moduledatareceivernet.cpp \
-		moduledatasendernet.cpp \
-		moduleclassnamereceivernet.cpp \
-		moduleclassnamesendernet.cpp \
-		moduleconstructiondumbreceivernet.cpp \
-		modelcontrolsendernet.cpp \
-		moduleconstructiondumbsendernet.cpp \
-		moduleclassinforeceivernet.cpp \
-		moduleclassinfosendernet.cpp \
-		controlvaluereceivernet.cpp \
-		controlvaluesendernet.cpp \
-		modulestatisticsreceivernet.cpp \
-		modulestatisticssendernet.cpp \
-		errorsendernet.cpp \
-		errorreceivernet.cpp \
-		graphnamereceivernet.cpp \
-		graphnamesendernet.cpp \
-		modelstatusreceivernet.cpp \
-		modelstatussendernet.cpp \
-		rendererstatusreceivernet.cpp \
-		rendererstatussendernet.cpp
+	enginecontrolsendernet.cpp \
+	enginecontrolreceivernet.cpp \
+	moduleclassloadercontrolsendernet.cpp \
+	moduleclassloadercontrolreceivernet.cpp \
+	renderercontrolreceivernet.cpp \
+	renderercontrolsendernet.cpp \
+	modelcontrolreceivernet.cpp \
+	moduledatareceivernet.cpp \
+	moduledatasendernet.cpp \
+	moduleclassnamereceivernet.cpp \
+	moduleclassnamesendernet.cpp \
+	moduleconstructiondumbreceivernet.cpp \
+	modelcontrolsendernet.cpp \
+	moduleconstructiondumbsendernet.cpp \
+	moduleclassinforeceivernet.cpp \
+	moduleclassinfosendernet.cpp \
+	controlvaluereceivernet.cpp \
+	controlvaluesendernet.cpp \
+	modulestatisticsreceivernet.cpp \
+	modulestatisticssendernet.cpp \
+	errorsendernet.cpp \
+	errorreceivernet.cpp \
+	graphnamereceivernet.cpp \
+	graphnamesendernet.cpp \
+	modelstatusreceivernet.cpp \
+	modelstatussendernet.cpp \
+	rendererstatusreceivernet.cpp \
+	rendererstatussendernet.cpp \
+	graphdatareceivernet.cpp \
+	graphdatasendernet.cpp
 
 noinst_HEADERS = \
-		controlvaluereceivernet.h \
-		controlvaluesendernet.h \
-		enginecontrolreceivernet.h \
-		enginecontrolsendernet.h \
-		errorreceivernet.h \
-		errorsendernet.h \
-		graphnamereceivernet.h \
-		graphnamesendernet.h \
-		modelcontrolreceivernet.h \
-		modelcontrolsendernet.h \
-		moduleclassinforeceivernet.h \
-		moduleclassinfosendernet.h \
-		moduleclassloadercontrolreceivernet.h \
-		moduleclassloadercontrolsendernet.h \
-		moduleclassnamereceivernet.h \
-		moduleclassnamesendernet.h \
-		moduleconstructiondumbreceivernet.h \
-		moduleconstructiondumbsendernet.h \
-		moduledatareceivernet.h \
-		moduledatasendernet.h \
-		modulestatisticsreceivernet.h \
-		modulestatisticssendernet.h \
-		nodelcontrolreceivertest.h \
-		renderercontrolreceivernet.h \
-		renderercontrolsendernet.h \
-		modelstatusreceivernet.h \
-		modelstatussendernet.h \
-		rendererstatusreceivernet.h \
-		rendererstatussendernet.h
+	controlvaluereceivernet.h \
+	controlvaluesendernet.h \
+	enginecontrolreceivernet.h \
+	enginecontrolsendernet.h \
+	errorreceivernet.h \
+	errorsendernet.h \
+	graphnamereceivernet.h \
+	graphnamesendernet.h \
+	modelcontrolreceivernet.h \
+	modelcontrolsendernet.h \
+	moduleclassinforeceivernet.h \
+	moduleclassinfosendernet.h \
+	moduleclassloadercontrolreceivernet.h \
+	moduleclassloadercontrolsendernet.h \
+	moduleclassnamereceivernet.h \
+	moduleclassnamesendernet.h \
+	moduleconstructiondumbreceivernet.h \
+	moduleconstructiondumbsendernet.h \
+	moduledatareceivernet.h \
+	moduledatasendernet.h \
+	modulestatisticsreceivernet.h \
+	modulestatisticssendernet.h \
+	nodelcontrolreceivertest.h \
+	renderercontrolreceivernet.h \
+	renderercontrolsendernet.h \
+	modelstatusreceivernet.h \
+	modelstatussendernet.h \
+	rendererstatusreceivernet.h \
+	rendererstatussendernet.h \
+	graphdatareceivernet.h \
+	graphdatasendernet.h
 
 
 %receivernet.h: ../interfaces/%.if

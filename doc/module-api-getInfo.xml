@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getInfo">
+
+  <refnamediv>
+    <refname>getInfo</refname>
+    <refpurpose>query information for the user interface</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>int <function>getInfo</function></funcdef>
+        <paramdef>char* <parameter>buffer</parameter></paramdef>
+        <paramdef>int <parameter>bufLen</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>For the dynamic creation of the user interface several information about the module class are necessary:</para>
+
+<para>
+  <itemizedlist>
+    <listitem><para>icon, name, effect-group</para></listitem>
+    <listitem><para>information about the inputs</para></listitem>
+    <listitem><para>information about the outputs</para></listitem>
+  </itemizedlist>
+</para>
+
+<para>These information are const that means subsequent calls to this function must return the same value.</para>
+
+<para>The semantic of this function is that the caller gives a pointer to a
+already allocated array buf of size bufLen and if the info string fits
+in that array the string is copied and the size of the 0 terminated
+string is returned. If the buffer is to small no changes to the buffer
+are applied and the needed size is returned.</para>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>The function returns the number of written bytes or if the provided buffer was to small the minimum buffer size to store the info string</para>
+    
+  </refsect1>
+</refentry>

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "audiooutmodule.h"
 
 #include <string>
@@ -8,14 +30,16 @@
 #endif
 
 #include "audiooutdriver.h"
-#if defined(OS_POSIX)
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
+
+#if defined(WITH_ASOUNDLIB)
 #include "alsaoutdriver.h"
 #endif
-#if defined(HAVE_SYS_SOUNDCARD_H)
+
+#if defined(WITH_OSS)
 #include "ossoutdriver.h"
 #endif
-#elif defined(OS_WIN32)
+
+#if defined(OS_WIN32)
 #include "waveoutdriver.h"
 #endif
 
@@ -129,52 +153,57 @@ void update(void* instance)
       if (my->drv)
 	delete my->drv;
 
-#if defined(OS_POSIX)
-#if defined(HAVE_SYS_SOUNDCARD_H)
-      if (m_driver_name == "oss" 
-#if !defined(HAVE_ALSA_ASOUNDLIB_H)
-          || m_driver_name == "default"
-#endif
-          )
+
+#if defined(WITH_OSS)
+      if (m_driver_name == "oss" )
 	{
 	  my->drv = new OSSOutDriver();
 	  s_log(2, "Using OSS driver");
 	}
       else
 #endif
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
-        if (m_driver_name == "alsa"
-            || m_driver_name == "default")
-	{
-	  my->drv = new AlsaOutDriver();
-	  s_log(2, "Using alsa driver");
-	}
-#endif
-#if defined(HAVE_ALSA_ASOUNDLIB_H)
+#if defined(WITH_ASOUNDLIB)
+      if (m_driver_name == "alsa")
+        {
+          my->drv = new AlsaOutDriver();
+          s_log(2, "Using alsa driver");
+        }
       else
-	{
-	  my->drv = new AlsaOutDriver();
-	  s_log(2, "Unkown driver - using alsa driver");
-	}
-#elif defined(HAVE_SYS_SOUNDCARD_H)
-	{
-	  my->drv = new OSSOutDriver();
-	  s_log(2, "Unkown driver - using OSS driver");
-	}
-#else
-#error OSS or alsa support needed
 #endif
-#elif defined(OS_WIN32)
-      if (m_driver_name == "waveout" || m_driver_name == "default")
+#if defined(OS_WIN32)
+      if (m_driver_name == "waveout")
 	{
 	  my->drv = new WaveOutDriver();
 	  s_log(2, "Using WaveOut driver");
 	}
       else
+#endif
+#if defined(WITH_ASOUNDLIB)
+	{
+	  my->drv = new AlsaOutDriver();
+          if (m_driver_name == "default")
+            s_log(2, "Using alsa driver");
+          else
+            s_log(2, "Unkown driver - using alsa driver");
+	}
+#elif defined(WITH_OSS)
+	{
+	  my->drv = new OSSOutDriver();
+          if (m_driver_name == "default")
+            s_log(2, "Using OSS driver");
+          else
+            s_log(2, "Unkown driver - using OSS driver");
+	}
+#elif defined(OS_WIN32)
 	{
 	  my->drv = new WaveOutDriver();
-	  s_log(2, "Unkown driver - using WaveOut driver");
+          if (m_driver_name == "default")
+            s_log(2, "Using WaveOut driver");
+          else
+            s_log(2, "Unkown driver - using WaveOut driver");
 	}
+#else
+#error No audio driver !
 #endif
 
     }

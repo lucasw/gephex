@@ -19,6 +19,33 @@ inputs
         const             = true
         strong_dependency = true
     }
+
+    scale
+    {
+        name              = Lightness
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        hidden            = true
+        lower_bound       = 0
+        higher_bound      = 1
+        step_size         = 0.01
+        default           = 0.01
+        help              = lightness
+    }
+
+    algo
+    {
+        name                = Algorithm
+        type                = typ_StringType
+        const               = true
+        strong_dependency   = true
+        hidden              = true
+        widget_type         = combo_box
+        values              = sobel,roberts-cross
+        default             = roberts-cross
+        help                = sobel is slower and smoother, roberts-cross is quick and dirty
+    }
 }
 
 outputs

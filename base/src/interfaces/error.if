@@ -1,0 +1,22 @@
+name: Error
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  * Is called when an error occurred.
+  */
+ error string text
+
+ /**
+  * Is called for warnings.
+  */
+ warning string text
+
+
+ /**
+  * Is called for log messages.
+  */
+ log string text
+

@@ -15,7 +15,7 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_pixelizemodule] number_of_inputs=[2] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_pixelizemodule] number_of_inputs=[3] number_of_outputs=[1] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
@@ -23,6 +23,9 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_NumberType id=bsize const=true strong_dependency=true default=1 } ";
   break;
   case 1:
+    return "input_spec { type=typ_NumberType id=bsizey const=true strong_dependency=true default=0 } ";
+  break;
+  case 2:
     return "input_spec { type=typ_FrameBufferType id=src const=true strong_dependency=true  } ";
   break;
  }
@@ -74,6 +77,9 @@ int setInput(void* instance,int index,void* typePointer)
    inst->in_bsize = (NumberType *) typePointer;
   break;
   case 1:
+   inst->in_bsizey = (NumberType *) typePointer;
+  break;
+  case 2:
    inst->in_src = (FrameBufferType *) typePointer;
   break;
  } //switch(index) 
@@ -92,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Pixelizer] group=[Filter] inputs=[2 BlockSize{lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[80] hidden=[false] display_format=[fixed] } Image ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Pixelizer] group=[Filter] inputs=[3 BlockSize(X){lower_bound=[1] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[80] hidden=[false] display_format=[fixed] } BlockSize(Y){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[match x] higher_bound=[80] hidden=[false] display_format=[fixed] help=[if you set this value to 0, the y blocksize will match the x blocksize] } Image ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(pixelizemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

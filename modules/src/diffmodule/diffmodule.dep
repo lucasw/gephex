@@ -1,0 +1,24 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von diffmodule.mak
+
+.\diffmodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\diffmodule.h"\
+	
+
+.\diffmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\diffmodule.h"\
+	".\diffmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "diffmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "diffmodule - Win32 Debug"
+
+!ENDIF 
+

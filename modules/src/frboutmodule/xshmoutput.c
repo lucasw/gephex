@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "xshmoutput.h"
 
 #include <stdlib.h>
@@ -18,7 +40,7 @@
 
 //-----------------------------------------------------------------------
 
-#define EPS 0.0001
+#define EPS 0.001
 
 //-----------------------------------------------------------------------
 
@@ -193,7 +215,7 @@ XShm_new_instance(const char* server_name,
     }
 
   // XShmQueryExtension returns true whenever the xserver supports
-  // this extension - but it will still fail if we are not on the
+  // this extension - but the connect will still fail if we are not on the
   // same machine!
   // Only if server_name_ptr has the form ":<server_nr>"
   // we assume that we are on the same machine.
@@ -205,7 +227,7 @@ XShm_new_instance(const char* server_name,
 	       ", not 'localhost:0')");
       return 0;
     }
-  
+
   printf("xshmoutput: Connecting to '%s'...\n", server_name_ptr);
 
   sh->display = XOpenDisplay(server_name_ptr);
@@ -347,30 +369,33 @@ static int XShm_resize(struct DriverInstance* sh,
                        int width, int height,
                        char* error_text, int text_len)
 { 
-  int screen = DefaultScreen(sh->display);
-
-  if (width > MAX_RES || height > MAX_RES)
+  if (sh->width != width || sh->height != height)
     {
-      snprintf(error_text, text_len,
-               "Max resolution (%ix%i) exceeded by given resolution (%i,%i)",
-               MAX_RES, MAX_RES, width, height);
-      return 0;
+      int screen = DefaultScreen(sh->display);
+
+      if (width > MAX_RES || height > MAX_RES)
+        {
+          snprintf(error_text, text_len,
+                   "Max resolution (%ix%i) exceeded by given "
+                   "resolution (%i,%i)",
+                   MAX_RES, MAX_RES, width, height);
+          return 0;
+        }
+
+      XResizeWindow(sh->display, sh->win, width, height);
+
+      XDestroyImage(sh->shimage);
+
+      sh->shimage = XShmCreateImage(sh->display,
+                                    DefaultVisual(sh->display, screen),
+                                    DefaultDepth(sh->display, screen),
+                                    ZPixmap,
+                                    sh->shminfo.shmaddr, 
+                                    &sh->shminfo, width, height);
+
+      sh->width  = width;
+      sh->height = height;
     }
-
-  XResizeWindow(sh->display, sh->win, width, height);
-
-  XDestroyImage(sh->shimage);
-
-  sh->shimage = XShmCreateImage (sh->display,
-                                 DefaultVisual(sh->display, screen),
-                                 DefaultDepth(sh->display, screen),
-                                 ZPixmap,
-                                 sh->shminfo.shmaddr, 
-                                 &sh->shminfo, width, height);
-
-  sh->width  = width;
-  sh->height = height;
-
   return 1;
 }
 

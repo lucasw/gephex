@@ -1,3 +1,5 @@
+EXTRA_DIST = misc.dsp misc.mak misc.dep
+
 baseincludedir = @includedir@/gephex
 includedir = @includedir@/gephex/misc
 libdir = @libdir@/gephex

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #ifndef GRAPHWIDGET_H
 #define GRAPHWIDGET_H
 
@@ -86,9 +108,9 @@ namespace gui
     virtual void editGraphChanged( const std::string& graphID,
 				   const std::string& snapID );
 
-public slots:
+  public slots:
 
-void beginLineDraw();
+    void beginLineDraw();
     void redrawLine(const QPoint& from, const QPoint& to);
     void connectionRequestFromInput(const InputPlugWidget*,const QPoint& to);
     void connectionRequestFromOutput(const OutputPlugWidget*,const QPoint& to);
@@ -112,7 +134,10 @@ void beginLineDraw();
 
     void setDrawModuleInfo(bool draw){m_drawmoduleinfo=draw;}
 
-    signals:
+    // used to show the user to which input a control is connected
+    void highlightInput(int moduleID, int inputIndex);
+
+  signals:
     void createControl(const std::string& name,const std::string& type,
 		       int nodeID,int inputIndex,
 		       const ParamMap& params, const QPoint&);
@@ -145,8 +170,8 @@ void beginLineDraw();
     void decConnectionCount(PlugWidget* plug);
     void incConnectionCount(PlugWidget* plug);
 
-private slots:
-void displayTimings();
+  private slots:
+    void timer_fired();
 
   private:
     std::map<int, NodeWidget*> nodes;
@@ -165,7 +190,8 @@ void displayTimings();
     std::string currentModuleClassName;
 
     // moegliche aktionen der popup menues
-    enum {NODEWIDGET_KILL,NODEWIDGET_TIMING,NODEWIDGET_PROPERTIES};
+    enum {NODEWIDGET_KILL,NODEWIDGET_PROPERTIES,
+          NODEWIDGET_INTERNALS};
     enum {PLUGWIDGET_CONNECT_TO_CONTROL,PLUGWIDGET_REMOVE_CONTROL,
 	  PLUGWIDGET_HIDE_INPUT, PLUGWIDGET_DISCONNECT};
     enum {CONNECTIONWIDGET_KILL};
@@ -173,6 +199,7 @@ void displayTimings();
     // der node bzw der input fuer den ein popup menue geoeffnet wurde:
     NodeWidget* currentNode;
     InputPlugWidget* currentInput;  
+    InputPlugWidget* highlightedInput;
 
     GraphModel* m_controller;
     std::vector<QPixmap> nodePixmaps; 
@@ -198,6 +225,9 @@ void displayTimings();
     int m_property_id;
 
     std::string m_media_path;
+
+    unsigned int m_tick_count;
+    unsigned int m_last_highlight;
   };
 
 } // end of namespace gui

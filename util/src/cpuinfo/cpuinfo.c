@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "cpuinfo.h"
 
 #include "basic_types.h"
@@ -85,6 +107,37 @@ static int_32 cpuid_simple(int_32 eax_in)
 }
 
 /**
+ * Returns whether the processor supports extended functions
+ * with cpuid with function number eax_in
+ */
+static int_32 cpuid_support_extended(int_32 eax_in)
+{
+  int_32 result;
+
+#if !defined(CPU_I386)
+  return 0;
+#elif defined(COMP_VC) 
+  _asm
+    {
+      mov eax, eax_in
+      CPUID
+      mov result, eax
+	}
+#elif defined(COMP_GCC) 
+  __asm__ __volatile__
+    (
+     "cpuid               \n\t"
+     :	"=a" (result)
+     :	"0" (eax_in)
+     : "ebx", "ecx", "edx"
+     );
+#endif
+  
+  return result >= eax_in;
+}
+
+
+/**
  * Returns all values of cpuid
  */
 static void cpuid_extended(uint_32 eax_in,
@@ -134,11 +187,13 @@ int cpuinfo_has_mmx() {
 
 
 int cpuinfo_has_3dnow() {
-  return (cpuid_simple(0x80000001) & 0x80000000);
+  return cpuid_support_extended(0x80000001) &&
+	     (cpuid_simple(0x80000001) & 0x80000000);
 }
 
 int cpuinfo_has_e3dnow() {
-  return (cpuid_simple(0x80000001) & 0x40000000);
+  return cpuid_support_extended(0x80000001) &&
+	     (cpuid_simple(0x80000001) & 0x40000000);
 }
 
 

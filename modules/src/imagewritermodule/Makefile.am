@@ -25,7 +25,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../types/src/stringtype \
            -I@srcdir@/../../../types/src/numbertype 
 
-
- 
-
 DISTCLEANFILES = imagewritermodule.h imagewritermodule_auto.c
+

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "pixelizemodule.h"
 
 //---------------------------------------------------------------------------
@@ -66,20 +88,31 @@ void update(void* instance)
 
   int xsize = inst->in_src->xsize;
   int ysize = inst->in_src->ysize;
-  int bsize = trim_int(inst->in_bsize->number, 1, min(xsize, ysize));
+  int bsizex = trim_int(inst->in_bsize->number, 1, xsize);
+  int bsizey = trim_int(inst->in_bsizey->number, 0, ysize);
 
-  int blocks_x = xsize / bsize;
-  int blocks_y = ysize / bsize;
-  int xrest = xsize - blocks_x*bsize;
-  int yrest = ysize - blocks_y*bsize;
+  int blocks_x;
+  int blocks_y;
+  int xrest;
+  int yrest;
 
   int xi, yi;
   const uint_32* src;
   uint_32* dst;
   int offset;
 
-  if (bsize == 1)
-	  return;
+  if (bsizey == 0)
+    bsizey = min(ysize, bsizex);
+
+  blocks_x = xsize / bsizex;
+  blocks_y = ysize / bsizey;
+  xrest = xsize - blocks_x*bsizex;
+  yrest = ysize - blocks_y*bsizey;
+
+  
+
+  if (bsizex == 1 && bsizey == 1)
+    return;
 
   attribs.xsize = xsize;
   attribs.ysize = ysize;
@@ -90,27 +123,27 @@ void update(void* instance)
   offset = 0;
   for (yi = 0; yi < blocks_y; ++yi)
   {	  
-	  offset = yi*bsize*xsize;
+	  offset = yi*bsizey*xsize;
 	  for (xi = 0; xi < blocks_x; ++xi)
 	  {
-		  uint_32 col = average(src + offset, bsize, bsize, xsize);
-		  fill_block(dst + offset, bsize, bsize, xsize, col);
-		  offset += bsize;
+		  uint_32 col = average(src + offset, bsizex, bsizey, xsize);
+		  fill_block(dst + offset, bsizex, bsizey, xsize, col);
+		  offset += bsizex;
 	  }
 	  if (xrest > 0)
 	  {
-		  uint_32 col = average(src + offset, xrest, bsize, xsize);
-		  fill_block(dst + offset, xrest, bsize, xsize, col);
+		  uint_32 col = average(src + offset, xrest, bsizey, xsize);
+		  fill_block(dst + offset, xrest, bsizey, xsize, col);
 	  }
   }
   if (yrest > 0)
   {
-      offset = blocks_y*bsize*xsize;
+      offset = blocks_y*bsizey*xsize;
 	  for (xi = 0; xi < blocks_x; ++xi)
 	  {
-		  uint_32 col = average(src + offset, bsize, yrest, xsize);
-		  fill_block(dst + offset, bsize, yrest, xsize, col);
-		  offset += bsize;
+		  uint_32 col = average(src + offset, bsizex, yrest, xsize);
+		  fill_block(dst + offset, bsizex, yrest, xsize, col);
+		  offset += bsizex;
 	  }
 	  if (xrest > 0)
 	  {
@@ -122,11 +155,16 @@ void update(void* instance)
 
 void patchLayout(Instance* inst, int out2in[])
 {
-  int bsize = trim_int(inst->in_bsize->number, 1,
-	                   min(inst->in_src->xsize, inst->in_src->ysize));
+  int xsize = inst->in_src->xsize;
+  int ysize = inst->in_src->ysize;
+  int bsizex = trim_int(inst->in_bsize->number, 1, xsize);
+  int bsizey = trim_int(inst->in_bsizey->number, 0, ysize);
 
-  if (bsize == 1)
-	  out2in[out_r] = in_src;
+  if (bsizey == 0)
+    bsizey = min(ysize, bsizex);
+
+  if (bsizex == 1 && bsizey == 1)
+    out2in[out_r] = in_src;
 }
 
 //----------------------------------------------------------------------

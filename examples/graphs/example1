@@ -1,11 +1,14 @@
 <graph>
 <id>IDSTART/example1ENDID</id>
 <name>example1</name>
+<data>
+<dataitem> <key>1024</key> <buf>40 18 ~3cstr~3e~3cl~3e11~3c/l~3e~3cd~3eTemperature~3c/d~3e~3c/str~3e</buf> </dataitem>
+</data>
 <nodes>
 <node> <id>1</id> <type>mod_isingnoizemodule</type>
 <data>
 <dataitem> <key>0</key> <buf>37 160</buf> </dataitem>
-<dataitem> <key>1024</key> <buf>~3cstr~3e~3cl~3e22~3c/l~3e~3cd~3eIsingnoize:Temperature~3c/d~3e~3c/str~3e 1 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3ehslider~3c/d~3e~3c/str~3e 32 6| { help=[Relative temperature]; higher_bound=[6]; lower_bound=[0]; widget_type=[unboundednumber_selector];  } </buf> </dataitem>
+<dataitem> <key>1024</key> <buf>~3cstr~3e~3cl~3e22~3c/l~3e~3cd~3eIsingnoize:Temperature~3c/d~3e~3c/str~3e 1 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3ehslider~3c/d~3e~3c/str~3e 34 43| { help=[Relative temperature]; higher_bound=[6]; lower_bound=[0]; widget_type=[unboundednumber_selector];  } </buf> </dataitem>
 </data>
 </node>
 <node> <id>2</id> <type>mod_frboutmodule</type>
@@ -78,7 +81,7 @@
 <snapshot> <id>IDSTART/example1ENDID</id> <name>1</name>
 <values>
 <value><plug> <node_id>1</node_id> <plug_id>temp</plug_id> </plug>
-<buf>2.07059~00</buf></value>
+<buf>1.88235~00</buf></value>
 <value><plug> <node_id>1</node_id> <plug_id>border_growth</plug_id> </plug>
 <buf>4~00</buf></value>
 <value><plug> <node_id>1</node_id> <plug_id>spont_growth</plug_id> </plug>

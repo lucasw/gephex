@@ -1,0 +1,27 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von doepfermodule.mak
+
+.\doepfermodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\miditype\miditype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libmidi\libmidi.h"\
+	".\doepfermodule.h"\
+	
+
+.\doepfermodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\miditype\miditype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\doepfermodule.h"\
+	".\doepfermodule.xpm"\
+	
+
+!IF  "$(CFG)" == "doepfermodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "doepfermodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libgrid.mak
+
+.\libgrid.c : \
+	"..\..\..\util\include\basic_types.h"\
+	".\libgrid.h"\
+	

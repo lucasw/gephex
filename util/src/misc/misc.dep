@@ -1,0 +1,30 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von misc.mak
+
+.\cpuinfo.cpp : \
+	"..\..\..\config.h"\
+	".\cpuinfo.h"\
+	
+
+.\cpuspeed.cpp : \
+	"..\..\..\config.h"\
+	".\cpuspeed.h"\
+	
+
+.\fastmemcpy.cpp : \
+	"..\..\..\config.h"\
+	".\cpuinfo.h"\
+	".\fastmemcpy.h"\
+	
+
+.\timer.cpp : \
+	"..\..\..\config.h"\
+	".\cpuspeed.h"\
+	".\timer.h"\
+	
+
+!IF  "$(CFG)" == "misc - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "misc - Win32 Debug"
+
+!ENDIF 
+

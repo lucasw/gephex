@@ -1,3 +1,5 @@
+EXTRA_DIST = miditype.dsp miditype.mak miditype.dep miditype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \

@@ -25,3 +25,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = numbermodule.h numbermodule_auto.c
+EXTRA_DIST = numbermodule.dsp numbermodule.mak numbermodule.dep

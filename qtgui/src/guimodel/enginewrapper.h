@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #ifndef INCLUDED_ENGINEWRAPPER_H
 #define INCLUDED_ENGINEWRAPPER_H
 
@@ -14,6 +36,7 @@
 class ModuleConstructionDumbSenderNet;
 class ModuleClassInfoSenderNet;
 class ModuleDataSenderNet;
+class GraphDataSenderNet;
 class ControlValueSenderNet;
 class ModuleStatisticsSenderNet;
 class ModuleClassNameSenderNet;
@@ -44,6 +67,8 @@ class IRendererControlReceiver;
 class IEngineControlReceiver;
 
 class IModelControlReceiver;
+
+class IErrorReceiver;
 
 namespace net
 {
@@ -78,7 +103,8 @@ namespace gui
     {
     public:
       EngineWrapper(const std::string& ipcType,
-		    const std::string& locator, int port);
+		    const std::string& locator, int port,
+                    IErrorReceiver& log);
       ~EngineWrapper();
 		
       void connect();
@@ -116,6 +142,7 @@ namespace gui
       utils::AutoPtr<ModuleConstructionDumbSenderNet> mcdsn;
       utils::AutoPtr<ModuleClassInfoSenderNet> mcisn;
       utils::AutoPtr<ModuleDataSenderNet> mdsn;
+      utils::AutoPtr<GraphDataSenderNet> gdsn;
       utils::AutoPtr<ControlValueSenderNet> cvsn;
       utils::AutoPtr<ModuleStatisticsSenderNet> mssn;
       utils::AutoPtr<ModuleClassNameSenderNet> mcnsn;
@@ -140,6 +167,7 @@ namespace gui
       utils::AutoPtr<CommandTagger> tagger10;
       utils::AutoPtr<CommandTagger> tagger13;
       utils::AutoPtr<CommandTagger> tagger14;
+      utils::AutoPtr<CommandTagger> tagger15;
       
 
       utils::AutoPtr<PortTagger> portTagger1;
@@ -152,6 +180,7 @@ namespace gui
       utils::AutoPtr<PortTagger> portTagger10;
       utils::AutoPtr<PortTagger> portTagger13;
       utils::AutoPtr<PortTagger> portTagger14;
+      utils::AutoPtr<PortTagger> portTagger15;
       
 
       utils::AutoPtr<PortDispatcher> portDispatcher;

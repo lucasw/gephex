@@ -26,3 +26,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = netcontrolmodule.h netcontrolmodule_auto.c
+EXTRA_DIST = netcontrolmodule.dsp netcontrolmodule.mak netcontrolmodule.dep

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-shutDown">
+  <refnamediv>
+    <refname>shutDown</refname>
+    <refpurpose>destructs the type plugin.</refpurpose>
+  </refnamediv>
+
+<refsynopsisdiv>
+<funcsynopsis>
+<funcprototype>
+  <funcdef>void <function>shutDown</function></funcdef>
+  <paramdef><parameter>void</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+ </refsynopsisdiv>
+
+<refsect1>
+  <title>Description</title>
+
+<para>This function closes the type library. Before calling it all type instances must be destructed. It must be called before unloading the dll.  After calling shutdown no other method of the type plugin may be called.</para>
+
+<para>You should free all resources (memory, devices) allocated in init here.</para>
+
+  </refsect1>
+</refentry>
+

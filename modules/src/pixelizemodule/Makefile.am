@@ -26,3 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = pixelizemodule.h pixelizemodule_auto.c
+EXTRA_DIST = pixelizemodule.dsp pixelizemodule.mak pixelizemodule.dep

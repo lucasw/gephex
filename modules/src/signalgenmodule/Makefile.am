@@ -1,0 +1,29 @@
+libdir = @libdir@/gephex/modules
+
+PLUC=python @srcdir@/../../pluc.py
+
+signalgenmodule_auto.c: signalgenmodule.spec signalgenmodule.h
+	$(PLUC) c @srcdir@/signalgenmodule.spec
+
+signalgenmodule.h: signalgenmodule.spec
+	$(PLUC) h @srcdir@/signalgenmodule.spec
+
+lib_LTLIBRARIES = signalgenmodule.la
+signalgenmodule_la_SOURCES = 	signalgenmodule_auto.c \
+				signalgenmodule.c \
+				signalgenmodule.h \
+				signalgenmodule.spec \
+				signalgenmodule.xpm
+
+signalgenmodule_la_LDFLAGS = -module -avoid-version
+
+INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
+		-I @srcdir@/../../../util/include \
+		-I @srcdir@/../../../util/src/misc \
+		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/stringtype
+
+ 
+
+DISTCLEANFILES = signalgenmodule.h signalgenmodule_auto.c
+EXTRA_DIST = signalgenmodule.dsp signalgenmodule.mak signalgenmodule.dep

@@ -1,3 +1,5 @@
+EXTRA_DIST = audiotype.dsp audiotype.mak audiotype.dep audiotype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \

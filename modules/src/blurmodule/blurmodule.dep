@@ -1,0 +1,28 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von blurmodule.mak
+
+.\blurmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\blurmodule.h"\
+	
+
+.\blurmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\blurmodule.h"\
+	".\blurmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "blurmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "blurmodule - Win32 Debug"
+
+!ENDIF 
+

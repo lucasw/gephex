@@ -1,0 +1,16 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libeffectv.mak
+
+.\libeffectv.c : \
+	"..\..\..\config.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\EffecTV.h"\
+	".\libeffectv.h"\
+	".\utils.h"\
+	
+
+!IF  "$(CFG)" == "libeffectv - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "libeffectv - Win32 Debug"
+
+!ENDIF 
+

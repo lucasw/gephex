@@ -1,3 +1,5 @@
+EXTRA_DIST = libgeo.dsp libgeo.mak libgeo.dep
+
 noinst_LIBRARIES = libgeo.a
 
 libgeo_a_SOURCES = libgeo.c

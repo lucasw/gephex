@@ -8,7 +8,6 @@ mod_frboutmodule
     xpm           = frboutmodule.xpm
     author        = Georg
     version       = 1.0
-    static        = true
 }
 
 inputs
@@ -119,7 +118,7 @@ inputs
         lower_bound       = 0
         higher_bound      = 3
         step_size         = 1
-        help              = Bestimmt auf welchem Monitor der Output angezeigt wird
+        help              = On which monitor should the window be placed?
     }   
 
     driver
@@ -131,7 +130,7 @@ inputs
         hidden            = true
         default           = default
         widget_type       = combo_box
-        values            = default,GDI,XImage,XShm,SDL,GL,aalib
+        values            = default,GDI,XImage,XShm,SDL,GL,aalib,vloopback
     }
 
     server
@@ -143,7 +142,7 @@ inputs
         hidden             = true
         default            = default
         toggle_keys        = p[:0.1,:0.0]
-        help               = Format is default or SERVER_HOSTNAME:XSERVER:SCREEN
+        help               = Format is default or SERVER_HOSTNAME:XSERVER:SCREEN (for vloopback this is the video device, e.g. '/dev/video0')
     }
 
 }

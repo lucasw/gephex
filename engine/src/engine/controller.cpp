@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "controller.h"
 #include <iostream>
 
@@ -125,7 +147,8 @@ namespace engine
       tagger10(modelControlSender),
       
       tagger13(modelControlSender),
-      tagger14(modelControlSender),      
+      tagger14(modelControlSender),
+      tagger15(modelControlSender),
 
       portTagger(portDispatcher),
       protocol(portTagger),
@@ -144,6 +167,7 @@ namespace engine
 
       modelStatusReceiver(tagger13),
       rendererStatusReceiver(tagger14),
+      graphDataReceiver(tagger15),
 
       logger(new engine::NetLogger(errorReceiver)),
 
@@ -212,6 +236,7 @@ namespace engine
     initTaggers(portTagger10, tagger10, protocol, portDispatcher, m_port+9);
     initTaggers(portTagger13, tagger13, protocol, portDispatcher, m_port+12);
     initTaggers(portTagger14, tagger14, protocol, portDispatcher, m_port+13);
+    initTaggers(portTagger15, tagger15, protocol, portDispatcher, m_port+14);
 
     pModel.registerModuleConstructionSmartReceiver(pRenderer);
     pModel.registerModuleConstructionDumbReceiver(moduleReceiver);
@@ -221,6 +246,8 @@ namespace engine
     pModel.registerControlValueReceiver(controlValueReceiver);
     pModel.registerModuleStatisticsReceiver(moduleStatisticsReceiver);
     pModel.registerModelStatusReceiver(modelStatusReceiver);
+
+    pModel.registerGraphDataReceiver(graphDataReceiver);
 		
     pRenderer.registerSmartControlValueReceiver(pModel);
     pRenderer.registerModuleStatisticsSmartReceiver(pModel);
@@ -257,7 +284,7 @@ namespace engine
     std::vector<std::string> types = getFilesInDir(config.type_path,
                                                    TYPE_ENDING);
 	
-    std::cout << "Reading dlls...";
+    std::cout << "Reading plugins...";
     std::cout.flush();
     pDllLoader.readDlls(modules, types);
     std::cout << "   done\n";
@@ -289,11 +316,11 @@ namespace engine
       }
     catch (std::runtime_error& e)
       {
-	std::cerr << "Fehler beim Aufräumen: " << e.what() << std::endl;
+	std::cerr << "Error during cleanup: " << e.what() << std::endl;
       }
     catch (...)
       {
-	std::cerr << "Unbekannter Fehler beim Aufräumen " << std::endl;
+	std::cerr << "Unknown error during cleanup " << std::endl;
       }
   }
 	

@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von stringtype.mak
+
+.\stringtype.c : \
+	"..\..\..\engine\src\engine\dlltype.h"\
+	".\stringtype.h"\
+	

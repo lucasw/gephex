@@ -26,3 +26,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = posnummodule.h posnummodule_auto.c
+EXTRA_DIST = posnummodule.dsp posnummodule.mak posnummodule.dep

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getInputSpec">
+  
+  <refnamediv>
+    <refname>getInputSpec</refname>
+    <refpurpose>query a description of an input</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>char* <function>getInputSpec</function></funcdef>
+        <paramdef>int <parameter>index</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+      
+<para>
+This function returns a pointer to a c-string which describes the input with 
+the <parameter>index</parameter> number.
+The format of this specification string looks similar to a structure with
+default values in programming languages.
+The structure is called <literal>input_spec</literal> in it has the attributes
+<literal>type</literal>, <literal>id</literal>, <literal>const</literal>,
+<literal>default</literal> and <literal>strong_dependency</literal>.
+<returnvalue> 
+"input_spec { type=typ_STRING; id=STRING; const=BOOL; strong_dependency=BOOL; default=STRING}"
+</returnvalue> 
+The order of the attributes is irrelevant.
+<literal>type</literal> is the unique identifier for the type-class of
+that input.
+<literal>id</literal> is an identifier for this input. It has to be unique
+among all inputs of the module.
+With the <literal>const</literal> attribute signals the modules to the engine
+if it wants to change the value of the type object in the
+<function>update</function> function.
+If the input has set <literal>strong_dependency</literal> to true the engine
+must always set/update this input before calling <function>update</function>.
+The <literal>default</literal> attribute is the default value of the input
+when the module is new created. The format to specify this value is the format
+defined by the <function>serialise</function> and
+<function>deserialise</function> functions of the type-class.
+The specification for some input could look like this:
+<literal>"input_spec { type=typ_NumberType id=factor const=true strong_dependency=true default=0 }"</literal>
+</para>
+
+  </refsect1>
+</refentry>
+

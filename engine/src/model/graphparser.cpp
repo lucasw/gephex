@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "graphparser.h"
 
 #include <iostream>
@@ -131,10 +153,12 @@ namespace model
 
     SGraph::SGraph(const std::string& id,
 		   const std::string& name,
+                   std::list<SDataItem>& dataitems,
 		   std::list<SNode>& nodes,
 		   std::list<SConnection>& connections,
 		   std::list<SSnapshot>& snapshots)
-      : m_id(id), m_name(name), m_nodes(nodes),
+      : m_id(id), m_name(name), 
+        m_dataitems(dataitems), m_nodes(nodes),
 	m_connections(connections), m_snapshots(snapshots)
     {
     }
@@ -147,6 +171,11 @@ namespace model
     std::string SGraph::name() const
     {
       return m_name;
+    }
+
+    const std::list<SDataItem>& SGraph::dataitems() const
+    {
+      return m_dataitems;
     }
 
     const std::list<SNode>& SGraph::nodes() const
@@ -193,16 +222,16 @@ namespace model
 				    std::list<SDataItem>& data)
     {
       utils::xml::Iterator i = begin;
-      
+
       i = utils::xml::tagOpens(i, end, "data");
 
       while (utils::xml::next_tag_name(i, end) == "dataitem")
-      {	
-	SDataItem dataitem;
-	i = parse_dataitem(i, end, dataitem);
-	data.push_back(dataitem);
-      }
-
+        {	
+          SDataItem dataitem;
+          i = parse_dataitem(i, end, dataitem);
+          data.push_back(dataitem);
+        }
+          
       i = utils::xml::tagCloses(i, end, "data");
 
       return i;
@@ -427,6 +456,15 @@ namespace model
 	  i = utils::xml::leafTag(i, end, "id", graph_id);
 	  i = utils::xml::leafTag(i, end, "name", graph_name);
 
+          std::list<SDataItem> data;
+          std::string tagname = utils::xml::next_tag_name(i, end);
+
+          // older graphs don't have the data section      
+          if (tagname == "data")
+            {
+              i = parse_data(i, end, data);
+            }
+
 	  i = parse_nodes(i, end, nodes);
 
 	  i = parse_connections(i, end, connections);
@@ -435,6 +473,7 @@ namespace model
 
 	  return SGraph(graph_id,
 			graph_name,
+                        data,
 			nodes,
 			connections,
 			snapshots);
@@ -565,6 +604,13 @@ namespace model
       s << "<graph>\n";
       s << "<id>"   << g.id() << "</id>\n";
       s << "<name>" << g.name() << "</name>\n";
+      s << "<data>\n";
+      DataSerializer ds(s);
+      std::for_each(g.dataitems().begin(),
+                    g.dataitems().end(),
+                    ds);
+      s << "</data>\n";
+
       s << "<nodes>\n";
       NodeSerializer ns(s);
       std::for_each(g.nodes().begin(), g.nodes().end(), ns);

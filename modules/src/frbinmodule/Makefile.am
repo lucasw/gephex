@@ -10,20 +10,20 @@ frbinmodule.h: frbinmodule.spec
 
 lib_LTLIBRARIES = frbinmodule.la
 
-if HAVE_AVIFILE
+if WITH_AVIFILE
 AVIFILE_sOURCES = \
 	avifiledriver.h \
 	avifiledriver.cpp
 endif
 
-if HAVE_MPEG3
+if WITH_MPEG3
 MPEG3_sOURCES = \
 	mpeg3driver.h \
 	mpeg3driver.cpp
 MPEG3_lDFLAGS =  @MPEG3_LDFLAGS@
 endif
 
-if HAVE_SDL_IMAGE
+if WITH_SDL_IMAGE
 SDL_IMAGE_sOURCES = \
 	sdlimagedriver.h \
 	sdlimagedriver.cpp
@@ -53,13 +53,17 @@ frbinmodule_la_LIBADD = -lstdc++ -lscale
 
 frbinmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
 
-INCLUDES = 	\
-		-I @srcdir@/../../../engine/src/engine \
-		-I @srcdir@/../../../util/include \
-		-I @srcdir@/../libscale \
-		-I @srcdir@/../../../types/src/numbertype \
-		-I @srcdir@/../../../types/src/stringtype \
-		-I @srcdir@/../../../types/src/framebuffertype \
-		$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS)
+INCLUDES = \
+	-I @srcdir@/../../../engine/src/engine \
+	-I @srcdir@/../../../util/include \
+	-I @srcdir@/../libscale \
+	-I @srcdir@/../../../types/src/numbertype \
+	-I @srcdir@/../../../types/src/stringtype \
+	-I @srcdir@/../../../types/src/framebuffertype \
+	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS)
 
 DISTCLEANFILES = frbinmodule.h frbinmodule_auto.c
+EXTRA_DIST = frbinmodule.dsp frbinmodule.mak frbinmodule.dep \
+	dshowdriver.cpp dshowdriver.h \
+	vfwdriver.cpp vfwdriver.h \
+	timer.cpp timer.h

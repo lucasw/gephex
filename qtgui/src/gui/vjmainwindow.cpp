@@ -76,14 +76,48 @@
 
 namespace gui
 {
+
+  class ProxyErrorReceiver : public IErrorReceiver
+  {
+  public:
+    ProxyErrorReceiver() : m_client(0) {};
+
+    void set_client(IErrorReceiver* client)
+    {
+      m_client = client;
+    }
+
+    void error(const std::string& text)
+    {
+      if (m_client)
+        m_client->error(text);
+    }
+
+    void warning(const std::string& text)
+    {
+      if (m_client)
+        m_client->warning(text);
+    }
+
+    void log(const std::string& text)
+    {
+      if (m_client)
+        m_client->log(text);
+    }
+
+  private:
+    IErrorReceiver* m_client;
+  };
   
   VJMainWindow::VJMainWindow(QWidget* parent, const char* name,
                              const GuiConfig& config)
 			     
     : QMainWindow(parent,name),
+      m_error_proxy(new ProxyErrorReceiver()),
       engineWrapper(new EngineWrapper(config.ipcType,
                                       config.ipcLocator,
-                                      config.port)),
+                                      config.port,
+                                      *m_error_proxy)),
       running(false), connected(false), 
       moduleClassView(0), graphNameView(0),
       m_config(config),
@@ -312,9 +346,11 @@ namespace gui
     //synchronizeEngineAction->addTo(server);
     shutDownEngineAction->addTo(server);
 
+    /*
     QPopupMenu* graphMenu = new QPopupMenu(this);
     menuBar()->insertItem("Graphs",graphMenu,2,2);
     newGraphAction->addTo(graphMenu);
+    */
 
     QPopupMenu* startstop = new QPopupMenu(this);
     menuBar()->insertItem("Engine",startstop,3,3);
@@ -402,6 +438,8 @@ namespace gui
     engineWrapper->errorSender().registerErrorReceiver(*logWindow);
     belowTab->addTab(logWindow, "Messages");
 
+    m_error_proxy->set_client(logWindow);
+
     setCentralWidget(centralWidget);
 
     // layout
@@ -417,7 +455,7 @@ namespace gui
     graphNameView = new GraphNameView(leftTab,
 				      engineWrapper->modelControlReceiver(),
                                       *logWindow);
-    engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);    
+    engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);
 
     editorWidget = new EditorWidget(editor,"Editorwidget",
 				    engineWrapper->graphModel(),
@@ -522,13 +560,18 @@ namespace gui
             std::string binary_name = m_config.engine_binary;
 
 #if defined(OS_POSIX)
-            args.push_back("-fg");
-            args.push_back("white");
-            args.push_back("-bg");
-            args.push_back("black");
-            args.push_back("-e");
-            args.push_back(binary_name);
-            utils::spawn("xterm", args);
+            const char* home = getenv("HOME");
+            if (home == 0)
+              {
+                statusBar()->message("could not read $HOME");
+                utils::Timing::sleep(2000);
+              }
+            else
+              {
+                std::string h (home);
+                args.push_back(binary_name);
+                utils::spawn(h + "/.gephex/run_in_terminal.sh", args);
+              }
 #elif defined(OS_WIN32)
             utils::spawn(binary_name, args);
 #endif

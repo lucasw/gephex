@@ -1,6 +1,12 @@
 <graph>
 <id>IDSTART/example3ENDID</id>
 <name>example3</name>
+<data>
+<dataitem> <key>1026</key> <buf>141 7 ~3cstr~3e~3cl~3e5~3c/l~3e~3cd~3eFader~3c/d~3e~3c/str~3e</buf> </dataitem>
+<dataitem> <key>1027</key> <buf>13 6 ~3cstr~3e~3cl~3e4~3c/l~3e~3cd~3eZoom~3c/d~3e~3c/str~3e</buf> </dataitem>
+<dataitem> <key>1028</key> <buf>76 74 ~3cstr~3e~3cl~3e8~3c/l~3e~3cd~3eRotation~3c/d~3e~3c/str~3e</buf> </dataitem>
+<dataitem> <key>1029</key> <buf>309 15 ~3cstr~3e~3cl~3e8~3c/l~3e~3cd~3ePosition~3c/d~3e~3c/str~3e</buf> </dataitem>
+</data>
 <nodes>
 <node> <id>1</id> <type>mod_frbinmodule</type>
 <data>
@@ -10,9 +16,9 @@
 <node> <id>2</id> <type>mod_rotozoommodule</type>
 <data>
 <dataitem> <key>0</key> <buf>121 39</buf> </dataitem>
-<dataitem> <key>1026</key> <buf>~3cstr~3e~3cl~3e13~3c/l~3e~3cd~3eRotozoom:Zoom~3c/d~3e~3c/str~3e 2 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3evslider~3c/d~3e~3c/str~3e 11 45| { higher_bound=[4]; lower_bound=[0]; step_size=[0.04]; widget_type=[number_selector];  } </buf> </dataitem>
-<dataitem> <key>1027</key> <buf>~3cstr~3e~3cl~3e17~3c/l~3e~3cd~3eRotozoom:Rotation~3c/d~3e~3c/str~3e 2 1 ~3cstr~3e~3cl~3e4~3c/l~3e~3cd~3edial~3c/d~3e~3c/str~3e 76 74| { higher_bound=[360]; lower_bound=[0]; step_size=[1]; widget_type=[number_selector];  } </buf> </dataitem>
-<dataitem> <key>1028</key> <buf>~3cstr~3e~3cl~3e20~3c/l~3e~3cd~3eRotozoom:Translation~3c/d~3e~3c/str~3e 2 2 ~3cstr~3e~3cl~3e9~3c/l~3e~3cd~3epos_field~3c/d~3e~3c/str~3e 165 41| {  } </buf> </dataitem>
+<dataitem> <key>1026</key> <buf>~3cstr~3e~3cl~3e13~3c/l~3e~3cd~3eRotozoom:Zoom~3c/d~3e~3c/str~3e 2 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3evslider~3c/d~3e~3c/str~3e 28 29| { higher_bound=[4]; lower_bound=[0]; step_size=[0.04]; widget_type=[number_selector];  } </buf> </dataitem>
+<dataitem> <key>1027</key> <buf>~3cstr~3e~3cl~3e17~3c/l~3e~3cd~3eRotozoom:Rotation~3c/d~3e~3c/str~3e 2 1 ~3cstr~3e~3cl~3e4~3c/l~3e~3cd~3edial~3c/d~3e~3c/str~3e 82 96| { higher_bound=[360]; lower_bound=[0]; step_size=[1]; widget_type=[number_selector];  } </buf> </dataitem>
+<dataitem> <key>1028</key> <buf>~3cstr~3e~3cl~3e20~3c/l~3e~3cd~3eRotozoom:Translation~3c/d~3e~3c/str~3e 2 2 ~3cstr~3e~3cl~3e9~3c/l~3e~3cd~3epos_field~3c/d~3e~3c/str~3e 203 37| {  } </buf> </dataitem>
 </data>
 </node>
 <node> <id>3</id> <type>mod_staticcolormodule</type>
@@ -28,7 +34,7 @@
 <node> <id>5</id> <type>mod_xfademodule</type>
 <data>
 <dataitem> <key>0</key> <buf>122 110</buf> </dataitem>
-<dataitem> <key>1025</key> <buf>~3cstr~3e~3cl~3e16~3c/l~3e~3cd~3eCrossfader:Fader~3c/d~3e~3c/str~3e 5 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3ehslider~3c/d~3e~3c/str~3e 55 8| { higher_bound=[1]; lower_bound=[0]; step_size=[0.01];  } </buf> </dataitem>
+<dataitem> <key>1025</key> <buf>~3cstr~3e~3cl~3e16~3c/l~3e~3cd~3eCrossfader:Fader~3c/d~3e~3c/str~3e 5 0 ~3cstr~3e~3cl~3e7~3c/l~3e~3cd~3ehslider~3c/d~3e~3c/str~3e 79 28| { higher_bound=[1]; lower_bound=[0]; step_size=[0.01];  } </buf> </dataitem>
 </data>
 </node>
 </nodes>
@@ -110,7 +116,7 @@
 <value><plug> <node_id>4</node_id> <plug_id>server</plug_id> </plug>
 <buf>default~00</buf></value>
 <value><plug> <node_id>5</node_id> <plug_id>x</plug_id> </plug>
-<buf>0.905882~00</buf></value>
+<buf>0.909804~00</buf></value>
 <value><plug> <node_id>5</node_id> <plug_id>1</plug_id> </plug>
 <buf>~00</buf></value>
 <value><plug> <node_id>5</node_id> <plug_id>2</plug_id> </plug>

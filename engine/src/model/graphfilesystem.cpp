@@ -38,7 +38,7 @@
 
 #include "graph.h"
 #include "graphserial.h"
-#include "controllvalueset.h"
+#include "controlvalueset.h"
 
 namespace model
 {

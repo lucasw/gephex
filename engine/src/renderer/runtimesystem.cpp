@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "runtimesystem.h"
 
 #if (ENGINE_VERBOSITY > 0)
@@ -287,10 +309,12 @@ namespace renderer
     IModule* m1 = it1->second->module();
     IModule* m2 = it2->second->module();
 	
-    if (outputNumber < 0 || outputNumber >= m1->getOutputs().size())
+    if (outputNumber < 0 ||
+        static_cast<unsigned int>(outputNumber) >= m1->getOutputs().size())
       throw std::runtime_error("Invalid output at RuntimeSystem::connect.");
 
-    if (inputNumber < 0 || inputNumber >= m2->getInputs().size())
+    if (inputNumber < 0 ||
+        static_cast<unsigned int>(inputNumber) >= m2->getInputs().size())
       throw std::runtime_error("Invalid input at RuntimeSystem::connect.");
 
     int t1 = m1->getOutputs()[outputNumber]->getType();
@@ -342,7 +366,7 @@ namespace renderer
     void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
                          IControlValueReceiver* cvr,
                          const RuntimeSystem::ControlBlockMap& blocks,
-                         int frameCount)
+                         int /*frameCount*/)
     {
       //  int moduleID = m->getID();
       IModule* m = block->module();
@@ -411,6 +435,7 @@ namespace renderer
       }
 
 #if (ENGINE_VERBOSITY > 2)
+    std::cout << " ***** update begins\n";
     std::cout << "Pushed all m_sinks onto the stack." << std::endl;
     std::cout << "Number of m_sinks: " << m_sinks.size() << std::endl;
 #endif
@@ -422,6 +447,10 @@ namespace renderer
 	IModule* m = block->module();
 			
 	assert (block->isActive());
+
+#if (ENGINE_VERBOSITY > 3)
+        std::cout << "On Stack: " << m->getID() << "\n";
+#endif
 			
 	IInput* dep = m->dependencies();
 			
@@ -429,10 +458,14 @@ namespace renderer
 	if (dep != 0)
 	  {
 	    IModule* temp = dep->getConnectedModule();
-	    
+	
 	    // is the input connected to an other module?
 	    if (temp != 0)
               {
+#if (ENGINE_VERBOSITY > 3)
+                std::cout << "   Following connection to " << temp->getID()
+                          << "\n";
+#endif    
 		// check that module
 		ModuleControlBlockPtr current = getControlBlock(temp);
 		
@@ -444,9 +477,17 @@ namespace renderer
 		  {
 		    // it could be that the value changed (conservative)
 		    block->setChanged(dep->getIndex());
+#if (ENGINE_VERBOSITY > 3)
+                    std::cout << "     [already done]" << temp->getID()
+                              << "\n";
+#endif    
 		  }
 		else
 		  {
+#if (ENGINE_VERBOSITY > 3)
+                    std::cout << "     [pushed on stack]" << temp->getID()
+                              << "\n";
+#endif
 		    // we must update this module
 		    current->activate();
 		    stack.push(current);		    
@@ -460,6 +501,9 @@ namespace renderer
 	    // is a update necessary?
 	    if (!m->isDeterministic() || block->hasChanged())
 	      {
+#if (ENGINE_VERBOSITY > 3)
+                std::cout << "   Updating...\n";
+#endif    
 		// lets update the module
 		unsigned long startTime = utils::Timing::getTimeInMillis();
 		//TODO: if an exception is caught, remove the module!
@@ -498,6 +542,13 @@ namespace renderer
 		// and set them there to changed
 		sendInputValues(block,cvr,m_modules,frameCount);
 	      }
+            else
+              {
+#if (ENGINE_VERBOSITY > 3)
+                std::cout << "   Skipping update (deterministic and no "
+                          << "needed input changed)...\n";
+#endif    
+              }
 		
 	    // this module is now updated
 	    stack.pop(); 
@@ -511,7 +562,7 @@ namespace renderer
     ++frameCount;
 
 #if (ENGINE_VERBOSITY > 2)
-    std::cout << "finished with updating" << std::endl;
+    std::cout << "**** update finished" << std::endl;
 #endif
   }
 	
@@ -581,7 +632,7 @@ namespace renderer
     m_modules.erase(it);
 		
 #if (ENGINE_VERBOSITY > 0)
-    std::cout << "Deleted Module # " << id << std::endl;
+    std::cout << "Deleted Module # " << moduleID << std::endl;
 #endif
   }
 
@@ -602,7 +653,8 @@ namespace renderer
     ModuleControlBlockPtr block = it->second;
     IModule* n = block->module();
 
-    if (inputIndex < 0 || inputIndex >= n->getInputs().size())
+    if (inputIndex < 0 ||
+        static_cast<unsigned int>(inputIndex) >= n->getInputs().size())
       {
 	throw std::runtime_error("Input does not exist at "
 				 "RuntimeSystem::setInputValue()");

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "domainsockettest.h"
 #include "idatalistener.h"
 
@@ -20,7 +42,7 @@ std::string DomainSocketTest::getName() const
 
 std::string DomainSocketTest::getDescription() const
 {
-	return "Ein bedeutender Test";
+	return "An important test";
 }
 
 class TestDataListener : public net::IDataListener
@@ -66,7 +88,7 @@ void DomainSocketTest::run() throw(std::runtime_error)
 
   sock2 = client.connect("/tmp/test_",1234);
 
-  //  std::cout << "Na los, ich warte!" << std::endl;
+  //  std::cout << "waiting..." << std::endl;
 
   //  while (!sock1->connected())
     {
@@ -74,7 +96,7 @@ void DomainSocketTest::run() throw(std::runtime_error)
     }
 
   //  assert(client.connected());
-  //  std::cout << "verbunden!!" << std::endl;
+  //  std::cout << "connected!!" << std::endl;
 
     //  sock1->setSoTimeout(0);
     //  sock2->setSoTimeout(0);
@@ -92,7 +114,7 @@ void DomainSocketTest::run() throw(std::runtime_error)
       if (!compareBlocks(data,len,buf.getPtr(),buf.getLen()))
 	{
 	  std::ostringstream os;
-	  os << "Falsche Daten. len = " << len << "." << std::endl;
+	  os << "Wrong data. len = " << len << "." << std::endl;
 	  //	  printBlock(os,data,len);
 	  os << std::endl;
 	  //	  printBlock(os,buf.getPtr(),buf.getLen());

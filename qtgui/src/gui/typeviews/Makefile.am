@@ -1,21 +1,23 @@
+EXTRA_DIST = typeviews.dsp typeviews.mak typeviews.dep
+
 baseincludedir = @includedir@/gephex
 
 noinst_LIBRARIES = libtypeviews.a
 
 BUILT_SOURCES = \
-	boundednumberview_moc.cpp \
-	slidernumberview_moc.cpp \
-	unboundednumberview_moc.cpp \
-	comboboxstringview_moc.cpp \
-	radionumberview_moc.cpp \
-	checkboxnumberview_moc.cpp \
-	positionview_moc.cpp \
-	filestringview_moc.cpp \
-	colorview_moc.cpp \
-	fontview_moc.cpp \
-	frameview_moc.cpp \
-	dialnumberview_moc.cpp \
-	stringview_moc.cpp
+	boundednumberview_moc_cpp.cpp \
+	slidernumberview_moc_cpp.cpp \
+	unboundednumberview_moc_cpp.cpp \
+	comboboxstringview_moc_cpp.cpp \
+	radionumberview_moc_cpp.cpp \
+	checkboxnumberview_moc_cpp.cpp \
+	positionview_moc_cpp.cpp \
+	filestringview_moc_cpp.cpp \
+	colorview_moc_cpp.cpp \
+	fontview_moc_cpp.cpp \
+	frameview_moc_cpp.cpp \
+	dialnumberview_moc_cpp.cpp \
+	stringview_moc_cpp.cpp
 
 libtypeviews_a_SOURCES = \
 	boundednumberview.cpp \
@@ -45,9 +47,7 @@ libtypeviews_a_SOURCES = \
 	stringview.cpp \
 	stringview.h
 
-Makefile: $(BUILT_SOURCES)
-
-%_moc.cpp: %.cpp
+%_moc_cpp.cpp: %.cpp
 	$(MOC) -o $@ $<
 
 INCLUDES = \

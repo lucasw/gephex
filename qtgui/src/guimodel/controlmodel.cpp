@@ -1,12 +1,36 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "controlmodel.h"
 
-//#include <sstream>
+#include <sstream>
 #include <stdexcept>
 
 #include "icontrolview.h"
 #include "icontrolconnectview.h"
 
 #include "interfaces/imodelcontrolreceiver.h"
+#include "interfaces/ierrorreceiver.h"
+
 #include "utils/buffer.h"
 #include "utils/bufferstream.h"
 #include "utils/string_.h"
@@ -14,7 +38,9 @@
 
 namespace gui
 {
-	
+
+  //------------------------------------------------------------------------
+
   class ControlElement //: public IPersistent
   {
   private:
@@ -82,7 +108,8 @@ namespace gui
     }
     
   };
-	
+
+
   ControlElement::ControlElement(const std::string& name,
 				 const Point& pos,int nodeID,
 				 int inputIndex,
@@ -92,10 +119,43 @@ namespace gui
     _widgetType(widgetType), _params(params)
   {
   }
-	
-	
-  ControlModel::ControlModel(IModelControlReceiver& r)
-    : lastControlID(1023), mcr(&r)
+
+  //------------------------------------------------------------------------
+
+  class LabelElement //: public IPersistent
+  {
+  private:
+    Point m_pos;
+    std::string m_text;
+
+		
+  public:
+    typedef ControlModel::ParamMap ParamMap;
+
+    LabelElement(const Point& pos, const std::string& text)
+      : m_pos(pos), m_text(text) {}
+		
+    std::string text() const
+    {
+      return m_text;
+    }
+
+    Point position() const
+    {
+      return m_pos;
+    }
+		
+    void setPosition(const Point& p)
+    {
+      m_pos = p;
+    }    
+  };
+
+  //------------------------------------------------------------------------
+  
+  ControlModel::ControlModel(IModelControlReceiver& r,
+                             IErrorReceiver& log)
+    : lastControlID(1023), lastLabelID(1023), mcr(&r), m_log(log)
   {
   }
 	
@@ -162,6 +222,32 @@ namespace gui
 
       return ControlElement(name, p, nodeID, inputIndex, widgetType, params);
     }
+
+    //------------------------------------------------------------------------
+
+    utils::Buffer lElem2Buffer(const LabelElement& lElem)
+    {
+      utils::Buffer ob(100);
+      utils::OBufferStream os(ob);
+
+      os << lElem.position() << ' ' << utils::String(lElem.text());
+	  
+      os.flush();
+
+      return ob;
+    }
+
+    LabelElement buffer2LElem(const utils::Buffer& b)
+    {
+      utils::IBufferStream is(b);
+		
+      utils::String t;
+      Point p;
+		
+      is >> p >> t;
+
+      return LabelElement(p, t);
+    }
   }
 	
   void ControlModel::addControl(const Point& pos, const std::string& name,
@@ -181,17 +267,23 @@ namespace gui
   void ControlModel::delControl(int controlID)
   {
     ControlMap::iterator i = controls.find(controlID);
-    if(i == controls.end())
-      throw std::runtime_error("FUCK YOUUUUUUU!!!!!!....");
+    if (i == controls.end())
+      {
+        m_log.warning("Unknown controlID at ControlModel::delControl()");
+        return;
+      }
 		
-    mcr->unSetModuleData(i->second->nodeID(),controlID);		
+    mcr->unSetModuleData(i->second->nodeID(),controlID);
   }
 	
   void ControlModel::moveControl(int controlID, const Point& pos)
   {
     ControlMap::iterator i = controls.find(controlID);
-    if(i == controls.end())
-      throw std::runtime_error("FUCK YOUUUUUUU!!!!!!....");
+    if (i == controls.end())
+      {
+        m_log.warning("Unknown controlID at ControlModel::moveControl()");
+        return;
+      }
 		
     ControlElement copy = *i->second;
     copy.setPosition(pos);
@@ -202,16 +294,56 @@ namespace gui
   void ControlModel::renameControl(int controlID, const std::string& name)
   {
     ControlMap::iterator i = controls.find(controlID);
-    if(i == controls.end())
-      throw std::runtime_error("FUCK YOUUUUUUU!!!!!!....");
+    if (i == controls.end())
+      {
+        m_log.warning("Unknown controlID at ControlModel::renameControl()");
+        return;
+      }
 		
     ControlElement copy = *i->second;
     copy.rename(name);
 		
     mcr->setModuleData(copy.nodeID(),i->first,cElem2Buffer(copy));
   }
+
+  void ControlModel::addLabel(const Point& pos, const std::string& text)
+  {
+    int labelID = ++lastLabelID;
+		
+    LabelElement temp(pos, text);
+		
+    mcr->setEditGraphData(labelID,
+                          lElem2Buffer(temp));
+  }
+
+  void ControlModel::moveLabel(int labelID, const Point& pos)
+  {
+    LabelMap::iterator i = labels.find(labelID);
+    if (i == labels.end())
+      {
+        m_log.warning("Unknown labelID at ControlModel::moveLabel()");
+        return;
+      }
+		
+    LabelElement copy = *i->second;
+    copy.setPosition(pos);
+		
+    mcr->setEditGraphData(i->first, lElem2Buffer(copy));
+  }
+
+  void ControlModel::delLabel(int labelID)
+  {
+    LabelMap::iterator i = labels.find(labelID);
+    if (i == labels.end())
+      {
+        m_log.warning("Unknown labelID at ControlModel::delLabel()");
+        return;
+      }
+		
+    mcr->unSetEditGraphData(labelID);
+  }
 	
-  void ControlModel::moduleDataSet(int moduleID, int type,
+  void ControlModel::moduleDataSet(int /*moduleID*/, int type,
 				   const utils::Buffer& buf)
   {
     int controlID = type;
@@ -240,7 +372,11 @@ namespace gui
         }
         catch(std::exception& e)
           {
-            std::cerr << e.what() << "\n";
+            std::ostringstream txt;
+            txt << "Could not connect control at ControlModel::"
+                << "moduleDataSet(): '"
+                << e.what() << "'";
+            m_log.error(txt.str());
           }
       }
     else
@@ -253,7 +389,9 @@ namespace gui
 	    || cElem.nodeID() != oldElem->nodeID()
 	    || cElem.inputIndex() != oldElem->inputIndex())
 	  {
-	    throw std::runtime_error("Im Controlmodel ist die Hölle los!");
+            m_log.error("Internal data inconsistent at "
+                        "ControlModel::moduleDataSet()");
+            return;
 	  }
 
 	if (!(cElem.name() == oldElem->name()))
@@ -267,8 +405,9 @@ namespace gui
 	  }
 	else
 	  {
-	    throw std::runtime_error("No change at "
-                                     "ControlModel::moduleDataSet()");
+            m_log.warning("No change at "
+                          "ControlModel::moduleDataSet()");
+            return;
 	  }
       }
   }
@@ -278,9 +417,11 @@ namespace gui
     int controlID = type;
 		
     ControlMap::iterator i = controls.find(controlID);
-    if(i == controls.end())
-      throw std::runtime_error("FUCK YOUUUUUUU!!!!!!....");
-		
+    if (i == controls.end())
+      {
+        m_log.warning("Unknown moduleID at ControlModel::moduleDataUnSet()");
+        return;
+      }
 
     int nodeID = i->second->nodeID();
     int inputIndex = i->second->inputIndex();
@@ -288,7 +429,9 @@ namespace gui
 
     if (nodeID != moduleID)
       {
-	throw std::runtime_error("moduleDataUnSet: shit detection activated!");
+        m_log.error("Internal data inconsistent at ControlModel::"
+                    "moduleDataUnSet()");
+        return;
       }
 
     try {
@@ -296,12 +439,14 @@ namespace gui
       connectView->controlDisconnected(nodeID, inputIndex);
     }
     catch (std::exception& e) {
-      std::cerr << "Error at controlDisconnected: " << e.what() << "\n";
+      std::ostringstream txt;
+      txt << "Could not disconnect control at ControlModel::"
+          << "moduleDataUnSet(): '"
+          << e.what() << "'";
+      m_log.error(txt.str());
     }
 
     view->controlDeleted(type);
-		
-
   }
 	
   void ControlModel::syncDataStarted()
@@ -313,5 +458,93 @@ namespace gui
   {
     //TODO
   }
-	
+
+  void ControlModel::graphDataSet(int type, const utils::Buffer& buf)
+  {
+    int labelID = type;
+		
+    LabelMap::iterator i = labels.find(labelID);
+    if (i == labels.end())
+      {
+	if (labelID > lastLabelID)
+	  {
+	    lastLabelID = labelID;
+	  }
+
+	utils::AutoPtr<LabelElement> 
+	  lElem ( new LabelElement(buffer2LElem(buf)) );
+
+	labels.insert(std::make_pair(labelID, lElem));
+
+        try {
+          view->labelAdded(labelID, lElem->text());
+          view->labelMoved(labelID, lElem->position());
+        } catch(std::exception& e) {
+          std::ostringstream txt;
+          txt << "Could not add label at ControlModel::"
+              << "graphDataSet(): '"
+              << e.what() << "'";
+          m_log.error(txt.str());
+        }
+      }
+    else
+      {
+	utils::AutoPtr<LabelElement> oldElem = i->second;
+
+	LabelElement lElem = buffer2LElem(buf);
+
+	if (!(lElem.position() == oldElem->position()))
+	  {
+            try {
+	    view->labelMoved(labelID, lElem.position());
+            } catch (std::exception& e) {
+              std::ostringstream txt;
+              txt << "Could not move label at ControlModel::"
+                  << "graphDataSet(): '"
+                  << e.what() << "'";
+              m_log.error(txt.str());
+            }
+	  }
+	else
+	  {
+            m_log.warning("No change at "
+                          "ControlModel::graphDataSet()");
+	  }
+      }
+  }
+
+  void ControlModel::graphDataUnSet(int type)
+  {
+    int labelID = type;
+		
+    LabelMap::iterator i = labels.find(labelID);
+    if (i == labels.end())
+      {
+        m_log.warning("Unknown labelID at ControlModel::graphDataUnSet()");
+        return;
+      }
+
+    labels.erase(i);
+
+    try {
+    view->labelDeleted(type);
+    } catch (std::exception& e) {
+      std::ostringstream txt;
+      txt << "Could not delete label at ControlModel::"
+          << "graphDataUnSet(): '"
+          << e.what() << "'";
+      m_log.error(txt.str());      
+    }
+  }
+
+  void ControlModel::syncGraphDataStarted()
+  {
+    labels.clear();
+  }
+
+  void ControlModel::syncGraphDataFinished()
+  {
+    //TODO
+  }
+
 }

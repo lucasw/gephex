@@ -49,3 +49,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = imgarithmodule.h imgarithmodule_auto.c
 
+EXTRA_DIST = imgarithmodule.dsp imgarithmodule.mak imgarithmodule.dep

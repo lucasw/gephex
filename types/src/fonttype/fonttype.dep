@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von fonttype.mak
+
+.\fonttype.c : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\fonttype.h"\
+	

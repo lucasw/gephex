@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von number2colormodule.mak
+
+.\number2colormodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\number2colormodule.h"\
+	
+
+.\number2colormodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\number2colormodule.h"\
+	".\number2colormodule.xpm"\
+	
+
+!IF  "$(CFG)" == "number2colormodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "number2colormodule - Win32 Debug"
+
+!ENDIF 
+

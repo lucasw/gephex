@@ -1,0 +1,30 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvedgemodule.mak
+
+.\effectvedgemodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\utils.h"\
+	".\edge.c"\
+	".\effectvedgemodule.h"\
+	
+
+.\effectvedgemodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvedgemodule.h"\
+	".\effectvedgemodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvedgemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvedgemodule - Win32 Debug"
+
+!ENDIF 
+

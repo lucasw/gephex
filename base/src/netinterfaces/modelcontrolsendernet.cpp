@@ -73,62 +73,75 @@ void ModelControlSenderNet::dataReceived(const std::string& command,const utils:
 	 }
 	else 	if (command == "0006")
 	 {
+		int type;
+		utils::Buffer buf;
+		bs  >> type >> buf;
+		m_rec->setEditGraphData( type, buf );
+	 }
+	else 	if (command == "0007")
+	 {
+		int type;
+		bs  >> type;
+		m_rec->unSetEditGraphData( type );
+	 }
+	else 	if (command == "0008")
+	 {
 		utils::String name;
 		bs  >> name;
 		m_rec->newGraph( name );
 	 }
-	else 	if (command == "0007")
+	else 	if (command == "0009")
 	 {
 		utils::String graphID;
 		utils::String newName;
 		bs  >> graphID >> newName;
 		m_rec->renameGraph( graphID, newName );
 	 }
-	else 	if (command == "0008")
+	else 	if (command == "0010")
 	 {
 		utils::String graphID;
 		utils::String newName;
 		bs  >> graphID >> newName;
 		m_rec->copyGraph( graphID, newName );
 	 }
-	else 	if (command == "0009")
+	else 	if (command == "0011")
 	 {
 		utils::String graphID;
 		bs  >> graphID;
 		m_rec->saveGraph( graphID );
 	 }
-	else 	if (command == "0010")
+	else 	if (command == "0012")
 	 {
 		utils::String graphID;
 		bs  >> graphID;
 		m_rec->deleteGraph( graphID );
 	 }
-	else 	if (command == "0011")
+	else 	if (command == "0013")
 	 {
 		m_rec->synchronize(  );
 	 }
-	else 	if (command == "0012")
+	else 	if (command == "0014")
 	 {
 		utils::String graphID;
 		utils::String snapID;
 		bs  >> graphID >> snapID;
 		m_rec->changeRenderedGraph( graphID, snapID );
 	 }
-	else 	if (command == "0013")
+	else 	if (command == "0015")
 	 {
 		utils::String graphID;
 		utils::String snapID;
 		bs  >> graphID >> snapID;
 		m_rec->changeEditGraph( graphID, snapID );
 	 }
-	else 	if (command == "0014")
+	else 	if (command == "0016")
 	 {
 		utils::String graphID;
 		utils::String newSnapName;
 		bs  >> graphID >> newSnapName;
 		m_rec->newControlValueSet( graphID, newSnapName );
 	 }
-	else 	if (command == "0015")
+	else 	if (command == "0017")
 	 {
 		utils::String graphID;
 		utils::String snapID;
@@ -136,7 +149,7 @@ void ModelControlSenderNet::dataReceived(const std::string& command,const utils:
 		bs  >> graphID >> snapID >> newSnapName;
 		m_rec->renameControlValueSet( graphID, snapID, newSnapName );
 	 }
-	else 	if (command == "0016")
+	else 	if (command == "0018")
 	 {
 		utils::String graphID;
 		utils::String snapID;
@@ -144,14 +157,14 @@ void ModelControlSenderNet::dataReceived(const std::string& command,const utils:
 		bs  >> graphID >> snapID >> newSnapName;
 		m_rec->copyControlValueSet( graphID, snapID, newSnapName );
 	 }
-	else 	if (command == "0017")
+	else 	if (command == "0019")
 	 {
 		utils::String graphID;
 		utils::String snapID;
 		bs  >> graphID >> snapID;
 		m_rec->deleteControlValueSet( graphID, snapID );
 	 }
-	else 	if (command == "0018")
+	else 	if (command == "0020")
 	 {
 		int moduleID;
 		int inputIndex;
@@ -159,7 +172,7 @@ void ModelControlSenderNet::dataReceived(const std::string& command,const utils:
 		bs  >> moduleID >> inputIndex >> buf;
 		m_rec->setInputValue( moduleID, inputIndex, buf );
 	 }
-	else 	if (command == "0019")
+	else 	if (command == "0021")
 	 {
 		int moduleID;
 		int inputIndex;

@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von TestFramework.mak
+
+.\CompositeTest.cpp : \
+	".\CompositeTest.h"\
+	".\Test.h"\
+	".\Tester.h"\
+	
+
+.\easytest.cpp : \
+	".\easytest.h"\
+	".\LeafTest.h"\
+	".\Test.h"\
+	
+
+.\LeafTest.cpp : \
+	".\LeafTest.h"\
+	".\Test.h"\
+	".\Tester.h"\
+	
+
+.\Tester.cpp : \
+	".\CompositeTest.h"\
+	".\LeafTest.h"\
+	".\Test.h"\
+	".\Tester.h"\
+	

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getOutputSpec">
+
+  <refnamediv>
+    <refname>getOutputSpec</refname>
+    <refpurpose>query the specification of an output</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>char* <function>getOutputSpec</function></funcdef>
+        <paramdef>int <parameter>index</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>Format:
+"output_spec { type=typ_STRING; id=STRING }"</para>
+
+  </refsect1>
+</refentry>
+

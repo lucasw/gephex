@@ -1,0 +1,37 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von gradnormmodule.mak
+
+.\gradnormmodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\..\..\util\src\cpuinfo\cpuinfo.h"\
+	".\gradnormmodule.h"\
+	
+
+.\gradnormmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\gradnormmodule.h"\
+	".\gradnormmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "gradnormmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "gradnormmodule - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "gradnormmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "gradnormmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libgeo.mak
+
+.\libgeo.c : \
+	"..\..\include\basic_types.h"\
+	".\libgeo.h"\
+	

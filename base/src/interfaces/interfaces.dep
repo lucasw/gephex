@@ -1,0 +1,152 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von interfaces.mak
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "interfaces - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
+
+!ENDIF 
+

@@ -1,0 +1,6 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von libscale.mak
+
+.\libscale.c : \
+	"..\..\..\util\include\basic_types.h"\
+	".\libscale.h"\
+	

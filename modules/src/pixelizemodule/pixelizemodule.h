@@ -14,10 +14,11 @@ typedef struct _Instance
 {
 struct _MyInstance* my;
  NumberType* in_bsize;
+ NumberType* in_bsizey;
  FrameBufferType* in_src;
  FrameBufferType* out_r;
 } Instance, *InstancePtr;
-enum Inputs { in_bsize = 0, in_src = 1 };
+enum Inputs { in_bsize = 0, in_bsizey = 1, in_src = 2 };
 enum Outputs { out_r = 0 };
 
 struct _MyInstance* construct(void);

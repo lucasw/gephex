@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "nodewidget.h"
 
 #include <iostream>
@@ -42,10 +64,11 @@ namespace gui
     }
 
     virtual ~FixedValueKeyListener() {}
-    virtual void keyPressed(const Key& key) {
+    virtual void keyPressed(const Key& /*key*/)
+    {
       m_model.setInputValue(m_moduleID, m_inputIndex, m_inputValue);
     }
-    virtual void keyReleased(const Key& key) {}
+    virtual void keyReleased(const Key& /*key*/) {}
 
   private:
     IModelControlReceiver& m_model;
@@ -70,7 +93,8 @@ namespace gui
 
     virtual ~ToggleValueKeyListener() {}
 
-    virtual void keyPressed(const Key& key) {
+    virtual void keyPressed(const Key& /*key*/)
+    {
       if (m_state)
 	m_model.setInputValue(m_moduleID, m_inputIndex, m_inputValue1);
       else
@@ -78,7 +102,7 @@ namespace gui
 
       m_state = !m_state;
     }
-    virtual void keyReleased(const Key& key) {}
+    virtual void keyReleased(const Key& /*key*/) {}
 
   private:
     IModelControlReceiver& m_model;
@@ -317,9 +341,10 @@ namespace gui
 
   void NodeWidget::mouseMoveEvent(QMouseEvent* e)
   {
-    if(dragMode){
-      emit moved(this, mapToParent(e->pos()-clickedPos));
-    }
+    if(dragMode)
+      {
+        emit moved(this, e->globalPos() - clickedPos);
+      }
 
     emit mouseOverNode(this);
   }
@@ -327,13 +352,15 @@ namespace gui
   void NodeWidget::mousePressEvent(QMouseEvent* e)
   {
     clickedPos = e->pos();
-    if(e->button() == LeftButton){
-      dragMode = true;
-      emit clickedLeft(this);
-    }
+    
+    if (e->button() == LeftButton)
+      {
+        dragMode = true;
+        emit clickedLeft(this);
+      }
     else if (e->button() == RightButton)
       {
-	emit beenRightClicked(this, e->pos());
+        emit beenRightClicked(this, e->globalPos());
       }
   }
 
@@ -341,8 +368,8 @@ namespace gui
   {
     if (dragMode)
       {
-	dragMode = false;
-	emit released(this,mapToParent(e->pos()-clickedPos));
+        dragMode = false;
+        emit released(this, e->globalPos() - clickedPos);
       }
   }
 

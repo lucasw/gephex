@@ -1,12 +1,12 @@
 AC_INIT
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.0.4)
+AM_INIT_AUTOMAKE(gephex,0.4)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
 AC_PROG_CXX
-AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 
 # gcc versions <= 2.95.2 don't have the standard c++ header
 # sstream
@@ -14,10 +14,10 @@ AM_PATH_SSTREAM(have_sstream=yes, have_sstream=no)
 # copy sstream_compat to sstream if sstream is missing:
 if test "x$have_sstream" = "xno"
 then
-  echo "Using own sstream in util/include/compatibility"
+  AC_MSG_NOTICE([Using own sstream in util/include/compatibility])
   if ! cp $srcdir/util/include/compatibility/sstream_compat ./util/include/sstream;
   then
-    AC_ERROR("Could not copy the sstream header!")
+    AC_MSG_ERROR([Could not copy the sstream header!])
   fi
 else
   # make sure there is no sstream header
@@ -31,108 +31,12 @@ AC_PATH_XTRA
 AM_CONDITIONAL(HAVE_X11, test "x$no_x" != "xyes")
 AH_TEMPLATE([HAVE_X11],  [build with x11 support])
 if test "x$no_x" != "xyes"; then
-	AC_DEFINE(HAVE_X11)
+  AC_DEFINE(HAVE_X11)
 fi
 
 # qt
 AM_PATH_QT([2.3.0], have_qt=yes, have_qt=no)
 AM_CONDITIONAL(HAVE_QT, test "x$have_qt" = "xyes")
-
-# sdl
-AM_PATH_SDL([1.1.0], have_sdl=yes, have_sdl=no)
-AH_TEMPLATE([HAVE_SDL],  [build with sdl support])
-AM_CONDITIONAL(HAVE_SDL, test "x$have_sdl" = "xyes")
-if test "x$have_sdl" = "xyes"; then
-        AC_DEFINE(HAVE_SDL)
-fi
-
-# SDL_image
-AC_CHECK_HEADERS([SDL/SDL_image.h],
-	have_sdl_image_header=yes,
-	have_sdl_image_header=no)
-AH_TEMPLATE([HAVE_SDL_IMAGE],  [build with libsdl_image support])
-AM_CONDITIONAL(HAVE_SDL_IMAGE, test "x$have_sdl_image_header" = "xyes")
-if test "x$have_sdl_image_header" = "xyes"; then
-        AC_DEFINE(HAVE_SDL_IMAGE)
-	AC_SUBST(SDL_IMAGE_LDFLAGS,"-lSDL_image")
-fi
-
-# SDL_ttf
-AC_CHECK_HEADERS([SDL/SDL_ttf.h],
-	have_sdl_ttf_header=yes,
-	have_sdl_ttf_header=no)
-AH_TEMPLATE([HAVE_SDL_TTF],  [build with libsdl true type font support])
-AM_CONDITIONAL(HAVE_SDL_TTF, test "x$have_sdl_ttf_header" = "xyes")
-if test "x$have_sdl_ttf_header" = "xyes"; then
-        AC_DEFINE(HAVE_SDL_TTF)
-	AC_SUBST(SDL_TTF_LDFLAGS,"-lSDL_ttf")
-fi
-
-
-# avifile
-AM_PATH_AVIFILE([0.7.0], have_avifile=yes, have_avifile=no)
-AM_CONDITIONAL(HAVE_AVIFILE, test "x$have_avifile" = "xyes")
-AH_TEMPLATE([HAVE_AVIFILE], [Does libavifile exist on the system?])
-if test "x$have_avifile" = "xyes"; then
-        AC_DEFINE(HAVE_AVIFILE)
-fi
-
-# check for libmpeg3 
-AC_CHECK_HEADERS([libmpeg3.h],have_mpeg3=yes,have_mpeg3=no)
-AH_TEMPLATE([HAVE_MPEG3],  [build with libmpeg3 support])
-AM_CONDITIONAL(HAVE_MPEG3, test "x$have_mpeg3" = "xyes")
-if  test "x$have_mpeg3" = "xyes"; then 
-	AC_DEFINE(HAVE_MPEG3) 
-	AC_SUBST(MPEG3_LDFLAGS,[-lmpeg3]) 
-fi
-
-# OpenGL
-AC_CHECK_HEADERS([GL/glx.h],have_glx=yes,have_glx=no)
-AH_TEMPLATE([HAVE_GLX],  [build with gl output driver support])
-AM_CONDITIONAL(HAVE_GLX, test "x$have_glx" = "xyes")
-if test "x$have_glx" = "xyes"; then
-	AC_DEFINE(HAVE_GLX)
-	AC_SUBST(GLX_LDFLAGS, [-lgl])
-fi
-
-# libpng
-AC_CHECK_HEADERS([png.h],have_png=yes,have_png=no)
-AM_CONDITIONAL(HAVE_PNG, test "x$have_png" = "xyes")
-
-# aalib
-AC_CHECK_HEADERS([aalib.h],have_aalib_header=yes,have_aalib_header=no)
-AC_CHECK_LIB(aa,aa_autoinit,  have_aalib_lib=yes, have_aalib_lib=no)
-AM_CONDITIONAL(HAVE_AALIB, test "x$have_aalib_lib" = "xyes" && test "x$have_aalib_header" = "xyes" )
-
-# alsalib
-AC_CHECK_HEADERS([alsa/asoundlib.h],have_asoundlib_header=yes,have_asoundlib_header=no)
-AC_CHECK_LIB(asound, snd_pcm_open,  have_asoundlib_lib=yes, have_asoundlib_lib=no)
-if test "x$have_asoundlib_lib" = "xyes" && test "x$have_asoundlib_header" = "xyes";
-then
-have_asoundlib=yes
-else
-have_asoundlib=no
-fi
-AM_CONDITIONAL(HAVE_ASOUNDLIB, test "x$have_asoundlib" = "xyes")
-
-# video4linux
-AM_PATH_V4L(have_v4l=yes,have_v4l=no)
-AM_CONDITIONAL(HAVE_V4L, test "x$have_v4l" = "xyes")
-
-# oss
-AC_CHECK_HEADERS([sys/soundcard.h],have_sys_soundcard_h=yes,have_sys_soundcard_h=no)
-AM_CONDITIONAL(HAVE_OSS, test "x$have_sys_soundcard_h" = "xyes")
-
-
-# audio (oss or alsa)
-AM_CONDITIONAL(HAVE_ASOUNDLIB_OR_OSS, test "x$have_asoundlib" = "xyes" || test "x$have_sys_soundcard_h" = "xyes")
-
-# joystick.h
-AC_CHECK_HEADERS([linux/joystick.h],have_linux_joystick_h=yes,have_linux_joystick_h=no)
-AM_CONDITIONAL(HAVE_LINUX_JOYSTICK, test "x$have_linux_joystick_h" = "xyes")
-
-# joystick (linux or sdl)
-AM_CONDITIONAL(HAVE_JOYSTICK, test "x$have_linux_joystick_h" = "xyes" || test "x$have_sdl" = "xyes")
 
 # Checks for libraries.
 AC_CHECK_LIB(dl,dlopen,
@@ -170,12 +74,12 @@ AH_TOP([#ifndef INCLUDED_CONFIG_H
 AH_BOTTOM([#endif])
 
 
-AH_TEMPLATE([OS_WIN32],  [Windows halt])
-AH_TEMPLATE([OS_CYGWIN], [CYGWIN halt])
-AH_TEMPLATE([OS_DARWIN], [Darwin])
-AH_TEMPLATE([OS_LINUX],  [Linux])
-AH_TEMPLATE([OS_BSD],    [*BSD])
-AH_TEMPLATE([OS_SOLARIS],[Sun Solaris])
+AH_TEMPLATE([OS_WIN32],  [native win32 build])
+AH_TEMPLATE([OS_CYGWIN], [CYGWIN build])
+AH_TEMPLATE([OS_DARWIN], [Darwin build])
+AH_TEMPLATE([OS_LINUX],  [Linux build])
+AH_TEMPLATE([OS_BSD],    [*BSD build])
+AH_TEMPLATE([OS_SOLARIS],[Sun Solaris build])
 AH_TEMPLATE([OS_POSIX],  [Any Posix compliant system])
 
 AH_TEMPLATE([CPU_I386],  [Intel x86 compatible CPU >= 386])
@@ -186,49 +90,54 @@ AH_TEMPLATE([OPT_SERIALIZE_FRAMEBUFFER],
             [Serialize the FrameBuffer-Type])
 
 #AC_CANONICAL_HOST
-echo Checking host type... $host
+AC_MSG_NOTICE([processing host variable $host])
+
+AC_MSG_CHECKING([for processor type])
 
 # processor detection
 case $host in
 i[[3456]]86-*-*)
   AC_DEFINE([CPU_I386])
-  echo "80x86 processor detected (x >= 3)."
+  AC_MSG_RESULT([80x86 processor detected (x >= 3).])
  ;;
+*)
+  AC_MSG_RESULT([non x86 processor detected])
 esac
 
+AC_MSG_CHECKING([for OS])
 # os detection
 case $host in
 *-*-solaris*)
   AC_DEFINE([OS_SOLARIS])
   AC_DEFINE([OS_POSIX])
-  echo "Solaris OS detected."
+  AC_MSG_RESULT([Solaris detected.])
   ;;
 *-*-darwin*)
   AC_DEFINE([OS_DARWIN])
   AC_DEFINE([OS_POSIX])
- echo "Darwin OS detected."
+  AC_MSG_RESULT([Darwin detected.])
  ;;
 *-*-linux*)
   AC_DEFINE([OS_LINUX])
   AC_DEFINE([OS_POSIX])
- echo "Linux OS detected."
+  AC_MSG_RESULT([Linux detected.])
  ;;
 *-*-*bsd*)
   AC_DEFINE([OS_BSD])
   AC_DEFINE([OS_POSIX])
- echo "BSD OS detected."
+  AC_MSG_RESULT([*BSD detected.])
  ;;
 *gnu* )
- AC_DEFINE([OS_POSIX])
- echo "Posix OS detected."
+  AC_DEFINE([OS_POSIX])
+  AC_MSG_RESULT([Posix detected.])
  ;;
 *cygwin* )
- AC_DEFINE([OS_POSIX])
- AC_DEFINE([OS_CYGWIN])
- echo "Cygwin OS detected."
+  AC_DEFINE([OS_POSIX])
+  AC_DEFINE([OS_CYGWIN])
+  AC_MSG_RESULT([Cygwin detected.])
  ;;
 *)
- echo UNKNWON OS! Assuming Posix combatibility... 
+ AC_MSG_RESULT([Unknown OS! Assuming Posix combatibility])
  AC_DEFINE([OS_POSIX])
 esac
 
@@ -244,39 +153,131 @@ esac
 #	AC_MSG_ERROR([Python is required for base to build!]); 
 #fi
 
+# optional libraries
+
+CHECK_EXTRA_LIB([GL],
+                [AC_CHECK_HEADER([GL/glx.h],have_gl=yes,have_gl=no)],
+                [no], [with_gl], [have_gl], [use_gl])
+AM_CONDITIONAL([WITH_GL], test "x$use_gl" = "xyes")
+
+CHECK_EXTRA_LIB([SDL], [AM_PATH_SDL([1.1.0], have_sdl=yes, have_sdl=no)],
+                [yes], [with_sdl], [have_sdl], [use_sdl])
+AM_CONDITIONAL([WITH_SDL], test "x$use_sdl" = "xyes")
+
+CHECK_EXTRA_LIB([SDL_IMAGE],
+                [AC_CHECK_HEADER([SDL/SDL_image.h],
+                             	  have_sdl_image=yes,
+                                  have_sdl_image=no)],
+                [yes], [with_sdl_image], [have_sdl_image], [use_sdl_image],
+                [AC_SUBST(SDL_IMAGE_LDFLAGS,"-lSDL_image")])
+AM_CONDITIONAL([WITH_SDL_IMAGE], test "x$use_sdl_image" = "xyes")
+
+CHECK_EXTRA_LIB([SDL_TTF],
+                [AC_CHECK_HEADER([SDL/SDL_ttf.h],
+                                  have_sdl_ttf=yes,
+	                          have_sdl_ttf=no)],
+                [yes], [with_sdl_ttf], [have_sdl_ttf], [use_sdl_ttf],
+                [AC_SUBST(SDL_TTF_LDFLAGS, "-lSDL_ttf")])
+AM_CONDITIONAL([WITH_SDL_TTF], test "x$use_sdl_ttf" = "xyes")
+
+# avifile
+CHECK_EXTRA_LIB([AVIFILE],
+                [AM_PATH_AVIFILE([0.7.0], have_avifile=yes, have_avifile=no)],
+                [yes], [with_avifile], [have_avifile], [use_avifile])
+AM_CONDITIONAL([WITH_AVIFILE], test "x$use_avifile" = "xyes")
+
+# check for libmpeg3 
+CHECK_EXTRA_LIB([MPEG3],
+                [AC_CHECK_HEADER([libmpeg3.h],have_mpeg3=yes,have_mpeg3=no)],
+                [no], [with_mpeg3], [have_mpeg3], [use_mpeg3],
+                [AC_SUBST(MPEG3_LDFLAGS,"-lmpeg3")])
+AM_CONDITIONAL([WITH_MPEG3], test "x$use_mpeg3" = "xyes")
+
+# libpng
+CHECK_EXTRA_LIB([LIBPNG],
+                [AC_CHECK_HEADER([png.h],have_libpng=yes,have_libpng=no)],
+                [no], [with_libpng], [have_libpng], [use_libpng])
+AM_CONDITIONAL([WITH_LIBPNG], test "x$use_libpng" = "xyes")
+
+# aalib
+CHECK_EXTRA_LIB([AALIB],
+                [AC_CHECK_HEADER([aalib.h],have_aalib=yes,have_aalib=no)],
+                [yes], [with_aalib], [have_aalib], [use_aalib])
+AM_CONDITIONAL([WITH_AALIB], test "x$use_aalib" = "xyes")
+
+# alsalib
+CHECK_EXTRA_LIB([ASOUNDLIB],
+                [AC_CHECK_HEADER([alsa/asoundlib.h],
+                                  have_asoundlib=yes,have_asoundlib=no)],
+                [yes], [with_asoundlib], [have_asoundlib], [use_asoundlib])
+AM_CONDITIONAL([WITH_ASOUNDLIB], test "x$use_asoundlib" = "xyes")
+
+# video4linux
+CHECK_EXTRA_LIB([V4L],
+                [AM_PATH_V4L(have_v4l=yes,have_v4l=no)],
+                [yes], [with_v4l], [have_v4l], [use_v4l])
+AM_CONDITIONAL([WITH_V4L], test "x$use_v4l" = "xyes")
+
+# oss
+CHECK_EXTRA_LIB([OSS],
+                [AC_CHECK_HEADER([sys/soundcard.h],have_oss=yes,have_oss=no)],
+                [yes], [with_oss], [have_oss], [use_oss])
+AM_CONDITIONAL([WITH_OSS], test "x$use_oss" = "xyes")
+
+# audio (oss or alsa)
+AM_CONDITIONAL(WITH_ASOUNDLIB_OR_OSS, test "x$use_asoundlib" = "xyes" || test "x$use_oss" = "xyes")
+
+# joystick.h
+CHECK_EXTRA_LIB([LINUX_JOYSTICK],
+                [AC_CHECK_HEADER([linux/joystick.h],
+                                  have_linux_joystick=yes,
+                                  have_linux_joystick=no)],
+                [yes], [with_linux_joystick], [have_linux_joystick],
+                [use_linux_joystick])
+AM_CONDITIONAL([WITH_LINUX_JOYSTICK], test "x$use_linux_joystick" = "xyes")
+
+
+# joystick (linux or sdl)
+AM_CONDITIONAL(WITH_JOYSTICK, test "x$use_linux_joystick" = "xyes" || test "x$use_sdl" = "xyes")
 
 AC_ARG_ENABLE(mmx,
      [AC_HELP_STRING([--enable-mmx],
-                     [Turn on MMX support.
-                      Still runs on x86 that don't have MMX!])],
+                     [turn on MMX support
+                      (still runs on x86 that don't have MMX) [default=yes]])],
      [case "${enableval}" in
        yes)
-       	 echo "MMX support activated" 
          enable_mmx=yes
-         AC_DEFINE(OPT_INCLUDE_MMX)
        ;;
        no)
-	 echo "MMX support turned off"
          enable_mmx=no
        ;;
        *)
          AC_MSG_ERROR(bad value ${enableval} for --enable-mmx)
        ;;
-     esac],[enable_mmx=no])
+     esac],[enable_mmx=yes])
+
+     if test "x$enable_mmx" = "xyes"
+     then
+       	 AC_MSG_NOTICE([MMX support active])
+         AC_DEFINE(OPT_INCLUDE_MMX)
+     else
+	 AC_MSG_NOTICE([MMX support turned off])
+     fi
+
      AM_CONDITIONAL(OPT_INCLUDE_MMX, test "x$enable_mmx" = "xyes")
 
 AC_ARG_ENABLE(serialize-framebuffer,
      [AC_HELP_STRING([--enable-serialize-framebuffer],
-                     [Serialize the framebuffer type
-                      (for previews in the gui).])],
+                     [turn on serialization of the framebuffer type
+                      (for previews in the gui) [default=no]])],
      [case "${enableval}" in
        yes)
-       	 echo "Framebuffer serialization activated" 
+       	 AC_MSG_NOTICE([framebuffer serialization activated]) 
          enable_serframe=yes
          AC_DEFINE(OPT_SERIALIZE_FRAMEBUFFER)
        ;;
        no)
-	 echo "Framebuffer serialization deactivated"
+	 AC_MSG_NOTICE([framebuffer serialization deactivated])
          enable_serframe=no
        ;;
        *)
@@ -285,36 +286,6 @@ AC_ARG_ENABLE(serialize-framebuffer,
      esac],[enable_serframe=no])
      AM_CONDITIONAL(OPT_SERIALIZE_FRAMEBUFFER,
                     test "x$enable_serframe" = "xyes")
-
-AC_ARG_WITH(effectv,
-     [AC_HELP_STRING([--with-effectv=dir],
-                     [Compile with effectv. Needs effectv source files.
-                      You must provide the effectv src dir.
-                      Example: --with-effectv=/home/georg/effectv-0.38])],
-     [case "${withval}" in
-        no)
-           with_effectv=no
-        ;;
-        *) 
-           EFFECTV_SRC_DIR=${withval}
-
-           AC_MSG_CHECKING(for EffecTV src dir ${withval})
-           if (test ! -d ${withval} || test ! -d ${withval}/effects)
-           then
-             AC_MSG_RESULT(failed)
-             echo "*** No such effectv src dir: $EFFECTV_SRC_DIR"
-             echo "*** Disabling effectv support!"
-             with_effectv=no
-           else
-             AC_MSG_RESULT(ok)
-             AC_SUBST(EFFECTV_SRC_DIR)
-             echo EffecTV support enabled
-             echo EffecTV src dir = $EFFECTV_SRC_DIR
-             with_effectv=yes
-           fi
-         ;;
-      esac],[with_effectv=no])
-AM_CONDITIONAL(EFFECTV, test "x$with_effectv" = "xyes")
 
 AC_ARG_VAR([FRBINCACHE],
            [The size of the cache of the image source module in MB])
@@ -331,7 +302,11 @@ base/src/net/Makefile
 base/src/netinterfaces/Makefile
 base/src/thread/Makefile
 base/src/utils/Makefile
+build/Makefile
+build/dummy/Makefile
 data/Makefile
+data/gephex-wrapper
+data/gephex.conf.default
 doc/Makefile
 doc/images/Makefile
 engine/Makefile
@@ -356,28 +331,17 @@ modules/src/audiovismodule/Makefile
 modules/src/audiowavegenmodule/Makefile
 modules/src/blurmodule/Makefile
 modules/src/bwmodule/Makefile
-modules/src/color2number/Makefile
+modules/src/capturemodule/Makefile
+modules/src/color2numbermodule/Makefile
 modules/src/diffmodule/Makefile
 modules/src/doepfermodule/Makefile
-modules/src/effecttvedgemodule/Makefile
-modules/src/effectvagingmodule/Makefile
-modules/src/effectvburnmodule/Makefile
-modules/src/effectvcyclemodule/Makefile
-modules/src/effectvdotmodule/Makefile
-modules/src/effectvfiremodule/Makefile
-modules/src/effectvlensmodule/Makefile
-modules/src/effectvlifemodule/Makefile
-modules/src/effectvpuzzlemodule/Makefile
-modules/src/effectvquarkmodule/Makefile
-modules/src/effectvsparkmodule/Makefile
 modules/src/flashmodule/Makefile
 modules/src/flipflopmodule/Makefile
+modules/src/font3Dmodule/Makefile
 modules/src/fpsmodule/Makefile
 modules/src/frbinmodule/Makefile
 modules/src/frboutmodule/Makefile
-modules/src/functions/Makefile
-modules/src/functions/jumpmodule/Makefile
-modules/src/functions/numxfadermodule/Makefile
+modules/src/funparsemodule/Makefile
 modules/src/gradnormmodule/Makefile
 modules/src/ifsgenmodule/Makefile
 modules/src/ifsmodule/Makefile
@@ -387,35 +351,49 @@ modules/src/imagewritermodule/Makefile
 modules/src/imgarithmodule/Makefile
 modules/src/isingnoizemodule/Makefile
 modules/src/joystickmodule/Makefile
-modules/src/libeffectv/Makefile
-modules/src/libeffectv/trick/Makefile
+modules/src/jumpmodule/Makefile
+modules/src/libdshow/Makefile
 modules/src/libgrid/Makefile
 modules/src/libmidi/Makefile
 modules/src/libscale/Makefile
 modules/src/midiinmodule/Makefile
 modules/src/netcontrolmodule/Makefile
 modules/src/numarithmodule/Makefile
-modules/src/number2color/Makefile
+modules/src/number2colormodule/Makefile
 modules/src/numbermodule/Makefile
 modules/src/numenvmodule/Makefile
 modules/src/numlfomodule/Makefile
 modules/src/numposmodule/Makefile
+modules/src/numxfadermodule/Makefile
 modules/src/overlaymodule/Makefile
 modules/src/pixelizemodule/Makefile
 modules/src/planemodule/Makefile
-modules/src/plasma/Makefile
+modules/src/plasmamodule/Makefile
 modules/src/posnummodule/Makefile
 modules/src/rangeconvertmodule/Makefile
 modules/src/resultmodule/Makefile
 modules/src/rotozoommodule/Makefile
 modules/src/sdlfontmodule/Makefile
-modules/src/signalgenmodules/Makefile
+modules/src/signalgenmodule/Makefile
 modules/src/staticcolormodule/Makefile
 modules/src/stringtokenizermodule/Makefile
 modules/src/tunnelmodule/Makefile
 modules/src/twolayermodule/Makefile
-modules/src/v4lmodule/Makefile
 modules/src/xfademodule/Makefile
+effectvmodules/Makefile
+effectvmodules/src/Makefile
+effectvmodules/src/libeffectv/Makefile
+effectvmodules/src/effectvedgemodule/Makefile
+effectvmodules/src/effectvagingmodule/Makefile
+effectvmodules/src/effectvburnmodule/Makefile
+effectvmodules/src/effectvcyclemodule/Makefile
+effectvmodules/src/effectvdotmodule/Makefile
+effectvmodules/src/effectvfiremodule/Makefile
+effectvmodules/src/effectvlensmodule/Makefile
+effectvmodules/src/effectvlifemodule/Makefile
+effectvmodules/src/effectvpuzzlemodule/Makefile
+effectvmodules/src/effectvquarkmodule/Makefile
+effectvmodules/src/effectvsparkmodule/Makefile
 qtgui/Makefile
 qtgui/src/Makefile
 qtgui/src/gui/Makefile
@@ -428,6 +406,7 @@ types/Makefile
 types/src/Makefile
 types/src/audiotype/Makefile
 types/src/envtype/Makefile
+types/src/fonttype/Makefile
 types/src/framebuffertype/Makefile
 types/src/ifstype/Makefile
 types/src/lfotype/Makefile
@@ -441,80 +420,25 @@ util/include/Makefile
 util/include/compatibility/Makefile
 util/src/Makefile
 util/src/cpuinfo/Makefile
-util/src/joystick_net_midi/Makefile
+util/src/joystick_midi_net/Makefile
 util/src/libgeo/Makefile
 util/src/libjoystick/Makefile
 util/src/misc/Makefile
 ])
 AC_OUTPUT
-#
-#modules/src/starfield/Makefile
-#modules/src/libmpeg3module/Makefile
-
-MISSING_LIB_TEXT="Some modules will not be compiled! Install the missing
-library/headers and run configure again to activate these modules."
-
-if test "x$have_sdl" != "xyes";  then
-   echo Note: No SDL support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_sdl_image_header" != "xyes";  then
-   echo Note: No SDL-image support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_sdl_ttf_header" != "xyes";  then
-   echo Note: No SDL_ttf support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_avifile" != "xyes"; then
-   echo Note: No Avifile support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-#if test "x$have_mpeg3" != "xyes"; then
-#   echo Note: No Mpeg3 support found.
-#   echo $MISSING_LIB_TEXT
-#fi
-
-#if test "x$have_glx" != "xyes"; then
-#   echo Note: No OpenGL / GLX support found.
-#   echo $MISSING_LIB_TEXT
-#fi
-
-if test "x$have_png" != "xyes"; then
-   echo Note: No PNG support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_aalib_lib" != "xyes" || test "x$have_aalib_header" != "xyes"; then
-   echo Note: No AALIB support found.
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_asoundlib" != "xyes"; then
-   echo "Note: No ASOUNDLIB (ALSA) support found."
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_sys_soundcard_h" != "xyes"; then
-   echo "Note: No OpenSoundSystem (OSS) support found."
-   echo $MISSING_LIB_TEXT
-fi
-
-if test "x$have_v4l" != "xyes"; then
-   echo "Note: No Video4Linux (v4l) support found."
-   echo $MISSING_LIB_TEXT
-fi
 
 if test "x$have_qt" != "xyes"; then
-  echo Note: No QT support found!! GUI will not be built!!!
-  echo If you know you have qt installed, try to rerun configure with
-  echo the "--with-qt-(lib|bin|inc)dir=<YOUR QT DIRS>" flags.
-  echo For details do "./configure --help".
-  echo Also we would appreciate your feedback in that case,
-  echo to improve our autoconf test for qt.
-  echo Sorry for the inconvinience.
+  AC_MSG_WARN([No QT support found.
+*** The GUI (graphical user interface) will not be built!
+*** Note: most linux distributions split qt into two packages:
+*** one containing only the libraries needed to run binary qt
+*** applications and one containing all the headers and tools
+*** needed to compile qt applications from source.
+*** Obviously, you need *both* packages in that case.
+*** If you know you have qt installed, try to run configure 
+*** again with the "--with-qt-(lib|bin|inc)dir=<YOUR QT DIRS>" flags.
+*** For details see "./configure --help".
+*** Also we would appreciate your feedback in that case,
+*** to improve our autoconf test for qt.
+*** Sorry for the inconvinience.])
 fi

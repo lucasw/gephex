@@ -1,0 +1,26 @@
+name: ModuleClassInfo
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ moduleClassLoaded string moduleClassName, buffer buf
+
+ /**
+  *
+  */
+ moduleClassUnloaded string moduleClassID
+
+ /**
+  *
+  */
+ syncStarted
+
+ /**
+  *
+  */
+ syncFinished
+

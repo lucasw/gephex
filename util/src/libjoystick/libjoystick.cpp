@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "libjoystick.h"
 
 #if defined(HAVE_CONFIG_H)
@@ -17,11 +39,11 @@
 #include "win32joystickdriver.h"
 #endif
 
-#if defined(OS_LINUX) && defined(HAVE_LINUX_JOYSTICK_H)
+#if defined(WITH_LINUX_JOYSTICK)
 #include "linuxjoystickdriver.h"
 #endif
 
-#if defined(HAVE_SDL)
+#if defined(WITH_SDL)
 #include "sdljoystickdriver.h"
 #endif
 
@@ -36,14 +58,14 @@ JoystickDriver::JoystickDriver(const std::string& driver_name)
     }
   else
 #endif
-    /*#if defined(OS_LINUX) && defined(HAVE_LINUX_JOYSTICK_H)
+#if defined(WITH_LINUX_JOYSTICK)
   if (driver_name == "default")
     {
       m_impl = new LinuxJoystickDriverImpl();
     }
     else
-    #endif*/
-#if defined(HAVE_SDL)
+#endif
+#if defined(WITH_SDL)
     if (driver_name == "sdl" || driver_name == "default")
       {
         m_impl = new SDLJoystickDriverImpl();
@@ -85,11 +107,11 @@ Joystick::Joystick(JoystickImpl* jst)
 {
   int na = m_impl->num_axes();
   int nb = m_impl->num_buttons();
-  axis   = std::vector<double>(na);
-  button = std::vector<bool>(nb);
+  axis   = std::vector<double>(na, 0);
+  button = std::vector<bool>(nb, false);
 
-  axis_min = std::vector<double>(na);
-  axis_max = std::vector<double>(na);
+  axis_min = std::vector<double>(na, INT_MAX);
+  axis_max = std::vector<double>(na, INT_MIN);
 }
 
 Joystick::~Joystick()
@@ -116,6 +138,7 @@ void Joystick::poll()
   for (int i = 0; i < m_impl->num_axes(); ++i)
     {
       double v = state.axes[i];
+
       if (v < axis_min[i])
         axis_min[i] = v;
         
@@ -169,6 +192,5 @@ bool Joystick::get_button(int but) const
   if (but >= 0 && but < m_impl->num_buttons())
     return button[but];
   else
-    return 0;
+    return false;
 }
-

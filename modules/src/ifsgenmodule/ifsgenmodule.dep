@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von ifsgenmodule.mak
+
+.\ifsgenmodule.cpp : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\ifstype\ifstype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\ifsgenmodule.h"\
+	
+
+.\ifsgenmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\ifstype\ifstype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\ifsgenmodule.h"\
+	".\ifsgenmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "ifsgenmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ifsgenmodule - Win32 Debug"
+
+!ENDIF 
+

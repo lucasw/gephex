@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-convertType">
+  <refnamediv>
+    <refname>convertType</refname>
+    <refpurpose>
+      Assigns the value from src to dst and changes the attributes while doing that.
+    </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;
+typedef void* TypeAttributesInstanceID;</funcsynopsisinfo>    
+      <funcprototype>
+	<funcdef>void <function>convertType</function></funcdef>
+	<paramdef>TypeInstanceID <parameter>destination</parameter></paramdef>
+	<paramdef>TypeInstanceID <parameter>source</parameter></paramdef>
+	<paramdef>TypeAttributesInstanceID <parameter>attributes</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>destination</parameter></term>
+	<listitem>
+<para>The value of this type object is changed to the one of <parameter>destination</parameter> and the attributes of <parameter>source</parameter> will then equal <parameter>attributes</parameter>.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>source</parameter></term>
+	<listitem>
+<para>The value of this type objects is assigned to <parameter>destination</parameter> while changing the attributes to <parameter>attributes</parameter>. The type insance <parameter>source</parameter> stays unchanged.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>attributes</parameter></term>
+	<listitem>
+<para>These attributes are the new attributes of <parameter>destination</parameter>.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+
+  <refsect1>
+    <title>Description</title>
+
+<para>The <function>changeAttributes</function> converts the value of the <parameter>source</parameter> type instance to the <parameter>attributes</parameter> and assigns the result to the <parameter>destination</parameter> instance.</para>
+<para>This function is optional. Types with attributes must also implement the <function>attributesEqual</function> function.</para>
+
+  </refsect1>
+</refentry>

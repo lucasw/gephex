@@ -1,0 +1,83 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von frboutmodule.mak
+
+.\frboutmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\frboutmodule.h"\
+	".\gdioutput.h"\
+	".\outputdriver.h"\
+	".\sdloutput.h"\
+	".\slist.h"\
+	
+
+.\frboutmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\frboutmodule.h"\
+	".\frboutmodule.xpm"\
+	
+
+.\gdioutput.c : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libscale\libscale.h"\
+	".\gdioutput.h"\
+	".\multimonitor.h"\
+	".\outputdriver.h"\
+	
+
+.\multimonitor.c : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	".\multimonitor.h"\
+	
+
+.\sdloutput.c : \
+	"..\..\..\..\sdl\include\begin_code.h"\
+	"..\..\..\..\sdl\include\close_code.h"\
+	"..\..\..\..\sdl\include\sdl.h"\
+	"..\..\..\..\sdl\include\sdl_active.h"\
+	"..\..\..\..\sdl\include\sdl_audio.h"\
+	"..\..\..\..\sdl\include\sdl_byteorder.h"\
+	"..\..\..\..\sdl\include\sdl_cdrom.h"\
+	"..\..\..\..\sdl\include\sdl_error.h"\
+	"..\..\..\..\sdl\include\sdl_events.h"\
+	"..\..\..\..\sdl\include\sdl_getenv.h"\
+	"..\..\..\..\sdl\include\sdl_joystick.h"\
+	"..\..\..\..\sdl\include\sdl_keyboard.h"\
+	"..\..\..\..\sdl\include\sdl_keysym.h"\
+	"..\..\..\..\sdl\include\sdl_main.h"\
+	"..\..\..\..\sdl\include\sdl_mouse.h"\
+	"..\..\..\..\sdl\include\sdl_mutex.h"\
+	"..\..\..\..\sdl\include\sdl_quit.h"\
+	"..\..\..\..\sdl\include\sdl_rwops.h"\
+	"..\..\..\..\sdl\include\sdl_timer.h"\
+	"..\..\..\..\sdl\include\sdl_types.h"\
+	"..\..\..\..\sdl\include\sdl_version.h"\
+	"..\..\..\..\sdl\include\sdl_video.h"\
+	"..\..\..\config.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libscale\libscale.h"\
+	".\outputdriver.h"\
+	".\sdloutput.h"\
+	
+
+.\slist.c : \
+	".\slist.h"\
+	
+
+!IF  "$(CFG)" == "frboutmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "frboutmodule - Win32 Debug"
+
+!ENDIF 
+

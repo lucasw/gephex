@@ -32,7 +32,7 @@ static GLXContext s_cx;
 static int s_xsize;
 static int s_ysize;
 
-static void print_visual(XVisualInfo* vinfo)
+/*static void print_visual(XVisualInfo* vinfo)
 {
   printf("Visual %i: {\n", vinfo->visualid);
   printf("\tDepth\t\t: %i\n", vinfo->depth);
@@ -43,7 +43,7 @@ static void print_visual(XVisualInfo* vinfo)
   printf("\tcolormap_size\t\t: %.8x\n", vinfo->colormap_size);
   printf("\tbits_per_rgb\t\t: %i\n", vinfo->bits_per_rgb);
   printf("}\n");
-}
+}*/
 
 // init a opengl window by the native windowsystem
 int initOutput(const char* caption, const char* display_name ,int xres, int yres, int bpp)

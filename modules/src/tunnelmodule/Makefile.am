@@ -31,3 +31,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = tunnelmodule.h tunnelmodule_auto.c
+EXTRA_DIST = tunnelmodule.dsp tunnelmodule.mak tunnelmodule.dep

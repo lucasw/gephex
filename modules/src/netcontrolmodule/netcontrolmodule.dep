@@ -1,0 +1,34 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von netcontrolmodule.mak
+
+.\netcontrolmodule.c : \
+	"..\..\..\..\..\dxsdk\include\basetsd.h"\
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\miditype\miditype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\netcontrolmodule.h"\
+	
+
+.\netcontrolmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\miditype\miditype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\netcontrolmodule.h"\
+	".\netcontrolmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "netcontrolmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "netcontrolmodule - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "netcontrolmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "netcontrolmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-attributesEqual">
+  <refnamediv>
+    <refname>attributesEqual</refname>
+    <refpurpose>
+      compares attributes with the of one type instance
+    </refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;
+typedef void* TypeAttributesInstanceID;</funcsynopsisinfo>    
+      <funcprototype>
+	<funcdef>void <function>attributesEqual</function></funcdef>
+	<paramdef>TypeInstanceID <parameter>instance</parameter></paramdef>
+	<paramdef>TypeAttributesInstanceID <parameter>attributes</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>instance</parameter></term>
+	<listitem>
+<para>The attributes of this type object are compared with the second parameter <parameter>attributes</parameter></para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>attributes</parameter></term>
+	<listitem>
+<para>These attributes are compared with the attributes of the <parameter>instance</parameter>.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+    
+    <refsect1>
+      <title>Description</title>
+
+<para>The <function>attributesEqual</function> function compares the attributes of <parameter>instance</parameter> with the <parameter>attributes</parameter>.</para>
+
+<para>An example for an datatype with attributes is the framebuffer type. The resolution is an attribute of the type. There are also other attributes thinkable like colormodel (RGB, BGR, YUV) or the memory layout of the pixels. It must be possible to change the attributes without changing the abstract value of the type instance</para>
+
+<para>This function is optional. Types with attributes must also provide the <function>convertType</function> function.</para>
+
+    </refsect1>
+
+    <refsect1>
+      <title>Return Value</title>
+
+<para>The funtion returns 1 if the attributes are equal and 0 in the other cases.</para>
+    </refsect1>
+      
+  </refentry>

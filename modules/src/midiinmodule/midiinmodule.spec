@@ -21,10 +21,22 @@ inputs
         default           = 0
         strong_dependency = true
         const             = true
-		widget_type       = number_selector
+        widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 256
         step_size         = 1
+    }
+
+    driver
+    {
+        name              = Driver
+        type              = typ_StringType
+        const             = true
+        strong_dependency = true
+        hidden            = true
+        default           = default
+        widget_type       = combo_box
+        values            = default,wavein,oss,alsa
     }
 }
 

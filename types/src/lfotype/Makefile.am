@@ -1,3 +1,5 @@
+EXTRA_DIST = lfotype.dsp lfotype.mak lfotype.dep lfotype.def
+
 includedir = @includedir@/gephex/types
 libdir = @libdir@/gephex/types
 INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \

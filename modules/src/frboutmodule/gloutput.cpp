@@ -183,11 +183,14 @@ static void GL_destroy(struct DriverInstance* sh)
 static int GL_resize(struct DriverInstance* sh, int width, int height,
                      char* error_text, int text_len)
 {
-  sh->win_xsize = width;
-  sh->win_ysize = height;
+  if (sh->win_xsize != width || sh->win_ysize != height)
+    {
+      sh->win_xsize = width;
+      sh->win_ysize = height;
   
-  glViewport(0, 0, sh->win_xsize, sh->win_ysize);
-  resizeOutput(sh->win_xsize,sh->win_ysize);  
+      glViewport(0, 0, sh->win_xsize, sh->win_ysize);
+      resizeOutput(sh->win_xsize,sh->win_ysize);  
+    }
   return 1;
 }
 

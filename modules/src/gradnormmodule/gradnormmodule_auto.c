@@ -15,12 +15,18 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_gradnormmodule] number_of_inputs=[1] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_gradnormmodule] number_of_inputs=[3] number_of_outputs=[1] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
     return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
+  break;
+  case 1:
+    return "input_spec { type=typ_NumberType id=scale const=true strong_dependency=true default=0.01 } ";
+  break;
+  case 2:
+    return "input_spec { type=typ_StringType id=algo const=true strong_dependency=true default=roberts-cross } ";
   break;
  }
  return 0;
@@ -70,6 +76,12 @@ int setInput(void* instance,int index,void* typePointer)
   case 0:
    inst->in_b = (FrameBufferType *) typePointer;
   break;
+  case 1:
+   inst->in_scale = (NumberType *) typePointer;
+  break;
+  case 2:
+   inst->in_algo = (StringType *) typePointer;
+  break;
  } //switch(index) 
  return 1;
 }
@@ -86,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Gradientnorm] group=[Filter] inputs=[1 Image ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Gradientnorm] group=[Filter] inputs=[3 Image Lightness{lower_bound=[0] step_size=[0.01] higher_bound=[1] hidden=[true] help=[lightness] } Algorithm{widget_type=[combo_box] values=[sobel,roberts-cross] hidden=[true] help=[sobel is slower and smoother, roberts-cross is quick and dirty] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(gradnormmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

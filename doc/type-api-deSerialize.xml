@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-deSerialize">
+  <refnamediv>
+    <refname>deSerialize</refname>
+    <refpurpose>assign the type instance the serilaized value </refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;</funcsynopsisinfo>
+      <funcprototype>
+        <funcdef>void <function>deSerialize</function></funcdef>
+        <paramdef>const char* <parameter>buffer</parameter></paramdef>
+        <paramdef>int <parameter>bufferLen</parameter></paramdef>
+        <paramdef>TypeInstanceID <parameter>instance</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>instance</parameter></term>
+	<listitem>
+<para>The value of this type instance will be changed to the one of the <parameter>buffer</parameter>.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>buffer</parameter></term>
+	<listitem>
+<para>This is a pointer to an buffer of size <parameter>bufferLen</parameter>. The buffer holds the value that is assigned to the <parameter>instance</parameter> type object. The buffer will not be changed.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>bufferLen</parameter></term>
+	<listitem>
+<para>This is the size of the <parameter>buffer</parameter> in bytes.</para>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>The function <function>deSerialize</function> gets a <parameter>buffer</parameter> with a serialized value of the type and a instance of the same type. After calling this function the value of type instance is changed to the one in the serialized buffer. The caller must ensure that the value in the <parameter>buffer</parameter>, the <parameter>instance</parameter> typeobject and the <function>deSerialize</function> function have the same type.</para>
+
+<para>This function is optional. A type plugin that provides (de)serialisation functionality must also implement the inverse function <function>serialize</function>.</para>
+
+  </refsect1>
+</refentry>

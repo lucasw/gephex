@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "linuxjoystickdriver.h"
 
 #include <sstream>
@@ -17,8 +39,7 @@
 class LinuxJoystickImpl : public JoystickImpl
 {
 public:
-  LinuxJoystickImpl(LinuxJoystickDriverImpl* driver, 
-                    int fd)
+  LinuxJoystickImpl(LinuxJoystickDriverImpl* driver, int fd)
     : m_driver(driver), m_handle(fd)
   {
     static const int NAME_LENGTH = 64;
@@ -27,7 +48,7 @@ public:
     unsigned char buttons = 2;
 
     ioctl(m_handle, JSIOCGVERSION, &m_version);
-    ioctl(m_handle, JSIOCGAXES, &axes);
+    ioctl(m_handle, JSIOCGAXES,    &axes);
     ioctl(m_handle, JSIOCGBUTTONS, &buttons);
     ioctl(m_handle, JSIOCGNAME(NAME_LENGTH), name);
 
@@ -35,8 +56,8 @@ public:
     m_num_axes    = std::min(32, static_cast<int>(axes));
     m_num_buttons = std::min(32, static_cast<int>(buttons));
 
-    m_state.axes    = std::vector<int>(m_num_axes);
-    m_state.buttons = std::vector<bool>(m_num_buttons);
+    m_state.axes    = std::vector<int>(m_num_axes, 0);
+    m_state.buttons = std::vector<bool>(m_num_buttons, false);
   }
 
   virtual ~LinuxJoystickImpl()
@@ -68,8 +89,10 @@ public:
         fd_set readfds;
         tv.tv_sec = 0;
         tv.tv_usec = 0;
+        FD_ZERO(&readfds);
         FD_SET(m_handle,&readfds);
         select(m_handle+1,&readfds,0,0,&tv);
+        //TODO: handle EINTR
 
         if (!(FD_ISSET(m_handle, &readfds)))
           return m_state;

@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von audioaddmodule.mak
+
+.\audioaddmodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audioaddmodule.h"\
+	
+
+.\audioaddmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\audiotype\audiotype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\audioaddmodule.h"\
+	".\audioaddmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "audioaddmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "audioaddmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #ifndef _INCLUDED_CONTROL_EDITOR_H_
 #define _INCLUDED_CONTROL_EDITOR_H_
 
@@ -25,6 +47,8 @@ namespace gui
   class ControlWidget;
   class ControlValueDispatcher;
 
+  class LabelWidget;
+
   class TypeViewFactory;
 
   class ControlEditor: public QWidget, 
@@ -32,7 +56,9 @@ namespace gui
   {
     Q_OBJECT
   public:
-    enum {CONTROLELEMENTWIDGET_KILL};
+    enum {CONTROLELEMENTWIDGET_KILL} ControlAction;
+    enum {LABEL_KILL} LabelAction;
+    enum {LABEL_ADD} ContextAction;
 
     typedef std::map<std::string, std::string> ParamMap;
 
@@ -53,8 +79,12 @@ namespace gui
 
     virtual void controlRenamed(int controlID, const std::string& name);
 
+    virtual void labelAdded(int labelID, const std::string& text);
+    virtual void labelMoved(int labelID, const Point& p);
+    virtual void labelDeleted(int labelID);
+
 public slots:
-void controlChanged(int nodeID,int inputIndex, const utils::Buffer&);
+    void controlChanged(int nodeID, int inputIndex, const utils::Buffer&);
 
     void selectWidgetType(const std::string& name, const std::string& type,
 			  int nodeID,int inputIndex,
@@ -63,25 +93,43 @@ void controlChanged(int nodeID,int inputIndex, const utils::Buffer&);
     void deleteControl(int nodeID,int inputIndex);
 
     void controlWidgetMoved(ControlWidget*, const QPoint&);
-	
     void controlWidgetReleased(ControlWidget* n,const QPoint& pos);
-
     void openPopup(ControlWidget*, const QPoint&);
 
-protected slots:
-void widgetTypeSelected(int);
+    void labelWidgetMoved(LabelWidget*, const QPoint&);
+    void labelWidgetReleased(LabelWidget* n,const QPoint& pos);
+    void openLabelPopup(LabelWidget*, const QPoint&);
+
+  protected slots:
+    void widgetTypeSelected(int);
 
     void controlPopupActivated(int action);
 
+    void labelPopupActivated(int action);
+
+    void contextPopupActivated(int action);
+
+    // this slot is used to check wether the mouse is over a controlwidget 
+    //    void checkMouse();
+
+    void mouseOverControl(QWidget* w);
+
   protected:
     virtual void mousePressEvent(QMouseEvent*);
+
+  signals:
+
+    // this signal is emitted if the user wants
+    // to find out to which input a control is connected
+    void inputSelected(int moduleID, int inputIndex);
 
   private:
     ControlModel* m_controller;
     IModelControlReceiver* m_model;
     TypeViewFactory* m_factory;	
 	
-    std::map<int,ControlWidget*> widgets;
+    std::map<int, ControlWidget*> widgets;
+    std::map<int, LabelWidget*> labels;
 
     Point clickedPos;
     int currentNodeID;
@@ -93,7 +141,9 @@ void widgetTypeSelected(int);
     std::map<int,std::string> id2Identifier;
     ControlWidget* currentControl;
 
-	utils::AutoPtr<ControlValueDispatcher> m_controlValueDispatcher;
+    LabelWidget* currentLabel;
+
+    utils::AutoPtr<ControlValueDispatcher> m_controlValueDispatcher;
   };
 
 } // end of namespace gui

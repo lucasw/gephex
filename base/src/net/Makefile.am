@@ -1,3 +1,9 @@
+EXTRA_DIST = net.dsp net.mak net.dep \
+	fhsocket.cpp fhsocket.h \
+	namedpipeserversocket.cpp namedpipeserversocket.h \
+	namedpipeclientsocket.cpp namedpipeclientsocket.h \
+	namedpipesockettest.cpp namedpipesockettest.h
+
 TESTS=nettest
 
 check_PROGRAMS = nettest

@@ -1,0 +1,24 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von jumpmodule.mak
+
+.\jumpmodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\jumpmodule.h"\
+	
+
+.\jumpmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\jumpmodule.h"\
+	".\jumpmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "jumpmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "jumpmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,53 +1,33 @@
 libdir = @libdir@/gephex/modules
 
-if EFFECTV
-EFFECTV_DIRS = \
-	libeffectv \
-	effecttvedgemodule \
-	effectvagingmodule \
-	effectvburnmodule \
-	effectvcyclemodule \
-	effectvdotmodule \
-	effectvfiremodule \
-	effectvlensmodule \
-	effectvlifemodule \
-	effectvpuzzlemodule \
-	effectvquarkmodule \
-	effectvsparkmodule 
-endif
+if WITH_SDL
 
-if HAVE_SDL
-
-if HAVE_SDL_TTF
+if WITH_SDL_TTF
 SDL_TTF_DIRS = sdlfontmodule
 endif
 
 endif
 
-if HAVE_JOYSTICK
+if WITH_JOYSTICK
 JOYSTICK_DIRS = joystickmodule
 endif
 
-if HAVE_PNG
+if WITH_LIBPNG
 PNG_DIRS = imagewritermodule
 endif
 
-if HAVE_ASOUNDLIB_OR_OSS
-AUDIO_DIRS = audioinmodule audiooutmodule
+if WITH_ASOUNDLIB_OR_OSS
+AUDIO_DIRS = audioinmodule audiooutmodule midiinmodule
 endif
 
-if HAVE_OSS
-OSS_DIRS = midiinmodule
+if WITH_V4L
+V4L_DIRS = capturemodule
 endif
-
-if HAVE_V4L
-V4L_DIRS = v4lmodule
-endif
-
 
 SUBDIRS = libgrid \
 	libmidi \
 	libscale \
+	libdshow \
 	audioaddmodule \
 	audiobdmodule \
 	audioenergymodule \
@@ -57,15 +37,16 @@ SUBDIRS = libgrid \
 	audiowavegenmodule \
 	blurmodule \
 	bwmodule \
-	color2number \
+	color2numbermodule \
 	diffmodule \
 	doepfermodule \
 	flashmodule \
 	flipflopmodule \
+	font3Dmodule \
 	fpsmodule \
 	frbinmodule \
 	frboutmodule \
-	functions \
+	funparsemodule \
 	gradnormmodule \
 	ifsgenmodule \
 	ifsmodule \
@@ -73,28 +54,27 @@ SUBDIRS = libgrid \
 	imagebuffermodule \
 	imgarithmodule \
 	isingnoizemodule \
+	jumpmodule \
 	netcontrolmodule \
 	numarithmodule \
-	number2color \
+	number2colormodule \
 	numbermodule \
 	numenvmodule \
 	numlfomodule \
 	numposmodule \
+	numxfadermodule \
 	overlaymodule \
 	pixelizemodule \
 	planemodule \
-	plasma \
+	plasmamodule \
 	posnummodule \
 	rangeconvertmodule \
 	resultmodule \
 	rotozoommodule \
-	signalgenmodules \
+	signalgenmodule \
 	staticcolormodule \
 	stringtokenizermodule \
 	tunnelmodule \
 	twolayermodule \
-	xfademodule $(EFFECTV_DIRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(OSS_DIRS)
-
-
-
+	xfademodule $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS)
 

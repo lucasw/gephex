@@ -1,0 +1,26 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von numposmodule.mak
+
+.\numposmodule.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\positiontype\positiontype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numposmodule.h"\
+	
+
+.\numposmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\positiontype\positiontype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\numposmodule.h"\
+	".\numposmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "numposmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "numposmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -9,6 +31,7 @@
 #include "netinterfaces/moduleclassnamesendernet.h"
 #include "netinterfaces/moduleclassinfosendernet.h"
 #include "netinterfaces/moduledatasendernet.h"
+#include "netinterfaces/graphdatasendernet.h"
 #include "netinterfaces/moduleconstructiondumbsendernet.h"
 #include "netinterfaces/graphnamesendernet.h"
 #include "netinterfaces/rendererstatussendernet.h"
@@ -46,11 +69,13 @@
 namespace gui
 {
   EngineWrapper::EngineWrapper(const std::string& ipcType,
-			       const std::string& locator, int port)
+			       const std::string& locator, int port,
+                               IErrorReceiver& log)
     : m_ipcType(ipcType), m_locator(locator), m_port(port),
       mcdsn(new ModuleConstructionDumbSenderNet()), 
       mcisn(new ModuleClassInfoSenderNet()),
       mdsn(new ModuleDataSenderNet()),
+      gdsn(new GraphDataSenderNet()),
       cvsn(new ControlValueSenderNet()),
       mssn(new ModuleStatisticsSenderNet()),
       mcnsn(new ModuleClassNameSenderNet()),
@@ -69,6 +94,7 @@ namespace gui
       tagger10(new CommandTagger(*esn)),      
       tagger13(new CommandTagger(*mstsn)),
       tagger14(new CommandTagger(*rssn)),
+      tagger15(new CommandTagger(*gdsn)),
 
 
       portTagger1(new PortTagger()),
@@ -81,6 +107,7 @@ namespace gui
       portTagger10(new PortTagger()),      
       portTagger13(new PortTagger()),
       portTagger14(new PortTagger()),
+      portTagger15(new PortTagger()),
 
 
       portDispatcher(new PortDispatcher()),
@@ -95,7 +122,7 @@ namespace gui
       ecrn(new EngineControlReceiverNet(*tagger3)),
       
       gModel(new GraphModel(*mcrn)), 
-      cModel(new ControlModel(*mcrn)),
+      cModel(new ControlModel(*mcrn, log)),
       classModel(new ModuleClassModel()),
       dispatcher(new ControlValueDispatcher(*mcrn)),
       moduleDataDispatcher(new ModuleDataDispatcher(*gModel,*cModel))
@@ -109,16 +136,18 @@ namespace gui
     initTaggers(*portTagger4, *tagger4, *protocol, *portDispatcher, m_port+3);
     initTaggers(*portTagger5, *tagger5, *protocol, *portDispatcher, m_port+4);
     initTaggers(*portTagger6, *tagger6, *protocol, *portDispatcher, m_port+5);
-    initTaggers(*portTagger7, *tagger7, *protocol, *portDispatcher, m_port+6);    
+    initTaggers(*portTagger7, *tagger7, *protocol, *portDispatcher, m_port+6);
     initTaggers(*portTagger10,*tagger10,*protocol, *portDispatcher, m_port+9);
     initTaggers(*portTagger13,*tagger13,*protocol, *portDispatcher, m_port+12);
     initTaggers(*portTagger14,*tagger14,*protocol, *portDispatcher, m_port+13);
+    initTaggers(*portTagger15,*tagger15,*protocol, *portDispatcher, m_port+14);
 
 		
     mcisn->registerModuleClassInfoReceiver(*classModel);
     mcdsn->registerModuleConstructionDumbReceiver(*gModel);
     mdsn->registerModuleDataReceiver(*moduleDataDispatcher);
     cvsn->registerControlValueReceiver(*dispatcher);
+    gdsn->registerGraphDataReceiver(*cModel);
   }
 	
 	

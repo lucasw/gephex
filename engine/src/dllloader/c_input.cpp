@@ -1,3 +1,25 @@
+/* This source file is a part of the GePhex Project.
+
+ Copyright (C) 2001-2004
+
+ Georg Seidel <georg@gephex.org> 
+ Martin Bayer <martin@gephex.org> 
+ Phillip Promesberger <coma@gephex.org>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+
 #include "c_input.h"
 
 #include <cassert>
@@ -63,20 +85,20 @@ CInput::CInput(int _typeID,
 CInput::~CInput()
 {
   delete m_defaultValue;
-	delete internalData;
+  delete internalData;
 }
 
 const IType* CInput::getData() const
 {
-	return data;
+  return data;
 }	
 
 IModule* CInput::getConnectedModule() const
 {
-	if (oPlug != 0)
-		return oPlug->getModule();
-	else
-		return 0;
+  if (oPlug != 0)
+    return oPlug->getModule();
+  else
+    return 0;
 }
 
 void CInput::plugIn(utils::AutoPtr<IOutputPlug>& newOPlug)
@@ -95,12 +117,23 @@ void CInput::unPlug()
 {
   if (m_isConnected)
     {
+      assert(internalData != 0);
+      assert(data != 0);
+      assert(oPlug != 0);
+
+      const IType* connectedData = oPlug->getData();
+      
+      // copy the connected value
+      if (m_attr != 0 && !connectedData->equalAttributes(*m_attr))
+	{ // input attribs are fixed and differ a conversion is needed
+	  internalData->convert(*connectedData, *m_attr);
+	}
+      else
+        internalData->assign(connectedData);
+
       oPlug->getOutput()->unPlug(*this);
       oPlug = utils::AutoPtr<IOutputPlug>(0);
 
-      assert(internalData != 0);
-      // set default value and convert if neccesary
-      internalData->assign(m_defaultValue);
       data = internalData;
       m_isConnected = false;
     
