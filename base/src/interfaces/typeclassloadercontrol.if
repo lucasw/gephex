@@ -1,0 +1,15 @@
+name: TypeClassLoaderControl
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ loadTypeClass string name
+
+ /**
+  *
+  */
+ unloadTypeClass string name

@@ -1,0 +1,53 @@
+name: ModuleConstructionDumb
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+  /**
+   * Fügt dem Laufzeitsystem ein neues Modul des Typs moduleClassID hinzu.
+   * @param moduleClassID Bestimmt die Art des Moduls das hinzugefügt wird.
+   * @param modID Eine eindeutige ID für das neue Modul.
+   */
+  moduleAdded string moduleClassName, int modID
+
+  /**
+   * Verknüpft den Eingang eines Moduls mit dem Ausgang eines anderen.
+   * @param moduleID1 Die ID des Quellmoduls
+   * @param outputIndex Der Index des Ausgangs des Quellmoduls
+   * @param moduleID2 Die ID des Zielmoduls
+   * @param inputIndex Der Index des eingangs des Zielmoduls
+   * @exception runtime_error Wird geworfen wenn eine moduleID
+   *            ungültig ist, die out/inputIndex ungültig ist oder der
+   *            Typ des Ausgangs nicht mit dem des Eingangs übereinstimmt.
+   */
+  modulesConnected int moduleID1,int outputIndex, int moduleID2,int inputIndex
+
+  /**
+   * Löst die Verknüpfung eines Eingangs von dem zu moduleID gehörigen Modul.
+   * @param moduleID Das Modul von dem ein Eingang gelöscht werden soll
+   * @param inputIndex Der index des Eingangs
+   * @exception runtime_error Wird geworfen wenn moduleID oder inputIndex
+   *       ungültig ist.
+   */
+  modulesDisconnected int moduleID,int inputIndex
+
+  /**
+   * Löscht ein Modul.
+   * @param moduleID Das Modul das gelöscht wird
+   */
+  moduleDeleted int moduleID
+
+  /**
+   * Teilt dem Receiver mit, dass die folgenden Aufrufe nur zur
+   * Synchronisation dienen.
+   *
+   */
+  syncModuleStarted
+
+  /**
+   * Teilt dem Receiver mit, dass die Synchronisation beendet ist.
+   *
+   */
+  syncModuleFinished
+

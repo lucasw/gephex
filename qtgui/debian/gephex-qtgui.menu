@@ -1,0 +1,1 @@
+?package(gephex-qtgui):needs=x11 section=Apps/Graphics title="GePhex Gui" command=gui

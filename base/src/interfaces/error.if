@@ -1,0 +1,12 @@
+name: Error
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ exceptionThrown string text
+
+

@@ -1,0 +1,33 @@
+SUBDIRS = libgrid \
+	libmidi \
+	colorcyclermodule \
+	addmodule \
+	resultmodule \
+	numbermodule \
+	xfademodule \
+	plasma \
+	bmpmodule \
+	rotozoommodule \
+	invertmodule \
+	blurmodule \
+	tunnelmodule \
+	signalgenmodules \
+	bwmodule \
+	imgsubmodule \
+	imgaddmodule \
+	imgmulmodule \
+	staticcolormodule \
+	functions \
+	numposmodule \
+	posnummodule \
+	flashmodule \
+	cubesmodule \
+	starfield \
+	gloutmodule \
+	sdloutputmodule \
+	joystickmodule \
+	avifilemodule \
+	netcontrol \
+	v4lmodule \
+	midiinmodule \
+	doepfermodule

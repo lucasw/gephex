@@ -1,0 +1,68 @@
+bug 1:
+	engine starten
+	gui starten
+	result knopf
+	modul anlegen
+	engine berechnung starten
+	-> seg faultdringende bugfixes:
+
+------------------------------------------------------------------------
+
+1. Engine macht Fehler beim updaten
+
+Beobachtung:
+  Wenn Parameter von Modulen geaendert werden, die in einem
+  "toten Ast" haengen, dann werden sie von der engine nicht neu
+  geupdatet.
+
+Erklaerung:
+  Toter Ast soll heissen, daß der Teilgraph in dem sich das Modul
+  befindet nicht gerechnet wird, weil die engine merkt, daß er keinen
+  Einfluß auf die aktuelle Berechnung hat (z.B. wenn ein Modul an einem
+  XFader haengt, und der nur das andere Signal durchleitet).
+
+Vermutete Ursache:
+ Die engine, genauer der renderer, genauer das runtimesystem, hat intern
+ einen frame-counter, der jedes Mal erhöht wird, wenn der Graph einmal
+ gerechnet wurde.
+
+ Jedes Modul verwaltet einen timeStamp für jeden seiner Inputs. Ändert sich
+ der Input eines Moduls (z.B. durch ein Control in der Gui), so wird der 
+ timeStamp des entsprechenden Inputs auf den frame-count gesetzt.
+ Ein Modul wird nur geupdatet, wenn mind. ein Input den timeStamp auf 
+ frame-count gesetzt hat (oder wenn es non-deterministic ist).
+
+ Wenn sich der Input eines Moduls in einem toten Ast aendert, dann wird
+ der timeStamp auf den aktuellen frame-count gesetzt. Der tote Ast wird
+ aber beim updaten nicht berücksichtigt. Erst wenn der tote Ast wieder
+ aktiviert wird (z.B. wenn der XFader umgestellt wird), wird das Modul
+ wieder betrachtet. Dann hat der geaenderte Input aber nicht mehr den
+ aktuellen frame-count als timeStamp, sondern den, der zum Zeitpunkt
+ seiner Aenderung aktuell war. Also wird das Modul nicht geupdatet.
+
+Vorgeschlagene Loesung:
+ a) anstatt des timeStamps wird ein flag verwaltet, das angibt, ob
+  noch unberuecksichtigte aenderungen am input anliegen
+  Nachteil: die flags muessen immer auf 0 gesetzt werden, wenn
+    geupdatet wird.
+
+ b) ???
+
+------------------------------------------------------------------------
+
+2. Default Value von Inputs
+
+Beobachtung:
+  Default Values von Inputs werden erst gesetzt, wenn man den Property
+  Dialog des Inputs einmal geoeffnet hat.
+ 
+Vermutete Ursache: ???
+
+
+------------------------------------------------------------------------
+
+3. Feedback Bug
+
+Siehe Eintrag in Sourceforge
+
+------------------------------------------------------------------------

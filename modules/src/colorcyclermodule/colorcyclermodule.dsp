@@ -1,0 +1,183 @@
+# Microsoft Developer Studio Project File - Name="colorcyclermodule" - Package Owner=<4>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# ** NICHT BEARBEITEN **
+
+# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
+
+CFG=colorcyclermodule - Win32 Debug
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE 
+!MESSAGE NMAKE /f "colorcyclermodule.mak".
+!MESSAGE 
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE 
+!MESSAGE NMAKE /f "colorcyclermodule.mak" CFG="colorcyclermodule - Win32 Debug"
+!MESSAGE 
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE 
+!MESSAGE "colorcyclermodule - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "colorcyclermodule - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
+!IF  "$(CFG)" == "colorcyclermodule - Win32 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../dlls"
+# PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 1
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "colorcyclermodule_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/rgbtype" /I "../../../types/src/stringtype" /I "../../../engine/src/engine" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "colorcyclermodule_EXPORTS" /D "WIN32" /D "NDEBUG" /D "VERBOSE_ENGINE" /YX /FD /c
+# SUBTRACT CPP /X
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x407 /d "NDEBUG"
+# ADD RSC /l 0x407 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+
+!ELSEIF  "$(CFG)" == "colorcyclermodule - Win32 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../dlls"
+# PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "colorcyclermodule_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/rgbtype" /I "../../../types/src/stringtype" /I "../../../engine/src/engine" /I "../../../" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "colorcyclermodule_EXPORTS" /D "WIN32" /D "_DEBUG" /YX /FD /GZ /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x407 /d "_DEBUG"
+# ADD RSC /l 0x407 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /pdbtype:sept
+# SUBTRACT LINK32 /incremental:no
+
+!ENDIF 
+
+# Begin Target
+
+# Name "colorcyclermodule - Win32 Release"
+# Name "colorcyclermodule - Win32 Debug"
+# Begin Group "Quellcodedateien"
+
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\colorcyclermodule.c
+
+!IF  "$(CFG)" == "colorcyclermodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "colorcyclermodule - Win32 Debug"
+
+# ADD CPP /MDd
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\colorcyclermodule_auto.c
+# End Source File
+# End Group
+# Begin Group "Header-Dateien"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\colorcyclermodule.h
+# End Source File
+# End Group
+# Begin Group "Ressourcendateien"
+
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
+# Begin Source File
+
+SOURCE=.\colorcyclermodule.def
+# End Source File
+# Begin Source File
+
+SOURCE=.\colorcyclermodule.spec
+
+!IF  "$(CFG)" == "colorcyclermodule - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\colorcyclermodule.spec
+
+BuildCmds= \
+	python ../../pluc.py c colorcyclermodule.spec \
+	python ../../pluc.py h colorcyclermodule.spec \
+	python ../../pluc.py def colorcyclermodule.spec \
+	
+
+"colorcyclermodule.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"colorcyclermodule_auto.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"colorcyclermodule.def" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "colorcyclermodule - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\colorcyclermodule.spec
+
+BuildCmds= \
+	python ../../pluc.py c colorcyclermodule.spec \
+	python ../../pluc.py h colorcyclermodule.spec \
+	python ../../pluc.py def colorcyclermodule.spec \
+	
+
+"colorcyclermodule.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"colorcyclermodule_auto.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+
+"colorcyclermodule.def" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+   $(BuildCmds)
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\colorcyclermodule.xpm
+# End Source File
+# End Target
+# End Project

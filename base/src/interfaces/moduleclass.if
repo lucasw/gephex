@@ -1,0 +1,16 @@
+name: ModuleClass
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ moduleClassLoaded string moduleClassID, const IModuleClass& moduleClass
+
+ /**
+  *
+  */
+ moduleClassUnloaded string moduleClassID
+

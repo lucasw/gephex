@@ -1,0 +1,30 @@
+name: SequencerStatus
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+  /**
+   *
+   */	 
+ editSequenceChanged string sequenceID
+
+  /**
+   *
+   */
+  started
+
+  /**
+   *
+   */
+  stopped
+
+  /**
+   *
+   */
+  paused
+
+  /**
+   *
+   */
+  time int currentTime

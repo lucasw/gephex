@@ -1,0 +1,22 @@
+name: GraphName
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ graphExists  string graphID, string snapID, string graphName, string snapName
+
+ /**
+  *
+  */
+ graphNoLongerExists string graphID, string snapID
+
+
+ /**
+  *
+  */
+ graphRenamed string graphID, string snapID, string newGraphName, string newSnapName
+

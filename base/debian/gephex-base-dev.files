@@ -1,0 +1,3 @@
+usr/include/gephex/*
+usr/lib/gephex/lib*.a
+usr/lib/gephex/lib*.so

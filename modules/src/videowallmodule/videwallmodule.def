@@ -1,0 +1,26 @@
+LIBRARY VIDEOWALLMODULE
+
+DESCRIPTION "description"
+
+EXPORTS
+
+ newInstance @1
+
+ deleteInstance @2
+
+ getSpec @3
+
+ setInput @4
+
+ getOutput @5
+
+ update @6
+
+ getInputSpec @7
+
+ getOutputSpec @8
+
+ getInfo @9
+
+ init @10
+

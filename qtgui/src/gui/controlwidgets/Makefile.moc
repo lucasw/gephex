@@ -1,0 +1,18 @@
+MOCS=comboboxwidget_moc.cpp dialwidget_moc.cpp lineeditwidget_moc.cpp positionwidget_moc.cpp sliderwidget_moc.cpp
+
+
+
+ALL: $(MOCS)
+
+%_moc.cpp: %.h
+	moc -o $@ $<
+
+clean:
+	rm *moc*
+
+
+
+
+
+
+

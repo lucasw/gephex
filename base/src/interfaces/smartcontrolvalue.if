@@ -1,0 +1,21 @@
+name: SmartControlValue
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+  /**
+   *
+   */
+  controlValueChanged string graphName, int nodeID, int intputIndex, buffer newValue
+
+  /**
+   *
+   */
+  syncInputValuesStarted string graphName
+
+  /**
+   *
+   */
+  syncInputValuesFinished string graphName
+

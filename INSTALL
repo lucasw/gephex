@@ -1,0 +1,21 @@
+To install GePhex, perform the following steps:
+
+1. Edit the Makefile in this directory and change the "CONFIGURE_FLAGS"
+   to whatever value suits you (default is "--prefix=$HOME/gephex).
+
+2. Type "make configure" to run configure in all subprojects.
+
+3. Type make (note: this will not only makes the subprojects but also
+     installs them, sorry for this non-standard behaviour).
+
+4. Edit the file postinstall.sh and edit the PREFIX variable
+   to match your choice in step 1 (default is again $HOME/gephex).
+   
+5. Type "./postinstall.sh" to create yout ~/.gephex directory with
+   the config files
+
+6. Go into <your chosen prefix>/bin and start engine and gui (in that order).
+
+7. Have fun!!!
+
+8. Sorry for the complicated install, we are working to improve it

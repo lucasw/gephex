@@ -1,0 +1,33 @@
+/* XPM */
+static char * insect_0_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 11 1",
+/* colors */
+" 	s None	c None",
+".	c cyan",
+"X	c navy",
+"o	c yellow",
+"O	c peru",
+"+	c firebrick",
+"@	c red",
+"#	c white",
+"$	c blue",
+"%	c sea green",
+"&	c green",
+/* pixels */
+"                ",
+"     .X  X.     ",
+"     X.  .X     ",
+"      .  .      ",
+"  o   .  .  Oo  ",
+"   o  +@@+ OoO  ",
+"    o #@@#OoO   ",
+"     +#@@#+O    ",
+"    X++@@++X    ",
+"   X$X+@@+X$X   ",
+"  X$X##@@##X$X  ",
+"  $X %&  &% X$  ",
+"     &%  %&     ",
+"     &    &     ",
+"     &    &     ",
+"                "};

@@ -1,0 +1,12 @@
+Source: gephex-engine
+Section: unknown
+Priority: optional
+Maintainer: Martin Bayer <bayer@fmi.uni-passau.de>
+Build-Depends: debhelper (>> 3.0.0), gephex-base-dev (=0.0.1-1)
+Standards-Version: 3.5.2
+
+Package: gephex-engine
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

@@ -1,0 +1,11 @@
+name: ModelStatus
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+  /**
+   *
+   */	 
+ editGraphChanged string graphID, string snapID
+

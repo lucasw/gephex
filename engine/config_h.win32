@@ -1,0 +1,22 @@
+#ifndef INCLUDED_CONFIG_H
+#define INCLUDED_CONFIG_H
+
+#define COMP_VC
+#define OS_WIN32
+#define CPU_I386
+#define CPU_I486
+#define CPU_I586
+#define CPU_HAS_MMX
+
+namespace std {
+
+template <typename T>
+T max(const T& t1, const T& t2)
+{
+	return (t1 > t2) ? t1 : t2;
+}
+
+}
+
+
+#endif

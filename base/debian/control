@@ -1,0 +1,26 @@
+Source: gephex-base
+Priority: optional
+Maintainer: Martin Bayer <bayer@fmi.uni-passau.de>
+Build-Depends: debhelper (>> 3.0.0), python
+Standards-Version: 3.5.2
+
+Package: gephex
+Section: x11
+Architecture: any
+Depends: gephex-base, gephex-base-dev, gephex-engine, gephex-qtgui, gephex-types, gephex-modules
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+
+Package: gephex-base-dev
+Section: devel
+Architecture: any
+Depends: gephex-base
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+
+Package: gephex-base
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

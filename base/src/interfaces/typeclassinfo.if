@@ -1,0 +1,18 @@
+name: TypeClassInfo
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+/**
+*
+*/
+typeClassLoaded int TypeClassID, buffer buf
+
+/**
+*
+*/
+typeClassUnloaded int TypeClassID
+
+
+

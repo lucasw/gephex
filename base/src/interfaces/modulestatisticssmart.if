@@ -1,0 +1,12 @@
+name: ModuleStatisticsSmart
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+/**
+ * Die Berechnungsroutine kann ueber dieses signal die
+ * Berechnungsdauer einzelner Module melden
+ */
+ modExecTimeSignal string graphName, int nodeID, double execTime
+

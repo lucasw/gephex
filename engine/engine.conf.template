@@ -1,0 +1,20 @@
+conf {
+module_dirs=[XXX_MODULE_DIRS_XXX]
+type_dirs=[XXX_TYPE_DIRS_XXX]
+graph_dir=[XXX_GRAPH_DIR_XXX]
+sequence_dir=[XXX_SEQUENCE_DIR_XXX]
+playlist_dir=[XXX_PLAYLIST_DIR_XXX]
+
+ipc_type=[inet]
+ipc_unix_node_prefix=[/tmp/gephex_socket_]
+ipc_port=[6666]
+
+renderer_interval=[30]
+net_interval=[30]
+sequencer_interval=[100]
+}
+
+
+
+
+
