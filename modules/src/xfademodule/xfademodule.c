@@ -37,24 +37,29 @@
 #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
 #include "cpuinfo.h"
 static int s_mmx_supported = 0;
+static int s_e3dnow_supported = 0;
 #endif
 
 static const double EPS = 0.00001;
 
 static logT s_log;
 
-typedef void (*fadeT)(uint_32 size, unsigned char* framebuf1,
-		      unsigned char* framebuf2, unsigned char* result,
+typedef void (*fadeT)(uint_32 size, uint_8* framebuf1,
+		      uint_8* framebuf2, uint_8* result,
 		      int fadeValue);
 
-static void fade(uint_32 size, unsigned char* framebuf1,
-		 unsigned char* framebuf2, unsigned char* result,
+static void fade(uint_32 size, uint_8* framebuf1,
+		 uint_8* framebuf2, uint_8* result,
 		 int fadeValue);
 
 #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
-static void fade_mmx(uint_32 size, unsigned char* framebuf1,
-		     unsigned char* framebuf2, unsigned char* result,
+extern void fade_mmx(uint_32 size, uint_8* framebuf1,
+		     uint_8* framebuf2, uint_8* result,
 		     int fadeValue);
+
+extern void fade_e3dnow(uint_32 size, uint_8* framebuf1,
+                        uint_8* framebuf2, uint_8* result,
+                        int fadeValue);
 #endif
 
 typedef struct _MyInstance {
@@ -79,14 +84,24 @@ int init(logT log_function)
 #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
   if (cpuinfo_has_cpuid())
     {
-      s_log(2, "found mmx support");
-      s_mmx_supported = cpuinfo_has_mmx();
+      s_mmx_supported    = cpuinfo_has_mmx();
+      s_e3dnow_supported = cpuinfo_has_e3dnow();
     }
   else
     {
-      s_log(2, "no mmx support");
-      s_mmx_supported = 0;
+      s_mmx_supported    = 0;
+      s_e3dnow_supported = 0;
     }
+
+  if (s_mmx_supported)
+    s_log(2, "found mmx support");
+  else
+    s_log(2, "no mmx support");
+
+  if (s_e3dnow_supported)
+    s_log(2, "found e3dnow support");
+  else
+    s_log(2, "no e3dnow support");
 #endif
 
   return 1;
@@ -117,11 +132,11 @@ void destruct(MyInstance* my)
   free(my);
 }
 
-static void fade(uint_32 size, unsigned char* framebuf1,
-		 unsigned char* framebuf2, unsigned char* result,
+static void fade(uint_32 size, uint_8* framebuf1,
+		 uint_8* framebuf2, uint_8* result,
 		 int fadeValue)
 {	
-  unsigned char* end = result + size;
+  uint_8* end = result + size*4;
   int negfadeValue = 255 - fadeValue;
 		
   while (result != end)
@@ -144,159 +159,6 @@ static void fade(uint_32 size, unsigned char* framebuf1,
     }
 }
 
-#if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
-static void fade_mmx(uint_32 size,
-		     unsigned char* framebuf1,
-		     unsigned char* framebuf2,
-		     unsigned char* result,
-		     int fadeValue)
-{
-  unsigned char* end = result + size;      
-  int negfadeValue = 255 - fadeValue;
-
-  char masq[8];
-  char masq_neg[8];
-  int i;
-	
-  int rest = size & 0x07;
-
-  for(i=0; i<8; i+=4)
-    {
-      masq[i] = fadeValue;
-      masq[i+1] = fadeValue;
-      masq[i+2] = fadeValue;
-      masq[i+3] = fadeValue; 
-
-      masq_neg[i] = negfadeValue;
-      masq_neg[i+1] = negfadeValue;
-      masq_neg[i+2] = negfadeValue;
-      masq_neg[i+3] = negfadeValue; 
-    }
-
-#if defined(COMP_VC)
-  {
-  int s = size;
-  _asm{
-	  mov edi, result
-	  mov esi, framebuf1
-	  mov ebx, framebuf2
-	  mov eax, s
-	  shr eax, 3
-	  cmp eax, 0
-	  jz fade_mmx_end
-
-	  movq mm5, [masq]
-	  movq mm4, [masq_neg]
-	  pxor mm6, mm6
-	  punpcklbw mm4, mm6
-	  punpcklbw mm5, mm6
-
-loop_main:
-	  
-          movq mm0, [esi]
-		  movq mm1, [esi]
-		  
-		  punpcklbw mm0, mm6
-		  punpckhbw mm1, mm6
-		  
-		  movq mm2, [ebx]
-		  movq mm3, [ebx]
-		  
-		  punpcklbw mm2, mm6
-		  punpckhbw mm3, mm6
-		  
-		  pmullw mm0, mm4
-		  pmullw mm1, mm4
-		  
-		  pmullw mm2, mm5
-		  pmullw mm3, mm5
-		  
-		  paddw mm0, mm2
-		  paddw mm1, mm3
-		  
-		  psrlw mm0, 8
-		  psrlw mm1, 8
-		  
-		  packuswb mm0, mm1
-		  
-		  movq [edi], mm0
-		  
-		  add esi, 8
-		  add ebx, 8
-		  add edi, 8
-		  dec eax
-	jnz loop_main
-
-fade_mmx_end:
-	  emms
-		  
-  }
-  }
-#elif defined(COMP_GCC)
-  __asm__ __volatile__ (
-      "movq (%0), %%mm4                     \n\t"
-      "movq (%1), %%mm5                     \n\t"
-      "movl %2, %%esi                       \n\t"
-      "movl %3, %%ebx                       \n\t"
-      "movl %4, %%edi                       \n\t"
-      "movl %5, %%eax                       \n\t"
-      "shrl $3, %%eax                       \n\t"
-      "cmpl $0, %%eax                       \n\t"
-      "jz   2f                              \n\t"
-
-      "pxor %%mm6, %%mm6                    \n\t"
-      "punpcklbw %%mm6, %%mm4               \n\t"
-      "punpcklbw %%mm6, %%mm5               \n\t"
-      "1:                                   \n\t" 	  
-      "    movq (%%esi), %%mm0              \n\t"
-      "    movq (%%esi), %%mm1              \n\t"
-			
-      "	   punpcklbw %%mm6, %%mm0           \n\t"
-      "	   punpckhbw %%mm6, %%mm1           \n\t"
-			
-      "	   movq (%%ebx), %%mm2              \n\t"
-      "	   movq (%%ebx), %%mm3              \n\t"
-			
-      "	   punpcklbw %%mm6, %%mm2           \n\t"
-      "	   punpckhbw %%mm6, %%mm3           \n\t"
-
-      "    pmullw %%mm4, %%mm0              \n\t"
-      "    pmullw %%mm4, %%mm1              \n\t"
-
-      "    pmullw %%mm5, %%mm2              \n\t"
-      "    pmullw %%mm5, %%mm3              \n\t"
-			
-      "    paddw %%mm2, %%mm0               \n\t"
-      "    paddw %%mm3, %%mm1               \n\t"
-
-      "    psrlw $8, %%mm0                  \n\t"
-      "    psrlw $8, %%mm1                  \n\t"
-
-      "    packuswb %%mm1, %%mm0            \n\t"
-      "    movq %%mm0, (%%edi)              \n\t"
-	    
-      "    addl $8, %%esi                   \n\t"
-      "    addl $8, %%ebx                   \n\t"
-      "    addl $8, %%edi                   \n\t"
-      "    decl %%eax                       \n\t"
-      "jnz 1b                               \n\t"
-      "2:                                   \n\t"
-      "emms                                 \n\t"
-      :
-      : "r"(masq_neg), "r"(masq), "m" (framebuf1), "m"(framebuf2),
-      "m"(result), "m" (size)
-      : "eax", "ebx", "esi", "edi", "memory"
-      );
-#endif
-
-  if (rest != 0) {
-    uint_32 s = size & (~0x07);
-    assert (s == size - rest);
-    fade(rest, framebuf1+s, framebuf2+s, result+s, fadeValue);
-  }
-}
-#endif
-
 
 /**
  * Takes two framebuffertypes and scales them if they differ in size.
@@ -310,21 +172,8 @@ void scale_framebuffers(const FrameBufferType* f1,const FrameBufferType* f2,
 	if (f1->xsize != f2->xsize
 	  || f1->ysize != f2->ysize)
 	{
-	  // inputs have different sizes
-
-	  /*{
-	    char buffer[64];
-	    snprintf(buffer, sizeof(buffer),
-		     "In1 = %ix%i, In2 = %ix%i\n",
-		     f1->xsize, f1->ysize,
-		     f2->xsize, f2->ysize);
-
-	    s_log(2, buffer);
-	    }*/
-
 	  if (*scaled == 0)
 	    *scaled = framebuffer_newInstance();
-
 
 	  // indicate that we did scale this time
 	  *did_scale = 1;
@@ -377,12 +226,24 @@ void update(void* instance)
 	  my->fade = fade;
 	}
 #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
-      else if (s_mmx_supported &&
-	       strcmp(my->oldRoutine.text, "mmx") == 0)
+      else if (strcmp(my->oldRoutine.text, "mmx") == 0)
+    {
+      if (s_e3dnow_supported)
 	{
+	  s_log(2, "Using e3dnow fading");
+	  my->fade = fade_e3dnow;
+	}
+      else if (s_mmx_supported)
+        {
 	  s_log(2, "Using mmx fading");
 	  my->fade = fade_mmx;
-	}
+        }
+      else
+        {
+	  s_log(2, "Using regular fading");
+	  my->fade = fade;
+        }
+    }
 #endif
       else
 	{
@@ -410,7 +271,7 @@ void update(void* instance)
       int didScale = 0;
 
       int xsize = 0, ysize = 0;
-      int fadeValue = (int) (number * 255);
+      int fadeValue = (int) (number * 255 + .5);
 
       scale_framebuffers(inst->in_1, inst->in_2,
 			 &my->scaledFb, &fb1, &fb2,
@@ -430,8 +291,8 @@ void update(void* instance)
 
       assert(inst->out_r->xsize == xsize && inst->out_r->ysize == ysize);
 
-      my->fade(xsize*ysize*4, (unsigned char*) fb1, (unsigned char*) fb2,
-	       (unsigned char*) inst->out_r->framebuffer,
+      my->fade(xsize*ysize, (uint_8*) fb1, (uint_8*) fb2,
+	       (uint_8*) inst->out_r->framebuffer,
 	       fadeValue);
       
       // delete scaled framebuffer if we didn't need it this time

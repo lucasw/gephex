@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 if WITH_SDL
 
@@ -24,10 +24,15 @@ if WITH_V4L
 V4L_DIRS = capturemodule
 endif
 
+if WITH_FFMPEG
+FFMPEG_DIRS = ffmpegoutmodule
+endif
+
 SUBDIRS = libgrid \
 	libmidi \
 	libscale \
 	libdshow \
+	libcolorconv \
 	audioaddmodule \
 	audiobdmodule \
 	audioenergymodule \
@@ -37,9 +42,11 @@ SUBDIRS = libgrid \
 	audiowavegenmodule \
 	blurmodule \
 	bwmodule \
+	chromakeymodule \
 	color2numbermodule \
 	diffmodule \
 	doepfermodule \
+        dplmodule \
 	flashmodule \
 	flipflopmodule \
 	font3Dmodule \
@@ -56,6 +63,7 @@ SUBDIRS = libgrid \
 	isingnoizemodule \
 	jumpmodule \
 	netcontrolmodule \
+	noisemodule \
 	numarithmodule \
 	number2colormodule \
 	numbermodule \
@@ -76,5 +84,6 @@ SUBDIRS = libgrid \
 	stringtokenizermodule \
 	tunnelmodule \
 	twolayermodule \
-	xfademodule $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS)
-
+	xfademodule \
+	y4minmodule \
+	yuv4mpeg2module	$(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)

@@ -79,16 +79,22 @@ FrameBufferType* framebuffer_newInstance(void)
 }
 
 static __inline
+void framebuffer_destroyInstance(FrameBufferType* fbuffer)
+{
+  if (fbuffer->data)
+    free(fbuffer->data);
+
+  fbuffer->data  = fbuffer->framebuffer = 0;
+  fbuffer->xsize = fbuffer->ysize = fbuffer->size = 0;
+}
+
+static __inline
 void framebuffer_deleteInstance(FrameBufferType* fbuffer)
 {
   if (fbuffer == 0)
     return;
 
-  if (fbuffer->data)
-    free(fbuffer->data);
-
-  fbuffer->data =fbuffer->framebuffer = 0;
-  fbuffer->xsize = fbuffer->ysize = fbuffer->size = 0;
+  framebuffer_destroyInstance(fbuffer);
 
   free(fbuffer);
 }

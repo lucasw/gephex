@@ -56,6 +56,8 @@ typedef struct _MyInstance
 
   JoystickDriver* jst_drv;
   Joystick* jst;
+
+  StringType driver_name;
 } MyInstance, *MyInstancePtr;
 
 
@@ -87,24 +89,15 @@ MyInstance* construct()
 {
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));  
 
-  my->old_id = -1;
-  my->jst    = 0;
+  my->old_id  = -1;
+  my->jst_drv = 0;
+  my->jst     = 0;
+
+  string_initInstance(&my->driver_name);
 
   reset_axbu(my);
-  try
-    {
-      my->jst_drv = new JoystickDriver("default");
-      return my;
-    } 
-  catch(std::exception& e)
-    {
-      char buffer[256];
-      snprintf(buffer, sizeof(buffer),
-               "Could not create joystick driver: '%s'", e.what());
-      s_log(0, buffer);
-      free(my);
-    }
-  return 0;
+  
+  return my;
 }
 
 void destruct(MyInstance* my)
@@ -112,17 +105,60 @@ void destruct(MyInstance* my)
   if (my->jst != 0)
     delete my->jst;
 
-  delete my->jst_drv;
+  if (my->jst_drv != 0)
+    delete my->jst_drv;
+
+  string_destroyInstance(&my->driver_name);
   free(my);
 }
 
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
-  MyInstancePtr my = inst->my;  
+  MyInstancePtr my = inst->my;
 
   int joy_id = trim_int(inst->in_joy_id->number, 0, 31);
+  const char* new_driver_name = inst->in_driver->text;
   int i, num_axes, num_buttons;
+
+  const char* driver_name = my->driver_name.text;
+
+  if (my->jst_drv == 0 ||
+	  strcmp(new_driver_name, driver_name) != 0)
+  {
+	  if (my->jst_drv)
+		  delete my->jst_drv;
+
+	  if (my->jst)
+	  {
+		  delete my->jst;
+		  my->jst    = 0;
+		  my->old_id = -1;
+	  }
+
+	  try
+	  {          
+		  string_assign(&my->driver_name, inst->in_driver);
+		  my->jst_drv = new JoystickDriver(new_driver_name);
+
+		  char buffer[64];
+		  snprintf(buffer, sizeof(buffer), "Using driver '%s'", new_driver_name);
+		  s_log(2, buffer);
+	  } 
+	  catch(std::exception& e)
+	  {
+		  char buffer[256];
+		  snprintf(buffer, sizeof(buffer),
+			  "Could not create joystick driver: '%s'", e.what());
+		  s_log(0, buffer);
+	  }
+  }
+
+  if (my->jst_drv == 0)
+  {
+    //s_log(1, "HEEEE");
+    return;
+  }
 
   if (joy_id != my->old_id)
     {
@@ -141,12 +177,22 @@ void update(void* instance)
       try
         {
           my->jst = my->jst_drv->open(joy_id);
+
+		  char buffer[64];
+
+		  snprintf(buffer, sizeof(buffer), "Opened joystick %i\n", joy_id);
+		  s_log(2, buffer);
+		  snprintf(buffer, sizeof(buffer), "Name: %s\t#Axes: %i\t#Buttons: %i",
+			       my->jst_drv->name(joy_id).c_str(),
+				   my->jst->num_axes(), my->jst->num_buttons());
+		  s_log(2, buffer);
+
         }
       catch (std::exception& e)
         {
           s_log(0, e.what());
           my->old_id = joy_id;
-          return;                
+          return;
         }
 
       my->old_id = joy_id;
@@ -163,7 +209,10 @@ void update(void* instance)
     }
   
   if (my->jst == 0)
+  {
+    //s_log(1, "HAAA");
     return;
+  }
   
   try
   {
@@ -216,7 +265,7 @@ void update(void* instance)
 	  
 	  inst->out_signal_x->number = ax[0];
 	  inst->out_signal_y->number = ax[1];
-	  
+
 	  inst->out_button_1->number = b[0] ? 1.0 : 0.0;
 	  inst->out_button_2->number = b[1] ? 1.0 : 0.0;
   }

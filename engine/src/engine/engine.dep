@@ -2,58 +2,14 @@
 
 .\bufferedsender.cpp : \
 	"..\..\..\base\src\net\isender.h"\
+	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\circularbuffer.h"\
 	".\bufferedsender.h"\
 	
 
 .\controller.cpp : \
-	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
-	"..\..\..\base\src\interfaces\icontrolvaluesender.h"\
-	"..\..\..\base\src\interfaces\ienginecontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\ienginecontrolsender.h"\
-	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
-	"..\..\..\base\src\interfaces\igraphdatareceiver.h"\
-	"..\..\..\base\src\interfaces\igraphdatasender.h"\
-	"..\..\..\base\src\interfaces\igraphnamereceiver.h"\
-	"..\..\..\base\src\interfaces\igraphnamesender.h"\
-	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\imodelcontrolsender.h"\
-	"..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\base\src\interfaces\imodelstatussender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolsender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclasssender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassspecreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassspecsender.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructiondumbsender.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructionsmartreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructionsmartsender.h"\
-	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
-	"..\..\..\base\src\interfaces\imoduledatasender.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssender.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssmartreceiver.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssmartsender.h"\
-	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\irenderercontrolsender.h"\
-	"..\..\..\base\src\interfaces\irendererstatusreceiver.h"\
-	"..\..\..\base\src\interfaces\irendererstatussender.h"\
-	"..\..\..\base\src\interfaces\iserializedgraphsender.h"\
-	"..\..\..\base\src\interfaces\ismartcontrolvaluereceiver.h"\
-	"..\..\..\base\src\interfaces\ismartcontrolvaluesender.h"\
 	"..\..\..\base\src\interfaces\itask.h"\
-	"..\..\..\base\src\interfaces\itypeclassinfosender.h"\
-	"..\..\..\base\src\interfaces\itypeclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamesender.h"\
-	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclasssender.h"\
+	"..\..\..\base\src\net\domainserversocket.h"\
 	"..\..\..\base\src\net\idatalistener.h"\
 	"..\..\..\base\src\net\isender.h"\
 	"..\..\..\base\src\net\iserversocket.h"\
@@ -69,25 +25,10 @@
 	"..\..\..\base\src\net\tagger.h"\
 	"..\..\..\base\src\net\tagutils.h"\
 	"..\..\..\base\src\net\tcpserversocket.h"\
-	"..\..\..\base\src\netinterfaces\controlvaluereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\enginecontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\errorreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\graphdatareceivernet.h"\
-	"..\..\..\base\src\netinterfaces\graphnamereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\modelcontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\modelstatusreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassinforeceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassloadercontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassnamereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleconstructiondumbreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduledatareceivernet.h"\
-	"..\..\..\base\src\netinterfaces\modulestatisticsreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\renderercontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\rendererstatusreceivernet.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\configmanager.h"\
 	"..\..\..\base\src\utils\filesystem.h"\
 	"..\..\..\base\src\utils\ilogger.h"\
-	"..\..\..\config.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\dllloader\dllloader.h"\
 	"..\model\model.h"\
@@ -95,70 +36,12 @@
 	"..\renderer\renderer.h"\
 	".\bufferedsender.h"\
 	".\controller.h"\
-	".\engineconfig.h"\
 	".\netlogger.h"\
 	".\scheduler.h"\
 	
 
-.\engineconfig.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\base\src\utils\autoptr.h"\
-	"..\..\..\base\src\utils\configfile.h"\
-	"..\..\..\base\src\utils\filesystem.h"\
-	"..\..\..\base\src\utils\structreader.h"\
-	"..\..\..\config.h"\
-	".\engineconfig.h"\
-	
-
 .\main.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
-	"..\..\..\base\src\interfaces\icontrolvaluesender.h"\
-	"..\..\..\base\src\interfaces\ienginecontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\ienginecontrolsender.h"\
-	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
-	"..\..\..\base\src\interfaces\igraphdatareceiver.h"\
-	"..\..\..\base\src\interfaces\igraphdatasender.h"\
-	"..\..\..\base\src\interfaces\igraphnamereceiver.h"\
-	"..\..\..\base\src\interfaces\igraphnamesender.h"\
-	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\imodelcontrolsender.h"\
-	"..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\base\src\interfaces\imodelstatussender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolsender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclasssender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassspecreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassspecsender.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructiondumbsender.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructionsmartreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleconstructionsmartsender.h"\
-	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
-	"..\..\..\base\src\interfaces\imoduledatasender.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssender.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssmartreceiver.h"\
-	"..\..\..\base\src\interfaces\imodulestatisticssmartsender.h"\
-	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\irenderercontrolsender.h"\
-	"..\..\..\base\src\interfaces\irendererstatusreceiver.h"\
-	"..\..\..\base\src\interfaces\irendererstatussender.h"\
-	"..\..\..\base\src\interfaces\iserializedgraphsender.h"\
-	"..\..\..\base\src\interfaces\ismartcontrolvaluereceiver.h"\
-	"..\..\..\base\src\interfaces\ismartcontrolvaluesender.h"\
 	"..\..\..\base\src\interfaces\itask.h"\
-	"..\..\..\base\src\interfaces\itypeclassinfosender.h"\
-	"..\..\..\base\src\interfaces\itypeclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamesender.h"\
-	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclasssender.h"\
 	"..\..\..\base\src\net\idatalistener.h"\
 	"..\..\..\base\src\net\isender.h"\
 	"..\..\..\base\src\net\iserversocket.h"\
@@ -173,23 +56,8 @@
 	"..\..\..\base\src\net\tagger.h"\
 	"..\..\..\base\src\net\tagutils.h"\
 	"..\..\..\base\src\net\tcpserversocket.h"\
-	"..\..\..\base\src\netinterfaces\controlvaluereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\enginecontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\errorreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\graphdatareceivernet.h"\
-	"..\..\..\base\src\netinterfaces\graphnamereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\modelcontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\modelstatusreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassinforeceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassloadercontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassnamereceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleconstructiondumbreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduledatareceivernet.h"\
-	"..\..\..\base\src\netinterfaces\modulestatisticsreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\renderercontrolsendernet.h"\
-	"..\..\..\base\src\netinterfaces\rendererstatusreceivernet.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
-	"..\..\..\config.h"\
+	"..\..\..\base\src\utils\configmanager.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\dllloader\dllloader.h"\
 	"..\model\model.h"\
@@ -197,12 +65,10 @@
 	"..\renderer\renderer.h"\
 	".\bufferedsender.h"\
 	".\controller.h"\
-	".\engineconfig.h"\
 	".\scheduler.h"\
 	
 
 .\netlogger.cpp : \
-	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
 	"..\..\..\base\src\utils\ilogger.h"\
 	".\netlogger.h"\
 	

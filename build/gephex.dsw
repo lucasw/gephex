@@ -189,6 +189,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "chromakeymodule"="..\modules\src\chromakeymodule\chromakeymodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "color2numbermodule"="..\modules\src\color2numbermodule\color2numbermodule.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -263,6 +278,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name libmidi
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dplmodule"="..\modules\src\dplmodule\dplmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -509,6 +536,24 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name xfademodule
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dplmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name chromakeymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name noisemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name y4minmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name y4moutputmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ffmpegoutmodule
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -724,6 +769,18 @@ Package=<4>
 ###############################################################################
 
 Project: "envtype"="..\types\src\envtype\envtype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ffmpegoutmodule"="..\modules\src\ffmpegoutmodule\ffmpegoutmodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1080,6 +1137,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "libcolorconv"="..\modules\src\libcolorconv\libcolorconv.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "libdshow"="..\modules\src\libdshow\libdshow.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -1240,6 +1309,18 @@ Package=<4>
 ###############################################################################
 
 Project: "netinterfaces"="..\base\src\netinterfaces\netinterfaces.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "noisemodule"="..\modules\src\noisemodule\noisemodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1612,6 +1693,42 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "y4minmodule"="..\modules\src\y4minmodule\y4minmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libcolorconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "y4moutputmodule"="..\modules\src\yuv4mpeg2module\y4moutputmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libcolorconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libscale
     End Project Dependency
 }}}
 

@@ -35,7 +35,7 @@ void my_se_translator(unsigned int u, EXCEPTION_POINTERS* p);
 #include <signal.h>
 #endif
 
-#include "engineconfig.h"
+#include "configmanager.h"
 #include "controller.h"
 
 // this global variable is needed for the signal handling
@@ -146,7 +146,21 @@ const char* logo =
            << "[build time: \"" __DATE__ << " - " __TIME__ "\"]\n";
 }
 
-int main(int /*argc*/,char* /*argv[]*/)
+static std::string get_cfile_name()
+{
+#if defined(OS_WIN32)
+  return "../gephex.conf";
+#elif defined(OS_POSIX)
+  const char* HOME_STR = getenv("HOME");
+
+  if (HOME_STR == 0)
+    throw std::runtime_error("Could not read $HOME");
+
+  return std::string(HOME_STR) + "/.gephex/0.4/gephex.conf";
+#endif
+}
+
+int main(int argc, const char* argv[])
 {
   printWelcome();
   try
@@ -163,7 +177,113 @@ int main(int /*argc*/,char* /*argv[]*/)
 	throw std::runtime_error("Could not set control handler!"); 
 #endif
 
-      engine::EngineConfig config;
+      using namespace utils;
+
+      ConfigManager::ParamList params;
+
+      config_param_t::ParamValue def;
+
+      params.push_back(config_param_t("media_path",
+                                   config_param_t::STRING_PARAM,
+                                   "common",
+                                   "List of directories that contain "
+                                   "videos, images and fonts "
+                                   "(separated by ';')", 0));
+
+      params.push_back(config_param_t("graph_path",
+                                      config_param_t::STRING_PARAM,
+                                      "engine",
+                                      "List of directories that contain "
+                                      "gephex graph files (separated by ';')",
+                                      0));
+
+      params.push_back(config_param_t("module_path",
+                                   config_param_t::STRING_PARAM,
+                                   "engine",
+                                   "Directory that contains gephex modules",
+                                      0));
+
+      params.push_back(config_param_t("type_path",
+                                   config_param_t::STRING_PARAM,
+                                   "engine",
+                                   "Directory that contains gephex types",
+                                      0));
+
+      params.push_back(config_param_t("ipc_type",
+                                   config_param_t::STRING_PARAM,
+                                   "engine",
+                                   "Communication mechanism (inet, unix, or "
+                                   "namedpipe)", 0));
+
+      params.push_back(config_param_t("ipc_port",
+                                   config_param_t::INT_PARAM,
+                                   "engine",
+                                   "Port on which the engine listens for the "
+                                   "gui", 0));
+
+      params.push_back(config_param_t("renderer_interval",
+                                   config_param_t::INT_PARAM,
+                                   "engine",
+                                   "The interval between two updates of the "
+                                   "rendered graph (in ms)", 0));
+
+
+      params.push_back(config_param_t("net_interval",
+                                   config_param_t::INT_PARAM,
+                                   "engine",
+                                   "The interval between polling the "
+                                   "connection the gui (in ms)", 0));
+
+      def.s = "/tmp/gephex_socket";
+      params.push_back(config_param_t("ipc_unix_node_prefix",
+                                      config_param_t::STRING_PARAM,
+                                      "engine",
+                                      "Path and prefix of the unix nodes "
+                                      "in the filesystem (unix only)", &def));
+
+
+      def.b = false;
+      params.push_back(config_param_t("headless",
+                                      config_param_t::BOOL_PARAM,
+                                      "engine",
+                                      "Start without GUI, load all "
+                                      "available modules", &def));
+
+      params.push_back(config_param_t("autostart",
+                                      config_param_t::BOOL_PARAM,
+                                      "engine",
+                                      "Automatically start the "
+                                      "rendering", &def));
+
+      def.s = "_default_";
+      params.push_back(config_param_t("render_graph_id",
+                                      config_param_t::STRING_PARAM,
+                                      "engine",
+                                      "The graph that is initially "
+                                      "loaded", &def));
+
+      params.push_back(config_param_t("render_snap_id",
+                                      config_param_t::STRING_PARAM,
+                                      "engine",
+                                      "The snapshot that is initially "
+                                      "active", &def));
+
+      utils::ConfigManager config(get_cfile_name(), argc, argv, params);
+
+      // This is a hack to communicate the media path to
+      // loaded modules.
+      static const char* GEPHEX_MEDIA_PATH = "GEPHEX_MEDIA_PATH";
+      std::string media_path = config.get_string_param("media_path");
+
+#if defined(OS_POSIX)
+      int ret = setenv(GEPHEX_MEDIA_PATH, media_path.c_str(), 1);
+      if (ret == -1)
+#elif defined(OS_WIN32)
+      BOOL ret = SetEnvironmentVariable(GEPHEX_MEDIA_PATH,
+                                        media_path.c_str());
+      if (ret == 0)
+#endif
+        throw std::runtime_error("Could not set GEPHEX_MEDIA_PATH");
 
       engine::Controller ctrl(config);
       s_controller = &ctrl; // publish for signalhandling

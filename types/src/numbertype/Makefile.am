@@ -1,7 +1,7 @@
 EXTRA_DIST = numbertype.dsp numbertype.mak numbertype.dep numbertype.def
 
 includedir = @includedir@/gephex/types
-libdir = @libdir@/gephex/types
+libdir = @gphx_type_lib_dir@
 INCLUDES  = -I @srcdir@/../../../engine/src/engine \
 	    -I @srcdir@/../../../util/include
 

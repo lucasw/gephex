@@ -119,10 +119,6 @@ SOURCE=.\graphnameview.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\guiconfig.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\hidebutton.cpp
 # End Source File
 # Begin Source File
@@ -200,10 +196,6 @@ SOURCE=.\controldispatcher.h
 # Begin Source File
 
 SOURCE=.\datareceiverwrapper.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\guiconfig.h
 # End Source File
 # Begin Source File
 

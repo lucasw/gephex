@@ -117,40 +117,27 @@ void ls_scale32m_adjust(uint_32* dst, int dwidth, int dheight,
   uint_32 x_a, y_a;
   uint_32 A,B;
   double deltax=.0, deltay=.0;
-  int dirx, diry;
+  const int dirx = mirrorx ? -1 : 1;
+  const int diry = mirrory ? dwidth : -dwidth;
   uint_32* current = dst;
 
   assert (dwidth >= 0 && dheight >= 0);
 
   if (mirrorx)
-    {
-      dirx = -1;
-      current += dwidth;
-    }
-  else
-    {
-      dirx = 1;
-    }
+    current += dwidth;
       
   if (mirrory)
-    {
-      diry = -dwidth;
-      current += (dheight-1)*dwidth;
-    }
-  else
-    {
-      diry = dwidth;
-    }
+    current += (dheight-1)*dwidth;
 
   deltax = (double)swidth  / (double)dwidth;
   deltay = (double)sheight / (double)dheight;
 
-  A = (uint_32) (65536.*deltax);
-  B = (uint_32) (65536.*deltay);
+  A = (uint_32) (65536 * deltax);
+  B = (uint_32) (65536 * deltay);
 
   y_a = 0;
 
-  for (y = dheight; y != 0; --y)
+  for (y = dheight; y != 0; --y, y_a += B, current += diry)
     {
       int x;
       const uint_32* src_base;
@@ -159,16 +146,12 @@ void ls_scale32m_adjust(uint_32* dst, int dwidth, int dheight,
       x_a = 0;		
       src_base = src + (y_a >> 16) * swidth;
 
-      for (x = dwidth; x != 0; --x)
+      for (x = dwidth; x != 0; --x, x_a += A, cx += dirx)
         {			
           const uint_32* src_ptr = src_base + (x_a >> 16);
           apply_pal(cx, src_ptr, pal);
           //APPLY_PAL(*cx, src_col, pal);
-          x_a += A;
-          cx += dirx;
         }
-      y_a += B;
-      current += diry;
     }
 }
 
@@ -182,7 +165,8 @@ void ls_scale32m(uint_32* dst, int dwidth, int dheight,
   uint_32 x_a, y_a;
   uint_32 A,B;
   double deltax=.0, deltay=.0;
-  int dirx, diry;
+  const int dirx = mirrorx ? -1 : 1;
+  const int diry = mirrory ? -dwidth : dwidth;
   uint_32* current = dst;
 
   assert (dwidth >= 0 && dheight >= 0);
@@ -190,38 +174,24 @@ void ls_scale32m(uint_32* dst, int dwidth, int dheight,
   if (dwidth == swidth && dheight == sheight && !mirrorx && !mirrory)
     {
       memcpy(dst, src, dwidth*dheight*sizeof(uint_32));
-	  return;
+      return;
     }
 
   if (mirrorx)
-    {
-      dirx     = -1;
-      current += dwidth;
-    }
-  else
-    {
-      dirx     = 1;
-    }
+    current += dwidth;
       
   if (mirrory)
-    {
-      diry = -dwidth;
-      current += (dheight-1)*dwidth;
-    }
-  else
-    {
-      diry = dwidth;
-    }
+    current += (dheight-1)*dwidth;
 
   deltax = (double)swidth  / (double)dwidth;
   deltay = (double)sheight / (double)dheight;
 
-  A = (uint_32) (65536.*deltax);
-  B = (uint_32) (65536.*deltay);
+  A = (uint_32) (65536 * deltax);
+  B = (uint_32) (65536 * deltay);
 
   y_a = 0;
 
-  for (y = dheight; y != 0; --y)
+  for (y = dheight; y != 0; --y, y_a += B, current += diry)
     {
       int x;
       const uint_32* src_base;
@@ -230,14 +200,8 @@ void ls_scale32m(uint_32* dst, int dwidth, int dheight,
       x_a = 0;		
       src_base = src + (y_a >> 16) * swidth;
       
-      for (x = dwidth; x != 0; --x)
-        {			
-          *cx = src_base[x_a >> 16];
-          x_a += A;
-          cx += dirx;
-        }
-      y_a += B;
-      current += diry;
+      for (x = dwidth; x != 0; --x, x_a += A, cx += dirx)
+        *cx = src_base[x_a >> 16];
     }
 }
 
@@ -257,18 +221,18 @@ void ls_scale32(uint_32* dst, int dwidth, int dheight,
   if (dwidth == swidth && dheight == sheight)
     {
       memcpy(dst, src, dwidth*dheight*sizeof(uint_32));
-	  return;
+      return;
     }
 
   deltax = (double)swidth  / (double)dwidth;
   deltay = (double)sheight / (double)dheight;
 
-  A = (uint_32) (65536.*deltax);
-  B = (uint_32) (65536.*deltay);
+  A = (uint_32) (65536 * deltax);
+  B = (uint_32) (65536 * deltay);
 
   y_a = 0;
 
-  for (y = dheight; y != 0; --y)
+  for (y = dheight; y != 0; --y, y_a += B, current += dwidth)
     {
       int x;
       const uint_32* src_base;
@@ -277,14 +241,8 @@ void ls_scale32(uint_32* dst, int dwidth, int dheight,
       x_a = 0;		
       src_base = src + (y_a >> 16) * swidth;
       
-      for (x = dwidth; x != 0; --x)
-        {			
-          *cx = src_base[x_a >> 16];
-          x_a += A;
-          ++cx;
-        }
-      y_a += B;
-      current += dwidth;
+      for (x = dwidth; x != 0; --x, x_a += A, ++cx)
+        *cx = src_base[x_a >> 16];
     }
 }
 

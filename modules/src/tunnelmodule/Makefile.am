@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -26,9 +26,9 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
 		-I @srcdir@/../../../types/src/numbertype \
 		-I @srcdir@/../../../types/src/positiontype \
+		-I @srcdir@/../../../types/src/stringtype \
 		-I @srcdir@/../../../types/src/framebuffertype
 
- 
 
 DISTCLEANFILES = tunnelmodule.h tunnelmodule_auto.c
 EXTRA_DIST = tunnelmodule.dsp tunnelmodule.mak tunnelmodule.dep

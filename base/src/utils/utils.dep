@@ -1,7 +1,6 @@
 # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von utils.mak
 
 .\buffer.cpp : \
-	"..\..\..\config.h"\
 	".\buffer.h"\
 	
 
@@ -27,8 +26,15 @@
 	".\structreader.h"\
 	
 
+.\configmanager.cpp : \
+	".\autoptr.h"\
+	".\configfile.h"\
+	".\configmanager.h"\
+	".\structreader.h"\
+	
+
 .\filesystem.cpp : \
-	"..\..\..\config.h"\
+	"..\..\..\util\include\compatibility\unistd.h"\
 	".\filesystem.h"\
 	
 
@@ -37,14 +43,11 @@
 	
 
 .\sharedlibrary.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\config.h"\
 	".\sharedlibrary.h"\
 	
 
 .\spawn.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\config.h"\
+	"..\..\..\util\include\compatibility\unistd.h"\
 	".\spawn.h"\
 	
 
@@ -82,8 +85,6 @@
 	
 
 .\timing.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\config.h"\
 	".\timing.h"\
 	
 

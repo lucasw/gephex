@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 noinst_LIBRARIES = libgrid.a
 libgrid_a_SOURCES = libgrid.c libgrid.h
 

@@ -40,5 +40,16 @@ typedef signed char int_8;
 #define UINT32_MAX UINT_MAX
 #define INT32_MAX INT_MAX
 
+#if _MSC_VER == 1200
+typedef unsigned int   uint32_t;
+typedef signed int     int32_t;
+typedef unsigned short uint16_t;
+typedef signed short   int16_t;
+typedef unsigned char  uint8_t;
+typedef signed char    int8_t;
+#else
+#include <stdint.h>
+#endif
+
 #endif
 

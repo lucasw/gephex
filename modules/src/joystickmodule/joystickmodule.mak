@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "joystickmodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -58,48 +62,14 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/numbertype" /I "../../../types/src/miditype" /I "../../../engine/src/engine" /I "../../../util/include" /I "../../" /I "../libmidi" /I "../../../util/src/libjoystick" /I "../../../" /D "_WINDOWS" /D "_USRDLL" /D "joystickmodule_EXPORTS" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\joystickmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../" /I "../../../types/src/stringtype" /I "../../../types/src/miditype" /I "../libmidi" /I "../../../util/src/libjoystick" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include" /I "../../../" /D "_WINDOWS" /D "_USRDLL" /D "joystickmodule_EXPORTS" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\joystickmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\joystickmodule.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\joystickmodule.pdb" /machine:I386 /def:".\joystickmodule.def" /out:"$(OUTDIR)\joystickmodule.dll" /implib:"$(OUTDIR)\joystickmodule.lib" 
+LINK32_FLAGS=sdl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\joystickmodule.pdb" /machine:I386 /def:".\joystickmodule.def" /out:"$(OUTDIR)\joystickmodule.dll" /implib:"$(OUTDIR)\joystickmodule.lib" /libpath:"$(SDL_DIR)/lib" 
 DEF_FILE= \
 	".\joystickmodule.def"
 LINK32_OBJS= \
@@ -137,11 +107,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : ".\joystickmodule_auto.c" ".\joystickmodule.h" ".\joystickmodule.def" "..\..\..\config.h" "$(OUTDIR)\joystickmodule.dll"
+ALL : "$(OUTDIR)\joystickmodule.dll"
 
 !ELSE 
 
-ALL : "libjoystick - Win32 Debug" ".\joystickmodule_auto.c" ".\joystickmodule.h" ".\joystickmodule.def" "..\..\..\config.h" "$(OUTDIR)\joystickmodule.dll"
+ALL : "libjoystick - Win32 Debug" "$(OUTDIR)\joystickmodule.dll"
 
 !ENDIF 
 
@@ -159,16 +129,46 @@ CLEAN :
 	-@erase "$(OUTDIR)\joystickmodule.ilk"
 	-@erase "$(OUTDIR)\joystickmodule.lib"
 	-@erase "$(OUTDIR)\joystickmodule.pdb"
-	-@erase "..\..\..\config.h"
-	-@erase "joystickmodule.def"
-	-@erase "joystickmodule.h"
-	-@erase "joystickmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/miditype" /I "../libmidi" /I "../../../util/src/libjoystick" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include" /I "../../../" /D "_WINDOWS" /D "_USRDLL" /D "joystickmodule_EXPORTS" /D "_DEBUG" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\joystickmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I "../../../types/src/miditype" /I "../libmidi" /I "../../../util/src/libjoystick" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include" /I "../../../" /D "_WINDOWS" /D "_USRDLL" /D "joystickmodule_EXPORTS" /D "_DEBUG" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\joystickmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\joystickmodule.bsc" 
+BSC32_SBRS= \
+	
+LINK32=link.exe
+LINK32_FLAGS=sdl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\joystickmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\joystickmodule.def" /out:"$(OUTDIR)\joystickmodule.dll" /implib:"$(OUTDIR)\joystickmodule.lib" /pdbtype:sept /libpath:"$(SDL_DIR)/lib" 
+DEF_FILE= \
+	".\joystickmodule.def"
+LINK32_OBJS= \
+	"$(INTDIR)\joystickmodule.obj" \
+	"$(INTDIR)\joystickmodule_auto.obj" \
+	"..\..\..\util\src\libjoystick\Debug\libjoystick.lib"
+
+"$(OUTDIR)\joystickmodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+TargetPath=.\Debug\joystickmodule.dll
+SOURCE="$(InputPath)"
+PostBuild_Desc=Kopiere Dll...
+DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
+
+ALL : $(DS_POSTBUILD_DEP)
+
+# Begin Custom Macros
+OutDir=.\Debug
+# End Custom Macros
+
+$(DS_POSTBUILD_DEP) : "libjoystick - Win32 Debug" "$(OUTDIR)\joystickmodule.dll"
+   copy .\Debug\joystickmodule.dll ..\..\..\dlls\modules
+	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -199,44 +199,6 @@ CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/miditype" /
    $(CPP) @<<
    $(CPP_PROJ) $< 
 <<
-
-MTL=midl.exe
-MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\joystickmodule.bsc" 
-BSC32_SBRS= \
-	
-LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\joystickmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\joystickmodule.def" /out:"$(OUTDIR)\joystickmodule.dll" /implib:"$(OUTDIR)\joystickmodule.lib" /pdbtype:sept 
-DEF_FILE= \
-	".\joystickmodule.def"
-LINK32_OBJS= \
-	"$(INTDIR)\joystickmodule.obj" \
-	"$(INTDIR)\joystickmodule_auto.obj" \
-	"..\..\..\util\src\libjoystick\Debug\libjoystick.lib"
-
-"$(OUTDIR)\joystickmodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-    $(LINK32) @<<
-  $(LINK32_FLAGS) $(LINK32_OBJS)
-<<
-
-TargetPath=.\Debug\joystickmodule.dll
-SOURCE="$(InputPath)"
-PostBuild_Desc=Kopiere Dll...
-DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
-
-ALL : $(DS_POSTBUILD_DEP)
-
-# Begin Custom Macros
-OutDir=.\Debug
-# End Custom Macros
-
-$(DS_POSTBUILD_DEP) : "libjoystick - Win32 Debug" ".\joystickmodule_auto.c" ".\joystickmodule.h" ".\joystickmodule.def" "..\..\..\config.h" "$(OUTDIR)\joystickmodule.dll"
-   copy .\Debug\joystickmodule.dll ..\..\..\dlls\modules
-	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
-
-!ENDIF 
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"

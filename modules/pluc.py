@@ -909,15 +909,15 @@ void update(void* instance)
         
 
 def createAMFile(file, fileprefix, inputs, outputs):
-        template = """libdir = @libdir@/gephex/modules
+        template = """libdir = @libdir@/gephex-0.4/modules
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
 XXX_NAME_XXX_auto.c: XXX_NAME_XXX.spec XXX_NAME_XXX.h
-        $(PLUC) c @srcdir@/XXX_NAME_XXX.spec
+	$(PLUC) c @srcdir@/XXX_NAME_XXX.spec
 
 XXX_NAME_XXX.h: XXX_NAME_XXX.spec
-        $(PLUC) h @srcdir@/XXX_NAME_XXX.spec
+	$(PLUC) h @srcdir@/XXX_NAME_XXX.spec
 
 lib_LTLIBRARIES = XXX_NAME_XXX.la
 
@@ -936,6 +936,9 @@ XXX_TYPE_INCLUDES_XXX
 
 
 DISTCLEANFILES = XXX_NAME_XXX.h XXX_NAME_XXX_auto.c
+
+#EXTRA_DIST = XXX_NAME_XXX.dsp XXX_NAME_XXX.mak XXX_NAME_XXX.dep
+
 """
         usedtypes = createUsedTypes(inputs,outputs)
         typedirs = map(lambda y: string.replace(y,'typ_',''),
@@ -1047,7 +1050,7 @@ LINK32=link.exe
 TargetPath=.\Release\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "X_NAME_X - Win32 Debug"
@@ -1080,7 +1083,7 @@ LINK32=link.exe
 TargetPath=.\Debug\X_NAME_X.dll
 SOURCE="$(InputPath)"
 PostBuild_Desc=Kopiere Dll...
-PostBuild_Cmds=mkdir ..\..\..\dlls\modules	copy $(TargetPath) ..\..\..\dlls\modules
+PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # End Special Build Tool
 !ENDIF 
 

@@ -1,0 +1,13 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von noisemodule.mak
+
+.\noisemodule.cpp : \
+	"..\..\..\util\include\basic_types.h"\
+	"..\..\..\util\src\misc\crandgen.h"\
+	
+
+!IF  "$(CFG)" == "noisemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "noisemodule - Win32 Debug"
+
+!ENDIF 
+

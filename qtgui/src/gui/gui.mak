@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "gui - Win32 Release"
 
 OUTDIR=.\Release
@@ -35,11 +39,11 @@ OutDir=.\Release
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\gephex-gui.exe"
+ALL : "..\..\..\config.h" "$(OUTDIR)\gephex-gui.exe"
 
 !ELSE 
 
-ALL : "typeviews - Win32 Release" "guimodel - Win32 Release" "editor - Win32 Release" "dialogs - Win32 Release" "base - Win32 Release" "netinterfaces - Win32 Release" "net - Win32 Release" "interfaces - Win32 Release" "utils - Win32 Release" "$(OUTDIR)\gephex-gui.exe"
+ALL : "typeviews - Win32 Release" "guimodel - Win32 Release" "editor - Win32 Release" "dialogs - Win32 Release" "base - Win32 Release" "netinterfaces - Win32 Release" "net - Win32 Release" "interfaces - Win32 Release" "utils - Win32 Release" "..\..\..\config.h" "$(OUTDIR)\gephex-gui.exe"
 
 !ENDIF 
 
@@ -53,7 +57,6 @@ CLEAN :
 	-@erase "$(INTDIR)\controlwidget_moc.obj"
 	-@erase "$(INTDIR)\graphnameview.obj"
 	-@erase "$(INTDIR)\graphnameview_moc.obj"
-	-@erase "$(INTDIR)\guiconfig.obj"
 	-@erase "$(INTDIR)\hidebutton.obj"
 	-@erase "$(INTDIR)\hidebutton_moc.obj"
 	-@erase "$(INTDIR)\hidebuttonconstructor.obj"
@@ -84,46 +87,13 @@ CLEAN :
 	-@erase "$(INTDIR)\vjmainwindow.obj"
 	-@erase "$(INTDIR)\vjmainwindow_moc.obj"
 	-@erase "$(OUTDIR)\gephex-gui.exe"
+	-@erase "..\..\..\config.h"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I "../" /I "$(QTDIR)/include" /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_WINDOWS" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /D "VERBOSE_ENGINE" /D "NDEBUG" /D "WIN32" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 RSC_PROJ=/l 0x407 /fo"$(INTDIR)\Skript1.res" /d "NDEBUG" 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\gui.bsc" 
@@ -135,7 +105,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\connectionwidget.obj" \
 	"$(INTDIR)\controlwidget.obj" \
 	"$(INTDIR)\graphnameview.obj" \
-	"$(INTDIR)\guiconfig.obj" \
 	"$(INTDIR)\hidebutton.obj" \
 	"$(INTDIR)\hidebuttonconstructor.obj" \
 	"$(INTDIR)\inputplugwidget.obj" \
@@ -191,7 +160,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Release
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "typeviews - Win32 Release" "guimodel - Win32 Release" "editor - Win32 Release" "dialogs - Win32 Release" "base - Win32 Release" "netinterfaces - Win32 Release" "net - Win32 Release" "interfaces - Win32 Release" "utils - Win32 Release" "$(OUTDIR)\gephex-gui.exe"
+$(DS_POSTBUILD_DEP) : "typeviews - Win32 Release" "guimodel - Win32 Release" "editor - Win32 Release" "dialogs - Win32 Release" "base - Win32 Release" "netinterfaces - Win32 Release" "net - Win32 Release" "interfaces - Win32 Release" "utils - Win32 Release" "..\..\..\config.h" "$(OUTDIR)\gephex-gui.exe"
    if not exist ..\..\..\bin mkdir ..\..\..\bin
 	copy    .\Release\gephex-gui.exe   ..\..\..\bin
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
@@ -224,7 +193,6 @@ CLEAN :
 	-@erase "$(INTDIR)\controlwidget_moc.obj"
 	-@erase "$(INTDIR)\graphnameview.obj"
 	-@erase "$(INTDIR)\graphnameview_moc.obj"
-	-@erase "$(INTDIR)\guiconfig.obj"
 	-@erase "$(INTDIR)\hidebutton.obj"
 	-@erase "$(INTDIR)\hidebutton_moc.obj"
 	-@erase "$(INTDIR)\hidebuttonconstructor.obj"
@@ -263,42 +231,8 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "../" /I "$(QTDIR)/include" /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_WINDOWS" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /D "_DEBUG" /D "WIN32" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 RSC_PROJ=/l 0x407 /fo"$(INTDIR)\Skript1.res" /d "_DEBUG" 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\gui.bsc" 
@@ -310,7 +244,6 @@ LINK32_OBJS= \
 	"$(INTDIR)\connectionwidget.obj" \
 	"$(INTDIR)\controlwidget.obj" \
 	"$(INTDIR)\graphnameview.obj" \
-	"$(INTDIR)\guiconfig.obj" \
 	"$(INTDIR)\hidebutton.obj" \
 	"$(INTDIR)\hidebuttonconstructor.obj" \
 	"$(INTDIR)\inputplugwidget.obj" \
@@ -373,6 +306,36 @@ $(DS_POSTBUILD_DEP) : "typeviews - Win32 Debug" "guimodel - Win32 Debug" "editor
 
 !ENDIF 
 
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("gui.dep")
@@ -391,7 +354,7 @@ SOURCE=.\connectionwidget.cpp
 
 SOURCE=.\controlwidget.cpp
 
-"$(INTDIR)\controlwidget.obj" : $(SOURCE) "$(INTDIR)" ".\typeview.h" ".\controlwidget.h"
+"$(INTDIR)\controlwidget.obj" : $(SOURCE) "$(INTDIR)" ".\controlwidget.h" ".\typeview.h"
 
 
 SOURCE=.\graphnameview.cpp
@@ -399,14 +362,9 @@ SOURCE=.\graphnameview.cpp
 "$(INTDIR)\graphnameview.obj" : $(SOURCE) "$(INTDIR)" ".\graphnameview.h"
 
 
-SOURCE=.\guiconfig.cpp
-
-"$(INTDIR)\guiconfig.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
-
-
 SOURCE=.\hidebutton.cpp
 
-"$(INTDIR)\hidebutton.obj" : $(SOURCE) "$(INTDIR)" ".\inputplugwidget.h" ".\hidebutton.h" ".\plugwidget.h"
+"$(INTDIR)\hidebutton.obj" : $(SOURCE) "$(INTDIR)" ".\hidebutton.h" ".\inputplugwidget.h" ".\plugwidget.h"
 
 
 SOURCE=.\hidebuttonconstructor.cpp
@@ -421,7 +379,7 @@ SOURCE=.\inputplugwidget.cpp
 
 SOURCE=.\main.cpp
 
-"$(INTDIR)\main.obj" : $(SOURCE) "$(INTDIR)" ".\vjmainwindow.h" "..\..\..\config.h"
+"$(INTDIR)\main.obj" : $(SOURCE) "$(INTDIR)" ".\vjmainwindow.h"
 
 
 SOURCE=.\modulebutton.cpp
@@ -436,17 +394,17 @@ SOURCE=.\moduleclassview.cpp
 
 SOURCE=.\nodeproperty.cpp
 
-"$(INTDIR)\nodeproperty.obj" : $(SOURCE) "$(INTDIR)" ".\plugwidget.h" ".\inputplugwidget.h"
+"$(INTDIR)\nodeproperty.obj" : $(SOURCE) "$(INTDIR)" ".\inputplugwidget.h" ".\plugwidget.h"
 
 
 SOURCE=.\nodewidget.cpp
 
-"$(INTDIR)\nodewidget.obj" : $(SOURCE) "$(INTDIR)" ".\plugwidget.h" ".\inputplugwidget.h" ".\nodewidget.h" ".\outputplugwidget.h"
+"$(INTDIR)\nodewidget.obj" : $(SOURCE) "$(INTDIR)" ".\nodewidget.h" ".\inputplugwidget.h" ".\outputplugwidget.h" ".\plugwidget.h"
 
 
 SOURCE=.\outputplugwidget.cpp
 
-"$(INTDIR)\outputplugwidget.obj" : $(SOURCE) "$(INTDIR)" ".\plugwidget.h" ".\outputplugwidget.h"
+"$(INTDIR)\outputplugwidget.obj" : $(SOURCE) "$(INTDIR)" ".\outputplugwidget.h" ".\plugwidget.h"
 
 
 SOURCE=.\picswitch.cpp
@@ -461,7 +419,7 @@ SOURCE=.\plugwidget.cpp
 
 SOURCE=.\propertywidget.cpp
 
-"$(INTDIR)\propertywidget.obj" : $(SOURCE) "$(INTDIR)" ".\typeview.h" ".\propertywidget.h"
+"$(INTDIR)\propertywidget.obj" : $(SOURCE) "$(INTDIR)" ".\propertywidget.h" ".\typeview.h"
 
 
 SOURCE=.\propertywidgetconstructor.cpp
@@ -476,12 +434,12 @@ SOURCE=.\typeview.cpp
 
 SOURCE=.\typeviewfactory.cpp
 
-"$(INTDIR)\typeviewfactory.obj" : $(SOURCE) "$(INTDIR)" ".\typeview.h" "..\..\..\config.h"
+"$(INTDIR)\typeviewfactory.obj" : $(SOURCE) "$(INTDIR)" ".\typeview.h"
 
 
 SOURCE=.\vjmainwindow.cpp
 
-"$(INTDIR)\vjmainwindow.obj" : $(SOURCE) "$(INTDIR)" ".\vjmainwindow.h" "..\..\..\config.h" ".\graphnameview.h" ".\picswitch.h" ".\moduleclassview.h"
+"$(INTDIR)\vjmainwindow.obj" : $(SOURCE) "$(INTDIR)" ".\vjmainwindow.h" ".\moduleclassview.h" ".\graphnameview.h" ".\picswitch.h"
 
 
 SOURCE=.\controlwidget.h
@@ -858,67 +816,67 @@ InputName=vjmainwindow
 
 SOURCE=.\controlwidget_moc.cpp
 
-"$(INTDIR)\controlwidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\controlwidget.h"
+"$(INTDIR)\controlwidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\graphnameview_moc.cpp
 
-"$(INTDIR)\graphnameview_moc.obj" : $(SOURCE) "$(INTDIR)" ".\graphnameview.h"
+"$(INTDIR)\graphnameview_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\hidebutton_moc.cpp
 
-"$(INTDIR)\hidebutton_moc.obj" : $(SOURCE) "$(INTDIR)" ".\hidebutton.h"
+"$(INTDIR)\hidebutton_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\inputplugwidget_moc.cpp
 
-"$(INTDIR)\inputplugwidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\inputplugwidget.h" ".\plugwidget.h"
+"$(INTDIR)\inputplugwidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\modulebutton_moc.cpp
 
-"$(INTDIR)\modulebutton_moc.obj" : $(SOURCE) "$(INTDIR)" ".\modulebutton.h"
+"$(INTDIR)\modulebutton_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\moduleclassview_moc.cpp
 
-"$(INTDIR)\moduleclassview_moc.obj" : $(SOURCE) "$(INTDIR)" ".\moduleclassview.h"
+"$(INTDIR)\moduleclassview_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\nodewidget_moc.cpp
 
-"$(INTDIR)\nodewidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\nodewidget.h"
+"$(INTDIR)\nodewidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\outputplugwidget_moc.cpp
 
-"$(INTDIR)\outputplugwidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\outputplugwidget.h" ".\plugwidget.h"
+"$(INTDIR)\outputplugwidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\picswitch_moc.cpp
 
-"$(INTDIR)\picswitch_moc.obj" : $(SOURCE) "$(INTDIR)" ".\picswitch.h"
+"$(INTDIR)\picswitch_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\plugwidget_moc.cpp
 
-"$(INTDIR)\plugwidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\plugwidget.h"
+"$(INTDIR)\plugwidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\propertywidget_moc.cpp
 
-"$(INTDIR)\propertywidget_moc.obj" : $(SOURCE) "$(INTDIR)" ".\propertywidget.h"
+"$(INTDIR)\propertywidget_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\typeview_moc.cpp
 
-"$(INTDIR)\typeview_moc.obj" : $(SOURCE) "$(INTDIR)" ".\typeview.h"
+"$(INTDIR)\typeview_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\vjmainwindow_moc.cpp
 
-"$(INTDIR)\vjmainwindow_moc.obj" : $(SOURCE) "$(INTDIR)" ".\vjmainwindow.h"
+"$(INTDIR)\vjmainwindow_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\Skript1.rc

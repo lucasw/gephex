@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 noinst_LIBRARIES = libmidi.a
 libmidi_a_SOURCES = libmidi.c \
 		    midiutil.c \

@@ -29,19 +29,19 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[0.5 0.5] } ";
   break;
   case 3:
-    return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
-  break;
-  case 4:
     return "input_spec { type=typ_NumberType id=xres const=true strong_dependency=true default=640 } ";
   break;
-  case 5:
+  case 4:
     return "input_spec { type=typ_NumberType id=yres const=true strong_dependency=true default=480 } ";
   break;
-  case 6:
+  case 5:
     return "input_spec { type=typ_NumberType id=d const=true strong_dependency=true default=0.5 } ";
   break;
-  case 7:
+  case 6:
     return "input_spec { type=typ_NumberType id=shading const=true strong_dependency=true default=0 } ";
+  break;
+  case 7:
+    return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
  }
  return 0;
@@ -98,19 +98,19 @@ int setInput(void* instance,int index,void* typePointer)
    inst->in_pos = (PositionType *) typePointer;
   break;
   case 3:
-   inst->in_b = (FrameBufferType *) typePointer;
-  break;
-  case 4:
    inst->in_xres = (NumberType *) typePointer;
   break;
-  case 5:
+  case 4:
    inst->in_yres = (NumberType *) typePointer;
   break;
-  case 6:
+  case 5:
    inst->in_d = (NumberType *) typePointer;
   break;
-  case 7:
+  case 6:
    inst->in_shading = (NumberType *) typePointer;
+  break;
+  case 7:
+   inst->in_b = (FrameBufferType *) typePointer;
   break;
  } //switch(index) 
  return 1;
@@ -128,7 +128,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Plane] group=[Effects] inputs=[8 Motion{widget_type=[unboundednumber_selector] } Rotation{lower_bound=[-180] widget_type=[number_selector] step_size=[0.5] higher_bound=[180] } Position Image Size(X){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Size(Y){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Distance{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] } Shading{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[10] hidden=[true] display_format=[fixed] help=[Degree of Shading] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Plane] group=[Effects] inputs=[8 Motion{precision=[2] widget_type=[unboundednumber_selector] display_format=[fixed] } Z-Rotation{lower_bound=[0] precision=[2] widget_type=[number_selector] step_size=[0.5] higher_bound=[90] display_format=[fixed] } Position{hidden=[true] } Size(X){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Size(Y){lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1024] hidden=[true] display_format=[fixed] help=[Size of output in pixels] } Plane-Distance{lower_bound=[0.1] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] hidden=[true] } Shading{lower_bound=[0] precision=[2] widget_type=[number_selector] step_size=[0.05] higher_bound=[1] hidden=[true] display_format=[fixed] help=[Degree of Shading] } Image ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(planemodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -157,33 +157,12 @@ int getInfo(char* buf,int bufLen)
 }
 
 
-static void* attributes[8];
-
-void initAttributes()
-{
-        static FrameBufferAttributes attr3;
-
-        int i = 0;
-
-        for (i = 0; i < 8; ++i)
-                attributes[i] = 0;
-
-        attr3.xsize = 256; attr3.ysize = 256;
-	attributes[3] = &attr3;  
-
-}
-
-void* getInputAttributes(int index)
-{
-        return attributes[index];
-}
-        
 
 int initSO(log2T log_function) 
 {
         s_log_function = log_function;
         
-        initAttributes();
+        
 
         return init(logger);
 }

@@ -218,5 +218,36 @@ BuildCmds= \
 
 SOURCE=.\imgarithmodule.xpm
 # End Source File
+# Begin Source File
+
+SOURCE=.\imgarithmodule_x86.asm
+
+!IF  "$(CFG)" == "imgarithmodule - Win32 Release"
+
+# Begin Custom Build - assembling $(InputPath)
+OutDir=.\Release
+InputPath=.\imgarithmodule_x86.asm
+InputName=imgarithmodule_x86
+
+"$(OutDir)/$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "imgarithmodule - Win32 Debug"
+
+# Begin Custom Build - assembling $(InputPath)
+OutDir=.\Debug
+InputPath=.\imgarithmodule_x86.asm
+InputName=imgarithmodule_x86
+
+"$(OutDir)/$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
 # End Target
 # End Project

@@ -22,14 +22,6 @@
 
 #include "overlaymodule.h"
 
-//TODO: some better test for visual 6
-#ifndef _WIN32
-#include <inttypes.h>
-#else
-typedef uint_8 uint8_t;
-typedef uint_32 uint32_t;
-#endif
-
 #include <cassert>
 
 static logT s_log;
@@ -115,7 +107,7 @@ void update(void* instance)
      uint32_t* in_control_ptr=in_control->data;
      uint32_t* out_r_ptr=inst->out_r->data;
      
-     int tolerance=trim_int(inst->in_tolerance->number*255,0,255);
+     int tolerance=trim_int(inst->in_tolerance->number*255 + .5 ,0,255);
      
      // the three frames must have the same attributes
   {
@@ -134,7 +126,7 @@ void update(void* instance)
      
      while(in_1_ptr!=((in_1->data)+size))
   {
-    uint8_t* color=reinterpret_cast<uint_8*>(in_control_ptr);
+    uint8_t* color=reinterpret_cast<uint8_t*>(in_control_ptr);
     
     if(color[1]<tolerance)
       {

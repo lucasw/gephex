@@ -56,7 +56,8 @@ libutils_a_AR = $(AR) $(ARFLAGS)
 libutils_a_LIBADD =
 am_libutils_a_OBJECTS = buffer.$(OBJEXT) bufferstream.$(OBJEXT) \
 	bufferutils.$(OBJEXT) circularbuffer.$(OBJEXT) \
-	configfile.$(OBJEXT) filesystem.$(OBJEXT) itokenizer.$(OBJEXT) \
+	configfile.$(OBJEXT) configmanager.$(OBJEXT) \
+	filesystem.$(OBJEXT) itokenizer.$(OBJEXT) \
 	sharedlibrary.$(OBJEXT) spawn.$(OBJEXT) streamlogger.$(OBJEXT) \
 	streamtokenizer.$(OBJEXT) string_.$(OBJEXT) \
 	stringtokenizer.$(OBJEXT) structreader.$(OBJEXT) \
@@ -82,6 +83,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/circularbuffer.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/circularbuffertest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/configfile.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/configmanager.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/filesystem.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/filesystemtest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itokenizer.Po \
@@ -154,6 +156,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -176,6 +181,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -210,6 +217,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -255,6 +264,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -288,6 +299,7 @@ libutils_a_SOURCES = \
 	bufferutils.cpp \
 	circularbuffer.cpp \
 	configfile.cpp \
+	configmanager.cpp \
 	filesystem.cpp \
 	itokenizer.cpp \
 	sharedlibrary.cpp \
@@ -309,6 +321,7 @@ noinst_HEADERS = \
 	bufferutils.h \
 	circularbuffer.h \
 	configfile.h \
+	configmanager.h \
 	filesystem.h \
 	ilogger.h \
 	istructtokenlistener.h \
@@ -430,6 +443,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/circularbuffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/circularbuffertest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/configfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/configmanager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystemtest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itokenizer.Po@am__quote@

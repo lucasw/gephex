@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
@@ -12,12 +12,16 @@ gradnormmodule.h: gradnormmodule.spec
 lib_LTLIBRARIES = gradnormmodule.la
 
 
+@builddir@/roberts_cross_x86.o: @srcdir@/roberts_cross_x86.asm
+	@NASM@ @NASM_FLAGS@ -o @builddir@/roberts_cross_x86.o @srcdir@/roberts_cross_x86.asm
+
 if OPT_INCLUDE_MMX
-gradnormmodule_la_LIBADD = \
+gradnormmodule_la_LIBADD = @builddir@/roberts_cross_x86.o\
 	-lcpuinfo \
 	-L@builddir@/../../../util/src/cpuinfo
 
 gradnormmodule_la_DEPENDENCIES= \
+	@builddir@/roberts_cross_x86.o \
 	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 
 cpuinfoINCLUDES  = -I @srcdir@/../../../util/src/cpuinfo

@@ -178,7 +178,7 @@ struct DriverInstance {
 static struct DriverInstance* 
 VLoopback_new_instance(const char* server_name,
                        int xpos, int ypos,
-                       int width, int height,
+                       int width, int height, int mmx_supported,
                        char* error_text, int text_len);
 
 static void VLoopback_destroy(struct DriverInstance* sh);
@@ -219,7 +219,7 @@ struct OutputDriver* VLoopback_get_driver()
 static struct DriverInstance*
 VLoopback_new_instance(const char* server_name,
                        int xpos, int ypos,
-                       int width, int height,
+                       int width, int height, int mmx_supported,
                        char* error_text, int text_len)
 {
   struct DriverInstance* sh = (struct DriverInstance*) malloc(sizeof(*sh));

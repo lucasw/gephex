@@ -1,9 +1,10 @@
 EXTRA_DIST = rgbtype.dsp rgbtype.mak rgbtype.dep rgbtype.def
 
 includedir = @includedir@/gephex/types
-libdir = @libdir@/gephex/types
+libdir = @gphx_type_lib_dir@
 INCLUDES  = 	-I @srcdir@/../../../engine/src/engine \
-		-I @srcdir@/../../../base/src
+		-I @srcdir@/../../../base/src \
+		-I @srcdir@/../../../util/include
 
 lib_LTLIBRARIES = rgbtype.la
 

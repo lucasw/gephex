@@ -252,4 +252,9 @@ void StructReader::serialize(std::ostream& out) const
 	out.flush();
 }
 
+bool StructReader::has_value(const std::string& name) const
+{
+  return m_values.count(name) > 0;
+}
+
 } // end of namespace utils

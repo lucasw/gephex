@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
@@ -39,14 +39,14 @@ EXTRA_DIST = parser.y scanner.flex \
 
 scanner.o: parser.tab.h
 
-scanner.c: scanner.flex
-	flex -oscanner.c scanner.flex
+scanner.c: @srcdir@/scanner.flex
+	flex -oscanner.c @srcdir@/scanner.flex
 
-parser.tab.h: parser.y
-	bison -d parser.y
+parser.tab.h: @srcdir@/parser.y
+	bison -d @srcdir@/parser.y
 
-parser.tab.c: parser.y
-	bison -d parser.y
+parser.tab.c: @srcdir@/parser.y
+	bison -d @srcdir@/parser.y
 
 
 funparsemodule_la_LDFLAGS = -module -avoid-version -no-undefined

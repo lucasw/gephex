@@ -336,7 +336,6 @@ void update(void* instance)
 
         my->extra_phase = fmod(t * freq, 1);
 
-
         if (my->extra_phase < 0)
           my->extra_phase += 1;
 

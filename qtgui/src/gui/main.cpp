@@ -41,8 +41,9 @@ typedef QMotifStyle GePhexStyle;
 #endif
 
 #include "ownstyle.h"
-#include "guiconfig.h"
 #include "vjmainwindow.h"
+
+#include "utils/configmanager.h"
 
 //---------------------------------------------------------------------
 
@@ -100,17 +101,108 @@ static const char* logo_data[] = {
 
 //---------------------------------------------------------------------
 
-int main( int argc, char** argv )
+  static std::string get_conf_base_dir()
+  {
+#if defined(OS_WIN32)
+    return "../";
+#elif defined(OS_POSIX)
+    const char* HOME_STR = getenv("HOME");
+
+    if (HOME_STR == 0)
+      throw std::runtime_error("Could not read $HOME");
+
+    return std::string(HOME_STR) + "/.gephex/0.4/";
+#endif		
+  }
+
+  static std::string get_cfile_name()
+  {
+    return get_conf_base_dir() + "gephex.conf";
+  }
+
+//---------------------------------------------------------------------
+
+int main( int argc, const char* argv[] )
 {
-  QApplication app( argc, argv );
+  QApplication app( argc, (char**) argv );
 
   app.setStyle( new gui::OwnStyle<GePhexStyle>() );
   
   try
     {
-      gui::GuiConfig config;
+      using namespace utils;
+      ConfigManager::ParamList params;
+      config_param_t::ParamValue def;
 
-      gui::VJMainWindow mainWin ( 0, "GePhex main window", config );
+      params.push_back(config_param_t("media_path",
+                                      config_param_t::STRING_PARAM,
+                                      "common",
+                                      "List of directories that contain "
+                                      "videos, images and fonts "
+                                      "(separated by ';')", 0));
+
+      params.push_back(config_param_t("ipc_type",
+                                      config_param_t::STRING_PARAM,
+                                      "gui",
+                                      "Communication mechanism (inet, unix, or"
+                                      " namedpipe)", 0));
+
+      params.push_back(config_param_t("ipc_inet_hostname",
+                                      config_param_t::STRING_PARAM,
+                                      "gui",
+                                      "Hostname of engine (inet only)", 0));
+
+      def.s = ".";
+      params.push_back(config_param_t("ipc_namedpipe_servername",
+                                      config_param_t::STRING_PARAM,
+                                      "gui",
+                                      "Servername of engine (namedpipe only)",
+                                      &def));
+
+
+      def.s = "/tmp/gephex_socket";
+      params.push_back(config_param_t("ipc_unix_node_prefix",
+                                      config_param_t::STRING_PARAM,
+                                      "gui",
+                                      "Path and prefix of the unix nodes "
+                                      "in the filesystem (unix only)", &def));
+
+      params.push_back(config_param_t("ipc_port",
+                                      config_param_t::INT_PARAM,
+                                      "gui",
+                                      "Port on which the gui connects to the "
+                                      "engine", 0));
+
+      params.push_back(config_param_t("engine_binary",
+                                      config_param_t::STRING_PARAM,
+                                      "gui",
+                                      "Full path of the gephex engine ", 0));
+
+
+      utils::ConfigManager config(get_cfile_name(), argc, argv, params);
+
+      std::string ipc_type = config.get_string_param("ipc_type");
+      std::string ipc_locator = "";
+        if (ipc_type == "inet")
+          {
+            ipc_locator = config.get_string_param("ipc_inet_hostname");
+          }
+        else if (ipc_type == "unix")
+          {
+            ipc_locator = config.get_string_param("ipc_unix_node_prefix");
+          }
+    
+        else if (ipc_type == "namedpipe")
+          {
+            ipc_locator = config.get_string_param("ipc_namedpipe_servername");
+          }
+        else
+          {
+            throw std::runtime_error("Unknown IPC Type: " + ipc_type);
+          }
+
+      gui::VJMainWindow mainWin ( 0, "GePhex main window", config,
+                                  ipc_locator, get_conf_base_dir());
 
       mainWin.setIcon(QPixmap(logo_data));
 

@@ -19,8 +19,11 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = -1.6
-        higher_bound      = 1.6
+        lower_bound       = 0
+        higher_bound      = 3
+        step_size         = 0.01
+        precision         = 2
+        display_format    = fixed
         default           = 0
     }
 
@@ -31,10 +34,12 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        default           = 0         
         lower_bound       = -180
         higher_bound      = 180
         step_size         = 0.5
+        precision         = 2
+        display_format    = fixed
+        default           = 0
     }
 
     pos
@@ -44,15 +49,6 @@ inputs
         const             = true
         strong_dependency = true        
         default           = [0.5 0.5]
-    }
-
-    b
-    {
-        name              = Image
-        type              = typ_FrameBufferType
-        const             = true
-        strong_dependency = true
-        attributes        = a$.xsize ~ 512; a$.ysize ~ 512;
     }
 
     xres
@@ -65,11 +61,11 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 1024
-        default           = 640
         step_size         = 1
         display_format    = fixed
         precision         = 0
         help              = Size of the output in pixels
+        default           = 640
     }
 
     yres
@@ -82,11 +78,11 @@ inputs
         widget_type       = number_selector
         lower_bound       = 0
         higher_bound      = 1024
-        default           = 480
         step_size         = 1
         display_format    = fixed
         precision         = 0
         help              = Size of the output in pixels
+        default           = 480
     }
 
     radius
@@ -96,9 +92,24 @@ inputs
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = 0
-        higher_bound      = 1
-        step_size         = 0.01
+        lower_bound       = 1
+        higher_bound      = 100
+        step_size         = 1
+        default           = 10
+        hidden            = true
+    }
+
+    zdist
+    {
+        name              = Z-Dist
+        type              = typ_NumberType
+        const             = true
+        strong_dependency = true
+        widget_type       = number_selector
+        lower_bound       = 0.1
+        higher_bound      = 10
+        step_size         = 0.1
+        default           = 1.5
     }
 
     shading
@@ -109,14 +120,35 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = number_selector
-        higher_bound      = 10
         lower_bound       = 0
-        step_size         = 1
-        default           = 0
+        higher_bound      = 1
+        step_size         = 0.1
         display_format    = fixed
-        precision         = 0
+        precision         = 2
         help              = Degree of shading
+        default           = 0
     }
+
+    mode
+    {
+        name              = Mode
+        type              = typ_StringType
+        const             = true
+        strong_dependency = true
+        hidden            = true
+        widget_type       = combo_box
+        values            = default,krass
+        default           = default
+    }
+
+    b
+    {
+        name              = Image
+        type              = typ_FrameBufferType
+        const             = true
+        strong_dependency = true
+    }
+
 }
 
 outputs

@@ -27,7 +27,7 @@
 #include <cmath>
 #include <cassert>
 
-#if (!defined _MSC_VER) || (_MSC_VER > 1200)
+#if !defined(_MSC_VER) || (_MSC_VER > 1200)
 using std::min;
 #include <stdint.h>
 #else
@@ -60,7 +60,6 @@ static void roberts_cross(int xsize, int ysize,
 
 #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
 
-#if defined(COMP_VC)
 extern "C"
 {
 void roberts_cross_e3dnow(int_32 xsize, int_32 ysize,
@@ -68,14 +67,7 @@ void roberts_cross_e3dnow(int_32 xsize, int_32 ysize,
                           uint_32* outfb,
                           float scale);
 }
-#endif
 
-#if defined(COMP_GCC)
-static void roberts_cross_e3dnow(int_32 xsize, int_32 ysize,
-                                 const uint_32* fb,
-                                 uint_32* outfb,
-                                 float scale);
-#endif
 
 static void sobel_3dnow(int xsize, int ysize,
                         const uint_32* fb,
@@ -383,112 +375,5 @@ static void sobel_3dnow(int xsize, int ysize,
       }
 }
 
-#if defined(COMP_GCC)
-static void roberts_cross_e3dnow(int_32 xsize, int_32 ysize,
-                                     const uint_32* fb,
-                                     uint_32* outfb,
-                                     float scale)
-{
-  int temp;
-  __asm__
-    (
-     "   femms                              \n\t"
-     "   movl     %2, %%esi                 \n\t" // 2 == src
-     "   movl     %3, %%edi                 \n\t" // 3 == dst
-
-"        prefetch 4(%%esi)    \n\t"
-
-     "   movl     %0, %%eax                 \n\t" //0 == xsize
-     "   shll     $2, %%eax                 \n\t"
-     "   addl     $4, %%eax                 \n\t"
-     "   addl     %%eax, %%esi              \n\t"
-     "   addl     %%eax, %%edi              \n\t"
-
-     "        prefetchw (%%edi)    \n\t"
-     "        prefetch  (%%esi)    \n\t"
-
-     "   movl     %1, %%ecx                 \n\t" // 1 == ysize
-     "   subl     $2, %%ecx                 \n\t"
-     "   movl     %%ecx, %5                 \n\t"
-
-     "   movl     %0, %%ebx                 \n\t"
-     "   shll     $2, %%ebx                 \n\t"
-     "   negl     %%ebx                     \n\t"
-
-     "   pxor    %%mm3, %%mm3               \n\t"
-     "   pxor    %%mm4, %%mm4               \n\t"
-     "   pxor    %%mm5, %%mm5               \n\t"
-     "   pxor    %%mm6, %%mm6               \n\t"
-
-
-     "1:     \n\t"
-     "     cmpl    $0, %5                   \n\t"
-     "     je      4f                       \n\t"
-
-     "     mov     %0, %%ecx                \n\t"
-     "     sub     $2, %%ecx                \n\t"
-
-".align 32 \n\t"
-     "2:     \n\t"
-     "       cmp     $0, %%ecx              \n\t"
-     "       je      3f                     \n\t"
-
-     "       prefetchw 64(%%edi)    \n\t"
-     "       prefetch 64(%%esi)    \n\t"
-
-
-     "       movd    (%%esi), %%mm3          \n\t"
-
-     "       movd    -4(%%esi, %%ebx, 1), %%mm5 \n\t"
-     "       psadbw  %%mm5, %%mm3            \n\t"
-
-
-     "       movd    -4(%%esi), %%mm4        \n\t"
-     "       movd    (%%esi, %%ebx, 1), %%mm6   \n\t"
-
-     "       psadbw  %%mm6, %%mm4       \n\t"
-
-     "       paddw   %%mm4, %%mm3       \n\t"
-     "       packuswb %%mm3, %%mm3      \n\t"
-
-     "       movd    %%mm3, %%eax       \n\t"
-
-     "       xorl     %%edx, %%edx      \n\t"
-     "       andl     $255, %%eax       \n\t"
-
-     "       orl      %%eax, %%edx      \n\t"
-     "       shll     $8, %%edx         \n\t"
-
-     "       orl      %%eax, %%edx      \n\t"
-     "       shll     $8, %%edx         \n\t"
-
-     "       orl      %%eax, %%edx      \n\t"
-
-     "       movl     %%edx, (%%edi)    \n\t"
-
-     "       decl     %%ecx             \n\t"
-     "       addl     $4, %%esi         \n\t"
-     "       addl     $4, %%edi         \n\t"
-
-
-
-     "     jmp      2b    \n\t"
-
-     "3:    \n\t"
-
-     "      decl    %5           \n\t"
-     "      addl    $8, %%esi    \n\t"
-     "      addl    $8, %%edi    \n\t"
-     "    jmp     1b             \n\t"
-
-     "4:           \n\t"
-     "    femms    \n\t"
-     :
-     : "m"(xsize), "m"(ysize), "m"(fb), "m"(outfb), "m"(scale), "m"(temp)
-     : "memory", "eax", "ebx", "ecx", "edx", "esi", "edi", "st",
-     "st(1)", "st(2)", "st(3)", "st(4)", "st(5)", "st(6)", "st(7)"
-     );
-}
-#endif
 
 #endif

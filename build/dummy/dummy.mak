@@ -39,16 +39,16 @@ ALL : "$(OUTDIR)\dummy.exe"
 
 !ELSE 
 
-ALL : "xfademodule - Win32 Release" "twolayermodule - Win32 Release" "tunnelmodule - Win32 Release" "stringtype - Win32 Release" "stringtokenizermodule - Win32 Release" "staticcolormodule - Win32 Release" "signalgenmodule - Win32 Release" "sdlfontmodule - Win32 Release" "rotozoommodule - Win32 Release" "rgbtype - Win32 Release" "resultmodule - Win32 Release" "rangeconvertmodule - Win32 Release" "posnummodule - Win32 Release" "positiontype - Win32 Release" "plasmamodule - Win32 Release" "planemodule - Win32 Release" "pixelizemodule - Win32 Release" "overlaymodule - Win32 Release" "numxfadermodule - Win32 Release" "numposmodule - Win32 Release" "numlfomodule - Win32 Release" "numenvmodule - Win32 Release" "numbertype - Win32 Release" "numbermodule - Win32 Release" "number2colormodule - Win32 Release" "numarithmodule - Win32 Release" "netcontrolmodule - Win32 Release" "miditype - Win32 Release" "midiinmodule - Win32 Release" "lfotype - Win32 Release" "jumpmodule - Win32 Release" "joystickmodule - Win32 Release" "isingnoizemodule - Win32 Release" "imgarithmodule - Win32 Release" "imagebuffermodule - Win32 Release" "ifsxfadermodule - Win32 Release" "ifstype - Win32 Release"\
- "ifsmodule - Win32 Release" "ifsgenmodule - Win32 Release" "gradnormmodule - Win32 Release" "funparsemodule - Win32 Release" "frboutmodule - Win32 Release" "frbinmodule - Win32 Release" "framebuffertype - Win32 Release" "fpsmodule - Win32 Release" "fonttype - Win32 Release" "font3Dmodule - Win32 Release" "flipflopmodule - Win32 Release" "flashmodule - Win32 Release" "envtype - Win32 Release" "effectvsparkmodule - Win32 Release" "effectvquarkmodule - Win32 Release" "effectvpuzzlemodule - Win32 Release" "effectvlifemodule - Win32 Release" "effectvlensmodule - Win32 Release" "effectvfiremodule - Win32 Release" "effectvedgemodule - Win32 Release" "effectvdotmodule - Win32 Release" "effectvcyclemodule - Win32 Release" "effectvburnmodule - Win32 Release" "effectvagingmodule - Win32 Release" "doepfermodule - Win32 Release" "diffmodule - Win32 Release" "color2numbermodule - Win32 Release" "capturemodule - Win32 Release" "bwmodule - Win32 Release" "blurmodule - Win32 Release" "audiowavegenmodule - Win32 Release" "audiovismodule - Win32 Release" "audiotype - Win32 Release" "audiosynthmodule - Win32 Release" "audiospecmodule - Win32 Release" "audiooutmodule - Win32 Release"\
- "audioinmodule - Win32 Release" "audioenergymodule - Win32 Release" "audiobdmodule - Win32 Release" "audioaddmodule - Win32 Release" "$(OUTDIR)\dummy.exe"
+ALL : "ffmpegoutmodule - Win32 Release" "y4moutputmodule - Win32 Release" "y4minmodule - Win32 Release" "noisemodule - Win32 Release" "chromakeymodule - Win32 Release" "dplmodule - Win32 Release" "xfademodule - Win32 Release" "twolayermodule - Win32 Release" "tunnelmodule - Win32 Release" "stringtype - Win32 Release" "stringtokenizermodule - Win32 Release" "staticcolormodule - Win32 Release" "signalgenmodule - Win32 Release" "sdlfontmodule - Win32 Release" "rotozoommodule - Win32 Release" "rgbtype - Win32 Release" "resultmodule - Win32 Release" "rangeconvertmodule - Win32 Release" "posnummodule - Win32 Release" "positiontype - Win32 Release" "plasmamodule - Win32 Release" "planemodule - Win32 Release" "pixelizemodule - Win32 Release" "overlaymodule - Win32 Release" "numxfadermodule - Win32 Release" "numposmodule - Win32 Release" "numlfomodule - Win32 Release" "numenvmodule - Win32 Release" "numbertype - Win32 Release" "numbermodule - Win32 Release" "number2colormodule - Win32 Release" "numarithmodule - Win32 Release" "netcontrolmodule - Win32 Release" "miditype - Win32 Release" "midiinmodule - Win32 Release" "lfotype - Win32 Release" "jumpmodule - Win32 Release"\
+ "joystickmodule - Win32 Release" "isingnoizemodule - Win32 Release" "imgarithmodule - Win32 Release" "imagebuffermodule - Win32 Release" "ifsxfadermodule - Win32 Release" "ifstype - Win32 Release" "ifsmodule - Win32 Release" "ifsgenmodule - Win32 Release" "gradnormmodule - Win32 Release" "funparsemodule - Win32 Release" "frboutmodule - Win32 Release" "frbinmodule - Win32 Release" "framebuffertype - Win32 Release" "fpsmodule - Win32 Release" "fonttype - Win32 Release" "font3Dmodule - Win32 Release" "flipflopmodule - Win32 Release" "flashmodule - Win32 Release" "envtype - Win32 Release" "effectvsparkmodule - Win32 Release" "effectvquarkmodule - Win32 Release" "effectvpuzzlemodule - Win32 Release" "effectvlifemodule - Win32 Release" "effectvlensmodule - Win32 Release" "effectvfiremodule - Win32 Release" "effectvedgemodule - Win32 Release" "effectvdotmodule - Win32 Release" "effectvcyclemodule - Win32 Release" "effectvburnmodule - Win32 Release" "effectvagingmodule - Win32 Release" "doepfermodule - Win32 Release" "diffmodule - Win32 Release" "color2numbermodule - Win32 Release" "capturemodule - Win32 Release" "bwmodule - Win32 Release" "blurmodule - Win32 Release"\
+ "audiowavegenmodule - Win32 Release" "audiovismodule - Win32 Release" "audiotype - Win32 Release" "audiosynthmodule - Win32 Release" "audiospecmodule - Win32 Release" "audiooutmodule - Win32 Release" "audioinmodule - Win32 Release" "audioenergymodule - Win32 Release" "audiobdmodule - Win32 Release" "audioaddmodule - Win32 Release" "$(OUTDIR)\dummy.exe"
 
 !ENDIF 
 
 !IF "$(RECURSE)" == "1" 
 CLEAN :"audioaddmodule - Win32 ReleaseCLEAN" "audiobdmodule - Win32 ReleaseCLEAN" "audioenergymodule - Win32 ReleaseCLEAN" "audioinmodule - Win32 ReleaseCLEAN" "audiooutmodule - Win32 ReleaseCLEAN" "audiospecmodule - Win32 ReleaseCLEAN" "audiosynthmodule - Win32 ReleaseCLEAN" "audiotype - Win32 ReleaseCLEAN" "audiovismodule - Win32 ReleaseCLEAN" "audiowavegenmodule - Win32 ReleaseCLEAN" "blurmodule - Win32 ReleaseCLEAN" "bwmodule - Win32 ReleaseCLEAN" "capturemodule - Win32 ReleaseCLEAN" "color2numbermodule - Win32 ReleaseCLEAN" "diffmodule - Win32 ReleaseCLEAN" "doepfermodule - Win32 ReleaseCLEAN" "effectvagingmodule - Win32 ReleaseCLEAN" "effectvburnmodule - Win32 ReleaseCLEAN" "effectvcyclemodule - Win32 ReleaseCLEAN" "effectvdotmodule - Win32 ReleaseCLEAN" "effectvedgemodule - Win32 ReleaseCLEAN" "effectvfiremodule - Win32 ReleaseCLEAN" "effectvlensmodule - Win32 ReleaseCLEAN" "effectvlifemodule - Win32 ReleaseCLEAN" "effectvpuzzlemodule - Win32 ReleaseCLEAN" "effectvquarkmodule - Win32 ReleaseCLEAN" "effectvsparkmodule - Win32 ReleaseCLEAN" "envtype - Win32 ReleaseCLEAN" "flashmodule - Win32 ReleaseCLEAN" "flipflopmodule - Win32 ReleaseCLEAN"\
  "font3Dmodule - Win32 ReleaseCLEAN" "fonttype - Win32 ReleaseCLEAN" "fpsmodule - Win32 ReleaseCLEAN" "framebuffertype - Win32 ReleaseCLEAN" "frbinmodule - Win32 ReleaseCLEAN" "frboutmodule - Win32 ReleaseCLEAN" "funparsemodule - Win32 ReleaseCLEAN" "gradnormmodule - Win32 ReleaseCLEAN" "ifsgenmodule - Win32 ReleaseCLEAN" "ifsmodule - Win32 ReleaseCLEAN" "ifstype - Win32 ReleaseCLEAN" "ifsxfadermodule - Win32 ReleaseCLEAN" "imagebuffermodule - Win32 ReleaseCLEAN" "imgarithmodule - Win32 ReleaseCLEAN" "isingnoizemodule - Win32 ReleaseCLEAN" "joystickmodule - Win32 ReleaseCLEAN" "jumpmodule - Win32 ReleaseCLEAN" "lfotype - Win32 ReleaseCLEAN" "midiinmodule - Win32 ReleaseCLEAN" "miditype - Win32 ReleaseCLEAN" "netcontrolmodule - Win32 ReleaseCLEAN" "numarithmodule - Win32 ReleaseCLEAN" "number2colormodule - Win32 ReleaseCLEAN" "numbermodule - Win32 ReleaseCLEAN" "numbertype - Win32 ReleaseCLEAN" "numenvmodule - Win32 ReleaseCLEAN" "numlfomodule - Win32 ReleaseCLEAN" "numposmodule - Win32 ReleaseCLEAN" "numxfadermodule - Win32 ReleaseCLEAN" "overlaymodule - Win32 ReleaseCLEAN" "pixelizemodule - Win32 ReleaseCLEAN" "planemodule - Win32 ReleaseCLEAN" "plasmamodule - Win32 ReleaseCLEAN"\
- "positiontype - Win32 ReleaseCLEAN" "posnummodule - Win32 ReleaseCLEAN" "rangeconvertmodule - Win32 ReleaseCLEAN" "resultmodule - Win32 ReleaseCLEAN" "rgbtype - Win32 ReleaseCLEAN" "rotozoommodule - Win32 ReleaseCLEAN" "sdlfontmodule - Win32 ReleaseCLEAN" "signalgenmodule - Win32 ReleaseCLEAN" "staticcolormodule - Win32 ReleaseCLEAN" "stringtokenizermodule - Win32 ReleaseCLEAN" "stringtype - Win32 ReleaseCLEAN" "tunnelmodule - Win32 ReleaseCLEAN" "twolayermodule - Win32 ReleaseCLEAN" "xfademodule - Win32 ReleaseCLEAN" 
+ "positiontype - Win32 ReleaseCLEAN" "posnummodule - Win32 ReleaseCLEAN" "rangeconvertmodule - Win32 ReleaseCLEAN" "resultmodule - Win32 ReleaseCLEAN" "rgbtype - Win32 ReleaseCLEAN" "rotozoommodule - Win32 ReleaseCLEAN" "sdlfontmodule - Win32 ReleaseCLEAN" "signalgenmodule - Win32 ReleaseCLEAN" "staticcolormodule - Win32 ReleaseCLEAN" "stringtokenizermodule - Win32 ReleaseCLEAN" "stringtype - Win32 ReleaseCLEAN" "tunnelmodule - Win32 ReleaseCLEAN" "twolayermodule - Win32 ReleaseCLEAN" "xfademodule - Win32 ReleaseCLEAN" "dplmodule - Win32 ReleaseCLEAN" "chromakeymodule - Win32 ReleaseCLEAN" "noisemodule - Win32 ReleaseCLEAN" "y4minmodule - Win32 ReleaseCLEAN" "y4moutputmodule - Win32 ReleaseCLEAN" "ffmpegoutmodule - Win32 ReleaseCLEAN" 
 !ELSE 
 CLEAN :
 !ENDIF 
@@ -165,7 +165,13 @@ LINK32_OBJS= \
 	"..\..\modules\src\stringtokenizermodule\Release\stringtokenizermodule.lib" \
 	"..\..\types\src\stringtype\Release\stringtype.lib" \
 	"..\..\modules\src\twolayermodule\Release\twolayermodule.lib" \
-	"..\..\modules\src\xfademodule\Release\xfademodule.lib"
+	"..\..\modules\src\xfademodule\Release\xfademodule.lib" \
+	"..\..\modules\src\dplmodule\Release\dplmodule.lib" \
+	"..\..\modules\src\chromakeymodule\Release\chromakeymodule.lib" \
+	"..\..\modules\src\noisemodule\Release\noisemodule.lib" \
+	"..\..\modules\src\y4minmodule\Release\y4minmodule.lib" \
+	"..\..\modules\src\yuv4mpeg2module\Release\y4moutputmodule.lib" \
+	"..\..\modules\src\ffmpegoutmodule\Release\ffmpegoutmodule.lib"
 
 "$(OUTDIR)\dummy.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -186,15 +192,16 @@ ALL : "$(OUTDIR)\dummy.exe"
 
 !ELSE 
 
-ALL : "xfademodule - Win32 Debug" "twolayermodule - Win32 Debug" "tunnelmodule - Win32 Debug" "stringtype - Win32 Debug" "stringtokenizermodule - Win32 Debug" "staticcolormodule - Win32 Debug" "signalgenmodule - Win32 Debug" "sdlfontmodule - Win32 Debug" "rotozoommodule - Win32 Debug" "rgbtype - Win32 Debug" "resultmodule - Win32 Debug" "rangeconvertmodule - Win32 Debug" "posnummodule - Win32 Debug" "positiontype - Win32 Debug" "plasmamodule - Win32 Debug" "planemodule - Win32 Debug" "pixelizemodule - Win32 Debug" "overlaymodule - Win32 Debug" "numxfadermodule - Win32 Debug" "numposmodule - Win32 Debug" "numlfomodule - Win32 Debug" "numenvmodule - Win32 Debug" "numbertype - Win32 Debug" "numbermodule - Win32 Debug" "number2colormodule - Win32 Debug" "numarithmodule - Win32 Debug" "netcontrolmodule - Win32 Debug" "miditype - Win32 Debug" "midiinmodule - Win32 Debug" "lfotype - Win32 Debug" "jumpmodule - Win32 Debug" "joystickmodule - Win32 Debug" "isingnoizemodule - Win32 Debug" "imgarithmodule - Win32 Debug" "imagebuffermodule - Win32 Debug" "ifsxfadermodule - Win32 Debug" "ifstype - Win32 Debug" "ifsmodule - Win32 Debug" "ifsgenmodule - Win32 Debug" "gradnormmodule - Win32 Debug"\
- "funparsemodule - Win32 Debug" "frboutmodule - Win32 Debug" "frbinmodule - Win32 Debug" "framebuffertype - Win32 Debug" "fpsmodule - Win32 Debug" "fonttype - Win32 Debug" "font3Dmodule - Win32 Debug" "flipflopmodule - Win32 Debug" "flashmodule - Win32 Debug" "envtype - Win32 Debug" "effectvsparkmodule - Win32 Debug" "effectvquarkmodule - Win32 Debug" "effectvpuzzlemodule - Win32 Debug" "effectvlifemodule - Win32 Debug" "effectvlensmodule - Win32 Debug" "effectvfiremodule - Win32 Debug" "effectvedgemodule - Win32 Debug" "effectvdotmodule - Win32 Debug" "effectvcyclemodule - Win32 Debug" "effectvburnmodule - Win32 Debug" "effectvagingmodule - Win32 Debug" "doepfermodule - Win32 Debug" "diffmodule - Win32 Debug" "color2numbermodule - Win32 Debug" "capturemodule - Win32 Debug" "bwmodule - Win32 Debug" "blurmodule - Win32 Debug" "audiowavegenmodule - Win32 Debug" "audiovismodule - Win32 Debug" "audiotype - Win32 Debug" "audiosynthmodule - Win32 Debug" "audiospecmodule - Win32 Debug" "audiooutmodule - Win32 Debug" "audioinmodule - Win32 Debug" "audioenergymodule - Win32 Debug" "audiobdmodule - Win32 Debug" "audioaddmodule - Win32 Debug" "$(OUTDIR)\dummy.exe"
+ALL : "ffmpegoutmodule - Win32 Debug" "y4moutputmodule - Win32 Debug" "y4minmodule - Win32 Debug" "noisemodule - Win32 Debug" "chromakeymodule - Win32 Debug" "dplmodule - Win32 Debug" "xfademodule - Win32 Debug" "twolayermodule - Win32 Debug" "tunnelmodule - Win32 Debug" "stringtype - Win32 Debug" "stringtokenizermodule - Win32 Debug" "staticcolormodule - Win32 Debug" "signalgenmodule - Win32 Debug" "sdlfontmodule - Win32 Debug" "rotozoommodule - Win32 Debug" "rgbtype - Win32 Debug" "resultmodule - Win32 Debug" "rangeconvertmodule - Win32 Debug" "posnummodule - Win32 Debug" "positiontype - Win32 Debug" "plasmamodule - Win32 Debug" "planemodule - Win32 Debug" "pixelizemodule - Win32 Debug" "overlaymodule - Win32 Debug" "numxfadermodule - Win32 Debug" "numposmodule - Win32 Debug" "numlfomodule - Win32 Debug" "numenvmodule - Win32 Debug" "numbertype - Win32 Debug" "numbermodule - Win32 Debug" "number2colormodule - Win32 Debug" "numarithmodule - Win32 Debug" "netcontrolmodule - Win32 Debug" "miditype - Win32 Debug" "midiinmodule - Win32 Debug" "lfotype - Win32 Debug" "jumpmodule - Win32 Debug" "joystickmodule - Win32 Debug" "isingnoizemodule - Win32 Debug"\
+ "imgarithmodule - Win32 Debug" "imagebuffermodule - Win32 Debug" "ifsxfadermodule - Win32 Debug" "ifstype - Win32 Debug" "ifsmodule - Win32 Debug" "ifsgenmodule - Win32 Debug" "gradnormmodule - Win32 Debug" "funparsemodule - Win32 Debug" "frboutmodule - Win32 Debug" "frbinmodule - Win32 Debug" "framebuffertype - Win32 Debug" "fpsmodule - Win32 Debug" "fonttype - Win32 Debug" "font3Dmodule - Win32 Debug" "flipflopmodule - Win32 Debug" "flashmodule - Win32 Debug" "envtype - Win32 Debug" "effectvsparkmodule - Win32 Debug" "effectvquarkmodule - Win32 Debug" "effectvpuzzlemodule - Win32 Debug" "effectvlifemodule - Win32 Debug" "effectvlensmodule - Win32 Debug" "effectvfiremodule - Win32 Debug" "effectvedgemodule - Win32 Debug" "effectvdotmodule - Win32 Debug" "effectvcyclemodule - Win32 Debug" "effectvburnmodule - Win32 Debug" "effectvagingmodule - Win32 Debug" "doepfermodule - Win32 Debug" "diffmodule - Win32 Debug" "color2numbermodule - Win32 Debug" "capturemodule - Win32 Debug" "bwmodule - Win32 Debug" "blurmodule - Win32 Debug" "audiowavegenmodule - Win32 Debug" "audiovismodule - Win32 Debug" "audiotype - Win32 Debug" "audiosynthmodule - Win32 Debug" "audiospecmodule - Win32 Debug"\
+ "audiooutmodule - Win32 Debug" "audioinmodule - Win32 Debug" "audioenergymodule - Win32 Debug" "audiobdmodule - Win32 Debug" "audioaddmodule - Win32 Debug" "$(OUTDIR)\dummy.exe"
 
 !ENDIF 
 
 !IF "$(RECURSE)" == "1" 
 CLEAN :"audioaddmodule - Win32 DebugCLEAN" "audiobdmodule - Win32 DebugCLEAN" "audioenergymodule - Win32 DebugCLEAN" "audioinmodule - Win32 DebugCLEAN" "audiooutmodule - Win32 DebugCLEAN" "audiospecmodule - Win32 DebugCLEAN" "audiosynthmodule - Win32 DebugCLEAN" "audiotype - Win32 DebugCLEAN" "audiovismodule - Win32 DebugCLEAN" "audiowavegenmodule - Win32 DebugCLEAN" "blurmodule - Win32 DebugCLEAN" "bwmodule - Win32 DebugCLEAN" "capturemodule - Win32 DebugCLEAN" "color2numbermodule - Win32 DebugCLEAN" "diffmodule - Win32 DebugCLEAN" "doepfermodule - Win32 DebugCLEAN" "effectvagingmodule - Win32 DebugCLEAN" "effectvburnmodule - Win32 DebugCLEAN" "effectvcyclemodule - Win32 DebugCLEAN" "effectvdotmodule - Win32 DebugCLEAN" "effectvedgemodule - Win32 DebugCLEAN" "effectvfiremodule - Win32 DebugCLEAN" "effectvlensmodule - Win32 DebugCLEAN" "effectvlifemodule - Win32 DebugCLEAN" "effectvpuzzlemodule - Win32 DebugCLEAN" "effectvquarkmodule - Win32 DebugCLEAN" "effectvsparkmodule - Win32 DebugCLEAN" "envtype - Win32 DebugCLEAN" "flashmodule - Win32 DebugCLEAN" "flipflopmodule - Win32 DebugCLEAN" "font3Dmodule - Win32 DebugCLEAN" "fonttype - Win32 DebugCLEAN"\
  "fpsmodule - Win32 DebugCLEAN" "framebuffertype - Win32 DebugCLEAN" "frbinmodule - Win32 DebugCLEAN" "frboutmodule - Win32 DebugCLEAN" "funparsemodule - Win32 DebugCLEAN" "gradnormmodule - Win32 DebugCLEAN" "ifsgenmodule - Win32 DebugCLEAN" "ifsmodule - Win32 DebugCLEAN" "ifstype - Win32 DebugCLEAN" "ifsxfadermodule - Win32 DebugCLEAN" "imagebuffermodule - Win32 DebugCLEAN" "imgarithmodule - Win32 DebugCLEAN" "isingnoizemodule - Win32 DebugCLEAN" "joystickmodule - Win32 DebugCLEAN" "jumpmodule - Win32 DebugCLEAN" "lfotype - Win32 DebugCLEAN" "midiinmodule - Win32 DebugCLEAN" "miditype - Win32 DebugCLEAN" "netcontrolmodule - Win32 DebugCLEAN" "numarithmodule - Win32 DebugCLEAN" "number2colormodule - Win32 DebugCLEAN" "numbermodule - Win32 DebugCLEAN" "numbertype - Win32 DebugCLEAN" "numenvmodule - Win32 DebugCLEAN" "numlfomodule - Win32 DebugCLEAN" "numposmodule - Win32 DebugCLEAN" "numxfadermodule - Win32 DebugCLEAN" "overlaymodule - Win32 DebugCLEAN" "pixelizemodule - Win32 DebugCLEAN" "planemodule - Win32 DebugCLEAN" "plasmamodule - Win32 DebugCLEAN" "positiontype - Win32 DebugCLEAN" "posnummodule - Win32 DebugCLEAN" "rangeconvertmodule - Win32 DebugCLEAN"\
- "resultmodule - Win32 DebugCLEAN" "rgbtype - Win32 DebugCLEAN" "rotozoommodule - Win32 DebugCLEAN" "sdlfontmodule - Win32 DebugCLEAN" "signalgenmodule - Win32 DebugCLEAN" "staticcolormodule - Win32 DebugCLEAN" "stringtokenizermodule - Win32 DebugCLEAN" "stringtype - Win32 DebugCLEAN" "tunnelmodule - Win32 DebugCLEAN" "twolayermodule - Win32 DebugCLEAN" "xfademodule - Win32 DebugCLEAN" 
+ "resultmodule - Win32 DebugCLEAN" "rgbtype - Win32 DebugCLEAN" "rotozoommodule - Win32 DebugCLEAN" "sdlfontmodule - Win32 DebugCLEAN" "signalgenmodule - Win32 DebugCLEAN" "staticcolormodule - Win32 DebugCLEAN" "stringtokenizermodule - Win32 DebugCLEAN" "stringtype - Win32 DebugCLEAN" "tunnelmodule - Win32 DebugCLEAN" "twolayermodule - Win32 DebugCLEAN" "xfademodule - Win32 DebugCLEAN" "dplmodule - Win32 DebugCLEAN" "chromakeymodule - Win32 DebugCLEAN" "noisemodule - Win32 DebugCLEAN" "y4minmodule - Win32 DebugCLEAN" "y4moutputmodule - Win32 DebugCLEAN" "ffmpegoutmodule - Win32 DebugCLEAN" 
 !ELSE 
 CLEAN :
 !ENDIF 
@@ -326,7 +333,13 @@ LINK32_OBJS= \
 	"..\..\types\src\stringtype\Debug\stringtype.lib" \
 	"..\..\modules\src\tunnelmodule\Debug\tunnelmodule.lib" \
 	"..\..\modules\src\twolayermodule\Debug\twolayermodule.lib" \
-	"..\..\modules\src\xfademodule\Debug\xfademodule.lib"
+	"..\..\modules\src\xfademodule\Debug\xfademodule.lib" \
+	"..\..\modules\src\dplmodule\Debug\dplmodule.lib" \
+	"..\..\modules\src\chromakeymodule\Debug\chromakeymodule.lib" \
+	"..\..\modules\src\noisemodule\Debug\noisemodule.lib" \
+	"..\..\modules\src\y4minmodule\Debug\y4minmodule.lib" \
+	"..\..\modules\src\yuv4mpeg2module\Debug\y4moutputmodule.lib" \
+	"..\..\modules\src\ffmpegoutmodule\Debug\ffmpegoutmodule.lib"
 
 "$(OUTDIR)\dummy.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
@@ -2355,6 +2368,162 @@ SOURCE=.\main.c
 "xfademodule - Win32 DebugCLEAN" : 
    cd "\code\gephex-0.4\modules\src\xfademodule"
    $(MAKE) /$(MAKEFLAGS) /F ".\xfademodule.mak" CFG="xfademodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"dplmodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\dplmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\dplmodule.mak" CFG="dplmodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"dplmodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\dplmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\dplmodule.mak" CFG="dplmodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"dplmodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\dplmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\dplmodule.mak" CFG="dplmodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"dplmodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\dplmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\dplmodule.mak" CFG="dplmodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"chromakeymodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\chromakeymodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\chromakeymodule.mak" CFG="chromakeymodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"chromakeymodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\chromakeymodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\chromakeymodule.mak" CFG="chromakeymodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"chromakeymodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\chromakeymodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\chromakeymodule.mak" CFG="chromakeymodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"chromakeymodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\chromakeymodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\chromakeymodule.mak" CFG="chromakeymodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"noisemodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\noisemodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\noisemodule.mak" CFG="noisemodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"noisemodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\noisemodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\noisemodule.mak" CFG="noisemodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"noisemodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\noisemodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\noisemodule.mak" CFG="noisemodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"noisemodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\noisemodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\noisemodule.mak" CFG="noisemodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"y4minmodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\y4minmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4minmodule.mak" CFG="y4minmodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"y4minmodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\y4minmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4minmodule.mak" CFG="y4minmodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"y4minmodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\y4minmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4minmodule.mak" CFG="y4minmodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"y4minmodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\y4minmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4minmodule.mak" CFG="y4minmodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"y4moutputmodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\yuv4mpeg2module"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4moutputmodule.mak" CFG="y4moutputmodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"y4moutputmodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\yuv4mpeg2module"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4moutputmodule.mak" CFG="y4moutputmodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"y4moutputmodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\yuv4mpeg2module"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4moutputmodule.mak" CFG="y4moutputmodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"y4moutputmodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\yuv4mpeg2module"
+   $(MAKE) /$(MAKEFLAGS) /F ".\y4moutputmodule.mak" CFG="y4moutputmodule - Win32 Debug" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "dummy - Win32 Release"
+
+"ffmpegoutmodule - Win32 Release" : 
+   cd "\code\gephex-0.4\modules\src\ffmpegoutmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\ffmpegoutmodule.mak" CFG="ffmpegoutmodule - Win32 Release" 
+   cd "..\..\..\build\dummy"
+
+"ffmpegoutmodule - Win32 ReleaseCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\ffmpegoutmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\ffmpegoutmodule.mak" CFG="ffmpegoutmodule - Win32 Release" RECURSE=1 CLEAN 
+   cd "..\..\..\build\dummy"
+
+!ELSEIF  "$(CFG)" == "dummy - Win32 Debug"
+
+"ffmpegoutmodule - Win32 Debug" : 
+   cd "\code\gephex-0.4\modules\src\ffmpegoutmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\ffmpegoutmodule.mak" CFG="ffmpegoutmodule - Win32 Debug" 
+   cd "..\..\..\build\dummy"
+
+"ffmpegoutmodule - Win32 DebugCLEAN" : 
+   cd "\code\gephex-0.4\modules\src\ffmpegoutmodule"
+   $(MAKE) /$(MAKEFLAGS) /F ".\ffmpegoutmodule.mak" CFG="ffmpegoutmodule - Win32 Debug" RECURSE=1 CLEAN 
    cd "..\..\..\build\dummy"
 
 !ENDIF 

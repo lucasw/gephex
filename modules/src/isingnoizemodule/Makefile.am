@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python $(top_srcdir)/modules/pluc.py
 

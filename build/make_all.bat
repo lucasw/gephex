@@ -4,6 +4,7 @@ if not exist ..\dlls\types mkdir ..\dlls\types
 if not exist ..\bin mkdir ..\bin
 if not exist ..\graphs mkdir ..\graphs
 if not exist ..\gephex.conf copy ..\data\gephexw.conf.default ..\gephex.conf
+if not exist ..\config.h copy ..\config_h.win32 ..\config.h
 if %1/==/ goto usage
 
 set CONFIG=%1

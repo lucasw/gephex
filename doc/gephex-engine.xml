@@ -30,8 +30,9 @@
     <manvolnum>1</manvolnum> </citerefentry>.</para>
 
 <para>
-There are no command line parameters.
-All parameters are set in the config file.
+All parameters are set in the config file. All supported parameters
+can be overridden from the command line. Please see the html documentation
+for the full description.
 </para>
 
 <para>The projects main intent is to create a framework that allows video-jockeys to design complex real-time video effects. The user can influence parameters 

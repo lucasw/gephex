@@ -20,12 +20,11 @@ inputs
         type              = typ_AudioType
         const             = true
         strong_dependency = true
-        help              = blah
     }
 
     w_lhs
     {
-        name              = DaempfungLinks
+        name              = AmpLeft
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -38,12 +37,11 @@ inputs
         type              = typ_AudioType
         const             = true
         strong_dependency = true
-        help              = blah
     }
 
     w_rhs
     {
-        name              = DaempfungRechts
+        name              = AmpRight
         type              = typ_NumberType
         const             = true
         strong_dependency = true
@@ -82,7 +80,7 @@ outputs
    
     r
     {
-       name = AddiertesSignal
+       name = AddedSignal
        type = typ_AudioType
     }
 }

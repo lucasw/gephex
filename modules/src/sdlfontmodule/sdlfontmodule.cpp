@@ -400,9 +400,9 @@ void update(void* instance)
   std::string text = std::string(inst->in_text_->text);
 
   SDL_Color col;
-  col.r = (Uint8) (inst->in_color->r * 255.f);
-  col.g = (Uint8) (inst->in_color->g * 255.f);
-  col.b = (Uint8) (inst->in_color->b * 255.f);
+  col.r = color_comp_to_byte(inst->in_color->r);
+  col.g = color_comp_to_byte(inst->in_color->g);
+  col.b = color_comp_to_byte(inst->in_color->b);
 
   //  SDL_Surface* text = 0;
   if(text !=  *my->lastText || col.r != my->lastColor.r 

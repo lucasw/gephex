@@ -23,6 +23,7 @@
 #include "colorview.h"
 
 #include <sstream>
+#include <cmath>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -96,9 +97,9 @@ void selectColor()
 
       is >> r >> g >> b;
 			
-      return QColor(static_cast<int>(r*255.0),
-		    static_cast<int>(g*255.0),
-		    static_cast<int>(b*255.0));
+      return QColor(static_cast<int>(floor(r*255 +.5)),
+		    static_cast<int>(floor(g*255 +.5)),
+		    static_cast<int>(floor(b*255 +.5)));
     }
 
     std::string colorToString(const QColor& col)

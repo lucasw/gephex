@@ -225,6 +225,7 @@ dnl    - added minimum version check
 dnl    - replaced AC_ERROR with AC_MSG_RESULT
 dnl    - moved evaluation of ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
 dnl      to the end
+dnl    - added a lot more guess dirs
 dnl     
 dnl Original version from Rik Hemsley:
 dnl   Copyright (C) 2001 Rik Hemsley (rikkus) <rik@kde.org>
@@ -242,6 +243,15 @@ saved_LIBRARY_PATH="$LIBRARY_PATH"
 saved_CXXFLAGS="$CXXFLAGS"
 saved_LDFLAGS="$LDFLAGS"
 saved_LIBS="$LIBS"
+
+# the test looks inside the following files to find the qt headers, libs
+# and binaries
+GUESS_QT_INC_DIRS="$QTDIR/include /usr/include /usr/include/qt /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt3 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt3 /usr/lib/qt/include /usr/lib/qt3/include /usr/lib/qt-3/include /usr/lib/qt-3.0/include /usr/lib/qt-3.1/include /usr/lib/qt-3.2/include /usr/lib/qt-3.3/include /usr/lib/qt-3.4/include"
+
+GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt3/lib /usr/lib/qt-3/lib /usr/lib/qt-3.0/lib /usr/lib/qt-3.1/lib /usr/lib/qt-3.2/lib /usr/lib/qt-3.3/lib /usr/lib/qt-3.4/lib"
+
+GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt3/bin /usr/lib/qt-3/bin /usr/lib/qt-3.0/bin /usr/lib/qt-3.1/bin /usr/lib/qt-3.2/bin /usr/lib/qt-3.3/bin /usr/lib/qt-3.4/bin"
+
 
 HAVE_QT=no
 min_qt_version=ifelse([$1], ,2.3.0, $1)
@@ -276,8 +286,6 @@ then
   AC_MSG_RESULT([specified as $qt_incdir])
 else
 
-  GUESS_QT_INC_DIRS="$QTDIR/include /usr/include /usr/include/qt /usr/include/qt2 /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt2 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt2 /usr/X11R6/include/X11/qt2"
-
   for dir in $GUESS_QT_INC_DIRS
   do
     if test -e $dir/qt.h
@@ -300,8 +308,6 @@ if test "x$qt_libdir" != "x"
 then
   AC_MSG_RESULT([specified as $qt_libdir])
 else
-
-  GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib"
 
   for dir in $GUESS_QT_LIB_DIRS
   do
@@ -343,8 +349,6 @@ if test "x$qt_bindir" != "x"
 then
   AC_MSG_RESULT([specified as $qt_bindir])
 else
-
-  GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin"
 
   for dir in $GUESS_QT_BIN_DIRS
   do

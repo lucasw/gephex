@@ -28,6 +28,18 @@ inputs
         precision         = 0
         default           = 0
     }
+
+    driver
+    {
+        name              = Driver
+        type              = typ_StringType
+        const             = true
+        strong_dependency = true
+        hidden            = true
+        default           = default
+        widget_type       = combo_box
+        values            = default,sdl
+    }
 }
 
 

@@ -93,7 +93,7 @@ void update(void* instance)
   if (c < attack)
   {
 
-	  fadeValue = (int) ((255.* c) / (double) attack);
+	  fadeValue = (int) ((0.5 + 255 * c) / (double) attack);
       negfadeValue = 255 - fadeValue;
   }
   else if (c < attack + sustain)
@@ -103,7 +103,7 @@ void update(void* instance)
   }
   else //decay
   {
-	fadeValue = (int) ((255.* my->counter)/ (double) decay);
+	fadeValue = (int) ((0.5 + 255 * my->counter)/ (double) decay);
 	negfadeValue = 255 - fadeValue;
   }
   

@@ -35,25 +35,15 @@ HideButton::HideButton(QWidget* parent, InputPlugWidget& in)
   connect(this, SIGNAL(toggled(bool)),
           this, SLOT(hasBeenToggled(bool)));
 
-  if (m_in->isVisible())
-    this->setChecked(false);
-  else
-    this->setChecked(true);
-
+  setChecked( !m_in->isVisible() );
 }
 
   void HideButton::hasBeenToggled(bool state)
   {
     if (state)
-      {
-	m_in->setInvisible();
-	//	this->setChecked(false);
-      }
+      m_in->setInvisible();
     else
-      {
-	m_in->setVisible();
-	//	this->setChecked(true);
-      }
+      m_in->setVisible();
   }
 
 } // end of namespace gui

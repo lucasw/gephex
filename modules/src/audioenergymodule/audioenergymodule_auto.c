@@ -23,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_AudioType id=audio const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=amp const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=amp const=true strong_dependency=true default=0 } ";
   break;
  }
  return 0;
@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Energy] group=[Audio] inputs=[2 AudioStream{help=[blah] } Amplification{widget_type=[unboundednumber_selector] hidden=[true] } ] outputs=[4 Low Middle1 Middle2 High ] type=xpm } ";
+  static const char* INFO = "info { name=[Energy] group=[Audio] inputs=[2 AudioStream{help=[blah] } Responsivity{widget_type=[unboundednumber_selector] hidden=[true] } ] outputs=[4 Low Middle1 Middle2 High ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(audioenergymodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -4,6 +4,14 @@ Where to get the source
 
 If this is a binary release, you can get the source at http://www.gephex.org.
 
+ffmpeg
+-------
+
+The source release contains the ffmpeg sources in contrib/ffmpeg.
+It's a recent cvs snapshot, and has not been modified.
+
+Check http://ffmpeg.sf.net for details on ffmpeg.
+
 
 EffecTV
 --------
@@ -18,15 +26,13 @@ Thanks to the EffecTV people for their cool effects!
 Important note:
 ---------------
 
- 1/ Graphs that have been created with 0.0.4beta2 cannot be opened.
-  The graph format has changed. 
-
- 2/ Note: on unix platforms, if you upgrade from gephex-0.0.4,
-  it's best to uninstall it first, to backup your graphs in 
-  "~/.gephex/graphs" and to remove "~/.gephex".
-  After you started the new gephex for the first time, you can restore
-  your old graphs into "~/.gephex/graphs".
-  This makes sure that the old configuration files don't get in the way.
+  On unix platforms, the layout of the ~/.gephex directory has
+  changed with 0.4.1. All files that previously have been
+  in "~/.gephex/" are now moved to the new directory 
+  "~/.gephex/0.4/". This change is done automatically when you first
+  start gephex-0.4.1. Note that after that, you cannot simply start
+  an older version of gephex, because it cannot find the config files
+  and will create new ones.
 
 
 For documentation, please have a look at doc/documentation.html 

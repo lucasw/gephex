@@ -26,6 +26,8 @@
 #include <string>
 #include <map>
 
+#include <iosfwd>
+
 #include "autoptr.h"
 
 namespace utils
@@ -43,11 +45,13 @@ namespace utils
   public:
     /**
      * 
-     * \param file_name the name of the config file
-     * \throws std::invalid_argument if file_name can't be opened or
-     *  parsed
+     * \param config_stream a stream that contains the config
+     *
+     * \throw std::invalid_argument if parsing the stream fails
      */
-    ConfigFile(const std::string& file_name);
+    ConfigFile(std::istream& config_stream);
+
+    ~ConfigFile();
 
     /**
      * Returns one section of the config file.

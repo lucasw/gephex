@@ -1,3 +1,39 @@
+0.4.1:
+------
+
+  * new ffmpeg based driver to load video files on linux and win32
+    (see also README.win32 and the documentation for updated build
+     instructions on win32)
+
+  * new modules:
+     * displacement module
+     * chroma key module
+     * noise module
+     * yuv4mpeg2 output module (experimental)
+     * yuv4mpeg2 input module  (experimental)
+     * ffmpeg output module    (experimental)
+
+  * updated modules:
+     * audioadd module   : translated property names to english
+     * audioenergy module: now automatically adapts to signal strength
+     * image calculon    : fixed bug #50 which could lead to a segfault in
+                           certain conditions
+     * image output      : unified xshm and ximage driver, added Xv support
+                           (uses hardware scaling if supported)
+     * rotozoom module   : added mirror-mode
+     * tunnel module     : fixed cylindrical mapping, removed some artifacts
+
+  * added command line parameter support to engine and gui (now all parameters
+    in gephex.conf can be overriden on the command line)
+ 
+  * replaced most inline assembler code with external nasm
+    assembler files
+
+  * small doc updates
+
+  * changed config dir to ~/.gephex/0.4 and changed module and type
+    install dir to $prefix/lib/gephex-0.4/(modules|types)
+
 0.4:
 -----
 

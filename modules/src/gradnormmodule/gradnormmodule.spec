@@ -30,7 +30,7 @@ inputs
         lower_bound       = 0
         higher_bound      = 1
         step_size         = 0.01
-        default           = 0.01
+        default           = 0.5
         help              = lightness
     }
 

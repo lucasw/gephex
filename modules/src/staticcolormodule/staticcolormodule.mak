@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "staticcolormodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -57,42 +61,8 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/numbertype" /I "../../../types/src/rgbtype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "staticcolormodule_EXPORTS" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\staticcolormodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\staticcolormodule.bsc" 
 BSC32_SBRS= \
@@ -104,6 +74,7 @@ DEF_FILE= \
 LINK32_OBJS= \
 	"$(INTDIR)\staticcolormodule.obj" \
 	"$(INTDIR)\staticcolormodule_auto.obj" \
+	"$(INTDIR)\staticcolormodule_x86.obj" \
 	"..\..\..\util\src\cpuinfo\Release\cpuinfo.lib"
 
 "$(OUTDIR)\staticcolormodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -166,8 +137,43 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MDd /Gm /GX /ZI /Od /I "../../../types/src/numbertype" /I "../../../types/src/rgbtype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "staticcolormodule_EXPORTS" /D "_DEBUG" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\staticcolormodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\staticcolormodule.bsc" 
+BSC32_SBRS= \
+	
+LINK32=link.exe
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\staticcolormodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\staticcolormodule.def" /out:"$(OUTDIR)\staticcolormodule.dll" /implib:"$(OUTDIR)\staticcolormodule.lib" /pdbtype:sept 
+DEF_FILE= \
+	".\staticcolormodule.def"
+LINK32_OBJS= \
+	"$(INTDIR)\staticcolormodule.obj" \
+	"$(INTDIR)\staticcolormodule_auto.obj" \
+	"$(INTDIR)\staticcolormodule_x86.obj" \
+	"..\..\..\util\src\cpuinfo\Debug\cpuinfo.lib"
+
+"$(OUTDIR)\staticcolormodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+TargetPath=.\Debug\staticcolormodule.dll
+SOURCE="$(InputPath)"
+PostBuild_Desc=Kopiere Dll...
+DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
+
+ALL : $(DS_POSTBUILD_DEP)
+
+# Begin Custom Macros
+OutDir=.\Debug
+# End Custom Macros
+
+$(DS_POSTBUILD_DEP) : "cpuinfo - Win32 Debug" ".\staticcolormodule_auto.c" ".\staticcolormodule.h" ".\staticcolormodule.def" "..\..\..\config.h" "$(OUTDIR)\staticcolormodule.dll"
+   copy .\Debug\staticcolormodule.dll ..\..\..\dlls\modules
+	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -199,44 +205,6 @@ CPP_PROJ=/nologo /G6 /MDd /Gm /GX /ZI /Od /I "../../../types/src/numbertype" /I 
    $(CPP_PROJ) $< 
 <<
 
-MTL=midl.exe
-MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\staticcolormodule.bsc" 
-BSC32_SBRS= \
-	
-LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\staticcolormodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\staticcolormodule.def" /out:"$(OUTDIR)\staticcolormodule.dll" /implib:"$(OUTDIR)\staticcolormodule.lib" /pdbtype:sept 
-DEF_FILE= \
-	".\staticcolormodule.def"
-LINK32_OBJS= \
-	"$(INTDIR)\staticcolormodule.obj" \
-	"$(INTDIR)\staticcolormodule_auto.obj" \
-	"..\..\..\util\src\cpuinfo\Debug\cpuinfo.lib"
-
-"$(OUTDIR)\staticcolormodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-    $(LINK32) @<<
-  $(LINK32_FLAGS) $(LINK32_OBJS)
-<<
-
-TargetPath=.\Debug\staticcolormodule.dll
-SOURCE="$(InputPath)"
-PostBuild_Desc=Kopiere Dll...
-DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
-
-ALL : $(DS_POSTBUILD_DEP)
-
-# Begin Custom Macros
-OutDir=.\Debug
-# End Custom Macros
-
-$(DS_POSTBUILD_DEP) : "cpuinfo - Win32 Debug" ".\staticcolormodule_auto.c" ".\staticcolormodule.h" ".\staticcolormodule.def" "..\..\..\config.h" "$(OUTDIR)\staticcolormodule.dll"
-   copy .\Debug\staticcolormodule.dll ..\..\..\dlls\modules
-	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
-
-!ENDIF 
-
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("staticcolormodule.dep")
@@ -254,7 +222,7 @@ SOURCE=.\staticcolormodule.c
 
 CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/numbertype" /I "../../../types/src/rgbtype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "staticcolormodule_EXPORTS" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\staticcolormodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
-"$(INTDIR)\staticcolormodule.obj" : $(SOURCE) "$(INTDIR)" ".\staticcolormodule.h" "..\..\..\config.h"
+"$(INTDIR)\staticcolormodule.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h" ".\staticcolormodule.h"
 	$(CPP) @<<
   $(CPP_SWITCHES) $(SOURCE)
 <<
@@ -354,6 +322,36 @@ InputPath=.\staticcolormodule.spec
 	python ../../pluc.py c staticcolormodule.spec 
 	python ../../pluc.py h staticcolormodule.spec 
 	python ../../pluc.py def staticcolormodule.spec
+<< 
+	
+
+!ENDIF 
+
+SOURCE=.\staticcolormodule_x86.asm
+
+!IF  "$(CFG)" == "staticcolormodule - Win32 Release"
+
+OutDir=.\Release
+InputPath=.\staticcolormodule_x86.asm
+InputName=staticcolormodule_x86
+
+"$(INTDIR)\staticcolormodule_x86.obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	<<tempfile.bat 
+	@echo off 
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
+<< 
+	
+
+!ELSEIF  "$(CFG)" == "staticcolormodule - Win32 Debug"
+
+OutDir=.\Debug
+InputPath=.\staticcolormodule_x86.asm
+InputName=staticcolormodule_x86
+
+"$(INTDIR)\staticcolormodule_x86.obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	<<tempfile.bat 
+	@echo off 
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
 << 
 	
 

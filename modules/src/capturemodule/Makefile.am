@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
@@ -21,18 +21,20 @@ capturemodule_la_SOURCES = \
 	v4lcapturedriver.h \
 	v4l1.h \
 	v4l1.cpp \
-	colorconv.h \
-	colorconv.cpp \
 	videodev.h
 
-capturemodule_la_LDFLAGS = -module -avoid-version -no-undefined -lscale
-capturemodule_la_LIBADD= -L@builddir@/../libscale
+capturemodule_la_LDFLAGS = -module -avoid-version -no-undefined -lscale -lcolorconv
+capturemodule_la_LIBADD= -L@builddir@/../libscale -L@builddir@/../libcolorconv
+
+capturemodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a \
+			       @builddir@/../libcolorconv/libcolorconv.a
 
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../util/include \
            -I@srcdir@/../../../types/src/framebuffertype \
            -I@srcdir@/../../../types/src/numbertype \
-	   -I@srcdir@/../libscale	
+	   -I@srcdir@/../libscale \
+	   -I@srcdir@/../libcolorconv	
 
 
 DISTCLEANFILES = capturemodule.h capturemodule_auto.c

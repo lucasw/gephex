@@ -37,7 +37,6 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
-@OPT_INCLUDE_MMX_FALSE@imgarithmodule_la_DEPENDENCIES =
 subdir = modules/src/imgarithmodule
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -104,6 +103,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -126,6 +128,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -160,6 +164,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -205,6 +211,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -213,7 +221,7 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -232,25 +240,20 @@ target_vendor = @target_vendor@
 PLUC = python @srcdir@/../../pluc.py
 lib_LTLIBRARIES = imgarithmodule.la
 @OPT_INCLUDE_MMX_TRUE@imgarithmodule_la_LIBADD = \
-@OPT_INCLUDE_MMX_TRUE@	-lcpuinfo \
-@OPT_INCLUDE_MMX_TRUE@	-L@builddir@/../../../util/src/cpuinfo 
+@OPT_INCLUDE_MMX_TRUE@	@builddir@/imgarithmodule_x86.o \
+@OPT_INCLUDE_MMX_TRUE@	-lcpuinfo -L@builddir@/../../../util/src/cpuinfo 
 
-#	imgarithmodule_x86_mmx.o
 @OPT_INCLUDE_MMX_TRUE@imgarithmodule_la_DEPENDENCIES = \
+@OPT_INCLUDE_MMX_TRUE@	@builddir@/imgarithmodule_x86.o \
 @OPT_INCLUDE_MMX_TRUE@	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 
-#	imgarithmodule_x86_mmx.o
 @OPT_INCLUDE_MMX_TRUE@cpuinfoINCLUDES = -I @srcdir@/../../../util/src/cpuinfo
-#MMX_sOURCES              = imgarithmodule_x86_mmx.asm
-
-#imgarithmodule_x86_mmx.o: imgarithmodule_x86_mmx.asm
-#	nasm -o imgarithmodule_x86_mmx.o -f elf imgarithmodule_x86_mmx.asm
 imgarithmodule_la_SOURCES = \
 	imgarithmodule_auto.c \
 	imgarithmodule.c \
 	imgarithmodule.h \
 	imgarithmodule.spec \
-	imgarithmodule.xpm #$(MMX_sOURCES)
+	imgarithmodule.xpm
 
 imgarithmodule_la_LDFLAGS = -module -avoid-version 
 INCLUDES = -I @srcdir@/../../../engine/src/engine \
@@ -261,7 +264,7 @@ INCLUDES = -I @srcdir@/../../../engine/src/engine \
 		$(cpuinfoINCLUDES)
 
 DISTCLEANFILES = imgarithmodule.h imgarithmodule_auto.c
-EXTRA_DIST = imgarithmodule.dsp imgarithmodule.mak imgarithmodule.dep
+EXTRA_DIST = imgarithmodule.dsp imgarithmodule.mak imgarithmodule.dep imgarithmodule_x86.asm
 all: all-am
 
 .SUFFIXES:
@@ -545,6 +548,9 @@ imgarithmodule_auto.c: imgarithmodule.spec imgarithmodule.h
 
 imgarithmodule.h: imgarithmodule.spec
 	$(PLUC) h @srcdir@/imgarithmodule.spec
+
+@builddir@/imgarithmodule_x86.o: @srcdir@/imgarithmodule_x86.asm
+	@NASM@ @NASM_FLAGS@ -o @builddir@/imgarithmodule_x86.o @srcdir@/imgarithmodule_x86.asm
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

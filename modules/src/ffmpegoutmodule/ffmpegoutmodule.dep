@@ -1,0 +1,49 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von ffmpegoutmodule.mak
+
+.\ffmpegoutmodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\avcodec.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\common.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\rational.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avformat.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avio.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtsp.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtspcodes.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\ffmpegoutmodule.h"\
+	".\ffmpegwriter.h"\
+	
+
+.\ffmpegoutmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\ffmpegoutmodule.h"\
+	".\ffmpegoutmodule.xpm"\
+	
+
+.\ffmpegwriter.cpp : \
+	"..\..\..\contrib\ffmpeg\libavcodec\avcodec.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\common.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\rational.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avformat.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avio.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtsp.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtspcodes.h"\
+	".\ffmpegwriter.h"\
+	
+
+!IF  "$(CFG)" == "ffmpegoutmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ffmpegoutmodule - Win32 Debug"
+
+!ENDIF 
+

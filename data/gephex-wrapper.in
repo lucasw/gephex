@@ -11,13 +11,15 @@
 # TODO: better error handling
 # Note: the prefix variable is replaced at configure time
 
-CONF_DIR=$HOME/.gephex
+CONF_DIR_BASE=$HOME/.gephex
+CONF_DIR=$CONF_DIR_BASE/0.4
 DATA_PATH=@prefix@/share/gephex/
 
-if [ ! -e $CONF_DIR ]; then
+if [ ! -e $CONF_DIR_BASE ]; then
     echo "You started gephex for the first time!"
 
     echo "Creating $CONF_DIR..."
+    mkdir $CONF_DIR_BASE
     mkdir $CONF_DIR
     mkdir $CONF_DIR/graphs
 
@@ -25,11 +27,41 @@ if [ ! -e $CONF_DIR ]; then
     cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g > $CONF_DIR/gephex.conf
 
     echo "Copying example graphs..."
-    cp $DATA_PATH/graphs/example* $CONF_DIR/graphs
+    GRAPHS="example1 example2 example3 noise fzcam4"
+    for i in $GRAPHS; do cp $DATA_PATH/graphs/$i $CONF_DIR/graphs; done
 
     echo "...done!"
     echo "Everything is set up."
     echo "Starting GePhex, have fun."
+else
+    # ~/.gephex already exists
+    # move to ~/.gephex/0.4/ if necessary (before version 0.4.1)
+    # also adapt gephex.conf, because module_path, type_path and
+    # graph_path have changed in 0.4.1
+    if [ ! -e $CONF_DIR ]; then
+      echo "Moving old configuration data from '$CONF_DIR_BASE'"
+      echo "to new location '$CONF_DIR'"
+
+      mkdir $CONF_DIR
+
+      mv $CONF_DIR_BASE/graphs $CONF_DIR
+
+      if [ -e $CONF_DIR_BASE/run_in_terminal.sh ]; then
+        mv $CONF_DIR_BASE/run_in_terminal.sh $CONF_DIR
+      fi
+
+      # adapt the graph_path to new location
+      sed 's|[.]gephex/graphs|.gephex/0.4/graphs|' $CONF_DIR_BASE/gephex.conf > $CONF_DIR/gephex.conf
+
+      # adapt module path
+      sed 's|lib/gephex/modules|lib/gephex-0.4/modules|' $CONF_DIR/gephex.conf > $CONF_DIR/gephex.conf.tmp
+
+      # adapt type path
+      sed 's|lib/gephex/types|lib/gephex-0.4/types|' $CONF_DIR/gephex.conf.tmp > $CONF_DIR/gephex.conf
+
+      rm $CONF_DIR_BASE/gephex.conf
+      rm $CONF_DIR/gephex.conf.tmp
+    fi   
 fi
 
 if [ ! -e $CONF_DIR/run_in_terminal.sh ]; then

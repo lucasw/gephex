@@ -109,10 +109,6 @@ SOURCE=.\controller.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\engineconfig.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\main.cpp
 # End Source File
 # Begin Source File
@@ -134,10 +130,6 @@ SOURCE=.\bufferedsender.h
 # Begin Source File
 
 SOURCE=.\controller.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\engineconfig.h
 # End Source File
 # Begin Source File
 

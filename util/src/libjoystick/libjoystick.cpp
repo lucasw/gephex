@@ -36,6 +36,7 @@
 #include "joystickdriver.h"
 
 #if defined(OS_WIN32)
+//#include "directinjoystickdriver.h"
 #include "win32joystickdriver.h"
 #endif
 
@@ -52,10 +53,14 @@
 JoystickDriver::JoystickDriver(const std::string& driver_name)
 {
 #if defined(OS_WIN32)
-  if (driver_name == "default")
+  if (driver_name == "default" || driver_name  == "win32")
     {
-      m_impl = new Win32JoystickDriverImpl();
+	  m_impl = new Win32JoystickDriverImpl();
     }
+  /*else if (driver_name == "directin")
+	{
+	  m_impl = new DirectInJoystickDriverImpl();	  
+	}*/
   else
 #endif
 #if defined(WITH_LINUX_JOYSTICK)
@@ -147,7 +152,9 @@ void Joystick::poll()
         
       if (drv->center_mode() == JoystickDriverImpl::ZERO_CENTER)
         {
-          if (v < 0)
+          if (fabs(v) < 0.00001)
+            axis[i] = 0.5;
+          else if (v < 0)
             axis[i] = 0.5 - (v / axis_min[i])*0.5;
           else
             axis[i] = (v / axis_max[i])*0.5 + 0.5;
@@ -155,7 +162,7 @@ void Joystick::poll()
       else if (drv->center_mode() == JoystickDriverImpl::FLOATING_CENTER)
         {				  				  
           double scale = axis_max[i] - axis_min[i];
-          if (scale == 0 || fabs(scale) < fabs(v))
+          if (fabs(scale) < 0.00001 || fabs(scale) < fabs(v))
             axis[i] = 0;
           else
             axis[i] = v / scale;

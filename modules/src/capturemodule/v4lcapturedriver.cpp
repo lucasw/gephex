@@ -39,17 +39,25 @@
 
 #include "v4l1.h"
 #include "libscale.h"
-#include "colorconv.h"
+#include "libcolorconv.h"
 
 
 //----------------------------------------------------------------------
+
+void cvt_bgra32_to_bgra(uint8_t* dst_, uint8_t* src_,
+			size_t width, size_t height)
+{
+  uint32_t* dst = reinterpret_cast<uint32_t*>( dst_ );
+  uint32_t* src = reinterpret_cast<uint32_t*>( src_ );
+  std::copy(src, src + (width*height), dst);
+}
+
 
 class V4LCaptureDriver::Impl
 {
 public:
   Impl():m_width(0),m_height(0) 
   {
-    init_tabs();
   }
   ~Impl()  {}
 	
@@ -81,7 +89,10 @@ public:
     // is it a character device?
     if (!S_ISCHR(stat_buf.st_mode))
       throw std::runtime_error("devicefile is no character device");
-    
+
+    try
+      {
+	
     vd = std::auto_ptr<v4l1_device>(new v4l1_device(device_name));
 
     // get capture dimensions
@@ -148,6 +159,13 @@ public:
   m_pixel_format=videoMMap.format;
 
   m_tmp_img = new uint32_t[m_width*m_height];
+
+      }
+    catch(std::runtime_error& e)
+      {
+	vd.release();
+	throw e;
+      }
   }
 
   void grab_frame(uint_32* frb, int width, int height)
@@ -172,15 +190,15 @@ public:
     switch (m_pixel_format)
       {
       case VIDEO_PALETTE_RGB32: // tested with a bttv 878 card
-	bgra32_2_bgra(reinterpret_cast<uint_8*>(m_tmp_img),
+	cvt_bgra32_to_bgra(reinterpret_cast<uint_8*>(m_tmp_img),
 		      reinterpret_cast<uint_8*>(raw_img),
 		      m_width,m_height);
 	break;
       case VIDEO_PALETTE_YUV420P: // tested with a phillips webcam
 	// convert the image from yuvp to bgra
-	yuv411p_2_bgra(reinterpret_cast<uint_8*>(m_tmp_img),
-		       reinterpret_cast<uint_8*>(raw_img),
-		       m_width,m_height);
+	cvt_yuv420p_to_bgra(reinterpret_cast<uint_8*>(m_tmp_img),
+			    reinterpret_cast<uint_8*>(raw_img),
+			    m_width,m_height);
 	  break;
       default:
 	throw std::runtime_error("unsupported pixelformat");

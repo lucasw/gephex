@@ -60,7 +60,7 @@
 #include "dllloader.h"
 #include "scheduler.h"
 
-#include "engineconfig.h"
+#include "configmanager.h"
 
 #include "bufferedsender.h"
 
@@ -76,6 +76,7 @@ namespace engine
   typedef net::TagDispatcher<uint_32> PortDispatcher;
 
   class AutoTypeLoader;
+  class AutoModuleLoader;
   class Acceptor;
 
   class NetPoller : public ITask
@@ -97,7 +98,7 @@ namespace engine
   class Controller : public IEngineControlReceiver, public ITask
     {
     public:
-      Controller(const EngineConfig& config);
+      Controller(const utils::ConfigManager& config);
       virtual ~Controller();
       virtual bool finished() const;
       void disconnect();
@@ -106,7 +107,7 @@ namespace engine
       bool run();
   
     private:
-      EngineConfig config;
+      utils::ConfigManager config;
       volatile bool m_finished;
       int m_port;
       CommandTagger tagger1;
@@ -164,11 +165,9 @@ namespace engine
       ModuleClassNameReceiverNet moduleClassNameReceiver;
 	
       GraphNameReceiverNet graphNameReceiver;
-
 	
       ErrorReceiverNet errorReceiver;
-	
-	
+		
       ModelStatusReceiverNet modelStatusReceiver;
       RendererStatusReceiverNet rendererStatusReceiver;
 	
@@ -179,9 +178,10 @@ namespace engine
       dllloader::DllLoader pDllLoader;
 	
       utils::AutoPtr<AutoTypeLoader> sf;
+      utils::AutoPtr<AutoModuleLoader> aml;
       engine::Scheduler scheduler;
 
-	  bool first_time;
+      bool first_time;
     };
 
 }

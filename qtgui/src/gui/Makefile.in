@@ -52,15 +52,15 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = connectionwidget.$(OBJEXT) controlwidget.$(OBJEXT) \
-	graphnameview.$(OBJEXT) guiconfig.$(OBJEXT) \
-	hidebutton.$(OBJEXT) hidebuttonconstructor.$(OBJEXT) \
-	inputplugwidget.$(OBJEXT) main.$(OBJEXT) \
-	modulebutton.$(OBJEXT) moduleclassview.$(OBJEXT) \
-	nodeproperty.$(OBJEXT) nodewidget.$(OBJEXT) \
-	outputplugwidget.$(OBJEXT) picswitch.$(OBJEXT) \
-	plugwidget.$(OBJEXT) propertywidget.$(OBJEXT) \
-	propertywidgetconstructor.$(OBJEXT) typeview.$(OBJEXT) \
-	typeviewfactory.$(OBJEXT) vjmainwindow.$(OBJEXT)
+	graphnameview.$(OBJEXT) hidebutton.$(OBJEXT) \
+	hidebuttonconstructor.$(OBJEXT) inputplugwidget.$(OBJEXT) \
+	main.$(OBJEXT) modulebutton.$(OBJEXT) \
+	moduleclassview.$(OBJEXT) nodeproperty.$(OBJEXT) \
+	nodewidget.$(OBJEXT) outputplugwidget.$(OBJEXT) \
+	picswitch.$(OBJEXT) plugwidget.$(OBJEXT) \
+	propertywidget.$(OBJEXT) propertywidgetconstructor.$(OBJEXT) \
+	typeview.$(OBJEXT) typeviewfactory.$(OBJEXT) \
+	vjmainwindow.$(OBJEXT)
 am__objects_2 =
 am_gephex_gui_real_OBJECTS = $(am__objects_1) $(am__objects_2)
 am__objects_3 = controlwidget_moc.$(OBJEXT) \
@@ -83,7 +83,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/controlwidget_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/graphnameview.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/graphnameview_moc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/guiconfig.Po ./$(DEPDIR)/hidebutton.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/hidebutton.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/hidebutton_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/hidebuttonconstructor.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/inputplugwidget.Po \
@@ -169,6 +169,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -191,6 +194,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -225,6 +230,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -270,6 +277,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -314,7 +323,6 @@ CPP_FILES = \
 	connectionwidget.cpp \
 	controlwidget.cpp \
 	graphnameview.cpp \
-	guiconfig.cpp \
 	hidebutton.cpp \
 	hidebuttonconstructor.cpp \
 	inputplugwidget.cpp \
@@ -352,7 +360,6 @@ HEADER_FILES = \
 	connectionwidget.h \
 	controlwidget.h \
 	graphnameview.h \
-	guiconfig.h \
 	hidebutton.h \
 	hidebuttonconstructor.h \
 	imoduleinfobasestation.h \
@@ -492,7 +499,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controlwidget_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphnameview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphnameview_moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiconfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidebutton.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidebutton_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hidebuttonconstructor.Po@am__quote@

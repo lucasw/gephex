@@ -25,9 +25,9 @@
 
 struct OutputDriver;
 
-int SDL_init(char* error_text, int text_len);
+/*int SDL_init(char* error_text, int text_len);
 
-int SDL_shutdown(char* error_text, int text_len);
+int SDL_shutdown(char* error_text, int text_len);*/
 
 /**
  * The returned Driver must be freed by the caller!

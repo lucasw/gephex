@@ -1,4 +1,4 @@
-# Das ist die Spezifikation fuer das Addier Module. Blabla
+# spec file for the audioenergie module
 
 mod_audioenergymodule
 {
@@ -25,12 +25,12 @@ inputs
 
    amp
     {
-        name                = Amplification
+        name                = Responsivity
         type                = typ_NumberType
         const               = true
         strong_dependency   = true
         widget_type         = unboundednumber_selector
-        default             = 1
+        default             = 0
         hidden              = true
     }
 }

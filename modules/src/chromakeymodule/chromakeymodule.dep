@@ -1,0 +1,39 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von chromakeymodule.mak
+
+.\chromakeymodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\..\..\util\src\cpuinfo\cpuinfo.h"\
+	".\chromakeymodule.h"\
+	
+
+.\chromakeymodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\rgbtype\rgbtype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\chromakeymodule.h"\
+	".\chromakeymodule.xpm"\
+	
+
+!IF  "$(CFG)" == "chromakeymodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "chromakeymodule - Win32 Debug"
+
+!ENDIF 
+
+!IF  "$(CFG)" == "chromakeymodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "chromakeymodule - Win32 Debug"
+
+!ENDIF 
+

@@ -7,7 +7,7 @@ mod_rotozoommodule
     group          = Effects
     xpm            = rotozoommodule.xpm
     author         = Miss Piggy
-    version        = -1.0
+    version        = 0.0
     enablePatching = true
 }
 
@@ -21,7 +21,7 @@ inputs
         strong_dependency = true
         widget_type       = number_selector
         lower_bound       = 0
-        higher_bound      = 4
+        higher_bound      = 8
         step_size         = 0.04
         default           = 1
     }
@@ -87,7 +87,7 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = combo_box
-        values            = regular,poly
+        values            = regular,poly,mirror
         default           = regular
         help              = regular is stable, poly is faster
     }

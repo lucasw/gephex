@@ -15,12 +15,15 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_joystickmodule] number_of_inputs=[1] number_of_outputs=[5] deterministic=[false] }";
+ return "mod_spec { name=[mod_joystickmodule] number_of_inputs=[2] number_of_outputs=[5] deterministic=[false] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
     return "input_spec { type=typ_NumberType id=joy_id const=true strong_dependency=true default=0 } ";
+  break;
+  case 1:
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
   break;
  }
  return 0;
@@ -82,6 +85,9 @@ int setInput(void* instance,int index,void* typePointer)
   case 0:
    inst->in_joy_id = (NumberType *) typePointer;
   break;
+  case 1:
+   inst->in_driver = (StringType *) typePointer;
+  break;
  } //switch(index) 
  return 1;
 }
@@ -110,7 +116,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Joystick] group=[Input] inputs=[1 Joystick_ID{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[31] hidden=[true] display_format=[fixed] } ] outputs=[5 X_Richtung Y_Richtung Button_1 Button_2 midiOut ] type=xpm } ";
+  static const char* INFO = "info { name=[Joystick] group=[Input] inputs=[2 Joystick_ID{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] higher_bound=[31] hidden=[true] display_format=[fixed] } Driver{widget_type=[combo_box] values=[default,sdl] hidden=[true] } ] outputs=[5 X_Richtung Y_Richtung Button_1 Button_2 midiOut ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(joystickmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

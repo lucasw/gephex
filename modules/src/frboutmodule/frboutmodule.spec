@@ -3,7 +3,7 @@
 mod_frboutmodule
 {
     name          = Image Output
-    deterministic = true
+    deterministic = false
     group         = Outputs
     xpm           = frboutmodule.xpm
     author        = Georg
@@ -43,7 +43,7 @@ inputs
         default           = 0
         widget_type       = number_selector
         lower_bound       = 0
-        higher_bound      = 2048
+        higher_bound      = 2560
         step_size         = 1
         display_format    = fixed
         precision         = 0
@@ -61,7 +61,7 @@ inputs
         default           = 480
         widget_type       = number_selector
         lower_bound       = 0
-        higher_bound      = 2048
+        higher_bound      = 1600
         step_size         = 1
         display_format    = fixed
         precision         = 0
@@ -130,7 +130,7 @@ inputs
         hidden            = true
         default           = default
         widget_type       = combo_box
-        values            = default,GDI,XImage,XShm,SDL,GL,aalib,vloopback
+        values            = default,SDL,GL,aalib,vloopback
     }
 
     server

@@ -1,35 +1,33 @@
 
 ;;  void roberts_cross_x86_e3dnow(uint_32 xsize, uint_32 ysize,
-;;                   const uint_32* src,
-;;      	     uint_32* dst,
-;;                   float scale)
-
-global _roberts_cross_e3dnow
+;;                                const uint_32* src,
+;;       	                  uint_32* dst, float scale)
 
 section .text
 
+global roberts_cross_e3dnow
+global _roberts_cross_e3dnow
+
+roberts_cross_e3dnow:
 _roberts_cross_e3dnow: 
         
-        push    ebp 
+        push    ebp
         mov     ebp, esp 
-        sub     esp, 0x40        ; 64 bytes of local stack space
+        sub     esp, 0x4        ; 4 bytes of local stack space
+        pusha; push    ebx
 
+        
 xsize	equ     8
 ysize	equ     12
 src	equ     16
 dst     equ     20
 scale	equ	24
 
-yi      equ     -16
-
-
-        femms
+yi      equ     -4
                         
         mov     esi, [ebp + src]
         mov     edi, [ebp + dst]
 
-        prefetch [esi+4]
-        
         mov     eax, [ebp + xsize]
         shl     eax, 2
         add     eax, 4
@@ -37,37 +35,39 @@ yi      equ     -16
         add     edi, eax        ; edi = dst + xsize + 1
 
         prefetchw [edi]
-        prefetch [esi]
-
-
+        prefetchnta [esi]
+        
         mov     ecx, [ebp + ysize] ; init of yloop
         sub     ecx, 2
-        mov     [ebp + yi], ecx
+
+
+        mov     [esp + yi], ecx
 
         mov     ebx, [ebp + xsize]
         shl     ebx, 2
         neg     ebx             ; ebx = -4*xsize
-
 
         pxor    mm3, mm3                
         pxor    mm4, mm4
         pxor    mm5, mm5
         pxor    mm6, mm6
 
-roberts_cross_e3dnow_yloop:
-        cmp     DWORD [ebp + yi],  0
-        je       roberts_cross_e3dnow_yloop_done
+        cmp     DWORD [esp + yi],  0
+        je      roberts_cross_e3dnow_yloop_done
 
+        align 32
+roberts_cross_e3dnow_yloop:
         mov     ecx, [ebp + xsize] ; init of xloop
         sub     ecx, 2
 
-        align 32
-roberts_cross_e3dnow_xloop:
         cmp     ecx, 0
         je      roberts_cross_e3dnow_xloop_done
 
-        prefetchw [edi+64]
-        prefetch [esi+64]
+        jmp     roberts_cross_e3dnow_xloop
+        align 32
+roberts_cross_e3dnow_xloop:
+        prefetchw   [edi+64]
+        prefetchnta [esi+64]
         
         movd    mm3, [esi]
         movd    mm5, [esi + ebx - 4]
@@ -95,22 +95,23 @@ roberts_cross_e3dnow_xloop:
 
         mov     [edi], edx
 
-        dec     ecx             ; end of xloop        
         add     esi, 4
         add     edi, 4
-        jmp     roberts_cross_e3dnow_xloop
+        dec     ecx             ; end of xloop        
+
+        jnz     roberts_cross_e3dnow_xloop
 
 roberts_cross_e3dnow_xloop_done:
 
-        dec     DWORD [ebp + yi]       ; end of yloop        
         add     esi, 8
         add     edi, 8
-        jmp     roberts_cross_e3dnow_yloop
+        dec     DWORD [esp + yi]       ; end of yloop
+        jnz     roberts_cross_e3dnow_yloop
 
 roberts_cross_e3dnow_yloop_done:
         
         femms
-
+        popa ;pop ebx
         leave                   ; mov esp,ebp / pop ebp 
         ret
 

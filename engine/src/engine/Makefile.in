@@ -58,16 +58,15 @@ am_enginetest_OBJECTS = testmain.$(OBJEXT) schedulertest.$(OBJEXT) \
 	scheduler.$(OBJEXT)
 enginetest_OBJECTS = $(am_enginetest_OBJECTS)
 am_gephex_engine_real_OBJECTS = main.$(OBJEXT) scheduler.$(OBJEXT) \
-	netlogger.$(OBJEXT) engineconfig.$(OBJEXT) \
-	controller.$(OBJEXT) bufferedsender.$(OBJEXT)
+	netlogger.$(OBJEXT) controller.$(OBJEXT) \
+	bufferedsender.$(OBJEXT)
 gephex_engine_real_OBJECTS = $(am_gephex_engine_real_OBJECTS)
 am__DEPENDENCIES_1 =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/bufferedsender.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/controller.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/engineconfig.Po ./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/controller.Po ./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/netlogger.Po ./$(DEPDIR)/scheduler.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/schedulertest.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/testmain.Po
@@ -126,6 +125,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -148,6 +150,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -182,6 +186,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -227,6 +233,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -281,8 +289,6 @@ gephex_engine_real_SOURCES = \
 	netlogger.cpp \
 	netlogger.h \
 	scheduler.h \
-	engineconfig.cpp \
-	engineconfig.h \
 	controller.h \
 	controller.cpp \
         bufferedsender.h \
@@ -412,7 +418,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bufferedsender.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controller.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/engineconfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/netlogger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scheduler.Po@am__quote@

@@ -39,6 +39,15 @@
 
 #define FIXEDPNT_SCALE 65536
 
+#if defined(_MSC_VER)
+#define lrint(a) ((long int) a)
+#endif
+
+__inline int_32 cvt_to_fp(double a)
+{
+  return (int_32) lrint(FIXEDPNT_SCALE * a);
+}
+
 const int ROTOZOOM_SAFETY_BORDER = 5;
 
 /**
@@ -54,6 +63,21 @@ struct ALTransform {
   double Tx, Ty;
 };
 
+struct ALTransformFP {
+  int_32 AX, AY, BX, BY;
+  int_32 Tx, Ty;
+};
+
+struct input_params_t {
+  double zoom;
+  double theta;
+  int transpx;
+  int transpy;
+  int xsize_src;
+  int ysize_src;
+  int xsize_result;
+  int ysize_result;
+};
 
 /**
  * 
@@ -67,35 +91,46 @@ static void inverse_transform(struct geo_Point* dst, int x, int y,
   dst->y = trans->BX * x_ + trans->AY * y_;
 }
 
+static void build_transform(struct ALTransform* trans,
+                            const struct input_params_t* p)
+{
+  double xs, ys;
+  double a, b;
+  
+  xs = (p->xsize_src / (double) p->xsize_result) * p->zoom;
+  ys = (p->ysize_src / (double) p->ysize_result) * p->zoom;
+  a  =  cos(p->theta);
+  trans->AX = xs * a;
+  trans->AY = ys * a;
+  b = sin(p->theta);
+  trans->BX = xs * b;
+  trans->BY = -ys * b;
+
+  trans->Tx = (-(p->xsize_src/2)-p->transpx)*trans->AX
+    - ((p->ysize_src/2)+p->transpy)*trans->BY + (p->xsize_src/2);
+  trans->Ty = (-(p->xsize_src/2)-p->transpx)*trans->BX
+    - ((p->ysize_src/2)+p->transpy)*trans->AY + (p->ysize_src/2);
+}
+
 /**
  * Creates the Transformation and its inverse.
  */
 static void build_transforms(struct ALTransform* trans,
 			     struct ALTransform* transi,
-			     double theta, double zoom,
-			     int transpx, int transpy,
-			     int xsize_src, int ysize_src,
-			     int xsize_result, int ysize_result)
+                             const struct input_params_t* p)
+
 {
   double xs, ys;
   double a, b;
   
-  if (zoom < 0.00001)
-    zoom = 0.00001;
+  build_transform(trans, p);
 
-  xs = (xsize_src / (double) xsize_result) * zoom;
-  ys = (ysize_src / (double) ysize_result) * zoom;
-  a  =  cos(theta);
-  trans->AX = xs * a;
-  trans->AY = ys * a;
-  b = sin(theta);
-  trans->BX = xs * b;
-  trans->BY = -ys * b;
+  // build inverse transform
+  xs = (p->xsize_src / (double) p->xsize_result) * p->zoom;
+  ys = (p->ysize_src / (double) p->ysize_result) * p->zoom;
+  a  = cos(p->theta);
+  b  = sin(p->theta);
 
-  trans->Tx = (-(xsize_src/2)-transpx)*trans->AX
-    - ((ysize_src/2)+transpy)*trans->BY + (xsize_src/2);
-  trans->Ty = (-(xsize_src/2)-transpx)*trans->BX
-    - ((ysize_src/2)+transpy)*trans->AY + (ysize_src/2);
 
   transi->AX =  a / xs;
   transi->AY =  a / ys;
@@ -168,20 +203,17 @@ static void poly_print(struct geo_Point* pi, int num_points)
   }
 }
 
-typedef void (*rotozoomT)(double theta, double zoom, int transpx, int transpy,
-			  uint_32* src, int xsize_src, int ysize_src,
-			  uint_32* result, int xsize_result, int ysize_result,
-			  void*);
+typedef void (*rotozoomT)(const struct input_params_t* p,
+			  uint_32* src, uint_32* result, void*);
 
-static void rotozoom1(double theta, double zoom, int transpx, int transpy,
-		      uint_32* src, int xsize_src, int ysize_src,
-		      uint_32* result, int xsize_result, int ysize_result,
-		      void*);
+static void rotozoom1(const struct input_params_t* p,
+                      uint_32* src, uint_32* result, void*);
 
-static void rotozoom2(double theta, double zoom, int transpx, int transpy,
-		      uint_32* src, int xsize_src, int ysize_src,
-		      uint_32* result, int xsize_result, int ysize_result,
-		      void*);
+static void rotozoom_mirror(const struct input_params_t* p,
+                            uint_32* src, uint_32* result, void*);
+
+static void rotozoom2(const struct input_params_t* p,
+                      uint_32* src, uint_32* result, void*);
 
 
 #if defined(M_PI)
@@ -253,24 +285,23 @@ void destruct(MyInstance* my)
 }
 
 
-void calc_parameters(void* instance, double* theta, double* zoom,
-		     int* transpx, int* transpy)
+void calc_parameters(void* instance, struct input_params_t* p)
 {
   InstancePtr inst = (InstancePtr) instance;  
-  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
-  int xsize_out = inst->in_texture->xsize;
-  int ysize_out = inst->in_texture->ysize;
 
-  *theta = (M_PI * inst->in_rot->number) / 180;
-  *zoom =  trim_double(inst->in_zoom->number,0.001,4);
+  p->xsize_src    = inst->in_texture->xsize;
+  p->ysize_src    = inst->in_texture->ysize;
+  p->xsize_result = inst->in_texture->xsize;
+  p->ysize_result = inst->in_texture->ysize;
 
-  *transpx= (int) ((3*xsize_out*trim_double(inst->in_disp->x,0,1))
-		   -(xsize_out*1.5));
+  p->theta = fmod((M_PI * inst->in_rot->number) / 180, 2*M_PI);
+  p->zoom =  trim_double(inst->in_zoom->number,0.001,8);
 
-  *transpy= (int) ((3*ysize_out*trim_double(inst->in_disp->y,0,1))
-		    -(ysize_out*1.5));
+  p->transpx = (int) ((3*p->xsize_result*trim_double(inst->in_disp->x,0,1))
+                      -(p->xsize_result*1.5));
 
+  p->transpy = (int) ((3*p->ysize_result*trim_double(inst->in_disp->y,0,1))
+                      -(p->ysize_result*1.5));
 }
 
 void strongDependencies(Instance* inst, int neededInputs[])
@@ -282,49 +313,64 @@ void strongDependencies(Instance* inst, int neededInputs[])
   // safety border for the inverse transformation
   const int border = ROTOZOOM_SAFETY_BORDER;
 
-  double theta, zoom;
-  int transpx, transpy;
-
-  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
-  int xsize_out = inst->in_texture->xsize;
-  int ysize_out = inst->in_texture->ysize;
-
-  int xsize_text = inst->in_texture->xsize;
-  int ysize_text = inst->in_texture->ysize;
+  struct input_params_t p;
 
   MyInstancePtr my = inst->my;
 
-  calc_parameters(inst, &theta, &zoom, &transpx, &transpy);
-
-  // calculate the transformation and the inverse transformation
-  build_transforms(&trans, &transi, theta, zoom,
-		   transpx, transpy, xsize_text, ysize_text,
-		   xsize_out, ysize_out);
-
-  ok = transform_and_clip(&transi, xsize_text, ysize_text,
-			  xsize_out, ysize_out,
-			  points, &num_points, border);
-
-  my->back_needed = 1;
   my->text_needed = 1;
-  if (ok == 0)
+  my->back_needed = 1;
+
+  if (strcmp("mirror", inst->in_routine->text) == 0)
     {
-      my->text_needed = 0;
-      neededInputs[in_texture] = 0;
-    }
-  else if (ok == 2)
-    {
-      my->back_needed = 0;
       neededInputs[in_background] = 0;
+      my->back_needed = 0;
+    }
+  else
+    {
+      calc_parameters(inst, &p);
+
+      // calculate the transformation and the inverse transformation
+      build_transforms(&trans, &transi, &p);
+
+      ok = transform_and_clip(&transi, p.xsize_src, p.ysize_src,
+                              p.xsize_result, p.ysize_result,
+                              points, &num_points, border);
+
+      if (ok == 0)
+        {
+          my->text_needed = 0;
+          neededInputs[in_texture] = 0;
+        }
+      else if (ok == 2)
+        {
+          my->back_needed = 0;
+          neededInputs[in_background] = 0;
+        }
     }
 
 }
 
+static int no_zoom_and_no_rotation_and_no_transp(const struct input_params_t*p)
+{
+  return (p->transpx == 0) && (p->transpy == 0)
+    && (fabs(p->theta) < 0.0000001 || fabs(p->theta - 2*M_PI) < 0.0000001)
+    && (fabs(p->zoom - 1.0) < 0.00001);
+}
+
 void patchLayout(Instance* inst, int out2in[])
 {
-  if (!inst->in_copy_background->number)
-    out2in[out_r] = in_background;
+  struct input_params_t p;
+
+  calc_parameters(inst, &p);
+
+  if (no_zoom_and_no_rotation_and_no_transp(&p))
+    {
+      out2in[out_r] = in_texture;
+    }
+  else if (!trim_bool(inst->in_copy_background->number))
+    {
+      out2in[out_r] = in_background;
+    }
 }
 
 /****************************************************************************/
@@ -334,18 +380,10 @@ void update(void* instance)
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
 
-  double theta, zoom;
-  int transpx, transpy;
+  struct input_params_t p;
 
-  //int xsize_out = trim_int(inst->in_outx->number, 0, 1024);
-  //int ysize_out = trim_int(inst->in_outy->number, 0, 1024);
-  int xsize_out = inst->in_texture->xsize;
-  int ysize_out = inst->in_texture->ysize;
-
-  int xsize_text = inst->in_texture->xsize;
-  int ysize_text = inst->in_texture->ysize;
-
-  calc_parameters(instance, &theta, &zoom, &transpx, &transpy);
+  int copy_background = trim_bool(inst->in_copy_background->number);
+  calc_parameters(instance, &p);
 
   if (strcmp(my->oldRoutine.text, inst->in_routine->text) != 0)
     {
@@ -363,6 +401,12 @@ void update(void* instance)
 	  my->rotozoom = rotozoom2;
 	  my->usesEdgeBuffer = 1;
 	}
+      else if (strcmp(my->oldRoutine.text, "mirror") == 0)
+	{
+	  s_log(2, "Using mirror rotozooming");
+	  my->rotozoom = rotozoom_mirror;
+	  my->usesEdgeBuffer = 0;
+	}
       else
 	{
 	  char buffer[128];
@@ -377,88 +421,73 @@ void update(void* instance)
 	}
     }
 
-  if (my->usesEdgeBuffer && my->edges.yres != ysize_out)
+  if (no_zoom_and_no_rotation_and_no_transp(&p))
+    return;
+
+  if (my->usesEdgeBuffer && my->edges.yres != p.ysize_result)
     {
       if (my->edges.scanlines != 0)
 	free(my->edges.scanlines);
 
-      my->edges.scanlines = (struct ScanLine*) malloc(sizeof(*(my->edges.scanlines))*ysize_out);
-      my->edges.yres = ysize_out;
+      my->edges.scanlines = (struct ScanLine*) 
+        malloc(sizeof(*(my->edges.scanlines))* p.ysize_result);
+      my->edges.yres = p.ysize_result;
     }
 
-  if (inst->in_copy_background->number && my->back_needed)
+  if (copy_background && my->back_needed)
     {
       framebuffer_assign(inst->out_r, inst->in_background);
     }
 
   {
     FrameBufferAttributes attribs;
-    attribs.xsize = xsize_out;
-    attribs.ysize = ysize_out;
-    framebuffer_changeAttributes(inst->out_r,&attribs);
+    attribs.xsize = p.xsize_src;
+    attribs.ysize = p.ysize_src;
+    framebuffer_changeAttributes(inst->out_r, &attribs);
   }
 
   if (my->text_needed)
     {
-      my->rotozoom(theta, zoom, transpx, transpy,
-		   inst->in_texture->framebuffer, xsize_text, ysize_text,
-		   inst->out_r->framebuffer, xsize_out, ysize_out,
-		   &my->edges);
+      my->rotozoom(&p, inst->in_texture->framebuffer,
+		   inst->out_r->framebuffer, &my->edges);
     }
 }
 
 /****************************************************************************/
 
+static void build_fixedpoint_transform(struct ALTransformFP* tr,
+                                       const struct input_params_t* p)
+{
+  struct ALTransform trans;
+  build_transform(&trans, p);
+
+  tr->AX = cvt_to_fp(trans.AX);
+  tr->AY = cvt_to_fp(trans.AY);
+  tr->BX = cvt_to_fp(trans.BX);
+  tr->BY = cvt_to_fp(trans.BY);
+
+  tr->Tx = cvt_to_fp(trans.Tx);
+  tr->Ty = cvt_to_fp(trans.Ty);
+}
+
 /**
  * Basic rotozoom routine. For details see comments in the code.
  */
-void rotozoom1(double theta, double zoom, int transpx, int transpy,
-	       uint_32* src, int xsize_src, int ysize_src,
-	       uint_32* result, int xsize_result, int ysize_result,
-	       void* is_not_a_serious_warning)
+void rotozoom1(const struct input_params_t* p,
+               uint_32* src, uint_32* result, void* is_not_a_serious_warning)
 {
-  double a_x = zoom * cos(theta);
-  double a_y = a_x;
-  double b_x = zoom * sin(theta);
-  double b_y = -b_x;
-  double xs, ys;
-  
   int y;
-  int Transx, Transy;  
-  int y_a, y_b, AX, AY, BX, BY;
+  int_32 y_a, y_b;
+  struct ALTransformFP tr;
 
-  // generate Transfom
-  //
-  // ( AX  BY )   ( x )    ( Transx )   ( u )
-  // (        ) * (   ) +  (        ) = (
-  // ( BX  AY )   ( y )    ( Transy )   ( v )
-  //
-  // \-------/            \--------/
-  //     M                    T
+  build_fixedpoint_transform(&tr, p);
 
-  xs = (xsize_src / (double) xsize_result);
-  ys = (ysize_src / (double) ysize_result);
-  a_x *= xs;
-  a_y *= ys;
-  b_x *= xs;
-  b_y *= ys;
-  
-  AX = (int_32) (FIXEDPNT_SCALE*a_x);
-  AY = (int_32) (FIXEDPNT_SCALE*a_y);
-  BX = (int_32) (FIXEDPNT_SCALE*b_x);
-  BY = (int_32) (FIXEDPNT_SCALE*b_y);
-
-  Transx = (-(xsize_src/2)-transpx)*AX - ((ysize_src/2)+transpy)*BY
-    + ((xsize_src/2)<<16);
-  Transy =  (-(xsize_src/2)-transpx)*BX - ((ysize_src/2)+transpy)*AY
-    + ((ysize_src/2)<<16);
-
-  // For every pixel (x,y) we perform (u,v) = (x,y) * M + T;
+  // For every pixel (x,y) we perform (u,v) = M * (x,y) + T;
   // this means u =  AX*x + BY*y + Transx
   // and        v =  BX*x + AY*y + Transy
   //
-  // Since this is all linear, and the coordinates x and y progress linearly
-  // in out loop, we don't have to do the multiplications.
+  // Since this is all affine linear, and the coordinates x and y progress 
+  // linearly in the loops, we don't have to do the multiplications.
   // Instead we can accumulate the Termx A*x in x_a, B*y in y_b, B*x in x_b
   // and A*y in y_a.
   //
@@ -471,19 +500,23 @@ void rotozoom1(double theta, double zoom, int transpx, int transpy,
   // For the x-loop, the corresponding invariant is (xsize-1-y)*AX == x_a and
   // (xsize-1-y)*BX == x_b.
 
-  y_a = Transy;
-  y_b = Transx;
+  y_a = tr.Ty;
+  y_b = tr.Tx;
   
-  for (y = ysize_result-1; y >= 0; --y, y_a += AY, y_b += BY)
+  {
+  const int xsize_src = p->xsize_src;
+  const int ysize_src = p->ysize_src;
+
+  for (y = p->ysize_result-1; y >= 0; --y, y_a += tr.AY, y_b += tr.BY)
     {
       int x;
-      int x_a = 0;
-      int x_b = 0;
-      for (x = xsize_result-1; x >= 0; --x, x_a += AX, x_b += BX)
+      int_32 x_a = y_b;
+      int_32 x_b = y_a;
+      for (x = p->xsize_result-1; x >= 0; --x, x_a += tr.AX, x_b += tr.BX)
 	{
 	  int u, v;
-	  u = ((x_a + y_b) >> 16);
-	  v = ((y_a + x_b) >> 16);
+	  u = x_a >> 16;
+	  v = x_b >> 16;
 		  
 	  if(u >= 0 && u < xsize_src && v >= 0 && v < ysize_src)
 	    *result = src[u + v*xsize_src];//(y_<<9)+ (y_<<7)];
@@ -491,6 +524,55 @@ void rotozoom1(double theta, double zoom, int transpx, int transpy,
 	  ++result;
 	}
     }
+  }
+}
+
+
+/**
+ * Basic rotozoom routine with mirror. For details see comments in rotozoom1().
+ */
+void rotozoom_mirror(const struct input_params_t* p,
+                     uint_32* src, uint_32* result,
+                     void* is_not_a_serious_warning)
+{  
+  int y;
+  struct ALTransformFP tr;
+
+  int_32 y_a, y_b;
+
+  build_fixedpoint_transform(&tr, p);
+
+  y_a = tr.Ty;
+  y_b = tr.Tx;
+
+  {  
+  const int xsize_src = p->xsize_src;
+  const int ysize_src = p->ysize_src;
+
+  for (y = p->ysize_result-1; y >= 0; --y, y_a += tr.AY, y_b += tr.BY)
+    {
+      int x;
+      int_32 x_a = y_b;
+      int_32 x_b = y_a;
+      for (x = p->xsize_result-1; x >= 0; --x, x_a += tr.AX, x_b += tr.BX)
+	{
+	  int u, v;
+	  u = abs(x_a >> 16);
+	  v = abs(x_b >> 16);
+  
+          // turned out to be much faster than a % operator
+          // (on an athlon-xp 2200+ with gcc-3.3.4)
+          while (u >= xsize_src)
+            u -= xsize_src;
+          while (v >= ysize_src)
+            v -= ysize_src;
+
+          *result = src[u + v*xsize_src];//(y_<<9)+ (y_<<7)];
+
+	  ++result;
+	}
+    }
+  }
 }
 
 /****************************************************************************/
@@ -565,10 +647,8 @@ static void set_scan_edge(struct EdgeBuffer* edges,
 /**
  * Full polygon drawing code here.
  */
-void rotozoom2(double theta, double zoom, int transpx, int transpy,
-	       uint_32* src, int xsize_src, int ysize_src,
-	       uint_32* result, int xsize_result, int ysize_result,
-	       void* edges_)
+void rotozoom2(const struct input_params_t* p,
+               uint_32* src, uint_32* result, void* edges_)
 {
   uint_32* dst;
 	
@@ -580,7 +660,7 @@ void rotozoom2(double theta, double zoom, int transpx, int transpy,
 
   struct ScanLine* sline;
 
-  assert(edges->yres == ysize_result);
+  assert(edges->yres == p->ysize_result);
 
   // now calculate the intersection of the rotozoomed image and the screen
   {
@@ -592,12 +672,10 @@ void rotozoom2(double theta, double zoom, int transpx, int transpy,
     const int border = ROTOZOOM_SAFETY_BORDER;
 
     // calculate the transformation and the inverse transformation
-    build_transforms(&trans, &transi, theta, zoom,
-		    transpx, transpy, xsize_src, ysize_src,
-		    xsize_result, ysize_result);
+    build_transforms(&trans, &transi, p);
 
-    ok = transform_and_clip(&transi, xsize_src, ysize_src,
-			    xsize_result, ysize_result,
+    ok = transform_and_clip(&transi, p->xsize_src, p->ysize_src,
+			    p->xsize_result, p->ysize_result,
 			    points, &num_points, border);
 
     if (!ok)
@@ -638,8 +716,8 @@ void rotozoom2(double theta, double zoom, int transpx, int transpy,
   while (iy1 < iy2)
     {
       int x;
-      int_32 AX = (int_32) (trans.AX*FIXEDPNT_SCALE);
-      int_32 BX = (int_32) (trans.BX*FIXEDPNT_SCALE);
+      int_32 AX = cvt_to_fp(trans.AX);
+      int_32 BX = cvt_to_fp(trans.BX);
 
       int_32 x_a = sline->x_a;
       int_32 x_b = sline->x_b;
@@ -647,7 +725,7 @@ void rotozoom2(double theta, double zoom, int transpx, int transpy,
       int x1 = sline->x1;
       int x2 = sline->x2;
 
-      dst = result + (x1 + iy1*xsize_result);
+      dst = result + (x1 + iy1* p->xsize_result);
       for (x = x1; x <= x2; ++x)
 	{
 	  int u, v;
@@ -655,7 +733,7 @@ void rotozoom2(double theta, double zoom, int transpx, int transpy,
 	  u = (x_a >> 16);
 	  v = (x_b >> 16);
 
-	  *dst = src[u + v*xsize_src];
+	  *dst = src[u + v* p->xsize_src];
 	  
 	  ++dst;
 	  x_a += AX;
@@ -702,8 +780,8 @@ static void set_scan_edge(struct EdgeBuffer* edges,
       if (is_left)
 	{
 	  scanline->x1  = (int) x1;
-	  scanline->x_a = (int_32) (x_a * FIXEDPNT_SCALE);
-	  scanline->x_b = (int_32) (x_b * FIXEDPNT_SCALE);
+	  scanline->x_a = cvt_to_fp(x_a);
+	  scanline->x_b = cvt_to_fp(x_b);
 	}
       else
 	scanline->x2 = (int)x1;

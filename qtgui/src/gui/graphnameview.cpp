@@ -512,14 +512,14 @@ namespace gui
 			       IModelControlReceiver& model,
                                IErrorReceiver& log)
     :  stupidObject(0,*this), editSnap(0), renderedGraph(0),
-       m_model(model), m_topItem(new FolderItem(model, "_", "", "Graphen", 
+       m_model(model), m_topItem(new FolderItem(model, "_", "", "Graphs", 
                                                 FolderItem::DENY_REMOVE 
                                                 | FolderItem::DENY_RENAME) ),
        m_log(log)
   {
     std::vector<std::string> cols;
     cols.push_back("Name");
-    cols.push_back("Status");
+    cols.push_back("State");
     m_treeView = new TreeView(parent, "Graphs", cols);
     m_treeView->insertItem(*m_topItem,0);	
   }

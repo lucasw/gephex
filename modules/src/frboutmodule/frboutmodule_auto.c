@@ -15,7 +15,7 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_frboutmodule] number_of_inputs=[10] number_of_outputs=[0] deterministic=[true] }";
+ return "mod_spec { name=[mod_frboutmodule] number_of_inputs=[10] number_of_outputs=[0] deterministic=[false] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
@@ -134,7 +134,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Frame,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[2048] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[On which monitor should the window be placed?] } OutputDriver{widget_type=[combo_box] values=[default,GDI,XImage,XShm,SDL,GL,aalib,vloopback] hidden=[true] } Display{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is default or SERVER_HOSTNAME:XSERVER:SCREEN (for vloopback this is the video device, e.g. '/dev/video0')] } ] outputs=[0] type=xpm } ";
+  static const char* INFO = "info { name=[Image Output] group=[Outputs] inputs=[10 Image Options{widget_type=[check_box] toggle_keys=[p[0,1]] values=[On Top,Frame,Mirror X,Mirror Y,Invert] hidden=[true] } xsize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[2560] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } ysize{lower_bound=[0] precision=[0] widget_type=[number_selector] step_size=[1] special_text=[auto] higher_bound=[1600] hidden=[true] display_format=[fixed] help=[If x_size and y_size > 0 the image is scaled] } Brightness{hidden=[true] help=[Brightness (0.5:no change)] } Contrast{lower_bound=[0] higher_bound=[4] hidden=[true] help=[Contrast (1:no change)] } Gamma{lower_bound=[0.01] higher_bound=[4] hidden=[true] help=[Gamma correction (1:no change)] } Monitor{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[3] hidden=[true] help=[On which monitor should the window be placed?] } OutputDriver{widget_type=[combo_box] values=[default,SDL,GL,aalib,vloopback] hidden=[true] } Display{toggle_keys=[p[:0.1,:0.0]] hidden=[true] help=[Format is default or SERVER_HOSTNAME:XSERVER:SCREEN (for vloopback this is the video device, e.g. '/dev/video0')] } ] outputs=[0] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(frboutmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

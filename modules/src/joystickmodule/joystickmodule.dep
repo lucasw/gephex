@@ -6,6 +6,7 @@
 	"..\..\..\engine\src\engine\dllmodule.h"\
 	"..\..\..\types\src\miditype\miditype.h"\
 	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\..\..\util\src\libjoystick\libjoystick.h"\
 	"..\libmidi\midiutil.h"\
@@ -17,6 +18,7 @@
 	"..\..\..\engine\src\engine\dllutils.h"\
 	"..\..\..\types\src\miditype\miditype.h"\
 	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
 	"..\..\..\util\include\basic_types.h"\
 	".\joystickmodule.h"\
 	".\joystickmodule.xpm"\

@@ -54,21 +54,23 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = libgrid libmidi libscale libdshow audioaddmodule \
-	audiobdmodule audioenergymodule audiospecmodule \
+DIST_SUBDIRS = libgrid libmidi libscale libdshow libcolorconv \
+	audioaddmodule audiobdmodule audioenergymodule audiospecmodule \
 	audiosynthmodule audiovismodule audiowavegenmodule blurmodule \
-	bwmodule color2numbermodule diffmodule doepfermodule \
-	flashmodule flipflopmodule font3Dmodule fpsmodule frbinmodule \
-	frboutmodule funparsemodule gradnormmodule ifsgenmodule \
-	ifsmodule ifsxfadermodule imagebuffermodule imgarithmodule \
-	isingnoizemodule jumpmodule netcontrolmodule numarithmodule \
-	number2colormodule numbermodule numenvmodule numlfomodule \
-	numposmodule numxfadermodule overlaymodule pixelizemodule \
-	planemodule plasmamodule posnummodule rangeconvertmodule \
-	resultmodule rotozoommodule signalgenmodule staticcolormodule \
+	bwmodule chromakeymodule color2numbermodule diffmodule \
+	doepfermodule dplmodule flashmodule flipflopmodule \
+	font3Dmodule fpsmodule frbinmodule frboutmodule funparsemodule \
+	gradnormmodule ifsgenmodule ifsmodule ifsxfadermodule \
+	imagebuffermodule imgarithmodule isingnoizemodule jumpmodule \
+	netcontrolmodule noisemodule numarithmodule number2colormodule \
+	numbermodule numenvmodule numlfomodule numposmodule \
+	numxfadermodule overlaymodule pixelizemodule planemodule \
+	plasmamodule posnummodule rangeconvertmodule resultmodule \
+	rotozoommodule signalgenmodule staticcolormodule \
 	stringtokenizermodule tunnelmodule twolayermodule xfademodule \
-	joystickmodule sdlfontmodule capturemodule imagewritermodule \
-	audioinmodule audiooutmodule midiinmodule
+	y4minmodule yuv4mpeg2module joystickmodule sdlfontmodule \
+	capturemodule imagewritermodule audioinmodule audiooutmodule \
+	midiinmodule ffmpegoutmodule
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -102,6 +104,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -124,6 +129,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -158,6 +165,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -203,6 +212,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -211,7 +222,7 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -232,10 +243,12 @@ target_vendor = @target_vendor@
 @WITH_LIBPNG_TRUE@PNG_DIRS = imagewritermodule
 @WITH_ASOUNDLIB_OR_OSS_TRUE@AUDIO_DIRS = audioinmodule audiooutmodule midiinmodule
 @WITH_V4L_TRUE@V4L_DIRS = capturemodule
+@WITH_FFMPEG_TRUE@FFMPEG_DIRS = ffmpegoutmodule
 SUBDIRS = libgrid \
 	libmidi \
 	libscale \
 	libdshow \
+	libcolorconv \
 	audioaddmodule \
 	audiobdmodule \
 	audioenergymodule \
@@ -245,9 +258,11 @@ SUBDIRS = libgrid \
 	audiowavegenmodule \
 	blurmodule \
 	bwmodule \
+	chromakeymodule \
 	color2numbermodule \
 	diffmodule \
 	doepfermodule \
+        dplmodule \
 	flashmodule \
 	flipflopmodule \
 	font3Dmodule \
@@ -264,6 +279,7 @@ SUBDIRS = libgrid \
 	isingnoizemodule \
 	jumpmodule \
 	netcontrolmodule \
+	noisemodule \
 	numarithmodule \
 	number2colormodule \
 	numbermodule \
@@ -284,7 +300,9 @@ SUBDIRS = libgrid \
 	stringtokenizermodule \
 	tunnelmodule \
 	twolayermodule \
-	xfademodule $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS)
+	xfademodule \
+	y4minmodule \
+	yuv4mpeg2module	$(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)
 
 all: all-recursive
 

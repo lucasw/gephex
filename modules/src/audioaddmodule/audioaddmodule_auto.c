@@ -116,7 +116,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Adder] group=[Audio] inputs=[6 Signal1{help=[blah] } DaempfungLinks Signal2{help=[blah] } DaempfungRechts Threshold{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[4096] hidden=[true] } FlushBuffers{widget_type=[radio_button] hidden=[true] } ] outputs=[1 AddiertesSignal ] type=xpm } ";
+  static const char* INFO = "info { name=[Adder] group=[Audio] inputs=[6 Signal1 AmpLeft Signal2 AmpRight Threshold{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[4096] hidden=[true] } FlushBuffers{widget_type=[radio_button] hidden=[true] } ] outputs=[1 AddedSignal ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(audioaddmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

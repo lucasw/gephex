@@ -53,6 +53,9 @@ static const int SDL_VIDEO_FLAGS = SDL_HWSURFACE | SDL_DOUBLEBUF |
 
 //static const char* classname = "GE-PHEX_SDL_OUTPUT_WINDOW";
 
+static int s_instance_counter = 0;
+static int s_call_sdl_quit    = 0;
+
 //-----------------------------------------------------------------------
 
 struct DriverInstance {
@@ -73,6 +76,7 @@ struct DriverInstance {
 static struct DriverInstance* SDL_new_instance(const char* server_name,
                                                int xpos, int ypos,
                                                int width, int height,
+                                               int mmx_supported,
                                                char* error_text, int buflen);
 
 static void SDL_destroy(struct DriverInstance* sh);
@@ -107,29 +111,37 @@ struct OutputDriver* SDL_get_driver()
   return drv;
 }
 
-int SDL_init(char* error_text, int text_len)
+static int do_init(/*char* error_text, int text_len*/)
 {
-  if((SDL_WasInit(SDL_INIT_VIDEO) & SDL_INIT_VIDEO) == 0)
+  if(SDL_Init(SDL_INIT_VIDEO) == -1)
     {
-      if(SDL_Init(SDL_INIT_VIDEO) == -1)
+      if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
         {
-          if(SDL_InitSubSystem(SDL_INIT_VIDEO)==-1)
+          if (SDL_InitSubSystem(SDL_INIT_VIDEO) == -1)
             {
               return 0;
             }
         }
-      else
-        {
-          //	atexit(SDL_QUIT);
-        }
+      s_call_sdl_quit = 2;
+    }
+  else
+    {
+      s_call_sdl_quit = 1;
     }
     
   return 1;
 }
 
-int SDL_shutdown(char* error_text, int text_len)
-{   
-  //TODO: deinit SDL?
+static int do_shutdown(/*char* error_text, int text_len*/)
+{
+  if (s_call_sdl_quit == 1)
+    {
+      SDL_Quit();
+    }
+  else if (s_call_sdl_quit == 2)
+    {
+      SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    }
   return 1;
 }
 
@@ -139,10 +151,20 @@ int SDL_shutdown(char* error_text, int text_len)
 static struct DriverInstance*
 SDL_new_instance(const char* server_name,
                  int xpos, int ypos,
-                 int width, int height,
+                 int width, int height, int mmx_supported,
                  char* error_text, int text_len)
 {
   struct DriverInstance* sh = (struct DriverInstance*) malloc(sizeof(*sh));
+
+  if (s_instance_counter == 0)
+    {
+      if (!do_init(/*error_text, text_len*/))
+        {
+          snprintf(error_text, text_len, "SDL_new_instance: "
+                   "Could not initialize SDL");
+          return 0;
+        }
+    }
 
   if (sh == 0)
     {
@@ -165,6 +187,7 @@ SDL_new_instance(const char* server_name,
       return 0;
     }  
 
+  ++s_instance_counter;
   return sh;
 }
 
@@ -179,10 +202,13 @@ static void SDL_destroy(struct DriverInstance* sh)
   // according to the sdl docu, the surface that is created
   // by SDL_SetVideoMode should not be freed.
   // see http://sdldoc.csn.ul.ie/sdlsetvideomode.php
-  //  if (sh->Screen != 0)
-  //    SDL_FreeSurface(sh->Screen);
+  //    if (sh->Screen != 0)
+  //      SDL_FreeSurface(sh->Screen);
 
   free(sh);
+  --s_instance_counter;
+  if (s_instance_counter == 0)
+    do_shutdown();
 }
 
 static int SDL_resize(struct DriverInstance* sh, int width, int height,
@@ -278,7 +304,6 @@ static int SDL_blit_(struct DriverInstance* sh,
 		
       framebuffer = (int_32*) fb;
     }
-	
 
   tmp = SDL_CreateRGBSurfaceFrom(framebuffer,
 				 sh->width, sh->height, 32,

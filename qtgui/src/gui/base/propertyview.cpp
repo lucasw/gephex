@@ -45,45 +45,6 @@ namespace gui
 	  deleteTable();
   }
 
-  namespace
-  {
-    QTable* buildNewTable(QWidget* parent)
-    {
-      int numberOfRows = NUM_ROWS;
-
-	  //QHBoxLayout* l = new QHBoxLayout(parent);
-      //QScrollView* scroller = new QScrollView(parent);
-	  //	  l->addWidget(scroller);
-      
-      QTable* table = new QTable(numberOfRows, 3,
-                                 parent,
-                                 "Property Table");
-	  
-      QHeader* header = table->horizontalHeader();
-	
-      header->setLabel(0,"Property", 85);
-      header->setLabel(1,"Value", 115);
-      header->setLabel(2,"hide", 30);
-	
-      table->setLeftMargin( 0 );
-      table->verticalHeader()->hide();
-      table->setShowGrid(false);
-
-      // resize colum if content is larger then columsize
-      /*      for (int i = 0; i < 3; ++i)
-	      table->setColumnStretchable(i,true);*/
-
-      for (int i = 0; i < numberOfRows; ++i)
-	{
-	  table->setRowHeight(i,10);
-          //	  table->setRowStretchable(i, true);
-	}
-      table->show();
-      
-      return table;
-      }
-  }
-
   void PropertyView::deleteTable()
   {
     if (table != 0)
@@ -114,15 +75,32 @@ namespace gui
 
   void PropertyView::displayProperties(const IPropertyDescription& desc)
   {	 
+    deleteTable();
 
-    this->deleteTable();
-
-    table = buildNewTable(this);
-	m_layout->addWidget(table);
-	m_layout->activate();
-		
     std::list<PropertyEntry> entries = desc.getEntries();
 
+    table = new QTable( entries.size() , 3, this, "Property Table");
+	  
+    QHeader* header = table->horizontalHeader();
+	
+    header->setLabel(0,"Property", 85);
+    header->setLabel(1,"Value", 115);
+    header->setLabel(2,"hide", 30);
+	
+    table->setLeftMargin( 0 );
+    table->verticalHeader()->hide();
+    table->setShowGrid(false);
+
+    // resize colum if content is larger then columsize
+    /*      for (int i = 0; i < 3; ++i)
+	    table->setColumnStretchable(i,true);*/
+
+    for (int i = 0; i < table->numRows(); ++i)
+      {
+	table->setRowHeight(i,10);
+	//	  table->setRowStretchable(i, true);
+      }
+    
     int rowIndex = 0;
     for (std::list<PropertyEntry>::const_iterator it = entries.begin(); 
 	 it != entries.end(); ++it)
@@ -154,6 +132,10 @@ namespace gui
 	++rowIndex;
       }
 
+    m_layout->addWidget(table);
+    m_layout->activate();
+    
+    table->show();
   }
 
   void PropertyView::undisplayProperties()

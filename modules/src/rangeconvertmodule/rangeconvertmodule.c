@@ -22,6 +22,7 @@
 
 #include "rangeconvertmodule.h"
 
+#include <math.h>
 #include <assert.h>
 
 static logT s_log;
@@ -47,14 +48,11 @@ MyInstance* construct()
 {
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
-  // Add your initialization here
-
   return my;
 }
 
 void destruct(MyInstance* my)
 {
-  // Add your cleanup here
   free(my);
 }
 
@@ -69,7 +67,12 @@ void update(void* instance)
   double in = trim_double(inst->in_n->number, inst->in_min_in->number,
 			  inst->in_max_in->number);
   double result;
-  if (delta_out < 0 || delta_in < 0)
+
+  if (fabs(delta_in) < 0.000001)
+    {
+      result = inst->in_min_out->number + 0.5*delta_out;
+    }
+  else if (delta_in < 0)
     {
       result = inst->in_n->number;
     }

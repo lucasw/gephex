@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#include "numbertype.h"
+#include "basic_types.h"
 
 typedef struct RGBType_
 {
@@ -80,4 +80,9 @@ static __inline void rgb_deSerialize(const char* buffer, int len, RGBType* rgb)
 	{
 		sscanf(buffer,"%f %f %f",&rgb->r, &rgb->g, &rgb->b);
 	}
+}
+
+static __inline uint_8 color_comp_to_byte(double c)
+{
+  return (uint_8) (c * 255 +.5);
 }

@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -27,6 +27,7 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
 		-I @srcdir@/../../../types/src/miditype \
 		-I @srcdir@/../../../types/src/numbertype \
+		-I @srcdir@/../../../types/src/stringtype \
 		$(SDL_CFLAGS) \
 		-I @srcdir@/../libmidi \
 		-I @srcdir@/../../../util/src/libjoystick

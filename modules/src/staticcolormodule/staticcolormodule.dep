@@ -35,3 +35,9 @@
 
 !ENDIF 
 
+!IF  "$(CFG)" == "staticcolormodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "staticcolormodule - Win32 Debug"
+
+!ENDIF 
+

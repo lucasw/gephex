@@ -67,13 +67,9 @@ namespace utils
     return l;
   }
 
-  ConfigFile::ConfigFile(const std::string& file_name)
+  ConfigFile::ConfigFile(std::istream& config_stream)
   {
-    std::ifstream file(file_name.c_str());
-    if (!file)
-      throw std::invalid_argument("Could not open config file");
-
-    StructList structs = divide_structs(file);
+    StructList structs = divide_structs(config_stream);
     
     for (StructList::const_iterator it = structs.begin();
 	 it != structs.end(); ++it)
@@ -83,12 +79,16 @@ namespace utils
 
 	if (m_sections.count(name) != 0)
 	  {
-	    throw std::invalid_argument("Duplicate section in config file");
+	    throw std::invalid_argument("Duplicate section in config");
 	  }
 
 	m_sections.insert(std::make_pair(name, new_reader));
       }
     
+  }
+
+  ConfigFile::~ConfigFile()
+  {
   }
 
   const StructReader& ConfigFile::get_section(const std::string& section_name)

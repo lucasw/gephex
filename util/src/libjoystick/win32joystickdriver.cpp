@@ -75,7 +75,7 @@ public:
 		
 		ji.dwSize = sizeof(ji);
 		ji.dwFlags = JOY_RETURNALL | JOY_RETURNCENTERED |JOY_USEDEADZONE;
-		hr = joyGetPosEx( 0,  &ji );
+		hr = joyGetPosEx( m_handle,  &ji );
 		if (hr != JOYERR_NOERROR)
 		{
 			throw std::runtime_error("Could not get Joystick Pos!");			
@@ -94,15 +94,68 @@ public:
 
 		if (m_num_buttons > 0)
 			m_state.buttons[0] = (ji.dwButtons & JOY_BUTTON1) ? 1 : 0;
-		
 	    if (m_num_buttons > 1)
 			m_state.buttons[1] = (ji.dwButtons & JOY_BUTTON2) ? 1 : 0;
-
 		if (m_num_buttons > 2)
 			m_state.buttons[2] = (ji.dwButtons & JOY_BUTTON3) ? 1 : 0;
-
 		if (m_num_buttons > 3)
 			m_state.buttons[3] = (ji.dwButtons & JOY_BUTTON4) ? 1 : 0;
+		if (m_num_buttons > 4)
+			m_state.buttons[4] = (ji.dwButtons & JOY_BUTTON5) ? 1 : 0;
+	    if (m_num_buttons > 5)
+			m_state.buttons[5] = (ji.dwButtons & JOY_BUTTON6) ? 1 : 0;
+		if (m_num_buttons > 6)
+			m_state.buttons[6] = (ji.dwButtons & JOY_BUTTON7) ? 1 : 0;
+		if (m_num_buttons > 7)
+			m_state.buttons[7] = (ji.dwButtons & JOY_BUTTON8) ? 1 : 0;
+		if (m_num_buttons > 8)
+			m_state.buttons[8] = (ji.dwButtons & JOY_BUTTON9) ? 1 : 0;
+	    if (m_num_buttons > 9)
+			m_state.buttons[9] = (ji.dwButtons & JOY_BUTTON10) ? 1 : 0;
+		if (m_num_buttons > 10)
+			m_state.buttons[10] = (ji.dwButtons & JOY_BUTTON11) ? 1 : 0;
+		if (m_num_buttons > 11)
+			m_state.buttons[11] = (ji.dwButtons & JOY_BUTTON12) ? 1 : 0;
+		if (m_num_buttons > 12)
+			m_state.buttons[12] = (ji.dwButtons & JOY_BUTTON13) ? 1 : 0;
+	    if (m_num_buttons > 13)
+			m_state.buttons[13] = (ji.dwButtons & JOY_BUTTON14) ? 1 : 0;
+		if (m_num_buttons > 14)
+			m_state.buttons[14] = (ji.dwButtons & JOY_BUTTON15) ? 1 : 0;
+		if (m_num_buttons > 15)
+			m_state.buttons[15] = (ji.dwButtons & JOY_BUTTON16) ? 1 : 0;
+        if (m_num_buttons > 16)
+			m_state.buttons[16] = (ji.dwButtons & JOY_BUTTON17) ? 1 : 0;
+	    if (m_num_buttons > 17)
+			m_state.buttons[17] = (ji.dwButtons & JOY_BUTTON18) ? 1 : 0;
+		if (m_num_buttons > 18)
+			m_state.buttons[18] = (ji.dwButtons & JOY_BUTTON19) ? 1 : 0;
+		if (m_num_buttons > 19)
+			m_state.buttons[19] = (ji.dwButtons & JOY_BUTTON20) ? 1 : 0;
+		if (m_num_buttons > 20)
+			m_state.buttons[20] = (ji.dwButtons & JOY_BUTTON21) ? 1 : 0;
+		if (m_num_buttons > 21)
+			m_state.buttons[21] = (ji.dwButtons & JOY_BUTTON22) ? 1 : 0;
+	    if (m_num_buttons > 22)
+			m_state.buttons[22] = (ji.dwButtons & JOY_BUTTON23) ? 1 : 0;
+		if (m_num_buttons > 23)
+			m_state.buttons[23] = (ji.dwButtons & JOY_BUTTON24) ? 1 : 0;
+		if (m_num_buttons > 24)
+			m_state.buttons[24] = (ji.dwButtons & JOY_BUTTON25) ? 1 : 0;
+		if (m_num_buttons > 25)
+			m_state.buttons[25] = (ji.dwButtons & JOY_BUTTON26) ? 1 : 0;
+	    if (m_num_buttons > 26)
+			m_state.buttons[26] = (ji.dwButtons & JOY_BUTTON27) ? 1 : 0;
+		if (m_num_buttons > 27)
+			m_state.buttons[27] = (ji.dwButtons & JOY_BUTTON28) ? 1 : 0;
+		if (m_num_buttons > 28)
+			m_state.buttons[28] = (ji.dwButtons & JOY_BUTTON29) ? 1 : 0;
+        if (m_num_buttons > 29)
+			m_state.buttons[29] = (ji.dwButtons & JOY_BUTTON30) ? 1 : 0;
+	    if (m_num_buttons > 30)
+			m_state.buttons[30] = (ji.dwButtons & JOY_BUTTON31) ? 1 : 0;
+		if (m_num_buttons > 31)
+			m_state.buttons[31] = (ji.dwButtons & JOY_BUTTON32) ? 1 : 0;
 
 		return m_state;
 	}

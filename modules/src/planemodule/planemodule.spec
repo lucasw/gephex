@@ -20,18 +20,22 @@ inputs
         strong_dependency = true
         default           = 0
         widget_type       = unboundednumber_selector
+        precision         = 2
+        display_format    = fixed
     }
 
     rot
     {
-        name              = Rotation
+        name              = Z-Rotation
         type              = typ_NumberType
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = -180
-        higher_bound      = 180
+        lower_bound       = 0
+        higher_bound      = 90
         default           = 0
+        precision         = 2
+        display_format    = fixed
         step_size         = 0.5
     }
 
@@ -42,15 +46,7 @@ inputs
         const             = true
         strong_dependency = true
         default           = [0.5 0.5]
-    }
-
-    b
-    {
-        name              = Image
-        type              = typ_FrameBufferType
-        const             = true
-        strong_dependency = true
-        attributes        = a$.xsize ~ 256; a$.ysize ~ 256;
+        hidden            = true
     }
 
     xres
@@ -89,15 +85,16 @@ inputs
 
     d
     {
-        name              = Distance
+        name              = Plane-Distance
         type              = typ_NumberType
         const             = true
         strong_dependency = true
         widget_type       = number_selector
-        lower_bound       = 0
+        lower_bound       = 0.1
         higher_bound      = 1
         step_size         = 0.01
         default           = 0.5
+        hidden            = true
     }
 
     shading
@@ -108,13 +105,21 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = number_selector
-        higher_bound      = 10
+        higher_bound      = 1
         lower_bound       = 0
-        step_size         = 1
+        step_size         = 0.05
         default           = 0
         display_format    = fixed
-        precision         = 0
+        precision         = 2
         help              = Degree of Shading
+    }
+
+    b
+    {
+        name              = Image
+        type              = typ_FrameBufferType
+        const             = true
+        strong_dependency = true
     }
 }
 

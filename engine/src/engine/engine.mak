@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "engine - Win32 Release"
 
 OUTDIR=.\Release
@@ -50,7 +53,6 @@ CLEAN :
 !ENDIF 
 	-@erase "$(INTDIR)\bufferedsender.obj"
 	-@erase "$(INTDIR)\controller.obj"
-	-@erase "$(INTDIR)\engineconfig.obj"
 	-@erase "$(INTDIR)\main.obj"
 	-@erase "$(INTDIR)\netlogger.obj"
 	-@erase "$(INTDIR)\scheduler.obj"
@@ -62,40 +64,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I "../../../util/include" /I ".." /I "../../../base/src/utils" /I "../../../base/src/net" /I "../../../" /I "../../../base/src/" /I "../../../base/src/interfaces" /I "../../../base/src/netinterfaces" /I "../model" /I "../dllloader" /I "../renderer" /I "../sequencer" /D "_CONSOLE" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\engine.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\engine.bsc" 
 BSC32_SBRS= \
@@ -105,7 +74,6 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 LINK32_OBJS= \
 	"$(INTDIR)\bufferedsender.obj" \
 	"$(INTDIR)\controller.obj" \
-	"$(INTDIR)\engineconfig.obj" \
 	"$(INTDIR)\main.obj" \
 	"$(INTDIR)\netlogger.obj" \
 	"$(INTDIR)\scheduler.obj" \
@@ -162,7 +130,6 @@ CLEAN :
 !ENDIF 
 	-@erase "$(INTDIR)\bufferedsender.obj"
 	-@erase "$(INTDIR)\controller.obj"
-	-@erase "$(INTDIR)\engineconfig.obj"
 	-@erase "$(INTDIR)\main.obj"
 	-@erase "$(INTDIR)\netlogger.obj"
 	-@erase "$(INTDIR)\scheduler.obj"
@@ -176,40 +143,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "../../../util/include" /I ".." /I "../../../base/src/utils" /I "../../../base/src/net" /I "../../../" /I "../../../base/src/" /I "../../../base/src/interfaces" /I "../../../base/src/netinterfaces" /I "../model" /I "../dllloader" /I "../renderer" /I "../sequencer" /D "_CONSOLE" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\engine.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\engine.bsc" 
 BSC32_SBRS= \
@@ -219,7 +153,6 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 LINK32_OBJS= \
 	"$(INTDIR)\bufferedsender.obj" \
 	"$(INTDIR)\controller.obj" \
-	"$(INTDIR)\engineconfig.obj" \
 	"$(INTDIR)\main.obj" \
 	"$(INTDIR)\netlogger.obj" \
 	"$(INTDIR)\scheduler.obj" \
@@ -253,6 +186,36 @@ $(DS_POSTBUILD_DEP) : "renderer - Win32 Debug" "model - Win32 Debug" "dllloader 
 
 !ENDIF 
 
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("engine.dep")
@@ -272,11 +235,6 @@ SOURCE=.\bufferedsender.cpp
 SOURCE=.\controller.cpp
 
 "$(INTDIR)\controller.obj" : $(SOURCE) "$(INTDIR)"
-
-
-SOURCE=.\engineconfig.cpp
-
-"$(INTDIR)\engineconfig.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\main.cpp

@@ -50,6 +50,7 @@ struct OutputDriver {
   struct DriverInstance* (*new_instance)(const char* server_name,
                                          int xpos, int ypos,
                                          int width, int height,
+                                         int mmx_supported,
                                          char* error_txt, int buflen);
 
   void (*destroy)(struct DriverInstance* self);

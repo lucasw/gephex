@@ -32,7 +32,9 @@
 #endif
 
 // for the min and max templates
-#if defined (COMP_VC)
+// #if defined (COMP_VC) 
+// vc7 gets confused with this, so only include for vc6
+#if _MSC_VER == 1200  
 #include "minmax.h"
 #else 
 #include <algorithm> 

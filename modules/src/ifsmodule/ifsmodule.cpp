@@ -31,7 +31,7 @@
 #endif
 
 // for the min and max templates
-#if defined (COMP_VC)
+#if _MSC_VER == 1200
   #include "minmax.h"
 #else 
   #include <algorithm> 
@@ -98,7 +98,7 @@ void update(void* instance)
 
   int numDots = trim_int(inst->in_num_dot->number,1,10000000);
   int recursionDeep = trim_int(inst->in_num_rec->number,0,40);
-  int amount = (int) (trim_double(inst->in_amount->number,0,1) * 255);
+  int amount = (int) (trim_double(inst->in_amount->number,0,1) * 255 + .5);
 
   uint_32 pal[256];
   for (int i=0;i!=256;++i)

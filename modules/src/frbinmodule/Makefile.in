@@ -55,19 +55,21 @@ am__frbinmodule_la_SOURCES_DIST = frbinmodule_auto.c frbinmodule.cpp \
 	videofiledriver.h bmpdriver.h bmpdriver.cpp driverfactory.h \
 	framecache.h framecache.cpp avifiledriver.h avifiledriver.cpp \
 	mpeg3driver.h mpeg3driver.cpp sdlimagedriver.h \
-	sdlimagedriver.cpp
+	sdlimagedriver.cpp ffmpegdriver.h ffmpegdriver.cpp
 @WITH_AVIFILE_TRUE@am__objects_1 = avifiledriver.lo
 @WITH_MPEG3_TRUE@am__objects_2 = mpeg3driver.lo
 @WITH_SDL_IMAGE_TRUE@am__objects_3 = sdlimagedriver.lo
+@WITH_FFMPEG_TRUE@am__objects_4 = ffmpegdriver.lo
 am_frbinmodule_la_OBJECTS = frbinmodule_auto.lo frbinmodule.lo \
 	bmpdriver.lo framecache.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_3)
+	$(am__objects_3) $(am__objects_4)
 frbinmodule_la_OBJECTS = $(am_frbinmodule_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/avifiledriver.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/bmpdriver.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/ffmpegdriver.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/framecache.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/frbinmodule.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/frbinmodule_auto.Plo \
@@ -126,6 +128,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -148,6 +153,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -182,6 +189,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -227,6 +236,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -235,7 +246,7 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -253,21 +264,13 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 PLUC = python @srcdir@/../../pluc.py
 lib_LTLIBRARIES = frbinmodule.la
-@WITH_AVIFILE_TRUE@AVIFILE_sOURCES = \
-@WITH_AVIFILE_TRUE@	avifiledriver.h \
-@WITH_AVIFILE_TRUE@	avifiledriver.cpp
-
-@WITH_MPEG3_TRUE@MPEG3_sOURCES = \
-@WITH_MPEG3_TRUE@	mpeg3driver.h \
-@WITH_MPEG3_TRUE@	mpeg3driver.cpp
-
+@WITH_AVIFILE_TRUE@AVIFILE_sOURCES = avifiledriver.h avifiledriver.cpp
+@WITH_MPEG3_TRUE@MPEG3_sOURCES = mpeg3driver.h mpeg3driver.cpp
 @WITH_MPEG3_TRUE@MPEG3_lDFLAGS = @MPEG3_LDFLAGS@
-@WITH_SDL_IMAGE_TRUE@SDL_IMAGE_sOURCES = \
-@WITH_SDL_IMAGE_TRUE@	sdlimagedriver.h \
-@WITH_SDL_IMAGE_TRUE@	sdlimagedriver.cpp
-
+@WITH_SDL_IMAGE_TRUE@SDL_IMAGE_sOURCES = sdlimagedriver.h sdlimagedriver.cpp
 @WITH_SDL_IMAGE_TRUE@SDL_IMAGE_lDFLAGS = @SDL_LD_FLAGS@ @SDL_IMAGE_LDFLAGS@
 @WITH_SDL_IMAGE_TRUE@SDL_IMAGE_cFLAGS = @SDL_CFLAGS@
+@WITH_FFMPEG_TRUE@FFMPEG_sOURCES = ffmpegdriver.h ffmpegdriver.cpp
 frbinmodule_la_SOURCES = \
 	frbinmodule_auto.c \
 	frbinmodule.cpp \
@@ -279,11 +282,11 @@ frbinmodule_la_SOURCES = \
 	bmpdriver.cpp \
 	driverfactory.h \
 	framecache.h \
-	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES)
+	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES) $(FFMPEG_sOURCES)
 
 frbinmodule_la_LDFLAGS = \
         -module -avoid-version -no-undefined \
-        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS)
+        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@
 
 frbinmodule_la_LIBADD = -lstdc++ -lscale
 frbinmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
@@ -294,7 +297,7 @@ INCLUDES = \
 	-I @srcdir@/../../../types/src/numbertype \
 	-I @srcdir@/../../../types/src/stringtype \
 	-I @srcdir@/../../../types/src/framebuffertype \
-	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS)
+	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS) @FFMPEG_CFLAGS@
 
 DISTCLEANFILES = frbinmodule.h frbinmodule_auto.c
 EXTRA_DIST = frbinmodule.dsp frbinmodule.mak frbinmodule.dep \
@@ -373,6 +376,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/avifiledriver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bmpdriver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ffmpegdriver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/framecache.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/frbinmodule.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/frbinmodule_auto.Plo@am__quote@

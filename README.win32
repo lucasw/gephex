@@ -2,7 +2,7 @@
 The following programs and libraries are needed
 to compile gephex on win32:
 
-  * msvc 6
+  * msvc 6 (for higher versions (7/2003.NET) see at the bottom)
   * python
   * nasm
   * libqt (2.3nc)
@@ -10,6 +10,8 @@ to compile gephex on win32:
   * sdl-image
   * sdl-ttf
   * directx sdk
+  * ffmpeg (distributed with gephex in source form)
+  * mingw and msys to compile ffmpeg
 
 The python, nasm and qt (uic, moc) binaries must be in the PATH.
 You need to set up the following environment variables:
@@ -19,6 +21,15 @@ You need to set up the following environment variables:
   * SDL_TTF_DIR   : base dir of sdl-ttf
   * QTDIR         : base dir of qt
   * DXSDK_DIR     : base dir of directx sdk
+
+First, ffmpeg must be built.
+Start msys and chdir into <gephex-dist>/contrib/ffmpeg.
+Then call
+ > ./configure --enable-shared
+ > make
+If everything works out, the necessary dlls are now in
+"<gephex-dist>/contrib/ffmpeg/libavformat" and
+"<gephex-dist>/contrib/ffmpeg/libavcodec".
 
 There are two ways to build gephex
 (all paths are relative to your gephex dir):
@@ -55,9 +66,10 @@ There are two ways to build gephex
 
  Unfortunately, vs6 puts hard paths into .mak files and .dep files.
  Although the dsp files are controlled by the above environment variables,
- the console build will probably only work if you have your libraries
- installed into the following directories:
+ the console build will probably only work if you have installed the gephex
+ source and your libraries into the following directories:
 
+  GEPHEX_DIR    = c:/code/gephex-0.4  (_not_ c:/code/gephex-0.4.1!)
   SDL_DIR       = c:/code/sdl
   SDL_IMAGE_DIR = c:/code/sdl_image
   SDL_TTF_DIR   = c:/code/sdl_ttf
@@ -99,6 +111,54 @@ into <gephex-dir>/bin. The following dlls are needed:
   from qt:
     - qt-mt230nc.dll
 
+  from ffmpeg:
+    - avformat.dll
+    - avcodec.dll
+
 
  Good luck!
+
+ADD-ON: Compiling with Visual Studio .NET 2003:
+
+One thing upfront: If you plan to build the gui with VS.NET 2003, you WILL
+need a recent version, that is, a version higher than 3.0. AFAIK the only way
+to get such a version is to buy the following book:
+"C++ GUI Programming with QT 3", ISBN: 0131240722
+If you know any other way to get a qt version 3.0, please tell us.
+
+The prerequisits are basically the same as with Visual Studio 6, so before you
+start compiling, get all the 3rd party libraries listed in the first section of
+this README.
+
+You can either adjust all your environment variables as described above, 
+however I advise you to use the built-in Visual Studio features and make 
+entries in Tools->Options->Projects->VC++-Directories for include (SDL,
+SDL_Image, SDL_ttf, QT, dxsdk), lib (see include) and executables (python, 
+qt-moc (QTDIR/bin) and uic (same). Especially in the case of the known 
+executable paths i found there to be no other way since VS.Net seemed to 
+ignore my PATH environment variable. The rest is up to your personal taste 
+(Note: you will get warnings for not found environment variables if you 
+chose to do it this way).
+
+Build ffmpeg as described above.
+
+Build the gephex-projects in the following order:
+base.sln    (in gephex/base/src)
+	- Note: build interfaces first, then the rest. This is not very 
+	  convenient, i know, but i haven't found another way to set a 
+	  dependency without visual studio expecting a .lib file coming out
+	  of it.
+engine.sln  (in gephex/engine/src)
+types.sln   (in gephex/types/src)
+modules.sln (in gephex/modules/src)
+qtgui.sln   (in gephex/qtgui/src)
+
+After you're done, copy all required dlls to gephex/bin (see above).
+Note: if you want to copy the complete gephex directory to another
+machine which doesn't have Visual Studio .NET 2003 installed, you 
+will also need to copy the msvcrt7.dll runtime files from your Visual
+Studio directory to gephex/bin (multithreaded dll).
+
+Good luck again....
+
 

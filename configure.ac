@@ -1,7 +1,8 @@
 AC_INIT
+AC_PREREQ(2.59) dnl force autoconf version
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.4)
+AM_INIT_AUTOMAKE(gephex,0.4.1)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -98,6 +99,7 @@ AC_MSG_CHECKING([for processor type])
 case $host in
 i[[3456]]86-*-*)
   AC_DEFINE([CPU_I386])
+  CPU=x86
   AC_MSG_RESULT([80x86 processor detected (x >= 3).])
  ;;
 *)
@@ -153,6 +155,7 @@ esac
 #	AC_MSG_ERROR([Python is required for base to build!]); 
 #fi
 
+
 # optional libraries
 
 CHECK_EXTRA_LIB([GL],
@@ -165,17 +168,29 @@ CHECK_EXTRA_LIB([SDL], [AM_PATH_SDL([1.1.0], have_sdl=yes, have_sdl=no)],
 AM_CONDITIONAL([WITH_SDL], test "x$use_sdl" = "xyes")
 
 CHECK_EXTRA_LIB([SDL_IMAGE],
-                [AC_CHECK_HEADER([SDL/SDL_image.h],
+                [ac_save_CFLAGS="$CFLAGS"
+                 ac_save_CPPFLAGS="$CPPFLAGS"
+                 CFLAGS="$CFLAGS $SDL_CFLAGS"
+                 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+                 AC_CHECK_HEADER([SDL_image.h],
                              	  have_sdl_image=yes,
-                                  have_sdl_image=no)],
+                                  have_sdl_image=no)
+                 CFLAGS="$ac_save_CFLAGS"
+                 CPPFLAGS="$ac_save_CPPFLAGS"],
                 [yes], [with_sdl_image], [have_sdl_image], [use_sdl_image],
                 [AC_SUBST(SDL_IMAGE_LDFLAGS,"-lSDL_image")])
 AM_CONDITIONAL([WITH_SDL_IMAGE], test "x$use_sdl_image" = "xyes")
 
 CHECK_EXTRA_LIB([SDL_TTF],
-                [AC_CHECK_HEADER([SDL/SDL_ttf.h],
+                [ac_save_CFLAGS="$CFLAGS"
+                 ac_save_CPPFLAGS="$CPPFLAGS"
+                 CFLAGS="$CFLAGS $SDL_CFLAGS"
+                 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+                 AC_CHECK_HEADER([SDL_ttf.h],
                                   have_sdl_ttf=yes,
-	                          have_sdl_ttf=no)],
+	                          have_sdl_ttf=no)
+                 CFLAGS="$ac_save_CFLAGS"
+                 CPPFLAGS="$ac_save_CPPFLAGS"],
                 [yes], [with_sdl_ttf], [have_sdl_ttf], [use_sdl_ttf],
                 [AC_SUBST(SDL_TTF_LDFLAGS, "-lSDL_ttf")])
 AM_CONDITIONAL([WITH_SDL_TTF], test "x$use_sdl_ttf" = "xyes")
@@ -183,7 +198,7 @@ AM_CONDITIONAL([WITH_SDL_TTF], test "x$use_sdl_ttf" = "xyes")
 # avifile
 CHECK_EXTRA_LIB([AVIFILE],
                 [AM_PATH_AVIFILE([0.7.0], have_avifile=yes, have_avifile=no)],
-                [yes], [with_avifile], [have_avifile], [use_avifile])
+                [no], [with_avifile], [have_avifile], [use_avifile])
 AM_CONDITIONAL([WITH_AVIFILE], test "x$use_avifile" = "xyes")
 
 # check for libmpeg3 
@@ -240,6 +255,12 @@ AM_CONDITIONAL([WITH_LINUX_JOYSTICK], test "x$use_linux_joystick" = "xyes")
 # joystick (linux or sdl)
 AM_CONDITIONAL(WITH_JOYSTICK, test "x$use_linux_joystick" = "xyes" || test "x$use_sdl" = "xyes")
 
+# ffmpeg
+CHECK_EXTRA_LIB([FFMPEG],
+                [if test -d $srcdir/contrib/ffmpeg; then have_ffmpeg=yes; else have_ffmpeg=no; fi],
+                [yes], [with_ffmpeg], [have_ffmpeg], [use_ffmpeg])
+AM_CONDITIONAL([WITH_FFMPEG], test "x$use_ffmpeg" = "xyes")
+
 AC_ARG_ENABLE(mmx,
      [AC_HELP_STRING([--enable-mmx],
                      [turn on MMX support
@@ -287,11 +308,71 @@ AC_ARG_ENABLE(serialize-framebuffer,
      AM_CONDITIONAL(OPT_SERIALIZE_FRAMEBUFFER,
                     test "x$enable_serframe" = "xyes")
 
+
+# required programs
+
+if test "$CPU" = "x86" && test "x$enable_mmx" = "xyes"; then
+	AC_PATH_PROG(NASM, nasm)
+	if test "x$NASM" = "x"; then
+        	AC_MSG_ERROR([*** 'nasm' missing, please install or fix your \$PATH ***])
+	fi
+
+        NASM_FLAGS="-f elf -O1"
+        AC_SUBST(NASM)
+        AC_SUBST(NASM_FLAGS)
+fi
+
+
 AC_ARG_VAR([FRBINCACHE],
            [The size of the cache of the image source module in MB])
 if test "x$FRBINCACHE" != "x"; then
 AC_DEFINE_UNQUOTED([FRBINMODULE_CACHE_SIZE], $FRBINCACHE, [Size of the cache the frbinmodule uses (in MB)])
 fi;
+
+if test "x$use_ffmpeg" = "xyes"; then
+ FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay" 
+#--disable-risky"
+
+ echo Preparing ffmpeg configure call...
+ 
+ # If building with builddir != srcdir, ffmpegs configure wants to be
+ # called with an absolute path.
+ # Also, we have to do some workarounds (doc dir is missing for example).
+ if test "x${srcdir}" != x.; then
+   pwd
+   (mkdir contrib && mkdir contrib/ffmpeg) || true
+    
+   if ! test -e contrib/ffmpeg/doc
+   then
+      mkdir contrib/ffmpeg/doc
+      echo "all:" > contrib/ffmpeg/doc/Makefile
+   fi
+
+   TMPDIR=`pwd` && cd ${srcdir} && absolute_srcdir=`pwd` && cd $TMPDIR
+
+   FFMPEG_CONFIG_DIR="${absolute_srcdir}/contrib/ffmpeg"
+
+   AC_SUBST(FFMPEG_DIR,"${absolute_srcdir}/contrib/ffmpeg") #TODO
+ else
+   FFMPEG_CONFIG_DIR="."
+   AC_SUBST(FFMPEG_DIR,"../../../contrib/ffmpeg") #TODO
+ fi
+
+ # get absolute path of builddir
+ abs_builddir=`pwd`
+
+ AC_SUBST(FFMPEG_LDFLAGS,"${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a -lz")
+ AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat")
+
+ echo Calling ffmpeg configure with flags:
+ echo "${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS"
+ cd contrib/ffmpeg/ && ${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS && cd ../..
+fi
+
+# set gphx_module_lib_dir and gphx_type_lib_dir
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+AC_SUBST(gphx_module_lib_dir, "${prefix}/lib/gephex-0.4/modules")
+AC_SUBST(gphx_type_lib_dir, "${prefix}/lib/gephex-0.4/types")
 
 AC_CONFIG_FILES([Makefile
 base/Makefile
@@ -304,6 +385,7 @@ base/src/thread/Makefile
 base/src/utils/Makefile
 build/Makefile
 build/dummy/Makefile
+contrib/Makefile
 data/Makefile
 data/gephex-wrapper
 data/gephex.conf.default
@@ -332,9 +414,12 @@ modules/src/audiowavegenmodule/Makefile
 modules/src/blurmodule/Makefile
 modules/src/bwmodule/Makefile
 modules/src/capturemodule/Makefile
+modules/src/chromakeymodule/Makefile
 modules/src/color2numbermodule/Makefile
 modules/src/diffmodule/Makefile
 modules/src/doepfermodule/Makefile
+modules/src/dplmodule/Makefile
+modules/src/ffmpegoutmodule/Makefile
 modules/src/flashmodule/Makefile
 modules/src/flipflopmodule/Makefile
 modules/src/font3Dmodule/Makefile
@@ -356,8 +441,10 @@ modules/src/libdshow/Makefile
 modules/src/libgrid/Makefile
 modules/src/libmidi/Makefile
 modules/src/libscale/Makefile
+modules/src/libcolorconv/Makefile
 modules/src/midiinmodule/Makefile
 modules/src/netcontrolmodule/Makefile
+modules/src/noisemodule/Makefile
 modules/src/numarithmodule/Makefile
 modules/src/number2colormodule/Makefile
 modules/src/numbermodule/Makefile
@@ -380,6 +467,8 @@ modules/src/stringtokenizermodule/Makefile
 modules/src/tunnelmodule/Makefile
 modules/src/twolayermodule/Makefile
 modules/src/xfademodule/Makefile
+modules/src/y4minmodule/Makefile
+modules/src/yuv4mpeg2module/Makefile
 effectvmodules/Makefile
 effectvmodules/src/Makefile
 effectvmodules/src/libeffectv/Makefile

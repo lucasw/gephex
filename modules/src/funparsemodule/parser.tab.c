@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 2 "parser.y"
+#line 2 "./parser.y"
 
 /* This source file is a part of the GePhex Project.
 
@@ -145,7 +145,7 @@
 #endif
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 45 "parser.y"
+#line 45 "./parser.y"
 typedef union YYSTYPE {
   struct slist_s_t* list;
   struct expression_s_t* expr;
@@ -1057,7 +1057,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 85 "parser.y"
+#line 85 "./parser.y"
     {
                                        expression_t* e = (expression_t*) parm;
                                        *e = yyvsp[0].expr;
@@ -1065,14 +1065,14 @@ yyreduce:
     break;
 
   case 3:
-#line 91 "parser.y"
+#line 91 "./parser.y"
     { 
                			       yyval.expr = expression_create_const(yyvsp[0].num);
 				     ;}
     break;
 
   case 4:
-#line 94 "parser.y"
+#line 94 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1083,7 +1083,7 @@ yyreduce:
     break;
 
   case 5:
-#line 101 "parser.y"
+#line 101 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1094,7 +1094,7 @@ yyreduce:
     break;
 
   case 6:
-#line 108 "parser.y"
+#line 108 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1105,7 +1105,7 @@ yyreduce:
     break;
 
   case 7:
-#line 115 "parser.y"
+#line 115 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1116,7 +1116,7 @@ yyreduce:
     break;
 
   case 8:
-#line 122 "parser.y"
+#line 122 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1127,7 +1127,7 @@ yyreduce:
     break;
 
   case 9:
-#line 129 "parser.y"
+#line 129 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1138,7 +1138,7 @@ yyreduce:
     break;
 
   case 10:
-#line 136 "parser.y"
+#line 136 "./parser.y"
     { 
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[0].expr);
@@ -1148,7 +1148,7 @@ yyreduce:
     break;
 
   case 11:
-#line 142 "parser.y"
+#line 142 "./parser.y"
     {
                                        slist_t args = slist_create();
                                        slist_push_front(args, yyvsp[-1].expr);
@@ -1158,14 +1158,14 @@ yyreduce:
     break;
 
   case 12:
-#line 149 "parser.y"
+#line 149 "./parser.y"
     {
 	                               yyval.expr = expression_create_var(yyvsp[0].text)
 	                             ;}
     break;
 
   case 13:
-#line 152 "parser.y"
+#line 152 "./parser.y"
     { 
 	                                yyval.expr = expression_create_fun(yyvsp[-3].text, yyvsp[-1].list); 
                                         free(yyvsp[-3].text);
@@ -1173,14 +1173,14 @@ yyreduce:
     break;
 
   case 14:
-#line 157 "parser.y"
+#line 157 "./parser.y"
     { 
    					yyval.expr=yyvsp[-1].expr;       
  				     ;}
     break;
 
   case 15:
-#line 162 "parser.y"
+#line 162 "./parser.y"
     { 
                                        yyval.list = slist_create();
                                        slist_push_front(yyval.list, yyvsp[0].expr);
@@ -1188,7 +1188,7 @@ yyreduce:
     break;
 
   case 16:
-#line 166 "parser.y"
+#line 166 "./parser.y"
     { 
 				       yyval.list = yyvsp[0].list;
 	                               slist_push_front(yyval.list, yyvsp[-2].expr);
@@ -1393,7 +1393,7 @@ yyreturn:
 }
 
 
-#line 172 "parser.y"
+#line 172 "./parser.y"
    /* Grammatik endet hier */
 
 

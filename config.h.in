@@ -109,6 +109,9 @@
 /* build with AVIFILE support */
 #undef WITH_AVIFILE
 
+/* build with FFMPEG support */
+#undef WITH_FFMPEG
+
 /* build with GL support */
 #undef WITH_GL
 

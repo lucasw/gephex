@@ -1,0 +1,2227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                      "http://www.w3.org/TR/html40/loose.dtd">
+<HTML>
+<!-- Created on October, 29 2004 by texi2html 1.66 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<HEAD>
+<TITLE>FFmpeg Documentation</TITLE>
+
+<META NAME="description" CONTENT="FFmpeg Documentation">
+<META NAME="keywords" CONTENT="FFmpeg Documentation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.66">
+
+</HEAD>
+
+<BODY LANG="en" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[ &lt;&lt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<P>
+
+<center>
+</center>
+</P>
+<P>
+
+<H1> 1. Introduction </H1>
+<!--docid::SEC1::-->
+<P>
+
+FFmpeg is a very fast video and audio converter. It can also grab from
+a live audio/video source.
+  
+The command line interface is designed to be intuitive, in the sense
+that ffmpeg tries to figure out all the parameters, when
+possible. You have usually to give only the target bitrate you want.
+</P>
+<P>
+
+FFmpeg can also convert from any sample rate to any other, and resize
+video on the fly with a high quality polyphase filter.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Quick Start </H1>
+<!--docid::SEC2::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 Video and Audio grabbing </H2>
+<!--docid::SEC3::-->
+<P>
+
+FFmpeg can use a video4linux compatible video source and any Open Sound
+System audio source:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg /tmp/out.mpg 
+</pre></td></tr></table><P>
+
+Note that you must activate the right video source and channel before
+launching ffmpeg. You can use any TV viewer such as xawtv
+(<A HREF="http://bytesex.org/xawtv/">http://bytesex.org/xawtv/</A>) by Gerd Knorr which I find very
+good. You must also set correctly the audio recording levels with a
+standard mixer.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 Video and Audio file format conversion </H2>
+<!--docid::SEC4::-->
+<P>
+
+* ffmpeg can use any supported file format and protocol as input: 
+</P>
+<P>
+
+Examples:
+</P>
+<P>
+
+* You can input from YUV files:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i /tmp/test%d.Y /tmp/out.mpg 
+</pre></td></tr></table><P>
+
+It will use the files: 
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/tmp/test0.Y, /tmp/test0.U, /tmp/test0.V,
+/tmp/test1.Y, /tmp/test1.U, /tmp/test1.V, etc...
+</pre></td></tr></table><P>
+
+The Y files use twice the resolution of the U and V files. They are
+raw files, without header. They can be generated by all decent video
+decoders. You must specify the size of the image with the `<SAMP>-s</SAMP>' option
+if ffmpeg cannot guess it.
+</P>
+<P>
+
+* You can input from a RAW YUV420P file:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i /tmp/test.yuv /tmp/out.avi
+</pre></td></tr></table><P>
+
+The RAW YUV420P is a file containing RAW YUV planar, for each frame first
+come the Y plane followed by U and V planes, which are half vertical and
+horizontal resolution.
+</P>
+<P>
+
+* You can output to a RAW YUV420P file:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i mydivx.avi -o hugefile.yuv
+</pre></td></tr></table><P>
+
+* You can set several input files and output files:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i /tmp/a.wav -s 640x480 -i /tmp/a.yuv /tmp/a.mpg
+</pre></td></tr></table><P>
+
+Convert the audio file a.wav and the raw yuv video file a.yuv
+to mpeg file a.mpg
+</P>
+<P>
+
+* You can also do audio and video conversions at the same time:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i /tmp/a.wav -ar 22050 /tmp/a.mp2
+</pre></td></tr></table><P>
+
+Convert the sample rate of a.wav to 22050 Hz and encode it to MPEG audio.
+</P>
+<P>
+
+* You can encode to several formats at the same time and define a
+mapping from input stream to output streams:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i /tmp/a.wav -ab 64 /tmp/a.mp2 -ab 128 /tmp/b.mp2 -map 0:0 -map 0:0
+</pre></td></tr></table><P>
+
+Convert a.wav to a.mp2 at 64 kbits and b.mp2 at 128 kbits. '-map
+file:index' specify which input stream is used for each output
+stream, in the order of the definition of output streams.
+</P>
+<P>
+
+* You can transcode decrypted VOBs
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i snatch_1.vob -f avi -vcodec mpeg4 -b 800 -g 300 -bf 2 -acodec mp3 -ab 128 snatch.avi
+</pre></td></tr></table><P>
+
+This is a typical DVD ripper example, input from a VOB file, output
+to an AVI file with MPEG-4 video and MP3 audio, note that in this
+command we use B frames so the MPEG-4 stream is DivX5 compatible, GOP
+size is 300 that means an INTRA frame every 10 seconds for 29.97 fps
+input video.  Also the audio stream is MP3 encoded so you need LAME
+support which is enabled using <CODE>--enable-mp3lame</CODE> when
+configuring.  The mapping is particularly useful for DVD transcoding
+to get the desired audio language.
+</P>
+<P>
+
+NOTE: to see the supported input formats, use <CODE>ffmpeg -formats</CODE>.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Invocation </H1>
+<!--docid::SEC5::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.1 Syntax </H2>
+<!--docid::SEC6::-->
+<P>
+
+The generic syntax is:
+</P>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg [[infile options][`<SAMP>-i</SAMP>' <VAR>infile</VAR>]]... {[outfile options] <VAR>outfile</VAR>}...
+</pre></td></tr></table>If no input file is given, audio/video grabbing is done.
+<P>
+
+As a general rule, options are applied to the next specified
+file. For example, if you give the `<SAMP>-b 64</SAMP>' option, it sets the video
+bitrate of the next file. Format option may be needed for raw input
+files.
+</P>
+<P>
+
+By default, ffmpeg tries to convert as losslessly as possible: it
+uses the same audio and video parameter for the outputs as the one
+specified for the inputs.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.2 Main options </H2>
+<!--docid::SEC7::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-L</SAMP>'
+<DD>show license
+<P>
+
+</P>
+<DT>`<SAMP>-h</SAMP>'
+<DD>show help
+<P>
+
+</P>
+<DT>`<SAMP>-formats</SAMP>'
+<DD>show available formats, codecs, protocols, ...
+<P>
+
+</P>
+<DT>`<SAMP>-f fmt</SAMP>'
+<DD>force format
+<P>
+
+</P>
+<DT>`<SAMP>-i filename</SAMP>'
+<DD>input file name
+<P>
+
+</P>
+<DT>`<SAMP>-y</SAMP>'
+<DD>overwrite output files
+<P>
+
+</P>
+<DT>`<SAMP>-t duration</SAMP>'
+<DD>set the recording time in seconds. <CODE>hh:mm:ss[.xxx]</CODE> syntax is also
+supported.
+<P>
+
+</P>
+<DT>`<SAMP>-ss position</SAMP>'
+<DD>seek to given time position. <CODE>hh:mm:ss[.xxx]</CODE> syntax is also
+supported.
+<P>
+
+</P>
+<DT>`<SAMP>-title string</SAMP>'
+<DD>set the title
+<P>
+
+</P>
+<DT>`<SAMP>-author string</SAMP>'
+<DD>set the author
+<P>
+
+</P>
+<DT>`<SAMP>-copyright string</SAMP>'
+<DD>set the copyright
+<P>
+
+</P>
+<DT>`<SAMP>-comment string</SAMP>'
+<DD>set the comment
+<P>
+
+</P>
+<DT>`<SAMP>-target type</SAMP>'
+<DD>specify target file type (&quot;vcd&quot;, &quot;svcd&quot; or &quot;dvd&quot;). All the format
+options (bitrate, codecs, buffer sizes) are automatically set by this
+option. You can just type:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -i myfile.avi -target vcd /tmp/vcd.mpg
+</pre></td></tr></table><P>
+
+</P>
+<DT>`<SAMP>-hq</SAMP>'
+<DD>activate high quality settings
+<P>
+
+</P>
+<DT>`<SAMP>-itsoffset offset</SAMP>'
+<DD>set the input time offset in seconds. <CODE>[-]hh:mm:ss[.xxx]</CODE> syntax
+is also supported.  This option affects all the input files that
+follow it.  The offset is added to the input files' timestamps;
+specifying a positive offset means that the corresponding streams are
+delayed by 'offset' seconds.
+<P>
+
+</DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.3 Video Options </H2>
+<!--docid::SEC8::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-b bitrate</SAMP>'
+<DD>set the video bitrate in kbit/s (default = 200 kb/s)
+<DT>`<SAMP>-r fps</SAMP>'
+<DD>set frame rate (default = 25)
+<DT>`<SAMP>-s size</SAMP>'
+<DD>set frame size. The format is `<SAMP>WxH</SAMP>' (default 160x128).  The
+following abbreviations are recognized:
+<DL COMPACT>
+<DT>`<SAMP>sqcif</SAMP>'
+<DD>128x96
+<DT>`<SAMP>qcif</SAMP>'
+<DD>176x144
+<DT>`<SAMP>cif</SAMP>'
+<DD>352x288
+<DT>`<SAMP>4cif</SAMP>'
+<DD>704x576
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-aspect aspect</SAMP>'
+<DD>set aspect ratio (4:3, 16:9 or 1.3333, 1.7777)
+<DT>`<SAMP>-croptop size</SAMP>'
+<DD>set top crop band size (in pixels)
+<DT>`<SAMP>-cropbottom size</SAMP>'
+<DD>set bottom crop band size (in pixels)
+<DT>`<SAMP>-cropleft size</SAMP>'
+<DD>set left crop band size (in pixels)
+<DT>`<SAMP>-cropright size</SAMP>'
+<DD>set right crop band size (in pixels)
+<DT>`<SAMP>-padtop size</SAMP>'
+<DD>set top pad band size (in pixels)
+<DT>`<SAMP>-padbottom size</SAMP>'
+<DD>set bottom pad band size (in pixels)
+<DT>`<SAMP>-padleft size</SAMP>'
+<DD>set left pad band size (in pixels)
+<DT>`<SAMP>-padright size</SAMP>'
+<DD>set right pad band size (in pixels)
+<DT>`<SAMP>-padcolor (hex color)</SAMP>'
+<DD>set color of padded bands. The value for pad color is expressed 
+as a six digit hexidecimal number where the first two digits represent red, 
+middle two digits green and last two digits blue. Defaults to 000000 (black)
+<DT>`<SAMP>-vn</SAMP>'
+<DD>disable video recording
+<DT>`<SAMP>-bt tolerance</SAMP>'
+<DD>set video bitrate tolerance (in kbit/s)
+<DT>`<SAMP>-maxrate bitrate</SAMP>'
+<DD>set max video bitrate tolerance (in kbit/s)
+<DT>`<SAMP>-minrate bitrate</SAMP>'
+<DD>set min video bitrate tolerance (in kbit/s)
+<DT>`<SAMP>-bufsize size</SAMP>'
+<DD>set ratecontrol buffere size (in kbit)
+<DT>`<SAMP>-vcodec codec</SAMP>'
+<DD>force video codec to <VAR>codec</VAR>. Use the <CODE>copy</CODE> special value to
+tell that the raw codec data must be copied as is.
+<DT>`<SAMP>-sameq</SAMP>'
+<DD>use same video quality as source (implies VBR)
+<P>
+
+</P>
+<DT>`<SAMP>-pass n</SAMP>'
+<DD>select the pass number (1 or 2). It is useful to do two pass
+encoding. The statistics of the video are recorded in the first pass and
+the video at the exact requested bit rate is generated in the second
+pass.
+<P>
+
+</P>
+<DT>`<SAMP>-passlogfile file</SAMP>'
+<DD>select two pass log file name to <VAR>file</VAR>.
+<P>
+
+</DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.4 Advanced Video Options </H2>
+<!--docid::SEC9::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-g gop_size</SAMP>'
+<DD>set the group of picture size
+<DT>`<SAMP>-intra</SAMP>'
+<DD>use only intra frames
+<DT>`<SAMP>-qscale q</SAMP>'
+<DD>use fixed video quantiser scale (VBR)
+<DT>`<SAMP>-qmin q</SAMP>'
+<DD>min video quantiser scale (VBR)
+<DT>`<SAMP>-qmax q</SAMP>'
+<DD>max video quantiser scale (VBR)
+<DT>`<SAMP>-qdiff q</SAMP>'
+<DD>max difference between the quantiser scale (VBR)
+<DT>`<SAMP>-qblur blur</SAMP>'
+<DD>video quantiser scale blur (VBR)
+<DT>`<SAMP>-qcomp compression</SAMP>'
+<DD>video quantiser scale compression (VBR)
+<P>
+
+</P>
+<DT>`<SAMP>-rc_init_cplx complexity</SAMP>'
+<DD>initial complexity for 1-pass encoding
+<DT>`<SAMP>-b_qfactor factor</SAMP>'
+<DD>qp factor between p and b frames
+<DT>`<SAMP>-i_qfactor factor</SAMP>'
+<DD>qp factor between p and i frames
+<DT>`<SAMP>-b_qoffset offset</SAMP>'
+<DD>qp offset between p and b frames
+<DT>`<SAMP>-i_qoffset offset</SAMP>'
+<DD>qp offset between p and i frames
+<DT>`<SAMP>-rc_eq equation</SAMP>'
+<DD>set rate control equation (see section <A HREF="ffmpeg-doc.html#SEC13">3.8 FFmpeg formula evaluator</A>). Default is <CODE>tex^qComp</CODE>.
+<DT>`<SAMP>-rc_override override</SAMP>'
+<DD>rate control override for specific intervals
+<DT>`<SAMP>-me method</SAMP>'
+<DD>set motion estimation method to <VAR>method</VAR>. Available methods are
+(from lower to best quality):
+<DL COMPACT>
+<DT>`<SAMP>zero</SAMP>'
+<DD>Try just the (0, 0) vector.
+<DT>`<SAMP>phods</SAMP>'
+<DD><DT>`<SAMP>log</SAMP>'
+<DD><DT>`<SAMP>x1</SAMP>'
+<DD><DT>`<SAMP>epzs</SAMP>'
+<DD>(default method)
+<DT>`<SAMP>full</SAMP>'
+<DD>exhaustive search (slow and marginally better than epzs)
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-dct_algo algo</SAMP>'
+<DD>set dct algorithm to <VAR>algo</VAR>. Available values are:
+<DL COMPACT>
+<DT>`<SAMP>0</SAMP>'
+<DD>FF_DCT_AUTO (default)
+<DT>`<SAMP>1</SAMP>'
+<DD>FF_DCT_FASTINT
+<DT>`<SAMP>2</SAMP>'
+<DD>FF_DCT_INT
+<DT>`<SAMP>3</SAMP>'
+<DD>FF_DCT_MMX
+<DT>`<SAMP>4</SAMP>'
+<DD>FF_DCT_MLIB
+<DT>`<SAMP>5</SAMP>'
+<DD>FF_DCT_ALTIVEC
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-idct_algo algo</SAMP>'
+<DD>set idct algorithm to <VAR>algo</VAR>. Available values are:
+<DL COMPACT>
+<DT>`<SAMP>0</SAMP>'
+<DD>FF_IDCT_AUTO (default)
+<DT>`<SAMP>1</SAMP>'
+<DD>FF_IDCT_INT          
+<DT>`<SAMP>2</SAMP>'
+<DD>FF_IDCT_SIMPLE       
+<DT>`<SAMP>3</SAMP>'
+<DD>FF_IDCT_SIMPLEMMX    
+<DT>`<SAMP>4</SAMP>'
+<DD>FF_IDCT_LIBMPEG2MMX  
+<DT>`<SAMP>5</SAMP>'
+<DD>FF_IDCT_PS2          
+<DT>`<SAMP>6</SAMP>'
+<DD>FF_IDCT_MLIB         
+<DT>`<SAMP>7</SAMP>'
+<DD>FF_IDCT_ARM          
+<DT>`<SAMP>8</SAMP>'
+<DD>FF_IDCT_ALTIVEC      
+<DT>`<SAMP>9</SAMP>'
+<DD>FF_IDCT_SH4          
+<DT>`<SAMP>10</SAMP>'
+<DD>FF_IDCT_SIMPLEARM    
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-er n</SAMP>'
+<DD>set error resilience to <VAR>n</VAR>.
+<DL COMPACT>
+<DT>`<SAMP>1</SAMP>'
+<DD>FF_ER_CAREFULL (default)
+<DT>`<SAMP>2</SAMP>'
+<DD>FF_ER_COMPLIANT
+<DT>`<SAMP>3</SAMP>'
+<DD>FF_ER_AGGRESSIVE
+<DT>`<SAMP>4</SAMP>'
+<DD>FF_ER_VERY_AGGRESSIVE
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-ec bit_mask</SAMP>'
+<DD>set error concealment to <VAR>bit_mask</VAR>. <VAR>bit_mask</VAR> is a bit mask of
+the following values:
+<DL COMPACT>
+<DT>`<SAMP>1</SAMP>'
+<DD>FF_EC_GUESS_MVS (default=enabled)
+<DT>`<SAMP>2</SAMP>'
+<DD>FF_EC_DEBLOCK (default=enabled)
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-bf frames</SAMP>'
+<DD>use 'frames' B frames (supported for MPEG-1, MPEG-2 and MPEG-4)
+<DT>`<SAMP>-mbd mode</SAMP>'
+<DD>macroblock decision
+<DL COMPACT>
+<DT>`<SAMP>0</SAMP>'
+<DD>FF_MB_DECISION_SIMPLE: use mb_cmp (cannot change it yet in ffmpeg)
+<DT>`<SAMP>1</SAMP>'
+<DD>FF_MB_DECISION_BITS: chooses the one which needs the fewest bits
+<DT>`<SAMP>2</SAMP>'
+<DD>FF_MB_DECISION_RD: rate distoration
+</DL>
+<P>
+
+</P>
+<DT>`<SAMP>-4mv</SAMP>'
+<DD>use four motion vector by macroblock (only MPEG-4)
+<DT>`<SAMP>-part</SAMP>'
+<DD>use data partitioning (only MPEG-4)
+<DT>`<SAMP>-bug param</SAMP>'
+<DD>workaround not auto detected encoder bugs
+<DT>`<SAMP>-strict strictness</SAMP>'
+<DD>how strictly to follow the standarts
+<DT>`<SAMP>-aic</SAMP>'
+<DD>enable Advanced intra coding (h263+)
+<DT>`<SAMP>-umv</SAMP>'
+<DD>enable Unlimited Motion Vector (h263+)
+<P>
+
+</P>
+<DT>`<SAMP>-deinterlace</SAMP>'
+<DD>deinterlace pictures
+<DT>`<SAMP>-interlace</SAMP>'
+<DD>force interlacing support in encoder (only MPEG-2 and MPEG-4). Use this option
+if your input file is interlaced and if you want to keep the interlaced
+format for minimum losses. The alternative is to deinterlace the input
+stream with `<SAMP>-deinterlace</SAMP>', but deinterlacing introduces more
+losses.
+<DT>`<SAMP>-psnr</SAMP>'
+<DD>calculate PSNR of compressed frames
+<DT>`<SAMP>-vstats</SAMP>'
+<DD>dump video coding statistics to `<TT>vstats_HHMMSS.log</TT>'.
+<DT>`<SAMP>-vhook module</SAMP>'
+<DD>insert video processing <VAR>module</VAR>. <VAR>module</VAR> contains the module
+name and its parameters separated by spaces.
+</DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.5 Audio Options </H2>
+<!--docid::SEC10::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-ar freq</SAMP>'
+<DD>set the audio sampling freq (default = 44100 Hz)
+<DT>`<SAMP>-ab bitrate</SAMP>'
+<DD>set the audio bitrate in kbit/s (default = 64)
+<DT>`<SAMP>-ac channels</SAMP>'
+<DD>set the number of audio channels (default = 1)
+<DT>`<SAMP>-an</SAMP>'
+<DD>disable audio recording
+<DT>`<SAMP>-acodec codec</SAMP>'
+<DD>force audio codec to <VAR>codec</VAR>. Use the <CODE>copy</CODE> special value to
+tell that the raw codec data must be copied as is.
+</DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.6 Audio/Video grab options </H2>
+<!--docid::SEC11::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-vd device</SAMP>'
+<DD>set video grab device (e.g. `<TT>/dev/video0</TT>')
+<DT>`<SAMP>-vc channel</SAMP>'
+<DD>set video grab channel (DV1394 only)
+<DT>`<SAMP>-tvstd standard</SAMP>'
+<DD>set television standard (NTSC, PAL (SECAM))
+<DT>`<SAMP>-dv1394</SAMP>'
+<DD>set DV1394 grab
+<DT>`<SAMP>-ad device</SAMP>'
+<DD>set audio device (e.g. `<TT>/dev/dsp</TT>')
+</DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.7 Advanced options </H2>
+<!--docid::SEC12::-->
+<P>
+
+</P>
+<DL COMPACT>
+<DT>`<SAMP>-map file:stream</SAMP>'
+<DD>set input stream mapping
+<DT>`<SAMP>-debug</SAMP>'
+<DD>print specific debug info
+<DT>`<SAMP>-benchmark</SAMP>'
+<DD>add timings for benchmarking
+<DT>`<SAMP>-hex</SAMP>'
+<DD>dump each input packet
+<DT>`<SAMP>-bitexact</SAMP>'
+<DD>only use bit exact algorithms (for codec testing)
+<DT>`<SAMP>-ps size</SAMP>'
+<DD>set packet size in bits
+<DT>`<SAMP>-re</SAMP>'
+<DD>read input at native frame rate. Mainly used to simulate a grab device.
+<DT>`<SAMP>-loop</SAMP>'
+<DD>loop over the input stream. Currently it works only for image
+streams. This option is used for ffserver automatic testing.
+</DL>
+<P>
+
+<A NAME="FFmpeg formula evaluator"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.8 FFmpeg formula evaluator </H2>
+<!--docid::SEC13::-->
+<P>
+
+When evaluating a rate control string, FFmpeg uses an internal formula
+evaluator. 
+</P>
+<P>
+
+The following binary operators are available: <CODE>+</CODE>, <CODE>-</CODE>,
+<CODE>*</CODE>, <CODE>/</CODE>, <CODE>^</CODE>.
+</P>
+<P>
+
+The following unary operators are available: <CODE>+</CODE>, <CODE>-</CODE>,
+<CODE>(...)</CODE>.
+</P>
+<P>
+
+The following functions are available:
+</P>
+<DL COMPACT>
+<DT><VAR>sinh(x)</VAR>
+<DD><DT><VAR>cosh(x)</VAR>
+<DD><DT><VAR>tanh(x)</VAR>
+<DD><DT><VAR>sin(x)</VAR>
+<DD><DT><VAR>cos(x)</VAR>
+<DD><DT><VAR>tan(x)</VAR>
+<DD><DT><VAR>exp(x)</VAR>
+<DD><DT><VAR>log(x)</VAR>
+<DD><DT><VAR>squish(x)</VAR>
+<DD><DT><VAR>gauss(x)</VAR>
+<DD><DT><VAR>abs(x)</VAR>
+<DD><DT><VAR>max(x, y)</VAR>
+<DD><DT><VAR>min(x, y)</VAR>
+<DD><DT><VAR>gt(x, y)</VAR>
+<DD><DT><VAR>lt(x, y)</VAR>
+<DD><DT><VAR>eq(x, y)</VAR>
+<DD><DT><VAR>bits2qp(bits)</VAR>
+<DD><DT><VAR>qp2bits(qp)</VAR>
+<DD></DL>
+<P>
+
+The following constants are available:
+</P>
+<DL COMPACT>
+<DT><VAR>PI</VAR>
+<DD><DT><VAR>E</VAR>
+<DD><DT><VAR>iTex</VAR>
+<DD><DT><VAR>pTex</VAR>
+<DD><DT><VAR>tex</VAR>
+<DD><DT><VAR>mv</VAR>
+<DD><DT><VAR>fCode</VAR>
+<DD><DT><VAR>iCount</VAR>
+<DD><DT><VAR>mcVar</VAR>
+<DD><DT><VAR>var</VAR>
+<DD><DT><VAR>isI</VAR>
+<DD><DT><VAR>isP</VAR>
+<DD><DT><VAR>isB</VAR>
+<DD><DT><VAR>avgQP</VAR>
+<DD><DT><VAR>qComp</VAR>
+<DD><DT><VAR>avgIITex</VAR>
+<DD><DT><VAR>avgPITex</VAR>
+<DD><DT><VAR>avgPPTex</VAR>
+<DD><DT><VAR>avgBPTex</VAR>
+<DD><DT><VAR>avgTex</VAR>
+<DD></DL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.9 Protocols </H2>
+<!--docid::SEC14::-->
+<P>
+
+The filename can be `<TT>-</TT>' to read from the standard input or to write
+to the standard output.
+</P>
+<P>
+
+ffmpeg handles also many protocols specified with the URL syntax.
+</P>
+<P>
+
+Use 'ffmpeg -formats' to have a list of the supported protocols.
+</P>
+<P>
+
+The protocol <CODE>http:</CODE> is currently used only to communicate with
+ffserver (see the ffserver documentation). When ffmpeg will be a
+video player it will also be used for streaming :-)
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Tips </H1>
+<!--docid::SEC15::-->
+<P>
+
+<UL>
+<LI>For streaming at very low bit rate application, use a low frame rate
+and a small gop size. This is especially true for real video where
+the Linux player does not seem to be very fast, so it can miss
+frames. An example is:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ffmpeg -g 3 -r 3 -t 10 -b 50 -s qcif -f rv10 /tmp/b.rm
+</pre></td></tr></table><P>
+
+</P>
+<LI>The parameter 'q' which is displayed while encoding is the current
+quantizer. The value of 1 indicates that a very good quality could
+be achieved. The value of 31 indicates the worst quality. If q=31
+too often, it means that the encoder cannot compress enough to meet
+your bit rate. You must either increase the bit rate, decrease the
+frame rate or decrease the frame size.
+<P>
+
+</P>
+<LI>If your computer is not fast enough, you can speed up the
+compression at the expense of the compression ratio. You can use
+'-me zero' to speed up motion estimation, and '-intra' to disable
+completely motion estimation (you have only I frames, which means it
+is about as good as JPEG compression).
+<P>
+
+</P>
+<LI>To have very low bitrates in audio, reduce the sampling frequency
+(down to 22050 kHz for mpeg audio, 22050 or 11025 for ac3).
+<P>
+
+</P>
+<LI>To have a constant quality (but a variable bitrate), use the option
+'-qscale n' when 'n' is between 1 (excellent quality) and 31 (worst
+quality).
+<P>
+
+</P>
+<LI>When converting video files, you can use the '-sameq' option which
+uses in the encoder the same quality factor than in the decoder. It
+allows to be almost lossless in encoding.
+<P>
+
+</UL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC15"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Supported File Formats and Codecs </H1>
+<!--docid::SEC16::-->
+<P>
+
+You can use the <CODE>-formats</CODE> option to have an exhaustive list.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 File Formats </H2>
+<!--docid::SEC17::-->
+<P>
+
+FFmpeg supports the following file formats through the <CODE>libavformat</CODE>
+library:
+</P>
+<P>
+
+</P>
+<TABLE>
+<TR><TD>Supported File Format </TD><TD> Encoding </TD><TD> Decoding </TD><TD> Comments</TD>
+</TR>
+<TR><TD>MPEG audio </TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>MPEG1 systems </TD><TD> X  </TD><TD>  X</TD>
+</TD><TD> muxed audio and video
+</TR>
+<TR><TD>MPEG2 PS </TD><TD> X  </TD><TD>  X</TD>
+</TD><TD> also known as <CODE>VOB</CODE> file
+</TR>
+<TR><TD>MPEG2 TS </TD><TD>    </TD><TD>  X</TD>
+</TD><TD> also known as DVB Transport Stream
+</TR>
+<TR><TD>ASF</TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>AVI</TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>WAV</TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>Macromedia Flash</TD><TD> X </TD><TD> X</TD>
+</TD><TD> Only embedded audio is decoded
+</TR>
+<TR><TD>FLV              </TD><TD>  X </TD><TD> X</TD>
+</TD><TD> Macromedia Flash video files
+</TR>
+<TR><TD>Real Audio and Video </TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>Raw AC3 </TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Raw MJPEG </TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Raw MPEG video </TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Raw PCM8/16 bits, mulaw/Alaw</TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Raw CRI ADX audio </TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>SUN AU format </TD><TD> X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>NUT </TD><TD> X </TD><TD> X </TD><TD> NUT Open Container Format</TD>
+</TR>
+<TR><TD>Quicktime        </TD><TD> X </TD><TD>  X</TD>
+</TR>
+<TR><TD>MPEG4            </TD><TD> X </TD><TD>  X</TD>
+</TD><TD> MPEG4 is a variant of Quicktime
+</TR>
+<TR><TD>Raw MPEG4 video  </TD><TD>  X </TD><TD>  X</TD>
+</TR>
+<TR><TD>DV               </TD><TD>  X </TD><TD>  X</TD>
+</TR>
+<TR><TD>4xm              </TD><TD>    </TD><TD> X</TD>
+</TD><TD> 4X Technologies format, used in some games
+</TR>
+<TR><TD>Playstation STR  </TD><TD>    </TD><TD> X</TD>
+</TR>
+<TR><TD>Id RoQ           </TD><TD>    </TD><TD> X</TD>
+</TD><TD> used in Quake III, Jedi Knight 2, other computer games
+</TR>
+<TR><TD>Interplay MVE    </TD><TD>    </TD><TD> X</TD>
+</TD><TD> format used in various Interplay computer games
+</TR>
+<TR><TD>WC3 Movie        </TD><TD>    </TD><TD> X</TD>
+</TD><TD> multimedia format used in Origin's Wing Commander III computer game
+</TR>
+<TR><TD>Sega FILM/CPK    </TD><TD>    </TD><TD> X</TD>
+</TD><TD> used in many Sega Saturn console games
+</TR>
+<TR><TD>Westwood Studios VQA/AUD  </TD><TD>    </TD><TD> X</TD>
+</TD><TD> Multimedia formats used in Westwood Studios games
+</TR>
+<TR><TD>Id Cinematic (.cin) </TD><TD>    </TD><TD> X</TD>
+</TD><TD> Used in Quake II
+</TR>
+<TR><TD>FLIC format      </TD><TD>    </TD><TD> X</TD>
+</TD><TD> .fli/.flc files
+</TR>
+<TR><TD>Sierra VMD       </TD><TD>    </TD><TD> X</TD>
+</TD><TD> used in Sierra CD-ROM games
+</TR>
+<TR><TD>Matroska         </TD><TD>    </TD><TD> X</TD>
+</TR></TABLE>
+<P>
+
+<CODE>X</CODE> means that the encoding (resp. decoding) is supported.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 Image Formats </H2>
+<!--docid::SEC18::-->
+<P>
+
+FFmpeg can read and write images for each frame of a video sequence. The
+following image formats are supported:
+</P>
+<P>
+
+</P>
+<TABLE>
+<TR><TD>Supported Image Format </TD><TD> Encoding </TD><TD> Decoding </TD><TD> Comments</TD>
+</TR>
+<TR><TD>PGM, PPM     </TD><TD> X </TD><TD> X</TD>
+</TR>
+<TR><TD>PAM          </TD><TD> X </TD><TD> X </TD><TD> PAM is a PNM extension with alpha support</TD>
+</TR>
+<TR><TD>PGMYUV       </TD><TD> X </TD><TD> X </TD><TD> PGM with U and V components in YUV 4:2:0</TD>
+</TR>
+<TR><TD>JPEG         </TD><TD> X </TD><TD> X </TD><TD> Progressive JPEG is not supported</TD>
+</TR>
+<TR><TD>.Y.U.V       </TD><TD> X </TD><TD> X </TD><TD> One raw file per component</TD>
+</TR>
+<TR><TD>Animated GIF </TD><TD> X </TD><TD> X </TD><TD> Only uncompressed GIFs are generated</TD>
+</TR>
+<TR><TD>PNG          </TD><TD> X </TD><TD> X </TD><TD> 2 bit and 4 bit/pixel not supported yet</TD>
+</TR>
+<TR><TD>SGI          </TD><TD> X </TD><TD> X </TD><TD> SGI RGB image format</TD>
+</TR></TABLE>
+<P>
+
+<CODE>X</CODE> means that the encoding (resp. decoding) is supported.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Video Codecs </H2>
+<!--docid::SEC19::-->
+<P>
+
+</P>
+<TABLE>
+<TR><TD>Supported Codec </TD><TD> Encoding </TD><TD> Decoding </TD><TD> Comments</TD>
+</TR>
+<TR><TD>MPEG1 video            </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>MPEG2 video            </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>MPEG4                  </TD><TD>  X  </TD><TD>  X </TD><TD> Also known as DIVX4/5</TD>
+</TR>
+<TR><TD>MSMPEG4 V1             </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>MSMPEG4 V2             </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>MSMPEG4 V3             </TD><TD>  X  </TD><TD>  X </TD><TD> Also known as DIVX3</TD>
+</TR>
+<TR><TD>WMV7                   </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>WMV8                   </TD><TD>  X  </TD><TD>  X </TD><TD> Not completely working</TD>
+</TR>
+<TR><TD>H263(+)                </TD><TD>  X  </TD><TD>  X </TD><TD> Also known as Real Video 1.0</TD>
+</TR>
+<TR><TD>MJPEG                  </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Lossless MJPEG         </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Apple MJPEG-B          </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Sunplus MJPEG          </TD><TD>     </TD><TD>  X </TD><TD> fourcc: SP5X</TD>
+</TR>
+<TR><TD>DV                     </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>Huff YUV               </TD><TD>  X  </TD><TD>  X</TD>
+</TR>
+<TR><TD>FFmpeg Video 1         </TD><TD>  X  </TD><TD>  X </TD><TD> Experimental lossless codec (fourcc: FFV1)</TD>
+</TR>
+<TR><TD>FFmpeg Snow            </TD><TD>  X  </TD><TD>  X </TD><TD> Experimental wavelet codec (fourcc: SNOW)</TD>
+</TR>
+<TR><TD>Asus v1                </TD><TD>  X  </TD><TD>  X </TD><TD> fourcc: ASV1</TD>
+</TR>
+<TR><TD>Asus v2                </TD><TD>  X  </TD><TD>  X </TD><TD> fourcc: ASV2</TD>
+</TR>
+<TR><TD>Creative YUV           </TD><TD>     </TD><TD>  X </TD><TD> fourcc: CYUV</TD>
+</TR>
+<TR><TD>H.264                  </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Sorenson Video 1       </TD><TD>  X  </TD><TD>  X </TD><TD> fourcc: SVQ1</TD>
+</TR>
+<TR><TD>Sorenson Video 3       </TD><TD>     </TD><TD>  X </TD><TD> fourcc: SVQ3</TD>
+</TR>
+<TR><TD>On2 VP3                </TD><TD>     </TD><TD>  X </TD><TD> still experimental</TD>
+</TR>
+<TR><TD>Theora                 </TD><TD>     </TD><TD>  X </TD><TD> still experimental</TD>
+</TR>
+<TR><TD>Intel Indeo 3          </TD><TD>     </TD><TD>  X </TD><TD> only works on i386 right now</TD>
+</TR>
+<TR><TD>FLV                    </TD><TD>  X  </TD><TD>  X </TD><TD> Flash H263 variant</TD>
+</TR>
+<TR><TD>ATI VCR1               </TD><TD>     </TD><TD>  X </TD><TD> fourcc: VCR1</TD>
+</TR>
+<TR><TD>ATI VCR2               </TD><TD>     </TD><TD>  X </TD><TD> fourcc: VCR2</TD>
+</TR>
+<TR><TD>Cirrus Logic AccuPak   </TD><TD>     </TD><TD>  X </TD><TD> fourcc: CLJR</TD>
+</TR>
+<TR><TD>4X Video               </TD><TD>     </TD><TD>  X </TD><TD> used in certain computer games</TD>
+</TR>
+<TR><TD>Sony Playstation MDEC  </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Id RoQ                 </TD><TD>     </TD><TD>  X </TD><TD> used in Quake III, Jedi Knight 2, other computer games</TD>
+</TR>
+<TR><TD>Xan/WC3                </TD><TD>     </TD><TD>  X </TD><TD> used in Wing Commander III .MVE files</TD>
+</TR>
+<TR><TD>Interplay Video        </TD><TD>     </TD><TD>  X </TD><TD> used in Interplay .MVE files</TD>
+</TR>
+<TR><TD>Apple Animation        </TD><TD>     </TD><TD>  X </TD><TD> fourcc: 'rle '</TD>
+</TR>
+<TR><TD>Apple Graphics         </TD><TD>     </TD><TD>  X </TD><TD> fourcc: 'smc '</TD>
+</TR>
+<TR><TD>Apple Video            </TD><TD>     </TD><TD>  X </TD><TD> fourcc: rpza</TD>
+</TR>
+<TR><TD>Cinepak                </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Microsoft RLE          </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Microsoft Video-1      </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Westwood VQA           </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Id Cinematic Video     </TD><TD>     </TD><TD>  X </TD><TD> used in Quake II</TD>
+</TR>
+<TR><TD>Planar RGB             </TD><TD>     </TD><TD>  X </TD><TD> fourcc: 8BPS</TD>
+</TR>
+<TR><TD>FLIC video             </TD><TD>     </TD><TD>  X</TD>
+</TR>
+<TR><TD>Duck TrueMotion v1     </TD><TD>     </TD><TD>  X </TD><TD> fourcc: DUCK</TD>
+</TR>
+<TR><TD>VMD Video              </TD><TD>     </TD><TD>  X </TD><TD> used in Sierra VMD files</TD>
+</TR>
+<TR><TD>MSZH                   </TD><TD>     </TD><TD>  X </TD><TD> Part of LCL</TD>
+</TR>
+<TR><TD>ZLIB                   </TD><TD>  X  </TD><TD>  X </TD><TD> Part of LCL, encoder experimental</TD>
+</TR>
+<TR><TD>TechSmith Camtasia     </TD><TD>     </TD><TD>  X </TD><TD> fourcc: TSCC</TD>
+</TR></TABLE>
+<P>
+
+<CODE>X</CODE> means that the encoding (resp. decoding) is supported.
+</P>
+<P>
+
+Check at <A HREF="http://www.mplayerhq.hu/~michael/codec-features.html">http://www.mplayerhq.hu/~michael/codec-features.html</A> to
+get a precise comparison of FFmpeg MPEG4 codec compared to the other
+solutions.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Audio Codecs </H2>
+<!--docid::SEC20::-->
+<P>
+
+</P>
+<TABLE>
+<TR><TD>Supported Codec </TD><TD> Encoding </TD><TD> Decoding </TD><TD> Comments</TD>
+</TR>
+<TR><TD>MPEG audio layer 2     </TD><TD>  IX  </TD><TD>  IX</TD>
+</TR>
+<TR><TD>MPEG audio layer 1/3   </TD><TD> IX   </TD><TD>  IX</TD>
+</TD><TD> MP3 encoding is supported through the external library LAME
+</TR>
+<TR><TD>AC3                    </TD><TD>  IX  </TD><TD>  IX</TD>
+</TD><TD> liba52 is used internally for decoding
+</TR>
+<TR><TD>Vorbis                 </TD><TD>  X   </TD><TD>  X</TD>
+</TD><TD> supported through the external library libvorbis
+</TR>
+<TR><TD>WMA V1/V2              </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>AAC                    </TD><TD> X    </TD><TD> X</TD>
+</TD><TD> supported through the external library libfaac/libfaad
+</TR>
+<TR><TD>Microsoft ADPCM        </TD><TD> X    </TD><TD> X</TD>
+</TR>
+<TR><TD>MS IMA ADPCM           </TD><TD> X    </TD><TD> X</TD>
+</TR>
+<TR><TD>QT IMA ADPCM           </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>4X IMA ADPCM           </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>G.726  ADPCM           </TD><TD> X    </TD><TD> X</TD>
+</TR>
+<TR><TD>Duck DK3 IMA ADPCM     </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in some Sega Saturn console games
+</TR>
+<TR><TD>Duck DK4 IMA ADPCM     </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in some Sega Saturn console games
+</TR>
+<TR><TD>Westwood Studios IMA ADPCM </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in Westwood Studios games like Command and Conquer
+</TR>
+<TR><TD>SMJPEG IMA ADPCM       </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in certain Loki game ports
+</TR>
+<TR><TD>CD-ROM XA ADPCM        </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>CRI ADX ADPCM          </TD><TD> X    </TD><TD> X</TD>
+</TD><TD> used in Sega Dreamcast games
+</TR>
+<TR><TD>Electronic Arts ADPCM  </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in various EA titles
+</TR>
+<TR><TD>RA144                  </TD><TD>      </TD><TD> X</TD>
+</TD><TD> Real 14400 bit/s codec
+</TR>
+<TR><TD>RA288                  </TD><TD>      </TD><TD> X</TD>
+</TD><TD> Real 28800 bit/s codec
+</TR>
+<TR><TD>RADnet                 </TD><TD> X    </TD><TD> IX</TD>
+</TD><TD> Real lowbitrate AC3 codec, liba52 is used for decoding
+</TR>
+<TR><TD>AMR-NB                 </TD><TD> X    </TD><TD> X</TD>
+</TD><TD> supported through an external library
+</TR>
+<TR><TD>AMR-WB                 </TD><TD> X    </TD><TD> X</TD>
+</TD><TD> supported through an external library
+</TR>
+<TR><TD>DV audio               </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>Id RoQ DPCM            </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in Quake III, Jedi Knight 2, other computer games
+</TR>
+<TR><TD>Interplay MVE DPCM     </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in various Interplay computer games
+</TR>
+<TR><TD>Xan DPCM               </TD><TD>      </TD><TD> X</TD>
+</TD><TD> used in Origin's Wing Commander IV AVI files
+</TR>
+<TR><TD>Apple MACE 3           </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>Apple MACE 6           </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>FLAC                   </TD><TD>      </TD><TD> X</TD>
+</TR>
+<TR><TD>FFmpeg Sonic           </TD><TD> X    </TD><TD> X</TD>
+</TD><TD> Experimental lossy/lossless codec
+</TR></TABLE>
+<P>
+
+<CODE>X</CODE> means that the encoding (resp. decoding) is supported.
+</P>
+<P>
+
+<CODE>I</CODE> means that an integer only version is available too (ensures highest
+performances on systems without hardware floating point support).
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 6. Platform Specific information </H1>
+<!--docid::SEC21::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.1 Linux </H2>
+<!--docid::SEC22::-->
+<P>
+
+ffmpeg should be compiled with at least GCC 2.95.3. GCC 3.2 is the
+preferred compiler now for ffmpeg. All future optimizations will depend on
+features only found in GCC 3.2.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.2 BSD </H2>
+<!--docid::SEC23::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.3 Windows </H2>
+<!--docid::SEC24::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 6.3.1 Native Windows compilation </H3>
+<!--docid::SEC25::-->
+<P>
+
+<UL>
+<LI>Install the current versions of MSYS and MinGW from
+<A HREF="http://www.mingw.org/">http://www.mingw.org/</A>. You can find detailed installation
+instructions in the download section and the FAQ.
+<P>
+
+</P>
+<LI>If you want to test the FFmpeg Simple Media Player, also download
+the MinGW development library of SDL 1.2.x
+(`<TT>SDL-devel-1.2.x-mingw32.tar.gz</TT>') from
+<A HREF="http://www.libsdl.org">http://www.libsdl.org</A>. Unpack it in a temporary place, and
+unpack the archive `<TT>i386-mingw32msvc.tar.gz</TT>' in the MinGW tool
+directory. Edit the `<TT>sdl-config</TT>' script so that it gives the
+correct SDL directory when invoked.
+<P>
+
+</P>
+<LI>Extract the current version of FFmpeg (the latest release version or the current CVS snapshot whichever is recommended).
+ 
+<LI>Start the MSYS shell (file `<TT>msys.bat</TT>').
+<P>
+
+</P>
+<LI>Change to the FFMPEG directory and follow
+ the instructions of how to compile ffmpeg (file
+`<TT>INSTALL</TT>'). Usually, launching `<TT>./configure</TT>' and `<TT>make</TT>'
+suffices. If you have problems using SDL, verify that
+`<TT>sdl-config</TT>' can be launched from the MSYS command line.
+<P>
+
+</P>
+<LI>You can install FFmpeg in `<TT>Program Files/FFmpeg</TT>' by typing `<TT>make install</TT>'. Don't forget to copy `<TT>SDL.dll</TT>' at the place you launch
+`<TT>ffplay</TT>'.
+<P>
+
+</UL>
+<P>
+
+Notes: 
+<UL>
+
+<LI>The target `<TT>make wininstaller</TT>' can be used to create a
+Nullsoft based Windows installer for FFmpeg and FFplay. `<TT>SDL.dll</TT>'
+must be copied in the ffmpeg directory in order to build the
+installer.
+<P>
+
+</P>
+<LI>By using <CODE>./configure --enable-shared</CODE> when configuring ffmpeg,
+you can build `<TT>avcodec.dll</TT>' and `<TT>avformat.dll</TT>'. With
+<CODE>make install</CODE> you install the FFmpeg DLLs and the associated
+headers in `<TT>Program Files/FFmpeg</TT>'. 
+<P>
+
+</P>
+<LI>Visual C++ compatibility: if you used <CODE>./configure --enable-shared</CODE>
+when configuring FFmpeg, then FFmpeg tries to use the Microsoft Visual
+C++ <CODE>lib</CODE> tool to build <CODE>avcodec.lib</CODE> and
+<CODE>avformat.lib</CODE>. With these libraries, you can link your Visual C++
+code directly with the FFmpeg DLLs.
+<P>
+
+</UL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 6.3.2 Cross compilation for Windows with Linux </H3>
+<!--docid::SEC26::-->
+<P>
+
+You must use the MinGW cross compilation tools available at
+<A HREF="http://www.mingw.org/">http://www.mingw.org/</A>.
+</P>
+<P>
+
+Then configure ffmpeg with the following options:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure --enable-mingw32 --cross-prefix=i386-mingw32msvc-
+</pre></td></tr></table>(you can change the cross-prefix according to the prefix choosen for the
+MinGW tools).
+<P>
+
+Then you can easily test ffmpeg with wine
+(<A HREF="http://www.winehq.com/">http://www.winehq.com/</A>).
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC27"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC26"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC28"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.4 MacOS X </H2>
+<!--docid::SEC27::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC28"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC27"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.5 BeOS </H2>
+<!--docid::SEC28::-->
+<P>
+
+The configure script should guess the configuration itself.
+Networking support is currently not finished.
+errno issues fixed by Andrew Bachmann.
+</P>
+<P>
+
+Old stuff:
+</P>
+<P>
+
+François Revol - revol at free dot fr - April 2002
+</P>
+<P>
+
+The configure script should guess the configuration itself, 
+however I still didn't tested building on net_server version of BeOS.
+</P>
+<P>
+
+ffserver is broken (needs poll() implementation).
+</P>
+<P>
+
+There is still issues with errno codes, which are negative in BeOs, and
+that ffmpeg negates when returning. This ends up turning errors into 
+valid results, then crashes.
+(To be fixed)
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC29"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC28"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC30"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 7. Developers Guide </H1>
+<!--docid::SEC29::-->
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC30"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC31"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.1 API </H2>
+<!--docid::SEC30::-->
+<UL>
+<LI>libavcodec is the library containing the codecs (both encoding and
+  decoding). See `<TT>libavcodec/apiexample.c</TT>' to see how to use it.
+<P>
+
+</P>
+<LI>libavformat is the library containing the file formats handling (mux and
+  demux code for several formats). See `<TT>ffplay.c</TT>' to use it in a
+player. See `<TT>output_example.c</TT>' to use it to generate audio or video
+streams.
+<P>
+
+</UL>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC31"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC30"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC32"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.2 Integrating libavcodec or libavformat in your program </H2>
+<!--docid::SEC31::-->
+<P>
+
+You can integrate all the source code of the libraries to link them
+statically to avoid any version problem. All you need is to provide a
+'config.mak' and a 'config.h' in the parent directory. See the defines
+generated by ./configure to understand what is needed.
+</P>
+<P>
+
+You can use libavcodec or libavformat in your commercial program, but
+<EM>any patch you make must be published</EM>. The best way to proceed is
+to send your patches to the ffmpeg mailing list.
+</P>
+<P>
+
+<A NAME="Coding Rules"></A>
+<HR SIZE="6">
+<A NAME="SEC32"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC31"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC33"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.3 Coding Rules </H2>
+<!--docid::SEC32::-->
+<P>
+
+ffmpeg is programmed in the ISO C90 language with a few additional
+features from ISO C99, namely:
+<UL>
+<LI>
+the `<SAMP>inline</SAMP>' keyword;
+<LI>
+`<SAMP>//</SAMP>' comments;
+<LI>
+designated struct initializers (`<SAMP>struct s x = { .i = 17 };</SAMP>')
+<LI>
+compound literals (`<SAMP>x = (struct s) { 17, 23 };</SAMP>')
+</UL>
+<P>
+
+These features are supported by all compilers we care about, so we won't
+accept patches to remove their use unless they absolutely don't impair
+clarity and performance.
+</P>
+<P>
+
+All code must compile with gcc 2.95 and gcc 3.3. Currently, ffmpeg also
+compiles with several other compilers, such as the Compaq ccc compiler
+or Sun Studio 9, and we would like to keep it that way unless it would
+be exceedingly involved. To ensure compatibility, please don't use any
+additional C99 features or gcc extensions. Watch out especially for:
+<UL>
+<LI>
+mixing statements and declarations;
+<LI>
+`<SAMP>long long</SAMP>' (use `<SAMP>int64_t</SAMP>' instead);
+<LI>
+`<SAMP>__attribute__</SAMP>' not protected by `<SAMP>#ifdef __GNUC__</SAMP>' or similar;
+<LI>
+gcc statement expressions (`<SAMP>(x = ({ int y = 4; y; })</SAMP>').
+</UL>
+<P>
+
+Indent size is 4. The TAB character should not be used.
+The presentation is the one specified by 'indent -i4 -kr'.
+</P>
+<P>
+
+Main priority in ffmpeg is simplicity and small code size (=less
+bugs).
+</P>
+<P>
+
+Comments: use the JavaDoc/Doxygen 
+format (see examples below) so that a documentation
+can be generated automatically. All non trivial functions should have a comment
+above it explaining what the function does, even if its just one sentance.
+All Structures and their member variables should be documented too.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/**
+ * @file mpeg.c
+ * mpeg codec.
+ * @author ...
+ */
+
+/**
+ * Summary sentance.
+ * more text ...
+ * ...
+ */
+typedef struct Foobar{
+    int var1; /**&lt; var1 description */
+    int var2; ///&lt; var2 description
+    /** var3 description */
+    int var3;
+} Foobar;
+
+/**
+ * Summary sentance.
+ * more text ...
+ * ...
+ * @param my_parameter description of my_parameter
+ * @return return value description
+ */
+int myfunc(int my_parameter)
+...
+</pre></td></tr></table><P>
+
+fprintf and printf are forbidden in libavformat and libavcodec, 
+please use av_log() instead.
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC33"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC32"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC34"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.4 Submitting patches </H2>
+<!--docid::SEC33::-->
+<P>
+
+First, (see section <A HREF="ffmpeg-doc.html#SEC32">7.3 Coding Rules</A>) above if you didn't yet.
+</P>
+<P>
+
+When you submit your patch, try to send a unified diff (diff '-up'
+option). I cannot read other diffs :-)
+</P>
+<P>
+
+Run the regression tests before submitting a patch so that you can
+verify that there are no big problems.
+</P>
+<P>
+
+Patches should be posted as base64 encoded attachments (or any other
+encoding which ensures that the patch wont be trashed during 
+transmission) to the ffmpeg-devel mailinglist, see 
+<A HREF="http://lists.sourceforge.net/lists/listinfo/ffmpeg-devel">http://lists.sourceforge.net/lists/listinfo/ffmpeg-devel</A>
+</P>
+<P>
+
+It also helps quite a bit if you tell us what the patch does (for example
+'replaces lrint by lrintf') , and why (for example '*bsd isnt c99 compliant
+and has no lrint()')
+</P>
+<P>
+
+We reply to all patches submitted and either apply or reject with some
+explanation why, but sometimes we are quite busy so it can take a week or 2
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC34"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC33"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.5 Regression tests </H2>
+<!--docid::SEC34::-->
+<P>
+
+Before submitting a patch (or committing with CVS), you should at least
+test that you did not break anything.
+</P>
+<P>
+
+The regression test build a synthetic video stream and a synthetic
+audio stream. Then these are encoded then decoded with all codecs or
+formats. The CRC (or MD5) of each generated file is recorded in a
+result file. Then a 'diff' is launched with the reference results and
+the result file.
+</P>
+<P>
+
+The regression test then goes on to test the ffserver code with a 
+limited set of streams. It is important that this step runs correctly
+as well.
+</P>
+<P>
+
+Run 'make test' to test all the codecs and formats.
+</P>
+<P>
+
+Run 'make fulltest' to test all the codecs, formats and ffserver.
+</P>
+<P>
+
+[Of course, some patches may change the regression tests results. In
+this case, the regression tests reference results shall be modified
+accordingly].
+</P>
+<P>
+
+<HR SIZE="6">
+<A NAME="SEC_Contents"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Table of Contents</H1>
+<BLOCKQUOTE>
+<A NAME="TOC1" HREF="ffmpeg-doc.html#SEC1">1. Introduction</A>
+<BR>
+<A NAME="TOC2" HREF="ffmpeg-doc.html#SEC2">2. Quick Start</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC3" HREF="ffmpeg-doc.html#SEC3">2.1 Video and Audio grabbing</A>
+<BR>
+<A NAME="TOC4" HREF="ffmpeg-doc.html#SEC4">2.2 Video and Audio file format conversion</A>
+<BR>
+</BLOCKQUOTE>
+<A NAME="TOC5" HREF="ffmpeg-doc.html#SEC5">3. Invocation</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC6" HREF="ffmpeg-doc.html#SEC6">3.1 Syntax</A>
+<BR>
+<A NAME="TOC7" HREF="ffmpeg-doc.html#SEC7">3.2 Main options</A>
+<BR>
+<A NAME="TOC8" HREF="ffmpeg-doc.html#SEC8">3.3 Video Options</A>
+<BR>
+<A NAME="TOC9" HREF="ffmpeg-doc.html#SEC9">3.4 Advanced Video Options</A>
+<BR>
+<A NAME="TOC10" HREF="ffmpeg-doc.html#SEC10">3.5 Audio Options</A>
+<BR>
+<A NAME="TOC11" HREF="ffmpeg-doc.html#SEC11">3.6 Audio/Video grab options</A>
+<BR>
+<A NAME="TOC12" HREF="ffmpeg-doc.html#SEC12">3.7 Advanced options</A>
+<BR>
+<A NAME="TOC13" HREF="ffmpeg-doc.html#SEC13">3.8 FFmpeg formula evaluator</A>
+<BR>
+<A NAME="TOC14" HREF="ffmpeg-doc.html#SEC14">3.9 Protocols</A>
+<BR>
+</BLOCKQUOTE>
+<A NAME="TOC15" HREF="ffmpeg-doc.html#SEC15">4. Tips</A>
+<BR>
+<A NAME="TOC16" HREF="ffmpeg-doc.html#SEC16">5. Supported File Formats and Codecs</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC17" HREF="ffmpeg-doc.html#SEC17">5.1 File Formats</A>
+<BR>
+<A NAME="TOC18" HREF="ffmpeg-doc.html#SEC18">5.2 Image Formats</A>
+<BR>
+<A NAME="TOC19" HREF="ffmpeg-doc.html#SEC19">5.3 Video Codecs</A>
+<BR>
+<A NAME="TOC20" HREF="ffmpeg-doc.html#SEC20">5.4 Audio Codecs</A>
+<BR>
+</BLOCKQUOTE>
+<A NAME="TOC21" HREF="ffmpeg-doc.html#SEC21">6. Platform Specific information</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC22" HREF="ffmpeg-doc.html#SEC22">6.1 Linux</A>
+<BR>
+<A NAME="TOC23" HREF="ffmpeg-doc.html#SEC23">6.2 BSD</A>
+<BR>
+<A NAME="TOC24" HREF="ffmpeg-doc.html#SEC24">6.3 Windows</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC25" HREF="ffmpeg-doc.html#SEC25">6.3.1 Native Windows compilation</A>
+<BR>
+<A NAME="TOC26" HREF="ffmpeg-doc.html#SEC26">6.3.2 Cross compilation for Windows with Linux</A>
+<BR>
+</BLOCKQUOTE>
+<A NAME="TOC27" HREF="ffmpeg-doc.html#SEC27">6.4 MacOS X</A>
+<BR>
+<A NAME="TOC28" HREF="ffmpeg-doc.html#SEC28">6.5 BeOS</A>
+<BR>
+</BLOCKQUOTE>
+<A NAME="TOC29" HREF="ffmpeg-doc.html#SEC29">7. Developers Guide</A>
+<BR>
+<BLOCKQUOTE>
+<A NAME="TOC30" HREF="ffmpeg-doc.html#SEC30">7.1 API</A>
+<BR>
+<A NAME="TOC31" HREF="ffmpeg-doc.html#SEC31">7.2 Integrating libavcodec or libavformat in your program</A>
+<BR>
+<A NAME="TOC32" HREF="ffmpeg-doc.html#SEC32">7.3 Coding Rules</A>
+<BR>
+<A NAME="TOC33" HREF="ffmpeg-doc.html#SEC33">7.4 Submitting patches</A>
+<BR>
+<A NAME="TOC34" HREF="ffmpeg-doc.html#SEC34">7.5 Regression tests</A>
+<BR>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<HR SIZE=1>
+<A NAME="SEC_OVERVIEW"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>Short Table of Contents</H1>
+<BLOCKQUOTE>
+<A NAME="TOC1" HREF="ffmpeg-doc.html#SEC1">1. Introduction</A>
+<BR>
+<A NAME="TOC2" HREF="ffmpeg-doc.html#SEC2">2. Quick Start</A>
+<BR>
+<A NAME="TOC5" HREF="ffmpeg-doc.html#SEC5">3. Invocation</A>
+<BR>
+<A NAME="TOC15" HREF="ffmpeg-doc.html#SEC15">4. Tips</A>
+<BR>
+<A NAME="TOC16" HREF="ffmpeg-doc.html#SEC16">5. Supported File Formats and Codecs</A>
+<BR>
+<A NAME="TOC21" HREF="ffmpeg-doc.html#SEC21">6. Platform Specific information</A>
+<BR>
+<A NAME="TOC29" HREF="ffmpeg-doc.html#SEC29">7. Developers Guide</A>
+<BR>
+
+</BLOCKQUOTE>
+<HR SIZE=1>
+<A NAME="SEC_About"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC1">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ffmpeg-doc.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1>About this document</H1>
+This document was generated
+by 
+using <A HREF="http://texi2html.cvshome.org"><I>texi2html</I></A>
+<P></P>
+The buttons in the navigation panels have the following meaning:
+<P></P>
+<table border = "1">
+<TR>
+<TH> Button </TH>
+<TH> Name </TH>
+<TH> Go to </TH>
+<TH> From 1.2.3 go to</TH>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &lt; ] </TD>
+<TD ALIGN="CENTER">
+Back
+</TD>
+<TD>
+previous section in reading order
+</TD>
+<TD>
+1.2.2
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &gt; ] </TD>
+<TD ALIGN="CENTER">
+Forward
+</TD>
+<TD>
+next section in reading order
+</TD>
+<TD>
+1.2.4
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &lt;&lt; ] </TD>
+<TD ALIGN="CENTER">
+FastBack
+</TD>
+<TD>
+beginning of this chapter or previous chapter
+</TD>
+<TD>
+1
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ Up ] </TD>
+<TD ALIGN="CENTER">
+Up
+</TD>
+<TD>
+up section
+</TD>
+<TD>
+1.2
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ &gt;&gt; ] </TD>
+<TD ALIGN="CENTER">
+FastForward
+</TD>
+<TD>
+next chapter
+</TD>
+<TD>
+2
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Top] </TD>
+<TD ALIGN="CENTER">
+Top
+</TD>
+<TD>
+cover (top) of document
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Contents] </TD>
+<TD ALIGN="CENTER">
+Contents
+</TD>
+<TD>
+table of contents
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [Index] </TD>
+<TD ALIGN="CENTER">
+Index
+</TD>
+<TD>
+concept index
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+<TR>
+<TD ALIGN="CENTER">
+ [ ? ] </TD>
+<TD ALIGN="CENTER">
+About
+</TD>
+<TD>
+this page
+</TD>
+<TD>
+ &nbsp; 
+</TD>
+</TR>
+</TABLE>
+    <P>
+      where the <STRONG> Example </STRONG> assumes that the current position
+      is at <STRONG> Subsubsection One-Two-Three </STRONG> of a document of
+      the following structure:</P>
+    <UL>
+      <LI> 1. Section One
+        <UL>
+          <LI>1.1 Subsection One-One
+            <UL>
+              <LI>...</LI>
+            </UL>
+          <LI>1.2 Subsection One-Two
+            <UL>
+              <LI>1.2.1 Subsubsection One-Two-One</LI>
+              <LI>1.2.2 Subsubsection One-Two-Two</LI>
+              <LI>1.2.3 Subsubsection One-Two-Three &nbsp; &nbsp;
+                <STRONG>&lt;== Current Position </STRONG></LI>
+              <LI>1.2.4 Subsubsection One-Two-Four</LI>
+            </UL>
+          </LI>
+          <LI>1.3 Subsection One-Three
+            <UL>
+              <LI>...</LI>
+            </UL>
+          </LI>
+          <LI>1.4 Subsection One-Four</LI>
+        </UL>
+      </LI>
+    </UL>
+
+<HR SIZE=1>
+<BR>
+<FONT SIZE="-1">
+This document was generated
+by <I>Georg Seidel</I> on <I>October, 29 2004</I>
+using <A HREF="http://texi2html.cvshome.org"><I>texi2html</I></A>
+</FONT>
+
+</BODY>
+</HTML>

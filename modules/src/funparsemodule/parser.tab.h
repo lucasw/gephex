@@ -66,7 +66,7 @@
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 45 "parser.y"
+#line 45 "./parser.y"
 typedef union YYSTYPE {
   struct slist_s_t* list;
   struct expression_s_t* expr;

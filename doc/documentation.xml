@@ -53,7 +53,7 @@
   <abstract>
 <para>GePhex is an interactive effect system for video jockeys. The effects can be controlled with external devices like joysticks, web-cams, or midi-devices. New effects can be designed in a GUI (Graphical User Interface) by composing basic effects into more complex ones.</para>
 
-<para>This book gives new users an introduction to the GePhex system.  The basic concept of effect-graphs is described. The reader learns how to use the system and the steps to create new effects. The last chapters hold information for developers.</para>
+<para>This book gives new users an introduction to the GePhex system. The basic concept of effect-graphs is described. The reader learns how to use the system and the steps to create new effects. The last chapters hold information for developers.</para>
   </abstract>
  </bookinfo>
 
@@ -66,7 +66,9 @@
 
 <itemizedlist>
 
-<listitem><para>GePhex is Free Software. You can use, distribute and modify GePhex under the terms of the GPL.</para></listitem>
+<listitem><para>GePhex is Free Software.
+You can use, distribute and modify GePhex under the terms of the GPL.
+</para></listitem>
 
 <listitem><para>GePhex is a multi platform project. Supported operating systems are Win32 and Linux. Ports to the BSD operating systems and Mac OSX are planned.</para></listitem>
 </itemizedlist>
@@ -99,6 +101,9 @@ different levels:
   <listitem><para>In autumn 2003 there was a public session in Vienna and another session at the fmi party in Passau, Germany. </para></listitem>
 
   <listitem><para>In December 2003 we released the first stable version (0.0.4).     </para></listitem>
+
+  <listitem><para>In June 2004 we released the second stable version (0.4). </para></listitem>
+
 </itemizedlist>
 
 </para>
@@ -111,7 +116,7 @@ This could be a security hole if used in a hostile environment. Never start this
 
   <sect1><title>GePhex's Components</title>
 <sect2><title>The Engine</title>
-<para>The engine can be started from the console with the <filename>gephex-engine</filename> command. At the moment there are no command-line options.
+<para>The engine can be started from the console with the <filename>gephex-engine</filename> command.
 The only environment variable that is used is DISPLAY for the output under X11.
 All options are set in the configuration file <filename>~/.gephex/gephex.conf</filename>. If no file exists a default configuration file is created.</para>
 
@@ -145,6 +150,14 @@ If engine and GUI run on the same host the usage of non ip based communication i
 
 The parameters <literal>ipc_unix_node_prefix</literal> and <literal>ipc_port</literal> must equal to the ones for the gui.
 </para>
+<para>
+All options that can be set in the config file can be overridden from the
+command line. For example
+<screen>
+  > gephex-engine --ipc_port=1234
+</screen>
+overrides the value of the option <varname>ipc_port</varname>.
+</para>
 </sect2>
 
 <sect2><title>The GUI (graphical user interface)</title>
@@ -177,6 +190,14 @@ You can select between <literal>inet</literal> for a internet-protocol based com
 If engine and GUI run on the same host the usage of non ip based communication is preferred because it has less overhead.
 The parameters <literal>ipc_unix_node_prefix</literal>, <literal>ipc_namedpipe_servername</literal>, and <literal>ipc_port</literal> must equal to the ones in for the engine.
 <varname>engine_binary</varname> is the full path of the engine executable. It is used to spawn a engine process if necessary.
+</para>
+<para>
+All options that can be set in the config file can be overridden from the
+command line. For example
+<screen>
+  > gephex-gui --media_path=/mnt/data/footage/
+</screen>
+overrides the value of the option <varname>media_path</varname>.
 </para>
 </sect2>
 
@@ -525,6 +546,8 @@ to compile gephex on win32:
   <listitem><para><ulink url="http://www.libsdl.org/projects/SDL_image"><citetitle>sdl-image</citetitle></ulink></para></listitem>
   <listitem><para><ulink url="http://www.libsdl.org/projects/SDL_ttf"><citetitle>sdl-ttf (choose the devel zip file for visual studio 6)</citetitle></ulink></para></listitem>
   <listitem><para><ulink url="http://www.microsoft.com/windows/directx/default.aspx"><citetitle>directx sdk</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://ffmpeg.sourceforge.net"><citetitle>ffmpeg (distributed with GePhex in source form)</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://www.mingw.org"><citetitle>MinGW/MSYS (needed to compile ffmpeg)</citetitle></ulink></para></listitem>
 </itemizedlist>
 </para>
 </sect3>
@@ -548,8 +571,22 @@ You need to set up the following environment variables:
 </para>
 </sect3>
 
-There are two ways to build GePhex (all paths are relative to your gephex dir):
+<sect3><title>Building ffmpeg</title>
+<para>
+Before building GePhex, ffmpeg must be built.
+Fire up MSYS and chdir into <quote>${gephex-dist}/contrib/ffmpeg</quote>.
+Then execute
+<screen>
+ > ./configure --enable-shared
+ > make
+</screen>
+If everything works out, the necessary dlls are now in
+<quote>${gephex-dist}/contrib/ffmpeg/libavformat</quote> and
+<quote>${gephex-dist}/contrib/ffmpeg/libavcodec</quote>.
 
+There are two ways to build GePhex (all paths are relative to your gephex dir):
+</para>
+</sect3>
 <sect3><title>Building with the Visual Studio IDE</title>
 <para>
 
@@ -592,10 +629,11 @@ There are two ways to build GePhex (all paths are relative to your gephex dir):
 <note><para>
  Unfortunately, vs6 puts hard paths into .mak files and .dep files.
  Although the dsp files are controlled by the above environment variables,
- the console build will probably only work if you have your libraries
- installed into the following directories:
+ the console build will probably only work if you have installed
+ the gephex source and your libraries into the following directories:
 
  <itemizedlist>
+<listitem><para><filename>GEPHEX_DIR</filename> = <filename>c:/code/gephex-0.4</filename> (and _not_ <filename>c:/code/gephex-0.4.x</filename>!) </para></listitem>
 <listitem><para><filename>SDL_DIR</filename> = <filename>c:/code/sdl</filename> </para></listitem>
 <listitem><para><filename>SDL_IMAGE_DIR</filename> = <filename>c:/code/sdl_image</filename> </para></listitem>
 <listitem><para><filename>SDL_TTF_DIR</filename> = <filename>c:/code/sdl_ttf</filename> </para></listitem>
@@ -642,6 +680,8 @@ The following dlls are needed:
 <listitem><para>libpng1.dll</para></listitem>
 <listitem><para>zlib.dll</para></listitem>
 <listitem><para>qt-mt230nc.dll</para></listitem>
+<listitem><para>avcodec.dll</para></listitem>
+<listitem><para>avformat.dll</para></listitem>
 </itemizedlist>
 
 Instead of copying these files manually, you can put them into
@@ -667,7 +707,7 @@ You need the recode utility, available with the
 
 <sect1><title>Precompiled Versions</title>
 
-<sect2><title>Using our APT Repository </title>
+<sect2 id="sec.apt"><title>Using our APT Repository </title>
 <para>The Debian binary package format is the common way to install software on a Debian GNU/Linux system. Using the dpkg, a medium-level tool to install, build, remove and manage Debian GNU/Linux packages, the system stays in a consistent state after changes to the software installation or configuration. The proper deinstallation and upgrade to a other version of the application package is guaranteed.</para>
 
 <para>Add the GePhex apt repository lines to your /etc/apt/sources.list and install GePhex with apt-get:

@@ -23,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=scale const=true strong_dependency=true default=0.01 } ";
+    return "input_spec { type=typ_NumberType id=scale const=true strong_dependency=true default=0.5 } ";
   break;
   case 2:
     return "input_spec { type=typ_StringType id=algo const=true strong_dependency=true default=roberts-cross } ";

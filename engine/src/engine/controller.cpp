@@ -74,6 +74,26 @@ namespace engine
   };
 
 
+/**
+   * Just a hack to automatically load all types that exist.
+   */
+  class AutoModuleLoader : public IModuleClassNameReceiver
+  {
+  public:
+    AutoModuleLoader(IModuleClassLoaderControlReceiver& moduleLoader)
+      : m_moduleLoader(moduleLoader)
+    {
+    }
+  
+    void moduleClassNameExists(const std::string& name)
+    {
+      m_moduleLoader.loadModuleClass(name);
+    }
+  private:
+    IModuleClassLoaderControlReceiver& m_moduleLoader;
+  };
+
+
 
   /**
    * Returns a vector of all files in a directory, that have a certain
@@ -132,10 +152,10 @@ namespace engine
     portDispatcher.registerListener(port, commandTagger);
   }
   
-  Controller::Controller(const EngineConfig& config_)
+  Controller::Controller(const utils::ConfigManager& config_)
     : config(config_),
       m_finished(false),
-      m_port(config.port),
+      m_port(config.get_int_param("ipc_port")),
       tagger1(modelControlSender),      
       tagger2(rendererControlSender),        
       tagger3(engineControlSender),
@@ -158,6 +178,7 @@ namespace engine
       moduleReceiver(tagger1),
       moduleClassInfoReceiver(tagger2),
       moduleDataReceiver(tagger3),
+      graphDataReceiver(tagger15),
       controlValueReceiver(tagger4),
       moduleStatisticsReceiver(tagger5),
       moduleClassNameReceiver(tagger6),
@@ -167,11 +188,10 @@ namespace engine
 
       modelStatusReceiver(tagger13),
       rendererStatusReceiver(tagger14),
-      graphDataReceiver(tagger15),
 
       logger(new engine::NetLogger(errorReceiver)),
 
-      pModel(config.graph_path, logger),
+      pModel(config.get_string_param("graph_path"), logger),
       pRenderer(logger),
       pDllLoader(logger),
       first_time(true)
@@ -179,7 +199,7 @@ namespace engine
     
     net::IServerSocket* serverSocket;
 
-    std::string ipcType = config.ipcType;
+    std::string ipcType = config.get_string_param("ipc_type");
     
     if (ipcType == "inet")
       {
@@ -193,7 +213,7 @@ namespace engine
     else if (ipcType == "unix")
       {
 	std::string nodePrefix 
-	  = config.ipcUnixNodePrefix;
+	  = config.get_string_param("ipc_unix_node_prefix");
 							 
 #if (ENGINE_VERBOSITY > 0)
 	std::cout << "IPC type: unix" << std::endl;
@@ -263,13 +283,24 @@ namespace engine
     moduleClassLoaderControlSender.registerModuleClassLoaderControlReceiver(pDllLoader);
 
     sf = utils::AutoPtr<AutoTypeLoader>(new AutoTypeLoader(pDllLoader));
-    pDllLoader.registerModuleClassNameReceiver(moduleClassNameReceiver);
+
+    if (config.get_bool_param("headless"))
+      {
+	aml=utils::AutoPtr<AutoModuleLoader>(new AutoModuleLoader(pDllLoader));
+	pDllLoader.registerModuleClassNameReceiver(*aml);
+      }
+    else
+      {
+	pDllLoader.registerModuleClassNameReceiver(moduleClassNameReceiver);
+      }
+
     pDllLoader.registerTypeClassNameReceiver(*sf);
+
 
     engineControlSender.registerEngineControlReceiver(*this);
 
-    int rendererInterval = config.rendererInterval;
-    int netInterval = config.netInterval;
+    int rendererInterval = config.get_int_param("renderer_interval");
+    int netInterval = config.get_int_param("net_interval");
 
     scheduler.addTask(*acceptor, 500);
     scheduler.addTask(*this,250);
@@ -277,17 +308,24 @@ namespace engine
     scheduler.addTask(pRenderer,rendererInterval);
 
 	
-    // load stuff    
-    std::vector<std::string> modules = getFilesInDir(config.module_path,
+    // load stuff
+    std::string module_path = config.get_string_param("module_path");
+    std::vector<std::string> modules = getFilesInDir(module_path,
                                                      MODULE_ENDING);
 	
-    std::vector<std::string> types = getFilesInDir(config.type_path,
+    std::string type_path = config.get_string_param("type_path");
+    std::vector<std::string> types = getFilesInDir(type_path,
                                                    TYPE_ENDING);
 	
     std::cout << "Reading plugins...";
     std::cout.flush();
     pDllLoader.readDlls(modules, types);
     std::cout << "   done\n";
+
+    if (config.get_bool_param("headless"))
+      {
+	pDllLoader.registerModuleClassNameReceiver(moduleClassNameReceiver);
+      }
 	
     std::cout << "Reading graphs...";
     std::cout.flush();
@@ -304,6 +342,15 @@ namespace engine
     catch (std::exception& e)
       {
         logger->error("Could not create default graph", e.what());
+      }
+
+    if (config.get_bool_param("autostart"))
+      {
+        std::string render_graph_id=config.get_string_param("render_graph_id");
+        std::string render_snap_id =config.get_string_param("render_snap_id");
+        pModel.changeRenderedGraph(render_graph_id, 
+				   render_snap_id);
+	pRenderer.start();
       }
   }
 	

@@ -8,7 +8,6 @@
 	"..\..\..\types\src\stringtype\stringtype.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\..\..\util\src\cpuinfo\cpuinfo.h"\
-	".\imgarithmodule.h"\
 	
 
 .\imgarithmodule_auto.c : \
@@ -19,9 +18,14 @@
 	"..\..\..\types\src\numbertype\numbertype.h"\
 	"..\..\..\types\src\stringtype\stringtype.h"\
 	"..\..\..\util\include\basic_types.h"\
-	".\imgarithmodule.h"\
 	".\imgarithmodule.xpm"\
 	
+
+!IF  "$(CFG)" == "imgarithmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "imgarithmodule - Win32 Debug"
+
+!ENDIF 
 
 !IF  "$(CFG)" == "imgarithmodule - Win32 Release"
 

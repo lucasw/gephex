@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 noinst_LIBRARIES = libscale.a
 libscale_a_SOURCES = libscale.c libscale.h
 

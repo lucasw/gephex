@@ -35,8 +35,6 @@ gephex_engine_real_SOURCES = \
 	netlogger.cpp \
 	netlogger.h \
 	scheduler.h \
-	engineconfig.cpp \
-	engineconfig.h \
 	controller.h \
 	controller.cpp \
         bufferedsender.h \

@@ -12,6 +12,7 @@ libutils_a_SOURCES = \
 	bufferutils.cpp \
 	circularbuffer.cpp \
 	configfile.cpp \
+	configmanager.cpp \
 	filesystem.cpp \
 	itokenizer.cpp \
 	sharedlibrary.cpp \
@@ -33,6 +34,7 @@ noinst_HEADERS = \
 	bufferutils.h \
 	circularbuffer.h \
 	configfile.h \
+	configmanager.h \
 	filesystem.h \
 	ilogger.h \
 	istructtokenlistener.h \

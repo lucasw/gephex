@@ -1,0 +1,30 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von dplmodule.mak
+
+.\dplmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\dplmodule.h"\
+	
+
+.\dplmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\dplmodule.h"\
+	".\dplmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "dplmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "dplmodule - Win32 Debug"
+
+!ENDIF 
+

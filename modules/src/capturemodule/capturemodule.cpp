@@ -187,9 +187,12 @@ void update(void* instance)
           s_log(0, e.what());
         }
     }
-
+  
+  try
+    {
+      
   if (my->drv == 0 || !my->drv->is_open())
-    return;
+    throw std::runtime_error("no usable capture device");
 
   bool new_frame = true;
   int capture_width;
@@ -211,8 +214,6 @@ void update(void* instance)
   attribs.ysize = ysize;
   framebuffer_changeAttributes(inst->out_result, &attribs);
 
-  try
-    {
       my->drv->decode_frame(inst->out_result->framebuffer,
                             xsize, ysize);
     }

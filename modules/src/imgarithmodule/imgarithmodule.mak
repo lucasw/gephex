@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "imgarithmodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -58,42 +62,8 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "imgarithmodule_EXPORTS" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\imgarithmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\imgarithmodule.bsc" 
 BSC32_SBRS= \
@@ -105,6 +75,7 @@ DEF_FILE= \
 LINK32_OBJS= \
 	"$(INTDIR)\imgarithmodule.obj" \
 	"$(INTDIR)\imgarithmodule_auto.obj" \
+	"$(INTDIR)\imgarithmodule_x86.obj" \
 	"..\..\..\util\src\cpuinfo\Release\cpuinfo.lib"
 
 "$(OUTDIR)\imgarithmodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -137,11 +108,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : ".\imgarithmodule_auto.c" ".\imgarithmodule.h" ".\imgarithmodule.def" "..\..\..\config.h" "$(OUTDIR)\imgarithmodule.dll"
+ALL : "$(OUTDIR)\imgarithmodule.dll"
 
 !ELSE 
 
-ALL : "cpuinfo - Win32 Debug" ".\imgarithmodule_auto.c" ".\imgarithmodule.h" ".\imgarithmodule.def" "..\..\..\config.h" "$(OUTDIR)\imgarithmodule.dll"
+ALL : "cpuinfo - Win32 Debug" "$(OUTDIR)\imgarithmodule.dll"
 
 !ENDIF 
 
@@ -159,16 +130,47 @@ CLEAN :
 	-@erase "$(OUTDIR)\imgarithmodule.ilk"
 	-@erase "$(OUTDIR)\imgarithmodule.lib"
 	-@erase "$(OUTDIR)\imgarithmodule.pdb"
-	-@erase "..\..\..\config.h"
-	-@erase "imgarithmodule.def"
-	-@erase "imgarithmodule.h"
-	-@erase "imgarithmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MDd /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "imgarithmodule_EXPORTS" /D "_DEBUG" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\imgarithmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\imgarithmodule.bsc" 
+BSC32_SBRS= \
+	
+LINK32=link.exe
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\imgarithmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\imgarithmodule.def" /out:"$(OUTDIR)\imgarithmodule.dll" /implib:"$(OUTDIR)\imgarithmodule.lib" /pdbtype:sept 
+DEF_FILE= \
+	".\imgarithmodule.def"
+LINK32_OBJS= \
+	"$(INTDIR)\imgarithmodule.obj" \
+	"$(INTDIR)\imgarithmodule_auto.obj" \
+	"$(INTDIR)\imgarithmodule_x86.obj" \
+	"..\..\..\util\src\cpuinfo\Debug\cpuinfo.lib"
+
+"$(OUTDIR)\imgarithmodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+TargetPath=.\Debug\imgarithmodule.dll
+SOURCE="$(InputPath)"
+PostBuild_Desc=Kopiere Dll...
+DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
+
+ALL : $(DS_POSTBUILD_DEP)
+
+# Begin Custom Macros
+OutDir=.\Debug
+# End Custom Macros
+
+$(DS_POSTBUILD_DEP) : "cpuinfo - Win32 Debug" "$(OUTDIR)\imgarithmodule.dll"
+   copy .\Debug\imgarithmodule.dll ..\..\..\dlls\modules
+	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -200,44 +202,6 @@ CPP_PROJ=/nologo /G6 /MDd /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I 
    $(CPP_PROJ) $< 
 <<
 
-MTL=midl.exe
-MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\imgarithmodule.bsc" 
-BSC32_SBRS= \
-	
-LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\imgarithmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\imgarithmodule.def" /out:"$(OUTDIR)\imgarithmodule.dll" /implib:"$(OUTDIR)\imgarithmodule.lib" /pdbtype:sept 
-DEF_FILE= \
-	".\imgarithmodule.def"
-LINK32_OBJS= \
-	"$(INTDIR)\imgarithmodule.obj" \
-	"$(INTDIR)\imgarithmodule_auto.obj" \
-	"..\..\..\util\src\cpuinfo\Debug\cpuinfo.lib"
-
-"$(OUTDIR)\imgarithmodule.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-    $(LINK32) @<<
-  $(LINK32_FLAGS) $(LINK32_OBJS)
-<<
-
-TargetPath=.\Debug\imgarithmodule.dll
-SOURCE="$(InputPath)"
-PostBuild_Desc=Kopiere Dll...
-DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
-
-ALL : $(DS_POSTBUILD_DEP)
-
-# Begin Custom Macros
-OutDir=.\Debug
-# End Custom Macros
-
-$(DS_POSTBUILD_DEP) : "cpuinfo - Win32 Debug" ".\imgarithmodule_auto.c" ".\imgarithmodule.h" ".\imgarithmodule.def" "..\..\..\config.h" "$(OUTDIR)\imgarithmodule.dll"
-   copy .\Debug\imgarithmodule.dll ..\..\..\dlls\modules
-	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
-
-!ENDIF 
-
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("imgarithmodule.dep")
@@ -265,7 +229,7 @@ CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/stringtype"
 
 CPP_SWITCHES=/nologo /G6 /MDd /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../types/src/framebuffertype" /I "../../../engine/src/engine" /I "../../../" /I "../../../util/include" /I "../../" /I "../../../util/src/cpuinfo" /D "_WINDOWS" /D "_USRDLL" /D "imgarithmodule_EXPORTS" /D "_DEBUG" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\imgarithmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
-"$(INTDIR)\imgarithmodule.obj" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\imgarithmodule.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h" ".\imgarithmodule.h"
 	$(CPP) @<<
   $(CPP_SWITCHES) $(SOURCE)
 <<
@@ -355,6 +319,36 @@ InputPath=.\imgarithmodule.spec
 	python ../../pluc.py c imgarithmodule.spec 
 	python ../../pluc.py h imgarithmodule.spec 
 	python ../../pluc.py def imgarithmodule.spec
+<< 
+	
+
+!ENDIF 
+
+SOURCE=.\imgarithmodule_x86.asm
+
+!IF  "$(CFG)" == "imgarithmodule - Win32 Release"
+
+OutDir=.\Release
+InputPath=.\imgarithmodule_x86.asm
+InputName=imgarithmodule_x86
+
+"$(INTDIR)\imgarithmodule_x86.obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	<<tempfile.bat 
+	@echo off 
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
+<< 
+	
+
+!ELSEIF  "$(CFG)" == "imgarithmodule - Win32 Debug"
+
+OutDir=.\Debug
+InputPath=.\imgarithmodule_x86.asm
+InputName=imgarithmodule_x86
+
+"$(INTDIR)\imgarithmodule_x86.obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	<<tempfile.bat 
+	@echo off 
+	nasmw -f win32 -O3 -o $(OutDir)/$(InputName).obj $(InputName).asm
 << 
 	
 

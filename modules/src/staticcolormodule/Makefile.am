@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -10,10 +10,19 @@ staticcolormodule.h: staticcolormodule.spec
 
 lib_LTLIBRARIES = staticcolormodule.la
 
+@builddir@/staticcolormodule_x86.o: @srcdir@/staticcolormodule_x86.asm
+	@NASM@ @NASM_FLAGS@ -o @builddir@/staticcolormodule_x86.o @srcdir@/staticcolormodule_x86.asm
+
 if OPT_INCLUDE_MMX
-staticcolormodule_la_LIBADD = -lcpuinfo -L@builddir@/../../../util/src/cpuinfo
-staticcolormodule_la_DEPENDENCIES= @builddir@/../../../util/src/cpuinfo/libcpuinfo.a
-cpuinfoINCLUDES             = -I @srcdir@/../../../util/src/cpuinfo
+staticcolormodule_la_LIBADD = \
+	@builddir@/staticcolormodule_x86.o \
+	-lcpuinfo -L@builddir@/../../../util/src/cpuinfo
+
+staticcolormodule_la_DEPENDENCIES = \
+	@builddir@/staticcolormodule_x86.o \
+	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
+
+cpuinfoINCLUDES = -I @srcdir@/../../../util/src/cpuinfo
 endif
 
 staticcolormodule_la_SOURCES = 	staticcolormodule_auto.c \
@@ -31,7 +40,5 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/framebuffertype \
 		$(cpuinfoINCLUDES)
 
- 
-
 DISTCLEANFILES = staticcolormodule.h staticcolormodule_auto.c
-EXTRA_DIST = staticcolormodule.dsp staticcolormodule.mak staticcolormodule.dep
+EXTRA_DIST = staticcolormodule.dsp staticcolormodule.mak staticcolormodule.dep staticcolormodule_x86.asm

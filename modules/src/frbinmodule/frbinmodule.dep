@@ -22,6 +22,20 @@
 	".\videofiledriver.h"\
 	
 
+.\ffmpegdriver.cpp : \
+	"..\..\..\contrib\ffmpeg\libavcodec\avcodec.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\common.h"\
+	"..\..\..\contrib\ffmpeg\libavcodec\rational.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avformat.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\avio.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtsp.h"\
+	"..\..\..\contrib\ffmpeg\libavformat\rtspcodes.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libscale\libscale.h"\
+	".\ffmpegdriver.h"\
+	".\videofiledriver.h"\
+	
+
 .\framecache.cpp : \
 	"..\..\..\util\include\basic_types.h"\
 	".\framecache.h"\
@@ -38,6 +52,7 @@
 	".\bmpdriver.h"\
 	".\driverfactory.h"\
 	".\dshowdriver.h"\
+	".\ffmpegdriver.h"\
 	".\framecache.h"\
 	".\frbinmodule.h"\
 	".\sdlimagedriver.h"\

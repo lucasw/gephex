@@ -50,16 +50,15 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-capturemodule_la_DEPENDENCIES =
 am_capturemodule_la_OBJECTS = capturemodule_auto.lo capturemodule.lo \
-	v4lcapturedriver.lo v4l1.lo colorconv.lo
+	v4lcapturedriver.lo v4l1.lo
 capturemodule_la_OBJECTS = $(am_capturemodule_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/capturemodule.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/capturemodule_auto.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/colorconv.Plo ./$(DEPDIR)/v4l1.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/v4l1.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/v4lcapturedriver.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -114,6 +113,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -136,6 +138,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -170,6 +174,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -215,6 +221,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -223,7 +231,7 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -252,17 +260,19 @@ capturemodule_la_SOURCES = \
 	v4lcapturedriver.h \
 	v4l1.h \
 	v4l1.cpp \
-	colorconv.h \
-	colorconv.cpp \
 	videodev.h
 
-capturemodule_la_LDFLAGS = -module -avoid-version -no-undefined -lscale
-capturemodule_la_LIBADD = -L@builddir@/../libscale
+capturemodule_la_LDFLAGS = -module -avoid-version -no-undefined -lscale -lcolorconv
+capturemodule_la_LIBADD = -L@builddir@/../libscale -L@builddir@/../libcolorconv
+capturemodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a \
+			       @builddir@/../libcolorconv/libcolorconv.a
+
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../util/include \
            -I@srcdir@/../../../types/src/framebuffertype \
            -I@srcdir@/../../../types/src/numbertype \
-	   -I@srcdir@/../libscale	
+	   -I@srcdir@/../libscale \
+	   -I@srcdir@/../libcolorconv	
 
 DISTCLEANFILES = capturemodule.h capturemodule_auto.c
 EXTRA_DIST = capturemodule.dsp capturemodule.mak capturemodule.dep dshowcapturedriver.cpp dshowcapturedriver.h
@@ -337,7 +347,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/capturemodule.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/capturemodule_auto.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/colorconv.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v4l1.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v4lcapturedriver.Plo@am__quote@
 

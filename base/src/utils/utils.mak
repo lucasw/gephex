@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "utils - Win32 Release"
 
 OUTDIR=.\../../lib
@@ -33,7 +36,7 @@ INTDIR=.\Release
 OutDir=.\../../lib
 # End Custom Macros
 
-ALL : "$(OUTDIR)\utils.lib"
+ALL : "..\..\..\config.h" "$(OUTDIR)\utils.lib"
 
 
 CLEAN :
@@ -42,6 +45,7 @@ CLEAN :
 	-@erase "$(INTDIR)\bufferutils.obj"
 	-@erase "$(INTDIR)\circularbuffer.obj"
 	-@erase "$(INTDIR)\configfile.obj"
+	-@erase "$(INTDIR)\configmanager.obj"
 	-@erase "$(INTDIR)\filesystem.obj"
 	-@erase "$(INTDIR)\itokenizer.obj"
 	-@erase "$(INTDIR)\sharedlibrary.obj"
@@ -56,6 +60,7 @@ CLEAN :
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\xmlutils.obj"
 	-@erase "$(OUTDIR)\utils.lib"
+	-@erase "..\..\..\config.h"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -63,40 +68,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I "../../../" /I "../../../util/include/compatibility" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\utils.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\utils.bsc" 
 BSC32_SBRS= \
@@ -120,7 +92,8 @@ LIB32_OBJS= \
 	"$(INTDIR)\structreader.obj" \
 	"$(INTDIR)\structscanner.obj" \
 	"$(INTDIR)\timing.obj" \
-	"$(INTDIR)\xmlutils.obj"
+	"$(INTDIR)\xmlutils.obj" \
+	"$(INTDIR)\configmanager.obj"
 
 "$(OUTDIR)\utils.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -135,7 +108,7 @@ INTDIR=.\Debug
 OutDir=.\../../lib
 # End Custom Macros
 
-ALL : "..\..\..\config.h" "$(OUTDIR)\utils.lib"
+ALL : "$(OUTDIR)\utils.lib"
 
 
 CLEAN :
@@ -144,6 +117,7 @@ CLEAN :
 	-@erase "$(INTDIR)\bufferutils.obj"
 	-@erase "$(INTDIR)\circularbuffer.obj"
 	-@erase "$(INTDIR)\configfile.obj"
+	-@erase "$(INTDIR)\configmanager.obj"
 	-@erase "$(INTDIR)\filesystem.obj"
 	-@erase "$(INTDIR)\itokenizer.obj"
 	-@erase "$(INTDIR)\sharedlibrary.obj"
@@ -159,7 +133,6 @@ CLEAN :
 	-@erase "$(INTDIR)\vc60.pdb"
 	-@erase "$(INTDIR)\xmlutils.obj"
 	-@erase "$(OUTDIR)\utils.lib"
-	-@erase "..\..\..\config.h"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -167,8 +140,39 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GX /ZI /Od /I "../../../" /I "../../../util/include/compatibility" /D "WIN32" /D "_DEBUG" /D for="if (0) {} else for" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\utils.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"$(OUTDIR)\utils.lib" 
+LIB32_OBJS= \
+	"$(INTDIR)\buffer.obj" \
+	"$(INTDIR)\bufferstream.obj" \
+	"$(INTDIR)\bufferutils.obj" \
+	"$(INTDIR)\circularbuffer.obj" \
+	"$(INTDIR)\configfile.obj" \
+	"$(INTDIR)\filesystem.obj" \
+	"$(INTDIR)\itokenizer.obj" \
+	"$(INTDIR)\sharedlibrary.obj" \
+	"$(INTDIR)\spawn.obj" \
+	"$(INTDIR)\streamlogger.obj" \
+	"$(INTDIR)\streamtokenizer.obj" \
+	"$(INTDIR)\string_.obj" \
+	"$(INTDIR)\stringtokenizer.obj" \
+	"$(INTDIR)\structreader.obj" \
+	"$(INTDIR)\structscanner.obj" \
+	"$(INTDIR)\timing.obj" \
+	"$(INTDIR)\xmlutils.obj" \
+	"$(INTDIR)\configmanager.obj"
+
+"$(OUTDIR)\utils.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
+    $(LIB32) @<<
+  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
+<<
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -200,39 +204,6 @@ CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GX /ZI /Od /I "../../../" /I "../../../uti
    $(CPP_PROJ) $< 
 <<
 
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\utils.bsc" 
-BSC32_SBRS= \
-	
-LIB32=link.exe -lib
-LIB32_FLAGS=/nologo /out:"$(OUTDIR)\utils.lib" 
-LIB32_OBJS= \
-	"$(INTDIR)\buffer.obj" \
-	"$(INTDIR)\bufferstream.obj" \
-	"$(INTDIR)\bufferutils.obj" \
-	"$(INTDIR)\circularbuffer.obj" \
-	"$(INTDIR)\configfile.obj" \
-	"$(INTDIR)\filesystem.obj" \
-	"$(INTDIR)\itokenizer.obj" \
-	"$(INTDIR)\sharedlibrary.obj" \
-	"$(INTDIR)\spawn.obj" \
-	"$(INTDIR)\streamlogger.obj" \
-	"$(INTDIR)\streamtokenizer.obj" \
-	"$(INTDIR)\string_.obj" \
-	"$(INTDIR)\stringtokenizer.obj" \
-	"$(INTDIR)\structreader.obj" \
-	"$(INTDIR)\structscanner.obj" \
-	"$(INTDIR)\timing.obj" \
-	"$(INTDIR)\xmlutils.obj"
-
-"$(OUTDIR)\utils.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
-    $(LIB32) @<<
-  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
-<<
-
-!ENDIF 
-
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("utils.dep")
@@ -246,7 +217,7 @@ LIB32_OBJS= \
 !IF "$(CFG)" == "utils - Win32 Release" || "$(CFG)" == "utils - Win32 Debug"
 SOURCE=.\buffer.cpp
 
-"$(INTDIR)\buffer.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\buffer.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\bufferstream.cpp
@@ -269,9 +240,14 @@ SOURCE=.\configfile.cpp
 "$(INTDIR)\configfile.obj" : $(SOURCE) "$(INTDIR)"
 
 
+SOURCE=.\configmanager.cpp
+
+"$(INTDIR)\configmanager.obj" : $(SOURCE) "$(INTDIR)"
+
+
 SOURCE=.\filesystem.cpp
 
-"$(INTDIR)\filesystem.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\filesystem.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\itokenizer.cpp
@@ -281,12 +257,12 @@ SOURCE=.\itokenizer.cpp
 
 SOURCE=.\sharedlibrary.cpp
 
-"$(INTDIR)\sharedlibrary.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\sharedlibrary.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\spawn.cpp
 
-"$(INTDIR)\spawn.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\spawn.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\streamlogger.cpp
@@ -321,7 +297,7 @@ SOURCE=.\structscanner.cpp
 
 SOURCE=.\timing.cpp
 
-"$(INTDIR)\timing.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\timing.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\xmlutils.cpp

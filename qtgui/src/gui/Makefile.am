@@ -21,7 +21,6 @@ CPP_FILES = \
 	connectionwidget.cpp \
 	controlwidget.cpp \
 	graphnameview.cpp \
-	guiconfig.cpp \
 	hidebutton.cpp \
 	hidebuttonconstructor.cpp \
 	inputplugwidget.cpp \
@@ -61,7 +60,6 @@ HEADER_FILES = \
 	connectionwidget.h \
 	controlwidget.h \
 	graphnameview.h \
-	guiconfig.h \
 	hidebutton.h \
 	hidebuttonconstructor.h \
 	imoduleinfobasestation.h \

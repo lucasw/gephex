@@ -35,3 +35,9 @@
 
 !ENDIF 
 
+!IF  "$(CFG)" == "xfademodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "xfademodule - Win32 Debug"
+
+!ENDIF 
+

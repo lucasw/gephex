@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -15,9 +15,16 @@ xfademodule_la_SOURCES = 	xfademodule_auto.c \
 				xfademodule.spec \
 				xfademodule.xpm
 
+@builddir@/xfademodule_x86.o: @srcdir@/xfademodule_x86.asm
+	@NASM@ @NASM_FLAGS@ -o @builddir@/xfademodule_x86.o @srcdir@/xfademodule_x86.asm
+
 if OPT_INCLUDE_MMX
-xfademodule_la_LIBADD = -lcpuinfo -L@builddir@/../../../util/src/cpuinfo
-xfademodule_la_DEPENDENCIES= @builddir@/../../../util/src/cpuinfo/libcpuinfo.a
+xfademodule_la_LIBADD = \
+	@builddir@/xfademodule_x86.o \
+	-lcpuinfo -L@builddir@/../../../util/src/cpuinfo
+xfademodule_la_DEPENDENCIES = \
+		@builddir@/xfademodule_x86.o \
+		@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 cpuinfoINCLUDES       = -I @srcdir@/../../../util/src/cpuinfo
 endif
 
@@ -30,7 +37,5 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/framebuffertype \
 		$(cpuinfoINCLUDES)
 
- 
-
 DISTCLEANFILES = xfademodule.h xfademodule_auto.c
-EXTRA_DIST = xfademodule.dsp xfademodule.mak xfademodule.dep
+EXTRA_DIST = xfademodule.dsp xfademodule.mak xfademodule.dep xfademodule_x86.asm

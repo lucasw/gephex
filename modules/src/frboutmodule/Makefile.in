@@ -53,13 +53,12 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am__frboutmodule_la_SOURCES_DIST = frboutmodule_auto.c frboutmodule.c \
 	frboutmodule.h frboutmodule.spec frboutmodule.xpm \
-	outputdriver.h slist.h slist.c ximageoutput.c xshmoutput.c \
-	ximageoutput.h xshmoutput.h x11stuff.h x11stuff.c \
-	vloopbackoutput.h vloopbackoutput.c aaoutput.c aaoutput.h \
-	sdloutput.c sdloutput.h gloutput.h gloutput.cpp glutil.h \
-	glxutil.c
-@HAVE_X11_TRUE@am__objects_1 = ximageoutput.lo xshmoutput.lo \
-@HAVE_X11_TRUE@	x11stuff.lo vloopbackoutput.lo
+	outputdriver.h slist.h slist.c x11output.c x11output.h \
+	x11stuff.h x11stuff.c vloopbackoutput.h vloopbackoutput.c \
+	aaoutput.c aaoutput.h sdloutput.c sdloutput.h gloutput.h \
+	gloutput.cpp glutil.h glxutil.c
+@HAVE_X11_TRUE@am__objects_1 = x11output.lo x11stuff.lo \
+@HAVE_X11_TRUE@	vloopbackoutput.lo
 @WITH_AALIB_TRUE@am__objects_2 = aaoutput.lo
 @WITH_SDL_TRUE@am__objects_3 = sdloutput.lo
 @WITH_GL_TRUE@am__objects_4 = gloutput.lo glxutil.lo
@@ -76,9 +75,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gloutput.Plo ./$(DEPDIR)/glxutil.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/sdloutput.Plo ./$(DEPDIR)/slist.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/vloopbackoutput.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/x11stuff.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ximageoutput.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/xshmoutput.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/x11output.Plo ./$(DEPDIR)/x11stuff.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
@@ -132,6 +129,9 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FFMPEG_CFLAGS = @FFMPEG_CFLAGS@
+FFMPEG_DIR = @FFMPEG_DIR@
+FFMPEG_LDFLAGS = @FFMPEG_LDFLAGS@
 FRBINCACHE = @FRBINCACHE@
 HAVE_QT_FALSE = @HAVE_QT_FALSE@
 HAVE_QT_TRUE = @HAVE_QT_TRUE@
@@ -154,6 +154,8 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MOC = @MOC@
 MPEG3_LDFLAGS = @MPEG3_LDFLAGS@
+NASM = @NASM@
+NASM_FLAGS = @NASM_FLAGS@
 OBJEXT = @OBJEXT@
 OPT_INCLUDE_MMX_FALSE = @OPT_INCLUDE_MMX_FALSE@
 OPT_INCLUDE_MMX_TRUE = @OPT_INCLUDE_MMX_TRUE@
@@ -188,6 +190,8 @@ WITH_ASOUNDLIB_OR_OSS_TRUE = @WITH_ASOUNDLIB_OR_OSS_TRUE@
 WITH_ASOUNDLIB_TRUE = @WITH_ASOUNDLIB_TRUE@
 WITH_AVIFILE_FALSE = @WITH_AVIFILE_FALSE@
 WITH_AVIFILE_TRUE = @WITH_AVIFILE_TRUE@
+WITH_FFMPEG_FALSE = @WITH_FFMPEG_FALSE@
+WITH_FFMPEG_TRUE = @WITH_FFMPEG_TRUE@
 WITH_GL_FALSE = @WITH_GL_FALSE@
 WITH_GL_TRUE = @WITH_GL_TRUE@
 WITH_JOYSTICK_FALSE = @WITH_JOYSTICK_FALSE@
@@ -233,6 +237,8 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+gphx_module_lib_dir = @gphx_module_lib_dir@
+gphx_type_lib_dir = @gphx_type_lib_dir@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -241,7 +247,7 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -259,11 +265,9 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 PLUC = python @top_srcdir@/modules/pluc.py
 lib_LTLIBRARIES = frboutmodule.la
-@HAVE_X11_TRUE@X11_sOOURCES = \
-@HAVE_X11_TRUE@	ximageoutput.c \
-@HAVE_X11_TRUE@	xshmoutput.c \
-@HAVE_X11_TRUE@	ximageoutput.h \
-@HAVE_X11_TRUE@	xshmoutput.h \
+@HAVE_X11_TRUE@X11_sOURCES = \
+@HAVE_X11_TRUE@	x11output.c \
+@HAVE_X11_TRUE@	x11output.h \
 @HAVE_X11_TRUE@	x11stuff.h \
 @HAVE_X11_TRUE@	x11stuff.c \
 @HAVE_X11_TRUE@	vloopbackoutput.h \
@@ -278,6 +282,8 @@ lib_LTLIBRARIES = frboutmodule.la
 @WITH_SDL_TRUE@	sdloutput.c \
 @WITH_SDL_TRUE@	sdloutput.h
 
+@WITH_SDL_TRUE@SDL_cFLAGS = @SDL_CFLAGS@
+@WITH_SDL_TRUE@SDL_lD_FLAGS = @SDL_LD_FLAGS@
 @WITH_GL_TRUE@GLLIBS = -lGL
 @WITH_GL_TRUE@GL_sOURCES = \
 @WITH_GL_TRUE@        gloutput.h \
@@ -293,17 +299,20 @@ frboutmodule_la_SOURCES = \
         frboutmodule.xpm \
         outputdriver.h \
 	slist.h \
-	slist.c $(X11_sOOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
+	slist.c $(X11_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
 
-frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale
-frboutmodule_la_LIBADD = -lscale -lX11 -lXext $(AALIB_lDFLAGS) @SDL_LD_FLAGS@ $(GLLIBS)
-frboutmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
+frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale -L/usr/X11R6/lib -L@builddir@/../libcolorconv
+frboutmodule_la_LIBADD = -lscale -lcolorconv -lX11 -lXext -lXv $(AALIB_lDFLAGS) $(SDL_lD_FLAGS) $(GLLIBS)
+frboutmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a \
+			       @builddir@/../libcolorconv/libcolorconv.a
+
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
 	   -I@srcdir@/../../../util/include \
 	   -I@srcdir@/../libscale \
+	   -I@srcdir@/../libcolorconv \
            -I@srcdir@/../../../types/src/stringtype \
            -I@srcdir@/../../../types/src/framebuffertype \
-           -I@srcdir@/../../../types/src/numbertype @SDL_CFLAGS@
+           -I@srcdir@/../../../types/src/numbertype $(SDL_cFLAGS)
 
 DISTCLEANFILES = frboutmodule.h frboutmodule_auto.c
 EXTRA_DIST = frboutmodule.dsp frboutmodule.mak frboutmodule.dep \
@@ -387,9 +396,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdloutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slist.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vloopbackoutput.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/x11output.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/x11stuff.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ximageoutput.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xshmoutput.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

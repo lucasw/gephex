@@ -6,6 +6,7 @@ extern "C"
 {
 #endif
 #include "dllmodule.h"
+#include "stringtype.h"
 #include "positiontype.h"
 #include "framebuffertype.h"
 #include "numbertype.h"
@@ -17,14 +18,16 @@ struct _MyInstance* my;
  NumberType* in_t;
  NumberType* in_rot;
  PositionType* in_pos;
- FrameBufferType* in_b;
  NumberType* in_xres;
  NumberType* in_yres;
  NumberType* in_radius;
+ NumberType* in_zdist;
  NumberType* in_shading;
+ StringType* in_mode;
+ FrameBufferType* in_b;
  FrameBufferType* out_r;
 } Instance, *InstancePtr;
-enum Inputs { in_t = 0, in_rot = 1, in_pos = 2, in_b = 3, in_xres = 4, in_yres = 5, in_radius = 6, in_shading = 7 };
+enum Inputs { in_t = 0, in_rot = 1, in_pos = 2, in_xres = 3, in_yres = 4, in_radius = 5, in_zdist = 6, in_shading = 7, in_mode = 8, in_b = 9 };
 enum Outputs { out_r = 0 };
 
 struct _MyInstance* construct(void);

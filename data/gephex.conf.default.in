@@ -3,8 +3,8 @@ common {
 }
 
 engine {
-    module_path          = [@prefix@/lib/gephex/modules/]
-    type_path            = [@prefix@/lib/gephex/types/]
+    module_path          = [@gphx_module_lib_dir@/]
+    type_path            = [@gphx_type_lib_dir@/]
     graph_path           = [__CONF_DIR__/graphs/]
     ipc_unix_node_prefix = [/tmp/gephex_socket_]
     ipc_type             = [inet]

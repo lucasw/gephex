@@ -42,6 +42,7 @@ class QAction;
 namespace utils 
 {
   class StructReader;
+  class ConfigManager;
 }
 
 namespace gui
@@ -57,7 +58,6 @@ namespace gui
   class DllSelectorDialog;  
   class LogWindow;  
   class KeyboardManager;
-  struct GuiConfig;
 
   class ProxyErrorReceiver;
 
@@ -70,7 +70,9 @@ namespace gui
 
 
       VJMainWindow(QWidget* parent, const char* name,
-                   const GuiConfig& config);		   
+                   const utils::ConfigManager& config,
+                   const std::string& ipc_locator,
+                   const std::string& conf_base_dir);
 
       virtual ~VJMainWindow();
 
@@ -175,9 +177,11 @@ namespace gui
 
       DllSelectorDialog* m_dllSelector;
 
-      const GuiConfig& m_config;
+      const utils::ConfigManager& m_config;
 
       KeyboardManager* m_kbManager;
+
+      std::string m_conf_base_dir;
     };
 
 } // end of namespace gui

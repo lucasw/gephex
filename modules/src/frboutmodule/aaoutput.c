@@ -38,9 +38,9 @@ struct DriverInstance {
 
 static struct DriverInstance* 
 AA_new_instance(const char* server_name,
-                    int xpos, int ypos,
-                    int width, int height,
-                    char* error_text, int buflen);
+                int xpos, int ypos,
+                int width, int height, int mmx_supported,
+                char* error_text, int buflen);
 
 static void AA_destroy(struct DriverInstance* sh);
 
@@ -139,7 +139,7 @@ static void my_handler(struct aa_context* context)
 static struct DriverInstance*
 AA_new_instance(const char* server_name,
                     int xpos, int ypos,
-                    int width, int height,
+                    int width, int height, int mmx_supported,
                     char* error_text, int textlen)
 {
   struct DriverInstance* sh = (struct DriverInstance*) malloc(sizeof(*sh));

@@ -21,7 +21,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "connectionwidget.h"
-#include <cmath>
+//#include <cmath>
 #include <qpainter.h>
 #include <qwidget.h>
 #include <math.h>
@@ -58,10 +58,10 @@ namespace gui
 
   double euklid(const QPoint& p1, const QPoint& p2)
   {
-    int dx = p2.x() - p1.x();
-    int dy = p2.y() - p1.y();
+    float dx = static_cast<float>(p2.x() - p1.x());
+    float dy = static_cast<float>(p2.y() - p1.y());
 
-    return sqrt(dx*dx + dy*dy);
+	return sqrt(dx*dx + dy*dy);
   }
 
   double ConnectionWidget::dist(const QPoint& y) const

@@ -48,7 +48,8 @@ namespace utils
  * Variable mit StructReader::getBoolValue("v1") auszulesen. Dann
  * erhaelt man als Ergebnis den boolschen Wert true.
  * Genauso kann man Zahlen auch als Strings auslesen.
- * Man kann jedoch nicht Zahlen als Bools bzw. Bools als Zahlen lesen.
+ * Man kann jedoch nicht Zahlen als Bools bzw. Bools als Zahlen lesen
+ * und auch nicht alle Strings als Zahlen/Bools.
  */
 class StructReader
 {
@@ -161,6 +162,8 @@ class StructReader
   std::map<std::string,std::string> getMap() const;
 
   void serialize(std::ostream&) const;
+
+  bool has_value(const std::string& name) const;
 
  private:
   ConfigMap m_values;

@@ -122,7 +122,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Rotozoom] group=[Effects] inputs=[7 Zoom{lower_bound=[0] widget_type=[number_selector] step_size=[0.04] higher_bound=[4] } Rotation{lower_bound=[-180] widget_type=[number_selector] step_size=[1] higher_bound=[180] } Translation Texture Background{help=[The background image] } Copy_Background{widget_type=[radio_button] false_value=[0] true_value=[1] hidden=[true] help=[Should background be copied or modified?] } Mode{widget_type=[combo_box] values=[regular,poly] hidden=[true] help=[regular is stable, poly is faster] } ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Rotozoom] group=[Effects] inputs=[7 Zoom{lower_bound=[0] widget_type=[number_selector] step_size=[0.04] higher_bound=[8] } Rotation{lower_bound=[-180] widget_type=[number_selector] step_size=[1] higher_bound=[180] } Translation Texture Background{help=[The background image] } Copy_Background{widget_type=[radio_button] false_value=[0] true_value=[1] hidden=[true] help=[Should background be copied or modified?] } Mode{widget_type=[combo_box] values=[regular,poly,mirror] hidden=[true] help=[regular is stable, poly is faster] } ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(rotozoommodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

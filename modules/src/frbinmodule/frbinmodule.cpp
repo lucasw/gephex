@@ -27,7 +27,7 @@
 #include <algorithm> 
 #include <cctype> // tolower
 #include <stdlib.h>
-//#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <list>
 #include <map>
@@ -62,6 +62,10 @@ using std::tolower;
 
 #if defined(WITH_SDL_IMAGE)
 #include "sdlimagedriver.h"
+#endif
+
+#if defined(WITH_FFMPEG)
+#include "ffmpegdriver.h"
 #endif
 
 #include "bmpdriver.h"
@@ -116,6 +120,12 @@ int init(logT log_function)
   s_cache = new FrameCache(CACHE_SIZE_IN_MB);
   s_factory = new DriverFactory();
 
+#if defined(WITH_FFMPEG)
+  DriverConstructor<FFMpegDriver>* ffmpeg_ctor
+    = new DriverConstructor<FFMpegDriver>();
+  s_factory->register_driver(ffmpeg_ctor);
+#endif
+
 #if defined(OS_WIN32)
   DriverConstructor<VFWDriver>* vFW_ctor = new DriverConstructor<VFWDriver>();
   s_factory->register_driver(vFW_ctor);
@@ -123,17 +133,16 @@ int init(logT log_function)
     s_factory->register_driver(DSHOW_ctor);
 #endif
 
-#if defined(WITH_MPEG3)
-  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
-    = new DriverConstructor<Mpeg3Driver>();
-  s_factory->register_driver(mpeg3_ctor);
-#endif
-
 #if defined(WITH_AVIFILE)
   DriverConstructor<AviFileDriver>* aviFile_ctor 
     = new DriverConstructor<AviFileDriver>();
   s_factory->register_driver(aviFile_ctor);
+#endif
 
+#if defined(WITH_MPEG3)
+  DriverConstructor<Mpeg3Driver>* mpeg3_ctor 
+    = new DriverConstructor<Mpeg3Driver>();
+  s_factory->register_driver(mpeg3_ctor);
 #endif
 
 #if defined(WITH_SDL_IMAGE)
@@ -262,9 +271,9 @@ static VideoFileDriver* load_file(const std::string& short_file_name,
 
   const char* media_path;
   if (ret == 0)
-	  media_path = 0;
+    media_path = 0;
   else
-	  media_path = media_path_buffer;
+    media_path = media_path_buffer;
 #else
   const char* media_path = getenv(GEPHEX_MEDIA_PATH);
 #endif
@@ -291,7 +300,7 @@ static VideoFileDriver* load_file(const std::string& short_file_name,
       ++it;
     }
   
-  if(it==path.end())
+  if (it == path.end())
     {
       // file not found
       throw std::runtime_error("file not found");
@@ -329,10 +338,11 @@ static VideoFileDriver* load_file(const std::string& short_file_name,
           delete drv;
           throw e;
         }
-      catch (std::runtime_error&)
+      catch (std::runtime_error& e)
         {
           delete drv;
           drv = 0;
+          std::cout << e.what() << "\n";
         }
     }
     

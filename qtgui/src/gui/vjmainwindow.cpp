@@ -23,6 +23,7 @@
 #include "vjmainwindow.h"
 
 #include <iostream>
+#include <sstream>
 
 #include <qmenubar.h>
 #include <qlayout.h>
@@ -49,7 +50,6 @@
 #include "dialogs/aboutdialogimpl.h"
 #include "dialogs/changesdialogimpl.h"
 #include "dialogs/newgraphdialog.h"
-#include "guiconfig.h"
 
 #include "interfaces/ienginecontrolreceiver.h"
 #include "interfaces/irenderercontrolreceiver.h"
@@ -69,6 +69,7 @@
 #include "utils/structreader.h"
 #include "utils/spawn.h"
 #include "utils/timing.h"
+#include "utils/configmanager.h"
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -110,18 +111,21 @@ namespace gui
   };
   
   VJMainWindow::VJMainWindow(QWidget* parent, const char* name,
-                             const GuiConfig& config)
+                             const utils::ConfigManager& config,
+                             const std::string& ipc_locator,
+                             const std::string& conf_base_dir)
 			     
     : QMainWindow(parent,name),
       m_error_proxy(new ProxyErrorReceiver()),
-      engineWrapper(new EngineWrapper(config.ipcType,
-                                      config.ipcLocator,
-                                      config.port,
+      engineWrapper(new EngineWrapper(config.get_string_param("ipc_type"),
+                                      ipc_locator,
+                                      config.get_int_param("ipc_port"),
                                       *m_error_proxy)),
       running(false), connected(false), 
       moduleClassView(0), graphNameView(0),
       m_config(config),
-      m_kbManager(0)
+      m_kbManager(0),
+      m_conf_base_dir(conf_base_dir)
   {
     createWindows();
     createActions();
@@ -467,7 +471,7 @@ namespace gui
 				    engineWrapper->moduleStatisticsSender(),
 				    engineWrapper->modelStatusSender(),
 				    &*m_kbManager, *logWindow,
-				    m_config.media_path);
+				    m_config.get_string_param("media_path"));
 
     editorWidget->show();
     QVBoxLayout* editorLayout = new QVBoxLayout(editor);
@@ -557,24 +561,34 @@ namespace gui
 	    // start engine
             statusBar()->message("trying to spawn gephex-engine...");
             std::vector<std::string> args;
-            std::string binary_name = m_config.engine_binary;
+            std::string binary_name =
+              m_config.get_string_param("engine_binary");
 
 #if defined(OS_POSIX)
-            const char* home = getenv("HOME");
-            if (home == 0)
-              {
-                statusBar()->message("could not read $HOME");
-                utils::Timing::sleep(2000);
-              }
-            else
-              {
-                std::string h (home);
-                args.push_back(binary_name);
-                utils::spawn(h + "/.gephex/run_in_terminal.sh", args);
-              }
-#elif defined(OS_WIN32)
-            utils::spawn(binary_name, args);
+            std::ostringstream arg;
+
+            arg << binary_name
+                << " --ipc_type=" << m_config.get_string_param("ipc_type")
+                << " --ipc_port=" << m_config.get_int_param("ipc_port");
+
+            args.push_back(arg.str());
+            //            std::cout << arg.str() << "\n";
+
+            binary_name = m_conf_base_dir  + "/run_in_terminal.sh";
+#else
+            std::ostringstream arg1;
+            arg1 << "--ipc_type=" << m_config.get_string_param("ipc_type");
+            
+            args.push_back(arg1.str());
+            
+            std::ostringstream arg2;
+            arg2 << "--ipc_port=" << m_config.get_int_param("ipc_port");
+
+            args.push_back(arg2.str());
 #endif
+
+            //            std::cout << "binary_name = " << binary_name  << "\n";
+            utils::spawn(binary_name, args);
 
             // give engine some time to start up
             utils::Timing::sleep(1000);
@@ -591,8 +605,10 @@ namespace gui
       } 
     catch(std::runtime_error& e) 
       {
+        std::cout << e.what() << "\n";
 	displayErrorMessage(e.what());
         connectToEngineAction->setEnabled(true);
+        utils::Timing::sleep(1000);
         this->clearSceleton();
         this->unbuildModuleBar();
       }

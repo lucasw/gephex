@@ -1,4 +1,4 @@
-libdir = @libdir@/gephex/modules
+libdir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -11,25 +11,23 @@ frbinmodule.h: frbinmodule.spec
 lib_LTLIBRARIES = frbinmodule.la
 
 if WITH_AVIFILE
-AVIFILE_sOURCES = \
-	avifiledriver.h \
-	avifiledriver.cpp
+AVIFILE_sOURCES = avifiledriver.h avifiledriver.cpp
 endif
 
 if WITH_MPEG3
-MPEG3_sOURCES = \
-	mpeg3driver.h \
-	mpeg3driver.cpp
-MPEG3_lDFLAGS =  @MPEG3_LDFLAGS@
+MPEG3_sOURCES = mpeg3driver.h mpeg3driver.cpp
+MPEG3_lDFLAGS = @MPEG3_LDFLAGS@
 endif
 
 if WITH_SDL_IMAGE
-SDL_IMAGE_sOURCES = \
-	sdlimagedriver.h \
-	sdlimagedriver.cpp
+SDL_IMAGE_sOURCES = sdlimagedriver.h sdlimagedriver.cpp
 
-SDL_IMAGE_lDFLAGS =  @SDL_LD_FLAGS@ @SDL_IMAGE_LDFLAGS@
-SDL_IMAGE_cFLAGS  =  @SDL_CFLAGS@
+SDL_IMAGE_lDFLAGS = @SDL_LD_FLAGS@ @SDL_IMAGE_LDFLAGS@
+SDL_IMAGE_cFLAGS  = @SDL_CFLAGS@
+endif
+
+if WITH_FFMPEG
+FFMPEG_sOURCES = ffmpegdriver.h ffmpegdriver.cpp
 endif
 
 frbinmodule_la_SOURCES = \
@@ -43,11 +41,11 @@ frbinmodule_la_SOURCES = \
 	bmpdriver.cpp \
 	driverfactory.h \
 	framecache.h \
-	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES)
+	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES) $(FFMPEG_sOURCES)
 
 frbinmodule_la_LDFLAGS = \
         -module -avoid-version -no-undefined \
-        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS)
+        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@
 
 frbinmodule_la_LIBADD = -lstdc++ -lscale
 
@@ -60,7 +58,7 @@ INCLUDES = \
 	-I @srcdir@/../../../types/src/numbertype \
 	-I @srcdir@/../../../types/src/stringtype \
 	-I @srcdir@/../../../types/src/framebuffertype \
-	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS)
+	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS) @FFMPEG_CFLAGS@
 
 DISTCLEANFILES = frbinmodule.h frbinmodule_auto.c
 EXTRA_DIST = frbinmodule.dsp frbinmodule.mak frbinmodule.dep \

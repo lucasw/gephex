@@ -5,17 +5,17 @@
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
 CFG=utils - Win32 Debug
-!MESSAGE Dies ist kein gÅltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und fÅhren Sie den Befehl
+!MESSAGE Dies ist kein g¸ltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und f¸hren Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "utils.mak".
 !MESSAGE 
-!MESSAGE Sie kînnen beim AusfÅhren von NMAKE eine Konfiguration angeben
+!MESSAGE Sie kˆnnen beim Ausf¸hren von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "utils.mak" CFG="utils - Win32 Debug"
 !MESSAGE 
-!MESSAGE FÅr die Konfiguration stehen zur Auswahl:
+!MESSAGE F¸r die Konfiguration stehen zur Auswahl:
 !MESSAGE 
 !MESSAGE "utils - Win32 Release" (basierend auf  "Win32 (x86) Static Library")
 !MESSAGE "utils - Win32 Debug" (basierend auf  "Win32 (x86) Static Library")
@@ -107,6 +107,10 @@ SOURCE=.\configfile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\configmanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filesystem.cpp
 # End Source File
 # Begin Source File
@@ -180,6 +184,10 @@ SOURCE=.\circularbuffer.h
 # Begin Source File
 
 SOURCE=.\configfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\configmanager.h
 # End Source File
 # Begin Source File
 

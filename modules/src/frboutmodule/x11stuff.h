@@ -24,6 +24,12 @@
 #define INCLUDED_X11_STUFF_H
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+#include <X11/extensions/XShm.h>
+#include <X11/extensions/Xvlib.h>
+
+#include "basic_types.h"
 
 /**
  * X11 helper functions.
@@ -49,7 +55,20 @@ int x11_win_on_top(Bool on_top,
  * \param win the window
  * \return 0 on error
  */
-int x11_win_frame(Bool frame,
-                   Display* dpy,
-                   Window win);
+int x11_win_frame(Bool frame, Display* dpy, Window win);
+
+/* find the best visual  
+ */  
+int find_best_visual(Display* dpy,
+                     XVisualInfo* chosen_vis);
+
+void convert_to_16_inplace(uint_8* frb, int width, int height);
+
+//void print_visual(XVisualInfo* vinfo);
+
+int check_xshm_extension(Display* dpy);
+
+int check_xv_extension(Display* dpy);
+
+
 #endif

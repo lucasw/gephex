@@ -35,8 +35,7 @@
 #endif
 
 #if defined(HAVE_X11)
-#include "ximageoutput.h"
-#include "xshmoutput.h"
+#include "x11output.h"
 #endif
 
 #if defined(WITH_V4L)
@@ -68,6 +67,8 @@ struct DriverInfo
   const char* name;
   struct OutputDriver* (*get_driver)();
 };
+
+static s_mmx_supported = 0;
 
 #define MAX_NUM_DRIVERS 16
 
@@ -358,20 +359,11 @@ int init(logT log_function)
 #endif
 
 #if defined(HAVE_X11)
-  insert_driver("XShm",   XShm_get_driver);
-  insert_driver("XImage", XImage_get_driver);
+  insert_driver("X11",    X11_get_driver);
 #endif
 
 #if defined(WITH_SDL)
-  if (!SDL_init(buffer, sizeof(buffer)))
-    {
-      char et[TEMP_BUF_SIZE];
-      snprintf(et, sizeof(et),
-               "Could not init SDL driver - skipping");
-      s_log(0, et);
-    }
-  else
-    insert_driver("SDL",    SDL_get_driver);
+  insert_driver("SDL",    SDL_get_driver);
 #endif
 
 #if defined(WITH_GL)
@@ -403,13 +395,6 @@ void shutDown(void)
 
 #if defined(OS_WIN32)	
   if (!GDI_shutdown(buffer, sizeof(buffer)))
-    {
-      s_log(0, buffer);
-    }
-#endif
-
-#if defined(WITH_SDL)
-  if (!SDL_shutdown(buffer, sizeof(buffer)))
     {
       s_log(0, buffer);
     }
@@ -550,6 +535,7 @@ void update(void* instance)
       my->drv->inst = my->drv->new_instance(server_name,
                                             my->win_xpos, my->win_ypos,
                                             my->width, my->height,
+                                            s_mmx_supported,
                                             buffer, sizeof(buffer));
 
       if (my->drv->inst == 0)

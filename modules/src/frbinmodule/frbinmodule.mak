@@ -50,6 +50,7 @@ CLEAN :
 !ENDIF 
 	-@erase "$(INTDIR)\bmpdriver.obj"
 	-@erase "$(INTDIR)\dshowdriver.obj"
+	-@erase "$(INTDIR)\ffmpegdriver.obj"
 	-@erase "$(INTDIR)\framecache.obj"
 	-@erase "$(INTDIR)\frbinmodule.obj"
 	-@erase "$(INTDIR)\frbinmodule_auto.obj"
@@ -65,7 +66,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -105,12 +106,13 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\frbinmodule.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=sdl.lib sdl_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib vfw32.lib strmiids.lib quartz.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\frbinmodule.pdb" /machine:I386 /def:".\frbinmodule.def" /out:"$(OUTDIR)\frbinmodule.dll" /implib:"$(OUTDIR)\frbinmodule.lib" /libpath:"$(SDL_DIR)/lib" /libpath:"$(SDL_IMAGE_DIR)/lib" /libpath:"$(DXSDK_DIR)/Lib" 
+LINK32_FLAGS=sdl.lib sdl_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib vfw32.lib strmiids.lib quartz.lib avcodec.lib avformat.lib /nologo /dll /incremental:no /pdb:"$(OUTDIR)\frbinmodule.pdb" /machine:I386 /def:".\frbinmodule.def" /out:"$(OUTDIR)\frbinmodule.dll" /implib:"$(OUTDIR)\frbinmodule.lib" /libpath:"$(SDL_DIR)/lib" /libpath:"$(SDL_IMAGE_DIR)/lib" /libpath:"$(DXSDK_DIR)/Lib" /libpath:"../../../contrib/ffmpeg/libavformat" /libpath:"../../../contrib/ffmpeg/libavcodec" 
 DEF_FILE= \
 	".\frbinmodule.def"
 LINK32_OBJS= \
 	"$(INTDIR)\bmpdriver.obj" \
 	"$(INTDIR)\dshowdriver.obj" \
+	"$(INTDIR)\ffmpegdriver.obj" \
 	"$(INTDIR)\framecache.obj" \
 	"$(INTDIR)\frbinmodule.obj" \
 	"$(INTDIR)\frbinmodule_auto.obj" \
@@ -165,6 +167,7 @@ CLEAN :
 !ENDIF 
 	-@erase "$(INTDIR)\bmpdriver.obj"
 	-@erase "$(INTDIR)\dshowdriver.obj"
+	-@erase "$(INTDIR)\ffmpegdriver.obj"
 	-@erase "$(INTDIR)\framecache.obj"
 	-@erase "$(INTDIR)\frbinmodule.obj"
 	-@erase "$(INTDIR)\frbinmodule_auto.obj"
@@ -186,7 +189,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -226,12 +229,13 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\frbinmodule.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=sdl.lib sdl_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib vfw32.lib strmiids.lib quartz.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\frbinmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\frbinmodule.def" /out:"$(OUTDIR)\frbinmodule.dll" /implib:"$(OUTDIR)\frbinmodule.lib" /pdbtype:sept /libpath:"$(SDL_DIR)/lib" /libpath:"$(SDL_IMAGE_DIR)/lib" /libpath:"$(DXSDK_DIR)/Lib" 
+LINK32_FLAGS=sdl.lib sdl_image.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib vfw32.lib strmiids.lib quartz.lib avcodec.lib avformat.lib /nologo /dll /incremental:yes /pdb:"$(OUTDIR)\frbinmodule.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"winspool" /nodefaultlib:"comdlg32" /nodefaultlib:"uuid" /nodefaultlib:"odbc32" /nodefaultlib:"odbccp32" /nodefaultlib:"oleaut32" /def:".\frbinmodule.def" /out:"$(OUTDIR)\frbinmodule.dll" /implib:"$(OUTDIR)\frbinmodule.lib" /pdbtype:sept /libpath:"$(SDL_DIR)/lib" /libpath:"$(SDL_IMAGE_DIR)/lib" /libpath:"$(DXSDK_DIR)/Lib" /libpath:"../../../contrib/ffmpeg/libavformat" /libpath:"../../../contrib/ffmpeg/libavcodec" 
 DEF_FILE= \
 	".\frbinmodule.def"
 LINK32_OBJS= \
 	"$(INTDIR)\bmpdriver.obj" \
 	"$(INTDIR)\dshowdriver.obj" \
+	"$(INTDIR)\ffmpegdriver.obj" \
 	"$(INTDIR)\framecache.obj" \
 	"$(INTDIR)\frbinmodule.obj" \
 	"$(INTDIR)\frbinmodule_auto.obj" \
@@ -282,6 +286,11 @@ SOURCE=.\bmpdriver.cpp
 SOURCE=.\dshowdriver.cpp
 
 "$(INTDIR)\dshowdriver.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\ffmpegdriver.cpp
+
+"$(INTDIR)\ffmpegdriver.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\framecache.cpp

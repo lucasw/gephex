@@ -463,7 +463,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CC CFLAGS ac_ct_CC CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS HAVE_X11_TRUE HAVE_X11_FALSE QT_CXXFLAGS QT_LIBS MOC UIC HAVE_QT_TRUE HAVE_QT_FALSE LIB_DL_FLAGS LIB_POSIX4_FLAGS LIB_SOCKET_FLAGS LIB_EXTRA_FLAGS WITH_GL_TRUE WITH_GL_FALSE SDL_CONFIG SDL_PREFIX SDL_CFLAGS SDL_LD_FLAGS WITH_SDL_TRUE WITH_SDL_FALSE SDL_IMAGE_LDFLAGS WITH_SDL_IMAGE_TRUE WITH_SDL_IMAGE_FALSE SDL_TTF_LDFLAGS WITH_SDL_TTF_TRUE WITH_SDL_TTF_FALSE AVIFILE_CONFIG AVIFILE_LDFLAGS AVIFILE_CXXFLAGS WITH_AVIFILE_TRUE WITH_AVIFILE_FALSE MPEG3_LDFLAGS WITH_MPEG3_TRUE WITH_MPEG3_FALSE WITH_LIBPNG_TRUE WITH_LIBPNG_FALSE WITH_AALIB_TRUE WITH_AALIB_FALSE WITH_ASOUNDLIB_TRUE WITH_ASOUNDLIB_FALSE WITH_V4L_TRUE WITH_V4L_FALSE WITH_OSS_TRUE WITH_OSS_FALSE WITH_ASOUNDLIB_OR_OSS_TRUE WITH_ASOUNDLIB_OR_OSS_FALSE WITH_LINUX_JOYSTICK_TRUE WITH_LINUX_JOYSTICK_FALSE WITH_JOYSTICK_TRUE WITH_JOYSTICK_FALSE OPT_INCLUDE_MMX_TRUE OPT_INCLUDE_MMX_FALSE OPT_SERIALIZE_FRAMEBUFFER_TRUE OPT_SERIALIZE_FRAMEBUFFER_FALSE FRBINCACHE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CC CFLAGS ac_ct_CC CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS HAVE_X11_TRUE HAVE_X11_FALSE QT_CXXFLAGS QT_LIBS MOC UIC HAVE_QT_TRUE HAVE_QT_FALSE LIB_DL_FLAGS LIB_POSIX4_FLAGS LIB_SOCKET_FLAGS LIB_EXTRA_FLAGS WITH_GL_TRUE WITH_GL_FALSE SDL_CONFIG SDL_PREFIX SDL_CFLAGS SDL_LD_FLAGS WITH_SDL_TRUE WITH_SDL_FALSE SDL_IMAGE_LDFLAGS WITH_SDL_IMAGE_TRUE WITH_SDL_IMAGE_FALSE SDL_TTF_LDFLAGS WITH_SDL_TTF_TRUE WITH_SDL_TTF_FALSE AVIFILE_CONFIG AVIFILE_LDFLAGS AVIFILE_CXXFLAGS WITH_AVIFILE_TRUE WITH_AVIFILE_FALSE MPEG3_LDFLAGS WITH_MPEG3_TRUE WITH_MPEG3_FALSE WITH_LIBPNG_TRUE WITH_LIBPNG_FALSE WITH_AALIB_TRUE WITH_AALIB_FALSE WITH_ASOUNDLIB_TRUE WITH_ASOUNDLIB_FALSE WITH_V4L_TRUE WITH_V4L_FALSE WITH_OSS_TRUE WITH_OSS_FALSE WITH_ASOUNDLIB_OR_OSS_TRUE WITH_ASOUNDLIB_OR_OSS_FALSE WITH_LINUX_JOYSTICK_TRUE WITH_LINUX_JOYSTICK_FALSE WITH_JOYSTICK_TRUE WITH_JOYSTICK_FALSE WITH_FFMPEG_TRUE WITH_FFMPEG_FALSE OPT_INCLUDE_MMX_TRUE OPT_INCLUDE_MMX_FALSE OPT_SERIALIZE_FRAMEBUFFER_TRUE OPT_SERIALIZE_FRAMEBUFFER_FALSE NASM NASM_FLAGS FRBINCACHE FFMPEG_DIR FFMPEG_LDFLAGS FFMPEG_CFLAGS gphx_module_lib_dir gphx_type_lib_dir LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1067,7 +1067,7 @@ Optional Packages:
                           Exec prefix where SDL is installed (optional)
   --with-SDL_IMAGE        Turn on SDL_IMAGE support (default=yes).
   --with-SDL_TTF          Turn on SDL_TTF support (default=yes).
-  --with-AVIFILE          Turn on AVIFILE support (default=yes).
+  --with-AVIFILE          Turn on AVIFILE support (default=no).
   --with-MPEG3            Turn on MPEG3 support (default=no).
   --with-LIBPNG           Turn on LIBPNG support (default=no).
   --with-AALIB            Turn on AALIB support (default=yes).
@@ -1075,6 +1075,7 @@ Optional Packages:
   --with-V4L              Turn on V4L support (default=yes).
   --with-OSS              Turn on OSS support (default=yes).
   --with-LINUX_JOYSTICK   Turn on LINUX_JOYSTICK support (default=yes).
+  --with-FFMPEG           Turn on FFMPEG support (default=yes).
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -1911,7 +1912,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=gephex
- VERSION=0.4
+ VERSION=0.4.1
 
 
 cat >>confdefs.h <<_ACEOF
@@ -4027,7 +4028,7 @@ linux*)
   lt_cv_deplibs_check_method=pass_all
   ;;
 
-netbsd* | knetbsd*-gnu)
+netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
   if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
     lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|_pic\.a)$'
   else
@@ -4144,7 +4145,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4147 "configure"' > conftest.$ac_ext
+  echo '#line 4148 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5248,7 +5249,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5251:" \
+echo "$as_me:5252:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6280,11 +6281,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6283: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6284: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6287: \$? = $ac_status" >&5
+   echo "$as_me:6288: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6513,11 +6514,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6516: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6517: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6520: \$? = $ac_status" >&5
+   echo "$as_me:6521: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6573,11 +6574,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6576: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6577: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6580: \$? = $ac_status" >&5
+   echo "$as_me:6581: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -6750,7 +6751,7 @@ EOF
       fi
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
 	wlarc=
@@ -7268,7 +7269,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
       link_all_deplibs=yes
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'  # a.out
       else
@@ -7915,6 +7916,18 @@ linux*)
   # people can always --disable-shared, the test was removed, and we
   # assume the GNU/Linux dynamic linker is in use.
   dynamic_linker='GNU/Linux ld.so'
+  ;;
+
+netbsdelf*-gnu)
+  version_type=linux
+  need_lib_prefix=no
+  need_version=no
+  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
+  soname_spec='${libname}${release}${shared_ext}$major'
+  shlibpath_var=LD_LIBRARY_PATH
+  shlibpath_overrides_runpath=no
+  hardcode_into_libs=yes
+  dynamic_linker='NetBSD ld.elf_so'
   ;;
 
 knetbsd*-gnu)
@@ -8749,7 +8762,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8752 "configure"
+#line 8765 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8847,7 +8860,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8850 "configure"
+#line 8863 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10358,7 +10371,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
 	;;
     esac
     ;;
-  netbsd* | knetbsd*-gnu)
+  netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
     if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
       archive_cmds_CXX='$LD -Bshareable  -o $lib $predep_objects $libobjs $deplibs $postdep_objects $linker_flags'
       wlarc=
@@ -10913,7 +10926,7 @@ echo $ECHO_N "checking for $compiler option to produce PIC... $ECHO_C" >&6
 	    ;;
 	esac
 	;;
-      netbsd* | knetbsd*-gnu)
+      netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
 	;;
       osf3* | osf4* | osf5*)
 	case $cc_basename in
@@ -11024,11 +11037,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11027: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11040: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11031: \$? = $ac_status" >&5
+   echo "$as_me:11044: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -11084,11 +11097,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11087: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11100: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11091: \$? = $ac_status" >&5
+   echo "$as_me:11104: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11607,6 +11620,18 @@ linux*)
   # people can always --disable-shared, the test was removed, and we
   # assume the GNU/Linux dynamic linker is in use.
   dynamic_linker='GNU/Linux ld.so'
+  ;;
+
+netbsdelf*-gnu)
+  version_type=linux
+  need_lib_prefix=no
+  need_version=no
+  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
+  soname_spec='${libname}${release}${shared_ext}$major'
+  shlibpath_var=LD_LIBRARY_PATH
+  shlibpath_overrides_runpath=no
+  hardcode_into_libs=yes
+  dynamic_linker='NetBSD ld.elf_so'
   ;;
 
 knetbsd*-gnu)
@@ -12441,7 +12466,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12444 "configure"
+#line 12469 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12539,7 +12564,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12542 "configure"
+#line 12567 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13366,11 +13391,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13369: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13394: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13373: \$? = $ac_status" >&5
+   echo "$as_me:13398: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13426,11 +13451,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13429: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13454: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13433: \$? = $ac_status" >&5
+   echo "$as_me:13458: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13603,7 +13628,7 @@ EOF
       fi
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds_F77='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
 	wlarc=
@@ -14101,7 +14126,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
       link_all_deplibs_F77=yes
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds_F77='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'  # a.out
       else
@@ -14748,6 +14773,18 @@ linux*)
   # people can always --disable-shared, the test was removed, and we
   # assume the GNU/Linux dynamic linker is in use.
   dynamic_linker='GNU/Linux ld.so'
+  ;;
+
+netbsdelf*-gnu)
+  version_type=linux
+  need_lib_prefix=no
+  need_version=no
+  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
+  soname_spec='${libname}${release}${shared_ext}$major'
+  shlibpath_var=LD_LIBRARY_PATH
+  shlibpath_overrides_runpath=no
+  hardcode_into_libs=yes
+  dynamic_linker='NetBSD ld.elf_so'
   ;;
 
 knetbsd*-gnu)
@@ -15459,11 +15496,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15462: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15499: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15466: \$? = $ac_status" >&5
+   echo "$as_me:15503: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15692,11 +15729,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15695: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15732: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15699: \$? = $ac_status" >&5
+   echo "$as_me:15736: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15752,11 +15789,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15755: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15792: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15759: \$? = $ac_status" >&5
+   echo "$as_me:15796: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15929,7 +15966,7 @@ EOF
       fi
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds_GCJ='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
 	wlarc=
@@ -16447,7 +16484,7 @@ if test -z "$aix_libpath"; then aix_libpath="/usr/lib:/lib"; fi
       link_all_deplibs_GCJ=yes
       ;;
 
-    netbsd* | knetbsd*-gnu)
+    netbsd* | netbsdelf*-gnu | knetbsd*-gnu)
       if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
 	archive_cmds_GCJ='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'  # a.out
       else
@@ -17094,6 +17131,18 @@ linux*)
   # people can always --disable-shared, the test was removed, and we
   # assume the GNU/Linux dynamic linker is in use.
   dynamic_linker='GNU/Linux ld.so'
+  ;;
+
+netbsdelf*-gnu)
+  version_type=linux
+  need_lib_prefix=no
+  need_version=no
+  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
+  soname_spec='${libname}${release}${shared_ext}$major'
+  shlibpath_var=LD_LIBRARY_PATH
+  shlibpath_overrides_runpath=no
+  hardcode_into_libs=yes
+  dynamic_linker='NetBSD ld.elf_so'
   ;;
 
 knetbsd*-gnu)
@@ -17928,7 +17977,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 17931 "configure"
+#line 17980 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18026,7 +18075,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18029 "configure"
+#line 18078 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -20557,6 +20606,15 @@ saved_CXXFLAGS="$CXXFLAGS"
 saved_LDFLAGS="$LDFLAGS"
 saved_LIBS="$LIBS"
 
+# the test looks inside the following files to find the qt headers, libs
+# and binaries
+GUESS_QT_INC_DIRS="$QTDIR/include /usr/include /usr/include/qt /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt3 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt3 /usr/lib/qt/include /usr/lib/qt3/include /usr/lib/qt-3/include /usr/lib/qt-3.0/include /usr/lib/qt-3.1/include /usr/lib/qt-3.2/include /usr/lib/qt-3.3/include /usr/lib/qt-3.4/include"
+
+GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt3/lib /usr/lib/qt-3/lib /usr/lib/qt-3.0/lib /usr/lib/qt-3.1/lib /usr/lib/qt-3.2/lib /usr/lib/qt-3.3/lib /usr/lib/qt-3.4/lib"
+
+GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt3/bin /usr/lib/qt-3/bin /usr/lib/qt-3.0/bin /usr/lib/qt-3.1/bin /usr/lib/qt-3.2/bin /usr/lib/qt-3.3/bin /usr/lib/qt-3.4/bin"
+
+
 HAVE_QT=no
 min_qt_version=2.3.0
 
@@ -20600,8 +20658,6 @@ then
 echo "${ECHO_T}specified as $qt_incdir" >&6
 else
 
-  GUESS_QT_INC_DIRS="$QTDIR/include /usr/include /usr/include/qt /usr/include/qt2 /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt2 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt2 /usr/X11R6/include/X11/qt2"
-
   for dir in $GUESS_QT_INC_DIRS
   do
     if test -e $dir/qt.h
@@ -20626,8 +20682,6 @@ then
   echo "$as_me:$LINENO: result: specified as $qt_libdir" >&5
 echo "${ECHO_T}specified as $qt_libdir" >&6
 else
-
-  GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib"
 
   for dir in $GUESS_QT_LIB_DIRS
   do
@@ -20671,8 +20725,6 @@ then
   echo "$as_me:$LINENO: result: specified as $qt_bindir" >&5
 echo "${ECHO_T}specified as $qt_bindir" >&6
 else
-
-  GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin"
 
   for dir in $GUESS_QT_BIN_DIRS
   do
@@ -21562,6 +21614,7 @@ i[3456]86-*-*)
 #define CPU_I386 1
 _ACEOF
 
+  CPU=x86
   echo "$as_me:$LINENO: result: 80x86 processor detected (x >= 3)." >&5
 echo "${ECHO_T}80x86 processor detected (x >= 3)." >&6
  ;;
@@ -21662,6 +21715,7 @@ esac
 #if test $PYTHON = "-"; then
 #	AC_MSG_ERROR([Python is required for base to build!]);
 #fi
+
 
 # optional libraries
 
@@ -22265,18 +22319,22 @@ fi;
 
 
 if test "x$with_sdl_image" = "xyes"; then
-  if test "${ac_cv_header_SDL_SDL_image_h+set}" = set; then
-  echo "$as_me:$LINENO: checking for SDL/SDL_image.h" >&5
-echo $ECHO_N "checking for SDL/SDL_image.h... $ECHO_C" >&6
-if test "${ac_cv_header_SDL_SDL_image_h+set}" = set; then
+  ac_save_CFLAGS="$CFLAGS"
+                 ac_save_CPPFLAGS="$CPPFLAGS"
+                 CFLAGS="$CFLAGS $SDL_CFLAGS"
+                 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+                 if test "${ac_cv_header_SDL_image_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for SDL_image.h" >&5
+echo $ECHO_N "checking for SDL_image.h... $ECHO_C" >&6
+if test "${ac_cv_header_SDL_image_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_SDL_SDL_image_h" >&5
-echo "${ECHO_T}$ac_cv_header_SDL_SDL_image_h" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_SDL_image_h" >&5
+echo "${ECHO_T}$ac_cv_header_SDL_image_h" >&6
 else
   # Is the header compilable?
-echo "$as_me:$LINENO: checking SDL/SDL_image.h usability" >&5
-echo $ECHO_N "checking SDL/SDL_image.h usability... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking SDL_image.h usability" >&5
+echo $ECHO_N "checking SDL_image.h usability... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -22284,7 +22342,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 $ac_includes_default
-#include <SDL/SDL_image.h>
+#include <SDL_image.h>
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
@@ -22319,15 +22377,15 @@ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
 echo "${ECHO_T}$ac_header_compiler" >&6
 
 # Is the header present?
-echo "$as_me:$LINENO: checking SDL/SDL_image.h presence" >&5
-echo $ECHO_N "checking SDL/SDL_image.h presence... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking SDL_image.h presence" >&5
+echo $ECHO_N "checking SDL_image.h presence... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <SDL/SDL_image.h>
+#include <SDL_image.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -22361,25 +22419,25 @@ echo "${ECHO_T}$ac_header_preproc" >&6
 # So?  What about this header?
 case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
   yes:no: )
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: proceeding with the compiler's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: SDL_image.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: SDL_image.h: proceeding with the compiler's result" >&2;}
     ac_header_preproc=yes
     ;;
   no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_image.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: SDL/SDL_image.h: in the future, the compiler will take precedence" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: SDL_image.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: SDL_image.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: SDL_image.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: SDL_image.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: SDL_image.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_image.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: SDL_image.h: in the future, the compiler will take precedence" >&2;}
     (
       cat <<\_ASBOX
 ## ------------------------------------------ ##
@@ -22390,24 +22448,26 @@ _ASBOX
       sed "s/^/$as_me: WARNING:     /" >&2
     ;;
 esac
-echo "$as_me:$LINENO: checking for SDL/SDL_image.h" >&5
-echo $ECHO_N "checking for SDL/SDL_image.h... $ECHO_C" >&6
-if test "${ac_cv_header_SDL_SDL_image_h+set}" = set; then
+echo "$as_me:$LINENO: checking for SDL_image.h" >&5
+echo $ECHO_N "checking for SDL_image.h... $ECHO_C" >&6
+if test "${ac_cv_header_SDL_image_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_cv_header_SDL_SDL_image_h=$ac_header_preproc
+  ac_cv_header_SDL_image_h=$ac_header_preproc
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_SDL_SDL_image_h" >&5
-echo "${ECHO_T}$ac_cv_header_SDL_SDL_image_h" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_SDL_image_h" >&5
+echo "${ECHO_T}$ac_cv_header_SDL_image_h" >&6
 
 fi
-if test $ac_cv_header_SDL_SDL_image_h = yes; then
+if test $ac_cv_header_SDL_image_h = yes; then
   have_sdl_image=yes
 else
   have_sdl_image=no
 fi
 
 
+                 CFLAGS="$ac_save_CFLAGS"
+                 CPPFLAGS="$ac_save_CPPFLAGS"
   if test "x$have_sdl_image" = "xyes"; then
     use_sdl_image=yes
 
@@ -22475,18 +22535,22 @@ fi;
 
 
 if test "x$with_sdl_ttf" = "xyes"; then
-  if test "${ac_cv_header_SDL_SDL_ttf_h+set}" = set; then
-  echo "$as_me:$LINENO: checking for SDL/SDL_ttf.h" >&5
-echo $ECHO_N "checking for SDL/SDL_ttf.h... $ECHO_C" >&6
-if test "${ac_cv_header_SDL_SDL_ttf_h+set}" = set; then
+  ac_save_CFLAGS="$CFLAGS"
+                 ac_save_CPPFLAGS="$CPPFLAGS"
+                 CFLAGS="$CFLAGS $SDL_CFLAGS"
+                 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+                 if test "${ac_cv_header_SDL_ttf_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for SDL_ttf.h" >&5
+echo $ECHO_N "checking for SDL_ttf.h... $ECHO_C" >&6
+if test "${ac_cv_header_SDL_ttf_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_SDL_SDL_ttf_h" >&5
-echo "${ECHO_T}$ac_cv_header_SDL_SDL_ttf_h" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_SDL_ttf_h" >&5
+echo "${ECHO_T}$ac_cv_header_SDL_ttf_h" >&6
 else
   # Is the header compilable?
-echo "$as_me:$LINENO: checking SDL/SDL_ttf.h usability" >&5
-echo $ECHO_N "checking SDL/SDL_ttf.h usability... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking SDL_ttf.h usability" >&5
+echo $ECHO_N "checking SDL_ttf.h usability... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -22494,7 +22558,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 $ac_includes_default
-#include <SDL/SDL_ttf.h>
+#include <SDL_ttf.h>
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
@@ -22529,15 +22593,15 @@ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
 echo "${ECHO_T}$ac_header_compiler" >&6
 
 # Is the header present?
-echo "$as_me:$LINENO: checking SDL/SDL_ttf.h presence" >&5
-echo $ECHO_N "checking SDL/SDL_ttf.h presence... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking SDL_ttf.h presence" >&5
+echo $ECHO_N "checking SDL_ttf.h presence... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <SDL/SDL_ttf.h>
+#include <SDL_ttf.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -22571,25 +22635,25 @@ echo "${ECHO_T}$ac_header_preproc" >&6
 # So?  What about this header?
 case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
   yes:no: )
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: proceeding with the compiler's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: SDL_ttf.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: SDL_ttf.h: proceeding with the compiler's result" >&2;}
     ac_header_preproc=yes
     ;;
   no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: SDL/SDL_ttf.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: SDL/SDL_ttf.h: in the future, the compiler will take precedence" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: SDL_ttf.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: SDL_ttf.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: SDL_ttf.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: SDL_ttf.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: SDL_ttf.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: SDL_ttf.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: SDL_ttf.h: in the future, the compiler will take precedence" >&2;}
     (
       cat <<\_ASBOX
 ## ------------------------------------------ ##
@@ -22600,24 +22664,26 @@ _ASBOX
       sed "s/^/$as_me: WARNING:     /" >&2
     ;;
 esac
-echo "$as_me:$LINENO: checking for SDL/SDL_ttf.h" >&5
-echo $ECHO_N "checking for SDL/SDL_ttf.h... $ECHO_C" >&6
-if test "${ac_cv_header_SDL_SDL_ttf_h+set}" = set; then
+echo "$as_me:$LINENO: checking for SDL_ttf.h" >&5
+echo $ECHO_N "checking for SDL_ttf.h... $ECHO_C" >&6
+if test "${ac_cv_header_SDL_ttf_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_cv_header_SDL_SDL_ttf_h=$ac_header_preproc
+  ac_cv_header_SDL_ttf_h=$ac_header_preproc
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_SDL_SDL_ttf_h" >&5
-echo "${ECHO_T}$ac_cv_header_SDL_SDL_ttf_h" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_SDL_ttf_h" >&5
+echo "${ECHO_T}$ac_cv_header_SDL_ttf_h" >&6
 
 fi
-if test $ac_cv_header_SDL_SDL_ttf_h = yes; then
+if test $ac_cv_header_SDL_ttf_h = yes; then
   have_sdl_ttf=yes
 else
   have_sdl_ttf=no
 fi
 
 
+                 CFLAGS="$ac_save_CFLAGS"
+                 CPPFLAGS="$ac_save_CPPFLAGS"
   if test "x$have_sdl_ttf" = "xyes"; then
     use_sdl_ttf=yes
 
@@ -22681,7 +22747,7 @@ echo "$as_me: error: bad value ${withval} for --with-AVIFILE" >&2;}
        ;;
      esac
 else
-  with_avifile=yes
+  with_avifile=no
 fi;
 
 
@@ -24390,6 +24456,74 @@ else
 fi
 
 
+# ffmpeg
+
+{ echo "$as_me:$LINENO: checking for FFMPEG" >&5
+echo "$as_me: checking for FFMPEG" >&6;}
+
+
+# Check whether --with-FFMPEG or --without-FFMPEG was given.
+if test "${with_FFMPEG+set}" = set; then
+  withval="$with_FFMPEG"
+  case "${withval}" in
+       yes)
+       	 { echo "$as_me:$LINENO: FFMPEG support turned on" >&5
+echo "$as_me: FFMPEG support turned on" >&6;}
+         with_ffmpeg=yes
+       ;;
+       no)
+	 { echo "$as_me:$LINENO: FFMPEG support turned off" >&5
+echo "$as_me: FFMPEG support turned off" >&6;}
+         with_ffmpeg=no
+       ;;
+       *)
+         { { echo "$as_me:$LINENO: error: bad value ${withval} for --with-FFMPEG" >&5
+echo "$as_me: error: bad value ${withval} for --with-FFMPEG" >&2;}
+   { (exit 1); exit 1; }; }
+       ;;
+     esac
+else
+  with_ffmpeg=yes
+fi;
+
+
+if test "x$with_ffmpeg" = "xyes"; then
+  if test -d $srcdir/contrib/ffmpeg; then have_ffmpeg=yes; else have_ffmpeg=no; fi
+  if test "x$have_ffmpeg" = "xyes"; then
+    use_ffmpeg=yes
+
+cat >>confdefs.h <<\_ACEOF
+#define WITH_FFMPEG 1
+_ACEOF
+
+    :
+    { echo "$as_me:$LINENO: FFMPEG is active" >&5
+echo "$as_me: FFMPEG is active" >&6;}
+  else
+    use_ffmpeg=no
+    { echo "$as_me:$LINENO: WARNING: No FFMPEG support found." >&5
+echo "$as_me: WARNING: No FFMPEG support found." >&2;}
+    { echo "$as_me:$LINENO: FFMPEG is not active" >&5
+echo "$as_me: FFMPEG is not active" >&6;}
+  fi
+else
+  use_ffmpeg=no
+  { echo "$as_me:$LINENO: FFMPEG is not active" >&5
+echo "$as_me: FFMPEG is not active" >&6;}
+fi
+
+
+
+
+if test "x$use_ffmpeg" = "xyes"; then
+  WITH_FFMPEG_TRUE=
+  WITH_FFMPEG_FALSE='#'
+else
+  WITH_FFMPEG_TRUE='#'
+  WITH_FFMPEG_FALSE=
+fi
+
+
 # Check whether --enable-mmx or --disable-mmx was given.
 if test "${enable_mmx+set}" = set; then
   enableval="$enable_mmx"
@@ -24473,6 +24607,61 @@ fi
 
 
 
+# required programs
+
+if test "$CPU" = "x86" && test "x$enable_mmx" = "xyes"; then
+	# Extract the first word of "nasm", so it can be a program name with args.
+set dummy nasm; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_NASM+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $NASM in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_NASM="$NASM" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_NASM="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+NASM=$ac_cv_path_NASM
+
+if test -n "$NASM"; then
+  echo "$as_me:$LINENO: result: $NASM" >&5
+echo "${ECHO_T}$NASM" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+	if test "x$NASM" = "x"; then
+        	{ { echo "$as_me:$LINENO: error: *** 'nasm' missing, please install or fix your \$PATH ***" >&5
+echo "$as_me: error: *** 'nasm' missing, please install or fix your \$PATH ***" >&2;}
+   { (exit 1); exit 1; }; }
+	fi
+
+        NASM_FLAGS="-f elf -O1"
+
+
+fi
+
+
+
 if test "x$FRBINCACHE" != "x"; then
 
 cat >>confdefs.h <<_ACEOF
@@ -24481,7 +24670,58 @@ _ACEOF
 
 fi;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile base/Makefile base/src/Makefile base/src/TestFramework/Makefile base/src/interfaces/Makefile base/src/net/Makefile base/src/netinterfaces/Makefile base/src/thread/Makefile base/src/utils/Makefile build/Makefile build/dummy/Makefile data/Makefile data/gephex-wrapper data/gephex.conf.default doc/Makefile doc/images/Makefile engine/Makefile engine/src/Makefile engine/src/dllloader/Makefile engine/src/engine/Makefile engine/src/model/Makefile engine/src/renderer/Makefile examples/Makefile examples/graphs/Makefile examples/img/Makefile modules/Makefile modules/src/Makefile modules/src/audioaddmodule/Makefile modules/src/audiobdmodule/Makefile modules/src/audioenergymodule/Makefile modules/src/audioinmodule/Makefile modules/src/audiooutmodule/Makefile modules/src/audiospecmodule/Makefile modules/src/audiosynthmodule/Makefile modules/src/audiovismodule/Makefile modules/src/audiowavegenmodule/Makefile modules/src/blurmodule/Makefile modules/src/bwmodule/Makefile modules/src/capturemodule/Makefile modules/src/color2numbermodule/Makefile modules/src/diffmodule/Makefile modules/src/doepfermodule/Makefile modules/src/flashmodule/Makefile modules/src/flipflopmodule/Makefile modules/src/font3Dmodule/Makefile modules/src/fpsmodule/Makefile modules/src/frbinmodule/Makefile modules/src/frboutmodule/Makefile modules/src/funparsemodule/Makefile modules/src/gradnormmodule/Makefile modules/src/ifsgenmodule/Makefile modules/src/ifsmodule/Makefile modules/src/ifsxfadermodule/Makefile modules/src/imagebuffermodule/Makefile modules/src/imagewritermodule/Makefile modules/src/imgarithmodule/Makefile modules/src/isingnoizemodule/Makefile modules/src/joystickmodule/Makefile modules/src/jumpmodule/Makefile modules/src/libdshow/Makefile modules/src/libgrid/Makefile modules/src/libmidi/Makefile modules/src/libscale/Makefile modules/src/midiinmodule/Makefile modules/src/netcontrolmodule/Makefile modules/src/numarithmodule/Makefile modules/src/number2colormodule/Makefile modules/src/numbermodule/Makefile modules/src/numenvmodule/Makefile modules/src/numlfomodule/Makefile modules/src/numposmodule/Makefile modules/src/numxfadermodule/Makefile modules/src/overlaymodule/Makefile modules/src/pixelizemodule/Makefile modules/src/planemodule/Makefile modules/src/plasmamodule/Makefile modules/src/posnummodule/Makefile modules/src/rangeconvertmodule/Makefile modules/src/resultmodule/Makefile modules/src/rotozoommodule/Makefile modules/src/sdlfontmodule/Makefile modules/src/signalgenmodule/Makefile modules/src/staticcolormodule/Makefile modules/src/stringtokenizermodule/Makefile modules/src/tunnelmodule/Makefile modules/src/twolayermodule/Makefile modules/src/xfademodule/Makefile effectvmodules/Makefile effectvmodules/src/Makefile effectvmodules/src/libeffectv/Makefile effectvmodules/src/effectvedgemodule/Makefile effectvmodules/src/effectvagingmodule/Makefile effectvmodules/src/effectvburnmodule/Makefile effectvmodules/src/effectvcyclemodule/Makefile effectvmodules/src/effectvdotmodule/Makefile effectvmodules/src/effectvfiremodule/Makefile effectvmodules/src/effectvlensmodule/Makefile effectvmodules/src/effectvlifemodule/Makefile effectvmodules/src/effectvpuzzlemodule/Makefile effectvmodules/src/effectvquarkmodule/Makefile effectvmodules/src/effectvsparkmodule/Makefile qtgui/Makefile qtgui/src/Makefile qtgui/src/gui/Makefile qtgui/src/gui/base/Makefile qtgui/src/gui/dialogs/Makefile qtgui/src/gui/editor/Makefile qtgui/src/gui/typeviews/Makefile qtgui/src/guimodel/Makefile types/Makefile types/src/Makefile types/src/audiotype/Makefile types/src/envtype/Makefile types/src/fonttype/Makefile types/src/framebuffertype/Makefile types/src/ifstype/Makefile types/src/lfotype/Makefile types/src/miditype/Makefile types/src/numbertype/Makefile types/src/positiontype/Makefile types/src/rgbtype/Makefile types/src/stringtype/Makefile util/Makefile util/include/Makefile util/include/compatibility/Makefile util/src/Makefile util/src/cpuinfo/Makefile util/src/joystick_midi_net/Makefile util/src/libgeo/Makefile util/src/libjoystick/Makefile util/src/misc/Makefile"
+if test "x$use_ffmpeg" = "xyes"; then
+ FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay"
+#--disable-risky"
+
+ echo Preparing ffmpeg configure call...
+
+ # If building with builddir != srcdir, ffmpegs configure wants to be
+ # called with an absolute path.
+ # Also, we have to do some workarounds (doc dir is missing for example).
+ if test "x${srcdir}" != x.; then
+   pwd
+   (mkdir contrib && mkdir contrib/ffmpeg) || true
+
+   if ! test -e contrib/ffmpeg/doc
+   then
+      mkdir contrib/ffmpeg/doc
+      echo "all:" > contrib/ffmpeg/doc/Makefile
+   fi
+
+   TMPDIR=`pwd` && cd ${srcdir} && absolute_srcdir=`pwd` && cd $TMPDIR
+
+   FFMPEG_CONFIG_DIR="${absolute_srcdir}/contrib/ffmpeg"
+
+   FFMPEG_DIR="${absolute_srcdir}/contrib/ffmpeg"
+ #TODO
+ else
+   FFMPEG_CONFIG_DIR="."
+   FFMPEG_DIR="../../../contrib/ffmpeg"
+ #TODO
+ fi
+
+ # get absolute path of builddir
+ abs_builddir=`pwd`
+
+ FFMPEG_LDFLAGS="${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a -lz"
+
+ FFMPEG_CFLAGS="-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat"
+
+
+ echo Calling ffmpeg configure with flags:
+ echo "${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS"
+ cd contrib/ffmpeg/ && ${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS && cd ../..
+fi
+
+# set gphx_module_lib_dir and gphx_type_lib_dir
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+gphx_module_lib_dir="${prefix}/lib/gephex-0.4/modules"
+
+gphx_type_lib_dir="${prefix}/lib/gephex-0.4/types"
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile base/Makefile base/src/Makefile base/src/TestFramework/Makefile base/src/interfaces/Makefile base/src/net/Makefile base/src/netinterfaces/Makefile base/src/thread/Makefile base/src/utils/Makefile build/Makefile build/dummy/Makefile contrib/Makefile data/Makefile data/gephex-wrapper data/gephex.conf.default doc/Makefile doc/images/Makefile engine/Makefile engine/src/Makefile engine/src/dllloader/Makefile engine/src/engine/Makefile engine/src/model/Makefile engine/src/renderer/Makefile examples/Makefile examples/graphs/Makefile examples/img/Makefile modules/Makefile modules/src/Makefile modules/src/audioaddmodule/Makefile modules/src/audiobdmodule/Makefile modules/src/audioenergymodule/Makefile modules/src/audioinmodule/Makefile modules/src/audiooutmodule/Makefile modules/src/audiospecmodule/Makefile modules/src/audiosynthmodule/Makefile modules/src/audiovismodule/Makefile modules/src/audiowavegenmodule/Makefile modules/src/blurmodule/Makefile modules/src/bwmodule/Makefile modules/src/capturemodule/Makefile modules/src/chromakeymodule/Makefile modules/src/color2numbermodule/Makefile modules/src/diffmodule/Makefile modules/src/doepfermodule/Makefile modules/src/dplmodule/Makefile modules/src/ffmpegoutmodule/Makefile modules/src/flashmodule/Makefile modules/src/flipflopmodule/Makefile modules/src/font3Dmodule/Makefile modules/src/fpsmodule/Makefile modules/src/frbinmodule/Makefile modules/src/frboutmodule/Makefile modules/src/funparsemodule/Makefile modules/src/gradnormmodule/Makefile modules/src/ifsgenmodule/Makefile modules/src/ifsmodule/Makefile modules/src/ifsxfadermodule/Makefile modules/src/imagebuffermodule/Makefile modules/src/imagewritermodule/Makefile modules/src/imgarithmodule/Makefile modules/src/isingnoizemodule/Makefile modules/src/joystickmodule/Makefile modules/src/jumpmodule/Makefile modules/src/libdshow/Makefile modules/src/libgrid/Makefile modules/src/libmidi/Makefile modules/src/libscale/Makefile modules/src/libcolorconv/Makefile modules/src/midiinmodule/Makefile modules/src/netcontrolmodule/Makefile modules/src/noisemodule/Makefile modules/src/numarithmodule/Makefile modules/src/number2colormodule/Makefile modules/src/numbermodule/Makefile modules/src/numenvmodule/Makefile modules/src/numlfomodule/Makefile modules/src/numposmodule/Makefile modules/src/numxfadermodule/Makefile modules/src/overlaymodule/Makefile modules/src/pixelizemodule/Makefile modules/src/planemodule/Makefile modules/src/plasmamodule/Makefile modules/src/posnummodule/Makefile modules/src/rangeconvertmodule/Makefile modules/src/resultmodule/Makefile modules/src/rotozoommodule/Makefile modules/src/sdlfontmodule/Makefile modules/src/signalgenmodule/Makefile modules/src/staticcolormodule/Makefile modules/src/stringtokenizermodule/Makefile modules/src/tunnelmodule/Makefile modules/src/twolayermodule/Makefile modules/src/xfademodule/Makefile modules/src/y4minmodule/Makefile modules/src/yuv4mpeg2module/Makefile effectvmodules/Makefile effectvmodules/src/Makefile effectvmodules/src/libeffectv/Makefile effectvmodules/src/effectvedgemodule/Makefile effectvmodules/src/effectvagingmodule/Makefile effectvmodules/src/effectvburnmodule/Makefile effectvmodules/src/effectvcyclemodule/Makefile effectvmodules/src/effectvdotmodule/Makefile effectvmodules/src/effectvfiremodule/Makefile effectvmodules/src/effectvlensmodule/Makefile effectvmodules/src/effectvlifemodule/Makefile effectvmodules/src/effectvpuzzlemodule/Makefile effectvmodules/src/effectvquarkmodule/Makefile effectvmodules/src/effectvsparkmodule/Makefile qtgui/Makefile qtgui/src/Makefile qtgui/src/gui/Makefile qtgui/src/gui/base/Makefile qtgui/src/gui/dialogs/Makefile qtgui/src/gui/editor/Makefile qtgui/src/gui/typeviews/Makefile qtgui/src/guimodel/Makefile types/Makefile types/src/Makefile types/src/audiotype/Makefile types/src/envtype/Makefile types/src/fonttype/Makefile types/src/framebuffertype/Makefile types/src/ifstype/Makefile types/src/lfotype/Makefile types/src/miditype/Makefile types/src/numbertype/Makefile types/src/positiontype/Makefile types/src/rgbtype/Makefile types/src/stringtype/Makefile util/Makefile util/include/Makefile util/include/compatibility/Makefile util/src/Makefile util/src/cpuinfo/Makefile util/src/joystick_midi_net/Makefile util/src/libgeo/Makefile util/src/libjoystick/Makefile util/src/misc/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -24704,6 +24944,13 @@ if test -z "${WITH_JOYSTICK_TRUE}" && test -z "${WITH_JOYSTICK_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"WITH_JOYSTICK\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"WITH_JOYSTICK\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${WITH_FFMPEG_TRUE}" && test -z "${WITH_FFMPEG_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"WITH_FFMPEG\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"WITH_FFMPEG\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -25176,6 +25423,7 @@ do
   "base/src/utils/Makefile" ) CONFIG_FILES="$CONFIG_FILES base/src/utils/Makefile" ;;
   "build/Makefile" ) CONFIG_FILES="$CONFIG_FILES build/Makefile" ;;
   "build/dummy/Makefile" ) CONFIG_FILES="$CONFIG_FILES build/dummy/Makefile" ;;
+  "contrib/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
   "data/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
   "data/gephex-wrapper" ) CONFIG_FILES="$CONFIG_FILES data/gephex-wrapper" ;;
   "data/gephex.conf.default" ) CONFIG_FILES="$CONFIG_FILES data/gephex.conf.default" ;;
@@ -25204,9 +25452,12 @@ do
   "modules/src/blurmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/blurmodule/Makefile" ;;
   "modules/src/bwmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/bwmodule/Makefile" ;;
   "modules/src/capturemodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/capturemodule/Makefile" ;;
+  "modules/src/chromakeymodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/chromakeymodule/Makefile" ;;
   "modules/src/color2numbermodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/color2numbermodule/Makefile" ;;
   "modules/src/diffmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/diffmodule/Makefile" ;;
   "modules/src/doepfermodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/doepfermodule/Makefile" ;;
+  "modules/src/dplmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/dplmodule/Makefile" ;;
+  "modules/src/ffmpegoutmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/ffmpegoutmodule/Makefile" ;;
   "modules/src/flashmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/flashmodule/Makefile" ;;
   "modules/src/flipflopmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/flipflopmodule/Makefile" ;;
   "modules/src/font3Dmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/font3Dmodule/Makefile" ;;
@@ -25228,8 +25479,10 @@ do
   "modules/src/libgrid/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/libgrid/Makefile" ;;
   "modules/src/libmidi/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/libmidi/Makefile" ;;
   "modules/src/libscale/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/libscale/Makefile" ;;
+  "modules/src/libcolorconv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/libcolorconv/Makefile" ;;
   "modules/src/midiinmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/midiinmodule/Makefile" ;;
   "modules/src/netcontrolmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/netcontrolmodule/Makefile" ;;
+  "modules/src/noisemodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/noisemodule/Makefile" ;;
   "modules/src/numarithmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/numarithmodule/Makefile" ;;
   "modules/src/number2colormodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/number2colormodule/Makefile" ;;
   "modules/src/numbermodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/numbermodule/Makefile" ;;
@@ -25252,6 +25505,8 @@ do
   "modules/src/tunnelmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/tunnelmodule/Makefile" ;;
   "modules/src/twolayermodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/twolayermodule/Makefile" ;;
   "modules/src/xfademodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/xfademodule/Makefile" ;;
+  "modules/src/y4minmodule/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/y4minmodule/Makefile" ;;
+  "modules/src/yuv4mpeg2module/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/src/yuv4mpeg2module/Makefile" ;;
   "effectvmodules/Makefile" ) CONFIG_FILES="$CONFIG_FILES effectvmodules/Makefile" ;;
   "effectvmodules/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES effectvmodules/src/Makefile" ;;
   "effectvmodules/src/libeffectv/Makefile" ) CONFIG_FILES="$CONFIG_FILES effectvmodules/src/libeffectv/Makefile" ;;
@@ -25504,11 +25759,20 @@ s,@WITH_LINUX_JOYSTICK_TRUE@,$WITH_LINUX_JOYSTICK_TRUE,;t t
 s,@WITH_LINUX_JOYSTICK_FALSE@,$WITH_LINUX_JOYSTICK_FALSE,;t t
 s,@WITH_JOYSTICK_TRUE@,$WITH_JOYSTICK_TRUE,;t t
 s,@WITH_JOYSTICK_FALSE@,$WITH_JOYSTICK_FALSE,;t t
+s,@WITH_FFMPEG_TRUE@,$WITH_FFMPEG_TRUE,;t t
+s,@WITH_FFMPEG_FALSE@,$WITH_FFMPEG_FALSE,;t t
 s,@OPT_INCLUDE_MMX_TRUE@,$OPT_INCLUDE_MMX_TRUE,;t t
 s,@OPT_INCLUDE_MMX_FALSE@,$OPT_INCLUDE_MMX_FALSE,;t t
 s,@OPT_SERIALIZE_FRAMEBUFFER_TRUE@,$OPT_SERIALIZE_FRAMEBUFFER_TRUE,;t t
 s,@OPT_SERIALIZE_FRAMEBUFFER_FALSE@,$OPT_SERIALIZE_FRAMEBUFFER_FALSE,;t t
+s,@NASM@,$NASM,;t t
+s,@NASM_FLAGS@,$NASM_FLAGS,;t t
 s,@FRBINCACHE@,$FRBINCACHE,;t t
+s,@FFMPEG_DIR@,$FFMPEG_DIR,;t t
+s,@FFMPEG_LDFLAGS@,$FFMPEG_LDFLAGS,;t t
+s,@FFMPEG_CFLAGS@,$FFMPEG_CFLAGS,;t t
+s,@gphx_module_lib_dir@,$gphx_module_lib_dir,;t t
+s,@gphx_type_lib_dir@,$gphx_type_lib_dir,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF

@@ -22,8 +22,16 @@
 
 #include "audioenergymodule.h"
 
+#include <algorithm>
 #include <cmath>
 #include "fft.hh"
+
+#if defined(_MSC_VER)
+#include <minmax.h>
+#else
+using std::min;
+using std::max;
+#endif
 
 //--------------------------------------------------------------
 
@@ -125,6 +133,9 @@ typedef struct _MyInstance {
 
   SampleBuffer* buffer;
 
+  double flmin[4];
+  double flmax[4];
+
 } MyInstance, *MyInstancePtr;
 
 //--------------------------------------------------------------
@@ -132,7 +143,7 @@ typedef struct _MyInstance {
 int init(logT log_function)
 {
   s_log = log_function;
-  
+
   return 1;
 }
 
@@ -151,6 +162,9 @@ MyInstance* construct()
 
   my->buffer = new SampleBuffer(BLOCK_SIZE);
 
+  std::fill(my->flmin,my->flmin+4,0.0);
+  std::fill(my->flmax,my->flmax+4,0.0);
+  
   return my;
 }
 
@@ -176,6 +190,22 @@ static double get_energy(const std::vector<std::complex<double> >& src,
 
   return sum; // / range;
 }
+
+namespace
+{
+  double adapt(double min, double max, double val)
+  {
+    if (max==min)
+      return 0.5;
+    else if (val < min)
+      return 0.0;
+    else if (val > max)
+      return 1.0;
+    else
+      return (val-min)/(max-min);
+  }
+}
+
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
@@ -184,8 +214,7 @@ void update(void* instance)
   int len = inst->in_audio->len;
   const double* samples = inst->in_audio->samples;
 
-  double amp = inst->in_amp->number;
-
+  double amp = trim_double(inst->in_amp->number, 0 , 1);
 
   if (inst->in_audio->channels != 1) {
     s_log(0, "channels not 1!");
@@ -225,16 +254,31 @@ void update(void* instance)
 
   int b1 = static_cast<int>(0.03 * num_blocks);
   int b2 = static_cast<int>(0.06 * num_blocks);
-  int b3 = static_cast<int>(0.16  * num_blocks);
+  int b3 = static_cast<int>(0.16 * num_blocks);
   int b4 = static_cast<int>(0.5  * num_blocks);
 
-  inst->out_e1->number = get_energy(src, 0, b1) * amp;
-  inst->out_e2->number = get_energy(src, b1, b2) * amp;
-  inst->out_e3->number = get_energy(src, b2, b3) * amp;
-  inst->out_e4->number = get_energy(src, b3, b4) * amp;
+  double e[4];
+  
+  e[0] = get_energy(src,  0, b1);
+  e[1] = get_energy(src, b1, b2);
+  e[2] = get_energy(src, b2, b3);
+  e[3] = get_energy(src, b3, b4);
+  
+  double f= 0.9 + 0.1 * amp*amp;
 
-  /*inst->out_f->sample_rate = inst->in_audio->sample_rate;
-    inst->out_f->channels = 1;*/
+  double f_inv= 1.0-f;
+
+  for (i = 0; i != 4; ++i)
+    {
+      my->flmin[i] = min( e[i], f*my->flmin[i] + f_inv*e[i]);
+      my->flmax[i] = max( e[i], f*my->flmax[i] + f_inv*e[i]);
+    }
+  
+  inst->out_e1->number = adapt(my->flmin[0], my->flmax[0],e[0]);
+  inst->out_e2->number = adapt(my->flmin[1], my->flmax[1],e[1]);
+  inst->out_e3->number = adapt(my->flmin[2], my->flmax[2],e[2]);
+  inst->out_e4->number = adapt(my->flmin[3], my->flmax[3],e[3]);
+  
 }
 
 

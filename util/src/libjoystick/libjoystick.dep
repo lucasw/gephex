@@ -4,6 +4,7 @@
 	"..\..\..\config.h"\
 	".\joystickdriver.h"\
 	".\libjoystick.h"\
+	".\sdljoystickdriver.h"\
 	".\win32joystickdriver.h"\
 	
 

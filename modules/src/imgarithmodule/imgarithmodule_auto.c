@@ -110,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Image Calculon] group=[Mixer] inputs=[5 c{lower_bound=[0] widget_type=[hslider] step_size=[0.01] higher_bound=[1] } x y Use-MMX{widget_type=[combo_box] values=[yes,no] hidden=[true] } Operation{widget_type=[combo_box] values=[x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x] hidden=[true] help=[x und y sind die beiden Bilder, c ist eine konstante Zahl] } ] outputs=[1 Result ] type=xpm } ";
+  static const char* INFO = "info { name=[Image Calculon] group=[Mixer] inputs=[5 c{lower_bound=[0] widget_type=[hslider] step_size=[0.01] higher_bound=[1] } x y Use-MMX{widget_type=[combo_box] values=[yes,no] hidden=[true] } Operation{widget_type=[combo_box] values=[x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x] hidden=[true] help=[x and y are the input images, c is the number input] } ] outputs=[1 Result ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(imgarithmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -53,7 +53,7 @@ struct DriverInstance {
 
 static struct DriverInstance* GDI_new_instance(const char* server_name,
 											   int xpos, int ypos,
-											   int width, int height,
+                                               int width, int height, int mmx_supported,
 											   char* error_text, int buflen);
 
 static void GDI_destroy(struct DriverInstance* sh);
@@ -174,10 +174,11 @@ int GDI_shutdown(char* error_text, int text_len)
 
 //-----------------------------------------------------------------------
 
+
 static struct DriverInstance*
 GDI_new_instance(const char* server_name,
 				 int xpos, int ypos,
-                 int width, int height,
+                 int width, int height, int mmx_support,
                  char* error_text, int buflen)
 {
   struct DriverInstance* sh = (struct DriverInstance*) malloc(sizeof(*sh));

@@ -1,7 +1,7 @@
 EXTRA_DIST = envtype.dsp envtype.mak envtype.dep envtype.def
 
 includedir = @includedir@/gephex/types
-libdir = @libdir@/gephex/types
+libdir = @gphx_type_lib_dir@
 INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include
 
