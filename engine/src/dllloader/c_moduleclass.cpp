@@ -41,19 +41,24 @@
 
 CModuleClass::CModuleClass(const CModuleFunctionTable& ftab_,
 			   const CModuleAttributes& attr_,
-			   const std::string& name)
+			   const std::string& name,
+			   frei0r_funs_t* frei0r,
+                           int frei0r_plugin_type)
   : functionTable(new CModuleFunctionTable(ftab_)), 
-  attributes(new CModuleAttributes(attr_)), 
-  defaultInputValues(attr_.inputs.size()),
-  m_name(name)
+    attributes(new CModuleAttributes(attr_)), 
+    defaultInputValues(attr_.inputs.size()),
+    m_name(name), m_frei0r(0), m_frei0r_plugin_type(frei0r_plugin_type)
 {
+  if (frei0r)
+    m_frei0r = new frei0r_funs_t(*frei0r);
 }
 
 IModuleClass* CModuleClass::clone() const
 {
   CModuleClass* newClass = new CModuleClass(*this->functionTable,
-	  *this->attributes,
-	  this->m_name);
+					    *this->attributes,
+					    this->m_name, this->m_frei0r,
+                                            this->m_frei0r_plugin_type);
   newClass->defaultInputValues = defaultInputValues;
   return newClass;
 }
@@ -64,13 +69,26 @@ CModuleClass::~CModuleClass()
 {
   delete functionTable;
   delete attributes;
+
+  if (m_frei0r)
+    delete m_frei0r;
 }
 
 
 IModule* CModuleClass::buildInstance(const ITypeFactory& tFactory) const
 
 {
-  void* instance = functionTable->newInstance();
+  void* instance;
+  if (m_frei0r)
+    {
+      typedef void* (*harr_t)(void*, int, int);
+      harr_t harr = (harr_t) functionTable->newInstance;
+
+      instance = harr(m_frei0r, defaultInputValues.size(),
+                      m_frei0r_plugin_type);
+    }
+  else
+    instance = functionTable->newInstance();
   if (instance == 0)
     {
       throw std::runtime_error("Ungute Sache vorgefallen.");

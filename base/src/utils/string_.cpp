@@ -34,6 +34,11 @@ namespace utils
   {
   }
 
+  String::String(const String& str)
+    : m_data(str.m_data)
+  {
+  }
+
   const String& String::operator=(const String& str)
   {
     m_data = str.m_data;

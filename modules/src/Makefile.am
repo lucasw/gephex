@@ -42,6 +42,7 @@ SUBDIRS = libgrid \
 	audiowavegenmodule \
 	blurmodule \
 	bwmodule \
+	centermodule \
 	chromakeymodule \
 	color2numbermodule \
 	diffmodule \
@@ -75,13 +76,16 @@ SUBDIRS = libgrid \
 	pixelizemodule \
 	planemodule \
 	plasmamodule \
+	pongmodule \
 	posnummodule \
 	rangeconvertmodule \
 	resultmodule \
 	rotozoommodule \
 	signalgenmodule \
+	signalplotmodule \
 	staticcolormodule \
 	stringtokenizermodule \
+	timesourcemodule \
 	tunnelmodule \
 	twolayermodule \
 	xfademodule \

@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x407 /d "NDEBUG"
 # ADD RSC /l 0x407 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /YX /FD /GZ /c
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
 # ADD RSC /l 0x407 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -114,6 +114,10 @@ SOURCE=.\c_typeclass.cpp
 # Begin Source File
 
 SOURCE=.\dllloader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\frei0rwrapper.cpp
 # End Source File
 # Begin Source File
 
@@ -178,6 +182,14 @@ SOURCE=.\c_typetables.h
 # Begin Source File
 
 SOURCE=.\dllloader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\frei0r.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\frei0rwrapper.h
 # End Source File
 # Begin Source File
 

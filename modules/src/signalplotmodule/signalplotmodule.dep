@@ -1,0 +1,8 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von signalplotmodule.mak
+
+!IF  "$(CFG)" == "signalplotmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "signalplotmodule - Win32 Debug"
+
+!ENDIF 
+

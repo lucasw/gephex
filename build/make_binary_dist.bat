@@ -11,6 +11,7 @@ if errorlevel 1 goto error_cant_create
 echo "- Copying stuff..."
 xcopy /E /V /I ..\bin %TARGET_DIR%\bin
 xcopy /E /V /I ..\dlls %TARGET_DIR%\dlls
+mkdir %TARGET_DIR%\dlls\frei0rs
 xcopy /E /V /I ..\examples %TARGET_DIR%\examples
 xcopy /E /V /I ..\doc %TARGET_DIR%\doc
 
@@ -40,6 +41,8 @@ copy %TARGET_DIR%\examples\graphs\example1 %TARGET_DIR%\graphs
 copy %TARGET_DIR%\examples\graphs\example2 %TARGET_DIR%\graphs
 copy %TARGET_DIR%\examples\graphs\example3 %TARGET_DIR%\graphs
 copy %TARGET_DIR%\examples\graphs\gephexwin32 %TARGET_DIR%\graphs
+copy %TARGET_DIR%\examples\graphs\fzcam4 %TARGET_DIR%\graphs
+copy %TARGET_DIR%\examples\graphs\noise %TARGET_DIR%\graphs
 
 
 

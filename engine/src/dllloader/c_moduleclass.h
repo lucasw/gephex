@@ -29,6 +29,8 @@
 
 #include "utils/autoptr.h"
 
+#include "frei0rwrapper.h"
+
 class CModuleFunctionTable;
 class CModuleAttributes;
 class IType;
@@ -43,7 +45,9 @@ public:
 
 	CModuleClass(const CModuleFunctionTable&,
 		     const CModuleAttributes& attr_,
-			 const std::string& name);
+		     const std::string& name,
+		     frei0r_funs_t* frei0r,
+                     int frei0r_plugin_type);
 
 	virtual IModuleClass* clone() const;
 
@@ -58,6 +62,8 @@ private:
 	typedef utils::AutoPtr<IType> ITypePtr;
 	mutable std::vector<ITypePtr> defaultInputValues;
 	std::string m_name;
+	frei0r_funs_t* m_frei0r;
+        int m_frei0r_plugin_type;
 };
 
 #endif

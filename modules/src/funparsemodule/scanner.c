@@ -454,8 +454,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "./scanner.flex"
-#line 2 "./scanner.flex"
+#line 1 "scanner.flex"
+#line 2 "scanner.flex"
 /* This source file is a part of the GePhex Project.
 
  Copyright (C) 2001-2004
@@ -642,7 +642,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 46 "./scanner.flex"
+#line 46 "scanner.flex"
 
 
 
@@ -731,7 +731,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 49 "./scanner.flex"
+#line 49 "scanner.flex"
 { 
                   YYSTYPE* lvalp = (YYSTYPE*) lval;
                   lvalp->num = atof(yytext);
@@ -740,62 +740,62 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 54 "./scanner.flex"
+#line 54 "scanner.flex"
 { return PLUS; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 55 "./scanner.flex"
+#line 55 "scanner.flex"
 { return MINUS; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 56 "./scanner.flex"
+#line 56 "scanner.flex"
 { return TIMES; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 57 "./scanner.flex"
+#line 57 "scanner.flex"
 { return DIV;	}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 58 "./scanner.flex"
+#line 58 "scanner.flex"
 { return MODULO; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 59 "./scanner.flex"
+#line 59 "scanner.flex"
 { return HOCH;	}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 60 "./scanner.flex"
+#line 60 "scanner.flex"
 { return SEMICOLON; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 61 "./scanner.flex"
+#line 61 "scanner.flex"
 { return KOMMA;	}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 62 "./scanner.flex"
+#line 62 "scanner.flex"
 { return PIPE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 63 "./scanner.flex"
+#line 63 "scanner.flex"
 { return KLAUF; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 64 "./scanner.flex"
+#line 64 "scanner.flex"
 { return KLZU; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 65 "./scanner.flex"
+#line 65 "scanner.flex"
 {
                   YYSTYPE* lvalp = (YYSTYPE*) lval;
                   lvalp->text = strdup(yytext);
@@ -805,22 +805,22 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 70 "./scanner.flex"
+#line 70 "scanner.flex"
 { return EOL; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 74 "./scanner.flex"
+#line 74 "scanner.flex"
 /* eat up whitespace */    
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 76 "./scanner.flex"
+#line 76 "scanner.flex"
 { fprintf (stderr,"Fehler beim Scannen. Ungültiges Token : %s \n",yytext); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 78 "./scanner.flex"
+#line 78 "scanner.flex"
 ECHO;
 	YY_BREAK
 #line 827 "scanner.c"
@@ -1789,7 +1789,7 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 78 "./scanner.flex"
+#line 78 "scanner.flex"
 
 
 

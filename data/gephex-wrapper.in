@@ -11,7 +11,8 @@
 # TODO: better error handling
 # Note: the prefix variable is replaced at configure time
 
-CONF_DIR_BASE=$HOME/.gephex
+HOME_DIR=$HOME
+CONF_DIR_BASE=$HOME_DIR/.gephex
 CONF_DIR=$CONF_DIR_BASE/0.4
 DATA_PATH=@prefix@/share/gephex/
 
@@ -24,7 +25,7 @@ if [ ! -e $CONF_DIR_BASE ]; then
     mkdir $CONF_DIR/graphs
 
     echo "Copying and adapting default config file..."
-    cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g > $CONF_DIR/gephex.conf
+    cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g | sed s:__HOME_DIR__:$HOME_DIR:g > $CONF_DIR/gephex.conf
 
     echo "Copying example graphs..."
     GRAPHS="example1 example2 example3 noise fzcam4"

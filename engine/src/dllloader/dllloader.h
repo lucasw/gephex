@@ -41,6 +41,8 @@
 
 #include "utils/autoptr.h"
 
+struct frei0r_funs_t;
+
 namespace utils 
 {
   class Buffer;
@@ -72,6 +74,9 @@ namespace dllloader
     {
 
     public:
+      typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
+
+
       /**
        * Erzeugt neuen DllLoader.
        * @param logger used for reporting errors
@@ -85,9 +90,12 @@ namespace dllloader
        * Davor sollte der ModuleClassNameReceiver registriert sein !!
        */
       void readDlls(const std::vector<std::string>& modules,
-		    const std::vector<std::string>& types);
+		    const std::vector<std::string>& types,
+		    const std::vector<std::string>& frei0rs);
 
       virtual void loadModuleClass(const std::string& name);
+      virtual void loadFrei0r(frei0r_funs_t&, SharedLibraryPtr sl,
+			      const std::string moduleName);
       virtual void unloadModuleClass(const std::string& name);
 
       //TODO: war mal const
@@ -111,8 +119,6 @@ namespace dllloader
       virtual void registerTypeClassNameReceiver(ITypeClassNameReceiver&);
 
     private:
-      typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
-
       SharedLibraryPtr loadDll(const std::string& filename);
       std::string getDllName(const std::string& filename);
 
@@ -120,11 +126,13 @@ namespace dllloader
                       const std::string& moduleName);
 
       void processModFile(const std::string&);
+      void processFrei0rFile(const std::string&);
       void processTypFile(const std::string&);
 	
       void constructModuleClass(CModuleFunctionTable* fTable,
 				SharedLibraryPtr sl,
-                                const std::string& moduleName);
+                                const std::string& moduleName,
+				frei0r_funs_t*);
 
       NameResolver* resolver;
 
@@ -139,6 +147,8 @@ namespace dllloader
 
       std::map<std::string,std::string> m_mod2fileName;
       std::map<std::string,std::string> m_typ2fileName;
+      std::map<std::string,std::string> m_f0r2fileName;
+
       std::map<std::string,SharedLibraryPtr> m_moduleHandles;
       std::map<std::string,utils::AutoPtr<utils::Buffer> > m_moduleInfos;
 

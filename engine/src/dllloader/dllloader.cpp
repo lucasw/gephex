@@ -59,7 +59,7 @@
 #include "interfaces/itypeclassinforeceiver.h"
 #include "interfaces/itypeclassnamereceiver.h"
 
-
+#include "frei0rwrapper.h"
 
 namespace dllloader
 {
@@ -67,6 +67,32 @@ namespace dllloader
   {
     void moduleLog(int level, const char* sender, const char* msg);
   };
+
+
+
+  void readFrei0rFuns(DllLoader::SharedLibraryPtr sl, frei0r_funs_t& f0r)
+  {
+    f0r.init            = (f0r_init_t) sl->loadSymbol("f0r_init");
+    f0r.deinit          = (f0r_deinit_t) sl->loadSymbol("f0r_deinit");
+    f0r.get_plugin_info = (f0r_get_plugin_info_t) 
+      sl->loadSymbol("f0r_get_plugin_info");
+    f0r.get_param_info  = (f0r_get_param_info_t)
+      sl->loadSymbol("f0r_get_param_info");
+    f0r.construct       = (f0r_construct_t) sl->loadSymbol("f0r_construct");
+    f0r.destruct        = (f0r_destruct_t) sl->loadSymbol("f0r_destruct");
+    f0r.set_param_value = (f0r_set_param_value_t) sl->loadSymbol("f0r_set_param_value");
+    f0r.get_param_value = (f0r_get_param_value_t)
+      sl->loadSymbol("f0r_get_param_value");
+    f0r.update          = (f0r_update_t) sl->loadSymbol("f0r_update");
+	  
+    if (f0r.init == 0 || f0r.deinit == 0 || f0r.get_plugin_info == 0 ||
+	f0r.get_param_info == 0 || f0r.construct == 0 || f0r.destruct == 0 ||
+	f0r.set_param_value == 0 || f0r.get_param_value == 0 ||
+	f0r.update == 0)
+      {
+	throw std::runtime_error("Funkti0rs are missing!");
+      }
+  }
 
   //TODO: ugly
   static utils::AutoPtr<utils::ILogger> s_logger(0);
@@ -112,10 +138,12 @@ namespace dllloader
 
   namespace
   {
-    void postLoadModule(CModuleFunctionTable& ft)
+    void postLoadModule(CModuleFunctionTable& ft, bool is_frei0r)
     {
-      if (ft.newInstance == 0 || ft.deleteInstance == 0
-	  || ft.update == 0 || ft.getSpec == 0 || ft.getInfo == 0) //TODO
+      if (ft.newInstance == 0 || ft.deleteInstance == 0 ||
+	  ft.update == 0 ||
+	  (!is_frei0r && ft.getSpec == 0) ||
+	  (!is_frei0r && ft.getInfo == 0)) //TODO
 	throw std::runtime_error("Benoetigte Funktion fehlt");
 		
       if (ft.init == 0)
@@ -173,7 +201,8 @@ namespace dllloader
   }
 
   void DllLoader::readDlls(const std::vector<std::string>& modules,
-			   const std::vector<std::string>& types)
+			   const std::vector<std::string>& types,
+			   const std::vector<std::string>& frei0rs)
   {
     for (std::vector<std::string>::const_iterator it = types.begin();
 	 it != types.end(); ++it)
@@ -197,6 +226,19 @@ namespace dllloader
 	try 
 	  {
 	    processModFile(*it);
+	  }
+	catch (std::runtime_error& e)
+	  {
+	    std::cerr << e.what() << std::endl;
+	  }
+      }		
+
+    for (std::vector<std::string>::const_iterator it = frei0rs.begin();
+	 it != frei0rs.end(); ++it)
+      {	
+	try 
+	  {
+	    processFrei0rFile(*it);
 	  }
 	catch (std::runtime_error& e)
 	  {
@@ -246,12 +288,30 @@ namespace dllloader
 	
     try
       {
-	postLoadModule(fTable);			
-	this->constructModuleClass(&fTable, sl, moduleName);
+	postLoadModule(fTable, false);
+	this->constructModuleClass(&fTable, sl, moduleName, 0);
       }
     catch (std::runtime_error& e)
       {	
 		m_logger->error("DllLoader::loadModule", e.what());
+      }
+  }
+
+  void DllLoader::loadFrei0r(frei0r_funs_t& f0r, SharedLibraryPtr sl,
+			     const std::string moduleName)
+  {
+    CModuleFunctionTable fTable;
+
+    create_f0r_wrapper(fTable);
+	
+    try
+      {
+	postLoadModule(fTable, true);
+	this->constructModuleClass(&fTable, sl, moduleName, &f0r);
+      }
+    catch (std::runtime_error& e)
+      {	
+	m_logger->error("DllLoader::loadModule", e.what());
       }
   }
 	
@@ -264,7 +324,20 @@ namespace dllloader
 
 		if (it == m_mod2fileName.end())
 		{
-			throw std::runtime_error("ModulClass gibts halt nicht");
+		  it = m_f0r2fileName.find(moduleName);
+
+		  if (it == m_f0r2fileName.end())
+		    throw std::runtime_error("ModuleClass gibts halt nicht");
+
+		  std::string filename = it->second;
+
+		  frei0r_funs_t f0r;
+		  SharedLibraryPtr sl = this->loadDll(filename);
+
+		  readFrei0rFuns(sl, f0r);
+
+		  loadFrei0r(f0r, sl, moduleName);
+		  return;
 		}
 		
 		std::string filename = it->second;
@@ -335,6 +408,13 @@ namespace dllloader
       }
 
 
+    for (std::map<std::string,std::string>::const_iterator nameIt 
+	   = m_f0r2fileName.begin();
+	 nameIt != m_f0r2fileName.end(); ++nameIt)
+      {
+     	m_nameReceiver->moduleClassNameExists(nameIt->first);       
+      }
+
     for (std::map<std::string,utils::AutoPtr<utils::Buffer> >::const_iterator
 	   modIt = m_moduleInfos.begin();
 	 modIt != m_moduleInfos.end(); ++modIt)
@@ -395,7 +475,7 @@ namespace dllloader
       m_typeInfoReceiver->typeClassLoaded(id,mi);
   }
 	
-  void DllLoader::unloadTypeClass(const std::string& name)
+  void DllLoader::unloadTypeClass(const std::string& /*name*/)
   {
     //TODO
   }
@@ -437,20 +517,59 @@ namespace dllloader
 	
   void DllLoader::constructModuleClass(CModuleFunctionTable* fTable,
 				       SharedLibraryPtr sl,
-                                       const std::string& moduleName) 
+                                       const std::string& moduleName,
+				       frei0r_funs_t* frei0r)
   {
-    if (fTable->init != 0)
+    int frei0r_plugin_type = -1;
+
+    if (frei0r)
       {
-        if (fTable->init(moduleLog) == 0)
+	if (frei0r->init() == 0)
 	  {
-	    throw std::runtime_error("init of plugin " + moduleName
-                                     + " failed");
-          }
+	    throw std::runtime_error("init0r of plugin " + moduleName
+				     + " failed");
+	  }
       }
-		
-    std::string moduleSpec = fTable->getSpec();
-    utils::StructReader spec(moduleSpec);
+    else
+      {
+	if (fTable->init != 0)
+	  {
+	    if (fTable->init(moduleLog) == 0)
+	      {
+		throw std::runtime_error("init of plugin " + moduleName
+					 + " failed");
+	      }
+	  }
+      }
+
     int numInputs;
+    int numOutputs ;
+    std::string moduleSpec;
+    bool isDeterministic;
+    f0r_plugin_info_t f0r_info;
+    if (frei0r)
+      {
+	frei0r->get_plugin_info(&f0r_info);
+
+        frei0r_check_plugin_info(f0r_info);
+
+        // remember this for later
+        frei0r_plugin_type = f0r_info.plugin_type;
+
+        numInputs = frei0r_num_inputs(f0r_info);
+
+	numOutputs = 1;
+	isDeterministic = false;
+
+	moduleSpec = frei0r_create_spec(f0r_info);
+      }
+    else
+      {
+	moduleSpec = fTable->getSpec();
+      }
+
+    utils::StructReader spec(moduleSpec);
+
     try {
       numInputs = spec.getIntValue("number_of_inputs");
     }
@@ -458,9 +577,6 @@ namespace dllloader
       {
 	throw std::runtime_error("number_of_inputs nicht angegeben");
       }
-		
-		
-    int numOutputs ;
     try
       {
 	numOutputs = spec.getIntValue("number_of_outputs");
@@ -469,23 +585,39 @@ namespace dllloader
       {
 	throw std::runtime_error("number_of_outputs nicht angegeben");
       }
-		
-    bool isDeterministic = spec.getBoolValue("deterministic", false);
+    
+    isDeterministic = spec.getBoolValue("deterministic", false);
 
-    std::vector<int> inputs(numInputs);
-    std::vector<utils::Buffer> 
-      defaultVals(numInputs,
-		  utils::Buffer(reinterpret_cast<const unsigned char*>(""),1));
-    std::vector<std::string> inputNames(numInputs);
-    std::vector<std::string> inputIDs(numInputs);
+  std::vector<int> inputs(numInputs);
+  std::vector<utils::Buffer> 
+  defaultVals(numInputs,
+	      utils::Buffer(reinterpret_cast<const unsigned char*>(""),1));
+  std::vector<std::string> inputNames(numInputs);
+  std::vector<std::string> inputIDs(numInputs);
 		
-    std::vector<bool> isConst(numInputs);
-    std::vector<bool> isStrong(numInputs);
-    std::vector<const TypeAttributes*> fixedAttributes(numInputs);
-		
-    for (int i = 0; i < numInputs; ++i)
+  std::vector<bool> isConst(numInputs);
+  std::vector<bool> isStrong(numInputs);
+  std::vector<const TypeAttributes*> fixedAttributes(numInputs);
+
+  std::vector<f0r_param_info_t> f0r_param_infos;
+
+  for (int i = 0; i < numInputs; ++i)
       {
-	std::string inSpec = fTable->getInputSpec(i);
+	std::string inSpec;
+	if (frei0r)
+	  {
+            std::string param_name;
+            inSpec = frei0r_create_in_param_spec(f0r_info, frei0r, i,
+                                                 f0r_param_infos);
+#if (ENGINE_VERBOSITY > 1)
+            std::cout << "param # " << i << ": '" << inSpec << "'\n";
+#endif
+          }
+	else
+	  {
+	    inSpec = fTable->getInputSpec(i);
+	  }
+
 	utils::StructReader inputSpec(inSpec);
 	
 	try {
@@ -513,61 +645,69 @@ namespace dllloader
 	  }
 
 #if (ENGINE_VERBOSITY > 2)
-	std::cout << "inputNames[" << i << "] = \"" 
-		  << inputNames[i] << '"' << std::endl;
+    std::cout << "inputNames[" << i << "] = \"" 
+	      << inputNames[i] << '"' << std::endl;
 #endif
-			
-	try 
-	  {
-	    inputs[i] = resolver->getObjectID(inputNames[i]);
-	  }
-	catch(std::runtime_error& e)
-	  {
-	    std::string msg = "Unbekannter Typ: \"";
-	    msg += inputNames[i];
-	    msg += '"';
-	    msg += " beim Laden von ";
-	    msg += spec.getStringValue("name");
-	    throw std::runtime_error(msg.c_str());
-	  }
-			
-			
-	try 
-	  {
-	    isConst[i] = (inputSpec.getBoolValue("const"));
-	  }
-	catch (...)
-	  {
-	    throw std::runtime_error("const nicht angegeben");
-	  }
-			
-	try 
-	  {
-	    isStrong[i] = (inputSpec.getBoolValue("strong_dependency"));
-	  }
-	catch (...)
-	  {
-	    throw std::runtime_error("strong_dependency nicht angegeben");
-	  }
-
-	try
-	  {
-	    fixedAttributes[i] 
-	      = static_cast<TypeAttributes*>(fTable->getInputAttributes(i));
-	  }
-	catch (...)
-	  {
-	    throw std::runtime_error("darf net sein");
-	  }
-
+	
+    try 
+      {
+	inputs[i] = resolver->getObjectID(inputNames[i]);
       }
+    catch(std::runtime_error& e)
+      {
+	std::string msg = "Unbekannter Typ: \"";
+	msg += inputNames[i];
+	msg += '"';
+	msg += " beim Laden von ";
+	msg += spec.getStringValue("name");
+	throw std::runtime_error(msg.c_str());
+      }
+			
+    
+    try 
+      {
+	isConst[i] = (inputSpec.getBoolValue("const"));
+      }
+    catch (...)
+      {
+	throw std::runtime_error("const nicht angegeben");
+      }
+			
+    try 
+      {
+	isStrong[i] = (inputSpec.getBoolValue("strong_dependency"));
+      }
+    catch (...)
+      {
+	throw std::runtime_error("strong_dependency nicht angegeben");
+      }
+
+    try
+      {
+	fixedAttributes[i] 
+	  = static_cast<TypeAttributes*>(fTable->getInputAttributes(i));
+      }
+    catch (...)
+      {
+	throw std::runtime_error("darf net sein");
+      }
+      }
+ 
 		
     std::vector<int> outputs(numOutputs);
     std::vector<std::string> outputNames(numOutputs);
     std::vector<std::string> outputIDs(numOutputs);
     for (int j = 0; j < numOutputs; ++j)
       {
-	std::string outSpec = fTable->getOutputSpec(j);
+	std::string outSpec;
+	if (frei0r)
+	  {
+	    outSpec = frei0r_create_out_spec();
+	  }
+	else
+	  {
+	    outSpec = fTable->getOutputSpec(j);
+	  }
 	utils::StructReader outputSpec(outSpec);			
 			
 	try {
@@ -594,7 +734,7 @@ namespace dllloader
 	    throw std::runtime_error(msg.c_str());
 	  }
       }
-		
+      		
     CModuleAttributes attributes;
     attributes.inputs = inputs;
     attributes.outputs = outputs;
@@ -616,14 +756,31 @@ namespace dllloader
     std::cout << "Registriere Modul " << name << std::endl;
 #endif
 
-    int bufLen = fTable->getInfo(0,0);
-    char* data = new char[bufLen];
-    int len = fTable->getInfo(data,bufLen);
+    char* data = 0;
+    int bufLen = 0;
+    if (frei0r)
+      {
+	std::vector<char> buf = frei0r_create_info(f0r_info,
+						   f0r_param_infos);
+
+#if (ENGINE_VERBOSITY > 1)
+        std::cout << "Inf0r: '" << &buf[0] << "'\n";
+#endif
+	data = new char[buf.size()];
+	memcpy(data, &buf[0], buf.size());
+	bufLen = buf.size();
+      }
+    else
+      {
+	bufLen = fTable->getInfo(0,0);
+	data = new char[bufLen];
+	int len = fTable->getInfo(data,bufLen);
 	if (len == 0) {
-		//TODO: is it ok to throw here (probably some leaks)?		
-		delete[] data;
-		throw std::runtime_error("getInfo failed!");
+	  //TODO: is it ok to throw here (probably some leaks)?		
+	  delete[] data;
+	  throw std::runtime_error("getInfo failed!");
 	}
+      }
     try 
       {
 	utils::Buffer mi = 
@@ -637,8 +794,8 @@ namespace dllloader
 			
 	m_infoReceiver->moduleClassLoaded(name,mi);
 
-	m_classReceiver->moduleClassLoaded(name,
-					   CModuleClass(*fTable,attributes,name));
+        CModuleClass cm(*fTable,attributes,name, frei0r, frei0r_plugin_type);
+	m_classReceiver->moduleClassLoaded(name, cm);
 
 	m_specReceiver->moduleClassLoaded(name,ModuleClassSpec(name,inputs,
 							       defaultVals,
@@ -655,7 +812,7 @@ namespace dllloader
 
     delete[] data;
     
-  }
+      }
   
 
   DllLoader::SharedLibraryPtr DllLoader::loadDll(const std::string& filename)
@@ -719,6 +876,41 @@ namespace dllloader
       }
 
     m_mod2fileName[name] = fname;
+
+    m_nameReceiver->moduleClassNameExists(name);
+  }
+
+
+
+  void DllLoader::processFrei0rFile(const std::string& fname)
+  {
+    frei0r_funs_t f0r;
+    SharedLibraryPtr sl = loadDll(fname);
+    readFrei0rFuns(sl, f0r);
+
+    if (!f0r.init())
+      throw std::runtime_error("init0r failed");
+
+    f0r_plugin_info_t inf0r;
+    f0r.get_plugin_info(&inf0r);
+    std::string name = std::string("mod_") + inf0r.name;
+
+#if (ENGINE_VERBOSITY > 1)
+    std::cout << "Nam0r = " << name << "\n";
+#endif
+
+    f0r.deinit();
+
+    std::map<std::string,std::string>::const_iterator 
+      it = m_f0r2fileName.find(name);
+
+    if (it != m_f0r2fileName.end())
+      {
+	throw std::runtime_error("Nam0r '" + name 
+				 + "'doppelt bei processFrei0rFile");
+      }
+
+    m_f0r2fileName[name] = fname;
 
     m_nameReceiver->moduleClassNameExists(name);
   }

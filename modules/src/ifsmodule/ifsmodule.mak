@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "ifsmodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -47,42 +51,8 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../.." /I "../../../util/include/" /I "../../../types/src/ifstype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include/compatibility" /I "../../../util/include" /D "NDEBUG" /D "HAVE_CONFIG_H" /D for="if(0); else for" /D "_WINDOWS" /D "_USRDLL" /D "ifsmodule_EXPORTS" /D for="if (0); else for" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\ifsmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../.." /I "../../../util/include/" /I "../../../types/src/ifstype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include/compatibility" /I "../../../util/include" /I "../../../util/src/misc" /D "NDEBUG" /D "HAVE_CONFIG_H" /D for="if(0); else for" /D "_WINDOWS" /D "_USRDLL" /D "ifsmodule_EXPORTS" /D for="if (0); else for" /D "_MBCS" /D "WIN32" /Fp"$(INTDIR)\ifsmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\ifsmodule.bsc" 
 BSC32_SBRS= \
@@ -144,42 +114,8 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../" /I "../../../types/src/ifstype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include/compatibility" /I "../../../util/include" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "ifsmodule_EXPORTS" /D for="if (0); else for" /D "_MBCS" /D "WIN32" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\ifsmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../" /I "../../../types/src/ifstype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../engine/src/engine" /I "../../../util/include/compatibility" /I "../../../util/include" /I "../../../util/src/misc" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "ifsmodule_EXPORTS" /D for="if (0); else for" /D "_MBCS" /D "WIN32" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\ifsmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\ifsmodule.bsc" 
 BSC32_SBRS= \
@@ -214,6 +150,36 @@ $(DS_POSTBUILD_DEP) : ".\ifsmodule_auto.c" ".\ifsmodule.h" ".\ifsmodule.def" "..
 
 !ENDIF 
 
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("ifsmodule.dep")
@@ -227,12 +193,12 @@ $(DS_POSTBUILD_DEP) : ".\ifsmodule_auto.c" ".\ifsmodule.h" ".\ifsmodule.def" "..
 !IF "$(CFG)" == "ifsmodule - Win32 Release" || "$(CFG)" == "ifsmodule - Win32 Debug"
 SOURCE=.\ifsmodule.cpp
 
-"$(INTDIR)\ifsmodule.obj" : $(SOURCE) "$(INTDIR)" ".\ifsmodule.h" "..\..\..\config.h"
+"$(INTDIR)\ifsmodule.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h" ".\ifsmodule.h"
 
 
 SOURCE=.\ifsmodule_auto.c
 
-"$(INTDIR)\ifsmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\ifsmodule.h" "..\..\..\config.h"
+"$(INTDIR)\ifsmodule_auto.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h" ".\ifsmodule.h"
 
 
 SOURCE=..\..\..\config_h.win32

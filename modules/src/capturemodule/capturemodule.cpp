@@ -32,6 +32,7 @@
 
 #if defined(OS_POSIX)
 #include "v4lcapturedriver.h"
+#include "v4l2capturedriver.h"
 #elif defined(OS_WIN32)
 #include "dshowcapturedriver.h"
 #endif
@@ -41,7 +42,7 @@
 CaptureDriver* create_driver()
 {
 #if defined(OS_POSIX)
-  return new V4LCaptureDriver();
+  return new V4L2CaptureDriver();
 #elif defined(OS_WIN32)
   return new DSHOWCaptureDriver();
 #endif
@@ -50,7 +51,9 @@ CaptureDriver* create_driver()
 
 struct device_descriptor
 {
-  device_descriptor() : drv(0), ref_count(0) {}
+  device_descriptor()
+    : drv(0), dev_num(-1), ref_count(0)
+  {}
   ~device_descriptor() { delete drv; }
 	
   void decrease_refcount()
@@ -77,15 +80,39 @@ struct device_descriptor
 		
     if (ref_count == 0)
       {
-        drv = create_driver();
+        try
+          {
+#if defined(OS_POSIX)
+            drv = new V4L2CaptureDriver();
+            try
+              {
+                drv->open(dev_num);
+              }
+            catch (std::exception& e)
+              {
+                delete drv;
+                drv = new V4LCaptureDriver();
+              }
+#elif defined(OS_WIN32)
+            drv = new DSHOWCaptureDriver();
+#endif
+            if (!drv->is_open())
+              drv->open(dev_num);
+          }
+        catch (...)
+          {
+            delete drv;
+            drv = 0;
+            throw;
+          }
       }
-		
     assert(drv);
     ++ref_count;
   }
 	
 
   CaptureDriver* drv;
+  int dev_num;
   int ref_count;
 };
 
@@ -123,12 +150,10 @@ void shutDown(void)
 
 static CaptureDriver* open_device(int device_num)
 {
+  s_devices[device_num].dev_num = device_num;
   s_devices[device_num].increase_refcount();
 
   CaptureDriver* drv = s_devices[device_num].drv;
-
-  if (!drv->is_open())
-    drv->open(device_num);
 
   return drv;
 }
@@ -168,7 +193,8 @@ void update(void* instance)
   int device_num = trim_int(inst->in_device->number, 0, MAX_DEVICES-1);
     
   //check if device changed
-  if (my->device_num != device_num)
+  if (my->device_num != device_num || my->drv == 0 ||
+      !my->drv->is_open())
     {
       try
         {

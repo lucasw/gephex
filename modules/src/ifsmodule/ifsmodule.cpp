@@ -26,6 +26,8 @@
 #include <cstdlib>
 #include <cassert>
 
+#include "crandgen.h"
+
 #if defined(HAVE_CONFIG_H)
   #include "config.h"
 #endif
@@ -41,7 +43,7 @@ static logT s_log;
 
 typedef struct _MyInstance {
 
-  uint_32* frameBuffer;
+  uint_8* frameBuffer;
   int xSize;
   int ySize;
 } MyInstance, *MyInstancePtr;
@@ -90,15 +92,19 @@ struct Val2Pal
   };
 };
 
+uint_32 val2ch(uint_8 val)
+{
+  uint8_t gw= val << 4; 
+
+  return gw | (gw << 8) | (gw << 16); 
+}
 
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
 
-  int numDots = trim_int(inst->in_num_dot->number,1,10000000);
-  int recursionDeep = trim_int(inst->in_num_rec->number,0,40);
-  int amount = (int) (trim_double(inst->in_amount->number,0,1) * 255 + .5);
+  int numDots = trim_int(inst->in_num_dot->number,1,100000000);
 
   uint_32 pal[256];
   for (int i=0;i!=256;++i)
@@ -127,7 +133,7 @@ void update(void* instance)
       delete[] my->frameBuffer;
       my->xSize=inst->out_out->xsize;
       my->ySize=inst->out_out->ysize;
-      my->frameBuffer= new uint_32[my->xSize*my->ySize];
+      my->frameBuffer= new uint_8[my->xSize*my->ySize];
 
     }
 
@@ -138,36 +144,41 @@ void update(void* instance)
 	    &(my->frameBuffer[my->xSize*my->ySize]),
 	    0);
 
-  for (int i=0;i!=numDots;++i)
+  double x = 0.0;
+  double y = 0.0;
+
+  if (inst->in_ifs->numfun != 0)
+  for ( int i = 0; i != numDots; ++i )
     {
-      double x = 0.0;
-      double y = 0.0;
+      // random chose in [0..numFuns-1]
+      int fun=static_cast<int>((rnd_lcg1()>>16)%inst->in_ifs->numfun);
+      
+      double xn=inst->in_ifs->ifs[0][fun]*x + inst->in_ifs->ifs[1][fun]*y
+	+ inst->in_ifs->ifs[4][fun];
 
-      for (int j=0;j!=recursionDeep;++j)
-	{
-	  // random chose in [0..numFuns-1]
-	  int fun=static_cast<int>((static_cast<double>(rand())/RAND_MAX)*inst->in_ifs->numfun);
-	  double xn=inst->in_ifs->ifs[0][fun]*x+inst->in_ifs->ifs[1][fun]*y+inst->in_ifs->ifs[4][fun];
-	  double yn=inst->in_ifs->ifs[2][fun]*x+inst->in_ifs->ifs[3][fun]*y+inst->in_ifs->ifs[5][fun];
-	  x=xn;y=yn;
-	}
+      double yn=inst->in_ifs->ifs[2][fun]*x + inst->in_ifs->ifs[3][fun]*y
+	+ inst->in_ifs->ifs[5][fun];
 
+      x=xn;y=yn;
+      
       // hm there needs to be some aspect correction
       int x_pos=(int)((x+1.0)*my->xSize/2);
       int y_pos=(int)((y+1.0)*my->ySize/2);
       
       // clipping
       if((x_pos>0)&&(x_pos<my->xSize)&&(y_pos>0)&&(y_pos<my->ySize))
-      {
-	// increase lightness
-	my->frameBuffer[x_pos+y_pos*my->xSize]+=amount;
-      }
+	{
+	  // increase lightness
+	  uint8_t* pix = my->frameBuffer+(x_pos+y_pos*my->xSize);
+	  if ((*pix) != 15)
+	    ++(*pix);
+	}
     }
   
   // copy in the output frame
   // and replace intensities with palette entry
   std::transform(my->frameBuffer,
 		 &(my->frameBuffer[my->xSize*my->ySize]),
-		 inst->out_out->framebuffer,Val2Pal(pal));
+		 inst->out_out->framebuffer,val2ch);
 }
 

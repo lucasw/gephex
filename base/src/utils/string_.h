@@ -46,6 +46,7 @@ namespace utils
   {
   public:
     String(const std::string& str = "");
+    String(const String&);
 
     const String& operator=(const String&);
 
@@ -66,7 +67,6 @@ namespace utils
     }
 
   private:
-    String(const String&);
 
     std::string m_data;
   };

@@ -68,7 +68,7 @@ struct DriverInstance
 
 static struct DriverInstance* GL_new_instance(const char* server_name,
 					      int xpos, int ypos,
-					      int width, int height,
+					      int width, int height, int mmx_supported,
 					      char* error_text, int buflen);
 
 static void GL_destroy(struct DriverInstance* sh);
@@ -112,7 +112,7 @@ struct OutputDriver* GL_get_driver()
 static struct DriverInstance*
 GL_new_instance(const char* server_name,
 		int xpos, int ypos,
-		int width, int height,
+		int width, int height,int mmx_supported,
 		char* error_text, int text_len)
 {
 #ifdef VERBOSE_GL_OUTPUT

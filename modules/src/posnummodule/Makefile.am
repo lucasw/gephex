@@ -23,7 +23,5 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/numbertype \
 		-I @srcdir@/../../../types/src/positiontype 
 
- 
-
 DISTCLEANFILES = posnummodule.h posnummodule_auto.c
 EXTRA_DIST = posnummodule.dsp posnummodule.mak posnummodule.dep

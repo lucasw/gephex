@@ -9,21 +9,20 @@ signalgenmodule.h: signalgenmodule.spec
 	$(PLUC) h @srcdir@/signalgenmodule.spec
 
 lib_LTLIBRARIES = signalgenmodule.la
-signalgenmodule_la_SOURCES = 	signalgenmodule_auto.c \
-				signalgenmodule.c \
-				signalgenmodule.h \
-				signalgenmodule.spec \
-				signalgenmodule.xpm
+signalgenmodule_la_SOURCES = signalgenmodule_auto.c \
+			     signalgenmodule.cpp \
+			     signalgenmodule.h \
+			     signalgenmodule.spec \
+			     signalgenmodule.xpm \
+			     signals.cpp signals.h
 
 signalgenmodule_la_LDFLAGS = -module -avoid-version
 
-INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
-		-I @srcdir@/../../../util/include \
-		-I @srcdir@/../../../util/src/misc \
-		-I @srcdir@/../../../types/src/numbertype \
-		-I @srcdir@/../../../types/src/stringtype
-
- 
+INCLUDES = -I @srcdir@/../../../engine/src/engine \
+	   -I @srcdir@/../../../util/include \
+	   -I @srcdir@/../../../util/src/misc \
+	   -I @srcdir@/../../../types/src/numbertype \
+	   -I @srcdir@/../../../types/src/stringtype
 
 DISTCLEANFILES = signalgenmodule.h signalgenmodule_auto.c
 EXTRA_DIST = signalgenmodule.dsp signalgenmodule.mak signalgenmodule.dep

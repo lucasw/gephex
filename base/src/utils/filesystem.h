@@ -42,7 +42,7 @@ namespace utils
   class DirEntry
     {
     public:
-      enum {DIRECTORY, FILE};
+      enum FileType { DIRECTORY, FILE };
 
       /**
        * Create a new DirEntry.
@@ -50,7 +50,7 @@ namespace utils
        * @param type wether its a file or directory (FILE | DIRECTORY).
        * @param size size of the file/driectory in bytes.
        */
-      DirEntry(const std::string& name,int type,int size);
+      DirEntry(const std::string& name, FileType type, int size);
 
       /**
        * ...
@@ -63,7 +63,7 @@ namespace utils
        * @return FILE if this is a file or DIRECTORY if this is
        *         a directory
        */
-      int getType() const;
+      FileType getType() const;
 	
       /**
        * ...
@@ -73,7 +73,7 @@ namespace utils
 
     private:
       std::string m_name;
-      int m_type;
+      FileType m_type;
       int m_size;
     };
 

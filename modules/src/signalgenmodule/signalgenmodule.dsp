@@ -106,20 +106,15 @@ PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\signalgenmodule.c
-
-!IF  "$(CFG)" == "signalgenmodule - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "signalgenmodule - Win32 Debug"
-
-# ADD CPP /MDd
-
-!ENDIF 
-
+SOURCE=.\signalgenmodule.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\signalgenmodule_auto.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\signals.cpp
 # End Source File
 # End Group
 # Begin Group "Header-Dateien"
@@ -128,6 +123,10 @@ SOURCE=.\signalgenmodule_auto.c
 # Begin Source File
 
 SOURCE=.\signalgenmodule.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\signals.h
 # End Source File
 # End Group
 # Begin Group "Ressourcendateien"

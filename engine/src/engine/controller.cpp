@@ -37,7 +37,7 @@
 #include "netlogger.h"
 #include "buffer.h"
 #include "filesystem.h"
-
+#include "stringtokenizer.h"
 
 namespace engine
 {
@@ -48,7 +48,7 @@ namespace engine
   public:
     Acceptor(net::IServerSocket& serverSocket, net::ISocket*& socket);
     bool run();
-      
+     
   private:
     net::IServerSocket* m_serverSocket;
     net::ISocket** m_socket;
@@ -96,11 +96,13 @@ namespace engine
 
 
   /**
-   * Returns a vector of all files in a directory, that have a certain
+   * Returns a vector of all files in a list of paths, that have a certain
    * file ending.
+   * Files can be listed more than once if a path of the list is a subpath
+   * of another path in the list.
    */
-  std::vector<std::string> getFilesInDir(const std::string& dirName,
-                                         const std::string& ending);
+  std::vector<std::string> getFilesInPathList(const std::string& dirName,
+                                              const std::string& ending);
 
   // connect a porttagger and a commandtagger with their receiving
   // and sending objects
@@ -118,27 +120,72 @@ namespace engine
 #error "unknown OS"
 #endif
 
-  std::vector<std::string> getFilesInDir(const std::string& dirName,
-					 const std::string& ending)
+  //TODO: make recursive
+  std::vector<std::string> getFilesInPath(const std::string& dirName,
+                                          const std::string& ending)
   {
-    std::list<utils::DirEntry> entries;
-    utils::FileSystem::listDir(dirName, entries);
-    
     std::vector<std::string> fileNames;
     
-    for (std::list<utils::DirEntry>::const_iterator it = entries.begin();
-	 it != entries.end(); ++it)
+    try
       {
-        std::string name = it->getName();
-      
-        if (name.length() > ending.length() 
-            && name.substr(name.length()-ending.length(),
-                           ending.length()) == ending)
-	
-          fileNames.push_back(dirName + name);
-      }
+        std::list<utils::DirEntry> entries;
+        utils::FileSystem::listDir(dirName, entries);
     
+        for (std::list<utils::DirEntry>::const_iterator it = entries.begin();
+             it != entries.end(); ++it)
+          {
+            std::string name = it->getName();
+
+            if (name == "." || name == "..")
+              continue;
+      
+            if (it->getType() == utils::DirEntry::DIRECTORY)
+              {
+                std::vector<std::string> 
+                  subfiles= getFilesInPath(name, ending);
+
+                fileNames.insert(fileNames.end(),
+                                 subfiles.begin(), subfiles.end());
+              }
+            else
+              {
+                if (name.length() > ending.length() 
+                    && name.substr(name.length()-ending.length(),
+                                   ending.length()) == ending)
+                  {
+                    fileNames.push_back(dirName + name);
+                  }
+              }
+          }
+      }
+    catch (std::runtime_error& e)
+      {
+        std::cerr << "Could not open '" << dirName << "' ("
+                  << e.what() << ")\n";
+      }
     return fileNames;
+  }
+  
+std::vector<std::string> getFilesInPathList(const std::string& pathList,
+                                            const std::string& ending)
+  {
+    std::vector<std::string> files;
+
+    utils::StringTokenizer st(pathList);
+    std::string path;
+
+    while ((path = st.next(";")) != "")
+    try
+      {
+        std::vector<std::string> fs = getFilesInPath(path, ending);
+        files.insert(files.end(),fs.begin(), fs.end());
+      }
+    catch (std::runtime_error& e)
+      {
+        std::cerr << "Could not open '" << path << "' ("
+                  << e.what() << ")\n";
+      }
+    return files;
   }
   
   void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
@@ -310,16 +357,22 @@ namespace engine
 	
     // load stuff
     std::string module_path = config.get_string_param("module_path");
-    std::vector<std::string> modules = getFilesInDir(module_path,
-                                                     MODULE_ENDING);
+    std::vector<std::string> modules = getFilesInPathList(module_path,
+                                                          MODULE_ENDING);
 	
     std::string type_path = config.get_string_param("type_path");
-    std::vector<std::string> types = getFilesInDir(type_path,
-                                                   TYPE_ENDING);
-	
+    std::vector<std::string> types = getFilesInPathList(type_path,
+                                                        TYPE_ENDING);
+
+
+    std::string frei0r_path = config.get_string_param("frei0r_path");
+    std::vector<std::string> frei0rs;
+    if (frei0r_path != "")
+      frei0rs = getFilesInPathList(frei0r_path, MODULE_ENDING);
+    
     std::cout << "Reading plugins...";
     std::cout.flush();
-    pDllLoader.readDlls(modules, types);
+    pDllLoader.readDlls(modules, types, frei0rs);
     std::cout << "   done\n";
 
     if (config.get_bool_param("headless"))

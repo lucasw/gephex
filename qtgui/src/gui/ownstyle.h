@@ -43,7 +43,7 @@ namespace gui
     virtual int pixelMetric( QStyle::PixelMetric metric,
                              const QWidget * widget = 0 ) const
     {
-      if (metric == PM_ScrollBarExtent)
+      if (metric == QStyle::PM_ScrollBarExtent)
         return 15;
       else
         return STYLE::pixelMetric(metric, widget);

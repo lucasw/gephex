@@ -15,7 +15,7 @@ static void logger(int level, const char* msg)
 }
 
 const char* getSpec(void) {
- return "mod_spec { name=[mod_overlaymodule] number_of_inputs=[4] number_of_outputs=[1] deterministic=[true] }";
+ return "mod_spec { name=[mod_overlaymodule] number_of_inputs=[5] number_of_outputs=[1] deterministic=[true] }";
 }
 const char* getInputSpec(int index) {
  switch(index) {
@@ -23,12 +23,15 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_NumberType id=tolerance const=true strong_dependency=true default=0 } ";
   break;
   case 1:
-    return "input_spec { type=typ_FrameBufferType id=control const=true strong_dependency=false  } ";
+    return "input_spec { type=typ_NumberType id=alpha_mode const=true strong_dependency=true default=0 } ";
   break;
   case 2:
-    return "input_spec { type=typ_FrameBufferType id=1 const=true strong_dependency=false  } ";
+    return "input_spec { type=typ_FrameBufferType id=control const=true strong_dependency=false  } ";
   break;
   case 3:
+    return "input_spec { type=typ_FrameBufferType id=1 const=true strong_dependency=false  } ";
+  break;
+  case 4:
     return "input_spec { type=typ_FrameBufferType id=2 const=true strong_dependency=false  } ";
   break;
  }
@@ -80,12 +83,15 @@ int setInput(void* instance,int index,void* typePointer)
    inst->in_tolerance = (NumberType *) typePointer;
   break;
   case 1:
-   inst->in_control = (FrameBufferType *) typePointer;
+   inst->in_alpha_mode = (NumberType *) typePointer;
   break;
   case 2:
-   inst->in_1 = (FrameBufferType *) typePointer;
+   inst->in_control = (FrameBufferType *) typePointer;
   break;
   case 3:
+   inst->in_1 = (FrameBufferType *) typePointer;
+  break;
+  case 4:
    inst->in_2 = (FrameBufferType *) typePointer;
   break;
  } //switch(index) 
@@ -104,7 +110,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Overlay] group=[Mixer] inputs=[4 Tolerance{lower_bound=[0] step_size=[0.01] higher_bound=[1] } ControlImage Image1 Image2 ] outputs=[1 Image ] type=xpm } ";
+  static const char* INFO = "info { name=[Overlay] group=[Mixer] inputs=[5 Tolerance{lower_bound=[0] step_size=[0.01] higher_bound=[1] } Alpha_mode{widget_type=[radio_button] false_value=[0] true_value=[1] } ControlImage Image1 Image2 ] outputs=[1 Image ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(overlaymodule_xpm);
   if (buf != 0 && reqLen <= bufLen)
@@ -136,10 +142,11 @@ void strongDependenciesCalculated(void* instance,int** neededInputs)
 {
   InstancePtr inst = (InstancePtr) instance;
 
-  static int neededIns[4];
+  static int neededIns[5];
   *neededInputs = neededIns;
         
 	neededIns[in_tolerance] = 0;
+	neededIns[in_alpha_mode] = 0;
 	neededIns[in_control] = 1;
 	neededIns[in_1] = 1;
 	neededIns[in_2] = 1;

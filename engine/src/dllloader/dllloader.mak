@@ -45,6 +45,7 @@ CLEAN :
 	-@erase "$(INTDIR)\c_type.obj"
 	-@erase "$(INTDIR)\c_typeclass.obj"
 	-@erase "$(INTDIR)\dllloader.obj"
+	-@erase "$(INTDIR)\frei0rwrapper.obj"
 	-@erase "$(INTDIR)\moduleclassspec.obj"
 	-@erase "$(INTDIR)\moduleinfoutils.obj"
 	-@erase "$(INTDIR)\nameresolver.obj"
@@ -59,7 +60,7 @@ CLEAN :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -107,6 +108,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\c_type.obj" \
 	"$(INTDIR)\c_typeclass.obj" \
 	"$(INTDIR)\dllloader.obj" \
+	"$(INTDIR)\frei0rwrapper.obj" \
 	"$(INTDIR)\moduleclassspec.obj" \
 	"$(INTDIR)\moduleinfoutils.obj" \
 	"$(INTDIR)\nameresolver.obj" \
@@ -137,6 +139,7 @@ CLEAN :
 	-@erase "$(INTDIR)\c_type.obj"
 	-@erase "$(INTDIR)\c_typeclass.obj"
 	-@erase "$(INTDIR)\dllloader.obj"
+	-@erase "$(INTDIR)\frei0rwrapper.obj"
 	-@erase "$(INTDIR)\moduleclassspec.obj"
 	-@erase "$(INTDIR)\moduleinfoutils.obj"
 	-@erase "$(INTDIR)\nameresolver.obj"
@@ -153,7 +156,7 @@ CLEAN :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -201,6 +204,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\c_type.obj" \
 	"$(INTDIR)\c_typeclass.obj" \
 	"$(INTDIR)\dllloader.obj" \
+	"$(INTDIR)\frei0rwrapper.obj" \
 	"$(INTDIR)\moduleclassspec.obj" \
 	"$(INTDIR)\moduleinfoutils.obj" \
 	"$(INTDIR)\nameresolver.obj" \
@@ -262,6 +266,11 @@ SOURCE=.\c_typeclass.cpp
 SOURCE=.\dllloader.cpp
 
 "$(INTDIR)\dllloader.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+
+
+SOURCE=.\frei0rwrapper.cpp
+
+"$(INTDIR)\frei0rwrapper.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
 
 
 SOURCE=.\moduleclassspec.cpp

@@ -2,7 +2,7 @@ AC_INIT
 AC_PREREQ(2.59) dnl force autoconf version
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.4.1)
+AM_INIT_AUTOMAKE(gephex,0.4.2)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -414,6 +414,7 @@ modules/src/audiowavegenmodule/Makefile
 modules/src/blurmodule/Makefile
 modules/src/bwmodule/Makefile
 modules/src/capturemodule/Makefile
+modules/src/centermodule/Makefile
 modules/src/chromakeymodule/Makefile
 modules/src/color2numbermodule/Makefile
 modules/src/diffmodule/Makefile
@@ -456,14 +457,17 @@ modules/src/overlaymodule/Makefile
 modules/src/pixelizemodule/Makefile
 modules/src/planemodule/Makefile
 modules/src/plasmamodule/Makefile
+modules/src/pongmodule/Makefile
 modules/src/posnummodule/Makefile
 modules/src/rangeconvertmodule/Makefile
 modules/src/resultmodule/Makefile
 modules/src/rotozoommodule/Makefile
 modules/src/sdlfontmodule/Makefile
 modules/src/signalgenmodule/Makefile
+modules/src/signalplotmodule/Makefile
 modules/src/staticcolormodule/Makefile
 modules/src/stringtokenizermodule/Makefile
+modules/src/timesourcemodule/Makefile
 modules/src/tunnelmodule/Makefile
 modules/src/twolayermodule/Makefile
 modules/src/xfademodule/Makefile

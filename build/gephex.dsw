@@ -189,6 +189,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "centermodule"="..\modules\src\centermodule\centermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "chromakeymodule"="..\modules\src\chromakeymodule\chromakeymodule.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -553,6 +565,18 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ffmpegoutmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name pongmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name signalplotmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name centermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name timesourcemodule
     End Project Dependency
 }}}
 
@@ -1482,6 +1506,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "pongmodule"="..\modules\src\pongmodule\pongmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "positiontype"="..\types\src\positiontype\positiontype.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -1593,6 +1629,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "signalplotmodule"="..\modules\src\signalplotmodule\signalplotmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "staticcolormodule"="..\modules\src\staticcolormodule\staticcolormodule.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -1621,6 +1669,18 @@ Package=<4>
 ###############################################################################
 
 Project: "stringtype"="..\types\src\stringtype\stringtype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "timesourcemodule"="..\modules\src\timesourcemodule\timesourcemodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -28,12 +28,13 @@
 #include "config.h"
 #endif
 
+#if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
 #include "cpuinfo.h"
-
-static logT s_log;
-
 static int s_mmx_supported;
 static int s_e3dnow_supported;
+#endif
+
+static logT s_log;
 
 typedef void (*chroma_key_t)(uint_8 r, uint_8 g, uint_8 b, uint_8 tolerance,
                              uint_32* dst, const uint_32* fg,

@@ -12,6 +12,8 @@
 #include <sstream>
 #include <videodev.h>
 
+#include <errno.h>
+
 struct v4l1_intern
 {
   int fd;

@@ -28,11 +28,14 @@
 	"..\..\..\base\src\interfaces\itype.h"\
 	"..\..\..\base\src\interfaces\itypefactory.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\util\include\basic_types.h"\
 	"..\renderer\typefactory.h"\
 	".\c_functiontypes.h"\
 	".\c_module.h"\
 	".\c_moduleclass.h"\
 	".\c_moduletables.h"\
+	".\frei0r.h"\
+	".\frei0rwrapper.h"\
 	
 
 .\c_output.cpp : \
@@ -96,16 +99,32 @@
 	"..\..\..\base\src\utils\sharedlibrary.h"\
 	"..\..\..\base\src\utils\structreader.h"\
 	"..\..\..\config.h"\
+	"..\..\..\util\include\basic_types.h"\
 	".\c_functiontypes.h"\
 	".\c_moduleclass.h"\
 	".\c_moduletables.h"\
 	".\c_typeclass.h"\
 	".\c_typetables.h"\
 	".\dllloader.h"\
+	".\frei0r.h"\
+	".\frei0rwrapper.h"\
 	".\moduleclassspec.h"\
 	".\moduleinfoutils.h"\
 	".\nameresolver.h"\
 	".\typedllloader.h"\
+	
+
+.\frei0rwrapper.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\engine\dllutils.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\frei0r.h"\
+	".\frei0r.xpm"\
+	".\frei0rwrapper.h"\
 	
 
 .\moduleclassspec.cpp : \

@@ -22,7 +22,7 @@ inputs
 	hidden	= true
 	widget_type	=	number_selector
 	lower_bound	= 0
-	higher_bound = 1024
+	higher_bound = 2048
 	default	= 0
 	step_size = 1
 	help	= Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert
@@ -37,7 +37,7 @@ inputs
 	hidden	= true
 	widget_type	=	number_selector
 	lower_bound	= 0
-	higher_bound = 1024
+	higher_bound = 2048
 	default	= 0
 	step_size = 1
 	help	= Wenn x_size und y_size > 0, wird das bild auf xsize x ysize skaliert
@@ -55,21 +55,6 @@ inputs
 	help	= try something 5000 - 100000
     }
 
-    amount
-    {
-	name	=	lightness
-	type	=	typ_NumberType
-	const	=	true
-	strong_dependency = true
-	hidden	= true
-	widget_type	=	number_selector
-	lower_bound	= 0
-	higher_bound = 1
-	step_size = 0.01
-	default	= 0.2
-	help	= lightness
-    }
-
     ifs
     {
 	name	=	ifsin
@@ -78,19 +63,6 @@ inputs
 	strong_dependency = true
     }
 
-    num_rec
-    {
-	name	=	recdeep
-	type	=	typ_NumberType
-	const	=	true
-	strong_dependency = true
-	hidden	= true
-	widget_type	=	number_selector
-	lower_bound	= 0
-	higher_bound = 255
-	default	= 5
-	help	= puh
-    }
 }
 
 outputs

@@ -26,6 +26,37 @@
 
 static logT s_log;
 
+struct bgra_pixel_t
+{
+  uint8_t colors[4];
+  
+  // TODO endianes
+  uint8_t& red() { return colors[0]; }
+  uint8_t& green() { return colors[1]; }
+  uint8_t& blue() { return colors[2]; }
+  uint8_t& alpha() { return colors[3]; }
+
+  uint8_t gray() 
+  { 
+    return (red() + 2*green() + blue()) / 4;
+  }
+  
+  void alpha_mix(uint8_t a, 
+		 bgra_pixel_t& color1, 
+		 bgra_pixel_t& color2
+	    )
+  {
+    uint8_t ia = 255 - a;
+    
+    red()   = (a * color1.red()   + ia * color2.red()  ) / 256;
+    green() = (a * color1.green() + ia * color2.green()) / 256;
+    blue()  = (a * color1.blue()  + ia * color2.blue() ) / 256;
+    alpha() = (a * color1.blue()  + ia * color2.blue() ) / 256;
+  }
+  
+};
+
+
 typedef struct _MyInstance 
 {
   FrameBufferType* temp_in_2;
@@ -102,12 +133,15 @@ void update(void* instance)
      framebuffer_changeAttributes(inst->out_r,&in_1_attr);
      
      int size=in_1_attr.xsize*in_1_attr.ysize;
-     uint32_t* in_1_ptr=in_1->data;
-     uint32_t* in_2_ptr=in_2->data;
-     uint32_t* in_control_ptr=in_control->data;
-     uint32_t* out_r_ptr=inst->out_r->data;
+     bgra_pixel_t* in_1_ptr=reinterpret_cast<bgra_pixel_t*>(in_1->data);
+     bgra_pixel_t* in_1_ptr_end
+       = reinterpret_cast<bgra_pixel_t*>(in_1->data) + size;
+     bgra_pixel_t* in_2_ptr=reinterpret_cast<bgra_pixel_t*>(in_2->data);
+     bgra_pixel_t* in_control_ptr=reinterpret_cast<bgra_pixel_t*>(in_control->data);
+     bgra_pixel_t* out_r_ptr=reinterpret_cast<bgra_pixel_t*>(inst->out_r->data);
      
      int tolerance=trim_int(inst->in_tolerance->number*255 + .5 ,0,255);
+     bool alpha_mode=trim_bool(inst->in_alpha_mode->number);
      
      // the three frames must have the same attributes
   {
@@ -123,26 +157,25 @@ void update(void* instance)
 	   framebuffer_compare_attributes(&in_2_attr,&in_control_attr));
   }
      
-     
-     while(in_1_ptr!=((in_1->data)+size))
-  {
-    uint8_t* color=reinterpret_cast<uint8_t*>(in_control_ptr);
-    
-    if(color[1]<tolerance)
+
+
+  if (alpha_mode)
+    while( in_1_ptr != in_1_ptr_end )
       {
-	*out_r_ptr=*in_1_ptr;
+	*out_r_ptr = (in_control_ptr->gray() > tolerance) ? 
+	  (*in_1_ptr) : (*in_2_ptr);
+	
+	++in_1_ptr;++in_2_ptr;++in_control_ptr;++out_r_ptr;
       }
-    else
+  else
+    while( in_1_ptr != in_1_ptr_end )
       {
-	*out_r_ptr=*in_2_ptr;
+	out_r_ptr->alpha_mix(in_control_ptr->gray(), *in_1_ptr, *in_2_ptr);
+	
+	++in_1_ptr;++in_2_ptr;++in_control_ptr;++out_r_ptr;
       }
-    
-    ++in_1_ptr;++in_2_ptr;++in_control_ptr;++out_r_ptr;
-  }
-
-
-
 }
+
 
 void strongDependencies(Instance* inst, int neededInputs[])
 {

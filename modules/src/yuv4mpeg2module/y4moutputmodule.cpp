@@ -37,12 +37,18 @@ static logT s_log;
 
 static const int WAIT_CYCLES_AFTER_REOPEN = 1;
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #if defined(_MSC_VER)
 #include <io.h>
 
 //#define close _close
 //#define open _open
 //#define write _write
+#elif defined(OS_POSIX)
+#include <unistd.h> // for write and close
 #endif
 
 enum color_model_t {NONE, YUV420P, BGRA8888};

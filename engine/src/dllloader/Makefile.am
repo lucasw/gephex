@@ -42,7 +42,11 @@ libdllloader_a_SOURCES = \
 	moduleclassspec.h \
 	moduleinfoutils.h \
 	nameresolver.h \
-	module.h
+	module.h \
+	frei0rwrapper.cpp \
+	frei0rwrapper.h \
+	frei0r.h \
+	frei0r.xpm
 
 
 

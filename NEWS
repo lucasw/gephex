@@ -1,3 +1,26 @@
+0.4.2:
+------
+
+  * support for frei0r plugins
+
+  * new modules:
+     * centermodule
+     * pongmodule
+     * timesourcemodule
+     * signalplotmodule
+
+  * updated modules:
+     * overlay module (new smooth overlay mode thanks to pierre)
+     * capture module (v4l2 support)
+     * ifs module (speedup and interface cleanup)
+     * image output (gl compile fix)
+     * signal generator (support for negative amplitudes)
+
+  * graph_path, module_path, and frei0r_path now can be a list of
+    directories each of which is scanned recursively
+
+  * fixed bugs #67, #68, #69, #70, #71, #72, #74, #75, #77
+  
 0.4.1:
 ------
 
@@ -263,3 +286,4 @@
     * Fixed countless bugs 
 
     * Reworked network code (support for unix domain sockets + named pipes)
+

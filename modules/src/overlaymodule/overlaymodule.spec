@@ -25,6 +25,20 @@ inputs
         strong_dependency = true
     }
 
+
+    alpha_mode
+    {
+        name              = Alpha_mode
+        type              = typ_NumberType
+        const             = true
+	widget_type       = radio_button
+	true_value        = 1
+	false_value       = 0
+        default           = 0
+        strong_dependency = true
+    }
+
+
     control
     {
         name              = ControlImage

@@ -203,6 +203,13 @@ int main(int argc, const char* argv[])
                                    "Directory that contains gephex modules",
                                       0));
 
+      def.s = "";
+      params.push_back(config_param_t("frei0r_path",
+				      config_param_t::STRING_PARAM,
+				      "engine",
+				      "Directory that contains frei0r effects",
+                                      &def));
+
       params.push_back(config_param_t("type_path",
                                    config_param_t::STRING_PARAM,
                                    "engine",

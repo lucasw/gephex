@@ -1,0 +1,27 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von timesourcemodule.mak
+
+.\timesourcemodule.cpp : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\timesourcemodule.h"\
+	
+
+.\timesourcemodule_auto.c : \
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\types\src\stringtype\stringtype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\timesourcemodule.h"\
+	".\timesourcemodule.xpm"\
+	
+
+!IF  "$(CFG)" == "timesourcemodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "timesourcemodule - Win32 Debug"
+
+!ENDIF 
+

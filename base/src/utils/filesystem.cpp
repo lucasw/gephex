@@ -43,7 +43,7 @@
 namespace utils
 {
 
-DirEntry::DirEntry(const std::string& name,int type,int size)
+DirEntry::DirEntry(const std::string& name, FileType type,int size)
   : m_name(name), m_type(type), m_size(size)
 {
 }
@@ -53,7 +53,7 @@ const std::string& DirEntry::getName() const
   return m_name;
 }
 
-int DirEntry::getType() const
+DirEntry::FileType DirEntry::getType() const
 {
   return m_type;
 }
@@ -108,11 +108,11 @@ void FileSystem::listDir(const std::string& path,std::list<DirEntry>& entries)
 	
   /* Find first .c file in current directory */
   if( (hFile = _findfirst( spec.c_str(), &c_file )) == -1 )
-    throw std::runtime_error(std::string("Could not open directory")+spec);
+    throw std::runtime_error(std::string("Could not open directory ")+spec);
 	
   do
     {
-		int type;
+		DirEntry::FileType type;
 		if (c_file.attrib & _A_SUBDIR)
 			type = DirEntry::DIRECTORY;
 		else 
@@ -126,7 +126,7 @@ void FileSystem::listDir(const std::string& path,std::list<DirEntry>& entries)
 #elif defined(OS_POSIX)
   DIR* dstream = opendir(path.c_str());
   if (dstream == 0)
-    throw std::runtime_error(std::string("Could not open directory")+path);
+    throw std::runtime_error(std::string("Could not open directory ")+path);
 
   dirent* current = readdir(dstream);
   while (current != 0)
@@ -139,7 +139,10 @@ void FileSystem::listDir(const std::string& path,std::list<DirEntry>& entries)
 	  //TODO
 	  throw std::runtime_error(fullname + " JAJAJAJA");
 	}
-      int type = S_ISREG(st.st_mode) ? DirEntry::FILE : DirEntry::DIRECTORY;
+      DirEntry::FileType type =
+        S_ISREG(st.st_mode) ? DirEntry::FILE
+                            : DirEntry::DIRECTORY;
+
       int size = st.st_blocks * 512;
       entries.push_back(DirEntry(current->d_name,type,size));
       current = readdir(dstream);

@@ -19,9 +19,12 @@ capturemodule_la_SOURCES = \
 	capturedriver.h \
 	v4lcapturedriver.cpp \
 	v4lcapturedriver.h \
+	v4l2capturedriver.cpp \
+	v4l2capturedriver.h \
 	v4l1.h \
 	v4l1.cpp \
-	videodev.h
+	videodev.h \
+	videodev2.h
 
 capturemodule_la_LDFLAGS = -module -avoid-version -no-undefined -lscale -lcolorconv
 capturemodule_la_LIBADD= -L@builddir@/../libscale -L@builddir@/../libcolorconv
