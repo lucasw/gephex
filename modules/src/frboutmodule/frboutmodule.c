@@ -68,7 +68,7 @@ struct DriverInfo
   struct OutputDriver* (*get_driver)();
 };
 
-static s_mmx_supported = 0;
+static int s_mmx_supported = 0; //TODO: set correctly
 
 #define MAX_NUM_DRIVERS 16
 
@@ -509,8 +509,7 @@ void update(void* instance)
   if (strcmp(driver_name, my->driver_name->text) != 0 ||
       strcmp(server_name, my->server_name->text) != 0 ||
       my->drv == 0)
-    {
-	  
+    {  
       if (my->drv != 0)
         {
           get_drv_window_pos(my->drv, &my->win_xpos,&my->win_ypos); 
@@ -621,7 +620,7 @@ void update(void* instance)
     params.invert     = invert;
 
     result = my->drv->blit(my->drv->inst,
-                           (const unsigned char*) inst->in_in->framebuffer,
+                           (const uint8_t*) inst->in_in->framebuffer,
                            inst->in_in->xsize,
                            inst->in_in->ysize,
                            &params,

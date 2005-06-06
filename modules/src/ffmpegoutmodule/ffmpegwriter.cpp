@@ -21,20 +21,16 @@
 #include "ffmpegwriter.h"
 #include <iostream>
 #include <string>
+#include <stdexcept>
+
 
 FFMpegWriter::FFMpegWriter(const std::string &filename, int xres, int yres, 
 			   std::string encoding)
+  : outfile(filename), encstr(encoding), x_res(xres), y_res(yres)
 {
   std::cout << "creating new ffmpeg writer " << filename << " " 
 	    << xres << "x" << yres 
 	    << ", encoding: " << encoding << std::endl;
-
-  outfile = filename;
-
-  encstr = encoding;
-
-  x_res = xres;
-  y_res = yres;
 
   av_register_all();
 
@@ -81,30 +77,28 @@ std::string FFMpegWriter::getEncoding()
   return encstr;
 }
 
-int FFMpegWriter::initEncoderMap()
+void FFMpegWriter::initEncoderMap()
 {
-	/*
-	* Had to add the template qualifiers <int, const char*>, because
-	* otherwise vs6 does not compile...
-	* georg
-	*/
-  encmap["DIVX High"]  = std::make_pair<int, const char*>(800000, "avi" );
-  encmap["DIVX Low"]   = std::make_pair<int, const char*>(200000, "avi" );
-  encmap["MPEG2 High"] = std::make_pair<int, const char*>(800000, "mpeg");
-  encmap["MPEG2 Low"]  = std::make_pair<int, const char*>(200000, "mpeg");
-  encmap["RM High"]    = std::make_pair<int, const char*>(800000, "rm"  );
-  encmap["RM Low"]     = std::make_pair<int, const char*>(200000, "rm"  );
-  encmap["MOV High"]   = std::make_pair<int, const char*>(800000, "mov" );
-  encmap["MOV Low"]    = std::make_pair<int, const char*>(200000, "mov" );
-
-  return 0;
+  encmap["DIVX High"]  = std::make_pair(800000, std::string("avi") );
+  encmap["DIVX Low"]   = std::make_pair(200000, std::string("avi") );
+  encmap["MPEG2 High"] = std::make_pair(800000, std::string("mpeg"));
+  encmap["MPEG2 Low"]  = std::make_pair(200000, std::string("mpeg"));
+  encmap["RM High"]    = std::make_pair(800000, std::string("rm"));
+  encmap["RM Low"]     = std::make_pair(200000, std::string("rm"));
+  encmap["MOV High"]   = std::make_pair(800000, std::string("mov"));
+  encmap["MOV Low"]    = std::make_pair(200000, std::string("mov"));
 }
 
 
-int FFMpegWriter::initEncoder()
+void FFMpegWriter::initEncoder()
 {
-  fmt = guess_format(encmap.find(encstr)->second.second.c_str(), NULL, NULL);
-  bps = encmap.find(encstr)->second.first;
+  encmap_t::const_iterator enc = encmap.find(encstr);
+
+  if ( enc == encmap.end() )
+    throw std::runtime_error( "unkown encoder format" );
+  
+  fmt = guess_format( enc->second.second.c_str(), NULL, NULL);
+  bps = enc->second.first;
 
   // use mpeg if unable to guess
   if (fmt == NULL)
@@ -117,8 +111,7 @@ int FFMpegWriter::initEncoder()
   // mpeg not available
   if (fmt == NULL)
   {
-    std::cout << "error initializing mpeg encoder!" << std::endl;
-    return -1;
+    std::runtime_error("error initializing mpeg encoder!");
   }
   else
   {
@@ -132,17 +125,14 @@ int FFMpegWriter::initEncoder()
   oc = av_alloc_format_context();
   if (oc == NULL) 
   {
-    std::cout << "ffmpeg: memory error allocating format context" << std::endl;
-    return -2;
+    throw std::runtime_error("ffmpeg: memory error allocating format context");
   }
   
   // set output format
   oc->oformat = fmt;
-
-  return 0;
 }
 
-int FFMpegWriter::initStream()
+void FFMpegWriter::initStream()
 {
 
   // create the video stream
@@ -162,15 +152,12 @@ int FFMpegWriter::initStream()
   {
     if (url_fopen(&oc->pb, outfile.c_str(), URL_WRONLY) < 0) 
       {
-	std::cout << "Could not open outfile" << std::endl;
-	return -1;
+	std::runtime_error("Could not open outfile");
       }
   }
 
   // write file header if needed
   av_write_header(oc);
-
-  return 0;
 }
 
 void FFMpegWriter::cleanup()

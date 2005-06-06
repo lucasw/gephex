@@ -62,7 +62,11 @@ int x11_win_frame(Bool frame, Display* dpy, Window win);
 int find_best_visual(Display* dpy,
                      XVisualInfo* chosen_vis);
 
-void convert_to_16_inplace(uint_8* frb, int width, int height);
+
+void convert_to_16_inplace(uint8_t* frb, int width, int height);
+
+int big_endian();
+void convert_endianness(uint8_t* frb, int width, int height);
 
 //void print_visual(XVisualInfo* vinfo);
 

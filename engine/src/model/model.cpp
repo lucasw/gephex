@@ -515,6 +515,40 @@ namespace model
     gr->graphDataUnSet(type);
   }
 
+  bool Model::check_for_graph_id(const std::string& graph_id)
+  {
+    // check if the id exists
+        GraphMap::const_iterator 
+      it = lookForGraph(graph_id,
+			graphs,
+			specs,
+			*fileSystem,
+			smartAss,
+			m_logger);
+
+	return it != graphs.end();
+  }
+
+  bool Model::check_for_snap_id(const std::string& graph_id,
+				const std::string& snap_id)
+  {
+    GraphMap::const_iterator 
+      it = lookForGraph(graph_id,
+			graphs,
+			specs,
+			*fileSystem,
+			smartAss,
+			m_logger);
+
+    if (it==graphs.end())
+      return false;
+
+    const Graph::ValueSetMap& valueSets = it->second->getValueSetMap();
+			
+    return valueSets.end() != valueSets.find(snap_id);
+  }
+  
+  
   void Model::newGraphWithID(const std::string& graphName,
                              const std::string& graphID,
                              bool notifyAndCreate)

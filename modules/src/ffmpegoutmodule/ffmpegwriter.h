@@ -44,9 +44,9 @@ class FFMpegWriter
 
  private:
 
-  int initEncoder();
-  int initEncoderMap();
-  int initStream();
+  void initEncoder();
+  void initEncoderMap();
+  void initStream();
   void cleanup();
 
   void open_video(AVFormatContext *oc, AVStream *st);
@@ -61,7 +61,8 @@ class FFMpegWriter
   int x_res, y_res;
   unsigned int bps;
 
-  std::map<std::string, std::pair<int, std::string> > encmap;
+  typedef std::map<std::string, std::pair<int, std::string> > encmap_t;
+  encmap_t encmap;
 
   uint8_t *video_outbuf;
   int video_outbuf_size;

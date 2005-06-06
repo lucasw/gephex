@@ -103,7 +103,7 @@ IModule* CModuleClass::buildInstance(const ITypeFactory& tFactory) const
       for (unsigned int i = 0; i < defaultInputValues.size(); ++i)
 	{
 
-	  ITypePtr tmp(tFactory.buildNew(attributes->inputs[i]));
+	  IType* tmp = tFactory.buildNew(attributes->inputs[i]);
 
 	  //TODO
 	  const TypeAttributes* attr = attributes->fixedAttributes[i];

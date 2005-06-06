@@ -2,67 +2,12 @@ AC_INIT
 AC_PREREQ(2.59) dnl force autoconf version
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.4.2)
+AM_INIT_AUTOMAKE(gephex,0.4.3)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_LIBTOOL
-
-# gcc versions <= 2.95.2 don't have the standard c++ header
-# sstream
-AM_PATH_SSTREAM(have_sstream=yes, have_sstream=no)
-# copy sstream_compat to sstream if sstream is missing:
-if test "x$have_sstream" = "xno"
-then
-  AC_MSG_NOTICE([Using own sstream in util/include/compatibility])
-  if ! cp $srcdir/util/include/compatibility/sstream_compat ./util/include/sstream;
-  then
-    AC_MSG_ERROR([Could not copy the sstream header!])
-  fi
-else
-  # make sure there is no sstream header
-  rm -f ./util/include/sstream
-fi
-
-# check for extra libs
-
-# x11
-AC_PATH_XTRA
-AM_CONDITIONAL(HAVE_X11, test "x$no_x" != "xyes")
-AH_TEMPLATE([HAVE_X11],  [build with x11 support])
-if test "x$no_x" != "xyes"; then
-  AC_DEFINE(HAVE_X11)
-fi
-
-# qt
-AM_PATH_QT([2.3.0], have_qt=yes, have_qt=no)
-AM_CONDITIONAL(HAVE_QT, test "x$have_qt" = "xyes")
-
-# Checks for libraries.
-AC_CHECK_LIB(dl,dlopen,
-   LIB_DL_FLAGS="-ldl"
-)
-AC_SUBST(LIB_DL_FLAGS)
-
-AC_CHECK_LIB(posix4, main,
-   LIB_POSIX4_FLAGS="-lposix4"
-)
-AC_SUBST(LIB_POSIX4_FLAGS)
-
-AC_CHECK_LIB(socket, socket)
-AC_CHECK_FUNC(connect,,[AC_CHECK_LIB(socket,connect,
-   LIB_SOCKET_FLAGS="-lsocket"
-)])
-AC_SUBST(LIB_SOCKET_FLAGS)
-
-have_nanosleep=0
-AC_CHECK_FUNC(nanosleep,have_nanosleep=1,[AC_CHECK_LIB(rt,nanosleep,
-  [LIB_EXTRA_FLAGS="-lrt"; have_nanosleep=1]
-  ,[AC_CHECK_LIB(posix4,nanosleep,
-    [LIB_EXTRA_FLAGS="-lposix4"; have_nanosleep=1]
-)])])
-AC_SUBST(LIB_EXTRA_FLAGS)
 
 # autoheader kram:
 AH_TOP([#ifndef INCLUDED_CONFIG_H
@@ -99,13 +44,16 @@ AC_MSG_CHECKING([for processor type])
 case $host in
 i[[3456]]86-*-*)
   AC_DEFINE([CPU_I386])
-  CPU=x86
+  CPU=i386
   AC_MSG_RESULT([80x86 processor detected (x >= 3).])
  ;;
 *)
   AC_MSG_RESULT([non x86 processor detected])
 esac
 
+AM_CONDITIONAL(OS_DARWIN, false)
+
+SHAREDLIBEXT=so
 AC_MSG_CHECKING([for OS])
 # os detection
 case $host in
@@ -118,6 +66,8 @@ case $host in
   AC_DEFINE([OS_DARWIN])
   AC_DEFINE([OS_POSIX])
   AC_MSG_RESULT([Darwin detected.])
+  SHAREDLIBEXT=dylib
+  AM_CONDITIONAL(OS_DARWIN, true)
  ;;
 *-*-linux*)
   AC_DEFINE([OS_LINUX])
@@ -137,11 +87,73 @@ case $host in
   AC_DEFINE([OS_POSIX])
   AC_DEFINE([OS_CYGWIN])
   AC_MSG_RESULT([Cygwin detected.])
+  SHAREDLIBEXT=dll
  ;;
 *)
  AC_MSG_RESULT([Unknown OS! Assuming Posix combatibility])
  AC_DEFINE([OS_POSIX])
 esac
+
+# export the detected shared library extensions for use in
+# Makefile.am fiels
+AC_SUBST(SHAREDLIBEXT)
+AC_MSG_NOTICE([Shared library extension is "$SHAREDLIBEXT"])
+
+# gcc versions <= 2.95.2 don't have the standard c++ header
+# sstream
+AM_PATH_SSTREAM(have_sstream=yes, have_sstream=no)
+# copy sstream_compat to sstream if sstream is missing:
+if test "x$have_sstream" = "xno"
+then
+  AC_MSG_NOTICE([Using own sstream in util/include/compatibility])
+  if ! cp $srcdir/util/include/compatibility/sstream_compat ./util/include/sstream;
+  then
+    AC_MSG_ERROR([Could not copy the sstream header!])
+  fi
+else
+  # make sure there is no sstream header
+  rm -f ./util/include/sstream
+fi
+
+# check for extra libs
+
+# x11
+AC_PATH_XTRA
+AM_CONDITIONAL(HAVE_X11, test "x$no_x" != "xyes")
+AH_TEMPLATE([HAVE_X11],  [build with x11 support])
+if test "x$no_x" != "xyes"; then
+  AC_DEFINE(HAVE_X11)
+fi
+
+# qt
+AM_PATH_QT([2.3.0], $SHAREDLIBEXT, have_qt=yes, have_qt=no)
+AM_CONDITIONAL(HAVE_QT, test "x$have_qt" = "xyes")
+
+# Checks for libraries.
+AC_CHECK_LIB(dl,dlopen,
+   LIB_DL_FLAGS="-ldl"
+)
+AC_SUBST(LIB_DL_FLAGS)
+
+AC_CHECK_LIB(posix4, main,
+   LIB_POSIX4_FLAGS="-lposix4"
+)
+AC_SUBST(LIB_POSIX4_FLAGS)
+
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_FUNC(connect,,[AC_CHECK_LIB(socket,connect,
+   LIB_SOCKET_FLAGS="-lsocket"
+)])
+AC_SUBST(LIB_SOCKET_FLAGS)
+
+have_nanosleep=0
+AC_CHECK_FUNC(nanosleep,have_nanosleep=1,[AC_CHECK_LIB(rt,nanosleep,
+  [LIB_EXTRA_FLAGS="-lrt"; have_nanosleep=1]
+  ,[AC_CHECK_LIB(posix4,nanosleep,
+    [LIB_EXTRA_FLAGS="-lposix4"; have_nanosleep=1]
+)])])
+AC_SUBST(LIB_EXTRA_FLAGS)
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST
@@ -277,11 +289,12 @@ AC_ARG_ENABLE(mmx,
        ;;
      esac],[enable_mmx=yes])
 
-     if test "x$enable_mmx" = "xyes"
+     if test "x$enable_mmx" = "xyes" && test "x$CPU" = "xi386"
      then
        	 AC_MSG_NOTICE([MMX support active])
          AC_DEFINE(OPT_INCLUDE_MMX)
      else
+	 enable_mmx=no
 	 AC_MSG_NOTICE([MMX support turned off])
      fi
 
@@ -311,10 +324,13 @@ AC_ARG_ENABLE(serialize-framebuffer,
 
 # required programs
 
-if test "$CPU" = "x86" && test "x$enable_mmx" = "xyes"; then
+if test "x$enable_mmx" = "xyes"; then
 	AC_PATH_PROG(NASM, nasm)
 	if test "x$NASM" = "x"; then
-        	AC_MSG_ERROR([*** 'nasm' missing, please install or fix your \$PATH ***])
+        	AC_MSG_ERROR([*** 'nasm' missing, please install or fix your 
+\$PATH ***
+Note: you can disable mmx by using the "--disable-mmx" parameter. In this
+case nasm will not be required.])
 	fi
 
         NASM_FLAGS="-f elf -O1"
@@ -330,7 +346,7 @@ AC_DEFINE_UNQUOTED([FRBINMODULE_CACHE_SIZE], $FRBINCACHE, [Size of the cache the
 fi;
 
 if test "x$use_ffmpeg" = "xyes"; then
- FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay" 
+ FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay --enable-shared" 
 #--disable-risky"
 
  echo Preparing ffmpeg configure call...
@@ -362,6 +378,7 @@ if test "x$use_ffmpeg" = "xyes"; then
  abs_builddir=`pwd`
 
  AC_SUBST(FFMPEG_LDFLAGS,"${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a -lz")
+# AC_SUBST(FFMPEG_LDFLAGS,"-L${abs_builddir}/contrib/ffmpeg/libavcodec -lavcodec -lz -L${abs_builddir}/contrib/ffmpeg/libavformat -lavformat")
  AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat")
 
  echo Calling ffmpeg configure with flags:
@@ -371,8 +388,54 @@ fi
 
 # set gphx_module_lib_dir and gphx_type_lib_dir
 test "x$prefix" = xNONE && prefix=$ac_default_prefix
-AC_SUBST(gphx_module_lib_dir, "${prefix}/lib/gephex-0.4/modules")
-AC_SUBST(gphx_type_lib_dir, "${prefix}/lib/gephex-0.4/types")
+AC_SUBST(gphx_module_lib_dir, '$(prefix)/lib/gephex-0.4/modules')
+AC_SUBST(gphx_type_lib_dir, '$(prefix)/lib/gephex-0.4/types')
+
+# check for docbook2x and docbook xslt
+
+AC_MSG_CHECKING([docbook2x command])
+
+GUESS_DOCBOOK2MAN="`which docbook2x-man` `which docbook2man`"
+
+docbooktoxman=""
+for cmd in $GUESS_DOCBOOK2MAN
+do
+  if test -e $cmd
+  then
+    docbooktoxman=$cmd
+    break
+  fi
+done
+
+if test "x$docbooktoxman" = "x"; then
+  AC_MSG_RESULT([not found])
+else
+  AC_MSG_RESULT([assuming $docbooktoxman])
+fi
+
+AC_SUBST(docbooktoxman)
+
+AC_MSG_CHECKING([docbook xsl dir])
+
+GUESS_DOCBOOK_XSL_DIRS="/sw/share/xml/xsl/docbook-xsl /usr/share/xml/docbook/stylesheet/nwalsh"
+
+docbook_xsl_dir=""
+for dir in $GUESS_DOCBOOK_XSL_DIRS
+do
+  if test -e $dir/html/docbook.xsl
+  then
+    docbook_xsl_dir=$dir
+    break
+  fi
+done
+
+if test "x$docbook_xsl_dir" = "x"; then
+  AC_MSG_RESULT([not found])
+else
+  AC_MSG_RESULT([assuming $docbook_xsl_dir])
+fi
+
+AC_SUBST(docbook_xsl_dir)
 
 AC_CONFIG_FILES([Makefile
 base/Makefile
@@ -389,8 +452,6 @@ contrib/Makefile
 data/Makefile
 data/gephex-wrapper
 data/gephex.conf.default
-doc/Makefile
-doc/images/Makefile
 engine/Makefile
 engine/src/Makefile
 engine/src/dllloader/Makefile
@@ -444,6 +505,7 @@ modules/src/libmidi/Makefile
 modules/src/libscale/Makefile
 modules/src/libcolorconv/Makefile
 modules/src/midiinmodule/Makefile
+modules/src/midiccdecmodule/Makefile
 modules/src/netcontrolmodule/Makefile
 modules/src/noisemodule/Makefile
 modules/src/numarithmodule/Makefile
@@ -453,6 +515,11 @@ modules/src/numenvmodule/Makefile
 modules/src/numlfomodule/Makefile
 modules/src/numposmodule/Makefile
 modules/src/numxfadermodule/Makefile
+modules/src/oscinmodule/Makefile
+modules/src/oscoutmodule/Makefile
+modules/src/oscnummodule/Makefile
+modules/src/oscmergemodule/Makefile
+modules/src/numoscmodule/Makefile
 modules/src/overlaymodule/Makefile
 modules/src/pixelizemodule/Makefile
 modules/src/planemodule/Makefile
@@ -487,6 +554,31 @@ effectvmodules/src/effectvlifemodule/Makefile
 effectvmodules/src/effectvpuzzlemodule/Makefile
 effectvmodules/src/effectvquarkmodule/Makefile
 effectvmodules/src/effectvsparkmodule/Makefile
+effectvmodules/src/effectv1dmodule/Makefile
+effectvmodules/src/effectvspiralmodule/Makefile
+effectvmodules/src/effectvbaltanmodule/Makefile
+effectvmodules/src/effectvdizzymodule/Makefile
+effectvmodules/src/effectvrndmmodule/Makefile
+effectvmodules/src/effectvstreakmodule/Makefile
+effectvmodules/src/effectvblurzoommodule/Makefile
+effectvmodules/src/effectvmatrixmodule/Makefile
+effectvmodules/src/effectvpupmodule/Makefile
+effectvmodules/src/effectvscrollmodule/Makefile
+effectvmodules/src/effectvtransformmodule/Makefile
+effectvmodules/src/effectvchameleonmodule/Makefile
+effectvmodules/src/effectvmosaicmodule/Makefile
+effectvmodules/src/effectvrdsmodule/Makefile
+effectvmodules/src/effectvshagadelicmodule/Makefile
+effectvmodules/src/effectvwarholmodule/Makefile
+effectvmodules/src/effectvdicemodule/Makefile
+effectvmodules/src/effectvnervousmodule/Makefile
+effectvmodules/src/effectvrevmodule/Makefile
+effectvmodules/src/effectvsimuramodule/Makefile
+effectvmodules/src/effectvwarpmodule/Makefile
+effectvmodules/src/effectvdiffmodule/Makefile
+effectvmodules/src/effectvnoisemodule/Makefile
+effectvmodules/src/effectvripplemodule/Makefile
+effectvmodules/src/effectvpredatormodule/Makefile
 qtgui/Makefile
 qtgui/src/Makefile
 qtgui/src/gui/Makefile
@@ -505,6 +597,7 @@ types/src/ifstype/Makefile
 types/src/lfotype/Makefile
 types/src/miditype/Makefile
 types/src/numbertype/Makefile
+types/src/osctype/Makefile
 types/src/positiontype/Makefile
 types/src/rgbtype/Makefile
 types/src/stringtype/Makefile
@@ -517,8 +610,12 @@ util/src/joystick_midi_net/Makefile
 util/src/libgeo/Makefile
 util/src/libjoystick/Makefile
 util/src/misc/Makefile
+doc/Makefile
+doc/images/Makefile
 ])
 AC_OUTPUT
+
+
 
 if test "x$have_qt" != "xyes"; then
   AC_MSG_WARN([No QT support found.

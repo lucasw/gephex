@@ -23,31 +23,31 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType id=in const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=options const=true strong_dependency=true default=2 } ";
+    return "input_spec { type=typ_NumberType id=options const=true strong_dependency=true default=[2] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=xsize const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=xsize const=true strong_dependency=true default=[0] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=ysize const=true strong_dependency=true default=480 } ";
+    return "input_spec { type=typ_NumberType id=ysize const=true strong_dependency=true default=[480] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=brightness const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=brightness const=true strong_dependency=true default=[0.5] } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType id=contrast const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=contrast const=true strong_dependency=true default=[1] } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType id=gamma const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=gamma const=true strong_dependency=true default=[1] } ";
   break;
   case 7:
-    return "input_spec { type=typ_NumberType id=monitor const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=monitor const=true strong_dependency=true default=[0] } ";
   break;
   case 8:
-    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=[default] } ";
   break;
   case 9:
-    return "input_spec { type=typ_StringType id=server const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=server const=true strong_dependency=true default=[default] } ";
   break;
  }
  return 0;

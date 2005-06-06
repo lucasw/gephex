@@ -39,11 +39,11 @@ OutDir=.\Release
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\y4minmodule.dll"
+ALL : ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Release" "libcolorconv - Win32 Release" "$(OUTDIR)\y4minmodule.dll"
+ALL : "libscale - Win32 Release" "libcolorconv - Win32 Release" ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
 
 !ENDIF 
 
@@ -58,6 +58,9 @@ CLEAN :
 	-@erase "$(OUTDIR)\y4minmodule.dll"
 	-@erase "$(OUTDIR)\y4minmodule.exp"
 	-@erase "$(OUTDIR)\y4minmodule.lib"
+	-@erase "y4minmodule.def"
+	-@erase "y4minmodule.h"
+	-@erase "y4minmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -73,8 +76,8 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\y4minmodule.def"
 LINK32_OBJS= \
-	"$(INTDIR)\y4minmodule.obj" \
 	"$(INTDIR)\y4minmodule_auto.obj" \
+	"$(INTDIR)\y4minmodule.obj" \
 	"..\libcolorconv\Release\libcolorconv.lib" \
 	"..\libscale\Release\libscale.lib"
 
@@ -94,7 +97,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Release
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" "libcolorconv - Win32 Release" "$(OUTDIR)\y4minmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" "libcolorconv - Win32 Release" ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
    copy .\Release\y4minmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -108,11 +111,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
+ALL : "$(OUTDIR)\y4minmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Debug" "libcolorconv - Win32 Debug" ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
+ALL : "libscale - Win32 Debug" "libcolorconv - Win32 Debug" "$(OUTDIR)\y4minmodule.dll"
 
 !ENDIF 
 
@@ -130,9 +133,6 @@ CLEAN :
 	-@erase "$(OUTDIR)\y4minmodule.ilk"
 	-@erase "$(OUTDIR)\y4minmodule.lib"
 	-@erase "$(OUTDIR)\y4minmodule.pdb"
-	-@erase "y4minmodule.def"
-	-@erase "y4minmodule.h"
-	-@erase "y4minmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -148,8 +148,8 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\y4minmodule.def"
 LINK32_OBJS= \
-	"$(INTDIR)\y4minmodule.obj" \
 	"$(INTDIR)\y4minmodule_auto.obj" \
+	"$(INTDIR)\y4minmodule.obj" \
 	"..\libcolorconv\Debug\libcolorconv.lib" \
 	"..\libscale\Debug\libscale.lib"
 
@@ -169,7 +169,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Debug
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "libcolorconv - Win32 Debug" ".\y4minmodule_auto.c" ".\y4minmodule.h" ".\y4minmodule.def" "$(OUTDIR)\y4minmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "libcolorconv - Win32 Debug" "$(OUTDIR)\y4minmodule.dll"
    copy .\Debug\y4minmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -216,33 +216,14 @@ $(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "libcolorconv - Win32 Debug" ".\y
 
 
 !IF "$(CFG)" == "y4minmodule - Win32 Release" || "$(CFG)" == "y4minmodule - Win32 Debug"
-SOURCE=.\y4minmodule.c
-
-!IF  "$(CFG)" == "y4minmodule - Win32 Release"
-
-CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libcolorconv" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "y4minmodule_EXPORTS" /D "WIN32" /D "NDEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\y4minmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-"$(INTDIR)\y4minmodule.obj" : $(SOURCE) "$(INTDIR)" ".\y4minmodule.h"
-	$(CPP) @<<
-  $(CPP_SWITCHES) $(SOURCE)
-<<
-
-
-!ELSEIF  "$(CFG)" == "y4minmodule - Win32 Debug"
-
-CPP_SWITCHES=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libcolorconv" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "y4minmodule_EXPORTS" /D "WIN32" /D "_DEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\y4minmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+SOURCE=.\y4minmodule.cpp
 
 "$(INTDIR)\y4minmodule.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) @<<
-  $(CPP_SWITCHES) $(SOURCE)
-<<
 
-
-!ENDIF 
 
 SOURCE=.\y4minmodule_auto.c
 
-"$(INTDIR)\y4minmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\y4minmodule.h"
+"$(INTDIR)\y4minmodule_auto.obj" : $(SOURCE) "$(INTDIR)"
 
 
 !IF  "$(CFG)" == "y4minmodule - Win32 Release"

@@ -26,9 +26,12 @@
 #include <stdio.h>
 #include <math.h> // for fabs
 #include <string.h>
+#include <assert.h>
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
+
+#include <errno.h>
 
 #include "outputdriver.h"
 
@@ -46,8 +49,8 @@
 
 //-----------------------------------------------------------------------
 
-static const int MAX_RES_X = 2560;
-static const int MAX_RES_Y = 1600;
+static const int MAX_RES_X = 1024;//2560;
+static const int MAX_RES_Y = 768;//1600;
 
 static const int USE_XSHM = 0x01;
 static const int USE_XV   = 0x02;
@@ -89,7 +92,7 @@ struct DriverInstance {
 
   int used_extensions; // indicates wether XShm and Xv are used
 
-  uint_8* data;
+  uint8_t* data;
   int data_size;
 
   XImage* ximage;
@@ -120,7 +123,7 @@ static int  X11_resize(struct DriverInstance* sh,int width, int height,
                         char* error_text, int text_len);
 
 static int  X11_blit(struct DriverInstance* sh,
-                      const unsigned char* fb,
+                      const uint8_t* fb,
                       int width, int height,
                       struct blit_params* params,
                       char* error_text, int text_len);
@@ -181,7 +184,7 @@ X11_new_instance(const char* server_name,
   sh->image_width     =  0;
   sh->image_height    =  0;
   sh->shminfo.shmaddr =  0;
-  sh->xv_port         = -1;
+  sh->xv_port         =  0xffffffff;
   sh->xv_format_id    = -1;
   sh->xv_image        =  0;
   
@@ -211,7 +214,11 @@ X11_new_instance(const char* server_name,
   
   if (check_xshm_extension(sh->display))
     {
-      sh->used_extensions |= USE_XSHM;
+      if (init_xshm_stuff(sh, error_text, text_len) != 0)
+	  sh->used_extensions |= USE_XSHM;
+      else
+	  printf(" x11output: could not init XShm: '%s', turning off xshm\n",
+		 error_text);
     }
 
   if (check_xv_extension(sh->display))
@@ -239,8 +246,15 @@ X11_new_instance(const char* server_name,
       snprintf(error_text, text_len, "Could not find matching visual\n"
                "XServer must be set up at 24 bit depth or 16 bit depth");
       XDestroyWindow(sh->display, sh->win);
+      deinit_xv_stuff(sh);
       free(sh);
       return 0;
+    }
+
+  if (sh->vis.depth == 16)
+    {
+      printf(" x11output: Screen set to 16bit color-depth. You might want to "
+	     "switch\n to 24bit for better performance\n");
     }
 
   if ((sh->used_extensions & USE_XV) == USE_XV)
@@ -256,14 +270,6 @@ X11_new_instance(const char* server_name,
 
   if ((sh->used_extensions & USE_XSHM) == USE_XSHM)
     {
-      if (init_xshm_stuff(sh, error_text, text_len) == 0)
-        {
-          deinit_xv_stuff(sh);
-          XDestroyWindow(sh->display, sh->win);
-          free(sh);
-          return 0;
-        }
-
       if ((sh->used_extensions & USE_XV) == 0)
         {
           /* create shared memory ximage */
@@ -305,6 +311,7 @@ static void X11_destroy(struct DriverInstance* sh)
 
   if (sh->ximage != 0)
     {
+      sh->ximage->data = 0;
       XDestroyImage(sh->ximage);
       sh->ximage = 0;
     }
@@ -339,8 +346,8 @@ static void X11_destroy(struct DriverInstance* sh)
 }
 
 static int X11_resize(struct DriverInstance* sh,
-                       int width, int height,
-                       char* error_text, int text_len)
+		      int width, int height,
+		      char* error_text, int text_len)
 { 
   if (sh->width != width || sh->height != height)
     {
@@ -361,14 +368,23 @@ static int X11_resize(struct DriverInstance* sh,
       if ((sh->used_extensions & USE_XSHM) == USE_XSHM &&
           (sh->used_extensions & USE_XV) == 0)
         {
+	  assert(sh->ximage);
+
+	  sh->ximage->data = 0;
           XDestroyImage(sh->ximage);
 
           sh->ximage = XShmCreateImage(sh->display,
-                                        sh->vis.visual,
-                                        sh->vis.depth,
-                                        ZPixmap,
-                                        sh->shminfo.shmaddr, 
-                                        &sh->shminfo, width, height);
+				       sh->vis.visual,
+				       sh->vis.depth,
+				       ZPixmap,
+				       sh->shminfo.shmaddr, 
+				       &sh->shminfo, width, height);
+
+	  if (sh->ximage == 0)
+	    {
+	      snprintf(error_text, text_len, "Could not create XShmImage");
+	      return 0;
+	    }
         }
     }
   return 1;
@@ -377,7 +393,7 @@ static int X11_resize(struct DriverInstance* sh,
 
 // xshm and no xv
 static int X11_xshm_blit(struct DriverInstance* sh,
-                         const unsigned char* fb,
+                         const uint8_t* fb,
                          int width, int height,
                          struct blit_params* params,
                          int needs_adjust,
@@ -395,31 +411,39 @@ static int X11_xshm_blit(struct DriverInstance* sh,
           XNextEvent(sh->display, &event);
 
           if (event.type == sh->completion_type)
-            break;          
+            break;
         }
     }
 
+  if (sh->ximage == 0)
+    {
+      snprintf(error_text, text_len, "Internal error: sh->ximage == 0");
+      return 0;
+    }
+ 
   // adjust and scale input framebuffer frb into shared mem
   if (needs_adjust)
     {
       ls_set_adjustment(sh->pal, params->brightness, params->contrast,
-                     params->gamma, params->invert);
+			params->gamma, params->invert);
                      
-      ls_scale32m_adjust((uint_32*)sh->ximage->data, sh->width, sh->height,
-                        (uint_32*)fb, width, height, params->mirrorx,
-                        params->mirrory, sh->pal);
+      ls_scale32m_adjust((uint32_t*)sh->ximage->data, sh->width, sh->height,
+			 (const uint32_t*)fb, width, height, params->mirrorx,
+			 params->mirrory, sh->pal);
     }
   else
     {
-      ls_scale32m((uint_32*)sh->ximage->data, sh->width, sh->height,
-                  (uint_32*)fb, width, height, params->mirrorx,
+      ls_scale32m((uint32_t*)sh->ximage->data, sh->width, sh->height,
+                  (const uint32_t*)fb, width, height, params->mirrorx,
                   params->mirrory);
     }
 
+  //TODO: this is a hack for big-endian machines
+  if (big_endian())
+    convert_endianness(sh->ximage->data, sh->width, sh->height);
+
   if (sh->vis.depth == 16)
-    {
       convert_to_16_inplace(sh->ximage->data, sh->width, sh->height);
-    }
 
   // blit shared mem image
   XShmPutImage(sh->display, sh->win, sh->gc, sh->ximage,
@@ -432,7 +456,7 @@ static int X11_xshm_blit(struct DriverInstance* sh,
 }
 
 static int X11_xshm_xv_blit(struct DriverInstance* sh,
-                            const unsigned char* fb,
+                            const uint8_t* fb,
                             int width, int height,
                             struct blit_params* params,
                             int needs_adjust,
@@ -472,6 +496,10 @@ static int X11_xshm_xv_blit(struct DriverInstance* sh,
       sh->image_height = height;
     }
 
+  //TODO: this is a hack for big-endian machines
+  if (big_endian())
+    convert_endianness((uint8_t*) fb, sh->width, sh->height);
+
   if (sh->vis.depth == 24)
     {
 #if defined(OPT_INCLUDE_MMX)
@@ -502,7 +530,7 @@ static int X11_xshm_xv_blit(struct DriverInstance* sh,
 
 
 static int X11_xv_blit(struct DriverInstance* sh,
-                       const unsigned char* fb,
+                       const uint8_t* fb,
                        int width, int height,
                        struct blit_params* params,
                        int needs_adjust,
@@ -531,7 +559,20 @@ static int X11_xv_blit(struct DriverInstance* sh,
 
       sh->data = malloc(sh->xv_image->data_size);
       sh->data_size = sh->xv_image->data_size;
+
+      if (sh->data == 0)
+	{
+	  snprintf(error_text, text_len,
+		   "Could not allocate data for XVImage");
+	  return 0;
+	}
     }
+
+  assert(sh->data);
+
+  //TODO: this is a hack for big-endian machines
+  if (big_endian())
+   convert_endianness(sh->data, sh->width, sh->height);
 
   sh->xv_image->data = sh->data;
 
@@ -555,42 +596,49 @@ static int X11_xv_blit(struct DriverInstance* sh,
 
 
 static int X11_ximage_blit(struct DriverInstance* sh,
-                           const unsigned char* fb,
+                           const uint8_t* fb,
                            int width, int height,
                            struct blit_params* params,
                            int needs_adjust,
                            char* error_text, int text_len)
 {
-  unsigned char* framebuffer;
+  uint8_t* framebuffer = 0;
 
-  if (width != sh->width || height != sh->height
-      || params->mirrorx || params->mirrory || needs_adjust)
+  if (width != sh->width || height != sh->height ||
+      params->mirrorx || params->mirrory || needs_adjust)
     {
       int size = sh->width*sh->height*4;
+
+      if (sh->data && sh->data_size < size)
+	{
+	  free(sh->data);
+	  sh->data = 0;
+	}
 
       if (sh->data == 0)
         {
           sh->data = malloc(size);
           sh->data_size = size;
         }
-      else if (sh->data_size < size)
-        {
-          free(sh->data);
-          sh->data = malloc(size);
-          sh->data_size = size;
-        }
-         
+
+      if (sh->data == 0)
+	{
+	  snprintf(error_text, text_len,
+		   "Could not allocate data for XImage");
+	  return 0;
+	}
+
       if (needs_adjust)
         {            
-          ls_scale32m_adjust((uint_32*)sh->data, sh->width, sh->height,
-                             (uint_32*)fb, width, height, params->mirrorx,
-                             params->mirrory, sh->pal);
+          ls_scale32m_adjust((uint32_t*) sh->data, sh->width, sh->height,
+                             (const uint32_t*) fb, width, height,
+			     params->mirrorx, params->mirrory, sh->pal);
         }
       else
         {
-          ls_scale32m((uint_32*)sh->data, sh->width, sh->height,
-                      (uint_32*)fb, width, height, params->mirrorx,
-                      params->mirrory);
+          ls_scale32m((uint32_t*) sh->data, sh->width, sh->height,
+                      (const uint32_t*) fb, width, height,
+		      params->mirrorx, params->mirrory);
         }
 
       framebuffer = sh->data;
@@ -604,20 +652,32 @@ static int X11_ximage_blit(struct DriverInstance* sh,
           sh->data_size = 0;
         }
 
-      framebuffer = (unsigned char*) fb;
+      assert(width == sh->width);
+      assert(height == sh->height);
+
+      framebuffer = (uint8_t*) fb;
     }
 
+  assert(framebuffer != 0);
+
   // now create an XImage using the framebuffers pixel data
+
+  //TODO: this is a hack for big-endian machines
+  if (big_endian())
+   convert_endianness(framebuffer, sh->width, sh->height);
 
   if (sh->vis.depth == 16)
     convert_to_16_inplace(framebuffer, sh->width, sh->height);
 
   if (sh->ximage == 0 ||
-      sh->image_width != width ||
-      sh->image_height != height)
+      sh->image_width  != sh->width ||
+      sh->image_height != sh->height)
     {
       if (sh->ximage)
-        XDestroyImage(sh->ximage);
+	{
+	  sh->ximage->data = 0;
+	  XDestroyImage(sh->ximage);
+	}
 
       sh->ximage = XCreateImage(sh->display,
                                 sh->vis.visual,
@@ -630,8 +690,8 @@ static int X11_ximage_blit(struct DriverInstance* sh,
                                 32,
                                 0);
 
-      sh->image_width  = width;
-      sh->image_height = height;
+      sh->image_width  = sh->width;
+      sh->image_height = sh->height;
     }
 
   if (sh->ximage == 0)
@@ -653,7 +713,7 @@ static int X11_ximage_blit(struct DriverInstance* sh,
 }
 
 static int X11_blit(struct DriverInstance* sh,
-                     const unsigned char* fb,
+                     const uint8_t* fb,
                      int width, int height,
                      struct blit_params* params,
                      char* error_text, int text_len)
@@ -722,7 +782,8 @@ static int find_best_xv_port(Display* dpy, Window win, XvPortID* xv_port,
 {
   unsigned int num_adaptors;
   XvAdaptorInfo* adaptors;
-  int ret, i;
+  int ret;
+  unsigned int i;
 
   DEBUG_PRINTF("Looking for port...\n");
 
@@ -870,20 +931,22 @@ static int init_xshm_stuff(struct DriverInstance* sh, char* error_text,
   sh->event_pending = 0;
 
   /* allocate shared memory */
+
+  // changed flags from 0777 to 0666, see
+  // http://lists.apple.com/archives/unix-porting/2004/Apr/msg00081.html
   sh->shminfo.shmid = shmget (IPC_PRIVATE,
                               MAX_RES_X * MAX_RES_Y * 4,
-                              IPC_CREAT|0777);
+                              0666 | IPC_CREAT);
 
   if (sh->shminfo.shmid == -1)
     {
-      snprintf(error_text, text_len, "shmget() failed!");
+      snprintf(error_text, text_len, "shmget() failed, errno=%i!", errno);
       return 0;
     }
 
   /* attach shared memory to our process */
   sh->shminfo.shmaddr = shmat (sh->shminfo.shmid, 0, 0);
-
-  if (sh->shminfo.shmaddr == -1)
+  if (sh->shminfo.shmaddr == (void*) -1) // TODO
     {
       shmctl (sh->shminfo.shmid, IPC_RMID, 0);
       snprintf(error_text, text_len, "shmat() failed!");
@@ -940,10 +1003,10 @@ static int init_xv_stuff(struct DriverInstance* sh, char* error_text,
 
 static void deinit_xv_stuff(struct DriverInstance* sh)
 {
-  if (sh->xv_port != -1)
+  if (sh->xv_port != 0xffffffff)
     {
       XvUngrabPort(sh->display, sh->xv_port, CurrentTime);
-      sh->xv_port = -1;
+      sh->xv_port = 0xffffffff;
     }
 
   if (sh->xv_image != 0)

@@ -181,6 +181,10 @@ int main( int argc, const char* argv[] )
 
       utils::ConfigManager config(get_cfile_name(), argc, argv, params);
 
+      // If the help message was requested, we simply return
+      if (config.help_requested())
+	return 0;
+
       std::string ipc_type = config.get_string_param("ipc_type");
       std::string ipc_locator = "";
         if (ipc_type == "inet")

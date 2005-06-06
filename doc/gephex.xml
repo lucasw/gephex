@@ -54,7 +54,7 @@
 
   <refsect1>
     <title>Files</title>
-  <para><filename>~/.gephex/gephex.conf</filename></para>
+  <para><filename>~/.gephex/0.4/gephex.conf</filename></para>
   </refsect1>
 
   <refsect1>

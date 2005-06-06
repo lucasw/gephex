@@ -1,0 +1,22 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvrdsmodule.mak
+
+.\effectvrdsmodule.c : \
+	"..\..\..\config.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\rds.c"\
+	
+
+.\effectvrdsmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllutils.h"\
+	".\effectvrdsmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvrdsmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvrdsmodule - Win32 Debug"
+
+!ENDIF 
+

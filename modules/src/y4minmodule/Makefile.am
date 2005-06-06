@@ -12,7 +12,7 @@ lib_LTLIBRARIES = y4minmodule.la
 
 y4minmodule_la_SOURCES = \
         y4minmodule_auto.c \
-        y4minmodule.c \
+        y4minmodule.cpp \
         y4minmodule.h \
         y4minmodule.spec \
         y4minmodule.xpm

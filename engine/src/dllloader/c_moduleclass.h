@@ -59,8 +59,7 @@ private:
 
 	CModuleFunctionTable* functionTable;
 	CModuleAttributes* attributes;
-	typedef utils::AutoPtr<IType> ITypePtr;
-	mutable std::vector<ITypePtr> defaultInputValues;
+	mutable std::vector<IType*> defaultInputValues;
 	std::string m_name;
 	frei0r_funs_t* m_frei0r;
         int m_frei0r_plugin_type;

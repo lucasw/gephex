@@ -1,0 +1,31 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvwarpmodule.mak
+
+.\effectvwarpmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\effectvwarpmodule.h"\
+	".\warp.c"\
+	
+
+.\effectvwarpmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvwarpmodule.h"\
+	".\effectvwarpmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvwarpmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvwarpmodule - Win32 Debug"
+
+!ENDIF 
+

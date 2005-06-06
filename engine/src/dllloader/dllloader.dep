@@ -22,22 +22,6 @@
 	".\c_output.h"\
 	
 
-.\c_moduleclass.cpp : \
-	"..\..\..\base\src\interfaces\imodule.h"\
-	"..\..\..\base\src\interfaces\imoduleclass.h"\
-	"..\..\..\base\src\interfaces\itype.h"\
-	"..\..\..\base\src\interfaces\itypefactory.h"\
-	"..\..\..\base\src\utils\autoptr.h"\
-	"..\..\..\util\include\basic_types.h"\
-	"..\renderer\typefactory.h"\
-	".\c_functiontypes.h"\
-	".\c_module.h"\
-	".\c_moduleclass.h"\
-	".\c_moduletables.h"\
-	".\frei0r.h"\
-	".\frei0rwrapper.h"\
-	
-
 .\c_output.cpp : \
 	"..\..\..\base\src\interfaces\imodule.h"\
 	"..\..\..\base\src\interfaces\itype.h"\
@@ -78,9 +62,7 @@
 	"..\..\..\base\src\interfaces\imoduleclass.h"\
 	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
 	"..\..\..\base\src\interfaces\imoduleclassreceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleclasssender.h"\
 	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
@@ -88,15 +70,14 @@
 	"..\..\..\base\src\interfaces\imoduleclassspecsender.h"\
 	"..\..\..\base\src\interfaces\itypeclass.h"\
 	"..\..\..\base\src\interfaces\itypeclassinforeceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassinfosender.h"\
-	"..\..\..\base\src\interfaces\itypeclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamereceiver.h"\
-	"..\..\..\base\src\interfaces\itypeclassnamesender.h"\
 	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
 	"..\..\..\base\src\interfaces\itypeclasssender.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\filesystem.h"\
 	"..\..\..\base\src\utils\ilogger.h"\
+	"..\..\..\base\src\utils\itokenizer.h"\
 	"..\..\..\base\src\utils\sharedlibrary.h"\
+	"..\..\..\base\src\utils\stringtokenizer.h"\
 	"..\..\..\base\src\utils\structreader.h"\
 	"..\..\..\config.h"\
 	"..\..\..\util\include\basic_types.h"\

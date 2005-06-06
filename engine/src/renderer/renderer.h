@@ -124,13 +124,8 @@ namespace renderer
 	void synchronize();
 
   private:
-    typedef std::map<const std::string,utils::AutoPtr<RuntimeSystem> > RuntimeSystemMap;
-    RuntimeSystemMap graphs;
-
-    bool isStarted;
-
-    utils::AutoPtr<RuntimeSystem> activeGraph;
-    std::string activeGraphName; //TODO
+	bool isStarted;
+	std::string activeGraphName; //TODO
 
     ISmartControlValueReceiver* cvr;
     IModuleStatisticsSmartReceiver* msr;
@@ -143,6 +138,11 @@ namespace renderer
     utils::AutoPtr<RuntimeSystem> find(const std::string& graphID) const;
 
     utils::AutoPtr<utils::ILogger> m_logger;
+
+    typedef std::map<const std::string,utils::AutoPtr<RuntimeSystem> > RuntimeSystemMap;
+    RuntimeSystemMap graphs;
+    
+    utils::AutoPtr<RuntimeSystem> activeGraph;
   };
 
 }

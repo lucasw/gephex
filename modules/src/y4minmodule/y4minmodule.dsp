@@ -106,16 +106,7 @@ PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\y4minmodule.c
-
-!IF  "$(CFG)" == "y4minmodule - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "y4minmodule - Win32 Debug"
-
-# ADD CPP /MDd
-
-!ENDIF 
-
+SOURCE=.\y4minmodule.cpp
 # End Source File
 # Begin Source File
 

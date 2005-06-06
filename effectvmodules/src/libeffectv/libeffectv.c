@@ -455,7 +455,7 @@ void fastsrand(unsigned int seed)
 /*
  * HSI color system utilities
  */
-static int trunc(double f)
+static int saturate(double f)
 {
 	int i;
 
@@ -474,9 +474,9 @@ void HSItoRGB(double H, double S, double I, int *r, int *g, int *b)
 	Gv=1+S*sin(T);
 	Bv=1+S*sin(T+2*M_PI/3);
 	T=255.999*I/2;
-	*r=trunc(Rv*T);
-	*g=trunc(Gv*T);
-	*b=trunc(Bv*T);
+	*r=saturate(Rv*T);
+	*g=saturate(Gv*T);
+	*b=saturate(Bv*T);
 }
 
 /* We don't want no leaks */

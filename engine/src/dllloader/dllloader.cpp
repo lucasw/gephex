@@ -31,6 +31,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <iostream>
+#include <list>
 
 #include "nameresolver.h"
 
@@ -49,6 +50,10 @@
 #include "utils/autoptr.h"
 #include "utils/sharedlibrary.h"
 #include "utils/ilogger.h"
+#include "utils/filesystem.h"
+#include "utils/stringtokenizer.h"
+
+
 
 #include "interfaces/imoduleclassreceiver.h"
 #include "interfaces/imoduleclassspecreceiver.h"
@@ -57,7 +62,6 @@
 
 #include "interfaces/itypeclassreceiver.h"
 #include "interfaces/itypeclassinforeceiver.h"
-#include "interfaces/itypeclassnamereceiver.h"
 
 #include "frei0rwrapper.h"
 
@@ -67,8 +71,6 @@ namespace dllloader
   {
     void moduleLog(int level, const char* sender, const char* msg);
   };
-
-
 
   void readFrei0rFuns(DllLoader::SharedLibraryPtr sl, frei0r_funs_t& f0r)
   {
@@ -166,38 +168,127 @@ namespace dllloader
     }
 	
   }
+
+  #if defined(OS_WIN32)
+  static const char* MODULE_ENDING = ".dll";
+  static const char* TYPE_ENDING   = ".dll";
+#elif defined(OS_POSIX)
+  static const char* MODULE_ENDING = ".so";
+  static const char* TYPE_ENDING   = ".so";
+#else
+#error "unknown OS"
+#endif
+
+  std::vector<std::string> getFilesInPath(const std::string& dirName,
+                                          const std::string& ending)
+  {
+    std::vector<std::string> fileNames;
+    
+    std::list<utils::DirEntry> entries;
+    utils::FileSystem::listDir(dirName, entries);
+    
+    for (std::list<utils::DirEntry>::const_iterator it = entries.begin();
+         it != entries.end(); ++it)
+      {
+        std::string name = it->getName();
+
+        if (name == "." || name == "..")
+          continue;
+      
+        if (it->getType() == utils::DirEntry::DIRECTORY)
+          {
+            std::vector<std::string> 
+              subfiles= getFilesInPath(name, ending);
+
+            fileNames.insert(fileNames.end(),
+                             subfiles.begin(), subfiles.end());
+          }
+        else
+          {
+            if (name.length() > ending.length() 
+                && name.substr(name.length()-ending.length(),
+                               ending.length()) == ending)
+              {
+                fileNames.push_back(dirName + name);
+              }
+          }
+      }
+    return fileNames;
+  }
+
+  /**
+   * Returns a vector of all files in a list of paths, that have a certain
+   * file ending.
+   * Files can be listed more than once if a path of the list is a subpath
+   * of another path in the list.
+   */
+  std::vector<std::string> getFilesInPathList(const std::string& pathList,
+					      const std::string& ending)
+  {
+    std::vector<std::string> files;
+
+    utils::StringTokenizer st(pathList);
+    std::string path;
+
+    while ((path = st.next(";")) != "")
+    try
+      {
+        std::vector<std::string> fs = getFilesInPath(path, ending);
+        files.insert(files.end(),fs.begin(), fs.end());
+      }
+    catch (...)
+      {
+        // we ignore all paths we cannot open
+      }
+
+    return files;
+  }
+
 	
-  DllLoader::DllLoader(utils::AutoPtr<utils::ILogger>& logger)
-    : resolver(new NameResolver()), m_infoReceiver(0), m_classReceiver(0),
-      m_specReceiver(0), m_typeInfoReceiver(0), m_typeClassReceiver(0),
-	  m_logger(logger)
+  DllLoader::DllLoader(utils::AutoPtr<utils::ILogger>& logger,
+		       IModuleClassInfoReceiver& infoReceiver,
+		       IModuleClassSpecReceiver& specReceiver,
+		       IModuleClassReceiver& classReceiver,
+		       //		       ITypeClassInfoReceiver& typeInfoReceiver,
+		       ITypeClassReceiver& typeClassReceiver,
+		       const std::string& module_path,
+		       const std::string& type_path,
+		       const std::string& frei0r_path
+		       )
+    : resolver(new NameResolver()),
+      m_infoReceiver(infoReceiver),
+      m_classReceiver(classReceiver),
+      m_specReceiver(specReceiver),
+      //      m_typeInfoReceiver(typeInfoReceiver),
+      m_typeClassReceiver(typeClassReceiver), m_logger(logger)
   {
     s_logger = logger;
+
+    // load stuff
+    std::vector<std::string> modules = getFilesInPathList(module_path,
+                                                          MODULE_ENDING);
+	
+    std::vector<std::string> types = getFilesInPathList(type_path,
+                                                        TYPE_ENDING);
+
+    std::vector<std::string> frei0rs;
+    if (frei0r_path != "")
+      frei0rs = getFilesInPathList(frei0r_path, MODULE_ENDING);
+    
+    std::cout << "Reading plugins...";
+    std::cout.flush();
+    readDlls(modules, types, frei0rs);
+    std::cout << "   done\n";
   }
 	
   DllLoader::~DllLoader()
   {
-    delete resolver;
-  }
-
-  void DllLoader::unloadAll()
-  {
-    //unload all loaded modules
-    typedef std::vector<std::pair<std::string, void*> > Fotze;
-    Fotze names(m_moduleHandles.size());
-
-    std::copy(m_moduleHandles.begin(), m_moduleHandles.end(),
-	      names.begin());	
+    // TODO
+    //
+    // 1. call cleanup/deinit methods of all types/effects/plugins
+    // 2. release shared library
     
-    for (Fotze::const_iterator it = names.begin() ;it != names.end(); ++it)
-      {
-	std::string name = it->first;
-#if (ENGINE_VERBOSITY > 1)
-	std::cout << "Unloading " << name << std::endl;
-#endif
-	unloadModuleClass(name);
-      }
-    //TODO: unload type classes
+    delete resolver;
   }
 
   void DllLoader::readDlls(const std::vector<std::string>& modules,
@@ -212,14 +303,14 @@ namespace dllloader
 #if (ENGINE_VERBOSITY > 0)
 	    std::cout << "processing typ file: " << *it << std::endl;
 #endif
-	    processTypFile(*it);
+	    processTypeFile(*it);
 	  }
 	catch (std::runtime_error& e)
 	  {
 	    std::cerr << e.what() << std::endl;
 	  }
       }
-		
+
     for (std::vector<std::string>::const_iterator it = modules.begin();
 	 it != modules.end(); ++it)
       {	
@@ -244,9 +335,10 @@ namespace dllloader
 	  {
 	    std::cerr << e.what() << std::endl;
 	  }
-      }		
+      }
   }
-	
+
+  
   //TODO: Fehlerbehandlung!
   void DllLoader::loadModule(SharedLibraryPtr sl,
                              const std::string& moduleName)
@@ -315,137 +407,52 @@ namespace dllloader
       }
   }
 	
-  void DllLoader::loadModuleClass(const std::string& moduleName)
-  {		
-	  try 
-	  {
-		std::map<std::string,std::string>::const_iterator it = 
-		m_mod2fileName.find(moduleName);
-
-		if (it == m_mod2fileName.end())
-		{
-		  it = m_f0r2fileName.find(moduleName);
-
-		  if (it == m_f0r2fileName.end())
-		    throw std::runtime_error("ModuleClass gibts halt nicht");
-
-		  std::string filename = it->second;
-
-		  frei0r_funs_t f0r;
-		  SharedLibraryPtr sl = this->loadDll(filename);
-
-		  readFrei0rFuns(sl, f0r);
-
-		  loadFrei0r(f0r, sl, moduleName);
-		  return;
-		}
-		
-		std::string filename = it->second;
-		
-		SharedLibraryPtr sl = this->loadDll(filename);
-		if (sl->loadSymbol("update") != 0)
-		{
-			loadModule(sl, moduleName);	
-		}
-		else
-		{
-			throw std::runtime_error("Unbekannter Dll Type.");
-		}
-	  }
-	  catch (std::runtime_error& e)
-	  {
-		m_logger->error("LoadModuleClass", e.what());
-	  }
-  }
 	
-  void DllLoader::unloadModuleClass(const std::string& name)
-  {
-    std::map<std::string,SharedLibraryPtr>::iterator it 
-      = m_moduleHandles.find(name);
-    std::map<std::string,utils::AutoPtr<utils::Buffer> >::iterator 
-      it2 = m_moduleInfos.find(name);
-
-    if (it == m_moduleHandles.end() || it2 == m_moduleInfos.end())
-      {
-	throw std::runtime_error("unbekannte moduleclass "
-				 "bei unloadmoduleclass");
-      }
-
-    m_specReceiver->moduleClassUnloaded(name);
-    m_classReceiver->moduleClassUnloaded(name);
-    m_infoReceiver->moduleClassUnloaded(name);
-
-    SharedLibraryPtr sl = it->second;
-
-    // Call the shutdown function of the dll
-    shutDownT shutDown = (shutDownT) sl->loadSymbol("shutDown");
-
-    if (shutDown != 0)
-      shutDown();
-
-
-    m_moduleInfos.erase(it2);
-    m_moduleHandles.erase(it);
- 
-  }
-
   void DllLoader::synchronize()
   {
-    //TODO: bis jetzt wird nur der moduleClassNameReceiver
-    // und der moduleClassInfoReceiver benachrichtigt!
+    //TODO: bis jetzt wird nur moduleClassInfoReceiver benachrichtigt!
 
 #if (ENGINE_VERBOSITY > 0)
     std::cout << "sync dllloader" << std::endl;
 #endif
-    m_infoReceiver->syncStarted();
-//	m_nameReceiver->syncStarted();
-
-    for (std::map<std::string,std::string>::const_iterator nameIt 
-	   = m_mod2fileName.begin();
-	 nameIt != m_mod2fileName.end(); ++nameIt)
-      {
-     	m_nameReceiver->moduleClassNameExists(nameIt->first);       
-      }
-
-
-    for (std::map<std::string,std::string>::const_iterator nameIt 
-	   = m_f0r2fileName.begin();
-	 nameIt != m_f0r2fileName.end(); ++nameIt)
-      {
-     	m_nameReceiver->moduleClassNameExists(nameIt->first);       
-      }
+    m_infoReceiver.syncStarted();
 
     for (std::map<std::string,utils::AutoPtr<utils::Buffer> >::const_iterator
 	   modIt = m_moduleInfos.begin();
 	 modIt != m_moduleInfos.end(); ++modIt)
       {
-	m_infoReceiver->moduleClassLoaded(modIt->first, *modIt->second);
+	m_infoReceiver.moduleClassLoaded(modIt->first, *modIt->second);
       }
 
-	//m_nameReceiver->syncFinished();
-    m_infoReceiver->syncFinished();
+    m_infoReceiver.syncFinished();
   }
 	
-  void DllLoader::loadTypeClass(const std::string& typeName)
+  void DllLoader::processTypeFile(const std::string& filename)
   {
-    // get the filename of the type
-    std::map<std::string,std::string>::const_iterator it = 
-      m_typ2fileName.find(typeName);
-    
-    if (it == m_typ2fileName.end())
+    std::string typeName = getDllName(filename);
+
+    std::map<std::string,std::string>::const_iterator 
+      it = m_typ2fileName.find(typeName);
+
+    if (it != m_typ2fileName.end())
       {
-	throw std::runtime_error("unknown type:" + typeName);
+	throw std::runtime_error("typname '" + typeName +"' doppelt bei processtypFile");
       }
 
-    std::string filename = it->second;
+    m_typ2fileName[typeName] = filename;
 
     // load the type and create class
-    CTypeFunctionTable ft = loadTypeDll(filename);
+    std::pair<CTypeFunctionTable,utils::AutoPtr<utils::SharedLibrary> > p
+      = loadTypeDll(filename);
 
+    CTypeFunctionTable ft= p.first;
+
+	
     // lets get the name of the type
     utils::StructReader spec(ft.getSpec());
     std::string name = spec.getStringValue("name");
 
+    
     // and the typeinfo
     int bufLen = ft.getInfo(0,0); // how big is it?
     char* data = new char[bufLen];
@@ -467,52 +474,7 @@ namespace dllloader
     CTypeClass tc(ft, name, id);
     
     // distribute the new typeclass to the typefactory
-    if ( m_typeClassReceiver != 0 )
-      m_typeClassReceiver->typeClassLoaded(id, tc);
-
-    // broadcast that there is a new type
-    if ( m_typeInfoReceiver != 0 )
-      m_typeInfoReceiver->typeClassLoaded(id,mi);
-  }
-	
-  void DllLoader::unloadTypeClass(const std::string& /*name*/)
-  {
-    //TODO
-  }
-	
-  void DllLoader::registerModuleClassInfoReceiver(IModuleClassInfoReceiver& r)
-  {
-    m_infoReceiver = &r;
-  }
-	
-  void DllLoader::registerModuleClassSpecReceiver(IModuleClassSpecReceiver& r)
-  {
-    m_specReceiver = &r;
-  }
-	
-  void DllLoader::registerModuleClassReceiver(IModuleClassReceiver& r)
-  {
-    m_classReceiver = &r;
-  }
-
-  void DllLoader::registerModuleClassNameReceiver(IModuleClassNameReceiver& r)
-  {
-    m_nameReceiver = &r;
-  }
-	
-  void DllLoader::registerTypeClassInfoReceiver(ITypeClassInfoReceiver& r)
-  {
-    m_typeInfoReceiver = &r;
-  }
-	
-  void DllLoader::registerTypeClassReceiver(ITypeClassReceiver& r)
-  {
-    m_typeClassReceiver = &r;
-  }
-
-  void DllLoader::registerTypeClassNameReceiver(ITypeClassNameReceiver& r)
-  {
-    m_typeNameReceiver = &r;
+    m_typeClassReceiver.typeClassLoaded(id, tc);
   }
 	
   void DllLoader::constructModuleClass(CModuleFunctionTable* fTable,
@@ -792,12 +754,12 @@ namespace dllloader
 		
 	m_moduleHandles[name] = sl;
 			
-	m_infoReceiver->moduleClassLoaded(name,mi);
+	m_infoReceiver.moduleClassLoaded(name,mi);
 
         CModuleClass cm(*fTable,attributes,name, frei0r, frei0r_plugin_type);
-	m_classReceiver->moduleClassLoaded(name, cm);
+	m_classReceiver.moduleClassLoaded(name, cm);
 
-	m_specReceiver->moduleClassLoaded(name,ModuleClassSpec(name,inputs,
+	m_specReceiver.moduleClassLoaded(name,ModuleClassSpec(name,inputs,
 							       defaultVals,
                                                                inputIDs,
 							       outputs,
@@ -871,13 +833,29 @@ namespace dllloader
 
     if (it != m_mod2fileName.end())
       {
-	throw std::runtime_error("Modulname '" + name 
-				 + "'doppelt bei processModFile");
+	throw std::runtime_error("A module with id '" + name 
+				 + "' already exists in plugin " + it->second);
       }
 
     m_mod2fileName[name] = fname;
 
-    m_nameReceiver->moduleClassNameExists(name);
+    // and load it
+    try 
+      {
+	SharedLibraryPtr sl = this->loadDll(fname);
+	if (sl->loadSymbol("update") != 0)
+	  {
+	    loadModule(sl, name);	
+	  }
+	else
+	  {
+	    throw std::runtime_error("Unknown Dll Type.");
+	  }
+      }
+    catch (std::runtime_error& e)
+      {
+	m_logger->error("LoadModuleClass", e.what());
+      }
   }
 
 
@@ -912,24 +890,23 @@ namespace dllloader
 
     m_f0r2fileName[name] = fname;
 
-    m_nameReceiver->moduleClassNameExists(name);
-  }
-
-  void DllLoader::processTypFile(const std::string& fname)
-  {
-    std::string name = getDllName(fname);
-
-    std::map<std::string,std::string>::const_iterator 
-      it = m_typ2fileName.find(name);
-
-    if (it != m_typ2fileName.end())
+    // and load it
+    try 
       {
-	throw std::runtime_error("typname '" + name +"' doppelt bei processtypFile");
+	frei0r_funs_t f0r;
+	SharedLibraryPtr sl = this->loadDll(fname);
+	
+	readFrei0rFuns(sl, f0r);
+	
+	loadFrei0r(f0r, sl, name);
       }
-
-    m_typ2fileName[name] = fname;
-
-    m_typeNameReceiver->typeClassNameExists(name);
+    catch (std::runtime_error& e)
+      {
+	m_logger->error("LoadModuleClass", e.what());
+      }
   }
+
   
+
+
 }

@@ -34,8 +34,6 @@
 	"..\..\..\base\src\interfaces\imodelstatussender.h"\
 	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleclassinfosender.h"\
-	"..\..\..\base\src\interfaces\imoduleclassloadercontrolreceiver.h"\
-	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
 	"..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleconstructiondumbsender.h"\
 	"..\..\..\base\src\interfaces\imoduledatareceiver.h"\
@@ -67,8 +65,6 @@
 	"..\..\..\base\src\netinterfaces\modelcontrolreceivernet.h"\
 	"..\..\..\base\src\netinterfaces\modelstatussendernet.h"\
 	"..\..\..\base\src\netinterfaces\moduleclassinfosendernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassloadercontrolreceivernet.h"\
-	"..\..\..\base\src\netinterfaces\moduleclassnamesendernet.h"\
 	"..\..\..\base\src\netinterfaces\moduleconstructiondumbsendernet.h"\
 	"..\..\..\base\src\netinterfaces\moduledatasendernet.h"\
 	"..\..\..\base\src\netinterfaces\modulestatisticssendernet.h"\

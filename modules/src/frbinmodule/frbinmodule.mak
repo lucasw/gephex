@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "frbinmodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -35,11 +39,11 @@ OutDir=.\Release
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\frbinmodule.dll"
+ALL : ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Release" "libdshow - Win32 Release" "$(OUTDIR)\frbinmodule.dll"
+ALL : "libscale - Win32 Release" "libdshow - Win32 Release" ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
 
 !ENDIF 
 
@@ -61,46 +65,15 @@ CLEAN :
 	-@erase "$(OUTDIR)\frbinmodule.dll"
 	-@erase "$(OUTDIR)\frbinmodule.exp"
 	-@erase "$(OUTDIR)\frbinmodule.lib"
+	-@erase "frbinmodule.def"
+	-@erase "frbinmodule.h"
+	-@erase "frbinmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\frbinmodule.bsc" 
 BSC32_SBRS= \
@@ -138,7 +111,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Release
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" "libdshow - Win32 Release" "$(OUTDIR)\frbinmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" "libdshow - Win32 Release" ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
    copy .\Release\frbinmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -152,11 +125,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
+ALL : "$(OUTDIR)\frbinmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Debug" "libdshow - Win32 Debug" ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
+ALL : "libscale - Win32 Debug" "libdshow - Win32 Debug" "$(OUTDIR)\frbinmodule.dll"
 
 !ENDIF 
 
@@ -181,49 +154,12 @@ CLEAN :
 	-@erase "$(OUTDIR)\frbinmodule.ilk"
 	-@erase "$(OUTDIR)\frbinmodule.lib"
 	-@erase "$(OUTDIR)\frbinmodule.pdb"
-	-@erase "frbinmodule.def"
-	-@erase "frbinmodule.h"
-	-@erase "frbinmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /D "WITH_SDL" /D "WITH_SDL_IMAGE" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\frbinmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\frbinmodule.bsc" 
 BSC32_SBRS= \
@@ -261,11 +197,41 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Debug
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "libdshow - Win32 Debug" ".\frbinmodule_auto.c" ".\frbinmodule.h" ".\frbinmodule.def" "$(OUTDIR)\frbinmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "libdshow - Win32 Debug" "$(OUTDIR)\frbinmodule.dll"
    copy .\Debug\frbinmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ENDIF 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -300,12 +266,12 @@ SOURCE=.\framecache.cpp
 
 SOURCE=.\frbinmodule.cpp
 
-"$(INTDIR)\frbinmodule.obj" : $(SOURCE) "$(INTDIR)" ".\frbinmodule.h"
+"$(INTDIR)\frbinmodule.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\frbinmodule_auto.c
 
-"$(INTDIR)\frbinmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\frbinmodule.h"
+"$(INTDIR)\frbinmodule_auto.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\sdlimagedriver.cpp

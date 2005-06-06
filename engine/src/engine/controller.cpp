@@ -22,7 +22,6 @@
 
 #include "controller.h"
 #include <iostream>
-
 #if defined (HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -36,8 +35,6 @@
 
 #include "netlogger.h"
 #include "buffer.h"
-#include "filesystem.h"
-#include "stringtokenizer.h"
 
 namespace engine
 {
@@ -54,55 +51,25 @@ namespace engine
     net::ISocket** m_socket;
   };
   
-  /**
-   * Just a hack to automatically load all types that exist.
-   */
-  class AutoTypeLoader : public ITypeClassNameReceiver
+  auto_stop_task::auto_stop_task(Controller* ctrl, unsigned int ttl)
+    : m_ctrl(ctrl), m_ttl(ttl), m_time(0)
   {
-  public:
-    AutoTypeLoader(ITypeClassLoaderControlReceiver& typLoader)
-      : m_typLoader(typLoader)
-    {
-    }
-  
-    void typeClassNameExists(const std::string& name)
-    {
-      m_typLoader.loadTypeClass(name);
-    }
-  private:
-    ITypeClassLoaderControlReceiver& m_typLoader;
-  };
-
-
-/**
-   * Just a hack to automatically load all types that exist.
-   */
-  class AutoModuleLoader : public IModuleClassNameReceiver
+  }
+      
+  bool auto_stop_task::run()
   {
-  public:
-    AutoModuleLoader(IModuleClassLoaderControlReceiver& moduleLoader)
-      : m_moduleLoader(moduleLoader)
-    {
-    }
-  
-    void moduleClassNameExists(const std::string& name)
-    {
-      m_moduleLoader.loadModuleClass(name);
-    }
-  private:
-    IModuleClassLoaderControlReceiver& m_moduleLoader;
-  };
+    ++m_time;
+
+    if (m_ttl != 0)
+      std::cout << m_time << std::endl;
+    
+    if (m_time == m_ttl)
+      m_ctrl->shutDown();
+    return true;
+  }
 
 
 
-  /**
-   * Returns a vector of all files in a list of paths, that have a certain
-   * file ending.
-   * Files can be listed more than once if a path of the list is a subpath
-   * of another path in the list.
-   */
-  std::vector<std::string> getFilesInPathList(const std::string& dirName,
-                                              const std::string& ending);
 
   // connect a porttagger and a commandtagger with their receiving
   // and sending objects
@@ -110,83 +77,6 @@ namespace engine
                    net::Protocol& protocol,
                    PortDispatcher& portDispatcher, int port);
 
-#if defined(OS_WIN32)
-  static const char* MODULE_ENDING = ".dll";
-  static const char* TYPE_ENDING   = ".dll";
-#elif defined(OS_POSIX)
-  static const char* MODULE_ENDING = ".so";
-  static const char* TYPE_ENDING   = ".so";
-#else
-#error "unknown OS"
-#endif
-
-  //TODO: make recursive
-  std::vector<std::string> getFilesInPath(const std::string& dirName,
-                                          const std::string& ending)
-  {
-    std::vector<std::string> fileNames;
-    
-    try
-      {
-        std::list<utils::DirEntry> entries;
-        utils::FileSystem::listDir(dirName, entries);
-    
-        for (std::list<utils::DirEntry>::const_iterator it = entries.begin();
-             it != entries.end(); ++it)
-          {
-            std::string name = it->getName();
-
-            if (name == "." || name == "..")
-              continue;
-      
-            if (it->getType() == utils::DirEntry::DIRECTORY)
-              {
-                std::vector<std::string> 
-                  subfiles= getFilesInPath(name, ending);
-
-                fileNames.insert(fileNames.end(),
-                                 subfiles.begin(), subfiles.end());
-              }
-            else
-              {
-                if (name.length() > ending.length() 
-                    && name.substr(name.length()-ending.length(),
-                                   ending.length()) == ending)
-                  {
-                    fileNames.push_back(dirName + name);
-                  }
-              }
-          }
-      }
-    catch (std::runtime_error& e)
-      {
-        std::cerr << "Could not open '" << dirName << "' ("
-                  << e.what() << ")\n";
-      }
-    return fileNames;
-  }
-  
-std::vector<std::string> getFilesInPathList(const std::string& pathList,
-                                            const std::string& ending)
-  {
-    std::vector<std::string> files;
-
-    utils::StringTokenizer st(pathList);
-    std::string path;
-
-    while ((path = st.next(";")) != "")
-    try
-      {
-        std::vector<std::string> fs = getFilesInPath(path, ending);
-        files.insert(files.end(),fs.begin(), fs.end());
-      }
-    catch (std::runtime_error& e)
-      {
-        std::cerr << "Could not open '" << path << "' ("
-                  << e.what() << ")\n";
-      }
-    return files;
-  }
   
   void initTaggers(PortTagger& portTagger, CommandTagger& commandTagger,
                    net::Protocol& protocol,
@@ -208,7 +98,6 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
       tagger3(engineControlSender),
       tagger4(modelControlSender),
       tagger5(modelControlSender),
-      tagger6(moduleClassLoaderControlSender),
       tagger7(modelControlSender),
 
       tagger10(modelControlSender),
@@ -228,7 +117,6 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
       graphDataReceiver(tagger15),
       controlValueReceiver(tagger4),
       moduleStatisticsReceiver(tagger5),
-      moduleClassNameReceiver(tagger6),
       graphNameReceiver(tagger7),      
 
       errorReceiver(tagger10),
@@ -240,10 +128,10 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
 
       pModel(config.get_string_param("graph_path"), logger),
       pRenderer(logger),
-      pDllLoader(logger),
-      first_time(true)
+      first_time(true),
+      ttl(config.get_int_param("ttl")),
+      auto_stop(this,ttl)
   {
-    
     net::IServerSocket* serverSocket;
 
     std::string ipcType = config.get_string_param("ipc_type");
@@ -298,7 +186,6 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
     initTaggers(portTagger3, tagger3, protocol, portDispatcher, m_port+2);
     initTaggers(portTagger4, tagger4, protocol, portDispatcher, m_port+3);
     initTaggers(portTagger5, tagger5, protocol, portDispatcher, m_port+4);
-    initTaggers(portTagger6, tagger6, protocol, portDispatcher, m_port+5);
     initTaggers(portTagger7, tagger7, protocol, portDispatcher, m_port+6);
     initTaggers(portTagger10, tagger10, protocol, portDispatcher, m_port+9);
     initTaggers(portTagger13, tagger13, protocol, portDispatcher, m_port+12);
@@ -320,29 +207,8 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
     pRenderer.registerModuleStatisticsSmartReceiver(pModel);
     pRenderer.registerRendererStatusReceiver(rendererStatusReceiver);
 		
-    pDllLoader.registerModuleClassReceiver(pRenderer);
-    pDllLoader.registerModuleClassSpecReceiver(pModel);
-    pDllLoader.registerModuleClassInfoReceiver(moduleClassInfoReceiver);
-    pDllLoader.registerTypeClassReceiver(pRenderer);
-		
     modelControlSender.registerModelControlReceiver(pModel);
     rendererControlSender.registerRendererControlReceiver(pRenderer);
-    moduleClassLoaderControlSender.registerModuleClassLoaderControlReceiver(pDllLoader);
-
-    sf = utils::AutoPtr<AutoTypeLoader>(new AutoTypeLoader(pDllLoader));
-
-    if (config.get_bool_param("headless"))
-      {
-	aml=utils::AutoPtr<AutoModuleLoader>(new AutoModuleLoader(pDllLoader));
-	pDllLoader.registerModuleClassNameReceiver(*aml);
-      }
-    else
-      {
-	pDllLoader.registerModuleClassNameReceiver(moduleClassNameReceiver);
-      }
-
-    pDllLoader.registerTypeClassNameReceiver(*sf);
-
 
     engineControlSender.registerEngineControlReceiver(*this);
 
@@ -352,66 +218,68 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
     scheduler.addTask(*acceptor, 500);
     scheduler.addTask(*this,250);
     scheduler.addTask(netPoller,netInterval);
-    scheduler.addTask(pRenderer,rendererInterval);
 
-	
-    // load stuff
-    std::string module_path = config.get_string_param("module_path");
-    std::vector<std::string> modules = getFilesInPathList(module_path,
-                                                          MODULE_ENDING);
-	
-    std::string type_path = config.get_string_param("type_path");
-    std::vector<std::string> types = getFilesInPathList(type_path,
-                                                        TYPE_ENDING);
-
-
-    std::string frei0r_path = config.get_string_param("frei0r_path");
-    std::vector<std::string> frei0rs;
-    if (frei0r_path != "")
-      frei0rs = getFilesInPathList(frei0r_path, MODULE_ENDING);
+    std::list<ITask*> t_list;
+    t_list.push_back(&auto_stop);
+    t_list.push_back(&pRenderer);
     
-    std::cout << "Reading plugins...";
-    std::cout.flush();
-    pDllLoader.readDlls(modules, types, frei0rs);
-    std::cout << "   done\n";
+    augmented_render_task =
+      utils::AutoPtr<synced_tasks>(new synced_tasks(t_list));
+    
+    scheduler.addTask(*augmented_render_task,rendererInterval);
 
-    if (config.get_bool_param("headless"))
-      {
-	pDllLoader.registerModuleClassNameReceiver(moduleClassNameReceiver);
-      }
-	
+    // load plugins
+    pDllLoader= utils::AutoPtr<dllloader::DllLoader>
+      (new dllloader::DllLoader(logger,
+		     moduleClassInfoReceiver,
+		     pModel,
+		     pRenderer,
+		     pRenderer,
+		     config.get_string_param("module_path"),
+		     config.get_string_param("type_path"),
+		     config.get_string_param("frei0r_path")));
+    
     std::cout << "Reading graphs...";
     std::cout.flush();
     pModel.updateFileSystem();
     std::cout << "   done\n";
-	
-    try 
-      {
-        pModel.newGraphWithID("default", "_default_", false);
-        pModel.newControlValueSetWithID("_default_", "default", "_default_");
-        pModel.changeRenderedGraph("_default_", "_default_");
-        pModel.changeEditGraph("_default_", "_default_");
-      }
-    catch (std::exception& e)
-      {
-        logger->error("Could not create default graph", e.what());
-      }
 
-    if (config.get_bool_param("autostart"))
+    std::string render_graph_id=config.get_string_param("render_graph_id");
+    std::string render_snap_id =config.get_string_param("render_snap_id");
+
+    //create graph and snapshot if they don't already exist
+    if( !pModel.check_for_graph_id(render_graph_id) )
       {
-        std::string render_graph_id=config.get_string_param("render_graph_id");
-        std::string render_snap_id =config.get_string_param("render_snap_id");
-        pModel.changeRenderedGraph(render_graph_id, 
-				   render_snap_id);
-	pRenderer.start();
+	std::cout << "create new graph: " << render_graph_id << std::endl;
+	pModel.newGraphWithID(render_graph_id, render_graph_id, false);
       }
+	
+    if( !pModel.check_for_snap_id(render_graph_id,render_snap_id) )
+      {
+	std::cout << "create new snap: " << render_graph_id << " "
+		  << render_snap_id << std::endl;
+	pModel.newControlValueSetWithID(render_graph_id,
+					render_snap_id,
+					render_snap_id);
+      }
+				    
+    // activate the graph/snapshot combination
+    pModel.changeRenderedGraph(render_graph_id, 
+			       render_snap_id);
+    
+    pModel.changeEditGraph(render_graph_id, 
+			   render_snap_id);
+
+    
+    // start the render if option is set or if in timeout mode
+    if (config.get_bool_param("autostart") || ttl != 0)
+      pRenderer.start();
   }
 	
   Controller::~Controller()
   {
     try
       {
-	this->pDllLoader.unloadAll();
 	disconnect();
       }
     catch (std::runtime_error& e)
@@ -461,15 +329,11 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
 	  {
 	    logger->error("Engine Exception Handler", e.what());
 	  }
-	/*	catch(...)
-                {
-                logger->error("Oh oh....", "Oh oh oh...");
-                }*/
       }
   }
   
   bool Controller::run()
-  { 
+  {
     try 
       {
         // here comes what happens after the connection to the gui is
@@ -482,6 +346,9 @@ std::vector<std::string> getFilesInPathList(const std::string& pathList,
 			  
             connection_down = false;			  
             first_time = false;
+
+	    // announce loaded plugins
+	    pDllLoader->synchronize();
           }
 
         if (connection_down && !first_time)

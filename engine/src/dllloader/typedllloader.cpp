@@ -64,7 +64,8 @@ namespace dllloader
     }
   }
 
-  CTypeFunctionTable loadTypeDll(const std::string& filename)
+  std::pair<CTypeFunctionTable,utils::AutoPtr<utils::SharedLibrary> >
+  loadTypeDll(const std::string& filename)
   {
     // load shared library file
     typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
@@ -125,6 +126,6 @@ namespace dllloader
       throw std::runtime_error("symbol deSerialize  missing");
 
     // all symbols are defined
-    return ft;
+    return std::make_pair(ft,sl);
   }
 }

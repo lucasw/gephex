@@ -63,6 +63,7 @@ void AlsaMidiInDriver::open(device_id_t device)
       std::ostringstream error_msg;
       error_msg << "snd_rawmidi_open '" << device_name << "' failed: "
                 << err;
+      m_impl->handle_in=0;
       throw std::runtime_error(error_msg.str().c_str());
     }
 }

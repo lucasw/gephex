@@ -168,27 +168,6 @@
 	".\moduleclassinfosendernet.h"\
 	
 
-.\moduleclassloadercontrolreceivernet.cpp : \
-	"..\interfaces\imoduleclassloadercontrolreceiver.h"\
-	"..\net\idatalistener.h"\
-	"..\net\isender.h"\
-	"..\net\itagger.h"\
-	"..\utils\bufferstream.h"\
-	"..\utils\bufferutils.h"\
-	"..\utils\string_.h"\
-	".\moduleclassloadercontrolreceivernet.h"\
-	
-
-.\moduleclassloadercontrolsendernet.cpp : \
-	"..\interfaces\imoduleclassloadercontrolreceiver.h"\
-	"..\interfaces\imoduleclassloadercontrolsender.h"\
-	"..\net\itaginterpreter.h"\
-	"..\utils\bufferstream.h"\
-	"..\utils\bufferutils.h"\
-	"..\utils\string_.h"\
-	".\moduleclassloadercontrolsendernet.h"\
-	
-
 .\moduleclassnamereceivernet.cpp : \
 	"..\interfaces\imoduleclassnamereceiver.h"\
 	"..\net\idatalistener.h"\
@@ -314,24 +293,6 @@
 	"..\utils\string_.h"\
 	".\rendererstatussendernet.h"\
 	
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-!ENDIF 
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-!ENDIF 
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-!ENDIF 
 
 !IF  "$(CFG)" == "netinterfaces - Win32 Release"
 

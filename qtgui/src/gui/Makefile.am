@@ -1,7 +1,6 @@
 SUBDIRS= base editor typeviews dialogs
 
 AM_CPPFLAGS = \
-	-DINST_INSTALL_PREFIX=\"$(prefix)\" \
 	-I $(srcdir)/.. \
 	-I $(srcdir)/dialogs \
 	-I @builddir@/dialogs \
@@ -81,11 +80,7 @@ HEADER_FILES = \
 
 EXTRA_DIST= \
 	gruen_klein.xpm \
-	inplugbusy.xpm \
-	inplugfree.xpm \
 	node.xpm \
-	outplugbusy.xpm \
-	outplugfree.xpm \
 	rot_klein.xpm \
 	gui.dsp gui.mak gui.dep \
 	logo.ico \
@@ -117,7 +112,8 @@ gephex_gui_real_LDADD = \
 	-L@builddir@/base \
 	-L@builddir@/editor \
 	-L@builddir@/typeviews \
-	-L@builddir@/dialogs
+	-L@builddir@/dialogs \
+	-L.
 
 gephex_gui_real_DEPENDENCIES = \
 	@builddir@/../guimodel/libguimodel.a \

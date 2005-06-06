@@ -29,12 +29,12 @@
 
 //---------------------------------------------------------------------------
 
-static int pal_trim(int p)
+static double pal_trim(double p)
 {
   if (p < 0)
     p = 0;
-  if (p > 255)
-    p = 255;
+  if (p > 1)
+    p = 1;
 
   return p;
 }
@@ -60,15 +60,15 @@ void ls_set_adjustment(ls_adjust_pal pal, double bright,
   for (i = 0; i < 256; ++i)
     {
 
-      int p = pal[i];
+      double p = pal[i] / 255.;
       // contrast
-      p = pal_trim((int) ((p - 127) * contrast + 127));
+      p = pal_trim((p - 0.5)*contrast + 0.5);
       // brightness
-      p = pal_trim(p + (int) ((bright-0.5)*255*2) );
+      p = pal_trim(p + (bright-0.5)*2);
       // gamma
-      p = pal_trim( (int) (255. * pow(p/255., gamma)) );
+      p = pal_trim(pow(p, gamma));
 
-      pal[i] = p;
+      pal[i] = (int) (p*255);
     }
 }
 
@@ -78,19 +78,13 @@ static __inline void apply_pal(uint_32* dstc,
                                const uint_32* col,
                                const ls_adjust_pal pal)
 {
-  uint_8* src = (uint_8*) col;
+  const uint_8* src = (const uint_8*) col;
   uint_8* dst = (uint_8*) dstc;
 
   dst[0] = pal[src[0]];
   dst[1] = pal[src[1]];
   dst[2] = pal[src[2]];
 }
-
-#define APPLY_PAL(DST, COL, PAL) ({uint_8* src = (uint_8*) &(COL); \
-  uint_8* dst = (uint_8*) &(DST); \
-  dst[0] = (PAL)[src[0]]; \
-  dst[1] = (PAL)[src[1]]; \
-  dst[2] = (PAL)[src[2]];} )
 
 //---------------------------------------------------------------------------
 
@@ -118,13 +112,19 @@ void ls_scale32m_adjust(uint_32* dst, int dwidth, int dheight,
   uint_32 A,B;
   double deltax=.0, deltay=.0;
   const int dirx = mirrorx ? -1 : 1;
-  const int diry = mirrory ? dwidth : -dwidth;
+  const int diry = mirrory ? -dwidth : dwidth;
   uint_32* current = dst;
 
   assert (dwidth >= 0 && dheight >= 0);
 
+  if (dwidth == swidth && dheight == sheight && !mirrorx && !mirrory)
+    {
+      ls_cpy_adjust(dst, src, dwidth, dheight, pal);
+      return;
+    }
+
   if (mirrorx)
-    current += dwidth;
+    current += dwidth-1;
       
   if (mirrory)
     current += (dheight-1)*dwidth;
@@ -178,7 +178,7 @@ void ls_scale32m(uint_32* dst, int dwidth, int dheight,
     }
 
   if (mirrorx)
-    current += dwidth;
+    current += dwidth-1;
       
   if (mirrory)
     current += (dheight-1)*dwidth;

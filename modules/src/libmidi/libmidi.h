@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -23,38 +23,40 @@
 #ifndef INCLUDED_LIBMIDI_H
 #define INCLUDED_LIBMIDI_H
 
+#include "basic_types.h"
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  typedef void (*midi_noteoffT)(unsigned char channel, unsigned char key,
-				unsigned char velocity,
-				void* self);
+  typedef void (*midi_noteoffT)(uint8_t channel, uint8_t key,
+				uint8_t velocity,
+				void* user_data);
 
-  typedef void (*midi_noteonT)(unsigned char channel, unsigned char key,
-			       unsigned char velocity, void* self);
+  typedef void (*midi_noteonT)(uint8_t channel, uint8_t key,
+			       uint8_t velocity, void* user_data);
 
-  typedef void (*midi_aftertouchT)(unsigned char channel, unsigned char key,
-				   unsigned char pressure,
-				   void* self); 
+  typedef void (*midi_aftertouchT)(uint8_t channel, uint8_t key,
+				   uint8_t pressure,
+				   void* user_data); 
 
-  typedef void (*midi_controlchangeT)(unsigned char channel,
-				      unsigned char control,
-				      unsigned char value,
-				      void* self);
+  typedef void (*midi_controlchangeT)(uint8_t channel,
+				      uint8_t control,
+				      uint8_t value,
+				      void* user_data);
 
-  typedef void (*midi_programchangeT)(unsigned char channel,
-				      unsigned char program, void* self);
+  typedef void (*midi_programchangeT)(uint8_t channel,
+				      uint8_t program, void* user_data);
 
-  typedef void (*midi_channelaftertouchT)(unsigned char channel,
-					  unsigned char pressure,
-					  void* self); 
+  typedef void (*midi_channelaftertouchT)(uint8_t channel,
+					  uint8_t pressure,
+					  void* user_data); 
 
-  typedef void (*midi_pitchbendT)(unsigned char channel, int value,
+  typedef void (*midi_pitchbendT)(uint8_t channel, int value,
 				  void* self);
 
-  typedef void (*midi_systemexclusiveT)(const unsigned char* data, int len);
+  typedef void (*midi_systemexclusiveT)(const uint8_t* data, int len);
 
 
   struct MidiParser;
@@ -64,6 +66,9 @@ extern "C"
    * Creates a new midiparser with handlers that are called at specific
    * midi messages.
    * If a handler is 0, the message of the corresponding type is ignored.
+   *
+   * @param user_data pointer to a context the caller wants to be
+   *   passed to the callback functions
    */
   struct MidiParser* midi_create_parser(midi_noteoffT noteoff,
 					midi_noteonT noteon,
@@ -73,7 +78,7 @@ extern "C"
 					midi_channelaftertouchT channelaftert,
 					midi_pitchbendT pitchbend,
 					midi_systemexclusiveT systemexclusive,
-					void* data);
+					void* user_data);
 
   /**
    * Destroys a midi parser.
@@ -82,8 +87,17 @@ extern "C"
   
   /**
    * Parses the raw midi data in buf.
-   * The buffer must start with a valid midi command.
+   * The buffer must start with a valid midi command
+   *  note that the first status byte may be missing if using running status,
+   *  in this case the status of the last midi message of the last
+   *  call to midi_parse_data() will be used).
    * If registered with self, the appropriate callbacks will be called.
+   *
+   * If the return value (ret) is less than len, there is
+   * an incomplete midi message at the end of buf. The caller should
+   * take the bytes buf[ret], ..., buf[len-1] and prepend them
+   * to the next midi data to be parsed when calling midi_parse_data() again.
+   *
    * @param self the MidiParser
    * @param buf a buffer with raw midi data
    * @param len the length of the buffer in bytes
@@ -91,8 +105,17 @@ extern "C"
    *   midi command at the end of the buffer, the return value can be
    *   smaller than len.
    */
-  int midi_parse_data(struct MidiParser* self, const unsigned char* buf,
+  int midi_parse_data(struct MidiParser* self, const uint8_t* buf,
 		      int len);
+
+  /**
+   * Resets the internal state of the parser (running status).
+   * Should be called whenever the parsed midi stream is interrupted,
+   * or if the same parser is used to parse different midi streams.
+   * 
+   * @param self the MidiParser
+   */
+  void midi_reset(struct MidiParser* self);
 
   /**
    * Register a handler that is called at every noteOff message.

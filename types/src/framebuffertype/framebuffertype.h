@@ -302,4 +302,15 @@ void framebuffer_getAttributes(FrameBufferType* fb,
   attr->ysize = fb->ysize;
 }	
 
+static __inline
+void framebuffer_set_default(FrameBufferType* fb)
+{
+  FrameBufferAttributes attribs;
+  attribs.xsize = 1;
+  attribs.ysize = 1;
+  framebuffer_changeAttributes(fb, &attribs);
+  // set black background
+  *(fb->data) = 0x00000000;
+}
+
 #endif

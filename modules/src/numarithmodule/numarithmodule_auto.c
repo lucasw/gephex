@@ -20,13 +20,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=lhs const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=lhs const=true strong_dependency=true default=[0] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=rhs const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=rhs const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_StringType id=op const=true strong_dependency=true default=x+y } ";
+    return "input_spec { type=typ_StringType id=op const=true strong_dependency=true default=[x+y] } ";
   break;
  }
  return 0;

@@ -28,7 +28,6 @@
 
 #include "netinterfaces/controlvaluesendernet.h"
 #include "netinterfaces/modulestatisticssendernet.h"
-#include "netinterfaces/moduleclassnamesendernet.h"
 #include "netinterfaces/moduleclassinfosendernet.h"
 #include "netinterfaces/moduledatasendernet.h"
 #include "netinterfaces/graphdatasendernet.h"
@@ -42,7 +41,6 @@
 #include "netinterfaces/modelcontrolreceivernet.h"
 #include "netinterfaces/modelcontrolreceivernet.h"
 #include "netinterfaces/renderercontrolreceivernet.h"
-#include "netinterfaces/moduleclassloadercontrolreceivernet.h"
 #include "netinterfaces/enginecontrolreceivernet.h"
 
 #include "net/isocket.h"
@@ -78,7 +76,6 @@ namespace gui
       gdsn(new GraphDataSenderNet()),
       cvsn(new ControlValueSenderNet()),
       mssn(new ModuleStatisticsSenderNet()),
-      mcnsn(new ModuleClassNameSenderNet()),
       gnsn(new GraphNameSenderNet()),
       esn(new ErrorSenderNet()),
       mstsn(new ModelStatusSenderNet()),
@@ -89,7 +86,6 @@ namespace gui
       tagger3(new CommandTagger(*mdsn)),
       tagger4(new CommandTagger(*cvsn)),
       tagger5(new CommandTagger(*mssn)),
-      tagger6(new CommandTagger(*mcnsn)),
       tagger7(new CommandTagger(*gnsn)),
       tagger10(new CommandTagger(*esn)),      
       tagger13(new CommandTagger(*mstsn)),
@@ -102,7 +98,6 @@ namespace gui
       portTagger3(new PortTagger()),
       portTagger4(new PortTagger()),
       portTagger5(new PortTagger()),
-      portTagger6(new PortTagger()),
       portTagger7(new PortTagger()),
       portTagger10(new PortTagger()),      
       portTagger13(new PortTagger()),
@@ -118,7 +113,6 @@ namespace gui
 
       mcrn(new ModelControlReceiverNet(*tagger1)),
       rcrn(new RendererControlReceiverNet(*tagger2)),
-      mclcrn(new ModuleClassLoaderControlReceiverNet(*tagger6)),
       ecrn(new EngineControlReceiverNet(*tagger3)),
       
       gModel(new GraphModel(*mcrn)), 
@@ -135,7 +129,6 @@ namespace gui
     initTaggers(*portTagger3, *tagger3, *protocol, *portDispatcher, m_port+2);
     initTaggers(*portTagger4, *tagger4, *protocol, *portDispatcher, m_port+3);
     initTaggers(*portTagger5, *tagger5, *protocol, *portDispatcher, m_port+4);
-    initTaggers(*portTagger6, *tagger6, *protocol, *portDispatcher, m_port+5);
     initTaggers(*portTagger7, *tagger7, *protocol, *portDispatcher, m_port+6);
     initTaggers(*portTagger10,*tagger10,*protocol, *portDispatcher, m_port+9);
     initTaggers(*portTagger13,*tagger13,*protocol, *portDispatcher, m_port+12);
@@ -226,7 +219,6 @@ namespace gui
 
   void EngineWrapper::synchronize() const
   {
-    mclcrn->synchronize();
     mcrn->synchronize();
     rcrn->synchronize();
   }
@@ -234,11 +226,6 @@ namespace gui
   IControlValueSender& EngineWrapper::controlValueSender()
   {
     return *cvsn;
-  }
-	
-  IModuleClassNameSender& EngineWrapper::moduleClassNameSender()
-  {
-    return *mcnsn;
   }
 	
   IModuleStatisticsSender& EngineWrapper::moduleStatisticsSender()
@@ -265,13 +252,6 @@ namespace gui
   IRendererStatusSender& EngineWrapper::rendererStatusSender()
   {
     return *rssn;
-  }
-
-  
-  IModuleClassLoaderControlReceiver&
-  EngineWrapper::moduleClassLoaderControlReceiver()
-  {
-    return *mclcrn;
   }
 
   IRendererControlReceiver& EngineWrapper::rendererControlReceiver()

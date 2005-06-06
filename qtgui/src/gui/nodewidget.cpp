@@ -208,17 +208,17 @@ namespace gui
 
   NodeWidget::NodeWidget(QWidget* parent,const char* name,
 			 WFlags fl,int _id,const ModuleInfo& _info,
-			 const std::vector<QPixmap>& picz,
+			 const PicManager& picz,
 			 const utils::AutoPtr<ControlValueDispatcher>& dispatcher, 
 			 IModelControlReceiver& mcr,
 			 KeyboardManager* kbManager,
 			 IErrorReceiver& log,
 			 const std::string& media_path)
-    : QWidget(parent,name,fl), id(_id), pictures(picz), dragMode(false),
+    : QWidget(parent,name,fl), id(_id), m_pictures(picz), dragMode(false),
       m_time(0), m_kbManager(kbManager), m_log(log)
   {
     setFixedSize(50, 50);
-    setBackgroundPixmap(pictures[NODE_WIDGET_PIC]);
+    setBackgroundPixmap(m_pictures.node_pic());
 	
     this->setMouseTracking(true);
 
@@ -246,13 +246,16 @@ namespace gui
           }
 
 	bool inPropertyDialog = sr.getBoolValue("hidden", false);
-		
+        
+        std::string type = _info.getInputs()[i].type;
+        QPixmap inplug_free = m_pictures.plug_pic(type, false);
+        QPixmap inplug_busy = m_pictures.plug_pic(type, true);
 	utils::AutoPtr<InputPlugWidget> 
 	  newInput (new InputPlugWidget(this, 0, 
-					pictures[INPUTPLUG_WIDGET_FREE_PIC],
-					pictures[INPUTPLUG_WIDGET_BUSY_PIC],
+                                        inplug_free,
+					inplug_busy,
 					_info.getInputs()[i].name,
-					_info.getInputs()[i].type,
+					type,
 					_info.getInputs()[i].params,
 					i,id,inPropertyDialog));
 		
@@ -296,12 +299,15 @@ namespace gui
 	
     for(unsigned int j=0;j<_info.getOutputs().size();j++)
       {
+        std::string type = _info.getOutputs()[j].type;
+        QPixmap outplug_free = m_pictures.plug_pic(type, false);
+        QPixmap outplug_busy = m_pictures.plug_pic(type, true);
 	utils::AutoPtr<OutputPlugWidget> 
 	  newOutput(new OutputPlugWidget(this, 0,
-					 pictures[OUTPUTPLUG_WIDGET_FREE_PIC],
-					 pictures[OUTPUTPLUG_WIDGET_BUSY_PIC],
+					 outplug_free,
+					 outplug_busy,
 					 _info.getOutputs()[j].name,
-					 _info.getOutputs()[j].type, j,id));
+					 type, j, id));
 	outputs.push_back(newOutput);
 	outputLayout->addWidget(&*outputs[j]);
 	outputs[j]->show();

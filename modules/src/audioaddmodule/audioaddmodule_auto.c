@@ -23,16 +23,16 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_AudioType id=lhs const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=w_lhs const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=w_lhs const=true strong_dependency=true default=[1] } ";
   break;
   case 2:
     return "input_spec { type=typ_AudioType id=rhs const=true strong_dependency=true  } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=w_rhs const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=w_rhs const=true strong_dependency=true default=[1] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=thr const=true strong_dependency=true default=512 } ";
+    return "input_spec { type=typ_NumberType id=thr const=true strong_dependency=true default=[512] } ";
   break;
   case 5:
     return "input_spec { type=typ_NumberType id=flush const=true strong_dependency=true  } ";

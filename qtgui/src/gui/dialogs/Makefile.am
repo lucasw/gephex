@@ -11,7 +11,6 @@ BUILT_SOURCES = \
 	changesdialog.cpp \
 	changesdialog.h \
 	changesdialog_h_moc.cpp \
-	dllselectordialog_h_moc.cpp \
 	newgraphdialog_h_moc.cpp
 
 libdialogs_a_SOURCES = \
@@ -21,8 +20,6 @@ libdialogs_a_SOURCES = \
 	changesdialog.ui \
 	changesdialogimpl.cpp \
 	changesdialogimpl.h \
-	dllselectordialog.cpp \
-	dllselectordialog.h \
 	newgraphdialog.cpp \
 	newgraphdialog.h
 

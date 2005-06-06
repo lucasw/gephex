@@ -158,6 +158,38 @@
 	".\logwindow.h"\
 	
 
+.\picmanager.cpp : \
+	"..\..\..\..\..\qt\include\qarray.h"\
+	"..\..\..\..\..\qt\include\qbrush.h"\
+	"..\..\..\..\..\qt\include\qcolor.h"\
+	"..\..\..\..\..\qt\include\qconfig.h"\
+	"..\..\..\..\..\qt\include\qcstring.h"\
+	"..\..\..\..\..\qt\include\qfeatures.h"\
+	"..\..\..\..\..\qt\include\qfont.h"\
+	"..\..\..\..\..\qt\include\qfontinfo.h"\
+	"..\..\..\..\..\qt\include\qfontmetrics.h"\
+	"..\..\..\..\..\qt\include\qgarray.h"\
+	"..\..\..\..\..\qt\include\qglobal.h"\
+	"..\..\..\..\..\qt\include\qnamespace.h"\
+	"..\..\..\..\..\qt\include\qobjectdefs.h"\
+	"..\..\..\..\..\qt\include\qpaintdevice.h"\
+	"..\..\..\..\..\qt\include\qpainter.h"\
+	"..\..\..\..\..\qt\include\qpen.h"\
+	"..\..\..\..\..\qt\include\qpixmap.h"\
+	"..\..\..\..\..\qt\include\qpoint.h"\
+	"..\..\..\..\..\qt\include\qpointarray.h"\
+	"..\..\..\..\..\qt\include\qrect.h"\
+	"..\..\..\..\..\qt\include\qregion.h"\
+	"..\..\..\..\..\qt\include\qshared.h"\
+	"..\..\..\..\..\qt\include\qsize.h"\
+	"..\..\..\..\..\qt\include\qstring.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs.h"\
+	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\..\..\qt\include\qwmatrix.h"\
+	"..\node.xpm"\
+	".\picmanager.h"\
+	
+
 .\propertyview.cpp : \
 	"..\..\..\..\..\qt\include\qabstractlayout.h"\
 	"..\..\..\..\..\qt\include\qarray.h"\

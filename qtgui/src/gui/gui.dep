@@ -95,6 +95,7 @@
 	"..\..\..\..\qt\include\qwidget.h"\
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
 	"..\..\..\base\src\utils\buffer.h"\
 	".\controlwidget.h"\
 	".\typeview.h"\
@@ -147,6 +148,9 @@
 	"..\..\..\..\qt\include\qwidget.h"\
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
+	"..\..\..\base\src\interfaces\igraphnamereceiver.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\itokenizer.h"\
 	"..\..\..\base\src\utils\stringtokenizer.h"\
@@ -346,8 +350,10 @@
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\qt\include\qwindowsstyle.h"\
+	"..\..\..\base\src\interfaces\irendererstatusreceiver.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\configmanager.h"\
+	"..\..\..\config.h"\
 	".\ownstyle.h"\
 	".\vjmainwindow.h"\
 	
@@ -581,6 +587,8 @@
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\qt\include\qwmatrix.h"\
+	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\itokenizer.h"\
@@ -593,6 +601,7 @@
 	".\base\ipropertydescription.h"\
 	".\base\key.h"\
 	".\base\keyboardmanager.h"\
+	".\base\picmanager.h"\
 	".\inputplugwidget.h"\
 	".\nodeproperty.h"\
 	".\nodewidget.h"\
@@ -778,6 +787,8 @@
 	"..\..\..\..\qt\include\qwidget.h"\
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
 	"..\..\..\base\src\utils\buffer.h"\
 	".\propertywidget.h"\
 	".\typeview.h"\
@@ -822,6 +833,7 @@
 	"..\..\..\..\qt\include\qwidget.h"\
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\buffer.h"\
 	"..\guimodel\controlvaluedispatcher.h"\
@@ -916,6 +928,7 @@
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\base\src\utils\buffer.h"\
+	"..\..\..\config.h"\
 	".\typeview.h"\
 	".\typeviewfactory.h"\
 	".\typeviews\boundednumberview.h"\
@@ -1000,12 +1013,25 @@
 	"..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\qt\include\qwmatrix.h"\
+	"..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
+	"..\..\..\base\src\interfaces\ienginecontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\ierrorreceiver.h"\
+	"..\..\..\base\src\interfaces\ierrorsender.h"\
+	"..\..\..\base\src\interfaces\igraphnamereceiver.h"\
+	"..\..\..\base\src\interfaces\igraphnamesender.h"\
+	"..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassinforeceiver.h"\
+	"..\..\..\base\src\interfaces\imoduleclassnamesender.h"\
+	"..\..\..\base\src\interfaces\irenderercontrolreceiver.h"\
+	"..\..\..\base\src\interfaces\irendererstatusreceiver.h"\
+	"..\..\..\base\src\interfaces\irendererstatussender.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\configmanager.h"\
 	"..\..\..\base\src\utils\spawn.h"\
 	"..\..\..\base\src\utils\structreader.h"\
 	"..\..\..\base\src\utils\timing.h"\
+	"..\..\..\config.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\guimodel\controlvaluedispatcher.h"\
 	"..\guimodel\enginewrapper.h"\
@@ -1016,9 +1042,10 @@
 	".\base\logwindow.h"\
 	".\base\propertyview.h"\
 	".\base\treeview.h"\
+	".\dialogs\aboutdialog.h"\
 	".\dialogs\aboutdialogimpl.h"\
+	".\dialogs\changesdialog.h"\
 	".\dialogs\changesdialogimpl.h"\
-	".\dialogs\dllselectordialog.h"\
 	".\dialogs\newgraphdialog.h"\
 	".\editor\editorwidget.h"\
 	".\graphnameview.h"\

@@ -11,11 +11,12 @@
 #define OPT_INCLUDE_MMX
 #undef OPT_SERIALIZE_FRAMEBUFFER
 
-#define VERSION "0.4.2"
+#define VERSION "0.4.3"
 
 #define FRBINMODULE_CACHE_SIZE 128
 
 #define WITH_FFMPEG
 #define WITH_SDL
+#define WITH_SDL_IMAGE
 
 #endif

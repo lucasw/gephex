@@ -21,7 +21,7 @@ check-local:
 
 clean-local:
 if WITH_FFMPEG
-	cd ffmpeg && $(MAKE) clean
+	cd ffmpeg && $(MAKE) clean && find . -name "*.@SHAREDLIBEXT@" | xargs rm -f
 endif
 #	cd ${srcdir}/ffmpeg && $(MAKE) $(AM_MAKEFLAGS) clean
 
@@ -45,5 +45,5 @@ endif
 
 distclean-local:
 if WITH_FFMPEG
-	if test "x${srcdir}" != "x."; then rm -rf ffmpeg/doc/Makefile ffmpeg/config.mak ffmpeg/config.h ffmpeg/qt-faststart; fi
+	if test "x${srcdir}" != "x."; then rm -rf ffmpeg/config.log ffmpeg/doc/Makefile ffmpeg/config.mak ffmpeg/config.h ffmpeg/qt-faststart; fi
 endif

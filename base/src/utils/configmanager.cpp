@@ -137,7 +137,8 @@ namespace utils
 
   static void create_cmdl_config(std::ostream& os,
                                  const ConfigManager::ParamList& params,
-                                 int argc, const char* argv[])
+                                 int argc, const char* argv[],
+				 bool& help_requested)
   {
     os << "cmdl {\n";
 
@@ -148,15 +149,19 @@ namespace utils
         if (is_help(arg))
           {
             print_help(argv[0], params);
-            throw std::runtime_error("No error");
+	    help_requested = true;
           }
         else if (is_param(arg))
           os << arg.substr(2) << "\n"; // strip leading "--"
         else
           {
-            std::cerr << "Invalid argument: '" << arg << "'\n";
+	    std::stringstream strs;
+
+	    strs << "Invalid argument: '" << arg << "'\n";
+
             print_help(argv[0], params);
-            throw std::runtime_error("No error");
+
+            throw std::runtime_error(strs.str().c_str());
           }
       }
     
@@ -178,8 +183,8 @@ namespace utils
         ConfigManager::CPMap::const_iterator cit = cpm.find(param_name);
 
         if (cit == cpm.end())
-          throw std::runtime_error("Unknown cmdl parameter: '--'"
-                                   + param_name);
+          throw std::runtime_error("Unknown cmdl parameter: '--"
+                                   + param_name + "'");
 
         check_type(sr, param_name, cit->second.m_type);
       }
@@ -199,7 +204,7 @@ namespace utils
   ConfigManager::ConfigManager(const std::string& cfile_name,
                              int argc, const char* argv[],
                              const ParamList& params)
-    : m_params(params), m_cf_file(0), m_cf_cmdl(0)
+    : m_params(params), m_cf_file(0), m_cf_cmdl(0), m_help_requested(false)
   {
     for (ConfigManager::ParamList::const_iterator it = params.begin();
          it != params.end(); ++it)
@@ -224,7 +229,7 @@ namespace utils
 
         //        std::cout << "processing cmdl...\n";
         std::ostringstream ccmdl;
-        create_cmdl_config(ccmdl, m_params, argc, argv);
+        create_cmdl_config(ccmdl, m_params, argc, argv, m_help_requested);
 
         std::istringstream ccmdl_is(ccmdl.str().c_str());
 
@@ -232,9 +237,8 @@ namespace utils
 
         check_cf_cmdl(m_params, m_cf_cmdl, m_cpm);
 
-        //#if (ENGINE_VERBOSITY > 0)
-        dump(*this, std::cout, m_params);
-        //#endif
+	if (!help_requested())
+	  dump(*this, std::cout, m_params);
       }
     catch (std::exception& e)
       {
@@ -254,6 +258,11 @@ namespace utils
 
   ConfigManager::~ConfigManager()
   {
+  }
+
+  bool ConfigManager::help_requested() const
+  {
+    return m_help_requested;
   }
 
   bool ConfigManager::get_bool_param(const std::string& param_name) const

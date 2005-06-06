@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -50,6 +50,8 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
 static void open_stream(AVFormatContext* av_fc, int stream_index);
 static void close_stream(AVFormatContext* av_fc, int stream_index);
 static void dump_stream_info(AVFormatContext *s);
+
+static int seek_to_second(AVFormatContext* st, int stream_index, double sec);
 
 //----------------------------------------------------------------------
 
@@ -309,6 +311,9 @@ struct FFMpegDriverImpl
     std::cout << "start_time: " << m_start_time << " s\n";
     std::cout << "fps       : " << m_fps << "\n";
 
+    std::cout << "timebase  : " 
+              << video_stream->time_base.num / 
+                     (double)video_stream->time_base.den << "\n";
 
     m_frame = avcodec_alloc_frame();
     file_name = filename;
@@ -367,8 +372,6 @@ struct FFMpegDriverImpl
   {
     assert(av_fc != 0);
 
-    AVStream* video_stream = av_fc->streams[video_stream_index];
-
     double wanted_timestamp = m_start_time + ((double) frame_number) / m_fps;
 
     double frame_duration = 1.0 / m_fps;
@@ -386,8 +389,8 @@ struct FFMpegDriverImpl
 #endif
 
         // first seek to the nearest keyframe before wanted_timestamp
-        int ret = av_seek_frame(av_fc, video_stream_index,
-                                (int64_t) (wanted_timestamp*AV_TIME_BASE));
+        int ret = seek_to_second(av_fc, video_stream_index, wanted_timestamp);
+
         if (ret < 0)
           {
             std::cerr << "Could not seek\n";
@@ -425,6 +428,8 @@ struct FFMpegDriverImpl
 #endif
     int dst_pix_fmt = PIX_FMT_RGBA32;
     AVPicture pict;
+
+    AVStream* video_stream = av_fc->streams[video_stream_index];
 
     int cwidth  = video_stream->codec.width;
     int cheight = video_stream->codec.height;
@@ -645,8 +650,8 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
   if (duration_0 <= 0) duration_0 = frame_duration*25;
 
   //  std::cout << "seeking until success...\n";
-  int ret = av_seek_frame(av_fc, stream_index,
-                          (int64_t) (duration_0*AV_TIME_BASE) + start_pts);
+
+  int ret = seek_to_second(av_fc, stream_index, duration_0);
 
   int seek_count = 1;
   // decrease duration until seek succeeds
@@ -654,8 +659,7 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
     {
       //      std::cout << ".\n";
       duration_0 -= frame_duration;
-      ret = av_seek_frame(av_fc, stream_index,
-                          (int64_t) (duration_0*AV_TIME_BASE) + start_pts);
+      ret = seek_to_second(av_fc, stream_index, duration_0);
       ++seek_count;
     }
 
@@ -709,5 +713,43 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
       return -1;
     }
 }
+
+//----------------------------------------------------------------------
+
+// TODO: check whether this number reflects the seek_frame api change
+
+#if LIBAVCODEC_BUILD <= 4721
+
+static int64_t get_timestamp(double ts_sec)
+{
+  return static_cast<int64_t>(ts_sec * AV_TIME_BASE + 0.5);
+}
+
+static int seek_to_second(AVFormatContext* av_fc, int stream_index,
+                          double sec)
+{
+  int64_t ts = get_timestamp(sec);
+
+  return av_seek_frame(av_fc, stream_index, ts);
+}
+
+#else
+
+static int64_t get_timestamp(double ts_sec, const AVRational& time_base)
+{
+  return static_cast<int64_t>(ts_sec*time_base.den /
+                                   static_cast<double>(time_base.num) + 0.5);
+}
+
+static int seek_to_second(AVFormatContext* av_fc, int stream_index,
+                          double sec)
+{
+  AVStream* video_stream = av_fc->streams[stream_index];
+
+  int64_t ts = get_timestamp(sec, video_stream->time_base);
+
+  return av_seek_frame(av_fc, stream_index, ts, AVSEEK_FLAG_BACKWARD);
+}
+#endif
 
 //----------------------------------------------------------------------

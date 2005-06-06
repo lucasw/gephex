@@ -13,7 +13,9 @@ lib_LTLIBRARIES = midiinmodule.la
 if WITH_ASOUNDLIB
 ALSALIB_sOURCES = \
         alsamidiindriver.cpp \
-	alsamidiindriver.h
+	alsamidiindriver.h \
+        alsaseqmidiindriver.cpp \
+	alsaseqmidiindriver.h
 ALSALIB_lDFLAGS = -lasound
 endif
 

@@ -20,22 +20,22 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=Amplitude const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=Amplitude const=true strong_dependency=true default=[1] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=Frequenz const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=Frequenz const=true strong_dependency=true default=[1] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=Phase const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=Phase const=true strong_dependency=true default=[0] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=Position const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=Position const=true strong_dependency=true default=[0] } ";
   break;
   case 4:
-    return "input_spec { type=typ_StringType id=signal const=true strong_dependency=true default=sinus } ";
+    return "input_spec { type=typ_StringType id=signal const=true strong_dependency=true default=[sinus] } ";
   break;
   case 5:
-    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=real } ";
+    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=[real] } ";
   break;
  }
  return 0;

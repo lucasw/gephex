@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /YX /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -76,7 +76,7 @@ PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"

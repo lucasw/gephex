@@ -58,6 +58,9 @@ EXTRALIBS+=-lbe -lmedia
 EXTRALIBS+=-lavcodec -L../libavcodec
 endif
 
+# needed for mac os x
+EXTRALIBS+=-lavcodec -L../libavcodec
+
 ifeq ($(CONFIG_NETWORK),yes)
 OBJS+= udp.o tcp.o http.o rtsp.o rtp.o rtpproto.o
 # BeOS and Darwin network stuff

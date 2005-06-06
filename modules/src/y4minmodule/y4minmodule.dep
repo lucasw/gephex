@@ -1,6 +1,6 @@
 # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von y4minmodule.mak
 
-.\y4minmodule.c : \
+.\y4minmodule.cpp : \
 	"..\..\..\config.h"\
 	"..\..\..\engine\src\engine\dllmodule.h"\
 	"..\..\..\types\src\framebuffertype\framebuffertype.h"\

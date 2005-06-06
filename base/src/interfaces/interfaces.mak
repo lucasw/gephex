@@ -25,13 +25,16 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "interfaces - Win32 Release"
 
 OUTDIR=.\../../lib
 INTDIR=.\Release
 
-ALL : ".\itypeclasssender.h" ".\itypeclassreceiver.h" ".\itypeclassnamesender.h" ".\itypeclassnamereceiver.h" ".\itypeclassloadercontrolsender.h" ".\itypeclassloadercontrolreceiver.h" ".\itypeclassinfosender.h" ".\itypeclassinforeceiver.h" ".\ismartcontrolvaluesender.h" ".\ismartcontrolvaluereceiver.h" ".\iserializedgraphsender.h" ".\iserializedgraphreceiver.h" ".\irendererstatussender.h" ".\irendererstatusreceiver.h" ".\irenderercontrolsender.h" ".\irenderercontrolreceiver.h" ".\imodulestatisticssmartsender.h" ".\imodulestatisticssmartreceiver.h" ".\imodulestatisticssender.h" ".\imodulestatisticsreceiver.h" ".\imoduledatasender.h" ".\imoduledatareceiver.h" ".\imoduleconstructionsmartsender.h" ".\imoduleconstructionsmartreceiver.h" ".\imoduleconstructiondumbsender.h" ".\imoduleconstructiondumbreceiver.h" ".\imoduleclassspecsender.h" ".\imoduleclassspecreceiver.h" ".\imoduleclasssender.h" ".\imoduleclassreceiver.h" ".\imoduleclassnamesender.h" ".\imoduleclassnamereceiver.h" ".\imoduleclassloadercontrolsender.h" ".\imoduleclassloadercontrolreceiver.h" ".\imoduleclassinfosender.h" ".\imoduleclassinforeceiver.h" ".\imodelstatussender.h" ".\imodelstatusreceiver.h"\
- ".\imodelcontrolsender.h" ".\imodelcontrolreceiver.h" ".\igraphnamesender.h" ".\igraphnamereceiver.h" ".\igraphdatasender.h" ".\igraphdatareceiver.h" ".\ierrorsender.h" ".\ierrorreceiver.h" ".\ienginecontrolsender.h" ".\ienginecontrolreceiver.h" ".\icontrolvaluesender.h" ".\icontrolvaluereceiver.h" 
+ALL : ".\itypeclasssender.h" ".\itypeclassreceiver.h" ".\itypeclassinfosender.h" ".\itypeclassinforeceiver.h" ".\ismartcontrolvaluesender.h" ".\ismartcontrolvaluereceiver.h" ".\iserializedgraphsender.h" ".\iserializedgraphreceiver.h" ".\irendererstatussender.h" ".\irendererstatusreceiver.h" ".\irenderercontrolsender.h" ".\irenderercontrolreceiver.h" ".\imodulestatisticssmartsender.h" ".\imodulestatisticssmartreceiver.h" ".\imodulestatisticssender.h" ".\imodulestatisticsreceiver.h" ".\imoduledatasender.h" ".\imoduledatareceiver.h" ".\imoduleconstructionsmartsender.h" ".\imoduleconstructionsmartreceiver.h" ".\imoduleconstructiondumbsender.h" ".\imoduleconstructiondumbreceiver.h" ".\imoduleclassspecsender.h" ".\imoduleclassspecreceiver.h" ".\imoduleclasssender.h" ".\imoduleclassreceiver.h" ".\imoduleclassnamesender.h" ".\imoduleclassnamereceiver.h" ".\imoduleclassinfosender.h" ".\imoduleclassinforeceiver.h" ".\imodelstatussender.h" ".\imodelstatusreceiver.h" ".\imodelcontrolsender.h" ".\imodelcontrolreceiver.h" ".\igraphnamesender.h" ".\igraphnamereceiver.h" ".\igraphdatasender.h" ".\igraphdatareceiver.h" ".\ierrorsender.h" ".\ierrorreceiver.h" ".\ienginecontrolsender.h"\
+ ".\ienginecontrolreceiver.h" ".\icontrolvaluesender.h" ".\icontrolvaluereceiver.h" 
 
 
 CLEAN :
@@ -52,8 +55,6 @@ CLEAN :
 	-@erase "imodelstatussender.h"
 	-@erase "imoduleclassinforeceiver.h"
 	-@erase "imoduleclassinfosender.h"
-	-@erase "imoduleclassloadercontrolreceiver.h"
-	-@erase "imoduleclassloadercontrolsender.h"
 	-@erase "imoduleclassnamereceiver.h"
 	-@erase "imoduleclassnamesender.h"
 	-@erase "imoduleclassreceiver.h"
@@ -80,10 +81,6 @@ CLEAN :
 	-@erase "ismartcontrolvaluesender.h"
 	-@erase "itypeclassinforeceiver.h"
 	-@erase "itypeclassinfosender.h"
-	-@erase "itypeclassloadercontrolreceiver.h"
-	-@erase "itypeclassloadercontrolsender.h"
-	-@erase "itypeclassnamereceiver.h"
-	-@erase "itypeclassnamesender.h"
 	-@erase "itypeclassreceiver.h"
 	-@erase "itypeclasssender.h"
 
@@ -93,40 +90,7 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /w /W0 /GX /O2 /I "../../../util/src/include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\interfaces.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\interfaces.bsc" 
 BSC32_SBRS= \
@@ -141,8 +105,8 @@ LIB32_OBJS= \
 OUTDIR=.\../../lib
 INTDIR=.\Debug
 
-ALL : ".\itypeclasssender.h" ".\itypeclassreceiver.h" ".\itypeclassnamesender.h" ".\itypeclassnamereceiver.h" ".\itypeclassloadercontrolsender.h" ".\itypeclassloadercontrolreceiver.h" ".\itypeclassinfosender.h" ".\itypeclassinforeceiver.h" ".\ismartcontrolvaluesender.h" ".\ismartcontrolvaluereceiver.h" ".\iserializedgraphsender.h" ".\iserializedgraphreceiver.h" ".\irendererstatussender.h" ".\irendererstatusreceiver.h" ".\irenderercontrolsender.h" ".\irenderercontrolreceiver.h" ".\imodulestatisticssmartsender.h" ".\imodulestatisticssmartreceiver.h" ".\imodulestatisticssender.h" ".\imodulestatisticsreceiver.h" ".\imoduledatasender.h" ".\imoduledatareceiver.h" ".\imoduleconstructionsmartsender.h" ".\imoduleconstructionsmartreceiver.h" ".\imoduleconstructiondumbsender.h" ".\imoduleconstructiondumbreceiver.h" ".\imoduleclassspecsender.h" ".\imoduleclassspecreceiver.h" ".\imoduleclasssender.h" ".\imoduleclassreceiver.h" ".\imoduleclassnamesender.h" ".\imoduleclassnamereceiver.h" ".\imoduleclassloadercontrolsender.h" ".\imoduleclassloadercontrolreceiver.h" ".\imoduleclassinfosender.h" ".\imoduleclassinforeceiver.h" ".\imodelstatussender.h" ".\imodelstatusreceiver.h"\
- ".\imodelcontrolsender.h" ".\imodelcontrolreceiver.h" ".\igraphnamesender.h" ".\igraphnamereceiver.h" ".\igraphdatasender.h" ".\igraphdatareceiver.h" ".\ierrorsender.h" ".\ierrorreceiver.h" ".\ienginecontrolsender.h" ".\ienginecontrolreceiver.h" ".\icontrolvaluesender.h" ".\icontrolvaluereceiver.h" 
+ALL : ".\itypeclasssender.h" ".\itypeclassreceiver.h" ".\itypeclassinfosender.h" ".\itypeclassinforeceiver.h" ".\ismartcontrolvaluesender.h" ".\ismartcontrolvaluereceiver.h" ".\iserializedgraphsender.h" ".\iserializedgraphreceiver.h" ".\irendererstatussender.h" ".\irendererstatusreceiver.h" ".\irenderercontrolsender.h" ".\irenderercontrolreceiver.h" ".\imodulestatisticssmartsender.h" ".\imodulestatisticssmartreceiver.h" ".\imodulestatisticssender.h" ".\imodulestatisticsreceiver.h" ".\imoduledatasender.h" ".\imoduledatareceiver.h" ".\imoduleconstructionsmartsender.h" ".\imoduleconstructionsmartreceiver.h" ".\imoduleconstructiondumbsender.h" ".\imoduleconstructiondumbreceiver.h" ".\imoduleclassspecsender.h" ".\imoduleclassspecreceiver.h" ".\imoduleclasssender.h" ".\imoduleclassreceiver.h" ".\imoduleclassnamesender.h" ".\imoduleclassnamereceiver.h" ".\imoduleclassinfosender.h" ".\imoduleclassinforeceiver.h" ".\imodelstatussender.h" ".\imodelstatusreceiver.h" ".\imodelcontrolsender.h" ".\imodelcontrolreceiver.h" ".\igraphnamesender.h" ".\igraphnamereceiver.h" ".\igraphdatasender.h" ".\igraphdatareceiver.h" ".\ierrorsender.h" ".\ierrorreceiver.h" ".\ienginecontrolsender.h"\
+ ".\ienginecontrolreceiver.h" ".\icontrolvaluesender.h" ".\icontrolvaluereceiver.h" 
 
 
 CLEAN :
@@ -163,8 +127,6 @@ CLEAN :
 	-@erase "imodelstatussender.h"
 	-@erase "imoduleclassinforeceiver.h"
 	-@erase "imoduleclassinfosender.h"
-	-@erase "imoduleclassloadercontrolreceiver.h"
-	-@erase "imoduleclassloadercontrolsender.h"
 	-@erase "imoduleclassnamereceiver.h"
 	-@erase "imoduleclassnamesender.h"
 	-@erase "imoduleclassreceiver.h"
@@ -191,10 +153,6 @@ CLEAN :
 	-@erase "ismartcontrolvaluesender.h"
 	-@erase "itypeclassinforeceiver.h"
 	-@erase "itypeclassinfosender.h"
-	-@erase "itypeclassloadercontrolreceiver.h"
-	-@erase "itypeclassloadercontrolsender.h"
-	-@erase "itypeclassnamereceiver.h"
-	-@erase "itypeclassnamesender.h"
 	-@erase "itypeclassreceiver.h"
 	-@erase "itypeclasssender.h"
 
@@ -204,8 +162,17 @@ CLEAN :
 "$(INTDIR)" :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "../../../util/include" /D "WIN32" /D "_DEBUG" /D for="if (0) {} else for" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\interfaces.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\interfaces.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"$(OUTDIR)\interfaces.lib" 
+LIB32_OBJS= \
+	
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -236,18 +203,6 @@ CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "../../../util/include" /D "WIN
    $(CPP) @<<
    $(CPP_PROJ) $< 
 <<
-
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\interfaces.bsc" 
-BSC32_SBRS= \
-	
-LIB32=link.exe -lib
-LIB32_FLAGS=/nologo /out:"$(OUTDIR)\interfaces.lib" 
-LIB32_OBJS= \
-	
-
-!ENDIF 
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -521,36 +476,6 @@ InputPath=.\moduleclassinfo.if
 InputName=moduleclassinfo
 
 ".\imoduleclassinfosender.h"	".\imoduleclassinforeceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ENDIF 
-
-SOURCE=.\moduleclassloadercontrol.if
-
-!IF  "$(CFG)" == "interfaces - Win32 Release"
-
-InputPath=.\moduleclassloadercontrol.if
-InputName=moduleclassloadercontrol
-
-".\imoduleclassloadercontrolsender.h"	".\imoduleclassloadercontrolreceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
-
-InputPath=.\moduleclassloadercontrol.if
-InputName=moduleclassloadercontrol
-
-".\imoduleclassloadercontrolsender.h"	".\imoduleclassloadercontrolreceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	<<tempfile.bat 
 	@echo off 
 	python ../../nic.py is . $(InputPath) 
@@ -941,66 +866,6 @@ InputPath=.\typeclassinfo.if
 InputName=typeclassinfo
 
 ".\itypeclassinfosender.h"	".\itypeclassinforeceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ENDIF 
-
-SOURCE=.\typeclassloadercontrol.if
-
-!IF  "$(CFG)" == "interfaces - Win32 Release"
-
-InputPath=.\typeclassloadercontrol.if
-InputName=typeclassloadercontrol
-
-".\itypeclassloadercontrolsender.h"	".\itypeclassloadercontrolreceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
-
-InputPath=.\typeclassloadercontrol.if
-InputName=typeclassloadercontrol
-
-".\itypeclassloadercontrolsender.h"	".\itypeclassloadercontrolreceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ENDIF 
-
-SOURCE=.\typeclassname.if
-
-!IF  "$(CFG)" == "interfaces - Win32 Release"
-
-InputPath=.\typeclassname.if
-InputName=typeclassname
-
-".\itypeclassnamesender.h"	".\itypeclassnamereceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	python ../../nic.py is . $(InputPath) 
-	python ../../nic.py ir . $(InputPath)
-<< 
-	
-
-!ELSEIF  "$(CFG)" == "interfaces - Win32 Debug"
-
-InputPath=.\typeclassname.if
-InputName=typeclassname
-
-".\itypeclassnamesender.h"	".\itypeclassnamereceiver.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	<<tempfile.bat 
 	@echo off 
 	python ../../nic.py is . $(InputPath) 

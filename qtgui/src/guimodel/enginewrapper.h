@@ -27,7 +27,6 @@
 
 //#include "interfaces/icontrolvaluesender.h"
 //#include "interfaces/imodulestatisticssender.h"
-//#include "interfaces/imoduleclassnamesender.h"
 
 #include "utils/autoptr.h"
 
@@ -39,7 +38,6 @@ class ModuleDataSenderNet;
 class GraphDataSenderNet;
 class ControlValueSenderNet;
 class ModuleStatisticsSenderNet;
-class ModuleClassNameSenderNet;
 class GraphNameSenderNet;
 
 class ErrorSenderNet;
@@ -49,11 +47,9 @@ class RendererStatusSenderNet;
 
 class ModelControlReceiverNet;
 class RendererControlReceiverNet;
-class ModuleClassLoaderControlReceiverNet;
 class EngineControlReceiverNet;
 
 class IControlValueSender;
-class IModuleClassNameSender;
 class IModuleStatisticsSender;
 class IGraphNameSender;
 
@@ -62,7 +58,6 @@ class IModelStatusSender;
 
 class IRendererStatusSender;
 
-class IModuleClassLoaderControlReceiver;
 class IRendererControlReceiver;
 class IEngineControlReceiver;
 
@@ -115,7 +110,6 @@ namespace gui
       void synchronize() const;
 		
       IControlValueSender& controlValueSender();
-      IModuleClassNameSender& moduleClassNameSender();
       IModuleStatisticsSender& moduleStatisticsSender();
       IGraphNameSender& graphNameSender();
 
@@ -123,7 +117,6 @@ namespace gui
       IModelStatusSender& modelStatusSender();
       IRendererStatusSender& rendererStatusSender();
 		
-      IModuleClassLoaderControlReceiver& moduleClassLoaderControlReceiver();
       IRendererControlReceiver& rendererControlReceiver();
       IEngineControlReceiver& engineControlReceiver();
 
@@ -145,7 +138,6 @@ namespace gui
       utils::AutoPtr<GraphDataSenderNet> gdsn;
       utils::AutoPtr<ControlValueSenderNet> cvsn;
       utils::AutoPtr<ModuleStatisticsSenderNet> mssn;
-      utils::AutoPtr<ModuleClassNameSenderNet> mcnsn;
       utils::AutoPtr<GraphNameSenderNet> gnsn;
 
       utils::AutoPtr<ErrorSenderNet> esn;
@@ -192,7 +184,6 @@ namespace gui
 		
       utils::AutoPtr<ModelControlReceiverNet> mcrn;
       utils::AutoPtr<RendererControlReceiverNet> rcrn;
-      utils::AutoPtr<ModuleClassLoaderControlReceiverNet> mclcrn;
       utils::AutoPtr<EngineControlReceiverNet> ecrn;
 		
       utils::AutoPtr<GraphModel> gModel;

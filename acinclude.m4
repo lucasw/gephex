@@ -220,7 +220,9 @@ fi
 dnl qt.m4
 dnl Adapted to GePhex by Georg Seidel <georg.seidel@web.de>
 dnl Changes made: 
-dnl    - added check for libqt-mt.so
+dnl    - added support for Darwin (made shared library extension a
+dnl      new parameter
+dnl    - added check for libqt-mt
 dnl    - added minimum version check
 dnl    - replaced AC_ERROR with AC_MSG_RESULT
 dnl    - moved evaluation of ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
@@ -230,7 +232,8 @@ dnl
 dnl Original version from Rik Hemsley:
 dnl   Copyright (C) 2001 Rik Hemsley (rikkus) <rik@kde.org>
 
-dnl AM_PATH_QT(MINIMUM_VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl AM_PATH_QT(MINIMUM_VERSION, SHAREDLIBEXT, 
+dnl            [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN([AM_PATH_QT],
 [
 AC_CHECKING([for Qt ...])
@@ -246,11 +249,11 @@ saved_LIBS="$LIBS"
 
 # the test looks inside the following files to find the qt headers, libs
 # and binaries
-GUESS_QT_INC_DIRS="$QTDIR/include /usr/include /usr/include/qt /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt3 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt3 /usr/lib/qt/include /usr/lib/qt3/include /usr/lib/qt-3/include /usr/lib/qt-3.0/include /usr/lib/qt-3.1/include /usr/lib/qt-3.2/include /usr/lib/qt-3.3/include /usr/lib/qt-3.4/include"
+GUESS_QT_INC_DIRS="$QTDIR/include $QTDIR/include/qt /usr/include /usr/include/qt /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt3 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt3 /usr/lib/qt/include /usr/lib/qt3/include /usr/lib/qt-3/include /usr/lib/qt-3.0/include /usr/lib/qt-3.1/include /usr/lib/qt-3.2/include /usr/lib/qt-3.3/include /usr/lib/qt-3.4/include /sw/include/qt"
 
-GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt3/lib /usr/lib/qt-3/lib /usr/lib/qt-3.0/lib /usr/lib/qt-3.1/lib /usr/lib/qt-3.2/lib /usr/lib/qt-3.3/lib /usr/lib/qt-3.4/lib"
+GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt3/lib /usr/lib/qt-3/lib /usr/lib/qt-3.0/lib /usr/lib/qt-3.1/lib /usr/lib/qt-3.2/lib /usr/lib/qt-3.3/lib /usr/lib/qt-3.4/lib /sw/lib"
 
-GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt3/bin /usr/lib/qt-3/bin /usr/lib/qt-3.0/bin /usr/lib/qt-3.1/bin /usr/lib/qt-3.2/bin /usr/lib/qt-3.3/bin /usr/lib/qt-3.4/bin"
+GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt3/bin /usr/lib/qt-3/bin /usr/lib/qt-3.0/bin /usr/lib/qt-3.1/bin /usr/lib/qt-3.2/bin /usr/lib/qt-3.3/bin /usr/lib/qt-3.4/bin /sw/bin"
 
 
 HAVE_QT=no
@@ -307,28 +310,34 @@ qt_mt=no
 if test "x$qt_libdir" != "x"
 then
   AC_MSG_RESULT([specified as $qt_libdir])
+ if test -e $qt_libdir/libqt.$2
+ then
+     qt_mt=no
+ else
+     qt_mt=yes
+ fi
 else
 
   for dir in $GUESS_QT_LIB_DIRS
   do
-    if test -e $dir/libqt.so
+    if test -e $dir/libqt.$2
     then
       qt_libdir=$dir
-      AC_MSG_RESULT([assuming $dir/libqt.so])
+      AC_MSG_RESULT([assuming $dir/libqt.$2])
       break
     fi
   done
 
-dnl if not found look for libqt-mt.so
+dnl if not found look for libqt-mt
   if test "x$qt_libdir" = "x"
   then
     for dir in $GUESS_QT_LIB_DIRS
     do
-      if test -e $dir/libqt-mt.so
+      if test -e $dir/libqt-mt.$2
       then
         qt_mt=yes
         qt_libdir=$dir
-        AC_MSG_RESULT([assuming $dir/libqt-mt.so])
+        AC_MSG_RESULT([assuming $dir/libqt-mt.$2])
         break
       fi
     done
@@ -469,9 +478,9 @@ then
 
   if test "x$HAVE_QT" = "xyes"
   then
-    ifelse([$2], , :, [$2])
-  else
     ifelse([$3], , :, [$3])
+  else
+    ifelse([$4], , :, [$4])
   fi
   
 fi

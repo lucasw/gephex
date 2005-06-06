@@ -12,4 +12,29 @@ SUBDIRS = \
 	effectvlifemodule \
 	effectvpuzzlemodule \
 	effectvquarkmodule \
-	effectvsparkmodule 
+	effectvsparkmodule \
+	effectvspiralmodule \
+	effectvbaltanmodule \
+	effectvdizzymodule \
+	effectvrndmmodule \
+	effectvstreakmodule \
+	effectvblurzoommodule \
+	effectvmatrixmodule \
+	effectvpupmodule \
+	effectvscrollmodule \
+	effectvtransformmodule \
+	effectvchameleonmodule \
+	effectvmosaicmodule \
+	effectvrdsmodule \
+	effectvshagadelicmodule \
+	effectvwarholmodule \
+	effectvdicemodule \
+	effectvnervousmodule \
+	effectvrevmodule \
+	effectvsimuramodule \
+	effectvwarpmodule \
+	effectvdiffmodule \
+	effectvnoisemodule \
+	effectvripplemodule \
+	effectvpredatormodule \
+	effectv1dmodule

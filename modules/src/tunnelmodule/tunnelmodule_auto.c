@@ -20,31 +20,31 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=t const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=t const=true strong_dependency=true default=[0] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[0.5 0.5] } ";
+    return "input_spec { type=typ_PositionType id=pos const=true strong_dependency=true default=[[0.5 0.5]] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=xres const=true strong_dependency=true default=640 } ";
+    return "input_spec { type=typ_NumberType id=xres const=true strong_dependency=true default=[640] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=yres const=true strong_dependency=true default=480 } ";
+    return "input_spec { type=typ_NumberType id=yres const=true strong_dependency=true default=[480] } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType id=radius const=true strong_dependency=true default=10 } ";
+    return "input_spec { type=typ_NumberType id=radius const=true strong_dependency=true default=[10] } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType id=zdist const=true strong_dependency=true default=1.5 } ";
+    return "input_spec { type=typ_NumberType id=zdist const=true strong_dependency=true default=[1.5] } ";
   break;
   case 7:
-    return "input_spec { type=typ_NumberType id=shading const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=shading const=true strong_dependency=true default=[0] } ";
   break;
   case 8:
-    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=[default] } ";
   break;
   case 9:
     return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";

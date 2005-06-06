@@ -286,11 +286,12 @@ namespace renderer
     ModuleControlBlockPtr newBlock ( new ModuleControlBlock(newModule) );
 		
     m_modules[moduleID] = newBlock;
-		
-    // no output => module is a sink
-    if (newModule->getOutputs().size() == 0) 
+    
+    // no output or notdeterministic => module is a sink
+    if (( newModule->getOutputs().size() == 0 ) ||
+	( !newModule->isDeterministic()) ) 
       m_sinks.push_front(newBlock);
-		
+    
 #if (ENGINE_VERBOSITY > 0)
     std::cout << "Added new Module (id " << moduleID << ") of Class " 
 	      << moduleClassName << std::endl;

@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "dialogs - Win32 Release"
 
 OUTDIR=.\Release
@@ -43,8 +46,6 @@ CLEAN :
 	-@erase "$(INTDIR)\changesdialog.obj"
 	-@erase "$(INTDIR)\changesdialog_moc.obj"
 	-@erase "$(INTDIR)\changesdialogimpl.obj"
-	-@erase "$(INTDIR)\dllselectordialog.obj"
-	-@erase "$(INTDIR)\dllselectordialog_moc.obj"
 	-@erase "$(INTDIR)\newgraphdialog.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(OUTDIR)\dialogs.lib"
@@ -52,40 +53,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /W3 /GR /GX /O2 /I "$(QTDIR)/include" /I "../../../../base/src" /I "../" /I "../../../../" /I "../../" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\dialogs.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\dialogs.bsc" 
 BSC32_SBRS= \
@@ -97,11 +65,9 @@ LIB32_OBJS= \
 	"$(INTDIR)\aboutdialogimpl.obj" \
 	"$(INTDIR)\changesdialog.obj" \
 	"$(INTDIR)\changesdialogimpl.obj" \
-	"$(INTDIR)\dllselectordialog.obj" \
 	"$(INTDIR)\newgraphdialog.obj" \
 	"$(INTDIR)\aboutdialog_moc.obj" \
-	"$(INTDIR)\changesdialog_moc.obj" \
-	"$(INTDIR)\dllselectordialog_moc.obj"
+	"$(INTDIR)\changesdialog_moc.obj"
 
 "$(OUTDIR)\dialogs.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -126,8 +92,6 @@ CLEAN :
 	-@erase "$(INTDIR)\changesdialog.obj"
 	-@erase "$(INTDIR)\changesdialog_moc.obj"
 	-@erase "$(INTDIR)\changesdialogimpl.obj"
-	-@erase "$(INTDIR)\dllselectordialog.obj"
-	-@erase "$(INTDIR)\dllselectordialog_moc.obj"
 	-@erase "$(INTDIR)\newgraphdialog.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
@@ -142,8 +106,28 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "$(QTDIR)/include" /I "../../../../base/src" /I "../" /I "../../../../" /I "../../" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\dialogs.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"$(OUTDIR)\gui_dialogs.lib" 
+LIB32_OBJS= \
+	"$(INTDIR)\aboutdialog.obj" \
+	"$(INTDIR)\aboutdialogimpl.obj" \
+	"$(INTDIR)\changesdialog.obj" \
+	"$(INTDIR)\changesdialogimpl.obj" \
+	"$(INTDIR)\newgraphdialog.obj" \
+	"$(INTDIR)\aboutdialog_moc.obj" \
+	"$(INTDIR)\changesdialog_moc.obj"
+
+"$(OUTDIR)\gui_dialogs.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
+    $(LIB32) @<<
+  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
+<<
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -174,31 +158,6 @@ CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "$(QTDIR)/include" /I ".
    $(CPP) @<<
    $(CPP_PROJ) $< 
 <<
-
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\dialogs.bsc" 
-BSC32_SBRS= \
-	
-LIB32=link.exe -lib
-LIB32_FLAGS=/nologo /out:"$(OUTDIR)\gui_dialogs.lib" 
-LIB32_OBJS= \
-	"$(INTDIR)\aboutdialog.obj" \
-	"$(INTDIR)\aboutdialogimpl.obj" \
-	"$(INTDIR)\changesdialog.obj" \
-	"$(INTDIR)\changesdialogimpl.obj" \
-	"$(INTDIR)\dllselectordialog.obj" \
-	"$(INTDIR)\newgraphdialog.obj" \
-	"$(INTDIR)\aboutdialog_moc.obj" \
-	"$(INTDIR)\changesdialog_moc.obj" \
-	"$(INTDIR)\dllselectordialog_moc.obj"
-
-"$(OUTDIR)\gui_dialogs.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
-    $(LIB32) @<<
-  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
-<<
-
-!ENDIF 
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -231,43 +190,10 @@ SOURCE=.\changesdialogimpl.cpp
 "$(INTDIR)\changesdialogimpl.obj" : $(SOURCE) "$(INTDIR)" ".\changesdialog.h"
 
 
-SOURCE=.\dllselectordialog.cpp
-
-"$(INTDIR)\dllselectordialog.obj" : $(SOURCE) "$(INTDIR)" ".\dllselectordialog.h"
-
-
 SOURCE=.\newgraphdialog.cpp
 
 "$(INTDIR)\newgraphdialog.obj" : $(SOURCE) "$(INTDIR)"
 
-
-SOURCE=.\dllselectordialog.h
-
-!IF  "$(CFG)" == "dialogs - Win32 Release"
-
-InputPath=.\dllselectordialog.h
-InputName=dllselectordialog
-
-".\dllselectordialog_moc.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	$(QTDIR)/bin/moc -o $(InputName)_moc.cpp $(InputName).h
-<< 
-	
-
-!ELSEIF  "$(CFG)" == "dialogs - Win32 Debug"
-
-InputPath=.\dllselectordialog.h
-InputName=dllselectordialog
-
-".\dllselectordialog_moc.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	$(QTDIR)/bin/moc -o $(InputName)_moc.cpp $(InputName).h
-<< 
-	
-
-!ENDIF 
 
 SOURCE=.\aboutdialog_moc.cpp
 
@@ -277,11 +203,6 @@ SOURCE=.\aboutdialog_moc.cpp
 SOURCE=.\changesdialog_moc.cpp
 
 "$(INTDIR)\changesdialog_moc.obj" : $(SOURCE) "$(INTDIR)" ".\changesdialog.h"
-
-
-SOURCE=.\dllselectordialog_moc.cpp
-
-"$(INTDIR)\dllselectordialog_moc.obj" : $(SOURCE) "$(INTDIR)" ".\dllselectordialog.h"
 
 
 SOURCE=.\aboutdialog.ui

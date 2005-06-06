@@ -20,10 +20,10 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=device const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=device const=true strong_dependency=true default=[0] } ";
   break;
   case 1:
-    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=default } ";
+    return "input_spec { type=typ_StringType id=driver const=true strong_dependency=true default=[default] } ";
   break;
  }
  return 0;
@@ -105,7 +105,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Driver{widget_type=[combo_box] values=[default,wavein,oss,alsa] hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
+  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Driver{widget_type=[combo_box] values=[default,wavein,oss,alsa,alsaseq] hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(midiinmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -24,8 +24,6 @@
 #define INCLUDED_CONTROLLER_H
 
 #include "ienginecontrolreceiver.h"
-#include "itypeclassnamereceiver.h"
-#include "imoduleclassnamereceiver.h"
 #include "itask.h"
 #include "isocket.h"
 
@@ -35,7 +33,6 @@
 #include "graphdatareceivernet.h"
 #include "controlvaluereceivernet.h"
 #include "modulestatisticsreceivernet.h"
-#include "moduleclassnamereceivernet.h"
 #include "modelstatusreceivernet.h"
 #include "graphnamereceivernet.h"
 #include "errorreceivernet.h"
@@ -51,7 +48,6 @@
 
 #include "modelcontrolsendernet.h"
 #include "renderercontrolsendernet.h"
-#include "moduleclassloadercontrolsendernet.h"
 #include "enginecontrolsendernet.h"
 
 #include "autoptr.h"
@@ -59,6 +55,7 @@
 #include "renderer.h"
 #include "dllloader.h"
 #include "scheduler.h"
+#include "synced_tasks.h"
 
 #include "configmanager.h"
 
@@ -75,10 +72,20 @@ namespace engine
   typedef net::Tagger<uint_32, net::UInt32TagUtil> PortTagger;
   typedef net::TagDispatcher<uint_32> PortDispatcher;
 
-  class AutoTypeLoader;
-  class AutoModuleLoader;
   class Acceptor;
+  class Controller;
 
+  class auto_stop_task: public ITask
+    {
+    public:
+      auto_stop_task(Controller* ctrl, unsigned int ttl);
+      bool run();
+    private:
+      Controller* m_ctrl;
+      unsigned int m_time;
+      unsigned int m_ttl;
+    };
+  
   class NetPoller : public ITask
     {
     public:
@@ -115,7 +122,6 @@ namespace engine
       CommandTagger tagger3;
       CommandTagger tagger4;
       CommandTagger tagger5;
-      CommandTagger tagger6;
       CommandTagger tagger7;
       
       CommandTagger tagger10;
@@ -153,7 +159,6 @@ namespace engine
 	
       ModelControlSenderNet modelControlSender;
       RendererControlSenderNet rendererControlSender;
-      ModuleClassLoaderControlSenderNet moduleClassLoaderControlSender;
       EngineControlSenderNet engineControlSender;
     
       ModuleConstructionDumbReceiverNet moduleReceiver;
@@ -162,7 +167,6 @@ namespace engine
       GraphDataReceiverNet graphDataReceiver;
       ControlValueReceiverNet controlValueReceiver;
       ModuleStatisticsReceiverNet moduleStatisticsReceiver;
-      ModuleClassNameReceiverNet moduleClassNameReceiver;
 	
       GraphNameReceiverNet graphNameReceiver;
 	
@@ -174,14 +178,16 @@ namespace engine
       utils::AutoPtr<utils::ILogger> logger;
 
       model::Model pModel;
+
+      utils::AutoPtr<dllloader::DllLoader> pDllLoader;
       renderer::Renderer pRenderer;
-      dllloader::DllLoader pDllLoader;
-	
-      utils::AutoPtr<AutoTypeLoader> sf;
-      utils::AutoPtr<AutoModuleLoader> aml;
+      
+      utils::AutoPtr<synced_tasks> augmented_render_task;
       engine::Scheduler scheduler;
 
       bool first_time;
+      unsigned int ttl;
+      auto_stop_task auto_stop;
     };
 
 }

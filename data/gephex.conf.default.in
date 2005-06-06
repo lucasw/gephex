@@ -3,9 +3,9 @@ common {
 }
 
 engine {
-    module_path          = [@gphx_module_lib_dir@/]
+    type_path            = [__CONF_DIR__/types/;@gphx_type_lib_dir@/]
+    module_path          = [__CONF_DIR__/modules/;@gphx_module_lib_dir@/]
     frei0r_path          = [__HOME_DIR__/.frei0r-1/lib/;/usr/local/lib/frei0r-1/;/usr/lib/frei0r-1/]
-    type_path            = [@gphx_type_lib_dir@/]
     graph_path           = [__CONF_DIR__/graphs/]
     ipc_unix_node_prefix = [/tmp/gephex_socket_]
     ipc_type             = [inet]

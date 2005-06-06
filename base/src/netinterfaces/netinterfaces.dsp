@@ -149,14 +149,6 @@ SOURCE=.\moduleclassinfosendernet.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\moduleclassloadercontrolreceivernet.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\moduleclassloadercontrolsendernet.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\moduleclassnamereceivernet.cpp
 # End Source File
 # Begin Source File
@@ -842,65 +834,6 @@ BuildCmds= \
 # Begin Custom Build - Creating netinterface headers and implementations for $(InputPath) ...
 InputPath=..\interfaces\moduleclassinfo.if
 InputName=moduleclassinfo
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\interfaces\moduleclassloadercontrol.if
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-# Begin Custom Build
-InputPath=..\interfaces\moduleclassloadercontrol.if
-InputName=moduleclassloadercontrol
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-# Begin Custom Build - Creating netinterface headers and implementations for $(InputPath) ...
-InputPath=..\interfaces\moduleclassloadercontrol.if
-InputName=moduleclassloadercontrol
 
 BuildCmds= \
 	python ../../nic.py nrh . $(InputPath) \
@@ -1668,124 +1601,6 @@ BuildCmds= \
 # Begin Custom Build - Creating netinterface headers and implementations for $(InputPath) ...
 InputPath=..\interfaces\typeclassinfo.if
 InputName=typeclassinfo
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\interfaces\typeclassloadercontrol.if
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-# Begin Custom Build
-InputPath=..\interfaces\typeclassloadercontrol.if
-InputName=typeclassloadercontrol
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-# Begin Custom Build - Creating netinterface headers and implementations for $(InputPath) ...
-InputPath=..\interfaces\typeclassloadercontrol.if
-InputName=typeclassloadercontrol
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\interfaces\typeclassname.if
-
-!IF  "$(CFG)" == "netinterfaces - Win32 Release"
-
-# Begin Custom Build
-InputPath=..\interfaces\typeclassname.if
-InputName=typeclassname
-
-BuildCmds= \
-	python ../../nic.py nrh . $(InputPath) \
-	python ../../nic.py nrc . $(InputPath) \
-	python ../../nic.py nsh . $(InputPath) \
-	python ../../nic.py nsc . $(InputPath) \
-	
-
-"$(InputName)receivernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)receivernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"$(InputName)sendernet.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "netinterfaces - Win32 Debug"
-
-# Begin Custom Build - Creating netinterface headers and implementations for $(InputPath) ...
-InputPath=..\interfaces\typeclassname.if
-InputName=typeclassname
 
 BuildCmds= \
 	python ../../nic.py nrh . $(InputPath) \

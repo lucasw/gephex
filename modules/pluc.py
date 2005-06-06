@@ -217,7 +217,7 @@ def createModuleSpec(id, options, numberOfInputs, numberOfOutputs):
 def createInputSpec(input):
         (id,options) = input
         if options.has_key('default'):
-                default = 'default='+options['default']
+                default = 'default=['+options['default']+']'
         else:
                 default = ''
 

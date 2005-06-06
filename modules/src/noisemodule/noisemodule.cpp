@@ -46,16 +46,23 @@ void destruct(MyInstance* my)
 
 uint32_t mono_noise()
 {
-  uint8_t rd = rnd_lcg1() >> 24;
-  return rd | rd << 8 | rd << 16;
+  uint8_t color[4];
+  uint8_t tmp = rnd_lcg1() >> 24;
+  color[0] = tmp;
+  color[1] = tmp;
+  color[2] = tmp;
+  color[3] = 0;
+  return *reinterpret_cast<uint32_t*>(&color);
 }
 
 uint32_t chroma_noise()
 {
-  uint8_t rd_1 = rnd_lcg1() >> 24;
-  uint8_t rd_2 = rnd_lcg1() >> 24;
-  uint8_t rd_3 = rnd_lcg1() >> 24;
-  return rd_1 | rd_2 << 8 | rd_3 << 16;
+  uint8_t color[4];
+  color[0] = rnd_lcg1() >> 24;
+  color[1] = rnd_lcg1() >> 24;
+  color[2] = rnd_lcg1() >> 24;
+  color[3] = 0;
+  return *reinterpret_cast<uint32_t*>(&color);
 }
 
 void update(void* instance)

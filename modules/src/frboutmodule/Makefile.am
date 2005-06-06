@@ -15,7 +15,11 @@ X11_sOURCES = \
 	x11output.c \
 	x11output.h \
 	x11stuff.h \
-	x11stuff.c \
+	x11stuff.c
+endif
+
+if WITH_V4L
+V4L_sOURCES =  \
 	vloopbackoutput.h \
 	vloopbackoutput.c
 endif
@@ -52,7 +56,7 @@ frboutmodule_la_SOURCES = \
         frboutmodule.xpm \
         outputdriver.h \
 	slist.h \
-	slist.c $(X11_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
+	slist.c $(X11_sOURCES) $(V4L_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
 
 
 frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale -L/usr/X11R6/lib -L@builddir@/../libcolorconv

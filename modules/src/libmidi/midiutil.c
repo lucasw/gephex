@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-int midi_length_of_message(unsigned char status)
+int midi_length_of_message(uint8_t status)
 {
   int upper_nibble = status & 0xf0;
   switch (upper_nibble)
@@ -60,7 +60,7 @@ int midi_length_of_message(unsigned char status)
     }
 }
 
-int midi_is_status(unsigned char byte)
+int midi_is_status(uint8_t byte)
 {
   if (byte >= 0x80)
     return 1;

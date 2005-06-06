@@ -1,0 +1,22 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvshagadelicmodule.mak
+
+.\effectvshagadelicmodule.c : \
+	"..\..\..\config.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\shagadelic.c"\
+	
+
+.\effectvshagadelicmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllutils.h"\
+	".\effectvshagadelicmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvshagadelicmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvshagadelicmodule - Win32 Debug"
+
+!ENDIF 
+

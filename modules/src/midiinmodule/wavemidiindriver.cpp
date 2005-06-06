@@ -58,7 +58,7 @@ static void midi_shutdown();
 
 static int read_buffer(unsigned char* data, int data_size);
 //puts a byte into the static buffer
-static void put_byte(unsigned char byte);
+static void put_bytes(const unsigned char* bytes, int len);
 
 //-------------------------------------------------------------------------
 
@@ -257,36 +257,13 @@ static void midi_shutdown()
 
 //--------------------------------------------------------------------
 
-void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, 
-						   DWORD dwParam1, DWORD dwParam2);
-
-//puts a block of bytes into the static buffer
-static void put_block(unsigned char* block, int len)
-{
-	EnterCriticalSection(&s_critical_section);
-	
-	if (s_midi_buf_len+len <= MIDI_BUF_SIZE)
-	{
-		memcpy(s_midi_buf + s_midi_buf_len, block, len);
-		s_midi_buf_len += len;		
-	}
-	else
-	{
-	/*char buffer[64];
-	snprintf(buffer, sizeof(buffer),
-	"Buffer overflow at midiinmodule::put_block, ignoring %i bytes",
-	len);
-		s_log(0, buffer);*/
-	}
-	LeaveCriticalSection(&s_critical_section);
-}
-
 static void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance, 
 								  DWORD dwParam1, DWORD dwParam2)
 {	
 	unsigned char midiStat; /* MIDI_CMD_XXX */	
 	unsigned char midiParam1; /* je nach commando andere bedeutung */
 	unsigned char midiParam2; /* je nach commando andere bedeutung */
+	unsigned char buf[3];
 	
 	//MidiType* buffer = (MidiType*) dwInstance;
 	
@@ -326,17 +303,20 @@ static void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 			switch (len)
 			{
 			case 0:
-				put_byte(midiStat);
-				break;
+			  buf[0] = midiStat;
+			  put_bytes(buf, 1);
+			  break;
 			case 1:
-				put_byte(midiStat);
-				put_byte(midiParam1);
-				break;
+			  buf[0] = midiStat;
+			  buf[1] = midiParam1;
+			  put_bytes(buf, 2);
+			  break;
 			case 2:
-				put_byte(midiStat);
-				put_byte(midiParam1);
-				put_byte(midiParam2);
-				break;
+			  buf[0] = midiStat;
+			  buf[1] = midiParam1;
+			  buf[2] = midiParam2;
+			  put_bytes(buf, 3);
+			  break;
 			default:
 				{
 					char buffer[64];
@@ -351,7 +331,7 @@ static void CALLBACK midiCallBack(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstance,
 		{
 			MIDIHDR* hdr = (MIDIHDR*) dwParam1;
 			//TODO do we need to insert a status byte?
-			put_block((unsigned char*) hdr->lpData, hdr->dwBytesRecorded);
+			put_bytes((unsigned char*) hdr->lpData, hdr->dwBytesRecorded);
 			
 			//TODO do we need to reinsert the buffer?
 		}break;
@@ -390,12 +370,15 @@ static int read_buffer(unsigned char* data, int data_size)
 	return len;
 }
 
-static void put_byte(unsigned char byte)
+static void put_bytes(const unsigned char* bytes, int len)
 {
 	EnterCriticalSection(&s_critical_section);
 	
-	if (s_midi_buf_len < MIDI_BUF_SIZE)
-		s_midi_buf[s_midi_buf_len++] = byte;
+	if (s_midi_buf_len + len <= MIDI_BUF_SIZE)
+	  {
+	    memcpy(s_midi_buf+s_midi_buf_len, bytes, len);
+	    s_midi_buf_len += len;
+	  }
 	else
 	{
 	/*char buffer[64];

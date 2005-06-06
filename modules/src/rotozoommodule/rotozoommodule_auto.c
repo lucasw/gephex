@@ -20,13 +20,13 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=zoom const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=zoom const=true strong_dependency=true default=[1] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=rot const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_PositionType id=disp const=true strong_dependency=true default=[0.5 0.5] } ";
+    return "input_spec { type=typ_PositionType id=disp const=true strong_dependency=true default=[[0.5 0.5]] } ";
   break;
   case 3:
     return "input_spec { type=typ_FrameBufferType id=texture const=true strong_dependency=true  } ";
@@ -35,10 +35,10 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType id=background const=false strong_dependency=false  } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType id=copy_background const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=copy_background const=true strong_dependency=true default=[1] } ";
   break;
   case 6:
-    return "input_spec { type=typ_StringType id=routine const=true strong_dependency=true default=regular } ";
+    return "input_spec { type=typ_StringType id=routine const=true strong_dependency=true default=[regular] } ";
   break;
  }
  return 0;

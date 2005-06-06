@@ -28,7 +28,8 @@
 
 namespace dllloader
 {
-  CTypeFunctionTable loadTypeDll(const std::string& filename);
+  std::pair<CTypeFunctionTable,utils::AutoPtr<utils::SharedLibrary> >
+    loadTypeDll(const std::string& filename);
 }
 
 #endif

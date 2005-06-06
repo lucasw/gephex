@@ -32,6 +32,8 @@
 
 #include "utils/autoptr.h"
 
+#include "base/picmanager.h"
+
 class IModelControlReceiver;
 class IErrorReceiver;
 
@@ -59,6 +61,8 @@ namespace gui
     InputVektor inputs;
 
     int id;
+    const PicManager& m_pictures;
+
     std::string modName;
     std::string m_group;
     QPixmap* m_icon;
@@ -106,7 +110,7 @@ namespace gui
   public:
     NodeWidget(QWidget* parent,const char* name, WFlags fl,
 	       int id,const ModuleInfo& _info, 
-	       const std::vector<QPixmap>& picz,
+	       const PicManager& picz,
                const utils::AutoPtr<ControlValueDispatcher>&,
                IModelControlReceiver&,
 	       KeyboardManager* kbManager,
@@ -131,10 +135,6 @@ namespace gui
     
     const IPropertyDescription& getProperties() const;
     
-    enum {NODE_WIDGET_PIC=0,INPUTPLUG_WIDGET_FREE_PIC = 1,
-	  INPUTPLUG_WIDGET_BUSY_PIC = 2,OUTPUTPLUG_WIDGET_FREE_PIC = 3,
-	  OUTPUTPLUG_WIDGET_BUSY_PIC = 4};
-	
 
  public slots:
  // schleifen nur signale von inputs/outputs durch

@@ -20,7 +20,7 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=port const=true strong_dependency=true default=1337 } ";
+    return "input_spec { type=typ_NumberType id=port const=true strong_dependency=true default=[1337] } ";
   break;
  }
  return 0;

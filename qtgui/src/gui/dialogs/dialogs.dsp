@@ -102,10 +102,6 @@ SOURCE=.\changesdialogimpl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\dllselectordialog.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\newgraphdialog.cpp
 # End Source File
 # End Group
@@ -134,39 +130,6 @@ SOURCE=.\changesdialogimpl.h
 SOURCE=.\newgraphdialog.h
 # End Source File
 # End Group
-# Begin Group "MocHeader-Dateien"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\dllselectordialog.h
-
-!IF  "$(CFG)" == "dialogs - Win32 Release"
-
-# Begin Custom Build - Mocing $(InputPath)...
-InputPath=.\dllselectordialog.h
-InputName=dllselectordialog
-
-"$(InputName)_moc.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(QTDIR)/bin/moc -o $(InputName)_moc.cpp $(InputName).h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "dialogs - Win32 Debug"
-
-# Begin Custom Build - Mocing $(InputPath)...
-InputPath=.\dllselectordialog.h
-InputName=dllselectordialog
-
-"$(InputName)_moc.cpp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(QTDIR)/bin/moc -o $(InputName)_moc.cpp $(InputName).h
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# End Group
 # Begin Group "Moc-Dateien"
 
 # PROP Default_Filter ""
@@ -177,10 +140,6 @@ SOURCE=.\aboutdialog_moc.cpp
 # Begin Source File
 
 SOURCE=.\changesdialog_moc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\dllselectordialog_moc.cpp
 # End Source File
 # End Group
 # Begin Source File

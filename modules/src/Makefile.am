@@ -63,6 +63,7 @@ SUBDIRS = libgrid \
 	imgarithmodule \
 	isingnoizemodule \
 	jumpmodule \
+	midiccdecmodule \
 	netcontrolmodule \
 	noisemodule \
 	numarithmodule \
@@ -72,6 +73,11 @@ SUBDIRS = libgrid \
 	numlfomodule \
 	numposmodule \
 	numxfadermodule \
+	oscinmodule \
+	oscoutmodule \
+	oscnummodule \
+	numoscmodule \
+	oscmergemodule \
 	overlaymodule \
 	pixelizemodule \
 	planemodule \

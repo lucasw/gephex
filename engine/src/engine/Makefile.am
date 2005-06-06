@@ -11,7 +11,6 @@ include_HEADERS = \
 	dllutils.h
 
 AM_CPPFLAGS = \
-	-DINST_INSTALL_PREFIX=\"$(prefix)\" \
 	-I @srcdir@/.. \
 	-I @srcdir@/../renderer \
 	-I @srcdir@/../model \
@@ -38,7 +37,8 @@ gephex_engine_real_SOURCES = \
 	controller.h \
 	controller.cpp \
         bufferedsender.h \
-        bufferedsender.cpp
+        bufferedsender.cpp \
+	synced_tasks.h
 
 gephex_engine_real_LDADD = \
 	-ldllloader \

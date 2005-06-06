@@ -25,6 +25,10 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "frboutmodule - Win32 Release"
 
 OUTDIR=.\Release
@@ -35,11 +39,11 @@ OutDir=.\Release
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\frboutmodule.dll"
+ALL : ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Release" "$(OUTDIR)\frboutmodule.dll"
+ALL : "libscale - Win32 Release" ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
 
 !ENDIF 
 
@@ -58,46 +62,15 @@ CLEAN :
 	-@erase "$(OUTDIR)\frboutmodule.dll"
 	-@erase "$(OUTDIR)\frboutmodule.exp"
 	-@erase "$(OUTDIR)\frboutmodule.lib"
+	-@erase "frboutmodule.def"
+	-@erase "frboutmodule.h"
+	-@erase "frboutmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\frboutmodule.bsc" 
 BSC32_SBRS= \
@@ -131,7 +104,7 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Release
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" "$(OUTDIR)\frboutmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Release" ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
    copy .\Release\frboutmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
@@ -145,11 +118,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
+ALL : "$(OUTDIR)\frboutmodule.dll"
 
 !ELSE 
 
-ALL : "libscale - Win32 Debug" ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
+ALL : "libscale - Win32 Debug" "$(OUTDIR)\frboutmodule.dll"
 
 !ENDIF 
 
@@ -171,49 +144,12 @@ CLEAN :
 	-@erase "$(OUTDIR)\frboutmodule.ilk"
 	-@erase "$(OUTDIR)\frboutmodule.lib"
 	-@erase "$(OUTDIR)\frboutmodule.pdb"
-	-@erase "frboutmodule.def"
-	-@erase "frboutmodule.h"
-	-@erase "frboutmodule_auto.c"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-MTL=midl.exe
+CPP_PROJ=/nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32 
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\frboutmodule.bsc" 
 BSC32_SBRS= \
@@ -247,11 +183,41 @@ ALL : $(DS_POSTBUILD_DEP)
 OutDir=.\Debug
 # End Custom Macros
 
-$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" ".\frboutmodule_auto.c" ".\frboutmodule.h" ".\frboutmodule.def" "$(OUTDIR)\frboutmodule.dll"
+$(DS_POSTBUILD_DEP) : "libscale - Win32 Debug" "$(OUTDIR)\frboutmodule.dll"
    copy .\Debug\frboutmodule.dll ..\..\..\dlls\modules
 	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ENDIF 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -268,9 +234,9 @@ SOURCE=.\frboutmodule.c
 
 !IF  "$(CFG)" == "frboutmodule - Win32 Release"
 
-CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "NDEBUG" /D "VERBOSE_ENGINE" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
-"$(INTDIR)\frboutmodule.obj" : $(SOURCE) "$(INTDIR)" ".\frboutmodule.h"
+"$(INTDIR)\frboutmodule.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
   $(CPP_SWITCHES) $(SOURCE)
 <<
@@ -278,9 +244,9 @@ CPP_SWITCHES=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(SDL_DIR)/include" /I "../../
 
 !ELSEIF  "$(CFG)" == "frboutmodule - Win32 Debug"
 
-CPP_SWITCHES=/nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /D "WITH_SDL" /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_SWITCHES=/nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/numbertype" /I "../../../" /I "../../" /I "../../../engine/src/engine" /I "../../../types/src/framebuffertype" /I "../../../util/include" /I "../libscale" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "frboutmodule_EXPORTS" /D "HAVE_CONFIG_H" /D "_MBCS" /D "WIN32" /D snprintf=_snprintf /Fp"$(INTDIR)\frboutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
-"$(INTDIR)\frboutmodule.obj" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\frboutmodule.obj" : $(SOURCE) "$(INTDIR)" ".\frboutmodule.h"
 	$(CPP) @<<
   $(CPP_SWITCHES) $(SOURCE)
 <<
@@ -290,7 +256,7 @@ CPP_SWITCHES=/nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "$(SDL_DIR)/include" /I "..
 
 SOURCE=.\frboutmodule_auto.c
 
-"$(INTDIR)\frboutmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\frboutmodule.h"
+"$(INTDIR)\frboutmodule_auto.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\gdioutput.c

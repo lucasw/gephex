@@ -23,19 +23,19 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_StringType id=fileName const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=flush const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=flush const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=frame const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=frame const=true strong_dependency=true default=[0] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=x_size const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=x_size const=true strong_dependency=true default=[0] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=y_size const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=y_size const=true strong_dependency=true default=[0] } ";
   break;
   case 5:
-    return "input_spec { type=typ_StringType id=cache const=true strong_dependency=true default=no } ";
+    return "input_spec { type=typ_StringType id=cache const=true strong_dependency=true default=[no] } ";
   break;
  }
  return 0;

@@ -1,0 +1,33 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvnervousmodule.mak
+
+.\effectvnervousmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\effectvnervousmodule.h"\
+	".\nervous.c"\
+	
+
+.\effectvnervousmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvnervousmodule.h"\
+	".\effectvnervousmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvnervousmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvnervousmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -23,10 +23,10 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_AudioType id=audio const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=thr const=true strong_dependency=true default=0.3 } ";
+    return "input_spec { type=typ_NumberType id=thr const=true strong_dependency=true default=[0.3] } ";
   break;
   case 2:
-    return "input_spec { type=typ_StringType id=algo const=true strong_dependency=true default=exp } ";
+    return "input_spec { type=typ_StringType id=algo const=true strong_dependency=true default=[exp] } ";
   break;
  }
  return 0;

@@ -8,7 +8,8 @@ CPP_FILES = \
         treeviewitem.cpp \
 	propertyview.cpp \
 	key.cpp \
-	keyboardmanager.cpp
+	keyboardmanager.cpp \
+	picmanager.cpp
 
 MOCED_FILES = \
 	askforstringdialog_moc.cpp
@@ -25,7 +26,8 @@ HEADER_FILES = \
 	treeviewitem.h \
 	key.h \
 	ikeylistener.h \
-	keyboardmanager.h
+	keyboardmanager.h\
+	picmanager.h
 
 libguibase_a_SOURCES =  $(CPP_FILES) $(HEADER_FILES)
 nodist_libguibase_a_SOURCES =  $(MOCED_FILES)

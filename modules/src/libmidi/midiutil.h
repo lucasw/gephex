@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -22,6 +22,8 @@
 
 #ifndef INCLUDED_MIDIUTIL_H
 #define INCLUDED_MIDIUTIL_H
+
+#include "basic_types.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -48,14 +50,14 @@ extern "C"
    *           or -1 for a variable length message. If status
    *           is invalid, -2 is returned
    */
-  int midi_length_of_message(unsigned char status);
+  int midi_length_of_message(uint8_t status);
 
   /**
    * Returns wether a byte is a midi status byte.
    * @param the byte that is tested
    * @return 1 if byte is a status byte, 0 if it is a data byte
    */
-  int midi_is_status(unsigned char byte);
+  int midi_is_status(uint8_t byte);
 
 #ifdef __cplusplus
 }

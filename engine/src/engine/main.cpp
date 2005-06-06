@@ -248,21 +248,15 @@ int main(int argc, const char* argv[])
                                       "Path and prefix of the unix nodes "
                                       "in the filesystem (unix only)", &def));
 
-
       def.b = false;
-      params.push_back(config_param_t("headless",
-                                      config_param_t::BOOL_PARAM,
-                                      "engine",
-                                      "Start without GUI, load all "
-                                      "available modules", &def));
-
       params.push_back(config_param_t("autostart",
                                       config_param_t::BOOL_PARAM,
                                       "engine",
                                       "Automatically start the "
                                       "rendering", &def));
 
-      def.s = "_default_";
+
+      def.s = "default";
       params.push_back(config_param_t("render_graph_id",
                                       config_param_t::STRING_PARAM,
                                       "engine",
@@ -275,7 +269,18 @@ int main(int argc, const char* argv[])
                                       "The snapshot that is initially "
                                       "active", &def));
 
+      def.i = 0; // no timeout
+      params.push_back(config_param_t("ttl",
+                                      config_param_t::INT_PARAM,
+                                      "engine",
+                                      "Timeout"
+                                      , &def));
+
       utils::ConfigManager config(get_cfile_name(), argc, argv, params);
+
+      // If the help message was requested, we simply return
+      if (config.help_requested())
+	return 0;
 
       // This is a hack to communicate the media path to
       // loaded modules.

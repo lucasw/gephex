@@ -245,6 +245,7 @@ make="gmake"
 ;;
 Darwin)
 cc="cc"
+SLIBSUF=".dylib"
 v4l="no"
 audio_oss="no"
 dv1394="no"
@@ -253,7 +254,7 @@ SHFLAGS="-dynamiclib"
 extralibs=""
 darwin="yes"
 strip="strip -x"
-LDFLAGS="-Wl,-d"
+LDFLAGS=#"-Wl,-d"
 FFSLDFLAGS=-Wl,-bind_at_load
 ;;
 MINGW32*)

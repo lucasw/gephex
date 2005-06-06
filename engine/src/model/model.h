@@ -177,6 +177,22 @@ namespace model
 
       void updateFileSystem();
 
+      /**
+       * check if a graph with such a ID exists in the model
+       * \param graph_id is the id of the graph to check for
+       * \returns true if it exists
+       */
+      bool check_for_graph_id(const std::string& graph_id);
+
+      /**
+       * check if a snapshot with such a ID exists in the model
+       * \param graph_id is the id of the graph to check for
+       * \param snap_id is the id of the snapshot to check for
+       * \returns true if it exists
+       */
+      bool check_for_snap_id(const std::string& graph_id,
+			     const std::string& snap_id);
+      
       virtual void modExecTimeSignal(const std::string& graphName,
 				     int nodeID, double execTime);
 

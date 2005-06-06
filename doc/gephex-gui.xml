@@ -49,7 +49,7 @@ and data flow with interactive controls like joysticks or midi devices.</para>
 
   <refsect1>
     <title>Files</title>
-  <para><filename>~/.gephex/gephex.conf</filename></para>
+  <para><filename>~/.gephex/0.4/gephex.conf</filename></para>
   </refsect1>
 
   <refsect1>
@@ -59,8 +59,7 @@ and data flow with interactive controls like joysticks or midi devices.</para>
     <para><citerefentry> <refentrytitle>gephex-engine</refentrytitle>
     <manvolnum>1</manvolnum> </citerefentry></para>
     <para>
-      http://www.gephex.org for the original source and main 
-      arch archive.
+      http://www.gephex.org for the original source and main arch archive.
     </para>
   </refsect1>
 

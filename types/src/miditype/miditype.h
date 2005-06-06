@@ -73,11 +73,7 @@ static __inline void midi_resize(MidiType* dst, int newSize)
 static __inline void midi_set_buffer(MidiType* dst, unsigned char* buf,
 				     int len)
 {
-  if (len == 0)
-    return;
-
-  if (dst->capacity < len)
-    midi_resize(dst, len);
+  midi_resize(dst, len);
 
   assert(dst->capacity >= len);
   assert(dst->data != 0);
@@ -88,11 +84,7 @@ static __inline void midi_set_buffer(MidiType* dst, unsigned char* buf,
 
 static __inline void midi_assign(MidiType* dst, const MidiType* src)
 {
-  if (src->len == 0)
-    return;
-
-  if (dst->capacity < src->len)
-    midi_resize(dst, src->len);
+  midi_resize(dst, src->len);
   
   assert(dst->capacity >= src->len);
   assert(dst->data != 0);

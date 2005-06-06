@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <stdexcept>
 
 #include "basic_types.h"
 
@@ -44,7 +45,7 @@ struct _MyInstance
 
   ~_MyInstance()
   {
-    if (ffmpegWriter) delete ffmpegWriter;    
+    delete ffmpegWriter;    
     framebuffer_deleteInstance(scaledFb);
   }
 
@@ -89,16 +90,6 @@ void update(void* instance)
   const std::string filename(inst->in_filename->text);
   const std::string encoding(inst->in_encoding->text);
 
-  if (filename == "null")
-    {
-      if (my.ffmpegWriter != 0)
-	{ 
-	  delete my.ffmpegWriter;
-	  my.ffmpegWriter = 0;
-	}
-      return;
-    }
-
   // change size to valid one
   const size_t xsize = xsize_pre - xsize_pre % 4;
   const size_t ysize = ysize_pre - ysize_pre % 4;
@@ -106,43 +97,69 @@ void update(void* instance)
   // yuv4mpeg2 spec or ffpmeg
   assert(xsize%4==0);
   assert(ysize%4==0);
-
-
-  if (my.ffmpegWriter == 0)
-    my.ffmpegWriter=new FFMpegWriter(filename,xsize,ysize,encoding);
-
-  if (my.ffmpegWriter->getFilename() != filename ||
-      my.ffmpegWriter->getXres() != xsize ||
-      my.ffmpegWriter->getYres() != ysize ||
-      my.ffmpegWriter->getEncoding() != encoding)
-    {
-      delete  my.ffmpegWriter;
-      
-      my.ffmpegWriter=new FFMpegWriter(filename,xsize,ysize,encoding);
-    }
   
-  // the framebuffer
-  uint32_t* fb;
-
-  if (inst->in_in->xsize != my.ffmpegWriter->getXres() ||
-	  inst->in_in->ysize != my.ffmpegWriter->getYres())
+  if (filename == "null")
     {
-      FrameBufferAttributes  in_attr;
-      framebuffer_getAttributes(inst->in_in, &in_attr);
-      in_attr.xsize=my.ffmpegWriter->getXres();
-      in_attr.ysize=my.ffmpegWriter->getYres();
-      framebuffer_convertType(my.scaledFb, inst->in_in , &in_attr);
+      delete my.ffmpegWriter;
+      my.ffmpegWriter = 0;
+      return;
+    }
+
+  try
+    {
+      if (my.ffmpegWriter == 0)
+	my.ffmpegWriter=new FFMpegWriter(filename,xsize,ysize,encoding);
       
-      // use the scaled one
-      fb=my.scaledFb->framebuffer;
+      assert(my.ffmpegWriter != 0);
+      
+      if (my.ffmpegWriter->getFilename() != filename ||
+	  my.ffmpegWriter->getXres() != xsize ||
+	  my.ffmpegWriter->getYres() != ysize ||
+	  my.ffmpegWriter->getEncoding() != encoding)
+	{
+	  delete my.ffmpegWriter;
+	  my.ffmpegWriter=new FFMpegWriter(filename,xsize,ysize,encoding);
+	}
+      
+      assert(my.ffmpegWriter != 0);
     }
-  else
+  catch(std::runtime_error& e)
     {
-      // use the original
-      fb=inst->in_in->framebuffer;
+      my.ffmpegWriter=0;
+      s_log( 0, e.what() );
     }
 
-  my.ffmpegWriter->writeFrame(fb);
+  if ( my.ffmpegWriter != 0 )
+    {
+      // the framebuffer
+      uint32_t* fb;
 
+      if (inst->in_in->xsize != my.ffmpegWriter->getXres() ||
+	  inst->in_in->ysize != my.ffmpegWriter->getYres())
+	{
+	  FrameBufferAttributes  in_attr;
+	  framebuffer_getAttributes(inst->in_in, &in_attr);
+	  in_attr.xsize=my.ffmpegWriter->getXres();
+	  in_attr.ysize=my.ffmpegWriter->getYres();
+	  framebuffer_convertType(my.scaledFb, inst->in_in , &in_attr);
+	  
+	  // use the scaled one
+	  fb=my.scaledFb->framebuffer;
+	}
+      else
+	{
+	  // use the original
+	  fb=inst->in_in->framebuffer;
+	}
+
+      try
+	{
+	  my.ffmpegWriter->writeFrame(fb);
+	}
+      catch(std::runtime_error& e)
+	{
+	  s_log(0,e.what());
+	}
+    }
 }
 

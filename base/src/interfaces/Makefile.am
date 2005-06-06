@@ -7,7 +7,6 @@ INTERFACE_FILES = \
 	modelstatus.if \
 	moduleclass.if \
 	moduleclassinfo.if \
-	moduleclassloadercontrol.if \
 	moduleclassname.if \
 	moduleclassspec.if \
 	moduleconstructiondumb.if \
@@ -21,9 +20,7 @@ INTERFACE_FILES = \
 	serializedgraph.if \
 	smartcontrolvalue.if \
 	typeclass.if \
-	typeclassinfo.if \
-	typeclassloadercontrol.if \
-	typeclassname.if
+	typeclassinfo.if
 
 EXTRA_DIST = interfaces.dsp interfaces.mak interfaces.dep $(INTERFACE_FILES)
 

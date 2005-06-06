@@ -28,19 +28,7 @@
 //typedef long long    int_64;
 //typedef unsigned long long    uint_64;
 
-typedef unsigned int uint_32;
-typedef signed int   int_32;
-
-typedef unsigned short uint_16;
-typedef signed short int_16;
-
-typedef unsigned char uint_8;
-typedef signed char int_8;
-
-#define UINT32_MAX UINT_MAX
-#define INT32_MAX INT_MAX
-
-#if _MSC_VER == 1200
+#if _MSC_VER == 1200 //TODO
 typedef unsigned int   uint32_t;
 typedef signed int     int32_t;
 typedef unsigned short uint16_t;
@@ -49,6 +37,22 @@ typedef unsigned char  uint8_t;
 typedef signed char    int8_t;
 #else
 #include <stdint.h>
+#endif
+
+typedef uint32_t uint_32;
+typedef int32_t  int_32;
+
+typedef uint16_t uint_16;
+typedef int16_t int_16;
+
+typedef uint8_t uint_8;
+typedef int8_t  int_8;
+
+#ifndef UINT32_MAX
+#define UINT32_MAX UINT_MAX
+#endif
+#ifndef INT32_MAX
+#define INT32_MAX INT_MAX
 #endif
 
 #endif

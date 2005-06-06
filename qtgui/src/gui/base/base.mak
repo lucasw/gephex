@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "base - Win32 Release"
 
 OUTDIR=.\Release
@@ -33,7 +36,7 @@ INTDIR=.\Release
 OutDir=.\Release
 # End Custom Macros
 
-ALL : "$(OUTDIR)\base.lib"
+ALL : ".\treeview_moc.cpp" "$(OUTDIR)\base.lib"
 
 
 CLEAN :
@@ -42,49 +45,18 @@ CLEAN :
 	-@erase "$(INTDIR)\key.obj"
 	-@erase "$(INTDIR)\keyboardmanager.obj"
 	-@erase "$(INTDIR)\logwindow.obj"
+	-@erase "$(INTDIR)\picmanager.obj"
 	-@erase "$(INTDIR)\propertyview.obj"
 	-@erase "$(INTDIR)\treeview.obj"
 	-@erase "$(INTDIR)\treeviewitem.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(OUTDIR)\base.lib"
+	-@erase "treeview_moc.cpp"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MD /W3 /GR /GX /O2 /I "$(QTDIR)/include" /I "../../../../base/src" /I "../" /I "../../../../" /I "../../" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\base.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\base.bsc" 
 BSC32_SBRS= \
@@ -99,7 +71,8 @@ LIB32_OBJS= \
 	"$(INTDIR)\propertyview.obj" \
 	"$(INTDIR)\treeview.obj" \
 	"$(INTDIR)\treeviewitem.obj" \
-	"$(INTDIR)\askforstringdialog_moc.obj"
+	"$(INTDIR)\askforstringdialog_moc.obj" \
+	"$(INTDIR)\picmanager.obj"
 
 "$(OUTDIR)\base.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -114,7 +87,7 @@ INTDIR=.\Debug
 OutDir=.\Debug
 # End Custom Macros
 
-ALL : ".\treeview_moc.cpp" "$(OUTDIR)\gui_base.lib"
+ALL : "$(OUTDIR)\gui_base.lib"
 
 
 CLEAN :
@@ -123,19 +96,41 @@ CLEAN :
 	-@erase "$(INTDIR)\key.obj"
 	-@erase "$(INTDIR)\keyboardmanager.obj"
 	-@erase "$(INTDIR)\logwindow.obj"
+	-@erase "$(INTDIR)\picmanager.obj"
 	-@erase "$(INTDIR)\propertyview.obj"
 	-@erase "$(INTDIR)\treeview.obj"
 	-@erase "$(INTDIR)\treeviewitem.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
 	-@erase "$(OUTDIR)\gui_base.lib"
-	-@erase "treeview_moc.cpp"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "$(QTDIR)/include" /I "../../../../base/src" /I "../" /I "../../../../" /I "../../" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\base.bsc" 
+BSC32_SBRS= \
+	
+LIB32=link.exe -lib
+LIB32_FLAGS=/nologo /out:"$(OUTDIR)\gui_base.lib" 
+LIB32_OBJS= \
+	"$(INTDIR)\askforstringdialog.obj" \
+	"$(INTDIR)\key.obj" \
+	"$(INTDIR)\keyboardmanager.obj" \
+	"$(INTDIR)\logwindow.obj" \
+	"$(INTDIR)\propertyview.obj" \
+	"$(INTDIR)\treeview.obj" \
+	"$(INTDIR)\treeviewitem.obj" \
+	"$(INTDIR)\askforstringdialog_moc.obj" \
+	"$(INTDIR)\picmanager.obj"
+
+"$(OUTDIR)\gui_base.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
+    $(LIB32) @<<
+  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
+<<
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -167,30 +162,6 @@ CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I "$(QTDIR)/include" /I ".
    $(CPP_PROJ) $< 
 <<
 
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\base.bsc" 
-BSC32_SBRS= \
-	
-LIB32=link.exe -lib
-LIB32_FLAGS=/nologo /out:"$(OUTDIR)\gui_base.lib" 
-LIB32_OBJS= \
-	"$(INTDIR)\askforstringdialog.obj" \
-	"$(INTDIR)\key.obj" \
-	"$(INTDIR)\keyboardmanager.obj" \
-	"$(INTDIR)\logwindow.obj" \
-	"$(INTDIR)\propertyview.obj" \
-	"$(INTDIR)\treeview.obj" \
-	"$(INTDIR)\treeviewitem.obj" \
-	"$(INTDIR)\askforstringdialog_moc.obj"
-
-"$(OUTDIR)\gui_base.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
-    $(LIB32) @<<
-  $(LIB32_FLAGS) $(DEF_FLAGS) $(LIB32_OBJS)
-<<
-
-!ENDIF 
-
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
 !IF EXISTS("base.dep")
@@ -204,7 +175,7 @@ LIB32_OBJS= \
 !IF "$(CFG)" == "base - Win32 Release" || "$(CFG)" == "base - Win32 Debug"
 SOURCE=.\askforstringdialog.cpp
 
-"$(INTDIR)\askforstringdialog.obj" : $(SOURCE) "$(INTDIR)" ".\askforstringdialog.h"
+"$(INTDIR)\askforstringdialog.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\key.cpp
@@ -222,6 +193,11 @@ SOURCE=.\logwindow.cpp
 "$(INTDIR)\logwindow.obj" : $(SOURCE) "$(INTDIR)"
 
 
+SOURCE=.\picmanager.cpp
+
+"$(INTDIR)\picmanager.obj" : $(SOURCE) "$(INTDIR)"
+
+
 SOURCE=.\propertyview.cpp
 
 "$(INTDIR)\propertyview.obj" : $(SOURCE) "$(INTDIR)"
@@ -229,7 +205,7 @@ SOURCE=.\propertyview.cpp
 
 SOURCE=.\treeview.cpp
 
-"$(INTDIR)\treeview.obj" : $(SOURCE) "$(INTDIR)" ".\treeview_moc.cpp" ".\treeview.h"
+"$(INTDIR)\treeview.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\treeviewitem.cpp
@@ -295,7 +271,7 @@ InputName=askforstringdialog
 
 SOURCE=.\askforstringdialog_moc.cpp
 
-"$(INTDIR)\askforstringdialog_moc.obj" : $(SOURCE) "$(INTDIR)" ".\askforstringdialog.h"
+"$(INTDIR)\askforstringdialog_moc.obj" : $(SOURCE) "$(INTDIR)"
 
 
 

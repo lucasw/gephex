@@ -55,7 +55,6 @@ namespace gui
   class PropertyView;
   class IPropertyDescription;
   class EditorWidget;
-  class DllSelectorDialog;  
   class LogWindow;  
   class KeyboardManager;
 
@@ -108,12 +107,10 @@ namespace gui
       void shutDown();
       void synchronize();
       void aboutSlot();
-	  void changesSlot();
-      void dll_selector_closed();
+      void changesSlot();
 	
     private:
       void createActions(void);
-      void createWindows();
       void buildMenuBar(void);
       void buildModuleBar(void);
       void buildSceleton(void);
@@ -127,7 +124,6 @@ namespace gui
       
       // Actions
       QAction* quitAction;
-      QAction* showPlugInManagerAction;
       
       QAction* newGraphAction;
       QAction* rendererStateAction;
@@ -161,7 +157,7 @@ namespace gui
 
       enum {CONNECT_ENGINE, 
 	    DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
-	    STARTSTOP_ENGINE, WINDOW_DLL_SELECTOR,
+	    STARTSTOP_ENGINE,
 	    KEYGRAB_ON, KEYGRAB_OFF};
 	
       QPopupMenu* effectMenue;
@@ -170,12 +166,9 @@ namespace gui
 
       PropertyView* propertyView;
 	
-      QPopupMenu* windows;
-	  QPopupMenu* help;
+      QPopupMenu* help;
 
       int propertyTabID;
-
-      DllSelectorDialog* m_dllSelector;
 
       const utils::ConfigManager& m_config;
 

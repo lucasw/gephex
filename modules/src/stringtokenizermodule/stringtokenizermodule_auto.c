@@ -23,7 +23,7 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_StringType id=string const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=entry const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=entry const=true strong_dependency=true default=[1] } ";
   break;
  }
  return 0;

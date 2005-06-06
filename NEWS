@@ -1,3 +1,23 @@
+0.4.3:
+------
+
+  * support for Mac OS X (experimental)
+
+  * initial OSC support (experimental)
+
+  * support for alsamidisequencer
+
+  * ports of almost all effecTV effects
+
+  * some usability improvements
+
+  * some documentation improvements
+
+  * fixed bugs #78, #79, #80, #81, #82, #83, #84, #85, #86, #87, #88, #89, #90
+               #92,  #96, #97, #100, #102, #103, #112, #113, #114, #115, #116, 
+               #126, #125
+
+
 0.4.2:
 ------
 

@@ -7,6 +7,7 @@ SUBDIRS = \
 	lfotype \
 	miditype \
 	numbertype \
+	osctype \
 	positiontype \
 	rgbtype \
 	stringtype

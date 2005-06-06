@@ -1,0 +1,33 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvdizzymodule.mak
+
+.\effectvdizzymodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\dizzy.c"\
+	".\effectvdizzymodule.h"\
+	
+
+.\effectvdizzymodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvdizzymodule.h"\
+	".\effectvdizzymodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvdizzymodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvdizzymodule - Win32 Debug"
+
+!ENDIF 
+

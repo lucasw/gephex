@@ -141,5 +141,4 @@ void shutdownOutput()
   // It should be enough to call XCloseDisplay, because it automatically
   // destroys the window
   XCloseDisplay(s_dpy);
-  XFlush(s_dpy);
 }

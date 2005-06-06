@@ -47,10 +47,6 @@
 	"..\..\..\..\..\qt\include\qwidget.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
-	"..\..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
-	"..\..\..\..\base\src\interfaces\igraphdatareceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imoduledatareceiver.h"\
 	"..\..\..\..\base\src\utils\autoptr.h"\
 	"..\..\guimodel\controlmodel.h"\
 	"..\..\guimodel\controlvaluedispatcher.h"\
@@ -176,14 +172,6 @@
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\..\qt\include\qwmatrix.h"\
-	"..\..\..\..\base\src\interfaces\igraphdatareceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelstatussender.h"\
-	"..\..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imoduledatareceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodulestatisticssender.h"\
 	"..\..\..\..\base\src\utils\autoptr.h"\
 	"..\..\guimodel\controlmodel.h"\
 	"..\..\guimodel\graphmodel.h"\
@@ -192,6 +180,7 @@
 	"..\..\guimodel\igraphview.h"\
 	"..\..\guimodel\imoduleclassview.h"\
 	"..\..\guimodel\point.h"\
+	"..\base\picmanager.h"\
 	"..\imoduleinfobasestation.h"\
 	"..\moduleclassview.h"\
 	".\controleditor.h"\
@@ -260,13 +249,6 @@
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\..\qt\include\qwmatrix.h"\
-	"..\..\..\..\base\src\interfaces\icontrolvaluereceiver.h"\
-	"..\..\..\..\base\src\interfaces\ierrorreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelcontrolreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imoduleconstructiondumbreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imoduledatareceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
 	"..\..\..\..\base\src\utils\autoptr.h"\
 	"..\..\guimodel\controlvaluedispatcher.h"\
 	"..\..\guimodel\graphmodel.h"\
@@ -274,16 +256,12 @@
 	"..\..\guimodel\igraphview.h"\
 	"..\..\guimodel\point.h"\
 	"..\base\keyboardmanager.h"\
+	"..\base\picmanager.h"\
 	"..\connectionwidget.h"\
 	"..\imoduleinfobasestation.h"\
-	"..\inplugbusy.xpm"\
-	"..\inplugfree.xpm"\
 	"..\inputplugwidget.h"\
 	"..\modulebutton.h"\
-	"..\node.xpm"\
 	"..\nodewidget.h"\
-	"..\outplugbusy.xpm"\
-	"..\outplugfree.xpm"\
 	"..\outputplugwidget.h"\
 	"..\plugwidget.h"\
 	".\grapheditor.h"\
@@ -339,12 +317,11 @@
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\..\qt\include\qwmatrix.h"\
-	"..\..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
 	"..\..\..\..\base\src\utils\autoptr.h"\
 	"..\..\guimodel\icontrolconnectview.h"\
 	"..\..\guimodel\igraphview.h"\
 	"..\..\guimodel\point.h"\
+	"..\base\picmanager.h"\
 	".\grapheditor.h"\
 	".\grapheditorwindow.h"\
 	
@@ -442,7 +419,6 @@
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
 	".\mouseover.h"\
-	".\mouseover_moc_cpp.cpp"\
 	
 
 !IF  "$(CFG)" == "editor - Win32 Release"
@@ -636,12 +612,11 @@
 	"..\..\..\..\..\qt\include\qwindowdefs.h"\
 	"..\..\..\..\..\qt\include\qwindowdefs_win.h"\
 	"..\..\..\..\..\qt\include\qwmatrix.h"\
-	"..\..\..\..\base\src\interfaces\imodelstatusreceiver.h"\
-	"..\..\..\..\base\src\interfaces\imodulestatisticsreceiver.h"\
 	"..\..\..\..\base\src\utils\autoptr.h"\
 	"..\..\guimodel\icontrolconnectview.h"\
 	"..\..\guimodel\igraphview.h"\
 	"..\..\guimodel\point.h"\
+	"..\base\picmanager.h"\
 	".\grapheditor.h"\
 	
 

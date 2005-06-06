@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -71,6 +71,11 @@ namespace utils
 
       ~ConfigManager();
 
+      /*!
+       * True iff the first cmdline parameter was "--help" or "-h"
+       */
+      bool        help_requested() const;
+
       bool        get_bool_param(const std::string& param_name)   const;
       int         get_int_param(const std::string& param_name)    const;
       std::string get_string_param(const std::string& param_name) const;
@@ -81,6 +86,8 @@ namespace utils
       ConfigFilePtr m_cf_cmdl;
 
       CPMap m_cpm;
+
+      bool m_help_requested;
     };
 }
 

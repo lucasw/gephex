@@ -20,19 +20,19 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_StringType id=exp const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_StringType id=exp const=true strong_dependency=true default=[0] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=x1 const=true strong_dependency=false default=0 } ";
+    return "input_spec { type=typ_NumberType id=x1 const=true strong_dependency=false default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=x2 const=true strong_dependency=false default=0 } ";
+    return "input_spec { type=typ_NumberType id=x2 const=true strong_dependency=false default=[0] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=x3 const=true strong_dependency=false default=0 } ";
+    return "input_spec { type=typ_NumberType id=x3 const=true strong_dependency=false default=[0] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=x4 const=true strong_dependency=false default=0 } ";
+    return "input_spec { type=typ_NumberType id=x4 const=true strong_dependency=false default=[0] } ";
   break;
  }
  return 0;

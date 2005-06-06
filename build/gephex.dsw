@@ -578,6 +578,78 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name timesourcemodule
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvbaltanmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvblurzoommodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvchameleonmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdicemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdiffmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdizzymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvmatrixmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvmosaicmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvnervousmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvnoisemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvpupmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrdsmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrevmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvripplemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrndmmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvscrollmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvshagadelicmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvsimuramodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvspiralmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvstreakmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvtransformmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvwarholmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvwarpmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectv1dmodule
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -594,7 +666,52 @@ Package=<4>
 
 ###############################################################################
 
+Project: "effectv1dmodule"="..\effectvmodules\src\effectv1dmodule\effectv1dmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "effectvagingmodule"="..\effectvmodules\src\effectvagingmodule\effectvagingmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvbaltanmodule"="..\effectvmodules\src\effectvbaltanmodule\effectvbaltanmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvblurzoommodule"="..\effectvmodules\src\effectvblurzoommodule\effectvblurzoommodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -624,7 +741,67 @@ Package=<4>
 
 ###############################################################################
 
+Project: "effectvchameleonmodule"="..\effectvmodules\src\effectvchameleonmodule\effectvchameleonmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "effectvcyclemodule"="..\effectvmodules\src\effectvcyclemodule\effectvcyclemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdicemodule"="..\effectvmodules\src\effectvdicemodule\effectvdicemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdiffmodule"="..\effectvmodules\src\effectvdiffmodule\effectvdiffmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdizzymodule"="..\effectvmodules\src\effectvdizzymodule\effectvdizzymodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -714,6 +891,81 @@ Package=<4>
 
 ###############################################################################
 
+Project: "effectvmatrixmodule"="..\effectvmodules\src\effectvmatrixmodule\effectvmatrixmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvmosaicmodule"="..\effectvmodules\src\effectvmosaicmodule\effectvmosaicmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvnervousmodule"="..\effectvmodules\src\effectvnervousmodule\effectvnervousmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvnoisemodule"="..\effectvmodules\src\effectvnoisemodule\effectvnoisemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvpupmodule"="..\effectvmodules\src\effectvpupmodule\effectvpupmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "effectvpuzzlemodule"="..\effectvmodules\src\effectvpuzzlemodule\effectvpuzzlemodule.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -744,7 +996,187 @@ Package=<4>
 
 ###############################################################################
 
+Project: "effectvrdsmodule"="..\effectvmodules\src\effectvrdsmodule\effectvrdsmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvrevmodule"="..\effectvmodules\src\effectvrevmodule\effectvrevmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvripplemodule"="..\effectvmodules\src\effectvripplemodule\effectvripplemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvrndmmodule"="..\effectvmodules\src\effectvrndmmodule\effectvrndmmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvscrollmodule"="..\effectvmodules\src\effectvscrollmodule\effectvscrollmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvshagadelicmodule"="..\effectvmodules\src\effectvshagadelicmodule\effectvshagadelicmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvsimuramodule"="..\effectvmodules\src\effectvsimuramodule\effectvsimuramodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "effectvsparkmodule"="..\effectvmodules\src\effectvsparkmodule\effectvsparkmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvspiralmodule"="..\effectvmodules\src\effectvspiralmodule\effectvspiralmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvstreakmodule"="..\effectvmodules\src\effectvstreakmodule\effectvstreakmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvtransformmodule"="..\effectvmodules\src\effectvtransformmodule\effectvtransformmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvwarholmodule"="..\effectvmodules\src\effectvwarholmodule\effectvwarholmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvwarpmodule"="..\effectvmodules\src\effectvwarpmodule\effectvwarpmodule.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

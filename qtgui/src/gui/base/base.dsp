@@ -102,6 +102,10 @@ SOURCE=.\logwindow.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\picmanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\propertyview.cpp
 # End Source File
 # Begin Source File
@@ -139,6 +143,10 @@ SOURCE=.\keyboardmanager.h
 # Begin Source File
 
 SOURCE=.\logwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\picmanager.h
 # End Source File
 # Begin Source File
 

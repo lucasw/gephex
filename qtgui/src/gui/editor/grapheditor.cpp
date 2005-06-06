@@ -50,11 +50,6 @@
 
 #include "base/keyboardmanager.h"
 
-#include "node.xpm"
-#include "inplugfree.xpm"
-#include "inplugbusy.xpm"
-#include "outplugfree.xpm"
-#include "outplugbusy.xpm"
 
 #include "utils/buffer.h"
 
@@ -80,7 +75,6 @@ namespace gui
       currentModuleClassName(""),
       highlightedInput(0),
       m_controller(&contrl),
-      nodePixmaps(5),
       infos(&_infos),
       dispatcher(_dispatcher),
       model(mod),
@@ -91,19 +85,7 @@ namespace gui
       m_media_path(media_path),
       m_tick_count(0),
       m_last_highlight(0)
-  {
-	
-    nodePixmaps[NodeWidget::NODE_WIDGET_PIC]
-      = QPixmap(node_xpm);
-    nodePixmaps[NodeWidget::INPUTPLUG_WIDGET_FREE_PIC] 
-      = QPixmap(inplugfree_xpm);
-    nodePixmaps[NodeWidget::INPUTPLUG_WIDGET_BUSY_PIC] 
-      = QPixmap(inplugbusy_xpm);
-    nodePixmaps[NodeWidget::OUTPUTPLUG_WIDGET_FREE_PIC] 
-      = QPixmap(outplugfree_xpm);
-    nodePixmaps[NodeWidget::OUTPUTPLUG_WIDGET_BUSY_PIC] 
-      = QPixmap(outplugbusy_xpm);
-	
+  {	
     QTimer* timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(timer_fired()));
     timer->start(TIMER_MS);
@@ -120,7 +102,7 @@ namespace gui
     const ModuleInfo& mi = infos->getModuleInfo(moduleClassName);
 
     NodeWidget* nWidget = new NodeWidget(this,0,0,modID,
-					 mi, nodePixmaps, dispatcher, model,
+					 mi, m_picmanager, dispatcher, model,
 					 m_kbManager, m_log,
 					 m_media_path);
 
@@ -505,7 +487,6 @@ namespace gui
 
   void GraphEditor::nodeWidgetClicked(NodeWidget* /*n*/)
   {
-	  
   }
 
   void GraphEditor::nodeWidgetMoved(NodeWidget* n, const QPoint& pos)
@@ -520,11 +501,16 @@ namespace gui
     try
       {
         m_controller->moveModule(n->getID(),Point(p.x(),p.y()));
-        //emit properties(n->getProperties());
       }
     catch (std::exception& err)
       {
 	m_log.error(err.what() );
+      }
+
+    if (m_property_id != n->getID())
+      {
+	emit displayProperties(n->getProperties());
+	m_property_id = n->getID();
       }
   }
 
@@ -595,10 +581,11 @@ namespace gui
 	}
 	break;
       case NODEWIDGET_PROPERTIES:
-	{
-	  emit displayProperties(currentNode->getProperties());
-          m_property_id = currentNode->getID();
-	}
+	if (m_property_id != currentNode->getID())
+	  {
+	    emit displayProperties(currentNode->getProperties());
+	    m_property_id = currentNode->getID();
+	  }
 	break;
       case NODEWIDGET_INTERNALS:
 	{

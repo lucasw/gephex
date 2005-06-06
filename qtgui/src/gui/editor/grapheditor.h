@@ -23,7 +23,6 @@
 #ifndef GRAPHWIDGET_H
 #define GRAPHWIDGET_H
 
-#include <vector>
 #include <list>
 #include <map>
 #include <string>
@@ -40,6 +39,8 @@
 #include "guimodel/point.h"
 
 #include "utils/autoptr.h"
+
+#include "base/picmanager.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -202,7 +203,7 @@ namespace gui
     InputPlugWidget* highlightedInput;
 
     GraphModel* m_controller;
-    std::vector<QPixmap> nodePixmaps; 
+    PicManager m_picmanager;
 
     const InputPlugWidget* getInputPlugByPos(const QPoint& to) const;
     const OutputPlugWidget* getOutputPlugByPos(const QPoint& to) const;

@@ -1,0 +1,34 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvmatrixmodule.mak
+
+.\effectvmatrixmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\effectvmatrixmodule.h"\
+	".\matrix.c"\
+	".\matrixfont.xpm"\
+	
+
+.\effectvmatrixmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\types\src\numbertype\numbertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvmatrixmodule.h"\
+	".\effectvmatrixmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvmatrixmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvmatrixmodule - Win32 Debug"
+
+!ENDIF 
+

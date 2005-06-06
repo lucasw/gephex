@@ -18,6 +18,8 @@ install-exec-hook:
 
 install-data-hook:
 	chmod u+x $(DESTDIR)$(datadir)/run_in_terminal.sh
+	sed -e "s,\$$(prefix),@prefix@," < $(DESTDIR)$(datadir)/gephex.conf.default > $(DESTDIR)$(datadir)/gephex.conf.default.tmp
+	mv $(DESTDIR)$(datadir)/gephex.conf.default.tmp	$(DESTDIR)$(datadir)/gephex.conf.default
 
 uninstall-hook:
 	rm -rf $(DESTDIR)$(bindir)/gephex-engine

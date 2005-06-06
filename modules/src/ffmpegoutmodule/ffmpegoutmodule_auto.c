@@ -26,13 +26,13 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_StringType id=filename const=true strong_dependency=true  } ";
   break;
   case 2:
-    return "input_spec { type=typ_StringType id=encoding const=true strong_dependency=true default=DIVX High } ";
+    return "input_spec { type=typ_StringType id=encoding const=true strong_dependency=true default=[DIVX High] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=xsize const=true strong_dependency=true default=320 } ";
+    return "input_spec { type=typ_NumberType id=xsize const=true strong_dependency=true default=[320] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=ysize const=true strong_dependency=true default=240 } ";
+    return "input_spec { type=typ_NumberType id=ysize const=true strong_dependency=true default=[240] } ";
   break;
  }
  return 0;

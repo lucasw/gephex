@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -28,6 +28,8 @@
 
 #include "midiutil.h"
 
+static const uint8_t NO_STATUS = 0;  // not a status byte
+
 struct MidiParser
 {
   midi_noteoffT noteoff;
@@ -39,7 +41,8 @@ struct MidiParser
   midi_pitchbendT pitchbend;
   midi_systemexclusiveT systemexclusive;
 
-  void* data;
+  uint8_t running_status;
+  void* user_data;
 };
 
 
@@ -51,7 +54,7 @@ struct MidiParser* midi_create_parser(midi_noteoffT noteoff,
 				      midi_channelaftertouchT channelaftert,
 				      midi_pitchbendT pitchbend,
 				      midi_systemexclusiveT systemexclusive,
-				      void* data)
+				      void* user_data)
 {
   struct MidiParser* self = (struct MidiParser* ) malloc(sizeof(*self));
 
@@ -64,7 +67,8 @@ struct MidiParser* midi_create_parser(midi_noteoffT noteoff,
   self->pitchbend = pitchbend;
   self->systemexclusive = systemexclusive;
 
-  self->data = data;
+  self->running_status = NO_STATUS;
+  self->user_data = user_data;
 
   return self;
 }
@@ -74,15 +78,13 @@ void midi_destroy_parser(struct MidiParser* self)
   free(self);
 }
 
-
-
-static __inline int is_system_realtime(unsigned char byte)
+static __inline int is_system_realtime(uint8_t byte)
 {
   return byte >= 0xf8;
 }
 
-static int parse_onebytemsg(const unsigned char* buf,
-			    int len, int* overflow, unsigned char* b)
+static int parse_onebytemsg(const uint8_t* buf,
+			    int len, int* overflow, uint8_t* b)
 {
   int index = 0;
 
@@ -104,8 +106,8 @@ static int parse_onebytemsg(const unsigned char* buf,
   return index;
 }
 
-static int parse_twobytemsg(const unsigned char* buf, int len, int* overflow,
-			    unsigned char* b1, unsigned char* b2)
+static int parse_twobytemsg(const uint8_t* buf, int len, int* overflow,
+			    uint8_t* b1, uint8_t* b2)
 {
   int index = 0;
 
@@ -149,7 +151,7 @@ static int parse_twobytemsg(const unsigned char* buf, int len, int* overflow,
 }
 
 static int parse_system(struct MidiParser* self, int lower_nibble,
-			const unsigned char* buf, int len, int* overflow)
+			const uint8_t* buf, int len, int* overflow)
 {
   int index = 0;
 
@@ -203,9 +205,8 @@ static int parse_system(struct MidiParser* self, int lower_nibble,
   return index;
 }
 
-int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
+int midi_parse_data(struct MidiParser* self, const uint8_t* buf, int len)
 {
-  int old_status = 0;
   int status = 0;
   int index = 0;
   int overflow = 0;
@@ -213,17 +214,18 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
   while (index < len)
     {
       int length;
-      unsigned char status_upper_nibble;
-      unsigned char status_lower_nibble;
+      uint8_t status_upper_nibble;
+      uint8_t status_lower_nibble;
 
       status = buf[index];
-      if (!midi_is_status((unsigned char) status))
+      if (!midi_is_status((uint8_t) status))
 	{
-	  //running status
-	  status = old_status;
+	  if (midi_is_status(self->running_status))
+	    status = self->running_status;
 	}
       else
 	{
+	  self->running_status = (uint8_t) status;
 	  ++index; // go to first data byte
 	}
       
@@ -232,14 +234,14 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
       overflow = 0;
       switch(status_upper_nibble)
 	{
-	  unsigned char b1, b2;
+	  uint8_t b1, b2;
 
 	  case MIDI_NOTE_OFF:
 	  length = parse_twobytemsg(buf + index, len-index, &overflow,
 				    &b1, &b2);
 	  if (length != -1 && self->noteoff)
 	    {
-	      self->noteoff(status_lower_nibble, b1, b2, self->data);
+	      self->noteoff(status_lower_nibble, b1, b2, self->user_data);
 	    }
 	  break;
 	case MIDI_NOTE_ON:
@@ -247,7 +249,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 				    &b1, &b2);
 	  if (length != -1 && self->noteon)
 	    {
-	      self->noteon(status_lower_nibble, b1, b2, self->data);
+	      self->noteon(status_lower_nibble, b1, b2, self->user_data);
 	    }
 	  break;
 	case MIDI_AFTERTOUCH:
@@ -255,7 +257,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 				    &b1, &b2);
 	  if (length != -1 && self->aftertouch)
 	    {
-	      self->aftertouch(status_lower_nibble, b1, b2, self->data);
+	      self->aftertouch(status_lower_nibble, b1, b2, self->user_data);
 	    }
 	  break;
 	case MIDI_CTRLCHANGE:
@@ -263,21 +265,21 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 				    &b1, &b2);
 	  if (length != -1 && self->controlchange)
 	    {
-	      self->controlchange(status_lower_nibble, b1, b2, self->data);
+	      self->controlchange(status_lower_nibble, b1, b2, self->user_data);
 	    }
 	  break;
 	case MIDI_PROGCHANGE:
 	  length = parse_onebytemsg(buf + index, len-index, &overflow, &b1);
 	  if (length != -1 && self->programchange)
 	    {
-	      self->programchange(status_lower_nibble, b1, self->data);
+	      self->programchange(status_lower_nibble, b1, self->user_data);
 	    }
 	  break;
 	case MIDI_CHANNEL_AFTERTOUCH:
 	  length = parse_onebytemsg(buf + index, len-index, &overflow, &b1);
 	  if (length != -1 && self->channelaftertouch)
 	    {
-	      self->channelaftertouch(status_lower_nibble, b1, self->data);
+	      self->channelaftertouch(status_lower_nibble, b1, self->user_data);
 	    }
 	  break;
 	case MIDI_PITCHBEND:
@@ -285,7 +287,7 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
 				    &b1, &b2);
 	  if (length != -1 && self->pitchbend)
 	    {
-	      self->pitchbend(status_lower_nibble, b1 + (b2 << 7), self->data);
+	      self->pitchbend(status_lower_nibble, b1 + (b2 << 7), self->user_data);
 	    }
 	  break;
 	case MIDI_SYSTEM:
@@ -318,6 +320,11 @@ int midi_parse_data(struct MidiParser* self, const unsigned char* buf, int len)
     }
 
   return index-1;
+}
+
+void midi_reset(struct MidiParser* self)
+{
+  self->running_status = NO_STATUS;
 }
 
 void midi_set_noteoff_handler(struct MidiParser* self,

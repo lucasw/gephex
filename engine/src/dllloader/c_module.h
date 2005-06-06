@@ -42,7 +42,7 @@ class CModule : public IModule
 public:
   CModule(void* instance,CModuleVTable&,
 	  const CModuleAttributes& attributes,const ITypeFactory&,
-	  const std::vector<ITypePtr>& defaultInputTypes,
+	  const std::vector<IType*>& defaultInputTypes,
 	  const std::string& module_class_name);
 
   virtual ~CModule();

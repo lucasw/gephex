@@ -78,8 +78,8 @@ void update(void* instance)
 
   // paint the players
   // p1
-  int pos1= 10 + trim_double(inst->in_p1->number, 0, 1) * 90;
-  int pos2= 10 + trim_double(inst->in_p2->number, 0, 1) * 90;
+  int pos1= static_cast<int>(10 + trim_double(inst->in_p1->number, 0, 1) * 90);
+  int pos2= static_cast<int>(10 + trim_double(inst->in_p2->number, 0, 1) * 90);
   for (i = 0; i!= 10; ++i)
     {
       *(fb + (10+(pos1+i)*160))= 0xFFFFFFFF;

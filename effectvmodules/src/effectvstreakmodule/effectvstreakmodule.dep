@@ -1,0 +1,31 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvstreakmodule.mak
+
+.\effectvstreakmodule.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\effectvstreakmodule.h"\
+	".\streak.c"\
+	
+
+.\effectvstreakmodule_auto.c : \
+	"..\..\..\config.h"\
+	"..\..\..\engine\src\engine\dllmodule.h"\
+	"..\..\..\engine\src\engine\dllutils.h"\
+	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
+	"..\..\..\util\include\basic_types.h"\
+	".\effectvstreakmodule.h"\
+	".\effectvstreakmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvstreakmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvstreakmodule - Win32 Debug"
+
+!ENDIF 
+

@@ -7,15 +7,11 @@ noinst_LIBRARIES = libnetinterfaces.a
 libnetinterfaces_a_SOURCES = \
 	enginecontrolsendernet.cpp \
 	enginecontrolreceivernet.cpp \
-	moduleclassloadercontrolsendernet.cpp \
-	moduleclassloadercontrolreceivernet.cpp \
 	renderercontrolreceivernet.cpp \
 	renderercontrolsendernet.cpp \
 	modelcontrolreceivernet.cpp \
 	moduledatareceivernet.cpp \
 	moduledatasendernet.cpp \
-	moduleclassnamereceivernet.cpp \
-	moduleclassnamesendernet.cpp \
 	moduleconstructiondumbreceivernet.cpp \
 	modelcontrolsendernet.cpp \
 	moduleconstructiondumbsendernet.cpp \
@@ -49,10 +45,6 @@ noinst_HEADERS = \
 	modelcontrolsendernet.h \
 	moduleclassinforeceivernet.h \
 	moduleclassinfosendernet.h \
-	moduleclassloadercontrolreceivernet.h \
-	moduleclassloadercontrolsendernet.h \
-	moduleclassnamereceivernet.h \
-	moduleclassnamesendernet.h \
 	moduleconstructiondumbreceivernet.h \
 	moduleconstructiondumbsendernet.h \
 	moduledatareceivernet.h \

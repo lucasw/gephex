@@ -22,6 +22,8 @@
 
 #include "x11stuff.h"
 
+#include <string.h>
+
 int x11_win_on_top(Bool on_top,
                     Display* dpy,
                     Window win)
@@ -101,10 +103,11 @@ static int find_best_visual_bpp(Display* dpy,
   vinfo_templ.screen     = DefaultScreen(dpy);
   vinfo_templ.depth      = bpp;
   vinfo_templ.class      = TrueColor;
-  //  vinfo_templ.red_mask   = 0x000000ff;
-  //  vinfo_templ.green_mask = 0x0000ff00;
-  //  vinfo_templ.blue_mask  = 0x00ff0000;
-  //  vinfo_templ.bits_per_rgb  = 8;
+
+  /*vinfo_templ.red_mask   = 0x000000ff;
+    vinfo_templ.green_mask = 0x0000ff00;
+    vinfo_templ.blue_mask  = 0x00ff0000;
+    vinfo_templ.bits_per_rgb  = 8;*/
   
   vinfos = XGetVisualInfo(dpy, mask, &vinfo_templ, &n);
   /*for (i = 0; i < n; ++i)
@@ -135,23 +138,55 @@ int find_best_visual(Display* dpy,
     return find_best_visual_bpp(dpy, chosen_vis, 16);
 }
 
- void convert_to_16_inplace(unsigned char* frb,
+ void convert_to_16_inplace(uint8_t* frb,
                             int width, int height)
 {
-  const unsigned char* src = frb;
-  uint_16* dst = (uint_16*) frb;
+  const uint8_t* src = frb;
+  uint16_t* dst = (uint16_t*) frb;
   int i;
 
   for (i = width*height; i != 0; --i)
     {
-      unsigned char b = src[0] >> 3;
-      unsigned char g = src[1] >> 2;
-      unsigned char r = src[2] >> 3;
+      uint8_t b = src[0] >> 3;
+      uint8_t g = src[1] >> 2;
+      uint8_t r = src[2] >> 3;
       src += 4;
 
       *(dst++) = (r << 11) | (g << 5) | b;
     }
 }
+
+int big_endian()
+{
+  uint16_t tmp = 0xff11;
+
+  uint8_t* p = (uint8_t*) &tmp;
+
+  return p[0] == 0xff;
+}
+
+void convert_endianness(uint8_t* frb, int width, int height)
+{
+  uint8_t* ptr = frb;
+  int i;
+
+  for (i = width*height; i != 0; --i)
+    {
+      uint8_t b = ptr[0];
+      uint8_t g = ptr[1];
+      uint8_t r = ptr[2];
+      uint8_t a = ptr[3];
+      
+      ptr[0] = a;
+      ptr[1] = r;
+      ptr[2] = g;
+      ptr[3] = b;
+
+      ptr += 4;
+    }
+}
+
+
 /*
 void print_visual(XVisualInfo* vinfo)
 {

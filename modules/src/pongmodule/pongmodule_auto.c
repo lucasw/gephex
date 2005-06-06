@@ -20,25 +20,25 @@ const char* getSpec(void) {
 const char* getInputSpec(int index) {
  switch(index) {
    case 0:
-    return "input_spec { type=typ_NumberType id=p1 const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=p1 const=true strong_dependency=true default=[0.5] } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=p2 const=true strong_dependency=true default=0.5 } ";
+    return "input_spec { type=typ_NumberType id=p2 const=true strong_dependency=true default=[0.5] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=ball_x const=true strong_dependency=true default=0.01 } ";
+    return "input_spec { type=typ_NumberType id=ball_x const=true strong_dependency=true default=[0.01] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=ball_y const=true strong_dependency=true default=0.01 } ";
+    return "input_spec { type=typ_NumberType id=ball_y const=true strong_dependency=true default=[0.01] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=speed_x const=true strong_dependency=true default=0.01 } ";
+    return "input_spec { type=typ_NumberType id=speed_x const=true strong_dependency=true default=[0.01] } ";
   break;
   case 5:
-    return "input_spec { type=typ_NumberType id=speed_y const=true strong_dependency=true default=0.01 } ";
+    return "input_spec { type=typ_NumberType id=speed_y const=true strong_dependency=true default=[0.01] } ";
   break;
   case 6:
-    return "input_spec { type=typ_NumberType id=start const=true strong_dependency=true default=1 } ";
+    return "input_spec { type=typ_NumberType id=start const=true strong_dependency=true default=[1] } ";
   break;
  }
  return 0;

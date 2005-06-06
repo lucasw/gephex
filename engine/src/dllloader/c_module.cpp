@@ -208,7 +208,7 @@ CModule::CModule(void* instance,
 		 CModuleVTable& vtable,
 		 const CModuleAttributes& attributes,
 		 const ITypeFactory& tfactory_,
-		 const std::vector<ITypePtr>& defaultInputTypes,
+		 const std::vector<IType*>& defaultInputTypes,
 		 const std::string& module_class_name)
   : IModule(-1), m_instance(instance), m_vtable(&vtable),
     inputs(attributes.inputs.size()),outputs(attributes.outputs.size()),

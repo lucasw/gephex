@@ -45,8 +45,6 @@
 
 #include "picswitch.h"
 
-#include "dialogs/dllselectordialog.h"
-
 #include "dialogs/aboutdialogimpl.h"
 #include "dialogs/changesdialogimpl.h"
 #include "dialogs/newgraphdialog.h"
@@ -127,7 +125,6 @@ namespace gui
       m_kbManager(0),
       m_conf_base_dir(conf_base_dir)
   {
-    createWindows();
     createActions();
 
     buildMenuBar();
@@ -206,7 +203,6 @@ namespace gui
   void VJMainWindow::connectToRealEngine() throw (std::runtime_error)
   {
     engineWrapper->connect();
-    showPlugInManagerAction->setEnabled(true);
     
     rendererStateAction->setEnabled(true);
     //keyGrabStateAction->setEnabled(true);
@@ -222,7 +218,6 @@ namespace gui
   void VJMainWindow::disconnectFromRealEngine() throw (std::runtime_error)
   {
     engineWrapper->disconnect();
-    showPlugInManagerAction->setEnabled(false);
     
     rendererStateAction->setEnabled(false);
     //    keyGrabStateAction->setEnabled(false);
@@ -252,14 +247,6 @@ namespace gui
     newGraphAction->setEnabled(false);
     connect(newGraphAction,SIGNAL(activated()),this,SLOT(newGraph()));
 
-    showPlugInManagerAction= new QAction(this,"ShowPlugInManagerAction",false);
-    showPlugInManagerAction->setText("PlugIn Manager");
-    showPlugInManagerAction->setToolTip ("show the plugin-manager dialog");
-    showPlugInManagerAction->setEnabled(false);
-    showPlugInManagerAction->setToggleAction ( true );
-    connect(showPlugInManagerAction,SIGNAL(toggled(bool)),
-	    m_dllSelector,SLOT(setShown ( bool )));  
-    
     rendererStateAction= new QAction(this,"RendererStateAction",false);
     rendererStateAction->setText("start/stop rendering");
     rendererStateAction->setToolTip ("starts and stops the renderer");
@@ -320,23 +307,6 @@ namespace gui
     connect(changesAction,SIGNAL(activated()),this,SLOT(changesSlot()));
   }
   
-  
-  void VJMainWindow::createWindows()
-  {
-    m_dllSelector = 
-      new DllSelectorDialog(this,"PlugIn Manager Dialog",0,
-			    engineWrapper->moduleClassLoaderControlReceiver(),
-			    true);
-
-    connect(m_dllSelector, SIGNAL(status(const std::string&)),
-            this, SLOT(displayStatusText(const std::string&)));
-
-    connect(m_dllSelector, SIGNAL(closed()),
-            this, SLOT(dll_selector_closed()));
-    
-  }
-
-  
   void VJMainWindow::buildMenuBar(void)
   {
     QPopupMenu* file = new QPopupMenu(this);
@@ -364,10 +334,6 @@ namespace gui
       menuBar()->insertItem("Keyboard", keyboard,4,4);
       keyGrabStateAction->addTo(keyboard);*/
 
-    windows = new QPopupMenu(this);
-    menuBar()->insertItem("Windows",windows,5,5);
-    showPlugInManagerAction->addTo(windows);    
-
     effectMenue = new QPopupMenu(this);
     menuBar()->insertItem("Effects",effectMenue,6,6);
 
@@ -386,28 +352,22 @@ namespace gui
   
     moduleClassView = new ModuleClassView(effectMenue);
 
-
-    engineWrapper->moduleClassNameSender().registerModuleClassNameReceiver(*m_dllSelector);
-
     // moduleClassView->show();
     engineWrapper->moduleClassModel().registerModuleClassView(*moduleClassView);
-    engineWrapper->moduleClassModel().registerModuleClassView(*m_dllSelector);
     //engineWrapper->moduleClassModel().registerModuleClassView(*moduleClassTabView);
   }
 
   void VJMainWindow::unbuildModuleBar()
   {
-    // the dllselector and effectmenue clear themselves
+    // the effectmenue clears itself
     // when they receive the syncStarted call
     engineWrapper->moduleClassModel().unregisterModuleClassViews();	
     
     //engineWrapper->moduleClassNameSender().unregisterModuleClassNameReceiver(); //TODO der wird beim naechsten register automatisch ueberschrieben
     
-    //delete m_dllSelector;
     //delete effectMenue;
     
     effectMenue->clear();
-    m_dllSelector->clear();
   }
 
   void VJMainWindow::buildSceleton()
@@ -698,11 +658,6 @@ namespace gui
   {
     ChangesDialog* dlg = new ChangesDialog(this);
     dlg->show();
-  }
-
-  void VJMainWindow::dll_selector_closed()
-  {
-    showPlugInManagerAction->setOn(false);
   }
 
   void VJMainWindow::shutDown()

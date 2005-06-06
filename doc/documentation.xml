@@ -6,15 +6,13 @@
  <bookinfo>
   <title>The GePhex Book</title>
   <author>
-   <firstname>Martin</firstname>
-   <surname>Bayer</surname>
+   <firstname>Martin</firstname> <surname>Bayer</surname>
    <affiliation>
     <address><email>bayer@fmi.uni-passau.de</email></address>
    </affiliation>
   </author>
   <author>
-   <firstname>Georg</firstname>
-   <surname>Seidel</surname>
+   <firstname>Georg</firstname> <surname>Seidel</surname>
    <affiliation>
     <address><email>georg@gephex.org</email></address>
    </affiliation>
@@ -46,10 +44,12 @@
 
 <copyright><year>2002</year>
     <year>2003</year>
+    <year>2004</year>
+    <year>2005</year>
 <holder>Martin Bayer</holder>
 <holder>Georg Seidel</holder>
 </copyright>
-
+  
   <abstract>
 <para>GePhex is an interactive effect system for video jockeys. The effects can be controlled with external devices like joysticks, web-cams, or midi-devices. New effects can be designed in a GUI (Graphical User Interface) by composing basic effects into more complex ones.</para>
 
@@ -70,7 +70,7 @@
 You can use, distribute and modify GePhex under the terms of the GPL.
 </para></listitem>
 
-<listitem><para>GePhex is a multi platform project. Supported operating systems are Win32 and Linux. Ports to the BSD operating systems and Mac OSX are planned.</para></listitem>
+<listitem><para>GePhex is a multi platform project. Supported operating systems are Win32, Linux, and Mac OS X. There is also a port to FreeBSD.</para></listitem>
 </itemizedlist>
 </para>
 <para>
@@ -95,33 +95,85 @@ different levels:
 
 <itemizedlist>
 
-  <listitem><para>The project started in the late summer 2001.</para></listitem>
-  <listitem><para>In autumn 2002 was the first public vjing session at the fmi party on the campus of the university of Passau, Germany.</para></listitem>
+  <listitem><para>
+      The project started in the late summer 2001.
+  </para></listitem>
 
-  <listitem><para>In autumn 2003 there was a public session in Vienna and another session at the fmi party in Passau, Germany. </para></listitem>
+  <listitem><para>
+      In autumn 2002 was the first public vjing session at the fmi party
+      on the campus of the university of Passau, Germany.
+  </para></listitem>
 
-  <listitem><para>In December 2003 we released the first stable version (0.0.4).     </para></listitem>
+  <listitem><para>
+      In autumn 2003 there was a public session in Vienna and another
+      session at the fmi party in Passau, Germany.
+  </para></listitem>
 
-  <listitem><para>In June 2004 we released the second stable version (0.4). </para></listitem>
+  <listitem><para>
+      In December 2003 we released the first stable version (0.0.4).
+  </para></listitem>
+
+  <listitem><para>
+      In June 2004 we released the second stable version (0.4).
+      At this time we also started with the design of version 0.5,
+      which will be a complete rewrite. As of the time of this
+      writing (March 2005), there is only a minimal prototype system of
+      gephex-0.5.
+  </para></listitem>
+
+  <listitem><para>
+      In November 2004, we were invited to the 
+      <ulink url="http://www.piksel.org"><citetitle>piksel</citetitle></ulink>
+      meeting in Bergen, Norway. We released version 0.4.1 shortly before.
+  </para></listitem>
+
+  <listitem><para>
+      Version 0.4.2 was released some weeks after piksel. It includes
+      support for 
+      <ulink url="http://www.piksel.org/Frei0r"> 
+	<citetitle>frei0r</citetitle></ulink>,
+      a simple effect API we designed in Norway,
+      and some other stuff we did there (e.g. v4l2 support).
+  </para></listitem>
+
+  <listitem><para>
+      In February 2005, experimental support for Mac OS X and ports of most 
+      <ulink url="http://effectv.sf.net"><citetitle>effecTV</citetitle></ulink>
+      effects was added to version 0.4.3.
+  </para></listitem>
 
 </itemizedlist>
 
 </para>
   </sect1>
 
-<sect1><title>Security Note</title>
-<para>With the default configuration the GePhex engine listens at the TCP port 6666. The GUI connects to this port to control the engine. There is no authentication necessary to connect to the engine.
-This could be a security hole if used in a hostile environment. Never start this software as root and don't use it in an network that is connected to the internet without protection (e.g. a firewall).</para></sect1>
+  <sect1><title>Security Note</title>
+    <para>
+      With the default configuration the GePhex engine listens at the
+      TCP port 6666. The GUI connects to this port to control the engine.
+      There is no authentication necessary to connect to the engine.
+      This could be a security hole if used in a hostile environment.
+      Never start this software as root and don't use it in an network
+      that is connected to the internet without protection (e.g. a firewall).
+    </para>
+  </sect1>
 
 
-  <sect1><title>GePhex's Components</title>
-<sect2><title>The Engine</title>
-<para>The engine can be started from the console with the <filename>gephex-engine</filename> command.
-The only environment variable that is used is DISPLAY for the output under X11.
-All options are set in the configuration file <filename>~/.gephex/gephex.conf</filename>. If no file exists a default configuration file is created.</para>
+<sect1><title>GePhex's Components</title>
+  <sect2><title>The Engine</title>
+    <para>
+      The engine can be started from the console with the
+      <filename>gephex-engine</filename> command.
+      The only environment variable that is used is
+      <varname>DISPLAY</varname> for the output under X11.
 
-<para>
-<screen>
+      All options are set in the configuration file
+      <filename>~/.gephex/0.4/gephex.conf</filename>.
+      If this file does not exist, a default configuration file is created.
+    </para>
+
+    <para>
+      <screen>
 common {
     media_path           = [/home/tmp/seidel/gphx/share/gephex]
 }
@@ -129,7 +181,8 @@ common {
 engine {
     module_path          = [/home/tmp/seidel/gphx/lib/gephex/modules/]
     type_path            = [/home/tmp/seidel/gphx/lib/gephex/types/]
-    graph_path           = [/home/cip/seidel/.gephex/graphs/]
+    frei0r_path          = [/home/cip/seidel/.frei0r-1/lib/]
+    graph_path           = [/home/cip/seidel/.gephex/0.4/graphs/]
     ipc_unix_node_prefix = [/tmp/gephex_socket_]
     ipc_type             = [inet]
     ipc_port             = [6666]
@@ -138,18 +191,173 @@ engine {
 }
 ...
 </screen>
-<varname>media_path</varname> is used for both engine and gui. It is a
-semicolon separated list of directories, which contain media for GePhex
-(i.e. images, videos, fonts, ...).
-<varname>module_path</varname> is the absolute path to the directory with the effect plugins.
-The shared libraries for the types are stored in the <varname>type_path</varname>.
-The <varname>graph_path</varname> variable tells the engine the location of the user created graphs (semicolon separated list of directories).
-The user interface must connect to the engine with a ipc mechanism <varname>ipc_type</varname>.
-You can select between <literal>inet</literal> for a internet-protocol based communication, on Unix platforms <literal>unix</literal> for Unix domain sockets and <literal>namedpipe</literal> for named pipes on win32 systems.
-If engine and GUI run on the same host the usage of non ip based communication is preferred because it has less overhead.
-
-The parameters <literal>ipc_unix_node_prefix</literal> and <literal>ipc_port</literal> must equal to the ones for the gui.
 </para>
+
+<para>
+In the following, a <literal>path</literal> is a semicolon separated
+list of directories, which are searched by the engine in the given
+order.
+</para>
+
+<varname>media_path</varname> is used for both engine and gui. It tells
+the engine and the gui where media (i.e. images, videos, fonts, ...)
+is located.
+
+<table frame="none"><title>Options for gephex-engine</title>
+<tgroup cols="3">
+  <colspec align="left"/>
+  <colspec align="left"/>
+  <colspec align="right"/>
+  <colspec align="right"/>
+  <thead>
+    <row>
+      <entry>Option</entry>
+      <entry>Explanation</entry>
+      <entry>Type</entry>
+      <entry>Optional</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry><varname>module_path</varname></entry>
+      <entry>
+	tells the engine where to look for gephex effect modules
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>type_path</varname></entry>
+      <entry>
+	tells the engine where to look for gephex types
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>frei0r_path</varname></entry>
+      <entry>
+	tells the engine where to look for
+	<ulink url="http://www.piksel.org/Frei0r"> 
+	  <citetitle>frei0r</citetitle></ulink> effects
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>graph_path</varname></entry>
+      <entry>
+	<para>
+	  tells the engine the location of the user created graphs.
+	  The first directory in this path is used to store new graphs.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_type</varname></entry>
+      <entry>
+	<para>
+	  tells the engine how to connect to the user interface.
+	  You can select between <literal>inet</literal> for a
+	  internet-protocol based communication, on Unix platforms
+	  <literal>unix</literal> for Unix domain sockets and
+	  <literal>namedpipe</literal> for named pipes on win32 systems.
+	  If engine and GUI run on the same host the usage of non ip based
+	  communication is preferred because it has less overhead.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_unix_node_prefix</varname></entry>
+      <entry>
+	specifies where the unix node (fifo) is created when using
+	<varname>ipc_type</varname> <literal>unix</literal>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_port</varname></entry>
+      <entry>
+	specifies the port number when using
+	<varname>ipc_type</varname> <literal>inet</literal>
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>renderer_interval</varname></entry>
+      <entry>
+	tells the engine how often the current graph should be
+	updated. It expects the time between updates in milliseconds.
+	A value of 40 is equivalent to 25 updates per second.
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>net_interval</varname></entry>
+      <entry>
+	tells the engine how often to read commands from the user
+	interface.It expects the time between reads in milliseconds. 
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>autostart</varname></entry>
+      <entry>
+	if set, the engine automatically starts the update loop
+      </entry>
+      <entry>bool</entry>
+      <entry>yes</entry>
+    </row>
+    
+    <row>
+      <entry><varname>render_graph_id</varname></entry>
+      <entry>
+	the id of the graph that should be loaded at the beginning
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>render_snap_id</varname></entry>
+      <entry>
+	the id of the snapshot that should be loaded at the beginning
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>ttl</varname></entry>
+      <entry>
+	time to live: if the value is not 0, the engine terminates
+	itself after <varname>ttl</varname> update cycles
+      </entry>
+      <entry>int</entry>
+      <entry>yes</entry>
+    </row>
+
+  </tbody>
+  </tgroup>
+</table>
+
 <para>
 All options that can be set in the config file can be overridden from the
 command line. For example
@@ -158,13 +366,43 @@ command line. For example
 </screen>
 overrides the value of the option <varname>ipc_port</varname>.
 </para>
+
+<para>
+  The <literal>--help</literal> option shows a list of available parameters
+  with a short help text.
+  <screen>
+    > gephex-engine --help
+                  welcome to...
+       ---             _           ---
+    ----              | |            ----
+  ----   __ _ ___ _ __| |  ___ _  __  ----
+ -----  / _' | - \ '_ \ |_/ - \ \/ /  -----
+------ | (_| | --/ |_) |  \ --/&gt;  &lt;   ------
+ -----  \__. | \_| .__/ |' |\_/ /\ \  -----
+  ----   ._' |\__/ |  |_||_|__//  \_| ----
+   ----  |__/    |_|                 ----
+      ---                          ---
+
+[version:    "0.4.3"]
+[build time: "Mar  5 2005 - 00:13:18"]
+Usage: /Users/georg/gphx//bin/gephex-engine-real [options]
+The allowed options are:
+  --media_path  List of directories that contain videos, images and fonts (separated by ';')
+...
+  </screen>
+</para>
+
 </sect2>
 
 <sect2><title>The GUI (graphical user interface)</title>
 <para>
 The gui can be started on the console with the <filename>gephex-gui</filename> command.
-At the moment there are no command-line options and environment variables that influence the behavior.
-All options are set in the configuration file <filename>~/.gephex/gephex.conf</filename>. If no file exists a default configuration file is created.</para>
+There are two environment variablse that influence the guis behaviour,
+see the note at the end of the section.
+All options are set in the configuration file
+<filename>~/.gephex/0.4/gephex.conf</filename>.
+If this file does not exist a default configuration file is created.
+</para>
 
 <para>
 <screen>
@@ -182,15 +420,81 @@ gui {
     engine_binary        = [/home/tmp/seidel/gphx/bin/gephex-engine]
 }
 </screen>
+</para>
+
+<para>
 <varname>media_path</varname> is used for both engine and gui. It is a
 semicolon separated list of directories, which contain media for GePhex
 (i.e. images, videos, fonts, ...).
-The user interface must connect to the engine with a ipc mechanism <varname>ipc_type</varname>.
-You can select between <literal>inet</literal> for a internet-protocol based communication, on Unix platforms <literal>unix</literal> for Unix domain sockets and <literal>namedpipe</literal> for named pipes on win32 systems.
-If engine and GUI run on the same host the usage of non ip based communication is preferred because it has less overhead.
-The parameters <literal>ipc_unix_node_prefix</literal>, <literal>ipc_namedpipe_servername</literal>, and <literal>ipc_port</literal> must equal to the ones in for the engine.
-<varname>engine_binary</varname> is the full path of the engine executable. It is used to spawn a engine process if necessary.
 </para>
+
+<table frame="none"><title>Options for gephex-gui</title>
+<tgroup cols="3">
+  <colspec align="left"/>
+  <colspec align="left"/>
+  <colspec align="right"/>
+  <colspec align="right"/>
+  <thead>
+    <row>
+      <entry>Option</entry>
+      <entry>Explanation</entry>
+      <entry>Type</entry>
+      <entry>Optional</entry>
+    </row>
+  </thead>
+  <tbody>
+
+    <row>
+      <entry><varname>ipc_type</varname></entry>
+      <entry>
+	<para>
+	  tells the engine how to connect to the user interface.
+	  You can select between <literal>inet</literal> for a
+	  internet-protocol based communication, on Unix platforms
+	  <literal>unix</literal> for Unix domain sockets and
+	  <literal>namedpipe</literal> for named pipes on win32 systems.
+	  If engine and GUI run on the same host the usage of non ip based
+	  communication is preferred because it has less overhead.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_unix_node_prefix</varname></entry>
+      <entry>
+	specifies where the unix node (fifo) is created when using
+	<varname>ipc_type</varname> <literal>unix</literal>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_port</varname></entry>
+      <entry>
+	specifies where the number when using
+	<varname>ipc_type</varname> <literal>inet</literal>
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>engine_binary</varname></entry>
+      <entry>
+	the full path of the engine executable.
+	It is used to spawn a engine process if necessary.
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+  </tbody>
+</tgroup>
+</table>
+
 <para>
 All options that can be set in the config file can be overridden from the
 command line. For example
@@ -199,6 +503,19 @@ command line. For example
 </screen>
 overrides the value of the option <varname>media_path</varname>.
 </para>
+
+<para>
+  The <literal>--help</literal> option shows a list of available parameters
+  with a short help text.
+  <screen>
+    > gephex-gui --help
+Usage: /Users/georg/gphx//bin/gephex-gui-real [options]
+The allowed options are:
+  --media_path  List of directories that contain videos, images and fonts (separated by ';')
+...
+  </screen>
+</para>
+
 </sect2>
 
 <sect2><title>The GePhex Script</title>
@@ -238,7 +555,7 @@ you can provide the GEPHEX_XTERM* variables for the gui, too. </para></note>
 <para>Since GePhex is free software you can get the source code and compile it on you own.
 Or if you have one of our core platforms you can download the precompiled binaries from our <ulink url="http://www.gephex.org"><citetitle>website</citetitle></ulink>.</para>
 
-<sect1><title>Building from the Sources</title>
+<sect1 id="sec.building"><title>Building from the Sources</title>
 
   <para>
     It is not very difficult to compile your own version of GePhex.
@@ -307,7 +624,7 @@ gephex-0.4/INSTALL
    </para>
   </sect2>
 
-<sect2><title>Building on Unix Platforms</title>
+<sect2 id="sec.building.unix"><title>Building on Unix Platforms</title>
 
   <sect3> <title> Bootstrapping </title>
    <para>
@@ -413,8 +730,8 @@ See './configure --help' for available options
     At this point you can choose the location where the software should be
     installed. Some special options to include/exclude features can
     also be activated here.
-    E.g. if you have a recent x86 processor you could enable the faster MMX
-    implementation for some modules.
+    Normally it is not necessary to use any special parameters because
+    everything is checked automatically by the configure script.
   </para>
   <para>
     To see the available options you can use the
@@ -429,13 +746,30 @@ Installation directories:
 ...
 Optional Features:
 ...
-  --enable-mmx            Turn on MMX support. Still runs on x86 that don't
-                          have MMX!
+  --enable-mmx            Turn on MMX support (still runs on x86 that don't
+                          have MMX) [default=yes]
   --enable-serialize-framebuffer
                           Serialize the framebuffer type (for previews in the
-                          gui).
+                          gui) [default=no]
 
  Optional Packages:
+...
+
+  --with-SDL_IMAGE        Turn on SDL_IMAGE support (default=yes).
+  --with-SDL_TTF          Turn on SDL_TTF support (default=yes).
+  --with-AVIFILE          Turn on AVIFILE support (default=no).
+  --with-MPEG3            Turn on MPEG3 support (default=no).
+  --with-LIBPNG           Turn on LIBPNG support (default=no).
+  --with-AALIB            Turn on AALIB support (default=yes).
+  --with-ASOUNDLIB        Turn on ASOUNDLIB support (default=yes).
+  --with-V4L              Turn on V4L support (default=yes).
+  --with-OSS              Turn on OSS support (default=yes).
+  --with-LINUX_JOYSTICK   Turn on LINUX_JOYSTICK support (default=yes).
+  --with-FFMPEG           Turn on FFMPEG support (default=yes).
+
+Some influential environment variables:
+...
+  FRBINCACHE  The size of the cache of the image source module in MB
 ...
     </screen>
   </para>
@@ -443,7 +777,7 @@ Optional Features:
   <para>
     So let's do the actual configuration:
     <screen>
-bash@host:~/GePhex$ ./configure --enable-mmx --with-v4l --prefix=/usr
+bash@host:~/GePhex$ ./configure --prefix=/usr
 checking for a BSD-compatible install... /usr/bin/install -c
 checking whether build environment is sane... yes
 checking for gawk... gawk
@@ -473,7 +807,8 @@ make[3]: Entering directory `/home/martin/code/gephex/GePhex/base/src'
   <para>
     The following command installs the software on your system.
     The two binaries for the user interface <filename>gephex-gui</filename>
-    and the rendering engine <filename>gephex-engine</filename> will be
+    and the rendering engine <filename>gephex-engine</filename> and
+    the gephex wrapper script <filename>gephex</filename> will be
     installed in the <filename>PREFIX/bin</filename> directory and the
     location of the plugins is in <filename>PREFIX/lib/gephex</filename>.
     <screen>
@@ -529,7 +864,85 @@ bash@host:~/GePhex$ sudo dpkg -i ../gephex_0.4-1_i386.deb
 </sect3>
 </sect2>
 
-<sect2><title>Building on Windows</title>
+<sect2 id="sec.building.macosx"><title>Building on Mac OS X</title>
+
+<para>
+
+Building on Mac OS X is very similar to building on other UNIX systems.
+
+<para>
+Note that the tools described here are only one choice of several
+alternatives. If you find a better way to build gephex on Mac OS X
+ <ulink url="http://lists.gephex.org/mailman/listinfo">
+   <citetitle>let us know</citetitle></ulink>.
+</para>
+
+Here comes a list with tools that can be used to build gephex.
+
+<itemizedlist>
+<listitem><para> 
+  <ulink url="http://fink.sourceforge.net/"><citetitle>fink</citetitle></ulink>
+</para></listitem>
+
+ <listitem><para>
+   the developer tools from apple (I got them from my installation cd,
+   but i installed an update to gcc from 
+   <ulink url="https://connect.apple.com/"><citetitle>here</citetitle></ulink>)
+ </para></listitem>
+
+ <listitem><para>
+   x11 server + sdk (for example the sdk for 
+   <ulink url="http://www.apple.com/macosx/features/x11/">
+     <citetitle>the x11 server provided by apple</citetitle></ulink>
+   comes as an extra package with the developer tools)
+  </para></listitem>
+
+ <listitem><para>
+   qt (I used finks qt)
+ </para></listitem>
+
+ <listitem><para>
+   sdl and sdl_image (for loading images other than bmp files, again
+   I used finks versions)
+ </para></listitem>
+
+ </itemizedlist>
+
+ <para>
+ After that everything should work as described
+ in <xref linkend="sec.building.unix"/>.
+ </para>
+
+ <para>
+ If you manage to compile and link gephex against the native
+ qt version for Mac OS X please 
+ <ulink url="http://lists.gephex.org/mailman/listinfo">
+   <citetitle>let us know</citetitle></ulink>!
+ </para>
+
+We are looking for people to improve gephex on Mac OS X.
+Important areas that need work: 
+
+ <itemizedlist>
+   <listitem><para>
+   audio support (audio input and audio output module)
+   </para></listitem>
+
+   <listitem><para>
+   better output driver (current x11 output is slow, sdl seems broken)
+   </para></listitem>
+
+   <listitem><para>
+   altivec optimisations of some basic modules (xfader, ...)
+   </para></listitem>
+  </itemizedlist>
+
+ If you are interested  <ulink url="http://lists.gephex.org/mailman/listinfo">
+   <citetitle>let us know</citetitle></ulink>!
+
+</para>
+</sect2>
+<sect2 id="sec.building.win32"><title>Building on Windows</title>
 
 <sect3><title>What you need</title>  
 <para>
@@ -729,26 +1142,12 @@ bash@host:~$ sudo apt-get install gephex
 
 </chapter>
 
- <chapter><title>Basic Concepts</title>
-  <sect1><title>The three States of Graphs in the Renderer</title>
-<para>
-The Renderer knows three states for a graph:
-<itemizedlist>
-<listitem><para>The graph is not loaded. No internal state of the modules is stored and obvious no calculation is done in this state.</para></listitem>
-<listitem><para>The graph is loaded in the renderer. The modules remember their internal states e.g. the framebuffer of an xfader with loopback. But no calculation is allowed in this state.</para></listitem>
-<listitem><para>Only in the state active are any calculations done.</para></listitem>
-</itemizedlist>
-</para>
-  </sect1>
-
- </chapter>
-
 
  <chapter><title>Guided Tour</title>
 
  <sect1>
    <title> Starting GePhex </title>
-     <sect2>  <title> UN*X </title>
+     <sect2>  <title> UNIX </title>
        <para>
           You can start GePhex by executing 
           <filename>gephex</filename>.
@@ -975,14 +1374,54 @@ The Renderer knows three states for a graph:
 
  </chapter>
 
-<chapter><title>Example Graphs</title>
-    <para> On Un*x, the examples are installed automatically when you run
-GePhex for the first time. If not, it might be necessary to remove the
-<filename>~/.gephex</filename> directory from an older version of GePhex.
-<note> <para> This could delete your graphs, so backup
-<filename>~/.gephex/graphs</filename> if necessary.
-</para> </note>
+ <chapter><title>Basic Concepts</title>
+ <para>
+   TODO: this chapter needs a lot of work
+ </para>
+  <sect1><title>The three States of Graphs in the Renderer</title>
+<para>
+  The Renderer knows three states for a graph:
+  <itemizedlist>
+    <listitem><para>
+	The graph is not loaded. No internal state of the modules is
+	stored and obvious no calculation is done in this state.
+    </para></listitem>
+
+    <listitem><para>
+	The graph is loaded in the renderer. The modules remember their
+	internal states e.g. the framebuffer of an xfader with loopback.
+	But no calculation is allowed in this state.
+    </para></listitem>
+
+    <listitem><para>
+	Only in the state active are any calculations done.
+    </para></listitem>
+
+</itemizedlist>
 </para>
+
+<para>
+  So how can I distinguish these states? How can I change between them?
+  What do they imply for the usage of gephex?
+</para>
+  </sect1>
+
+ </chapter>
+
+
+<chapter><title>Example Graphs</title>
+
+    <para>
+      On UNIX systems, the examples are installed automatically when 
+      you run GePhex for the first time. If not, it might be necessary
+      to remove the <filename>~/.gephex/0.4</filename> directory from an
+      older version of GePhex.
+
+      <note><para>
+	  This could delete your graphs, so backup
+	  <filename>~/.gephex/0.4/graphs</filename> if necessary.
+      </para> </note>
+    </para>
 
 <sect1><title>Example1: Tunnel-Vision</title>
   <para>
@@ -1076,7 +1515,15 @@ GePhex for the first time. If not, it might be necessary to remove the
 
 <para>Many codecs don't allow fast seeking to an arbitrary video position. This isn't a problem for standard video playback applications. User of a video effect systems want to reverse the playback direction and jump to an random position in the video-footage. Sequential playback is boring. Watch you favorite movie in sine waves!</para>
 
-<para>For random access to the video footage it is often necessary to re-encode the material to frame-based codecs like mjpeg. Tools like mencoder of virtual dub are very helpful for these tasks.</para>
+<para>For random access to the video footage it is often necessary to re-encode the material to frame-based codecs like mjpeg. Tools like 
+<ulink url="http://ffmpeg.sourceforge.net/index.php">
+  <citetitle>ffmpeg</citetitle></ulink>,
+<ulink url="http://www.mplayerhq.hu/homepage/design7/news.html">
+  <citetitle>mencoder</citetitle></ulink>, or
+<ulink url="http://www.virtualdub.org/">
+  <citetitle>virtual dub</citetitle></ulink>
+are very helpful for these tasks.
+</para>
 
       </sect3>
 
@@ -1094,9 +1541,7 @@ GePhex for the first time. If not, it might be necessary to remove the
 
 <para>Video4Linux (V4L) is the video capture/overlay API of the linux kernel. It is based on the programming interface introduced by the bttv driver. This is a consumer frame-grabber chip used in most tv cards.</para> 
 
-<para>In future linux kernel series this api will be replaced by the successor <ulink url="http://bytesex.org/v4l/spec/"> <citetitle>Video for Linux Two</citetitle></ulink>. At the moment no GNU/Linux distribution supports this new API in their standard kernels.</para>
-
-<para>Support for the V4L2 API is planned.</para>
+<para>In the 2.6 linux kernel series this api was be replaced by the successor <ulink url="http://bytesex.org/v4l/spec/"> <citetitle>Video for Linux Two</citetitle></ulink>. The capturemodule works with both versions.</para>
 
       </sect3>
     
@@ -1349,7 +1794,7 @@ static __inline void palette_deleteInstance(PaletteType* pal)
 <para>
 To add a new effect module, it is best to use pluc, our plugin code generator.
 It can produce much of the boilerplate code from a simple module
-specification (see ...).
+specification (see <xref linkend="sec.pluc"/>).
 </para>
 
 <para>
@@ -1392,8 +1837,6 @@ image).
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-setOutput.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-update.xml" />
 
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-update.xml" />
-
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getInputAttributes.xml" />
 
 </sect3>
@@ -1414,7 +1857,7 @@ To enable additional functionality the shared library must export some of the th
 
     </sect2>
 
-    <sect2>
+    <sect2 id="sec.pluc">
       <title>Pluc the skeleton generator</title>
 
 <para>

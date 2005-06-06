@@ -27,17 +27,13 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include <cassert>
 
-#include "interfaces/imoduleclassloadercontrolreceiver.h"
 #include "interfaces/imoduleclassinfosender.h"
 #include "interfaces/imoduleclasssender.h"
 #include "interfaces/imoduleclassspecsender.h"
-#include "interfaces/imoduleclassnamesender.h"
 
-#include "interfaces/itypeclassloadercontrolreceiver.h"
-#include "interfaces/itypeclassinfosender.h"
 #include "interfaces/itypeclasssender.h"
-#include "interfaces/itypeclassnamesender.h"
 
 #include "utils/autoptr.h"
 
@@ -62,15 +58,10 @@ namespace dllloader
    * von Typ und Modul dlls.
    */
   class DllLoader: 
-    public IModuleClassLoaderControlReceiver,
-    public ITypeClassLoaderControlReceiver,
     public IModuleClassInfoSender, 
     public IModuleClassSpecSender, 
     public IModuleClassSender, 
-    public ITypeClassInfoSender, 
-    public ITypeClassSender,
-    public IModuleClassNameSender,
-    public ITypeClassNameSender
+    public ITypeClassSender
     {
 
     public:
@@ -81,54 +72,57 @@ namespace dllloader
        * Erzeugt neuen DllLoader.
        * @param logger used for reporting errors
        */
-      DllLoader(utils::AutoPtr<utils::ILogger>& logger);
+      DllLoader(utils::AutoPtr<utils::ILogger>& logger,
+		IModuleClassInfoReceiver&,
+		IModuleClassSpecReceiver&,
+		IModuleClassReceiver&,
+		ITypeClassReceiver&,
+		const std::string& module_path,
+		const std::string& type_path,
+		const std::string& frei0r_path);
 
       virtual ~DllLoader();
 
+
+      /**
+       * call this on connect of ModuleClassInfoReceiver
+       */
+      virtual void synchronize();
+
+
+      // TODO remove these functions from the public interfaces
+      void registerModuleClassInfoReceiver(IModuleClassInfoReceiver& r)
+	{assert(false);}
+      void registerModuleClassSpecReceiver(IModuleClassSpecReceiver& r)
+	{assert(false);}
+      void registerModuleClassReceiver(IModuleClassReceiver& r)
+	{assert(false);}
+      void registerTypeClassReceiver(ITypeClassReceiver&)
+	{assert(false);}
+      
+    private:
       /**
        * Liest und verarbeitet die module und die typ dateien.
-       * Davor sollte der ModuleClassNameReceiver registriert sein !!
        */
       void readDlls(const std::vector<std::string>& modules,
 		    const std::vector<std::string>& types,
 		    const std::vector<std::string>& frei0rs);
 
-      virtual void loadModuleClass(const std::string& name);
-      virtual void loadFrei0r(frei0r_funs_t&, SharedLibraryPtr sl,
-			      const std::string moduleName);
-      virtual void unloadModuleClass(const std::string& name);
-
-      //TODO: war mal const
-      virtual void synchronize();
-
-      /**
-       * Unloads all module and type dlls. Should be called before
-       * the listeners are destroyed.
-       */
-      void unloadAll();
-  
-      virtual void registerModuleClassInfoReceiver(IModuleClassInfoReceiver&);
-      virtual void registerModuleClassSpecReceiver(IModuleClassSpecReceiver&);
-      virtual void registerModuleClassReceiver(IModuleClassReceiver&);
-      virtual void registerModuleClassNameReceiver(IModuleClassNameReceiver&);
-
-      virtual void loadTypeClass(const std::string& name);
-      virtual void unloadTypeClass(const std::string& name);
-      virtual void registerTypeClassInfoReceiver(ITypeClassInfoReceiver&);
-      virtual void registerTypeClassReceiver(ITypeClassReceiver&);
-      virtual void registerTypeClassNameReceiver(ITypeClassNameReceiver&);
-
-    private:
+      
       SharedLibraryPtr loadDll(const std::string& filename);
       std::string getDllName(const std::string& filename);
+
+      void loadFrei0r(frei0r_funs_t&, SharedLibraryPtr sl,
+			      const std::string moduleName);
 
       void loadModule(SharedLibraryPtr,
                       const std::string& moduleName);
 
       void processModFile(const std::string&);
       void processFrei0rFile(const std::string&);
-      void processTypFile(const std::string&);
-	
+      void processTypeFile(const std::string& name);
+
+      
       void constructModuleClass(CModuleFunctionTable* fTable,
 				SharedLibraryPtr sl,
                                 const std::string& moduleName,
@@ -136,14 +130,10 @@ namespace dllloader
 
       NameResolver* resolver;
 
-      IModuleClassInfoReceiver* m_infoReceiver;
-      IModuleClassReceiver* m_classReceiver;
-      IModuleClassSpecReceiver* m_specReceiver;
-      IModuleClassNameReceiver* m_nameReceiver;
-
-      ITypeClassInfoReceiver* m_typeInfoReceiver;
-      ITypeClassReceiver* m_typeClassReceiver;
-      ITypeClassNameReceiver* m_typeNameReceiver;
+      IModuleClassInfoReceiver& m_infoReceiver;
+      IModuleClassReceiver& m_classReceiver;
+      IModuleClassSpecReceiver& m_specReceiver;
+      ITypeClassReceiver& m_typeClassReceiver;
 
       std::map<std::string,std::string> m_mod2fileName;
       std::map<std::string,std::string> m_typ2fileName;
@@ -152,11 +142,8 @@ namespace dllloader
       std::map<std::string,SharedLibraryPtr> m_moduleHandles;
       std::map<std::string,utils::AutoPtr<utils::Buffer> > m_moduleInfos;
 
-      //std::map<std::string,SharedLibraryPtr> m_typeHandles;
-
       utils::AutoPtr<utils::ILogger> m_logger;
     };
-
 }
 
 #endif

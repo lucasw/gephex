@@ -33,12 +33,14 @@ static logT s_log;
 #endif
 #if defined(WITH_ASOUNDLIB)
 #include "alsamidiindriver.h"
+#include "alsaseqmidiindriver.h"
 #endif
 
 #if defined(OS_WIN32)
 #include "wavemidiindriver.h"
 #endif
 
+#include <cassert>
 
 typedef struct _MyInstance {
 
@@ -111,97 +113,109 @@ void update(void* instance)
   int device = trim_int(inst->in_device->number, 0, 256);
   const char* driver_name = inst->in_driver->text;
 
-  if (my->driver_name == 0 ||
-      my->drv == 0 ||
-      strcmp(driver_name, my->driver_name) != 0)
-    {
-      delete my->driver_name;
-      my->driver_name = strcopy(driver_name);
-
-      if (my->drv)
-        {
-          my->drv->close();
-          delete my->drv;
-        }
-
-      if (strcmp(driver_name, "default") == 0)
-        {
-#if defined(WITH_OSS)
-          my->drv = new OSSMidiInDriver();
-#elif defined(WITH_ASOUNDLIB)
-          my->drv = new OSSMidiInDriver();
-#elif defined(OS_WIN32)
-          my->drv = new WaveMidiInDriver();
-#endif
-        }
-#if defined(WITH_OSS)
-      else if (strcmp(driver_name, "oss") == 0)
-        {
-          my->drv = new OSSMidiInDriver();
-        }
-#endif
-#if defined(WITH_ASOUNDLIB)
-      else if (strcmp(driver_name, "alsa") == 0)
-        {
-          my->drv = new AlsaMidiInDriver();
-        }
-#endif
-#if defined(OS_WIN32)
-      else if (strcmp(driver_name, "wavein") == 0)
-        {
-          my->drv = new WaveMidiInDriver();
-        }
-#endif
-      else
-        {
-#if defined(OS_WIN32)
-	  my->drv = new WaveMidiInDriver();
-	  s_log(2, "Unkown driver - using WaveIn driver");
-#elif defined(WITH_OSS)
-	  my->drv = new OSSMidiInDriver();
-	  s_log(2, "Unkown driver - using OSS driver");
-#elif defined(WITH_OSS)
-	  my->drv = new AlsaMidiInDriver();
-	  s_log(2, "Unkown driver - using alsa driver");
-#endif
-        }
-    }
-
-  if (device != my->device || !my->drv->is_open())
-    {
-      my->device = device;
-	  
-      if (my->drv->is_open())
-        my->drv->close();
-	  
-      try
-        {
-          my->drv->open(device);
-        }
-      catch (std::exception& e)
-        {
-          char buf[128];
-          snprintf(buf, sizeof(buf), "Error while opening: %s", e.what());
-          s_log(0, buf);
-        }      
-    }
-
-  if (!my->drv->is_open())
-    return;
-  
   try
     {
-      static const int MAX_MSG_LEN = 1024;
-      unsigned char buffer[MAX_MSG_LEN];
-      int len = my->drv->read(buffer, sizeof(buffer));
+      
+      if (my->driver_name == 0 ||
+	  my->drv == 0 ||
+	  strcmp(driver_name, my->driver_name) != 0)
+	{
+	  delete[] my->driver_name;
+	  my->driver_name = strcopy(driver_name);
+	  delete my->drv;
 
-      midi_set_buffer(inst->out_r, buffer, len);
+	  if (strcmp(driver_name, "default") == 0)
+	    {
+#if defined(WITH_OSS)
+	      my->drv = new OSSMidiInDriver();
+#elif defined(WITH_ASOUNDLIB)
+	      my->drv = new AlsaSeqMidiInDriver();
+#elif defined(OS_WIN32)	  
+	      my->drv = new WaveMidiInDriver();
+#endif
+	    }
+#if defined(WITH_OSS)
+	  else if (strcmp(driver_name, "oss") == 0)
+	    {
+	      my->drv = new OSSMidiInDriver();
+	    }
+#endif
+#if defined(WITH_ASOUNDLIB)
+	  else if (strcmp(driver_name, "alsa") == 0)
+	    {
+	      my->drv = new AlsaMidiInDriver();
+	    }
+	  else if (strcmp(driver_name, "alsaseq") == 0)
+	    {
+	      my->drv = new AlsaSeqMidiInDriver();
+	    }
+#endif
+#if defined(OS_WIN32)
+	  else if (strcmp(driver_name, "wavein") == 0)
+	    {
+	      my->drv = new WaveMidiInDriver();
+	    }
+#endif
+	  else
+	    {
+#if defined(OS_WIN32)
+	      my->drv = new WaveMidiInDriver();
+	      s_log(2, "Unkown driver - using WaveIn driver");
+#elif defined(WITH_OSS)
+	      my->drv = new OSSMidiInDriver();
+	      s_log(2, "Unkown driver - using OSS driver");
+#elif defined(WITH_ALSA)
+	      my->drv = new AlsaMidiInDriver();
+	      s_log(2, "Unkown driver - using alsa driver");
+#endif
+	    }
+	}
+
+      assert(my->drv != 0);
+      
+      if (device != my->device || !my->drv->is_open())
+	{
+	  my->device = device;
+	  
+	  if (my->drv->is_open())
+	    my->drv->close();
+
+	  assert(!my->drv->is_open());
+	  
+	  try
+	    {
+	      my->drv->open(device);
+	    }
+	  catch (std::exception& e)
+	    {
+	      char buf[128];
+	      snprintf(buf, sizeof(buf), "Error while opening: %s", e.what());
+	      s_log(0, buf);
+	      throw;
+	    }
+	  assert(my->drv->is_open());
+	}
+
+      assert(my->drv->is_open());
+
+      try
+	{
+	  static const int MAX_MSG_LEN = 1024;
+	  unsigned char buffer[MAX_MSG_LEN];
+	  int len = my->drv->read(buffer, sizeof(buffer));
+
+	  midi_set_buffer(inst->out_r, buffer, len);
+	}
+      catch (std::exception& e)
+	{
+	  char buf[128];
+	  snprintf(buf, sizeof(buf), "Error while reading: %s", e.what());
+	  s_log(0, buf);
+	  throw;
+	}
     }
   catch (std::exception& e)
     {
-      char buf[128];
-      snprintf(buf, sizeof(buf), "Error while reading: %s", e.what());
-      s_log(0, buf);
+      midi_set_buffer(inst->out_r, 0, 0);
     }
-  
 }

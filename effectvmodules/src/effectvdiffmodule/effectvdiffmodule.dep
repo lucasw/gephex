@@ -1,0 +1,22 @@
+# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von effectvdiffmodule.mak
+
+.\effectvdiffmodule.c : \
+	"..\..\..\config.h"\
+	"..\libeffectv\EffecTV.h"\
+	"..\libeffectv\libeffectv.h"\
+	"..\libeffectv\sdldummy.h"\
+	"..\libeffectv\utils.h"\
+	".\diff.c"\
+	
+
+.\effectvdiffmodule_auto.c : \
+	"..\..\..\engine\src\engine\dllutils.h"\
+	".\effectvdiffmodule.xpm"\
+	
+
+!IF  "$(CFG)" == "effectvdiffmodule - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "effectvdiffmodule - Win32 Debug"
+
+!ENDIF 
+
