@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* (stolen from the kernel) */
@@ -53,7 +53,7 @@ int32_t a52_bitstream_get_bh_2 (a52_state_t * state, uint32_t num_bits);
 static inline uint32_t bitstream_get (a52_state_t * state, uint32_t num_bits)
 {
     uint32_t result;
-	
+
     if (num_bits < state->bits_left) {
 	result = (state->current_word << (32 - state->bits_left)) >> (32 - num_bits);
 	state->bits_left -= num_bits;
@@ -66,7 +66,7 @@ static inline uint32_t bitstream_get (a52_state_t * state, uint32_t num_bits)
 static inline int32_t bitstream_get_2 (a52_state_t * state, uint32_t num_bits)
 {
     int32_t result;
-	
+
     if (num_bits < state->bits_left) {
 	result = (((int32_t)state->current_word) << (32 - state->bits_left)) >> (32 - num_bits);
 	state->bits_left -= num_bits;

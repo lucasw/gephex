@@ -1,6 +1,6 @@
 #include "picmanager.h"
 
-#include <qpainter.h>
+#include <QtGui/qpainter.h>
 
 #include "node.xpm"
 
@@ -9,7 +9,7 @@ namespace gui
 
   namespace
   {
-    void draw_border(const QPixmap& pixmap, const QColor& border_col)
+    void draw_border(QPixmap& pixmap, const QColor& border_col)
     {
        QPainter p( &pixmap );
        //p.setBrush( border_col );

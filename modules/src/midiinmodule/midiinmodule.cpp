@@ -22,6 +22,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "midiinmodule.h"
 
+#include <map>
+#include <string>
+#include <cassert>
+#include <algorithm>
+
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -40,7 +45,9 @@ static logT s_log;
 #include "wavemidiindriver.h"
 #endif
 
-#include <cassert>
+#if defined(OS_DARWIN)
+#include "macosxmidiindriver.h"
+#endif
 
 typedef struct _MyInstance {
 
@@ -106,6 +113,120 @@ char* strcopy(const char* s)
   return r;
 }
 
+namespace
+{
+  MidiInDriver* create_driver(const char* driver_name)
+  {
+    if (strcmp(driver_name, "default") == 0)
+      {
+#if defined(WITH_ASOUNDLIB)
+	return new AlsaSeqMidiInDriver();
+#elif defined(WITH_OSS)
+	return new OSSMidiInDriver();
+#elif defined(OS_WIN32)	  
+	return new WaveMidiInDriver();
+#elif defined(OS_DARWIN)
+	return new MacOSXMidiInDriver();
+#endif
+      }
+#if defined(WITH_OSS)
+    else if (strcmp(driver_name, "oss") == 0)
+      {
+	return new OSSMidiInDriver();
+      }
+#endif
+#if defined(WITH_ASOUNDLIB)
+    else if (strcmp(driver_name, "alsa") == 0)
+      {
+	return new AlsaMidiInDriver();
+      }
+    else if (strcmp(driver_name, "alsaseq") == 0)
+      {
+	return new AlsaSeqMidiInDriver();
+      }
+#endif
+#if defined(OS_WIN32)
+    else if (strcmp(driver_name, "wavein") == 0)
+      {
+	return new WaveMidiInDriver();
+      }
+#endif
+#if defined(OS_DARWIN)
+    else if (strcmp(driver_name, "coremidi") == 0)
+      {
+	return new MacOSXMidiInDriver();
+      }
+#endif
+    else
+      {
+#if defined(OS_WIN32)
+	return new WaveMidiInDriver();
+	s_log(2, "Unkown driver - using WaveIn driver");
+#elif defined(WITH_OSS)
+	return new OSSMidiInDriver();
+	s_log(2, "Unkown driver - using OSS driver");
+#elif defined(WITH_ALSA)
+	return new AlsaMidiInDriver();
+	s_log(2, "Unkown driver - using alsa driver");
+#elif defined(OS_DARWIN)
+	return new MacOSXMidiInDriver();
+	s_log(2, "Unkown driver - using coremidi driver");
+#endif
+      }
+  }
+
+  typedef std::pair<int, std::string> DriverKey;
+  typedef std::pair<MidiInDriver*, int> DriverData;
+
+  typedef std::map<DriverKey, DriverData> DriverMap;
+
+  static DriverMap s_map;
+
+  MidiInDriver* get_driver(const char* driver_name,
+			   int device_id)
+  {
+    DriverMap::const_iterator it = s_map.find(DriverKey(device_id,
+							std::string(driver_name)));
+    if (it != s_map.end())
+      {
+	DriverData data = it->second;
+	data.second += 1;  // Increase reference count
+	return data.first;
+      }
+    else
+      {
+	MidiInDriver* drv = create_driver(driver_name);
+	assert(drv != 0);
+
+	s_map.insert(std::make_pair(DriverKey(device_id, std::string(driver_name)),
+				    DriverData(drv, 1)));
+	return drv;
+      }
+  }
+
+  void release_driver(MidiInDriver* drv,
+		      const char* driver_name,
+		      int device_id)
+  {
+    DriverMap::iterator it = s_map.find(DriverKey(device_id,
+						  std::string(driver_name)));
+
+    assert(it != s_map.end());
+
+    DriverData& data = it->second;
+
+    assert(data.first == drv);
+    assert(data.second >= 1);
+    data.second -= 1;
+
+    if (data.second == 0)
+      {
+	s_map.erase(it);
+	delete drv;
+      }
+  }
+}
+
 void update(void* instance)
 {
   InstancePtr inst = (InstancePtr) instance;
@@ -122,53 +243,11 @@ void update(void* instance)
 	{
 	  delete[] my->driver_name;
 	  my->driver_name = strcopy(driver_name);
-	  delete my->drv;
 
-	  if (strcmp(driver_name, "default") == 0)
-	    {
-#if defined(WITH_OSS)
-	      my->drv = new OSSMidiInDriver();
-#elif defined(WITH_ASOUNDLIB)
-	      my->drv = new AlsaSeqMidiInDriver();
-#elif defined(OS_WIN32)	  
-	      my->drv = new WaveMidiInDriver();
-#endif
-	    }
-#if defined(WITH_OSS)
-	  else if (strcmp(driver_name, "oss") == 0)
-	    {
-	      my->drv = new OSSMidiInDriver();
-	    }
-#endif
-#if defined(WITH_ASOUNDLIB)
-	  else if (strcmp(driver_name, "alsa") == 0)
-	    {
-	      my->drv = new AlsaMidiInDriver();
-	    }
-	  else if (strcmp(driver_name, "alsaseq") == 0)
-	    {
-	      my->drv = new AlsaSeqMidiInDriver();
-	    }
-#endif
-#if defined(OS_WIN32)
-	  else if (strcmp(driver_name, "wavein") == 0)
-	    {
-	      my->drv = new WaveMidiInDriver();
-	    }
-#endif
-	  else
-	    {
-#if defined(OS_WIN32)
-	      my->drv = new WaveMidiInDriver();
-	      s_log(2, "Unkown driver - using WaveIn driver");
-#elif defined(WITH_OSS)
-	      my->drv = new OSSMidiInDriver();
-	      s_log(2, "Unkown driver - using OSS driver");
-#elif defined(WITH_ALSA)
-	      my->drv = new AlsaMidiInDriver();
-	      s_log(2, "Unkown driver - using alsa driver");
-#endif
-	    }
+	  if (my->drv != 0)
+	    release_driver(my->drv, my->driver_name, my->device);
+
+	  my->drv = get_driver(my->driver_name, my->device);
 	}
 
       assert(my->drv != 0);

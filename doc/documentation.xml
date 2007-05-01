@@ -866,83 +866,20 @@ bash@host:~/GePhex$ sudo dpkg -i ../gephex_0.4-1_i386.deb
 
 <sect2 id="sec.building.macosx"><title>Building on Mac OS X</title>
 
-<para>
+Content has been moved to this wiki
+<ulink url="http://wiki.gephex.org/BuildMacOSX"> <citetitle>article</citetitle></ulink>.
 
-Building on Mac OS X is very similar to building on other UNIX systems.
-
-<para>
-Note that the tools described here are only one choice of several
-alternatives. If you find a better way to build gephex on Mac OS X
- <ulink url="http://lists.gephex.org/mailman/listinfo">
-   <citetitle>let us know</citetitle></ulink>.
-</para>
-
-Here comes a list with tools that can be used to build gephex.
-
-<itemizedlist>
-<listitem><para> 
-  <ulink url="http://fink.sourceforge.net/"><citetitle>fink</citetitle></ulink>
-</para></listitem>
-
- <listitem><para>
-   the developer tools from apple (I got them from my installation cd,
-   but i installed an update to gcc from 
-   <ulink url="https://connect.apple.com/"><citetitle>here</citetitle></ulink>)
- </para></listitem>
-
- <listitem><para>
-   x11 server + sdk (for example the sdk for 
-   <ulink url="http://www.apple.com/macosx/features/x11/">
-     <citetitle>the x11 server provided by apple</citetitle></ulink>
-   comes as an extra package with the developer tools)
-  </para></listitem>
-
- <listitem><para>
-   qt (I used finks qt)
- </para></listitem>
-
- <listitem><para>
-   sdl and sdl_image (for loading images other than bmp files, again
-   I used finks versions)
- </para></listitem>
-
- </itemizedlist>
-
- <para>
- After that everything should work as described
- in <xref linkend="sec.building.unix"/>.
- </para>
-
- <para>
- If you manage to compile and link gephex against the native
- qt version for Mac OS X please 
- <ulink url="http://lists.gephex.org/mailman/listinfo">
-   <citetitle>let us know</citetitle></ulink>!
- </para>
-
-We are looking for people to improve gephex on Mac OS X.
-Important areas that need work: 
-
- <itemizedlist>
-   <listitem><para>
-   audio support (audio input and audio output module)
-   </para></listitem>
-
-   <listitem><para>
-   better output driver (current x11 output is slow, sdl seems broken)
-   </para></listitem>
-
-   <listitem><para>
-   altivec optimisations of some basic modules (xfader, ...)
-   </para></listitem>
-  </itemizedlist>
-
- If you are interested  <ulink url="http://lists.gephex.org/mailman/listinfo">
-   <citetitle>let us know</citetitle></ulink>!
-
-</para>
 </sect2>
+
 <sect2 id="sec.building.win32"><title>Building on Windows</title>
+
+<para>
+There is also an alternative way to build gephex using MinGW.
+The below description is outdated, it works only for gephex version 0.4.3 or
+less.
+
+See this wiki <ulink url="http://wiki.gephex.org/BuildMinGW"> <citetitle>article</citetitle> </ulink>.
+</para>
 
 <sect3><title>What you need</title>  
 <para>

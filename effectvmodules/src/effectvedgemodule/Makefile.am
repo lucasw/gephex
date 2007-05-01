@@ -18,7 +18,7 @@ effectvedgemodule_la_SOURCES = \
 	effectvedgemodule.spec \
 	effectvedgemodule.xpm
 
-EXTRA_DIST = edge.c effectvedgemodule.dsp effectvedgemodule.mak effectvedgemodule.dep
+EXTRA_DIST = edge.c  effectvedgemodule.dsp effectvedgemodule.mak effectvedgemodule.dep
 
 effectvedgemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

@@ -17,7 +17,7 @@ effectvmatrixmodule_la_SOURCES = \
         effectvmatrixmodule.spec \
         effectvmatrixmodule.xpm
 
-EXTRA_DIST = matrix.c matrixFont.xpm effectvmatrixmodule.dsp effectvmatrixmodule.mak effectvmatrixmodule.dep
+EXTRA_DIST = matrix.c matrixFont.xpm  effectvmatrixmodule.dsp effectvmatrixmodule.mak effectvmatrixmodule.dep
 
 effectvmatrixmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

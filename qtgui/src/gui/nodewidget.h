@@ -27,8 +27,8 @@
 #include <string>
 #include <list>
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/qpixmap.h>
 
 #include "utils/autoptr.h"
 
@@ -97,7 +97,6 @@ namespace gui
     void mouseOverNode(const NodeWidget*);
 
     // die folgenden signale werden von den inputs/outputs durchgesschleift
-    void beginLineDraw();
     void redrawLine(const QPoint& from, const QPoint& to);
     void connectionRequestFromInput(const InputPlugWidget*, const QPoint& to);
     void connectionRequestFromOutput(const OutputPlugWidget*,const QPoint& to);
@@ -108,7 +107,7 @@ namespace gui
     void error(const std::string& errorText);
 
   public:
-    NodeWidget(QWidget* parent,const char* name, WFlags fl,
+    NodeWidget(QWidget* parent, Qt::WFlags fl,
 	       int id,const ModuleInfo& _info, 
 	       const PicManager& picz,
                const utils::AutoPtr<ControlValueDispatcher>&,
@@ -138,7 +137,6 @@ namespace gui
 
  public slots:
  // schleifen nur signale von inputs/outputs durch
-    void beginLineDraw_();
     void redrawLine_(const QPoint& from, const QPoint& to);
     void connectionRequestFromInput_(const InputPlugWidget*, const QPoint& to);
     void connectionRequestFromOutput_(const OutputPlugWidget*,

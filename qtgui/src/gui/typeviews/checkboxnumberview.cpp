@@ -26,10 +26,11 @@
 #include <cmath>
 #include <vector>
 
-#include <qlayout.h>
-#include <qvbuttongroup.h>
-#include <qcheckbox.h>
-//#include <qmessagebox.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/QButtonGroup>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/QGroupBox>
+//#include <QtGui/qmessagebox.h>
 
 #include "utils/structreader.h"
 #include "utils/stringtokenizer.h"
@@ -50,51 +51,55 @@ namespace gui
 			
   public:
     CheckBoxNumberView(QWidget* parent, const ParamMap& params)
-      : TypeView(parent, params), m_value(0)
+      : TypeView(parent, params), m_value(0), m_num_buttons(0)
     {
       utils::StructReader sr(params);	  
-      
-	  QVBoxLayout* l = new QVBoxLayout(this);
-      m_group = new QVButtonGroup(this);	  
-	  l->addWidget(m_group);
 
-	  // parameter aus params angucken
-      try {
-        std::string values = sr.getStringValue("values");
+      QGroupBox* grp = new QGroupBox(this);
+      
+      m_group = new QButtonGroup(grp);
+      m_group->setExclusive(false);
+
+      QVBoxLayout* buttonLayout = new QVBoxLayout(grp);
+
+      // parameter aus params angucken
+      try
+        {
+          std::string values = sr.getStringValue("values");
 		  
-        utils::StringTokenizer tok(values);
-        int index = 0;
-        for (std::string token = tok.next(",");
-             token != ""; token = tok.next(","), ++index)
-          {
-            QCheckBox* cb = new QCheckBox(token.c_str(), m_group, "cb");
-			QFont f = cb->font();
-			f.setPointSize(8);
-			cb->setFont(f);
-            m_group->insert(cb, index);
-          }
-      }
+          utils::StringTokenizer tok(values);
+          for (std::string token = tok.next(",");
+               token != ""; token = tok.next(","), ++m_num_buttons)
+            {
+              QCheckBox* cb = new QCheckBox(token.c_str(), grp);
+              buttonLayout->addWidget(cb);
+              QFont f = cb->font();
+              f.setPointSize(8);
+              cb->setFont(f);
+              m_group->addButton(cb, m_num_buttons);
+            }
+        }
       catch(...)
-	  {
-	  }
-	  
-	  /*QSize min  = m_group->minimumSize();
-	  QSize max  = m_group->maximumSize();
-	  QSize pref = m_group->sizeHint();
-	  std::ostringstream os;
-	  os << "width     = " << m_group->width() << "\t height     = " << m_group->height() << "\n";
-	  os << "minWidth  = " << min.width()      << "\t minHeight  = " << min.height() << "\n";
-	  os << "maxWidth  = " << max.width()      << "\t maxHeight  = " << max.height() << "\n";
-	  os << "prefWidth = " << pref.width()     << "\t prefHeight = " << pref.height() << "\n";
-	  QMessageBox::information( 0, "Info", os.str().c_str() );*/
+        {
+        }
+	
+      /*
+      QSize min  = grp->minimumSize();
+      QSize max  = grp->maximumSize();
+      QSize pref = grp->sizeHint();
+      std::ostringstream os;
+      os << "width     = " << grp->width() << "\t height     = " << grp->height() << "\n";
+      os << "minWidth  = " << min.width()      << "\t minHeight  = " << min.height() << "\n";
+      os << "maxWidth  = " << max.width()      << "\t maxHeight  = " << max.height() << "\n";
+      os << "prefWidth = " << pref.width()     << "\t prefHeight = " << pref.height() << "\n";
+      QMessageBox::information( 0, "Info", os.str().c_str() );*/
       
-      
-	  this->resize(m_group->sizeHint());
+      m_layout->addWidget(grp);
 	  
+      connect(m_group, SIGNAL(buttonClicked(int)),
+              this, SLOT(boxToggled(int)));
 	  
-      connect(m_group, SIGNAL(clicked(int)), this, SLOT(boxToggled(int)));
-	  
-      m_group->show();
+      grp->show();
     }
 		
     virtual void valueChange(const utils::Buffer& newValue)
@@ -103,28 +108,28 @@ namespace gui
       double raw;
       is >> raw;
 	
-	  int new_value = (int) floor(raw+0.5);
+      int new_value = static_cast<int>(floor(raw+0.5));
 
-	  if (m_value != new_value)
-	  {
-		  m_value = new_value;
+      if (m_value != new_value)
+        {
+          m_value = new_value;
 		  
-		  for (int i = 0; i < m_group->count(); ++i)
-		  {
-			  QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->find(i));
-			  if (m_value & (1 << i))		
-				  cb->setChecked(true);      
-			  else
-				  cb->setChecked(false);
-		  }
-	  }
+          for (int i = 0; i < m_num_buttons; ++i)
+            {
+              QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->button(i));
+              if (m_value & (1 << i))		
+                cb->setChecked(true);      
+              else
+                cb->setChecked(false);
+            }
+        }
     }
 		
-private slots:
-void boxToggled(int index)
+  private slots:
+    void boxToggled(int index)
     {
       std::ostringstream os;			
-      QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->find(index));
+      QCheckBox* cb = dynamic_cast<QCheckBox*>(m_group->button(index));
       if (cb->isChecked())
         {
           m_value |= (1 << index);
@@ -143,8 +148,9 @@ void boxToggled(int index)
     }
 
   private:
-    QVButtonGroup* m_group;
+    QButtonGroup* m_group;
     int m_value;
+    int m_num_buttons;
   };
 
   // constructor

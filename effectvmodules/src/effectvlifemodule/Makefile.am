@@ -17,7 +17,7 @@ effectvlifemodule_la_SOURCES = \
         effectvlifemodule.spec \
         effectvlifemodule.xpm
 
-EXTRA_DIST = life.c effectvlifemodule.dsp effectvlifemodule.mak effectvlifemodule.dep
+EXTRA_DIST = life.c  effectvlifemodule.dsp effectvlifemodule.mak effectvlifemodule.dep
 
 effectvlifemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

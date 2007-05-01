@@ -38,18 +38,21 @@ ALL : "$(OUTDIR)\dllloader.lib"
 
 CLEAN :
 	-@erase "$(INTDIR)\c_input.obj"
-	-@erase "$(INTDIR)\c_module.obj"
-	-@erase "$(INTDIR)\c_moduleclass.obj"
 	-@erase "$(INTDIR)\c_output.obj"
 	-@erase "$(INTDIR)\c_outputplug.obj"
 	-@erase "$(INTDIR)\c_type.obj"
 	-@erase "$(INTDIR)\c_typeclass.obj"
 	-@erase "$(INTDIR)\dllloader.obj"
-	-@erase "$(INTDIR)\frei0rwrapper.obj"
+	-@erase "$(INTDIR)\frei0r_module.obj"
+	-@erase "$(INTDIR)\frei0r_module_class.obj"
+	-@erase "$(INTDIR)\frei0r_module_plugin.obj"
+	-@erase "$(INTDIR)\gephex_module.obj"
+	-@erase "$(INTDIR)\gephex_module_class.obj"
+	-@erase "$(INTDIR)\gephex_module_plugin.obj"
+	-@erase "$(INTDIR)\gephex_type_plugin.obj"
 	-@erase "$(INTDIR)\moduleclassspec.obj"
 	-@erase "$(INTDIR)\moduleinfoutils.obj"
 	-@erase "$(INTDIR)\nameresolver.obj"
-	-@erase "$(INTDIR)\typedllloader.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(OUTDIR)\dllloader.lib"
 
@@ -60,7 +63,7 @@ CLEAN :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /G6 /MD /w /W0 /GR /GX /O2 /Ob2 /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /I "compat_vs6" /D "_LIB" /D "NDEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -101,18 +104,21 @@ LIB32=link.exe -lib
 LIB32_FLAGS=/nologo /out:"$(OUTDIR)\dllloader.lib" 
 LIB32_OBJS= \
 	"$(INTDIR)\c_input.obj" \
-	"$(INTDIR)\c_module.obj" \
-	"$(INTDIR)\c_moduleclass.obj" \
 	"$(INTDIR)\c_output.obj" \
 	"$(INTDIR)\c_outputplug.obj" \
 	"$(INTDIR)\c_type.obj" \
 	"$(INTDIR)\c_typeclass.obj" \
 	"$(INTDIR)\dllloader.obj" \
-	"$(INTDIR)\frei0rwrapper.obj" \
+	"$(INTDIR)\frei0r_module.obj" \
+	"$(INTDIR)\frei0r_module_class.obj" \
+	"$(INTDIR)\frei0r_module_plugin.obj" \
+	"$(INTDIR)\gephex_module.obj" \
+	"$(INTDIR)\gephex_module_class.obj" \
+	"$(INTDIR)\gephex_module_plugin.obj" \
+	"$(INTDIR)\gephex_type_plugin.obj" \
 	"$(INTDIR)\moduleclassspec.obj" \
 	"$(INTDIR)\moduleinfoutils.obj" \
-	"$(INTDIR)\nameresolver.obj" \
-	"$(INTDIR)\typedllloader.obj"
+	"$(INTDIR)\nameresolver.obj"
 
 "$(OUTDIR)\dllloader.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -132,18 +138,21 @@ ALL : "..\..\..\config.h" "$(OUTDIR)\dllloader.lib"
 
 CLEAN :
 	-@erase "$(INTDIR)\c_input.obj"
-	-@erase "$(INTDIR)\c_module.obj"
-	-@erase "$(INTDIR)\c_moduleclass.obj"
 	-@erase "$(INTDIR)\c_output.obj"
 	-@erase "$(INTDIR)\c_outputplug.obj"
 	-@erase "$(INTDIR)\c_type.obj"
 	-@erase "$(INTDIR)\c_typeclass.obj"
 	-@erase "$(INTDIR)\dllloader.obj"
-	-@erase "$(INTDIR)\frei0rwrapper.obj"
+	-@erase "$(INTDIR)\frei0r_module.obj"
+	-@erase "$(INTDIR)\frei0r_module_class.obj"
+	-@erase "$(INTDIR)\frei0r_module_plugin.obj"
+	-@erase "$(INTDIR)\gephex_module.obj"
+	-@erase "$(INTDIR)\gephex_module_class.obj"
+	-@erase "$(INTDIR)\gephex_module_plugin.obj"
+	-@erase "$(INTDIR)\gephex_type_plugin.obj"
 	-@erase "$(INTDIR)\moduleclassspec.obj"
 	-@erase "$(INTDIR)\moduleinfoutils.obj"
 	-@erase "$(INTDIR)\nameresolver.obj"
-	-@erase "$(INTDIR)\typedllloader.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
 	-@erase "$(OUTDIR)\dllloader.lib"
@@ -156,7 +165,7 @@ CLEAN :
     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MTd /w /W0 /Gm /GR /GX /ZI /Od /I ".." /I "../../../base/src" /I "../../../" /I "../../../util/include" /I "compat_vs6" /D "_LIB" /D "_DEBUG" /D "_MBCS" /D for="if (0) {} else for" /D "HAVE_CONFIG_H" /D ENGINE_VERBOSITY=0 /Fp"$(INTDIR)\dllloader.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -197,18 +206,21 @@ LIB32=link.exe -lib
 LIB32_FLAGS=/nologo /out:"$(OUTDIR)\dllloader.lib" 
 LIB32_OBJS= \
 	"$(INTDIR)\c_input.obj" \
-	"$(INTDIR)\c_module.obj" \
-	"$(INTDIR)\c_moduleclass.obj" \
 	"$(INTDIR)\c_output.obj" \
 	"$(INTDIR)\c_outputplug.obj" \
 	"$(INTDIR)\c_type.obj" \
 	"$(INTDIR)\c_typeclass.obj" \
 	"$(INTDIR)\dllloader.obj" \
-	"$(INTDIR)\frei0rwrapper.obj" \
+	"$(INTDIR)\frei0r_module.obj" \
+	"$(INTDIR)\frei0r_module_class.obj" \
+	"$(INTDIR)\frei0r_module_plugin.obj" \
+	"$(INTDIR)\gephex_module.obj" \
+	"$(INTDIR)\gephex_module_class.obj" \
+	"$(INTDIR)\gephex_module_plugin.obj" \
+	"$(INTDIR)\gephex_type_plugin.obj" \
 	"$(INTDIR)\moduleclassspec.obj" \
 	"$(INTDIR)\moduleinfoutils.obj" \
-	"$(INTDIR)\nameresolver.obj" \
-	"$(INTDIR)\typedllloader.obj"
+	"$(INTDIR)\nameresolver.obj"
 
 "$(OUTDIR)\dllloader.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -231,16 +243,6 @@ LIB32_OBJS= \
 SOURCE=.\c_input.cpp
 
 "$(INTDIR)\c_input.obj" : $(SOURCE) "$(INTDIR)"
-
-
-SOURCE=.\c_module.cpp
-
-"$(INTDIR)\c_module.obj" : $(SOURCE) "$(INTDIR)"
-
-
-SOURCE=.\c_moduleclass.cpp
-
-"$(INTDIR)\c_moduleclass.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\c_output.cpp
@@ -268,9 +270,39 @@ SOURCE=.\dllloader.cpp
 "$(INTDIR)\dllloader.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
 
 
-SOURCE=.\frei0rwrapper.cpp
+SOURCE=.\frei0r_module.cpp
 
-"$(INTDIR)\frei0rwrapper.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+"$(INTDIR)\frei0r_module.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\frei0r_module_class.cpp
+
+"$(INTDIR)\frei0r_module_class.obj" : $(SOURCE) "$(INTDIR)" "..\..\..\config.h"
+
+
+SOURCE=.\frei0r_module_plugin.cpp
+
+"$(INTDIR)\frei0r_module_plugin.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\gephex_module.cpp
+
+"$(INTDIR)\gephex_module.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\gephex_module_class.cpp
+
+"$(INTDIR)\gephex_module_class.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\gephex_module_plugin.cpp
+
+"$(INTDIR)\gephex_module_plugin.obj" : $(SOURCE) "$(INTDIR)"
+
+
+SOURCE=.\gephex_type_plugin.cpp
+
+"$(INTDIR)\gephex_type_plugin.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\moduleclassspec.cpp
@@ -286,11 +318,6 @@ SOURCE=.\moduleinfoutils.cpp
 SOURCE=.\nameresolver.cpp
 
 "$(INTDIR)\nameresolver.obj" : $(SOURCE) "$(INTDIR)"
-
-
-SOURCE=.\typedllloader.cpp
-
-"$(INTDIR)\typedllloader.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=..\..\..\config_h.win32

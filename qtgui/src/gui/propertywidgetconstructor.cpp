@@ -32,7 +32,7 @@ namespace gui
   
   PropertyWidgetConstr::PropertyWidgetConstr(const TypeViewConstructor* con,
 					     const std::map<std::string,
-					     std::string>& params,
+  					       std::string>& params,
 					     int nodeID,int inIndex,
 					     int controlID,
 					     const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
@@ -54,7 +54,7 @@ namespace gui
 
   QWidget* PropertyWidgetConstr::constructWidget(QWidget* parent) const
   {
-    PropertyWidget* w = new PropertyWidget(parent,"", 0,
+    PropertyWidget* w = new PropertyWidget(parent, 0,
 					   m_nodeID, m_inputIndex,
 					   m_controlID, mcr, m_params,
 					   *m_viewConstructor);

@@ -22,7 +22,7 @@ INTERFACE_FILES = \
 	typeclass.if \
 	typeclassinfo.if
 
-EXTRA_DIST = interfaces.dsp interfaces.mak interfaces.dep $(INTERFACE_FILES)
+EXTRA_DIST = interfaces.vcproj interfaces.dsp interfaces.mak interfaces.dep $(INTERFACE_FILES)
 
 
 GENERATED_H = $(INTERFACE_FILES:%.if=i%receiver.h) $(INTERFACE_FILES:%.if=i%sender.h)
@@ -30,6 +30,7 @@ GENERATED_H = $(INTERFACE_FILES:%.if=i%receiver.h) $(INTERFACE_FILES:%.if=i%send
 noinst_HEADERS = \
 	$(GENERATED_H) \
 	imoduleclass.h \
+	imoduleplugin.h \
 	imoduleclassspec.h \
 	imodule.h \
 	itask.h \

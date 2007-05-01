@@ -25,4 +25,4 @@ INCLUDES = -I @srcdir@/../../../engine/src/engine \
 	   -I @srcdir@/../../../types/src/stringtype
 
 DISTCLEANFILES = signalgenmodule.h signalgenmodule_auto.c
-EXTRA_DIST = signalgenmodule.dsp signalgenmodule.mak signalgenmodule.dep
+EXTRA_DIST = signalgenmodule.vcproj signalgenmodule.dsp signalgenmodule.mak signalgenmodule.dep

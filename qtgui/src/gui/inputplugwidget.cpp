@@ -22,28 +22,28 @@
 
 #include "inputplugwidget.h"
 
-#include <qtooltip.h>
+#include <QtGui/QMouseEvent>
 
 namespace gui
 {
 
-  InputPlugWidget::InputPlugWidget(QWidget* parent, const char* name,
+  InputPlugWidget::InputPlugWidget(QWidget* parent,
 				   const QPixmap& free_, const QPixmap& busy_, 
-				   std::string _name, std::string _type,
+				   const std::string& name,
+				   const std::string& type,
 				   const ParamMap& params,
-				   int _index, int _ID, bool _inP)
-    : PlugWidget(parent,name,_name,_type,_index,_ID, free_, busy_),
-      inPropertyDialog(_inP), m_params(params)
+				   int index, int ID, bool inP)
+    : PlugWidget(parent,name,type,index,ID, free_, busy_),
+      inPropertyDialog(inP), m_params(params)
   {
-    std::string toolTipText = _name + ":" + _type;
-    QToolTip::add(this,toolTipText.c_str());
-    setBackgroundPixmap(freePic);
+    std::string toolTipText = name + ":" + type;
+    setToolTip(toolTipText.c_str());
   }
 
 
   void InputPlugWidget::mouseMoveEvent(QMouseEvent* e)
   {
-    if (lineDrawMode)
+    if (m_lineDrawMode)
       {
 	emit redrawLine(this->pos()+parentWidget()->pos() 
                         + QPoint(this->width() / 2,this->height() / 2),
@@ -58,9 +58,9 @@ namespace gui
 
   void InputPlugWidget::mouseReleaseEvent(QMouseEvent* e)
   {
-    if (lineDrawMode)
+    if (m_lineDrawMode)
       {
-	lineDrawMode = false;
+	m_lineDrawMode = false;
 	emit connectionRequestFromInput(this,
 					e->pos()+this->pos()
                                         +parentWidget()->pos());
@@ -101,12 +101,11 @@ namespace gui
   
   void InputPlugWidget::mousePressEvent(QMouseEvent* e)
   {
-    if(e->button() == LeftButton)
+    if(e->button() == Qt::LeftButton)
       {
-	emit beginLineDraw();
-	lineDrawMode = true;
+	m_lineDrawMode = true;
       }
-    else if(e->button() == RightButton)
+    else if(e->button() == Qt::RightButton)
       {
 	emit beenRightClicked(this);
       }

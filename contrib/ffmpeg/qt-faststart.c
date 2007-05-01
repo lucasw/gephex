@@ -24,6 +24,11 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#ifdef __MINGW32__
+#define fseeko(x,y,z)  fseeko64(x,y,z)
+#define ftello(x)      ftello64(x)
+#endif
+
 #define BE_16(x) ((((uint8_t*)(x))[0] << 8) | ((uint8_t*)(x))[1])
 #define BE_32(x) ((((uint8_t*)(x))[0] << 24) | \
                   (((uint8_t*)(x))[1] << 16) | \
@@ -69,13 +74,16 @@ int main(int argc, char *argv[])
     FILE *outfile;
     unsigned char atom_bytes[ATOM_PREAMBLE_SIZE];
     uint32_t atom_type = 0;
-    uint64_t atom_size;
+    uint64_t atom_size = 0;
     uint64_t last_offset;
     unsigned char *moov_atom;
+    unsigned char *ftyp_atom = 0;
     uint64_t moov_atom_size;
+    uint64_t ftyp_atom_size = 0;
     uint64_t i, j;
     uint32_t offset_count;
     uint64_t current_offset;
+    uint64_t start_offset = 0;
     unsigned char copy_buffer[COPY_BUFFER_SIZE];
     int bytes_to_copy;
 
@@ -96,7 +104,7 @@ int main(int argc, char *argv[])
         if (fread(atom_bytes, ATOM_PREAMBLE_SIZE, 1, infile) != 1) {
             break;
         }
-        atom_size = BE_32(&atom_bytes[0]);
+        atom_size = (uint32_t)BE_32(&atom_bytes[0]);
         atom_type = BE_32(&atom_bytes[4]);
 
         if ((atom_type != FREE_ATOM) &&
@@ -112,15 +120,36 @@ int main(int argc, char *argv[])
             break;
         }
 
+        /* keep ftyp atom */
+        if (atom_type == FTYP_ATOM) {
+            ftyp_atom_size = atom_size;
+            ftyp_atom = malloc(ftyp_atom_size);
+            if (!ftyp_atom) {
+                printf ("could not allocate 0x%llX byte for ftyp atom\n",
+                        atom_size);
+                fclose(infile);
+                return 1;
+            }
+            fseeko(infile, -ATOM_PREAMBLE_SIZE, SEEK_CUR);
+            if (fread(ftyp_atom, atom_size, 1, infile) != 1) {
+                perror(argv[1]);
+                free(ftyp_atom);
+                fclose(infile);
+                return 1;
+            }
+            start_offset = ftello(infile);
+            continue;
+        }
+
         /* 64-bit special case */
         if (atom_size == 1) {
             if (fread(atom_bytes, ATOM_PREAMBLE_SIZE, 1, infile) != 1) {
                 break;
             }
             atom_size = BE_64(&atom_bytes[0]);
-            fseek(infile, atom_size - ATOM_PREAMBLE_SIZE * 2, SEEK_CUR);
+            fseeko(infile, atom_size - ATOM_PREAMBLE_SIZE * 2, SEEK_CUR);
         } else {
-            fseek(infile, atom_size - ATOM_PREAMBLE_SIZE, SEEK_CUR);
+            fseeko(infile, atom_size - ATOM_PREAMBLE_SIZE, SEEK_CUR);
         }
     }
 
@@ -132,8 +161,8 @@ int main(int argc, char *argv[])
 
     /* moov atom was, in fact, the last atom in the chunk; load the whole
      * moov atom */
-    fseek(infile, -atom_size, SEEK_END);
-    last_offset = (uint64_t)ftell(infile);
+    fseeko(infile, -atom_size, SEEK_END);
+    last_offset = ftello(infile);
     moov_atom_size = atom_size;
     moov_atom = malloc(moov_atom_size);
     if (!moov_atom) {
@@ -214,12 +243,27 @@ int main(int argc, char *argv[])
         free(moov_atom);
         return 1;
     }
+
+    if (start_offset > 0) { /* seek after ftyp atom */
+        fseeko(infile, start_offset, SEEK_SET);
+        last_offset -= start_offset;
+    }
+
     outfile = fopen(argv[2], "wb");
     if (!outfile) {
         perror(argv[2]);
         fclose(outfile);
         free(moov_atom);
         return 1;
+    }
+
+    /* dump the same ftyp atom */
+    if (ftyp_atom_size > 0) {
+        printf (" writing ftyp atom...\n");
+        if (fwrite(ftyp_atom, ftyp_atom_size, 1, outfile) != 1) {
+            perror(argv[2]);
+            goto error_out;
+        }
     }
 
     /* dump the new moov atom */
@@ -252,6 +296,8 @@ int main(int argc, char *argv[])
     fclose(infile);
     fclose(outfile);
     free(moov_atom);
+    if (ftyp_atom_size > 0)
+        free(ftyp_atom);
 
     return 0;
 
@@ -259,5 +305,7 @@ error_out:
     fclose(infile);
     fclose(outfile);
     free(moov_atom);
+    if (ftyp_atom_size > 0)
+        free(ftyp_atom);
     return 1;
 }

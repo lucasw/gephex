@@ -1,3 +1,7 @@
+-include ../config.mak
+
+VPATH=$(SRC_PATH)/doc
+
 all: ffmpeg-doc.html faq.html ffserver-doc.html ffplay-doc.html hooks.html \
      ffmpeg.1 ffserver.1 ffplay.1
 
@@ -12,3 +16,5 @@ all: ffmpeg-doc.html faq.html ffserver-doc.html ffplay-doc.html hooks.html \
 
 clean:
 	rm -f *.html *.pod *.1
+
+.PHONY: all clean

@@ -1,10 +1,30 @@
+/*
+ * copyright (c) 2001 Fabrice Bellard
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
 /**
  * @file apiexample.c
  * avcodec API use example.
  *
  * Note that this library only handles codecs (mpeg, mpeg4, etc...),
  * not file formats (avi, vob, etc...). See library 'libavformat' for the
- * format handling 
+ * format handling
  */
 
 #include <stdlib.h>
@@ -21,7 +41,7 @@
 #define INBUF_SIZE 4096
 
 /*
- * Audio encoding example 
+ * Audio encoding example
  */
 void audio_encode_example(const char *filename)
 {
@@ -43,7 +63,7 @@ void audio_encode_example(const char *filename)
     }
 
     c= avcodec_alloc_context();
-    
+
     /* put sample parameters */
     c->bit_rate = 64000;
     c->sample_rate = 44100;
@@ -54,7 +74,7 @@ void audio_encode_example(const char *filename)
         fprintf(stderr, "could not open codec\n");
         exit(1);
     }
-    
+
     /* the codec gives us the frame size, in samples */
     frame_size = c->frame_size;
     samples = malloc(frame_size * 2 * c->channels);
@@ -66,7 +86,7 @@ void audio_encode_example(const char *filename)
         fprintf(stderr, "could not open %s\n", filename);
         exit(1);
     }
-        
+
     /* encode a single tone sound */
     t = 0;
     tincr = 2 * M_PI * 440.0 / c->sample_rate;
@@ -85,11 +105,11 @@ void audio_encode_example(const char *filename)
     free(samples);
 
     avcodec_close(c);
-    free(c);
+    av_free(c);
 }
 
 /*
- * Audio decoding. 
+ * Audio decoding.
  */
 void audio_decode_example(const char *outfilename, const char *filename)
 {
@@ -101,7 +121,7 @@ void audio_decode_example(const char *outfilename, const char *filename)
     uint8_t inbuf[INBUF_SIZE + FF_INPUT_BUFFER_PADDING_SIZE], *inbuf_ptr;
 
     printf("Audio decoding\n");
-    
+
     /* set end of buffer to 0 (this ensures that no overreading happens for damaged mpeg streams) */
     memset(inbuf + INBUF_SIZE, 0, FF_INPUT_BUFFER_PADDING_SIZE);
 
@@ -119,7 +139,7 @@ void audio_decode_example(const char *outfilename, const char *filename)
         fprintf(stderr, "could not open codec\n");
         exit(1);
     }
-    
+
     outbuf = malloc(AVCODEC_MAX_AUDIO_FRAME_SIZE);
 
     f = fopen(filename, "rb");
@@ -129,10 +149,10 @@ void audio_decode_example(const char *outfilename, const char *filename)
     }
     outfile = fopen(outfilename, "wb");
     if (!outfile) {
-        free(c);
+        av_free(c);
         exit(1);
     }
-        
+
     /* decode until eof */
     inbuf_ptr = inbuf;
     for(;;) {
@@ -142,7 +162,7 @@ void audio_decode_example(const char *outfilename, const char *filename)
 
         inbuf_ptr = inbuf;
         while (size > 0) {
-            len = avcodec_decode_audio(c, (short *)outbuf, &out_size, 
+            len = avcodec_decode_audio(c, (short *)outbuf, &out_size,
                                        inbuf_ptr, size);
             if (len < 0) {
                 fprintf(stderr, "Error while decoding\n");
@@ -162,11 +182,11 @@ void audio_decode_example(const char *outfilename, const char *filename)
     free(outbuf);
 
     avcodec_close(c);
-    free(c);
+    av_free(c);
 }
 
 /*
- * Video encoding example 
+ * Video encoding example
  */
 void video_encode_example(const char *filename)
 {
@@ -188,24 +208,24 @@ void video_encode_example(const char *filename)
 
     c= avcodec_alloc_context();
     picture= avcodec_alloc_frame();
-    
+
     /* put sample parameters */
     c->bit_rate = 400000;
     /* resolution must be a multiple of two */
-    c->width = 352;  
+    c->width = 352;
     c->height = 288;
     /* frames per second */
-    c->frame_rate = 25;  
-    c->frame_rate_base= 1;
+    c->time_base= (AVRational){1,25};
     c->gop_size = 10; /* emit one intra frame every ten frames */
     c->max_b_frames=1;
+    c->pix_fmt = PIX_FMT_YUV420P;
 
     /* open it */
     if (avcodec_open(c, codec) < 0) {
         fprintf(stderr, "could not open codec\n");
         exit(1);
     }
-    
+
     /* the codec gives us the frame size, in samples */
 
     f = fopen(filename, "wb");
@@ -213,13 +233,13 @@ void video_encode_example(const char *filename)
         fprintf(stderr, "could not open %s\n", filename);
         exit(1);
     }
-    
+
     /* alloc image and output buffer */
     outbuf_size = 100000;
     outbuf = malloc(outbuf_size);
     size = c->width * c->height;
     picture_buf = malloc((size * 3) / 2); /* size for YUV 420 */
-    
+
     picture->data[0] = picture_buf;
     picture->data[1] = picture->data[0] + size;
     picture->data[2] = picture->data[1] + size / 4;
@@ -255,7 +275,7 @@ void video_encode_example(const char *filename)
     /* get the delayed frames */
     for(; out_size; i++) {
         fflush(stdout);
-        
+
         out_size = avcodec_encode_video(c, outbuf, outbuf_size, NULL);
         printf("write frame %3d (size=%5d)\n", i, out_size);
         fwrite(outbuf, 1, out_size, f);
@@ -272,16 +292,16 @@ void video_encode_example(const char *filename)
     free(outbuf);
 
     avcodec_close(c);
-    free(c);
-    free(picture);
+    av_free(c);
+    av_free(picture);
     printf("\n");
 }
 
 /*
- * Video decoding example 
+ * Video decoding example
  */
 
-void pgm_save(unsigned char *buf,int wrap, int xsize,int ysize,char *filename) 
+void pgm_save(unsigned char *buf,int wrap, int xsize,int ysize,char *filename)
 {
     FILE *f;
     int i;
@@ -330,7 +350,7 @@ void video_decode_example(const char *outfilename, const char *filename)
         fprintf(stderr, "could not open codec\n");
         exit(1);
     }
-    
+
     /* the codec gives us the frame size, in samples */
 
     f = fopen(filename, "rb");
@@ -338,7 +358,7 @@ void video_decode_example(const char *outfilename, const char *filename)
         fprintf(stderr, "could not open %s\n", filename);
         exit(1);
     }
-    
+
     frame = 0;
     for(;;) {
         size = fread(inbuf, 1, INBUF_SIZE, f);
@@ -347,7 +367,7 @@ void video_decode_example(const char *outfilename, const char *filename)
 
         /* NOTE1: some codecs are stream based (mpegvideo, mpegaudio)
            and this is the only method to use them because you cannot
-           know the compressed data size before analysing it. 
+           know the compressed data size before analysing it.
 
            BUT some other codecs (msmpeg4, mpeg4) are inherently frame
            based, so you must call them with all the data for one
@@ -362,7 +382,7 @@ void video_decode_example(const char *outfilename, const char *filename)
            feed decoder and see if it could decode a frame */
         inbuf_ptr = inbuf;
         while (size > 0) {
-            len = avcodec_decode_video(c, picture, &got_picture, 
+            len = avcodec_decode_video(c, picture, &got_picture,
                                        inbuf_ptr, size);
             if (len < 0) {
                 fprintf(stderr, "Error while decoding frame %d\n", frame);
@@ -375,7 +395,7 @@ void video_decode_example(const char *outfilename, const char *filename)
                 /* the picture is allocated by the decoder. no need to
                    free it */
                 snprintf(buf, sizeof(buf), outfilename, frame);
-                pgm_save(picture->data[0], picture->linesize[0], 
+                pgm_save(picture->data[0], picture->linesize[0],
                          c->width, c->height, buf);
                 frame++;
             }
@@ -387,102 +407,27 @@ void video_decode_example(const char *outfilename, const char *filename)
     /* some codecs, such as MPEG, transmit the I and P frame with a
        latency of one frame. You must do the following to have a
        chance to get the last frame of the video */
-    len = avcodec_decode_video(c, picture, &got_picture, 
+    len = avcodec_decode_video(c, picture, &got_picture,
                                NULL, 0);
     if (got_picture) {
         printf("saving last frame %3d\n", frame);
         fflush(stdout);
-        
+
         /* the picture is allocated by the decoder. no need to
            free it */
         snprintf(buf, sizeof(buf), outfilename, frame);
-        pgm_save(picture->data[0], picture->linesize[0], 
+        pgm_save(picture->data[0], picture->linesize[0],
                  c->width, c->height, buf);
         frame++;
     }
-        
+
     fclose(f);
 
     avcodec_close(c);
-    free(c);
-    free(picture);
+    av_free(c);
+    av_free(picture);
     printf("\n");
 }
-
-// simple example how the options could be used
-int options_example(int argc, char* argv[])
-{
-    AVCodec* codec = avcodec_find_encoder_by_name((argc > 1) ? argv[2] : "mpeg4");
-    const AVOption* c;
-    AVCodecContext* avctx;
-    char* def = av_malloc(5000);
-    const char* col = "";
-    int i = 0;
-
-    if (!codec)
-	return -1;
-    c = codec->options;
-    avctx = avcodec_alloc_context();
-    *def = 0;
-
-    if (c) {
-	const AVOption *stack[FF_OPT_MAX_DEPTH];
-	int depth = 0;
-	for (;;) {
-	    if (!c->name) {
-		if (c->help) {
-		    stack[depth++] = c;
-		    c = (const AVOption*)c->help;
-		} else {
-		    if (depth == 0)
-			break; // finished
-		    c = stack[--depth];
-                    c++;
-		}
-	    } else {
-		int t = c->type & FF_OPT_TYPE_MASK;
-		printf("Config   %s  %s\n",
-		       t == FF_OPT_TYPE_BOOL ? "bool   " :
-		       t == FF_OPT_TYPE_DOUBLE ? "double  " :
-		       t == FF_OPT_TYPE_INT ? "integer" :
-		       t == FF_OPT_TYPE_STRING ? "string " :
-		       "unknown??", c->name);
-		switch (t) {
-		case FF_OPT_TYPE_BOOL:
-		    i += sprintf(def + i, "%s%s=%s",
-				 col, c->name,
-				 c->defval != 0. ? "on" : "off");
-		    break;
-		case FF_OPT_TYPE_DOUBLE:
-		    i += sprintf(def + i, "%s%s=%f",
-				 col, c->name, c->defval);
-		    break;
-		case FF_OPT_TYPE_INT:
-		    i += sprintf(def + i, "%s%s=%d",
-				 col, c->name, (int) c->defval);
-		    break;
-		case FF_OPT_TYPE_STRING:
-		    if (c->defstr) {
-			char* d = av_strdup(c->defstr);
-			char* f = strchr(d, ',');
-			if (f)
-                            *f = 0;
-			i += sprintf(def + i, "%s%s=%s",
-				     col, c->name, d);
-                        av_free(d);
-		    }
-		    break;
-		}
-		col = ":";
-		c++;
-	    }
-	}
-    }
-    printf("Default Options: %s\n", def);
-    av_free(def);
-    return 0;
-}
-
 
 int main(int argc, char **argv)
 {
@@ -495,9 +440,6 @@ int main(int argc, char **argv)
        you wish to have smaller code */
     avcodec_register_all();
 
-#ifdef OPT_TEST
-    options_example(argc, argv);
-#else
     if (argc <= 1) {
         audio_encode_example("/tmp/test.mp2");
         audio_decode_example("/tmp/test.sw", "/tmp/test.mp2");
@@ -510,7 +452,6 @@ int main(int argc, char **argv)
 
     //    audio_decode_example("/tmp/test.sw", filename);
     video_decode_example("/tmp/test%d.pgm", filename);
-#endif
 
     return 0;
 }

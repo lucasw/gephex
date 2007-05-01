@@ -24,8 +24,9 @@
 
 #include <map>
 
-#include <qlistview.h>
-#include <qpopupmenu.h>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QMenu>
+#include <QtGui/QMouseEvent>
 
 #include "treeviewitem.h"
 
@@ -35,32 +36,10 @@
 
 namespace gui
 {
-
-  class TreeViewItemImpl : public QListViewItem,
-			   public TreeViewItem
-  {
-  public:
-    
-    TreeViewItemImpl(QListViewItem* parent,
-		     TreeViewItem& item)
-      : QListViewItem(parent), m_item(item)
-    {
-    }
-
-    TreeViewItemImpl(QListView* parent,
-		     TreeViewItem& item)
-      : QListViewItem(parent), m_item(item)
-    {
-    }
-
-  private:
-    TreeViewItem& m_item;
-  };
-
   class ColumnTextChangeListenerImpl : public ColumnTextChangeListener
   {
   public:
-    ColumnTextChangeListenerImpl(QListViewItem* item)
+    ColumnTextChangeListenerImpl(QTreeWidgetItem* item)
       : m_item(item) {}
 
     virtual void textChanged(int column, const std::string& newText)
@@ -69,48 +48,32 @@ namespace gui
     }
 
   private:
-    QListViewItem* m_item;
+    QTreeWidgetItem* m_item;
   };
 
-  class TreeViewImpl : public QListView
+  class TreeViewImpl : public QTreeWidget
   {
     Q_OBJECT
   public:
     TreeViewImpl(QWidget* parent, const std::string& name,
                  const std::vector<std::string>& columnNames,
                  TreeView* treeview)
-      : QListView(parent, name.c_str()), activeItem(0),
+      : QTreeWidget(parent), activeItem(0),
         m_treeview(treeview)
     {
+      this->setColumnCount(columnNames.size());
+
+      QStringList headerNames;
       for (unsigned int i = 0; i < columnNames.size(); ++i)
-	this->addColumn(columnNames[i].c_str());
+	headerNames.append(columnNames[i].c_str());
 
+      this->setHeaderLabels(headerNames);
 
-      connect(this, SIGNAL(doubleClicked ( QListViewItem * )),
-	      this, SLOT(doubleClickedSlot ( QListViewItem * )));
+      connect(this,SIGNAL(itemClicked(QTreeWidgetItem *, int)),
+	      this,SLOT(itemClickedSlot(QTreeWidgetItem *, int)));
 
-      connect(this,SIGNAL(rightButtonClicked ( QListViewItem *, 
-                                               const QPoint &, int )),
-	      this,SLOT(rightButtonClickedSlot ( QListViewItem *,
-						 const QPoint &, int )));
-
-      connect(this,SIGNAL(rightButtonPressed ( QListViewItem *,
-                                               const QPoint &, int )),
-	      this,SLOT(rightButtonPressedSlot ( QListViewItem *,
-						 const QPoint &, int )));
-
-      connect(this,SIGNAL(mouseButtonPressed ( int, QListViewItem *,
-                                               const QPoint &, int )),
-	      this,SLOT(mouseButtonPressedSlot ( int, QListViewItem *,
-						 const QPoint &, int )));
-
-      connect(this,SIGNAL(mouseButtonClicked ( int, QListViewItem *,
-                                               const QPoint &, int )),
-	      this,SLOT(mouseButtonClickedSlot ( int, QListViewItem *,
-						 const QPoint &, int )));
-
-      connect(this, SIGNAL(onItem ( QListViewItem * )),
-	      this, SLOT(onItemSlot ( QListViewItem * )));
+      connect(this, SIGNAL(itemActivated ( QTreeWidgetItem *, int )),
+	      this, SLOT(itemActivatedSlot ( QTreeWidgetItem *, int )));
     }
 
     virtual ~TreeViewImpl()
@@ -129,8 +92,8 @@ namespace gui
       ItemImplPtr newItem;
       if (parent == 0) //top level item?
 	{
-	  newItem = ItemImplPtr( new TreeViewItemImpl(this, item) );
-	  newItem->setOpen(true);
+	  newItem = ItemImplPtr( new QTreeWidgetItem(this) );
+	  expandItem(&*newItem);
 	}
       else
 	{
@@ -143,7 +106,7 @@ namespace gui
 	  else
 	    {
 	      ItemImplPtr parentItem = it->second.first;
-	      newItem = ItemImplPtr(new TreeViewItemImpl(&*parentItem,item));
+	      newItem = ItemImplPtr(new QTreeWidgetItem(&*parentItem));
 	    }
 	}
 
@@ -152,7 +115,7 @@ namespace gui
 
       item.setColumnTextChangeListener(*newListener);
       m_impls[&item] = std::make_pair(newItem, newListener);
-      m_items[dynamic_cast<QListViewItem*>(&*newItem)] = &item;
+      m_items[&*newItem] = &item;
     }
 
     void removeItem( TreeViewItem& item )
@@ -161,7 +124,7 @@ namespace gui
       if (it == m_impls.end())
 	{
 	  throw std::runtime_error("impl not found at "
-				   "TreeViewItemImpl::removeItem");
+				   "TreeViewImpl::removeItem");
 	}
       else
 	{
@@ -169,7 +132,7 @@ namespace gui
 	  if (it2 == m_items.end())
 	    {
 	      throw std::runtime_error("item not found at "
-				       "TreeViewItemImpl::removeItem");
+				       "TreeViewImpl::removeItem");
 	    }
 	  else
 	    {
@@ -185,12 +148,13 @@ namespace gui
 	      
 	      // std::cout << "Treeview: Removed item!" << std::endl;
 	    }
+
 	}
     }
 
   private:
     
-    TreeViewItem* findTreeViewItem(QListViewItem* item)
+    TreeViewItem* findTreeViewItem(QTreeWidgetItem* item)
     {
       ItemMap::const_iterator it = m_items.find(item);
       if (it == m_items.end())
@@ -204,108 +168,65 @@ namespace gui
 	}
     }
 
-private slots:
-    
-void doubleClickedSlot (QListViewItem* item)
+    void mouseReleaseEvent(QMouseEvent* event)
     {
-      if (!item)
-	return;
+      QTreeWidgetItem* item = itemAt ( event->pos() );
+      if (event->button() == Qt::RightButton && item != 0)
+	{
 
-      TreeViewItem* treeItem = findTreeViewItem(item);
+	  TreeViewItem* treeItem = findTreeViewItem(item);
 
-      if (treeItem)
-        treeItem->doubleClicked( );
-    }
-
-    void rightButtonClickedSlot (QListViewItem* item, const QPoint& p, int c)
-    {
-      if (!item)
-	return;
-
-      TreeViewItem* treeItem = findTreeViewItem(item);
-
-      if (treeItem)
-        {
-          QPopupMenu* popme = treeItem->getPropertyMenu();
+	  if (treeItem)
+	    {
+	      QMenu* popme = treeItem->getPropertyMenu();
           
-          if (popme != 0)
-            {
-              popme->move(p);
-              popme->show();
-              activeItem = treeItem;
-              connect(popme,SIGNAL(activated(int)),
-                      this,SLOT(popupActivated(int)));
-            }
-		  
-          treeItem->rightButtonClicked(gui::Point(p.x(),p.y()), c);
-        }
+	      if (popme != 0)
+		{
+		  // TODO
+		  popme->move( event->globalPos() );
+		  popme->show();
+		  activeItem = treeItem;
+		}
+	    }
+	}
+
+      QTreeWidget::mouseReleaseEvent(event);
     }
 
-    void rightButtonPressedSlot (QListViewItem* item, const QPoint& p, int c)
+
+private slots:
+
+    void itemClickedSlot(QTreeWidgetItem* item,
+			 int column)
     {
       if (!item)
 	return;
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      if (treeItem)
-        treeItem->rightButtonPressed(gui::Point(p.x(),p.y()), c);
+      treeItem->onClick(column);
     }
 
-    void mouseButtonPressedSlot (int button, QListViewItem* item,
-				 const QPoint& p, int c)
+    void itemActivatedSlot(QTreeWidgetItem* item,
+			   int column)
     {
       if (!item)
 	return;
 
       TreeViewItem* treeItem = findTreeViewItem(item);
 
-      if (treeItem && button == Qt::LeftButton)
-	treeItem->leftButtonPressed(gui::Point(p.x(),p.y()), c);
-    }
-
-    void mouseButtonClickedSlot (int button,QListViewItem* item,
-				 const QPoint& p, int c)
-    {
-      if (!item)
-	return;
-
-      TreeViewItem* treeItem = findTreeViewItem(item);
-
-      if (treeItem && button == Qt::LeftButton)
-	treeItem->leftButtonClicked(gui::Point(p.x(),p.y()), c);
-    }
-
-    void onItemSlot (QListViewItem* item)
-    {
-      if (!item)
-	return;
-
-      TreeViewItem* treeItem = findTreeViewItem(item);
-
-      if (treeItem)
-        treeItem->mouseOnItem();
-    }
-
-    void popupActivated(int id)
-    {
-      if (activeItem )
-        {
-			
-          activeItem->propertySelected(id);
-        }
+      treeItem->onActivate(column);
     }
 
     
   private:
-    //typedef utils::AutoPtr<TreeViewItemImpl> ItemImplPtr;
-    typedef TreeViewItemImpl* ItemImplPtr;
+    typedef QTreeWidgetItem* ItemImplPtr;
     typedef utils::AutoPtr<ColumnTextChangeListenerImpl> TextChangeListenerPtr;
     typedef std::map<TreeViewItem*,
       std::pair<ItemImplPtr, TextChangeListenerPtr> > ImplMap;
     ImplMap m_impls;
 
-    typedef std::map<QListViewItem*, TreeViewItem*> ItemMap;
+    typedef std::map<QTreeWidgetItem*, TreeViewItem*> ItemMap;
     ItemMap m_items;
 
     TreeViewItem* activeItem;

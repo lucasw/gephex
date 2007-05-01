@@ -7,9 +7,9 @@ AM_CPPFLAGS = \
 	-I $(srcdir)/../.. \
 	-I $(srcdir)/../../../util/include \
 	-I @builddir@/../../../util/include \
-	-I $(srcdir)/../../../base/src/ \
+	-I $(srcdir)/../../../base/src \
 	-I $(srcdir)/../../../base/src/utils \
-	-I @builddir@/../../../base/src/ \
+	-I @builddir@/../../../base/src \
 	-I $(srcdir)/../../../base/src/net \
 	-I $(srcdir)/../../../base/src/netinterfaces \
 	$(QT_CXXFLAGS)
@@ -53,7 +53,7 @@ MOCED_FILES = \
 	typeview_moc.cpp \
 	vjmainwindow_moc.cpp
 
-BUILT_SOURCES = $(MOCED_FILES)
+BUILT_SOURCES = $(MOCED_FILES) graphnameview_moc_cpp.cpp
 
 HEADER_FILES = \
 	connectionwidget.h \
@@ -68,7 +68,6 @@ HEADER_FILES = \
 	nodeproperty.h \
 	nodewidget.h \
 	outputplugwidget.h \
-	ownstyle.h \
 	picswitch.h \
 	plugwidget.h \
 	propertywidget.h \
@@ -82,12 +81,12 @@ EXTRA_DIST= \
 	gruen_klein.xpm \
 	node.xpm \
 	rot_klein.xpm \
-	gui.dsp gui.mak gui.dep \
+	gui.vcproj gui.dsp gui.mak gui.dep \
 	logo.ico \
 	Skript1.rc resource.h
 
 gephex_gui_real_SOURCES =  $(CPP_FILES) $(HEADER_FILES)
-nodist_gephex_gui_real_SOURCES = $(BUILT_SOURCES)
+nodist_gephex_gui_real_SOURCES = $(MOCED_FILES)
 
 #dist-hook:
 #	rm -f $(distdir)/*_moc.cpp
@@ -95,8 +94,10 @@ nodist_gephex_gui_real_SOURCES = $(BUILT_SOURCES)
 %_moc.cpp: %.h
 	$(MOC) -o $@ $<
 
+%_moc_cpp.cpp: %.cpp
+	$(MOC) -o $@ $<
+
 gephex_gui_real_LDADD = \
-	$(QT_LIBS) \
 	-lguimodel \
 	-lgphxnetwork \
 	-lnetinterfaces \
@@ -113,7 +114,7 @@ gephex_gui_real_LDADD = \
 	-L@builddir@/editor \
 	-L@builddir@/typeviews \
 	-L@builddir@/dialogs \
-	-L.
+	-L. $(QT_LIBS) $(LIB_SOCKET_FLAGS)
 
 gephex_gui_real_DEPENDENCIES = \
 	@builddir@/../guimodel/libguimodel.a \
@@ -125,5 +126,5 @@ gephex_gui_real_DEPENDENCIES = \
 	@builddir@/dialogs/libdialogs.a \
 	@builddir@/typeviews/libtypeviews.a
 
-CLEANFILES = $(MOCED_FILES)
+CLEANFILES = $(BUILT_SOURCES)
 

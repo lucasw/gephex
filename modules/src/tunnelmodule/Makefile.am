@@ -1,4 +1,4 @@
-libdir = @gphx_module_lib_dir@
+bindir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -8,19 +8,29 @@ tunnelmodule_auto.c: tunnelmodule.spec tunnelmodule.h
 tunnelmodule.h: tunnelmodule.spec
 	$(PLUC) h @srcdir@/tunnelmodule.spec
 
-lib_LTLIBRARIES = tunnelmodule.la
+EXEEXT=.@SHAREDLIBEXT@
 
-tunnelmodule_la_SOURCES = 	tunnelmodule_auto.c \
+bin_PROGRAMS = tunnelmodule
+
+tunnelmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
+
+if SHARED_USE_DEF_FILE
+DEFFILE=tunnelmodule.def
+else
+DEFFILE=
+endif
+
+tunnelmodule_SOURCES = 	tunnelmodule_auto.c \
 				tunnelmodule.c \
 				tunnelmodule.h \
 				tunnelmodule.spec \
 				tunnelmodule.xpm
 
-tunnelmodule_la_LDFLAGS = -module -avoid-version -no-undefined
+tunnelmodule_LDFLAGS = @SHARED_LD_FLAGS@
 
-tunnelmodule_la_LIBADD = -lgrid -L@builddir@/../libgrid
+tunnelmodule_LDADD = -lgrid -L@builddir@/../libgrid
 
-tunnelmodule_la_DEPENDENCIES = @builddir@/../libgrid/libgrid.a
+tunnelmodule_DEPENDENCIES = @builddir@/../libgrid/libgrid.a
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
@@ -31,4 +41,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = tunnelmodule.h tunnelmodule_auto.c
-EXTRA_DIST = tunnelmodule.dsp tunnelmodule.mak tunnelmodule.dep
+EXTRA_DIST = tunnelmodule.vcproj tunnelmodule.dsp tunnelmodule.mak tunnelmodule.dep

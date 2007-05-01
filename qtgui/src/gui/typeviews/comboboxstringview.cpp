@@ -23,8 +23,9 @@
 #include "comboboxstringview.h"
 
 #include <iostream>
-#include <qcombobox.h>
-#include <qlayout.h>
+
+#include <QtGui/qcombobox.h>
+#include <QtGui/qlayout.h>
 
 #include "utils/structreader.h"
 #include "utils/stringtokenizer.h"
@@ -41,30 +42,28 @@ namespace gui
       : TypeView(parent, params)
     {
       
-      m_box = new QComboBox(false, this, "blah");
-		
-      QVBoxLayout* layout = new QVBoxLayout(this);
-      layout->addWidget(m_box);
+      m_box = new QComboBox(this);
+      m_layout->addWidget(m_box);
 
-      utils::StructReader sr(params);
-
-      try {
-	std::string values = sr.getStringValue("values");
+      try
+        {
+          utils::StructReader sr(params);
+          std::string values = sr.getStringValue("values");
 			
-	utils::StringTokenizer tok(values);
-	int index = 0;
-	for (std::string token = tok.next(",");
-	     token != ""; token = tok.next(","), ++index)
-	  {
-	    m_box->insertItem(token.c_str(), index);
-	    m_values[token] = index;
-	  }
-      }
+          utils::StringTokenizer tok(values);
+          int index = 0;
+          for (std::string token = tok.next(",");
+               token != ""; token = tok.next(","), ++index)
+            {
+              m_box->insertItem(index, token.c_str());
+              m_values[token] = index;
+            }
+        }
       catch(...)
 	{
 	}
-		
-	  this->resize(m_box->sizeHint());
+
+	
       connect(m_box, SIGNAL(activated(const QString&)),
 	      this,SLOT(comboboxChanged(const QString&)));
     }
@@ -90,30 +89,35 @@ namespace gui
         }
 
       std::string str ( raw, len );
-      std::map<std::string, int>::const_iterator
-	it = m_values.find(str.c_str());
+      ValueMap::const_iterator it = m_values.find(str.c_str());
 			
       if (it == m_values.end())
 	{
 	  //bad idea! don't throw!!
           //	throw std::runtime_error("Invalid combobox value: '" + str + "'");
+          fprintf(stderr, "Ignoring invalid value '%s' at "
+                  "ComboboxStringView::valueChange\n", str.c_str());
 	}
       else
-        m_box->setCurrentItem(it->second);
+        {
+          m_box->setCurrentIndex(it->second);
+        }
     }
 
 
-public slots:
-void comboboxChanged(const QString& s)
+  public slots:
+    void comboboxChanged(const QString& s)
     {
+      QByteArray raw = s.toUtf8();
       const unsigned char* str 
-	= reinterpret_cast<const unsigned char*>(s.latin1());
+	= reinterpret_cast<const unsigned char*>(raw.constData());
 
-      emit valueChanged(utils::Buffer(str,strlen(s.latin1())+1));
+      emit valueChanged(utils::Buffer(str,s.length()+1));
     }
 
   private:
-    std::map<std::string, int> m_values;
+    typedef std::map<std::string, int> ValueMap;
+    ValueMap m_values;
     QComboBox* m_box;
   };
 

@@ -22,14 +22,15 @@
 
 #include "graphnameview.h"
 
+#include <sstream>
+
 #include <cassert>
 #include <stdexcept>
-#include <sstream>
 #include <vector>
 #include <algorithm>
 
-#include <qpopupmenu.h>
-#include <qmessagebox.h>
+#include <QtGui/qmenu.h>
+#include <QtGui/qmessagebox.h>
 
 #include "interfaces/imodelcontrolreceiver.h"
 #include "interfaces/ierrorreceiver.h"
@@ -44,8 +45,9 @@ namespace gui
 {
   static bool checkNamePolicy (const std::string& name);
 
-  class FolderItem : public TreeViewItem
+  class FolderItem : public QObject, public TreeViewItem
   {
+    Q_OBJECT
   public:
     enum Permission {NONE = 0, DENY_RENAME = 1, DENY_REMOVE = 2};
 
@@ -67,118 +69,53 @@ namespace gui
       l.textChanged(0, m_name);
     }
 
-    virtual QPopupMenu* getPropertyMenu()
+    virtual QMenu* getPropertyMenu()
     {
-      QPopupMenu *popme = new QPopupMenu(0, "TopPop");
+      QMenu* popme = new QMenu("TopPop");
 
-      popme->insertItem("New Graph", NEW_GRAPH);
-      //popme->insertItem("New Folder",NEW_FOLDER);
+      QAction* newAc = new QAction("New Graph", popme);
 
-      /*if (!(m_mask & DENY_RENAME))
-        popme->insertItem("Rename",RENAME_FOLDER);
+      popme->addAction(newAc);
 
-      if (!(m_mask & DENY_REMOVE))
-        popme->insertItem("Remove",REMOVE_FOLDER);*/
+      connect(newAc, SIGNAL(triggered()), this, SLOT(newGraphSlot()));
 
       return popme;      
     }
 
-    virtual void propertySelected(int id)
+    void newGraphSlot()
     {
-      switch(id)
+      bool retry=true;
+      while(retry)
 	{
-	case NEW_GRAPH:
-	  {
-            bool retry=true;
-            while(retry)
-              {
-                const std::string 
-                  newName = AskForStringDialog::open(0, "New Graph",
-                                                     "Enter a name");
-                if (checkNamePolicy(newName))
-                  {
-                    std::string name("");
-                    if (m_path != "")
-                      name = m_path + "/";
-                    name += newName;
-                    m_model.newGraph(name);
-                    retry = false;
-                  }
-                else
-                  {
-                    switch (QMessageBox::warning (0,"invalid name",
-                                                  "A name must be between 1 "
-                                                  "and 20 characters long."
-                                                  "It must not contain "
-                                                  "spaces or special "
-                                                  "characters",
-                                                  QMessageBox::Retry 
-                                                  | QMessageBox::Default,
-                                                  QMessageBox::Abort
-                                                  | QMessageBox::Escape))
-                      {
-                      case QMessageBox::Abort: retry=false; break;            
-                      case QMessageBox::Retry: break;            
-                      }
-                  }
-              }
-	  } break;
-        /*case NEW_FOLDER:
-	  {
-            bool retry=true;
-            while(retry)
-              {
-                const std::string newName = AskForStringDialog::open(0, "New Folder",
-                                                                     "Enter a name");
-                if (checkNamePolicy(newName))
-                  {
-                    m_model.newGraph(m_path + "/" + newName + "/");
-                    retry=false;
-                  }
-                else
-                  {
-                    switch (QMessageBox::warning (0,"ungueltiger Name","Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
-                                                  QMessageBox::Retry | QMessageBox::Default,
-                                                  QMessageBox::Abort | QMessageBox::Escape))
-                      {
-                      case QMessageBox::Abort: retry=false; break;
-                      case QMessageBox::Retry: break;
-                      }
-                  }
-              }
-	  } break;
-        case RENAME_FOLDER:
-	  {
-            if (m_mask & DENY_RENAME)
-              break;
-            bool retry=true;
-            while(retry)
-              {
-                const std::string newName = AskForStringDialog::open(0, "New Name",
-                                                                     "Enter a name");
-                if (checkNamePolicy(newName))
-                  {
-                    m_model.renameGraph(m_graphID, m_path + "/" + newName + "/");
-                    retry=false;
-                  }
-                else
-                  {
-                    switch (QMessageBox::warning (0,"ungueltiger Name","Ein Name muss 1-20 Zeichen langsein und darf keine Leerzeichen oder Sonderzeichenenthalten",
-                                                  QMessageBox::Retry | QMessageBox::Default,
-                                                  QMessageBox::Abort | QMessageBox::Escape))
-                      {
-                      case QMessageBox::Abort: retry=false; break;
-                      case QMessageBox::Retry: break;
-                      }
-                  }
-              }
-	  } break;
-        case REMOVE_FOLDER:	  
-          if (!(m_mask & DENY_REMOVE))		  
-            m_model.deleteGraph(m_graphID);
-	  break;*/
-	default:
-	  assert("so ein mist!");
+	  const std::string 
+	    newName = AskForStringDialog::open(0, "New Graph",
+					       "Enter a name");
+	  if (checkNamePolicy(newName))
+	    {
+	      std::string name("");
+	      if (m_path != "")
+		name = m_path + "/";
+	      name += newName;
+	      m_model.newGraph(name);
+	      retry = false;
+	    }
+	  else
+	    {
+	      switch (QMessageBox::warning (0,"invalid name",
+					    "A name must be between 1 "
+					    "and 20 characters long."
+					    "It must not contain "
+					    "spaces or special "
+					    "characters",
+					    QMessageBox::Retry 
+					    | QMessageBox::Default,
+					    QMessageBox::Abort
+					    | QMessageBox::Escape))
+		{
+		case QMessageBox::Abort: retry=false; break;            
+		case QMessageBox::Retry: break;            
+		}
+	    }
 	}
     }
 
@@ -190,11 +127,11 @@ namespace gui
 
     int m_mask;
 
-    enum { NEW_GRAPH/*, NEW_FOLDER, REMOVE_FOLDER, RENAME_FOLDER*/ };
   };
 
-  class GraphItem : public TreeViewItem
+  class GraphItem : public QObject, public TreeViewItem
   {
+    Q_OBJECT
   public:
     GraphItem(const std::string& graphID,
 	      const std::string& path,
@@ -231,15 +168,27 @@ namespace gui
       l.textChanged(0,m_graphName.c_str());
     }
 
-    virtual QPopupMenu* getPropertyMenu()
+    virtual QMenu* getPropertyMenu()
     {
-      QPopupMenu *popme = new QPopupMenu(0, "GraphPopup");
+      QMenu *popme = new QMenu("GraphPopup");
 
-      popme->insertItem("Save Graph",SAVE_GRAPH);
-      popme->insertItem("Copy Graph",COPY_GRAPH);
-      popme->insertItem("Rename Graph",RENAME_GRAPH);
-      popme->insertItem("Remove Graph",KILL_GRAPH);
-      popme->insertItem("New Snapshot",NEW_SNAPSHOT);
+      QAction* saveAc = new QAction("Save Graph",   popme);
+      QAction* copyAc = new QAction("Copy Graph",     popme);
+      QAction* renaAc = new QAction("Rename Graph",   popme);
+      QAction* killAc = new QAction("Remove Graph",   popme);
+      QAction* newAc  = new QAction("New Snapshot", popme);
+      
+      popme->addAction(saveAc);
+      popme->addAction(copyAc);
+      popme->addAction(renaAc);
+      popme->addAction(killAc);
+      popme->addAction(newAc);
+
+      connect(saveAc, SIGNAL(triggered()), this, SLOT(saveGraphSlot()));
+      connect(copyAc, SIGNAL(triggered()), this, SLOT(copyGraphSlot()));
+      connect(renaAc, SIGNAL(triggered()), this, SLOT(renameGraphSlot()));
+      connect(killAc, SIGNAL(triggered()), this, SLOT(killGraphSlot()));
+      connect(newAc,  SIGNAL(triggered()), this, SLOT(newSnapshotSlot()));
 
       return popme;
     }
@@ -266,80 +215,86 @@ namespace gui
       m_textListener->textChanged(1,newStatus.c_str());
     }
 
-    virtual void GraphItem::propertySelected(int id)
+protected slots:
+   void saveGraphSlot()
     {
-      switch(id)
+      m_model.saveGraph(m_graphID);
+    }
+
+   void copyGraphSlot()
+    {
+      bool retry=true;
+      while(retry)
 	{
-	case NEW_SNAPSHOT:
-	  {
-	    std::string newName = AskForStringDialog::open(0, "New Snapshot",
-							   "Enter a name");
-	    m_model.newControlValueSet(m_graphID, newName);
-	  }
-	  break;
-	case SAVE_GRAPH:
-	  {
-	    m_model.saveGraph(m_graphID);
-	  } break;
-	case KILL_GRAPH:
-	  {
-	    m_model.deleteGraph(m_graphID);
-	  } break;
-	case RENAME_GRAPH:
-          {
-            bool retry=true;
-            while(retry)
-              {
-                const std::string newName = 
-		  AskForStringDialog::open(0, "New Graph",
-					   "Enter new name");
-                if (checkNamePolicy(newName))
-                  {
-		    m_model.renameGraph(m_graphID, newName);
-                    retry=false;
-                  }
-                else
-                  {
-                    switch (QMessageBox::warning (0,"invalid name","Only names with max 20 characters and without space or other special characters are possible",
-						  QMessageBox::Retry | QMessageBox::Default,
-                                                  QMessageBox::Abort | QMessageBox::Escape))
-                      {
-                      case QMessageBox::Abort: retry=false; break;            
-                      case QMessageBox::Retry: break;            
-                      }
-                  }
-              }
-          } break;
-	case COPY_GRAPH:
-	  {
-            bool retry=true;
-            while(retry)
-              {
-                const std::string newName = 
-		  AskForStringDialog::open(0, "New Graph",
-					   "Enter the name of the copy");
-                if (checkNamePolicy(newName))
-                  {
-		    m_model.copyGraph(m_graphID, newName);
-                    retry=false;
-                  }
-                else
-                  {
-                    switch (QMessageBox::warning (0,"invalid name","Only names with max 20 characters and without space or other special characters are possible",
-						  QMessageBox::Retry | QMessageBox::Default,
-                                                  QMessageBox::Abort | QMessageBox::Escape))
-                      {
-                      case QMessageBox::Abort: retry=false; break;            
-                      case QMessageBox::Retry: break;            
-                      }
-                  }
-              }
-	  } break;
-	default:
-	  assert(!"MIST!");
+	  const std::string newName = 
+	    AskForStringDialog::open(0, "New Graph",
+				     "Enter the name of the copy");
+	  if (checkNamePolicy(newName))
+	    {
+	      m_model.copyGraph(m_graphID, newName);
+	      retry=false;
+	    }
+	  else
+	    {
+	      switch (QMessageBox::warning (0,"invalid name",
+					    "Only names with max 20 characters"
+					    " and without space or other "
+					    "special characters are possible",
+					    QMessageBox::Retry |
+					     QMessageBox::Default,
+					    QMessageBox::Abort |
+					     QMessageBox::Escape))
+		{
+		case QMessageBox::Abort: retry=false; break;            
+		case QMessageBox::Retry: break;            
+		}
+	    }
 	}
     }
-  
+
+   void renameGraphSlot()
+    {
+      bool retry=true;
+      while(retry)
+	{
+	  const std::string newName = 
+	    AskForStringDialog::open(0, "New Graph",
+				     "Enter new name");
+	  if (checkNamePolicy(newName))
+	    {
+	      m_model.renameGraph(m_graphID, newName);
+	      retry=false;
+	    }
+	  else
+	    {
+	      switch (QMessageBox::warning (0,"invalid name",
+					    "Only names with max 20 characters"
+					    " and without space or other "
+					    "special characters are possible",
+					    QMessageBox::Retry |
+					     QMessageBox::Default,
+					    QMessageBox::Abort |
+					     QMessageBox::Escape))
+		{
+		case QMessageBox::Abort: retry=false; break;            
+		case QMessageBox::Retry: break;            
+		}
+	    }
+	}
+    }
+
+   void killGraphSlot()
+    {
+      m_model.deleteGraph(m_graphID);
+    }
+
+   void newSnapshotSlot()
+    {
+      std::string newName = AskForStringDialog::open(0, "New Snapshot",
+						     "Enter a name");
+      m_model.newControlValueSet(m_graphID, newName);
+    }
+	  
   private:
     std::string m_graphID;
     std::string m_path;
@@ -349,21 +304,19 @@ namespace gui
 
     int m_numberOfSnaps;
 
-    enum {NEW_GRAPH, NEW_SNAPSHOT,
-	  SAVE_GRAPH, KILL_GRAPH,RENAME_GRAPH, COPY_GRAPH};
-
   };
 
 
-  class SnapItem : public TreeViewItem
+  class SnapItem : public QObject, public TreeViewItem
   {
+    Q_OBJECT
   public:
     SnapItem(const std::string& graphID,
 	     const std::string& snapID,
 	     const std::string& graphName,
 	     const std::string& snapName,
 	     IModelControlReceiver& model,	     
-		 GraphNameViewObject& stupidObject)
+	     GraphNameViewObject& stupidObject)
       : m_graphID(graphID), m_snapID(snapID),
 	m_graphName(graphName), m_snapName(snapName),
 	m_model(model), m_stupidObject(stupidObject) {}
@@ -376,21 +329,33 @@ namespace gui
       l.textChanged(0,m_snapName.c_str());
     }
 
-    virtual void leftButtonClicked( const Point& pos, int column )
+    virtual void onActivate( int /*column*/ )
     {
-      this->propertySelected(EDIT_GRAPH);
-      this->propertySelected(RENDER_GRAPH);
+      this->editSlot();
+      this->renderSlot();
     }
 
-    virtual QPopupMenu* getPropertyMenu()
+    virtual QMenu* getPropertyMenu()
     {
-      QPopupMenu *popme = new QPopupMenu(0, "pop");
-      popme->insertItem("Edit this Graph",EDIT_GRAPH);
-      popme->insertItem("Render this Graph",RENDER_GRAPH);
-      popme->insertItem("Rename Snapshot",
-			RENAME_SNAPSHOT);
-      popme->insertItem("Copy Snapshot",COPY_SNAPSHOT);
-      popme->insertItem("Remove Snapshot",KILL_SNAPSHOT);      
+      QMenu *popme = new QMenu("pop");
+
+      QAction* editAc = new QAction("Edit this Graph",   popme);
+      QAction* rendAc = new QAction("Render this Graph", popme);
+      QAction* renaAc = new QAction("Rename Snapshot",   popme);
+      QAction* copyAc = new QAction("Copy Snapshot",     popme);
+      QAction* killAc = new QAction("Remove Snapshot",   popme);
+
+      popme->addAction(editAc);
+      popme->addAction(rendAc);
+      popme->addAction(renaAc);
+      popme->addAction(copyAc);
+      popme->addAction(killAc);
+
+      connect(editAc, SIGNAL(triggered()), this, SLOT(editSlot()));
+      connect(rendAc, SIGNAL(triggered()), this, SLOT(renderSlot()));
+      connect(renaAc, SIGNAL(triggered()), this, SLOT(renameSlot()));
+      connect(copyAc, SIGNAL(triggered()), this, SLOT(copySlot()));
+      connect(killAc, SIGNAL(triggered()), this, SLOT(killSlot()));
 
       return popme;
     }
@@ -428,42 +393,38 @@ namespace gui
       m_textListener->textChanged(1,newStatus.c_str());
     }
 
-    void SnapItem::propertySelected(int id)
+protected slots:
+    void editSlot()
     {
-      switch(id)
-	{
-	case EDIT_GRAPH:
-	  {
-        m_stupidObject.undisplayProperties_();
-	    m_model.changeEditGraph(m_graphID, m_snapID);
-	  } break;
-	case RENDER_GRAPH:
-	  {
-	    m_model.changeRenderedGraph(m_graphID, m_snapID);
-	  }
-	  break;		  
-	case RENAME_SNAPSHOT:
-	  {
-	    std::string 
-	      newName = AskForStringDialog::open(0, "Rename Snapshot",
-						 "Enter new name");
-	    m_model.renameControlValueSet(m_graphID, m_snapID, newName);
-	  } break;
-	case KILL_SNAPSHOT:
-	  {
-	    m_model.deleteControlValueSet(m_graphID, m_snapID);
-	  } break;
-	case COPY_SNAPSHOT:
-	  {
-	    std::string 
-	      newName = AskForStringDialog::open(0, "Copy Snapshot",
-						 "Enter a name for the copy");
+      m_stupidObject.undisplayProperties_();
+      m_model.changeEditGraph(m_graphID, m_snapID);
+    }
 
-	    m_model.copyControlValueSet(m_graphID, m_snapID, newName);
-	  } break;
-	default:
-	  assert(!"MIST!");
-        }
+    void renderSlot()
+    {
+      m_model.changeRenderedGraph(m_graphID, m_snapID);
+    }
+
+    void renameSlot()
+    {
+      std::string 
+	newName = AskForStringDialog::open(0, "Rename Snapshot",
+					   "Enter new name");
+      m_model.renameControlValueSet(m_graphID, m_snapID, newName);
+    }
+
+    void killSlot()
+    {
+      m_model.deleteControlValueSet(m_graphID, m_snapID);
+    }
+
+    void copySlot()
+    {
+      std::string 
+	newName = AskForStringDialog::open(0, "Copy Snapshot",
+					   "Enter a name for the copy");
+
+      m_model.copyControlValueSet(m_graphID, m_snapID, newName);
     }
 
   private:
@@ -653,7 +614,7 @@ namespace gui
 
         SnapItemPtr tmp( new SnapItem(graphID,snapID,
                                       graphName,snapName,m_model,
-									  stupidObject) );
+                                      stupidObject) );
 
         m_snaps[std::make_pair(graphID,snapID)] = tmp;
         m_treeView->insertItem(*tmp,&*it->second);
@@ -670,8 +631,8 @@ namespace gui
         if (it == m_folders.end())
           {
             m_log.error("Folder '" + graphID 
-                                     + "' doesnt exist at "
-                                     "GraphNameView::graphNoLongerExists()");
+                        + "' doesnt exist at "
+                        "GraphNameView::graphNoLongerExists()");
             return;
           }
 
@@ -684,12 +645,13 @@ namespace gui
         if (it2 == m_folderNames.end())
           {
             m_log.error("Foldername '" + path + "' doesnt exist at "
-                                     "GraphNameView::graphNoLongerExists()");
+                        "GraphNameView::graphNoLongerExists()");
             return;
           }
             
         m_folderNames.erase(it2);
       }
+
     if (snapID != "") //graph
       {
         GraphMap::iterator it = m_graphs.find(graphID);
@@ -698,8 +660,8 @@ namespace gui
         if (it == m_graphs.end() || it2 == m_snaps.end())
           {
             m_log.error("Graph '" + graphID + ":" 
-                                     + snapID + "' doesnt exist at "
-                                     "GraphNameView::graphNoLongerExists()");
+                        + snapID + "' doesnt exist at "
+                        "GraphNameView::graphNoLongerExists()");
             return;
           }
 		  
@@ -713,9 +675,12 @@ namespace gui
         // remove graph if it has no snaps left
         if (it->second->numberOfSnaps() == 0)
           {
-            if (renderedGraph && renderedGraph->graphName() == it->second->graphName())
-              renderedGraph = GraphItemPtr(0);
-			  
+            if (renderedGraph &&
+                renderedGraph->graphName() == it->second->graphName())
+              {
+                renderedGraph = GraphItemPtr(0);
+              }
+            
             m_treeView->removeItem(*it->second);
             m_graphs.erase(it);
           }
@@ -798,7 +763,7 @@ namespace gui
     for(std::string::const_iterator it=name.begin();it!=name.end();++it)
       {
         std::string::const_iterator it2 = std::find(allowedCharacters.begin(),
-			                                        allowedCharacters.end(),*it);
+                                                    allowedCharacters.end(),*it);
         if (it2==allowedCharacters.end())
           {
             // this character is not allowed
@@ -811,3 +776,6 @@ namespace gui
 
 
 }
+
+#include "graphnameview_moc_cpp.cpp"
+

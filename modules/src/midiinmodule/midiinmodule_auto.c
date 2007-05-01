@@ -105,7 +105,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Driver{widget_type=[combo_box] values=[default,wavein,oss,alsa,alsaseq] hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
+  static const char* INFO = "info { name=[Midi Source] group=[Midi] inputs=[2 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Driver{widget_type=[combo_box] values=[default,wavein,oss,alsa,alsaseq,coremidi] hidden=[true] } ] outputs=[1 Midi-Stream ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(midiinmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

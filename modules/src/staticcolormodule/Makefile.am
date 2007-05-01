@@ -1,4 +1,4 @@
-libdir = @gphx_module_lib_dir@
+bindir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -8,30 +8,40 @@ staticcolormodule_auto.c: staticcolormodule.spec staticcolormodule.h
 staticcolormodule.h: staticcolormodule.spec
 	$(PLUC) h @srcdir@/staticcolormodule.spec
 
-lib_LTLIBRARIES = staticcolormodule.la
+EXEEXT=.@SHAREDLIBEXT@
+
+bin_PROGRAMS = staticcolormodule
+
+staticcolormodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
+
+if SHARED_USE_DEF_FILE
+DEFFILE=staticcolormodule.def
+else
+DEFFILE=
+endif
 
 @builddir@/staticcolormodule_x86.o: @srcdir@/staticcolormodule_x86.asm
 	@NASM@ @NASM_FLAGS@ -o @builddir@/staticcolormodule_x86.o @srcdir@/staticcolormodule_x86.asm
 
 if OPT_INCLUDE_MMX
-staticcolormodule_la_LIBADD = \
+staticcolormodule_LDADD = \
 	@builddir@/staticcolormodule_x86.o \
 	-lcpuinfo -L@builddir@/../../../util/src/cpuinfo
 
-staticcolormodule_la_DEPENDENCIES = \
+staticcolormodule_DEPENDENCIES = \
 	@builddir@/staticcolormodule_x86.o \
 	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 
 cpuinfoINCLUDES = -I @srcdir@/../../../util/src/cpuinfo
 endif
 
-staticcolormodule_la_SOURCES = 	staticcolormodule_auto.c \
+staticcolormodule_SOURCES = 	staticcolormodule_auto.c \
 				staticcolormodule.c \
 				staticcolormodule.h \
 				staticcolormodule.spec \
 				staticcolormodule.xpm
 
-staticcolormodule_la_LDFLAGS = -module -avoid-version
+staticcolormodule_LDFLAGS = @SHARED_LD_FLAGS@
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
@@ -41,4 +51,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		$(cpuinfoINCLUDES)
 
 DISTCLEANFILES = staticcolormodule.h staticcolormodule_auto.c
-EXTRA_DIST = staticcolormodule.dsp staticcolormodule.mak staticcolormodule.dep staticcolormodule_x86.asm
+EXTRA_DIST = staticcolormodule.vcproj staticcolormodule.dsp staticcolormodule.mak staticcolormodule.dep staticcolormodule_x86.asm

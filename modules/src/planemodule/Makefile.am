@@ -31,4 +31,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = planemodule.h planemodule_auto.c
-EXTRA_DIST = planemodule.dsp planemodule.mak planemodule.dep
+EXTRA_DIST = planemodule.vcproj planemodule.dsp planemodule.mak planemodule.dep

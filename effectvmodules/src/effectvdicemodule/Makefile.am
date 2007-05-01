@@ -17,7 +17,7 @@ effectvdicemodule_la_SOURCES = \
         effectvdicemodule.spec \
         effectvdicemodule.xpm
 
-EXTRA_DIST = dice.c effectvdicemodule.dsp effectvdicemodule.mak effectvdicemodule.dep
+EXTRA_DIST = dice.c  effectvdicemodule.dsp effectvdicemodule.mak effectvdicemodule.dep
 
 effectvdicemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

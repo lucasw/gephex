@@ -27,9 +27,7 @@
 #include <map>
 #include <string>
 
-#include <qwidget.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QtGui/QWidget>
 
 #include "interfaces/imodulestatisticsreceiver.h"
 #include "interfaces/imodelstatusreceiver.h"
@@ -77,7 +75,7 @@ namespace gui
 
   public:
     typedef std::map<std::string, std::string> ParamMap;
-    GraphEditor(QWidget* parent, const char* name, WFlags fl,
+    GraphEditor(QWidget* parent,
 		GraphModel& contr,
 		const IModuleInfoBaseStation&,
 		const utils::AutoPtr<ControlValueDispatcher>& dispatcher_,
@@ -111,7 +109,6 @@ namespace gui
 
   public slots:
 
-    void beginLineDraw();
     void redrawLine(const QPoint& from, const QPoint& to);
     void connectionRequestFromInput(const InputPlugWidget*,const QPoint& to);
     void connectionRequestFromOutput(const OutputPlugWidget*,const QPoint& to);
@@ -123,9 +120,15 @@ namespace gui
     void nodeWidgetClicked(NodeWidget*);
     void nodeWidgetReleased(NodeWidget* n,const QPoint& pos);
 
-    void nodePopupActivated(int);
-    void inputPopupActivated(int);
-    void connectionPopupActivated(int);
+    void propertySlot();
+    void internalsSlot();
+    void killNodeSlot();
+
+    void connectToControlSlot();
+    void removeControlSlot();
+    void disconnectSlot();
+
+    void killConnectionSlot();
 
     void mouseOverNode(const NodeWidget*);
     void mouseOverInputPlug(const InputPlugWidget*);
@@ -166,7 +169,6 @@ namespace gui
   private:
     void connectionRequest(const InputPlugWidget* in,
 			   const OutputPlugWidget* out);
-    void removeOldLine();
 
     void decConnectionCount(PlugWidget* plug);
     void incConnectionCount(PlugWidget* plug);
@@ -182,20 +184,11 @@ namespace gui
 
     std::pair<int, int> selectedConnectionPair;
     
-    QPainter mainPainter;
-
-    QPoint oldLineFrom;
-    QPoint oldLineTo;
+    QPoint m_currentFrom;
+    QPoint m_currentTo;
 
     QPoint clickedPos;
     std::string currentModuleClassName;
-
-    // moegliche aktionen der popup menues
-    enum {NODEWIDGET_KILL,NODEWIDGET_PROPERTIES,
-          NODEWIDGET_INTERNALS};
-    enum {PLUGWIDGET_CONNECT_TO_CONTROL,PLUGWIDGET_REMOVE_CONTROL,
-	  PLUGWIDGET_HIDE_INPUT, PLUGWIDGET_DISCONNECT};
-    enum {CONNECTIONWIDGET_KILL};
 
     // der node bzw der input fuer den ein popup menue geoeffnet wurde:
     NodeWidget* currentNode;

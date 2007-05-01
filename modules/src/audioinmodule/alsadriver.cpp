@@ -52,7 +52,8 @@ AlsaDriver::~AlsaDriver()
     }
 }
 
-void AlsaDriver::open(device_id_t device,
+void AlsaDriver::open(logT /*logger*/,
+		      device_id_t device,
                       int sample_rate,
                       sample_format format,
                       int channels)
@@ -75,7 +76,7 @@ void AlsaDriver::open(device_id_t device,
     {
       std::ostringstream os;
       os << "cannot open audio device " 
-	 << buffer << "(" << snd_strerror(err)
+	 << buffer << " (" << snd_strerror(err)
 	 << ")";
   
       throw std::runtime_error(os.str().c_str());
@@ -102,7 +103,7 @@ void AlsaDriver::open(device_id_t device,
   }
 
   err = snd_pcm_hw_params_set_access(capture_handle, hw_params,
-                                      SND_PCM_ACCESS_RW_INTERLEAVED);
+                                     SND_PCM_ACCESS_RW_INTERLEAVED);
   if (err < 0) {
     std::ostringstream os;
     os << "cannot set access type ("
@@ -141,7 +142,7 @@ void AlsaDriver::open(device_id_t device,
   if (err < 0)
     {
       std::ostringstream os;
-      os << "cannot set channel count (%s)"
+      os << "cannot set channel count ("
 	 << snd_strerror(err) << ")";
       snd_pcm_hw_params_free(hw_params);
       snd_pcm_close(m_impl->handle);
@@ -199,7 +200,7 @@ int AlsaDriver::read(unsigned char* data, int num_samples)
       if (e < 0)
         {
 	  std::ostringstream os;
-	  os << "cannot prepare audio interface for use ("
+	  os << "[restart] cannot prepare audio interface for use ("
 	     << snd_strerror(e) << ")";
           throw std::runtime_error(os.str().c_str());
         }

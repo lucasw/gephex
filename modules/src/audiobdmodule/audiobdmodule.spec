@@ -35,7 +35,7 @@ inputs
        default           = 0.3
        strong_dependency = true
        const             = true
-       help              = 0=sensitiv, 1=wenig sensitiv
+       help              = 0=sensitiv 1=wenig sensitiv
     }
 
    algo

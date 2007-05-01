@@ -24,4 +24,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/framebuffertype 
 
 DISTCLEANFILES = blurmodule.h blurmodule_auto.c
-EXTRA_DIST = blurmodule.dsp blurmodule.mak blurmodule.dep
+EXTRA_DIST = blurmodule.vcproj blurmodule.dsp blurmodule.mak blurmodule.dep

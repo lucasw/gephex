@@ -12,10 +12,15 @@ typedef struct {
 #define OPT_AUDIO  0x0020
 #define OPT_GRAB   0x0040
 #define OPT_INT    0x0080
-    union {
-        void (*func_arg)(const char *);
+#define OPT_FLOAT  0x0100
+#define OPT_SUBTITLE 0x0200
+#define OPT_FUNC2  0x0400
+     union {
+        void (*func_arg)(const char *); //FIXME passing error code as int return would be nicer then exit() in the func
         int *int_arg;
         char **str_arg;
+        float *float_arg;
+        int (*func2_arg)(const char *, const char *);
     } u;
     const char *help;
     const char *argname;

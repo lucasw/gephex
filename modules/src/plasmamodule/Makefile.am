@@ -30,4 +30,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = plasmamodule.h plasmamodule_auto.c
-EXTRA_DIST = plasmamodule.dsp plasmamodule.mak plasmamodule.dep
+EXTRA_DIST = plasmamodule.vcproj plasmamodule.dsp plasmamodule.mak plasmamodule.dep

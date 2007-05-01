@@ -23,17 +23,19 @@
 #ifndef INCLUDED_AUDIO_IN_DRIVER_H
 #define INCLUDED_AUDIO_IN_DRIVER_H
 
-
 class AudioInDriver
 {
 public:
   typedef int device_id_t;
+  typedef void (*logT) (int, const char*);
+
 
   //static const device_id_t DEFAULT_DEVICE = 0;
 
   enum sample_format { SF_16LE };
   virtual ~AudioInDriver() {}
-  virtual void open(device_id_t device,
+  virtual void open(logT logger,
+		    device_id_t device,
 		    int sample_rate,
 		    sample_format format,
 		    int channels) = 0;

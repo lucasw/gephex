@@ -27,13 +27,13 @@ static int64_t int_sin(int64_t a){
 
     if(a>=MY_PI*3/2) a -= 2*MY_PI;  // -PI/2 .. 3PI/2
     if(a>=MY_PI/2  ) a = MY_PI - a; // -PI/2 ..  PI/2
-   
+
     return a - int_pow(a, 3)/6 + int_pow(a, 5)/120 - int_pow(a, 7)/5040;
 }
 
 #define SCALEBITS 8
 #define ONE_HALF  (1 << (SCALEBITS - 1))
-#define FIX(x)		((int) ((x) * (1L<<SCALEBITS) + 0.5))
+#define FIX(x)    ((int) ((x) * (1L<<SCALEBITS) + 0.5))
 typedef unsigned char UINT8;
 
 static void rgb24_to_yuv420p(UINT8 *lum, UINT8 *cb, UINT8 *cr,
@@ -54,7 +54,7 @@ static void rgb24_to_yuv420p(UINT8 *lum, UINT8 *cb, UINT8 *cr,
             r1 = r;
             g1 = g;
             b1 = b;
-            lum[0] = (FIX(0.29900) * r + FIX(0.58700) * g + 
+            lum[0] = (FIX(0.29900) * r + FIX(0.58700) * g +
                       FIX(0.11400) * b + ONE_HALF) >> SCALEBITS;
             r = p[3];
             g = p[4];
@@ -62,7 +62,7 @@ static void rgb24_to_yuv420p(UINT8 *lum, UINT8 *cb, UINT8 *cr,
             r1 += r;
             g1 += g;
             b1 += b;
-            lum[1] = (FIX(0.29900) * r + FIX(0.58700) * g + 
+            lum[1] = (FIX(0.29900) * r + FIX(0.58700) * g +
                       FIX(0.11400) * b + ONE_HALF) >> SCALEBITS;
             p += wrap3;
             lum += wrap;
@@ -73,7 +73,7 @@ static void rgb24_to_yuv420p(UINT8 *lum, UINT8 *cb, UINT8 *cr,
             r1 += r;
             g1 += g;
             b1 += b;
-            lum[0] = (FIX(0.29900) * r + FIX(0.58700) * g + 
+            lum[0] = (FIX(0.29900) * r + FIX(0.58700) * g +
                       FIX(0.11400) * b + ONE_HALF) >> SCALEBITS;
             r = p[3];
             g = p[4];
@@ -81,12 +81,12 @@ static void rgb24_to_yuv420p(UINT8 *lum, UINT8 *cb, UINT8 *cr,
             r1 += r;
             g1 += g;
             b1 += b;
-            lum[1] = (FIX(0.29900) * r + FIX(0.58700) * g + 
+            lum[1] = (FIX(0.29900) * r + FIX(0.58700) * g +
                       FIX(0.11400) * b + ONE_HALF) >> SCALEBITS;
-            
-            cb[0] = ((- FIX(0.16874) * r1 - FIX(0.33126) * g1 + 
+
+            cb[0] = ((- FIX(0.16874) * r1 - FIX(0.33126) * g1 +
                       FIX(0.50000) * b1 + 4 * ONE_HALF - 1) >> (SCALEBITS + 2)) + 128;
-            cr[0] = ((FIX(0.50000) * r1 - FIX(0.41869) * g1 - 
+            cr[0] = ((FIX(0.50000) * r1 - FIX(0.41869) * g1 -
                      FIX(0.08131) * b1 + 4 * ONE_HALF - 1) >> (SCALEBITS + 2)) + 128;
 
             cb++;
@@ -118,7 +118,7 @@ void pgmyuv_save(const char *filename, int w, int h,
 
     rgb24_to_yuv420p(lum_tab, cb_tab, cr_tab, rgb_tab, w, h);
 
-    f = fopen(filename,"w");
+    f = fopen(filename,"wb");
     fprintf(f, "P5\n%d %d\n%d\n", w, (h * 3) / 2, 255);
     fwrite(lum_tab, 1, w * h, f);
     h2 = h / 2;
@@ -174,7 +174,7 @@ static int ipol(uint8_t *src, int x, int y){
     int s11= src[ ((int_x+1)&255) + 256*((int_y+1)&255) ];
     int s0= (((1<<16) - frac_x)*s00 + frac_x*s01)>>8;
     int s1= (((1<<16) - frac_x)*s10 + frac_x*s11)>>8;
-    
+
     return (((1<<16) - frac_y)*s0 + frac_y*s1)>>24;
 }
 
@@ -182,14 +182,14 @@ void gen_image(int num, int w, int h)
 {
   const int c = h_cos [teta];
   const int s = h_sin [teta];
-  
+
   const int xi = -(w/2) * c;
   const int yi =  (w/2) * s;
-  
+
   const int xj = -(h/2) * s;
   const int yj = -(h/2) * c;
   int i,j;
-  
+
   int x,y;
   int xprime = xj;
   int yprime = yj;
@@ -202,7 +202,7 @@ void gen_image(int num, int w, int h)
 
     y = yprime + yi + FIXP*h/2;
     yprime += c;
-      
+
     for ( i=0 ; i<w ; i++ ) {
       x += c;
       y -= s;
@@ -231,19 +231,19 @@ void init_demo(const char *filename) {
 
   FILE *fichier;
 
-  fichier = fopen(filename,"r");
+  fichier = fopen(filename,"rb");
   if (!fichier) {
       perror(filename);
       exit(1);
   }
-      
+
   fread(line, 1, 15, fichier);
   for (i=0;i<H;i++) {
     fread(line,1,3*W,fichier);
     for (j=0;j<W;j++) {
-	  tab_r[W*i+j] = line[3*j    ];
-	  tab_g[W*i+j] = line[3*j + 1];
-	  tab_b[W*i+j] = line[3*j + 2];
+          tab_r[W*i+j] = line[3*j    ];
+          tab_g[W*i+j] = line[3*j + 1];
+          tab_b[W*i+j] = line[3*j + 2];
     }
   }
   fclose(fichier);
@@ -279,11 +279,11 @@ int main(int argc, char **argv)
     init_demo(argv[2]);
 
     for(i=0;i<DEFAULT_NB_PICT;i++) {
-        snprintf(buf, sizeof(buf), "%s%d.pgm", argv[1], i);
+        snprintf(buf, sizeof(buf), "%s%02d.pgm", argv[1], i);
         gen_image(i, w, h);
         pgmyuv_save(buf, w, h, rgb_tab);
     }
-    
+
     free(rgb_tab);
     return 0;
 }

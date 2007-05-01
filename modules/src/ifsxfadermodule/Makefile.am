@@ -24,4 +24,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = ifsxfadermodule.h ifsxfadermodule_auto.c
-EXTRA_DIST = ifsxfadermodule.dsp ifsxfadermodule.mak ifsxfadermodule.dep
+EXTRA_DIST = ifsxfadermodule.vcproj ifsxfadermodule.dsp ifsxfadermodule.mak ifsxfadermodule.dep

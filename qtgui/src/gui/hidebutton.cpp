@@ -28,9 +28,9 @@ namespace gui
 {
 
 HideButton::HideButton(QWidget* parent, InputPlugWidget& in)
-  : QCheckBox(parent, "oller knopf"), m_in(&in)
+  : QCheckBox(parent), m_in(&in)
 {
-  this->setToggleButton(true);
+  //this->setToggleButton(true);
 
   connect(this, SIGNAL(toggled(bool)),
           this, SLOT(hasBeenToggled(bool)));

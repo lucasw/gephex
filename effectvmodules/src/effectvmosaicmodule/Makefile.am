@@ -17,7 +17,7 @@ effectvmosaicmodule_la_SOURCES = \
         effectvmosaicmodule.spec \
         effectvmosaicmodule.xpm
 
-EXTRA_DIST = mosaic.c effectvmosaicmodule.dsp effectvmosaicmodule.mak effectvmosaicmodule.dep
+EXTRA_DIST = mosaic.c  effectvmosaicmodule.dsp effectvmosaicmodule.mak effectvmosaicmodule.dep
 
 effectvmosaicmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

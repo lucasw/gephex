@@ -1,7 +1,7 @@
 #ifndef INCLUDED_MOUSE_OVER_H
 #define INCLUDED_MOUSE_OVER_H
 
-#include <qobject.h>
+#include <QtCore/qobject.h>
 
 class QWidget;
 

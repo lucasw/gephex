@@ -1,4 +1,4 @@
-EXTRA_DIST = model.dsp model.mak model.dep
+EXTRA_DIST = model.vcproj model.dsp model.mak model.dep
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex

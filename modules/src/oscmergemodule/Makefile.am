@@ -26,5 +26,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = oscmergemodule.h oscmergemodule_auto.c
 
-#EXTRA_DIST = oscmergemodule.dsp oscmergemodule.mak oscmergemodule.dep
+#EXTRA_DIST = oscmergemodule.vcproj oscmergemodule.dsp oscmergemodule.mak oscmergemodule.dep
 

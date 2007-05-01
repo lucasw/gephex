@@ -30,6 +30,7 @@
 #endif
 
 #include "audioindriver.h"
+#include "a_cvt.h"
 
 #if defined(WITH_ASOUNDLIB)
 #include "alsadriver.h"
@@ -42,6 +43,10 @@
 #include "waveindriver.h"
 #endif
 
+#if defined(OS_DARWIN)
+#include "coreaudiodriver.h"
+#endif
+
 static logT s_log;
 
 static const int SAMPLE_RATE = 44100;
@@ -50,7 +55,7 @@ SAMPLE_FORMAT = AudioInDriver::SF_16LE;
 static const int BYTES_PER_SAMPLE = 2;
 static const int CHANNELS = 1;
 
-static const int AUDIO_BUFFER_SIZE = SAMPLE_RATE*BYTES_PER_SAMPLE/6;
+static const int AUDIO_BUFFER_SIZE = SAMPLE_RATE*BYTES_PER_SAMPLE*CHANNELS/6;
 
 typedef struct _MyInstance {
 
@@ -62,22 +67,9 @@ typedef struct _MyInstance {
 } MyInstance, *MyInstancePtr;
 
 
-#if defined(OS_WIN32)
-
-#endif
-
 int init(logT log_function)
 {
   s_log = log_function;
-
-  /*#if defined(OS_WIN32)
-  if (info() > 0)
-	return 1;
-  else {
-	  s_log(0, "No waveIn devices found");
-	  return 0;
-	}
-        #endif*/
 
   return 1;
 
@@ -166,6 +158,17 @@ void update(void* instance)
 	  my->drv = new WaveInDriver();
 	  s_log(2, "Unkown driver - using WaveIn driver");
 	}
+#elif defined(OS_DARWIN)
+      if (m_driver_name == "coreaudio" || m_driver_name == "default")
+	{
+	  my->drv = new CoreAudioDriver();
+	  s_log(2, "Using CoreAudio driver");
+	}
+      else
+	{
+	  my->drv = new CoreAudioDriver();
+	  s_log(2, "Unkown driver - using CoreAudio driver");
+	}
 #else
 #error No sound driver!
 #endif
@@ -183,7 +186,8 @@ void update(void* instance)
 
       try 
 	{
-	  my->drv->open(device,
+	  my->drv->open(s_log,
+			device,
 			SAMPLE_RATE,
 			SAMPLE_FORMAT,
 			CHANNELS);
@@ -217,21 +221,13 @@ void update(void* instance)
       s_log(2,"nothing to read!");
       else*/
     {
-      double* samples;
-      
       //      printf("read %i samples\n", len);
       audio_resize(inst->out_r, len);
       inst->out_r->len = len;
-      samples = inst->out_r->samples;
-      for (int i = 0; i < len; ++i)
-	{
-          int value = *((int_16*)(data + 2*i));
-	  // this should work on big endian machines as well
-          /*	  unsigned char low_byte  = data[2*i];
-	  unsigned char high_byte = data[2*i+1];
-	  int value = ((high_byte << 8) | low_byte);*/
-	  samples[i] = ((double) value) / ((double)(1 << 15)); 
-	}
+
+      a_cvt_16le_to_double_mono(reinterpret_cast<int16_t*>(data),
+				inst->out_r->samples,
+				len);
     }
 }
 

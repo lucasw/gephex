@@ -1,7 +1,8 @@
 #include "mouseover.h"
 
-#include <qwidget.h>
-#include <qapplication.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/QMouseEvent>
 
 namespace gui
 {

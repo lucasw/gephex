@@ -49,7 +49,7 @@ using std::tolower;
 
 #if defined(OS_WIN32)
 #include "vfwdriver.h"
-#include "dshowdriver.h"
+//#include "dshowdriver.h"
 #endif
 
 #if defined(WITH_AVIFILE)
@@ -129,8 +129,8 @@ int init(logT log_function)
 #if defined(OS_WIN32)
   DriverConstructor<VFWDriver>* vFW_ctor = new DriverConstructor<VFWDriver>();
   s_factory->register_driver(vFW_ctor);
-  DriverConstructor<DSHOWDriver>* DSHOW_ctor = new DriverConstructor<DSHOWDriver>();
-    s_factory->register_driver(DSHOW_ctor);
+  //  DriverConstructor<DSHOWDriver>* DSHOW_ctor = new DriverConstructor<DSHOWDriver>();
+  //    s_factory->register_driver(DSHOW_ctor);
 #endif
 
 #if defined(WITH_AVIFILE)

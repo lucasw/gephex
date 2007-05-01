@@ -1,4 +1,4 @@
-EXTRA_DIST = libeffectv.dsp libeffectv.mak libeffectv.dep
+EXTRA_DIST =  libeffectv.dsp libeffectv.mak libeffectv.dep
 
 libdir = @gphx_module_lib_dir@
 noinst_LIBRARIES = libeffectv.a

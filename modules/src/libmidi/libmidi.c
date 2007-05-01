@@ -218,6 +218,7 @@ int midi_parse_data(struct MidiParser* self, const uint8_t* buf, int len)
       uint8_t status_lower_nibble;
 
       status = buf[index];
+
       if (!midi_is_status((uint8_t) status))
 	{
 	  if (midi_is_status(self->running_status))
@@ -228,10 +229,11 @@ int midi_parse_data(struct MidiParser* self, const uint8_t* buf, int len)
 	  self->running_status = (uint8_t) status;
 	  ++index; // go to first data byte
 	}
-      
+
       status_upper_nibble = status & 0xf0;
       status_lower_nibble = status & 0x0f;
       overflow = 0;
+
       switch(status_upper_nibble)
 	{
 	  uint8_t b1, b2;

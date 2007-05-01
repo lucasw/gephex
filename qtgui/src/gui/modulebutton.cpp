@@ -25,9 +25,8 @@
 
 ModuleButton::ModuleButton(int _id, 
 			   QWidget *parent, 
-			   const char *name, 
-			   WFlags fl)
-  :QToolButton(parent, name), id(_id), m_controller(0)
+			   Qt::WFlags fl)
+  :QToolButton(parent), id(_id), m_controller(0)
 {
 }
 

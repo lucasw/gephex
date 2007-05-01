@@ -35,7 +35,7 @@ funparsemodule_la_SOURCES = \
 
 
 EXTRA_DIST = parser.y scanner.flex \
-	funparsemodule.dsp funparsemodule.mak funparsemodule.dep
+	funparsemodule.vcproj funparsemodule.dsp funparsemodule.mak funparsemodule.dep
 
 scanner.o: parser.tab.h
 

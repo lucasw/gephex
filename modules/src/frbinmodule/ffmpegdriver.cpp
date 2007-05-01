@@ -37,6 +37,7 @@
 
 #include "avformat.h"
 #include "avcodec.h"
+#include "avutil.h"
 
 #include "libscale.h"
 
@@ -98,13 +99,13 @@ static int decode(AVFormatContext* fc, int video_stream_index,
     AVStream* video_stream = fc->streams[video_stream_index];
     *got_frame = 0; 
 
-    if (video_stream->codec.codec_id == CODEC_ID_RAWVIDEO)
+    if (video_stream->codec->codec_id == CODEC_ID_RAWVIDEO)
       {
         avpicture_fill((AVPicture *)frame,
                        pkt->data, 
-                       video_stream->codec.pix_fmt,
-                       video_stream->codec.width,
-                       video_stream->codec.height);
+                       video_stream->codec->pix_fmt,
+                       video_stream->codec->width,
+                       video_stream->codec->height);
         frame->pict_type = FF_I_TYPE;
 
         *got_frame = 1;
@@ -114,7 +115,7 @@ static int decode(AVFormatContext* fc, int video_stream_index,
       }
     else
       {
-        int len = avcodec_decode_video(&video_stream->codec,
+        int len = avcodec_decode_video(video_stream->codec,
                                        frame, got_frame,
                                        pkt->data,
                                        pkt->size);
@@ -138,7 +139,8 @@ static int decode(AVFormatContext* fc, int video_stream_index,
     return 1;
 }
 
-static int decode_to_timestamp(AVFormatContext* fc, int video_stream_index,
+static int decode_to_timestamp(AVFormatContext* fc,
+                               int video_stream_index,
                                double wanted_timestamp, double fps,
                                AVPacket* pkt, AVFrame* frame,
                                double* timestamp)
@@ -147,6 +149,9 @@ static int decode_to_timestamp(AVFormatContext* fc, int video_stream_index,
   double current_timestamp = wanted_timestamp - 2*frame_duration;
 
   int counter = 0;
+
+  AVStream* video_stream = fc->streams[video_stream_index];
+  double time_base = av_q2d(video_stream->time_base);
 
   while (fabs(current_timestamp - wanted_timestamp) >= 0.98*frame_duration)
     {
@@ -159,14 +164,13 @@ static int decode_to_timestamp(AVFormatContext* fc, int video_stream_index,
       ret = decode(fc, video_stream_index, frame, pkt, &got_frame);
 
       if (got_frame)
-        current_timestamp = ((double) pkt->pts) / AV_TIME_BASE;
+        current_timestamp = ((double) pkt->pts) * time_base;
       av_free_packet(pkt);
 
       if (ret < 0)
         return -1;
 
       if (pkt->pts == AV_NOPTS_VALUE)
-        //          pkt->pts < current_timestamp * AV_TIME_BASE)
         {
           std::cerr << "Invalid pts in packet\n";
           return -1;
@@ -181,6 +185,32 @@ static int decode_to_timestamp(AVFormatContext* fc, int video_stream_index,
 
   *timestamp = current_timestamp;
   return 1;
+}
+
+
+namespace
+{
+  bool is_big_endian()
+  {
+    const int test = 0x01020304;
+    const unsigned char* mask = reinterpret_cast<const unsigned char*>(&test);
+    return mask[0] == 0x01;
+  }
+
+  void switch_byteorder(uint32_t& v)
+  {
+    uint32_t tmp;
+
+    const unsigned char* src = reinterpret_cast<unsigned char*>(&v);
+    unsigned char* dst = reinterpret_cast<unsigned char*>(&tmp);
+
+    dst[0] = src[3];
+    dst[1] = src[2];
+    dst[2] = src[1];
+    dst[3] = src[0];
+
+    v = tmp;
+  }
 }
 
 //----------------------------------------------------------------------
@@ -238,7 +268,7 @@ struct FFMpegDriverImpl
     int stream_index = -1;
     for (int i = 0; i < av_fc->nb_streams; i++)
       {
-        AVCodecContext* enc = &av_fc->streams[i]->codec;
+        AVCodecContext* enc = av_fc->streams[i]->codec;
         if (enc->codec_type == CODEC_TYPE_VIDEO)
           {
             stream_index = i;
@@ -267,7 +297,7 @@ struct FFMpegDriverImpl
         throw;
       }
 
-    AVCodecContext* enc = &av_fc->streams[video_stream_index]->codec;
+    AVCodecContext* enc = av_fc->streams[video_stream_index]->codec;
     if (enc->width == 0)
       {
         close();
@@ -276,8 +306,7 @@ struct FFMpegDriverImpl
 
     AVStream* video_stream = av_fc->streams[video_stream_index];
 
-    //    m_fps = ((double)enc->frame_rate) / enc->frame_rate_base;
-    m_fps = ((double)video_stream->r_frame_rate) / video_stream->r_frame_rate_base;
+    m_fps = av_q2d(video_stream->r_frame_rate);
     double duration_s;
     int ret = estimate_duration(av_fc, video_stream_index, m_fps,
                                 &duration_s, &m_start_time);
@@ -287,9 +316,7 @@ struct FFMpegDriverImpl
         throw std::runtime_error("Could not estimate stream duration");
       }
 
-    int num_frames = (int) 
-      floor((video_stream->r_frame_rate * duration_s) 
-            / video_stream->r_frame_rate_base);
+    int num_frames = static_cast<int>(floor(av_q2d(video_stream->r_frame_rate) * duration_s));
 
     info.width  = enc->width;
     info.height = enc->height;
@@ -306,14 +333,13 @@ struct FFMpegDriverImpl
     m_current_timestamp = -100;
 
     std::cout << "duration  : " << duration_s
-              << "s (" << (double) video_stream->duration / AV_TIME_BASE
+              << "s (" << (double) video_stream->duration * av_q2d(video_stream->time_base)
               << " s)\n";
     std::cout << "start_time: " << m_start_time << " s\n";
     std::cout << "fps       : " << m_fps << "\n";
 
     std::cout << "timebase  : " 
-              << video_stream->time_base.num / 
-                     (double)video_stream->time_base.den << "\n";
+              << av_q2d(video_stream->time_base) << "\n";
 
     m_frame = avcodec_alloc_frame();
     file_name = filename;
@@ -366,9 +392,9 @@ struct FFMpegDriverImpl
     return m_num_frames;
   }
 
-  void FFMpegDriverImpl::decode_frame(unsigned int frame_number,
-                                      uint_32* framebuffer,
-                                      int width, int height)
+  void decode_frame(unsigned int frame_number,
+                    uint_32* framebuffer,
+                    int width, int height)
   {
     assert(av_fc != 0);
 
@@ -431,11 +457,11 @@ struct FFMpegDriverImpl
 
     AVStream* video_stream = av_fc->streams[video_stream_index];
 
-    int cwidth  = video_stream->codec.width;
-    int cheight = video_stream->codec.height;
+    int cwidth  = video_stream->codec->width;
+    int cheight = video_stream->codec->height;
 
-    if (video_stream->codec.width == width &&
-        video_stream->codec.height == height)
+    if (video_stream->codec->width == width &&
+        video_stream->codec->height == height)
       {
         pict.data[0] = (uint_8*) framebuffer;
       }
@@ -459,9 +485,9 @@ struct FFMpegDriverImpl
     
     img_convert(&pict, dst_pix_fmt,
                 (AVPicture *) m_frame,
-                video_stream->codec.pix_fmt,
-                video_stream->codec.width,
-                video_stream->codec.height);
+                video_stream->codec->pix_fmt,
+                video_stream->codec->width,
+                video_stream->codec->height);
     
     if (cwidth != width || cheight != height)
       {
@@ -477,6 +503,14 @@ struct FFMpegDriverImpl
             m_scale_buf = 0;
             m_scale_buf_size = 0;
           }
+      }
+
+    // Correct byte order on big endian machines (using the
+    // correct pixel format crashes in img_convert).
+    if (is_big_endian())
+      {
+	std::for_each(framebuffer, framebuffer + width*height,
+		      switch_byteorder);
       }
   }
 
@@ -565,7 +599,7 @@ static void open_stream(AVFormatContext* av_fc, int stream_index)
 {
   assert (stream_index >= 0 && stream_index < av_fc->nb_streams);
     
-  AVCodecContext* enc = &av_fc->streams[stream_index]->codec;
+  AVCodecContext* enc = av_fc->streams[stream_index]->codec;
     
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
 
@@ -594,7 +628,7 @@ static void close_stream(AVFormatContext* av_fc, int stream_index)
 {
   AVCodecContext *enc;
     
-  enc = &av_fc->streams[stream_index]->codec;
+  enc = av_fc->streams[stream_index]->codec;
 
   assert(enc->codec_type == CODEC_TYPE_VIDEO);
 
@@ -624,13 +658,19 @@ static void dump_stream_info(AVFormatContext *s)
 
 //----------------------------------------------------------------------
 
-static int estimate_duration(AVFormatContext* av_fc, int stream_index,
+static int estimate_duration(AVFormatContext* av_fc,
+                             int stream_index,
                              double fps,
                              double* duration,
                              double* start_time)
-{   
+{
+  std::cout << "estimate_duration, stream_index = "
+            << stream_index << ", fps = " << fps << "\n";
+
   double frame_duration = 1.0 / fps;
   AVStream* stream = av_fc->streams[stream_index];  
+
+  const double time_base = av_q2d(stream->time_base);
 
   int64_t start_pts = stream->start_time;
   if (start_pts == AV_NOPTS_VALUE)
@@ -643,13 +683,21 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
       start_pts = 0;
     }
 
-  double duration_0 = (stream->duration == AV_NOPTS_VALUE) ? frame_duration
-    : (double) stream->duration / AV_TIME_BASE;
+  double duration_0 = ((stream->duration == AV_NOPTS_VALUE) ? frame_duration
+    : ((double) stream->duration * time_base));
 
   // assume at least 25 frames
-  if (duration_0 <= 0) duration_0 = frame_duration*25;
+  if (duration_0 <= 0)
+    duration_0 = frame_duration*25;
 
-  //  std::cout << "seeking until success...\n";
+  std::cout << "duration_0 = "
+            << duration_0
+            << " (stream->duration * time_base = "
+            << stream->duration << " * " << time_base << " = "
+            << (double) stream->duration * time_base
+            << ")\n";
+
+  std::cout << "seeking until success...\n";
 
   int ret = seek_to_second(av_fc, stream_index, duration_0);
 
@@ -657,7 +705,7 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
   // decrease duration until seek succeeds
   while (ret < 0 && duration_0 >= frame_duration)
     {
-      //      std::cout << ".\n";
+      std::cout << ".\n";
       duration_0 -= frame_duration;
       ret = seek_to_second(av_fc, stream_index, duration_0);
       ++seek_count;
@@ -672,14 +720,14 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
   AVPacket pkt;
   // read frames until EOF
 
-  //  std::cout << "reading until eof...\n";
+  std::cout << "reading until eof...\n";
   
   int read_count = 0;
   bool read_once = false;
   while (av_read_frame(av_fc, &pkt) >= 0)
     {
       read_once = true;
-      //      std::cout << ".\n";
+      //std::cout << ",\n";
       if (pkt.stream_index == stream_index)
         {
           if (pkt.pts == AV_NOPTS_VALUE)
@@ -688,7 +736,7 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
             }
           else
             {
-              duration_0 = (double) (pkt.pts - start_pts) / AV_TIME_BASE;
+              duration_0 = (double) (pkt.pts - start_pts) * time_base;
             }
 
         }
@@ -704,7 +752,7 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
       std::cout << "#seeks = " << seek_count << ", #reads = " << read_count
                 << "\n";
       *duration   = duration_0;
-      *start_time = (double) start_pts / AV_TIME_BASE;
+      *start_time = (double) start_pts * time_base;
       return 1;
     }
   else
@@ -716,29 +764,10 @@ static int estimate_duration(AVFormatContext* av_fc, int stream_index,
 
 //----------------------------------------------------------------------
 
-// TODO: check whether this number reflects the seek_frame api change
-
-#if LIBAVCODEC_BUILD <= 4721
-
-static int64_t get_timestamp(double ts_sec)
-{
-  return static_cast<int64_t>(ts_sec * AV_TIME_BASE + 0.5);
-}
-
-static int seek_to_second(AVFormatContext* av_fc, int stream_index,
-                          double sec)
-{
-  int64_t ts = get_timestamp(sec);
-
-  return av_seek_frame(av_fc, stream_index, ts);
-}
-
-#else
 
 static int64_t get_timestamp(double ts_sec, const AVRational& time_base)
 {
-  return static_cast<int64_t>(ts_sec*time_base.den /
-                                   static_cast<double>(time_base.num) + 0.5);
+  return static_cast<int64_t>(ts_sec/av_q2d(time_base) + 0.5);
 }
 
 static int seek_to_second(AVFormatContext* av_fc, int stream_index,
@@ -750,6 +779,5 @@ static int seek_to_second(AVFormatContext* av_fc, int stream_index,
 
   return av_seek_frame(av_fc, stream_index, ts, AVSEEK_FLAG_BACKWARD);
 }
-#endif
 
 //----------------------------------------------------------------------

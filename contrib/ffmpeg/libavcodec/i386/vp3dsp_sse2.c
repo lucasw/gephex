@@ -1,19 +1,21 @@
 /*
  * Copyright (C) 2004 the ffmpeg project
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /**
@@ -24,7 +26,7 @@
 #include "../dsputil.h"
 #include "mmx.h"
 
-static unsigned short __align16 SSE2_dequant_const[] =
+static DECLARE_ALIGNED_16(const unsigned short, SSE2_dequant_const[]) =
 {
     0,65535,65535,0,0,0,0,0,    // 0x0000 0000 0000 0000 0000 FFFF FFFF 0000
     0,0,0,0,65535,65535,0,0,    // 0x0000 0000 FFFF FFFF 0000 0000 0000 0000
@@ -35,22 +37,22 @@ static unsigned short __align16 SSE2_dequant_const[] =
     0,0,65535,65535, 0,0,0,0    // 0x0000 0000 0000 0000 FFFF FFFF 0000 0000
 };
 
-static unsigned int __align16 eight_data[] =
-{ 
-    0x00080008, 
-    0x00080008,
-    0x00080008, 
-    0x00080008 
-}; 
-
-static unsigned short __align16 SSE2_idct_data[7 * 8] =
+static DECLARE_ALIGNED_16(const unsigned int, eight_data[]) =
 {
-    64277,64277,64277,64277,64277,64277,64277,64277, 
-    60547,60547,60547,60547,60547,60547,60547,60547, 
-    54491,54491,54491,54491,54491,54491,54491,54491, 
-    46341,46341,46341,46341,46341,46341,46341,46341, 
-    36410,36410,36410,36410,36410,36410,36410,36410, 
-    25080,25080,25080,25080,25080,25080,25080,25080, 
+    0x00080008,
+    0x00080008,
+    0x00080008,
+    0x00080008
+};
+
+static DECLARE_ALIGNED_16(const unsigned short, SSE2_idct_data[7 * 8]) =
+{
+    64277,64277,64277,64277,64277,64277,64277,64277,
+    60547,60547,60547,60547,60547,60547,60547,60547,
+    54491,54491,54491,54491,54491,54491,54491,54491,
+    46341,46341,46341,46341,46341,46341,46341,46341,
+    36410,36410,36410,36410,36410,36410,36410,36410,
+    25080,25080,25080,25080,25080,25080,25080,25080,
     12785,12785,12785,12785,12785,12785,12785,12785
 };
 
@@ -796,24 +798,15 @@ static unsigned short __align16 SSE2_idct_data[7 * 8] =
 } /* end of SSE2_Dequantize Macro */
 
 
-void vp3_dsp_init_sse2(void)
-{
-    /* nop */
-}
-
-
-void vp3_idct_sse2(int16_t *input_data, int16_t *dequant_matrix,
-    int coeff_count, int16_t *output_data)
+void ff_vp3_idct_sse2(int16_t *input_data)
 {
     unsigned char *input_bytes = (unsigned char *)input_data;
-    unsigned char *dequant_matrix_bytes = (unsigned char *)dequant_matrix;
-    unsigned char *dequant_const_bytes = (unsigned char *)SSE2_dequant_const;
-    unsigned char *output_data_bytes = (unsigned char *)output_data;
+    unsigned char *output_data_bytes = (unsigned char *)input_data;
     unsigned char *idct_data_bytes = (unsigned char *)SSE2_idct_data;
     unsigned char *Eight = (unsigned char *)eight_data;
 
 #define eax input_bytes
-#define ebx dequant_matrix_bytes
+//#define ebx dequant_matrix_bytes
 #define ecx dequant_const_bytes
 #define edx idct_data_bytes
 
@@ -821,7 +814,7 @@ void vp3_idct_sse2(int16_t *input_data, int16_t *dequant_matrix,
 #define O(i) (ebx + 16 * i)
 #define C(i) (edx + 16 * (i-1))
 
-    SSE2_Dequantize();
+ //   SSE2_Dequantize();
 
 #undef ebx
 #define ebx output_data_bytes
@@ -829,6 +822,6 @@ void vp3_idct_sse2(int16_t *input_data, int16_t *dequant_matrix,
     SSE2_Row_IDCT();
 
     SSE2_Transpose();
-        
+
     SSE2_Column_IDCT();
 }

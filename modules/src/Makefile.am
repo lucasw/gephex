@@ -16,7 +16,7 @@ if WITH_LIBPNG
 PNG_DIRS = imagewritermodule
 endif
 
-if WITH_ASOUNDLIB_OR_OSS
+if WITH_ANY_AUDIO_SUPPORT
 AUDIO_DIRS = audioinmodule audiooutmodule midiinmodule
 endif
 
@@ -26,6 +26,15 @@ endif
 
 if WITH_FFMPEG
 FFMPEG_DIRS = ffmpegoutmodule
+endif
+
+if OS_WINDOWS
+  PLT_DRS =
+else
+  PLT_DRS = oscinmodule \
+            oscoutmodule \
+            y4minmodule \
+            yuv4mpeg2module
 endif
 
 SUBDIRS = libgrid \
@@ -45,6 +54,7 @@ SUBDIRS = libgrid \
 	centermodule \
 	chromakeymodule \
 	color2numbermodule \
+	colorizemodule \
 	diffmodule \
 	doepfermodule \
         dplmodule \
@@ -64,6 +74,11 @@ SUBDIRS = libgrid \
 	isingnoizemodule \
 	jumpmodule \
 	midiccdecmodule \
+	midinotedecmodule \
+	midikeyrangedecmodule \
+	midiprgchdecmodule \
+	midipitchwdecmodule \
+	mirrormodule \
 	netcontrolmodule \
 	noisemodule \
 	numarithmodule \
@@ -73,8 +88,6 @@ SUBDIRS = libgrid \
 	numlfomodule \
 	numposmodule \
 	numxfadermodule \
-	oscinmodule \
-	oscoutmodule \
 	oscnummodule \
 	numoscmodule \
 	oscmergemodule \
@@ -94,6 +107,6 @@ SUBDIRS = libgrid \
 	timesourcemodule \
 	tunnelmodule \
 	twolayermodule \
-	xfademodule \
-	y4minmodule \
-	yuv4mpeg2module	$(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)
+	xfademodule $(PLT_DRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)
+
+EXTRA_DIST = modules.sln

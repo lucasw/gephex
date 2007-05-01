@@ -26,7 +26,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <qdialog.h>
+#include <QtGui/qdialog.h>
 
 //#include "controlchangelistener.h"
 #include "base/ipropertydescription.h"

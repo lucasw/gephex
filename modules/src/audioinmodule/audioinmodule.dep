@@ -1,35 +1,24 @@
 # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von audioinmodule.mak
 
+.\a_cvt.cpp : \
+	".\a_cvt.h"\
+	
+
 .\audiobuffer.c : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
 	".\audiobuffer.h"\
 	
 
 .\audioinmodule.cpp : \
 	"..\..\..\config.h"\
-	"..\..\..\engine\src\engine\dllmodule.h"\
-	"..\..\..\types\src\audiotype\audiotype.h"\
-	"..\..\..\types\src\numbertype\numbertype.h"\
-	"..\..\..\types\src\stringtype\stringtype.h"\
-	"..\..\..\util\include\basic_types.h"\
+	".\a_cvt.h"\
+	".\alsadriver.h"\
 	".\audioindriver.h"\
-	".\audioinmodule.h"\
+	".\coreaudiodriver.h"\
+	".\ossdriver.h"\
 	".\waveindriver.h"\
 	
 
-.\audioinmodule_auto.c : \
-	"..\..\..\engine\src\engine\dllmodule.h"\
-	"..\..\..\engine\src\engine\dllutils.h"\
-	"..\..\..\types\src\audiotype\audiotype.h"\
-	"..\..\..\types\src\numbertype\numbertype.h"\
-	"..\..\..\types\src\stringtype\stringtype.h"\
-	"..\..\..\util\include\basic_types.h"\
-	".\audioinmodule.h"\
-	".\audioinmodule.xpm"\
-	
-
 .\waveindriver.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
 	".\audiobuffer.h"\
 	".\audioindriver.h"\
 	".\waveindriver.h"\

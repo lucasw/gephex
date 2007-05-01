@@ -2,23 +2,27 @@
  * Various utilities for ffmpeg system
  * Copyright (c) 2000, 2001, 2002 Fabrice Bellard
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 #include "config.h"
 #include "avformat.h"
-#ifdef CONFIG_WIN32
+#if defined(CONFIG_WINCE)
+/* Skip includes on WinCE. */
+#elif defined(__MINGW32__)
 #include <sys/types.h>
 #include <sys/timeb.h>
 #elif defined(CONFIG_OS2)
@@ -31,9 +35,14 @@
 #endif
 #include <time.h>
 
+/**
+ * gets the current time in micro seconds.
+ */
 int64_t av_gettime(void)
 {
-#ifdef CONFIG_WIN32
+#if defined(CONFIG_WINCE)
+    return timeGetTime() * int64_t_C(1000);
+#elif defined(__MINGW32__)
     struct timeb tb;
     _ftime(&tb);
     return ((int64_t)tb.time * int64_t_C(1000) + (int64_t)tb.millitm) * int64_t_C(1000);
@@ -44,11 +53,12 @@ int64_t av_gettime(void)
 #endif
 }
 
+#if !defined(CONFIG_WINCE)
 #if !defined(HAVE_LOCALTIME_R)
 struct tm *localtime_r(const time_t *t, struct tm *tp)
 {
     struct tm *l;
-    
+
     l = localtime(t);
     if (!l)
         return 0;
@@ -56,3 +66,4 @@ struct tm *localtime_r(const time_t *t, struct tm *tp)
     return tp;
 }
 #endif /* !defined(HAVE_LOCALTIME_R) */
+#endif /* !defined(CONFIG_WINCE) */

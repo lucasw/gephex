@@ -24,8 +24,14 @@
 
 #include <stdio.h>
 
+
 #define COMPILE_MULTIMON_STUBS
+#if defined (__GNUC__)
+// mingw does not have the multimon.h header
+#include <windows.h>
+#else
 #include <multimon.h>
+#endif
 
 static void get_error_text(char* buffer, int len);
 

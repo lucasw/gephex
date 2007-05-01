@@ -25,7 +25,7 @@
 
 #include <map>
 
-#include <qobject.h>
+#include <QtCore/QObject>
 
 #include "base/treeview.h"
 
@@ -66,10 +66,10 @@ namespace gui
      */
     void renderedGraphChanged( const std::string& graphID );
 
-	void undisplayProperties_();
+    void undisplayProperties_();
 
   signals:
-	void undisplayProperties();
+    void undisplayProperties();
 
 
   private:

@@ -26,4 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = color2numbermodule.h color2numbermodule_auto.c
-EXTRA_DIST = color2numbermodule.dsp color2numbermodule.mak color2numbermodule.dep
+EXTRA_DIST = color2numbermodule.vcproj color2numbermodule.dsp color2numbermodule.mak color2numbermodule.dep

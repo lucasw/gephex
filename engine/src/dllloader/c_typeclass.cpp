@@ -25,8 +25,10 @@
 #include "c_typetables.h"
 #include "c_type.h"
 
-CTypeClass::CTypeClass(const CTypeFunctionTable& ftab_,std::string name,int id)
-  : functionTable(ftab_), typeName(name), typeId(id)
+#include "utils/structreader.h"
+
+CTypeClass::CTypeClass(const CTypeFunctionTable& ftab_)
+  : functionTable(ftab_)
 {
 }
 
@@ -34,9 +36,10 @@ CTypeClass::~CTypeClass()
 {
 }
 
-ITypeClass* CTypeClass::clone() const
+std::string CTypeClass::getName() const
 {
-  return new CTypeClass(functionTable,typeName,typeId);
+  const utils::StructReader spec(functionTable.getSpec());
+  return spec.getStringValue("name");
 }
 
 IType* CTypeClass::buildInstance(/*void* ptr*/) const

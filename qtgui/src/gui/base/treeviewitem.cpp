@@ -41,35 +41,15 @@ namespace gui
 
 
   // Empty Default Implementations
-  void TreeViewItem::leftButtonClicked( const Point& /*pos*/, int /*column*/ )
+  void TreeViewItem::onClick( int /*column*/ )
   {
   }
 
-  void TreeViewItem::rightButtonClicked( const Point& /*pos*/, int /*column*/ )
+  void TreeViewItem::onActivate( int /*column*/ )
   {
   }
 
-  void TreeViewItem::leftButtonPressed( const Point& /*pos*/, int /*column*/ )
-  {
-  }
-
-  void TreeViewItem::rightButtonPressed( const Point& /*pos*/, int /*column*/ )
-  {
-  }
-
-  void TreeViewItem::doubleClicked()
-  {
-  }
-
-  void TreeViewItem::mouseOnItem()
-  {
-  }
-
-  void TreeViewItem::propertySelected(int /*id*/)
-  {
-  }
-
-  QPopupMenu* TreeViewItem::getPropertyMenu()
+  QMenu* TreeViewItem::getPropertyMenu()
   {
     return 0;
   }

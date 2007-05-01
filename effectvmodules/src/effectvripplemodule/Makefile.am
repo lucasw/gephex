@@ -17,7 +17,7 @@ effectvripplemodule_la_SOURCES = \
         effectvripplemodule.spec \
         effectvripplemodule.xpm
 
-EXTRA_DIST = ripple.c effectvripplemodule.dsp effectvripplemodule.mak effectvripplemodule.dep
+EXTRA_DIST = ripple.c  effectvripplemodule.dsp effectvripplemodule.mak effectvripplemodule.dep
 
 effectvripplemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

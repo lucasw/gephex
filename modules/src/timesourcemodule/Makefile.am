@@ -27,4 +27,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = timesourcemodule.h timesourcemodule_auto.c
 
-EXTRA_DIST = timesourcemodule.dsp timesourcemodule.mak timesourcemodule.dep
+EXTRA_DIST = timesourcemodule.vcproj timesourcemodule.dsp timesourcemodule.mak timesourcemodule.dep

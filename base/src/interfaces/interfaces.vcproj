@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="interfaces"
+	ProjectGUID="{9F982770-77F8-4760-B264-D2E0FF8DDA83}"
+	SccProjectName=""
+	SccLocalPath="">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="../../../util/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;for=&quot;if (0) {} else for&quot;;_LIB;HAVE_CONFIG_H"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Debug/interfaces.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="../../lib/interfaces.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="../../../util/src/include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;HAVE_CONFIG_H"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Release/interfaces.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\../../lib\interfaces.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Header-Dateien"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="imodule.h">
+			</File>
+			<File
+				RelativePath="imoduleclass.h">
+			</File>
+			<File
+				RelativePath="imoduleclassspec.h">
+			</File>
+			<File
+				RelativePath="itask.h">
+			</File>
+			<File
+				RelativePath="itype.h">
+			</File>
+			<File
+				RelativePath="itypeclass.h">
+			</File>
+			<File
+				RelativePath="itypefactory.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Interfaces"
+			Filter="if">
+			<File
+				RelativePath="controlvalue.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="enginecontrol.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="error.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphdata.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphname.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelcontrol.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelstatus.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclass.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassinfo.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrol.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassname.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassspec.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleconstructiondumb.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleconstructionsmart.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduledata.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modulestatistics.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modulestatisticssmart.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="renderercontrol.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="rendererstatus.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="serializedgraph.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="smartcontrolvalue.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="typeclass.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="typeclassinfo.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="typeclassloadercontrol.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="typeclassname.if">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating interface headers for $(InputPath) ..."
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py is . &quot;$(InputPath)&quot;
+python ../../nic.py ir . &quot;$(InputPath)&quot;
+"
+						Outputs="i$(InputName)sender.h;i$(InputName)receiver.h"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Autocreated Headers"
+			Filter="">
+			<File
+				RelativePath="icontrolvaluereceiver.h">
+			</File>
+			<File
+				RelativePath="icontrolvaluesender.h">
+			</File>
+			<File
+				RelativePath="ienginecontrolreceiver.h">
+			</File>
+			<File
+				RelativePath="ienginecontrolsender.h">
+			</File>
+			<File
+				RelativePath="ierrorreceiver.h">
+			</File>
+			<File
+				RelativePath="ierrorsender.h">
+			</File>
+			<File
+				RelativePath="igraphnamereceiver.h">
+			</File>
+			<File
+				RelativePath="igraphnamesender.h">
+			</File>
+			<File
+				RelativePath="imodelcontrolreceiver.h">
+			</File>
+			<File
+				RelativePath="imodelcontrolsender.h">
+			</File>
+			<File
+				RelativePath="imodelstatusreceiver.h">
+			</File>
+			<File
+				RelativePath="imodelstatussender.h">
+			</File>
+			<File
+				RelativePath="imoduleclassinforeceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleclassinfosender.h">
+			</File>
+			<File
+				RelativePath="imoduleclassloadercontrolreceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleclassloadercontrolsender.h">
+			</File>
+			<File
+				RelativePath="imoduleclassnamereceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleclassnamesender.h">
+			</File>
+			<File
+				RelativePath="imoduleclassreceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleclasssender.h">
+			</File>
+			<File
+				RelativePath="imoduleclassspecreceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleclassspecsender.h">
+			</File>
+			<File
+				RelativePath="imoduleconstructiondumbreceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleconstructiondumbsender.h">
+			</File>
+			<File
+				RelativePath="imoduleconstructionsmartreceiver.h">
+			</File>
+			<File
+				RelativePath="imoduleconstructionsmartsender.h">
+			</File>
+			<File
+				RelativePath="imoduledatareceiver.h">
+			</File>
+			<File
+				RelativePath="imoduledatasender.h">
+			</File>
+			<File
+				RelativePath="imodulestatisticsreceiver.h">
+			</File>
+			<File
+				RelativePath="imodulestatisticssender.h">
+			</File>
+			<File
+				RelativePath="imodulestatisticssmartreceiver.h">
+			</File>
+			<File
+				RelativePath="imodulestatisticssmartsender.h">
+			</File>
+			<File
+				RelativePath="irenderercontrolreceiver.h">
+			</File>
+			<File
+				RelativePath="irenderercontrolsender.h">
+			</File>
+			<File
+				RelativePath="irendererstatusreceiver.h">
+			</File>
+			<File
+				RelativePath="irendererstatussender.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Quellcodedateien"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+		</Filter>
+		<File
+			RelativePath="..\..\nic.py">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

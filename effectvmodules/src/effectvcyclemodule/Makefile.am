@@ -17,7 +17,7 @@ effectvcyclemodule_la_SOURCES = \
         effectvcyclemodule.spec \
         effectvcyclemodule.xpm
 
-EXTRA_DIST = cycle.c effectvcyclemodule.dsp effectvcyclemodule.mak effectvcyclemodule.dep
+EXTRA_DIST = cycle.c  effectvcyclemodule.dsp effectvcyclemodule.mak effectvcyclemodule.dep
 
 effectvcyclemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

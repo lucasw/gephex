@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD CPP /nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /I "../../../contrib/ffmpeg/libavutil" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -77,7 +77,7 @@ PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /w /W0 /Gm /GX /ZI /Od /I "$(DXSDK_DIR)\Include" /I "$(SDL_DIR)/include" /I "$(SDL_IMAGE_DIR)/include" /I "../../../types/src/stringtype" /I "../../../types/src/framebuffertype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /I "../libscale" /I "../libdshow" /I "../../../contrib/ffmpeg/libavformat" /I "../../../contrib/ffmpeg/libavcodec" /I "../../../contrib/ffmpeg/libavutil" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "frbinmodule_EXPORTS" /D "WIN32" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
@@ -108,10 +108,6 @@ PostBuild_Cmds=copy $(TargetPath) ..\..\..\dlls\modules
 # Begin Source File
 
 SOURCE=.\bmpdriver.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\dshowdriver.cpp
 # End Source File
 # Begin Source File
 
@@ -152,10 +148,6 @@ SOURCE=.\bmpdriver.h
 # Begin Source File
 
 SOURCE=.\driverfactory.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\dshowdriver.h
 # End Source File
 # Begin Source File
 

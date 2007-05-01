@@ -36,7 +36,7 @@ inputs
         hidden            = true
         default           = default
         widget_type       = combo_box
-        values            = default,wavein,oss,alsa
+        values            = default,wavein,oss,alsa,coreaudio
     }
 }
 

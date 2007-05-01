@@ -98,7 +98,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Beat] group=[Audio] inputs=[3 AudioStrom{help=[blah] } Threshold{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] help              = 0=sensitiv, 1=[wenig sensitiv] hidden=[true] } Algorithmus{widget_type=[combo_box] values=[exp,avg] hidden=[true] } ] outputs=[1 Beat ] type=xpm } ";
+  static const char* INFO = "info { name=[Beat] group=[Audio] inputs=[3 AudioStrom{help=[blah] } Threshold{lower_bound=[0] widget_type=[number_selector] step_size=[0.01] higher_bound=[1] help              = 0=sensitiv 1=[wenig sensitiv] hidden=[true] } Algorithmus{widget_type=[combo_box] values=[exp,avg] hidden=[true] } ] outputs=[1 Beat ] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(audiobdmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

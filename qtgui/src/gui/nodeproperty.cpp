@@ -24,11 +24,6 @@
 
 #include <iostream>
 
-#include <qtable.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-//#include <qslider.h>
-
 #include "typeviewfactory.h"
 #include "propertywidgetconstructor.h"
 #include "hidebuttonconstructor.h"

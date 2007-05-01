@@ -26,4 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = centermodule.h centermodule_auto.c
-EXTRA_DIST = centermodule.dsp centermodule.mak centermodule.dep
+EXTRA_DIST = centermodule.vcproj centermodule.dsp centermodule.mak centermodule.dep

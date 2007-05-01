@@ -24,7 +24,7 @@
 #define INCLUDED_NEW_GRAPH_DIALOG_H
 
 #include <string>
-#include <qdialog.h>
+#include <QtGui/qdialog.h>
 
 class QLabel;
 class QLineEdit;

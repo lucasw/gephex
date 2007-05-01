@@ -1,0 +1,66 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcproj", "{81BBA814-4347-48C9-A201-3D742D186893}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C0D82B08-39F4-4D2D-9D41-D04ABD410A31} = {C0D82B08-39F4-4D2D-9D41-D04ABD410A31}
+		{305A8A1E-94CA-4A88-B73C-9C5F43386F6B} = {305A8A1E-94CA-4A88-B73C-9C5F43386F6B}
+		{2A43C381-F176-4010-B1F6-B658B37F9B3C} = {2A43C381-F176-4010-B1F6-B658B37F9B3C}
+		{F5120189-E4DC-4102-9950-9D468805BB22} = {F5120189-E4DC-4102-9950-9D468805BB22}
+		{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12} = {BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guimodel", "guimodel\guimodel.vcproj", "{2A43C381-F176-4010-B1F6-B658B37F9B3C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "gui\base\base.vcproj", "{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "typeviews", "gui\typeviews\typeviews.vcproj", "{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dialogs", "gui\dialogs\dialogs.vcproj", "{305A8A1E-94CA-4A88-B73C-9C5F43386F6B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "editor", "gui\editor\editor.vcproj", "{F5120189-E4DC-4102-9950-9D468805BB22}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{81BBA814-4347-48C9-A201-3D742D186893}.Debug.ActiveCfg = Debug|Win32
+		{81BBA814-4347-48C9-A201-3D742D186893}.Debug.Build.0 = Debug|Win32
+		{81BBA814-4347-48C9-A201-3D742D186893}.Release.ActiveCfg = Release|Win32
+		{81BBA814-4347-48C9-A201-3D742D186893}.Release.Build.0 = Release|Win32
+		{2A43C381-F176-4010-B1F6-B658B37F9B3C}.Debug.ActiveCfg = Debug|Win32
+		{2A43C381-F176-4010-B1F6-B658B37F9B3C}.Debug.Build.0 = Debug|Win32
+		{2A43C381-F176-4010-B1F6-B658B37F9B3C}.Release.ActiveCfg = Release|Win32
+		{2A43C381-F176-4010-B1F6-B658B37F9B3C}.Release.Build.0 = Release|Win32
+		{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}.Debug.ActiveCfg = Debug|Win32
+		{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}.Debug.Build.0 = Debug|Win32
+		{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}.Release.ActiveCfg = Release|Win32
+		{BB2AC0FF-50D6-4CBD-BB54-00A11CB02C12}.Release.Build.0 = Release|Win32
+		{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}.Debug.ActiveCfg = Debug|Win32
+		{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}.Debug.Build.0 = Debug|Win32
+		{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}.Release.ActiveCfg = Release|Win32
+		{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}.Release.Build.0 = Release|Win32
+		{305A8A1E-94CA-4A88-B73C-9C5F43386F6B}.Debug.ActiveCfg = Debug|Win32
+		{305A8A1E-94CA-4A88-B73C-9C5F43386F6B}.Debug.Build.0 = Debug|Win32
+		{305A8A1E-94CA-4A88-B73C-9C5F43386F6B}.Release.ActiveCfg = Release|Win32
+		{305A8A1E-94CA-4A88-B73C-9C5F43386F6B}.Release.Build.0 = Release|Win32
+		{F5120189-E4DC-4102-9950-9D468805BB22}.Debug.ActiveCfg = Debug|Win32
+		{F5120189-E4DC-4102-9950-9D468805BB22}.Debug.Build.0 = Debug|Win32
+		{F5120189-E4DC-4102-9950-9D468805BB22}.Release.ActiveCfg = Release|Win32
+		{F5120189-E4DC-4102-9950-9D468805BB22}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

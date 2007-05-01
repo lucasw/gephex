@@ -22,36 +22,38 @@
 
 #include "askforstringdialog.h"
 
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtCore/qvariant.h>
+#include <QtGui/qtooltip.h>
+#include <QtGui/qwhatsthis.h>
 
 namespace gui
 {
 
-AskForStringDialog::AskForStringDialog(QWidget* parent,  const std::string& caption, const std::string& text )
-    : QDialog( parent, "diag" , true)
+AskForStringDialog::AskForStringDialog(QWidget* parent,
+				       const std::string& caption,
+				       const std::string& text )
+    : QDialog( parent)
 {
     resize( 227, 60 ); 
     setProperty( "caption", tr( caption.c_str() ) );
 
-    LineEdit1 = new QLineEdit( this, "LineEdit1" );
+    LineEdit1 = new QLineEdit( this );
     LineEdit1->setGeometry( QRect( 10, 30, 120, 22 ) ); 
 
-    TextLabel = new QLabel( this, "TextLabel" );
+    TextLabel = new QLabel( this);
     TextLabel->setGeometry( QRect( 10, 7, 180, 13 ) ); 
     TextLabel->setProperty( "text", tr( text.c_str() ) );
 
-    DoneButton = new QPushButton( this, "DoneButton" );
+    DoneButton = new QPushButton( this);
     DoneButton->setGeometry( QRect( 160, 30, 60, 26 ) ); 
     DoneButton->setProperty( "text", tr( "Done" ) );
 
     // signals and slots connections    
-	connect( DoneButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( LineEdit1, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
+    connect( DoneButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( LineEdit1, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
 }
 
 
@@ -60,8 +62,8 @@ AskForStringDialog::~AskForStringDialog()
 }
 
 std::string AskForStringDialog::open(QWidget* parent,
-									 const std::string& caption,
-									 const std::string& text)
+				     const std::string& caption,
+				     const std::string& text)
 {
 	AskForStringDialog dialog(parent, caption, text);
 
@@ -69,7 +71,7 @@ std::string AskForStringDialog::open(QWidget* parent,
 
 	dialog.exec();
 
-	return dialog.LineEdit1->text().latin1();
+	return dialog.LineEdit1->text().toUtf8().constData();
 }
 
 }

@@ -1,3 +1,15 @@
+0.4.4:
+------
+
+  * improved GUI (using Qt 4.x)
+
+  * improved Mac OS X support
+
+  * new midi modules
+
+  * frei0r 1.1 support
+
+
 0.4.3:
 ------
 

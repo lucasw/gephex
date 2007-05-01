@@ -25,7 +25,7 @@
 
 #include <string>
 
-class QPopupMenu;
+class QMenu;
 
 namespace gui
 {
@@ -68,51 +68,16 @@ namespace gui
     
     /**
      * Tells the item that it has received a left button click.
-     * @param pos position of the mouse cursor
      * @param column column that was clicked
      */
-    virtual void leftButtonClicked( const Point& pos, int column );
+    virtual void onClick(int column);
 
     /**
-     * Tells the item that it has received a right button click.
-     * @param pos position of the mouse cursor
-     * @param column column that was clicked
+     * Tells the item that it has been activated (double clicked, enter pressed,
+     * ...).
+     * @param column column that was activated
      */
-    virtual void rightButtonClicked( const Point& pos, int column );
-
-    /**
-     * Tells the item that it has received a left button press.
-     * @param pos position of the mouse cursor
-     * @param column column that was pressed
-     */
-    virtual void leftButtonPressed( const Point& pos, int column );
-
-    /**
-     * Tells the item that it has received a right button press.
-     * @param pos position of the mouse cursor
-     * @param column column that was pressed
-     */
-    virtual void rightButtonPressed( const Point& pos, int column );
-
-    /**
-     * Tells the item that it has received a left button click.
-     * @param pos position of the mouse cursor
-     * @param column column that was clicked
-     */
-    virtual void doubleClicked( );
-
-    /**
-     * Tells the item that it has received a double click.
-     * @param pos position of the mouse cursor
-     * @param column column that was double clicked
-     */
-    virtual void mouseOnItem();
-
-    /**
-     * Tells the item, that an entry of its property menu was selected.
-     * @param id the id that identifies the selected menu entry.
-     */
-    virtual void propertySelected(int id);
+    virtual void onActivate(int column);
 
     /**
      * With this the item can give its property menu to the TreeView.
@@ -123,7 +88,7 @@ namespace gui
      * The default Implementation returns 0.
      * @return The Property Menu of the item.
      */
-    virtual QPopupMenu* getPropertyMenu();
+    virtual QMenu* getPropertyMenu();
 
   protected:
     ColumnTextChangeListener* m_textListener;

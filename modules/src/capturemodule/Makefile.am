@@ -42,4 +42,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = capturemodule.h capturemodule_auto.c
 
-EXTRA_DIST = capturemodule.dsp capturemodule.mak capturemodule.dep dshowcapturedriver.cpp dshowcapturedriver.h
+EXTRA_DIST = capturemodule.vcproj capturemodule.dsp capturemodule.mak capturemodule.dep dshowcapturedriver.cpp dshowcapturedriver.h

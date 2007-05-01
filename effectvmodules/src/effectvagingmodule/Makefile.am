@@ -17,7 +17,7 @@ effectvagingmodule_la_SOURCES = \
         effectvagingmodule.spec \
         effectvagingmodule.xpm
 
-EXTRA_DIST = aging.c effectvagingmodule.dsp effectvagingmodule.mak effectvagingmodule.dep
+EXTRA_DIST = aging.c  effectvagingmodule.dsp effectvagingmodule.mak effectvagingmodule.dep
 
 effectvagingmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

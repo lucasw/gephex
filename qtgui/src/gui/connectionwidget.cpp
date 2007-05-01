@@ -21,10 +21,11 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "connectionwidget.h"
-//#include <cmath>
-#include <qpainter.h>
-#include <qwidget.h>
+
 #include <math.h>
+
+#include <QtGui/QWidget>
+#include <QtGui/QPainter>
 
 #include "inputplugwidget.h"
 #include "outputplugwidget.h"

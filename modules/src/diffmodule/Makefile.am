@@ -25,4 +25,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = diffmodule.h diffmodule_auto.c
-EXTRA_DIST = diffmodule.dsp diffmodule.mak diffmodule.dep
+EXTRA_DIST = diffmodule.vcproj diffmodule.dsp diffmodule.mak diffmodule.dep

@@ -17,7 +17,7 @@ effectvdotmodule_la_SOURCES = \
 	effectvdotmodule.spec \
 	effectvdotmodule.xpm
 
-EXTRA_DIST = heart.inc dot.c effectvdotmodule.dsp effectvdotmodule.mak effectvdotmodule.dep
+EXTRA_DIST = heart.inc dot.c  effectvdotmodule.dsp effectvdotmodule.mak effectvdotmodule.dep
 
 effectvdotmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

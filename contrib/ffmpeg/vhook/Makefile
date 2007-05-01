@@ -2,44 +2,49 @@ include ../config.mak
 
 VPATH=$(SRC_PATH)/vhook
 
-CFLAGS=-fPIC $(SHCFLAGS) -I.. -I$(SRC_PATH) -I$(SRC_PATH)/libavformat -I$(SRC_PATH)/libavcodec -DHAVE_AV_CONFIG_H
+CFLAGS=-I$(BUILD_ROOT) -I$(SRC_PATH) -I$(SRC_PATH)/libavutil -I$(SRC_PATH)/libavcodec \
+       -I$(SRC_PATH)/libavformat -I$(SRC_PATH)/libswscale $(VHOOKCFLAGS) -DHAVE_AV_CONFIG_H
+LDFLAGS+= -g
 
-ifeq ($(CONFIG_DARWIN),yes)
-SHFLAGS+=-flat_namespace -undefined suppress
-endif
-HOOKS=null.so fish.so ppm.so
+HOOKS=null$(SLIBSUF) fish$(SLIBSUF) ppm$(SLIBSUF) watermark$(SLIBSUF)
+ALLHOOKS=$(HOOKS) imlib2$(SLIBSUF) drawtext$(SLIBSUF)
 
 ifeq ($(HAVE_IMLIB2),yes)
-    HOOKS += imlib2.so
-endif    
+    HOOKS += imlib2$(SLIBSUF)
+    LIBS_imlib2$(SLIBSUF) = -lImlib2
+endif
 
 ifeq ($(HAVE_FREETYPE2),yes)
-    HOOKS += drawtext.so
+    HOOKS += drawtext$(SLIBSUF)
     CFLAGS += `freetype-config --cflags`
-endif    
+    LIBS_drawtext$(SLIBSUF) = `freetype-config --libs`
+endif
 
-all: $(HOOKS) 
+SRCS := $(HOOKS:$(SLIBSUF)=.c)
 
-SRCS := $(HOOKS:.so=.c)
+all: $(HOOKS)
 
-depend: $(SRCS)
+depend dep: $(SRCS)
 	$(CC) -MM $(CFLAGS) $^ 1>.depend
 
-install:
-	install -d "$(prefix)/lib/vhook"
-	install -m 755 $(HOOKS) "$(prefix)/lib/vhook"
+install: $(HOOKS)
+	install -d "$(shlibdir)/vhook"
+	install -m 755 $(HOOKS) "$(shlibdir)/vhook"
 
-imlib2.so: imlib2.o
-	$(CC) -g -o $@ $(SHFLAGS) $< -lImlib2
+uninstall:
+	rm -f $(addprefix $(shlibdir)/vhook/,$(ALLHOOKS))
+	-rmdir "$(shlibdir)/vhook/"
 
-drawtext.so: drawtext.o
-	$(CC) -g -o $@ $(SHFLAGS) $< `freetype-config --libs`
-
-%.so: %.o
-	$(CC) -g -o $@ $(SHFLAGS) $<
+%$(SLIBSUF): %.o
+	$(CC) $(LDFLAGS) -o $@ $(VHOOKSHFLAGS) $< $(VHOOKLIBS) $(LIBS_$@)
 
 clean:
-	rm -f *.o *.d .depend *.so *~
+	rm -f *.o *.d *~ *.a *.lib *.so *.dylib *.dll
+
+distclean: clean
+	rm -f .depend
+
+.PHONY: all depend dep clean distclean install* uninstall*
 
 ifneq ($(wildcard .depend),)
 include .depend

@@ -28,4 +28,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = overlaymodule.h overlaymodule_auto.c
-EXTRA_DIST = overlaymodule.dsp overlaymodule.mak overlaymodule.dep
+EXTRA_DIST = overlaymodule.vcproj overlaymodule.dsp overlaymodule.mak overlaymodule.dep

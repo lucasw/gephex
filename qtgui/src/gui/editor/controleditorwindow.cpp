@@ -22,37 +22,29 @@
 
 #include "controleditorwindow.h"
 
-#include <qscrollview.h>
-
 #include "controleditor.h"
 
 
 namespace gui
 {
 
-  ControlEditorWindow::ControlEditorWindow(QWidget* parent,const char* name,
-					   WFlags fl, 
+  ControlEditorWindow::ControlEditorWindow(QWidget* parent, 
 					   ControlModel& controlModel,
 					   IModelControlReceiver& model,
 					   const utils::AutoPtr<ControlValueDispatcher>& disp,
 					   const std::string& media_path)
-    : QMainWindow(parent,name,fl)
+    : QScrollArea(parent)
   {
-    QScrollView* controlScroller = new QScrollView(this);
-    m_controlEditor = new ControlEditor(controlScroller->viewport(),
-					"control",0,
-					controlModel,model,disp,
+    m_controlEditor = new ControlEditor(this,
+					controlModel,
+					model,
+					disp,
 					media_path);
 
-    controlScroller->addChild(m_controlEditor);
-    this->setCaption("Controls");
-
-    m_controlEditor->resize(1000,1000);
-    controlScroller->resize(200, 400);
-    this->resize(400, 200);
-    controlScroller->center(500,500);
-
-    this->setCentralWidget(controlScroller);
+    m_controlEditor->setMinimumSize(1000, 2000);
+    
+    setWidget(m_controlEditor);
+    setWidgetResizable(true);
   }
 
   ControlEditor* ControlEditorWindow::controlEditor()

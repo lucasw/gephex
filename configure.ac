@@ -1,8 +1,10 @@
 AC_INIT
+
 AC_PREREQ(2.59) dnl force autoconf version
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(gephex,0.4.3)
+
+AM_INIT_AUTOMAKE(gephex,0.4.4)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -53,51 +55,66 @@ esac
 
 AM_CONDITIONAL(OS_DARWIN, false)
 
+AM_CONDITIONAL(SHARED_USE_DEF_FILE, false)
+
 SHAREDLIBEXT=so
 AC_MSG_CHECKING([for OS])
 # os detection
 case $host in
-*-*-solaris*)
-  AC_DEFINE([OS_SOLARIS])
-  AC_DEFINE([OS_POSIX])
-  AC_MSG_RESULT([Solaris detected.])
-  ;;
 *-*-darwin*)
   AC_DEFINE([OS_DARWIN])
   AC_DEFINE([OS_POSIX])
   AC_MSG_RESULT([Darwin detected.])
-  SHAREDLIBEXT=dylib
   AM_CONDITIONAL(OS_DARWIN, true)
+  SHARED_COMP_FLAGS="-fno-common"
+  SHARED_LD_FLAGS="-bundle -undefined dynamic_lookup"
  ;;
 *-*-linux*)
   AC_DEFINE([OS_LINUX])
   AC_DEFINE([OS_POSIX])
   AC_MSG_RESULT([Linux detected.])
+  SHARED_COMP_FLAGS="-fpic"
+  SHARED_LD_FLAGS="-shared -fpic"
  ;;
 *-*-*bsd*)
   AC_DEFINE([OS_BSD])
   AC_DEFINE([OS_POSIX])
   AC_MSG_RESULT([*BSD detected.])
+  SHARED_COMP_FLAGS="-fpic"
+  SHARED_LD_FLAGS="-shared -fpic"
  ;;
-*gnu* )
-  AC_DEFINE([OS_POSIX])
-  AC_MSG_RESULT([Posix detected.])
- ;;
-*cygwin* )
-  AC_DEFINE([OS_POSIX])
-  AC_DEFINE([OS_CYGWIN])
-  AC_MSG_RESULT([Cygwin detected.])
+ *mingw* )
+  AC_DEFINE([OS_WIN32])
+  AC_MSG_RESULT([MinGW detected])
   SHAREDLIBEXT=dll
+  QTLIBEXT=a
+  os_windows=yes
+  LIB_SOCKET_FLAGS="-lws2_32"
+  SHARED_COMP_FLAGS=
+  SHARED_LD_FLAGS="-shared"
+  AM_CONDITIONAL(SHARED_USE_DEF_FILE, true)
  ;;
 *)
  AC_MSG_RESULT([Unknown OS! Assuming Posix combatibility])
  AC_DEFINE([OS_POSIX])
+ SHARED_COMP_FLAGS="-fpic"
+ SHARED_LD_FLAGS="-shared -fpic"
 esac
 
+AM_CONDITIONAL(OS_WINDOWS, test "x$os_windows" != "x")
+
+if test "x$QTLIBEXT" = "x"; then
+  QTLIBEXT=$SHAREDLIBEXT
+fi
+
 # export the detected shared library extensions for use in
-# Makefile.am fiels
+# Makefile.am fields
 AC_SUBST(SHAREDLIBEXT)
 AC_MSG_NOTICE([Shared library extension is "$SHAREDLIBEXT"])
+AC_MSG_NOTICE([QT library extension is "$QTLIBEXT"])
+
+AC_SUBST(SHARED_COMP_FLAGS)
+AC_SUBST(SHARED_LD_FLAGS)
 
 # gcc versions <= 2.95.2 don't have the standard c++ header
 # sstream
@@ -125,8 +142,12 @@ if test "x$no_x" != "xyes"; then
   AC_DEFINE(HAVE_X11)
 fi
 
+# directx
+AM_PATH_DX([8.0], have_dx=yes, have_dx=no)
+AM_CONDITIONAL(HAVE_DX, test "x$have_dx" = "xyes")
+
 # qt
-AM_PATH_QT([2.3.0], $SHAREDLIBEXT, have_qt=yes, have_qt=no)
+AM_PATH_QT([4.1.0], $QTLIBEXT, have_qt=yes, have_qt=no)
 AM_CONDITIONAL(HAVE_QT, test "x$have_qt" = "xyes")
 
 # Checks for libraries.
@@ -252,7 +273,7 @@ CHECK_EXTRA_LIB([OSS],
 AM_CONDITIONAL([WITH_OSS], test "x$use_oss" = "xyes")
 
 # audio (oss or alsa)
-AM_CONDITIONAL(WITH_ASOUNDLIB_OR_OSS, test "x$use_asoundlib" = "xyes" || test "x$use_oss" = "xyes")
+AM_CONDITIONAL(WITH_ANY_AUDIO_SUPPORT, test "x$use_asoundlib" = "xyes" || test "x$use_oss" = "xyes" || test "x$OS_WINDOWS" != "x" || test "x$OS_DARWIN" != "x")
 
 # joystick.h
 CHECK_EXTRA_LIB([LINUX_JOYSTICK],
@@ -346,7 +367,7 @@ AC_DEFINE_UNQUOTED([FRBINMODULE_CACHE_SIZE], $FRBINCACHE, [Size of the cache the
 fi;
 
 if test "x$use_ffmpeg" = "xyes"; then
- FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay --enable-shared" 
+ FFMPEG_CONFIGURE_FLAGS="--prefix=$prefix --disable-ffserver --disable-ffplay --enable-shared --enable-memalign-hack" 
 #--disable-risky"
 
  echo Preparing ffmpeg configure call...
@@ -377,13 +398,15 @@ if test "x$use_ffmpeg" = "xyes"; then
  # get absolute path of builddir
  abs_builddir=`pwd`
 
- AC_SUBST(FFMPEG_LDFLAGS,"${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a -lz")
+ AC_SUBST(FFMPEG_LDFLAGS,"${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a ${abs_builddir}/contrib/ffmpeg/libavutil/libavutil.a -lz")
 # AC_SUBST(FFMPEG_LDFLAGS,"-L${abs_builddir}/contrib/ffmpeg/libavcodec -lavcodec -lz -L${abs_builddir}/contrib/ffmpeg/libavformat -lavformat")
- AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat")
+ AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat -I${FFMPEG_DIR}/libavutil")
 
  echo Calling ffmpeg configure with flags:
  echo "${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS"
- cd contrib/ffmpeg/ && ${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS && cd ../..
+ cd contrib/ffmpeg/ || exit 1
+ ${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS
+ cd ../..
 fi
 
 # set gphx_module_lib_dir and gphx_type_lib_dir
@@ -478,6 +501,7 @@ modules/src/capturemodule/Makefile
 modules/src/centermodule/Makefile
 modules/src/chromakeymodule/Makefile
 modules/src/color2numbermodule/Makefile
+modules/src/colorizemodule/Makefile
 modules/src/diffmodule/Makefile
 modules/src/doepfermodule/Makefile
 modules/src/dplmodule/Makefile
@@ -506,6 +530,11 @@ modules/src/libscale/Makefile
 modules/src/libcolorconv/Makefile
 modules/src/midiinmodule/Makefile
 modules/src/midiccdecmodule/Makefile
+modules/src/midinotedecmodule/Makefile
+modules/src/midikeyrangedecmodule/Makefile
+modules/src/midiprgchdecmodule/Makefile
+modules/src/midipitchwdecmodule/Makefile
+modules/src/mirrormodule/Makefile
 modules/src/netcontrolmodule/Makefile
 modules/src/noisemodule/Makefile
 modules/src/numarithmodule/Makefile
@@ -579,6 +608,7 @@ effectvmodules/src/effectvdiffmodule/Makefile
 effectvmodules/src/effectvnoisemodule/Makefile
 effectvmodules/src/effectvripplemodule/Makefile
 effectvmodules/src/effectvpredatormodule/Makefile
+effectvmodules/src/effectvholomodule/Makefile
 qtgui/Makefile
 qtgui/src/Makefile
 qtgui/src/gui/Makefile

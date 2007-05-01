@@ -23,10 +23,10 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=bg const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=bg const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=foreground } ";
+    return "input_spec { type=typ_StringType id=mode const=true strong_dependency=true default=[foreground] } ";
   break;
  }
  return 0;

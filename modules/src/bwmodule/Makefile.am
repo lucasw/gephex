@@ -25,4 +25,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = bwmodule.h bwmodule_auto.c
-EXTRA_DIST = bwmodule.dsp bwmodule.mak bwmodule.dep
+EXTRA_DIST = bwmodule.vcproj bwmodule.dsp bwmodule.mak bwmodule.dep

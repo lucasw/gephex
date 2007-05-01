@@ -6,29 +6,32 @@ include config.mak
 
 VPATH=$(SRC_PATH)
 
-CFLAGS=$(OPTFLAGS) -I. -I$(SRC_PATH) -I$(SRC_PATH)/libavcodec -I$(SRC_PATH)/libavformat -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE
-LDFLAGS+= -g 
+CFLAGS=$(OPTFLAGS) -I$(BUILD_ROOT) -I$(SRC_PATH) -I$(SRC_PATH)/libavutil \
+       -I$(SRC_PATH)/libavcodec -I$(SRC_PATH)/libavformat -I$(SRC_PATH)/libswscale \
+       -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_ISOC9X_SOURCE
+LDFLAGS+= -g
 
-ifeq ($(TARGET_GPROF),yes)
-CFLAGS+=-p
-LDFLAGS+=-p
-endif
-
-MANPAGE=$(SRC_PATH)/doc/ffmpeg.1
-PROG=ffmpeg$(EXESUF)
+MANPAGES=doc/ffmpeg.1
+PROGS_G+=ffmpeg_g$(EXESUF)
+PROGS+=ffmpeg$(EXESUF)
 PROGTEST=output_example$(EXESUF)
 QTFASTSTART=qt-faststart$(EXESUF)
 
 ifeq ($(CONFIG_FFSERVER),yes)
-MANPAGE+=$(SRC_PATH)/doc/ffserver.1
-PROG+=ffserver$(EXESUF)
+MANPAGES+=doc/ffserver.1
+PROGS+=ffserver$(EXESUF)
 endif
 
 ifeq ($(CONFIG_FFPLAY),yes)
-MANPAGE+=$(SRC_PATH)/doc/ffplay.1
-PROG+=ffplay$(EXESUF)
-FFPLAY_O=ffplay.o
+MANPAGES+=doc/ffplay.1
+PROGS_G+=ffplay_g$(EXESUF)
+PROGS+=ffplay$(EXESUF)
 endif
+
+BASENAMES=ffmpeg ffplay ffserver
+ALLPROGS=$(addsuffix $(EXESUF), $(BASENAMES))
+ALLPROGS_G=$(addsuffix _g$(EXESUF), $(BASENAMES))
+ALLMANPAGES=$(addsuffix .1, $(BASENAMES))
 
 ifeq ($(CONFIG_AUDIO_BEOS),yes)
 EXTRALIBS+=-lmedia -lbe
@@ -38,85 +41,72 @@ ifeq ($(BUILD_SHARED),yes)
 DEP_LIBS=libavcodec/$(SLIBPREF)avcodec$(SLIBSUF) libavformat/$(SLIBPREF)avformat$(SLIBSUF)
 else
 DEP_LIBS=libavcodec/$(LIBPREF)avcodec$(LIBSUF) libavformat/$(LIBPREF)avformat$(LIBSUF)
-ifeq ($(CONFIG_MP3LAME),yes)
-EXTRALIBS+=-lmp3lame
-endif
-endif
-
-ifeq ($(CONFIG_VORBIS),yes)
-EXTRALIBS+=-logg -lvorbis -lvorbisenc
-endif
-
-ifeq ($(CONFIG_FAAD),yes)
-ifeq ($(CONFIG_FAADBIN),yes)
-# no libs needed
-else
-EXTRALIBS += -lfaad
-endif
-endif
-
-ifeq ($(CONFIG_FAAC),yes)
-EXTRALIBS+=-lfaac
-endif
-
-ifeq ($(CONFIG_XVID),yes)
-EXTRALIBS+=-lxvidcore
 endif
 
 ifeq ($(BUILD_VHOOK),yes)
 VHOOK=videohook
 INSTALLVHOOK=install-vhook
-CLEANVHOOK=clean-vhook
-endif
-
-ifeq ($(TARGET_OS), SunOS)
-TEST=/usr/bin/test
-else
-TEST=test
 endif
 
 ifeq ($(BUILD_DOC),yes)
 DOC=documentation
 endif
 
-OBJS = ffmpeg.o ffserver.o cmdutils.o $(FFPLAY_O)
+OBJS = ffmpeg.o ffserver.o cmdutils.o ffplay.o
 SRCS = $(OBJS:.o=.c) $(ASM_OBJS:.o=.s)
-FFLIBS = -L./libavformat -lavformat -L./libavcodec -lavcodec
+LDFLAGS := -L$(BUILD_ROOT)/libavformat -L$(BUILD_ROOT)/libavcodec -L$(BUILD_ROOT)/libavutil $(LDFLAGS)
+EXTRALIBS := -lavformat$(BUILDSUF) -lavcodec$(BUILDSUF) -lavutil$(BUILDSUF) $(EXTRALIBS)
 
-all: lib $(PROG) $(PROGTEST) $(VHOOK) $(QTFASTSTART) $(DOC)
+ifeq ($(CONFIG_SWSCALER),yes)
+LDFLAGS+=-L./libswscale
+EXTRALIBS+=-lswscale$(BUILDSUF)
+endif
+
+all: lib $(PROGS_G) $(PROGS) $(PROGTEST) $(VHOOK) $(QTFASTSTART) $(DOC)
 
 lib:
-	$(MAKE) -C libavcodec all
+	$(MAKE) -C libavutil   all
+	$(MAKE) -C libavcodec  all
 	$(MAKE) -C libavformat all
+ifeq ($(CONFIG_PP),yes)
+	$(MAKE) -C libpostproc all
+endif
+ifeq ($(CONFIG_SWSCALER),yes)
+	$(MAKE) -C libswscale  all
+endif
 
 ffmpeg_g$(EXESUF): ffmpeg.o cmdutils.o .libs
-	$(CC) $(LDFLAGS) -o $@ ffmpeg.o cmdutils.o $(FFLIBS) $(EXTRALIBS)
-
-ffmpeg$(EXESUF): ffmpeg_g$(EXESUF)
-	cp -p $< $@
-	$(STRIP) $@
+	$(CC) $(LDFLAGS) -o $@ ffmpeg.o cmdutils.o $(EXTRALIBS)
 
 ffserver$(EXESUF): ffserver.o .libs
-	$(CC) $(LDFLAGS) $(FFSLDFLAGS) -o $@ ffserver.o $(FFLIBS) $(EXTRALIBS) 
+	$(CC) $(LDFLAGS) $(FFSERVERLDFLAGS) -o $@ ffserver.o $(EXTRALIBS)
 
 ffplay_g$(EXESUF): ffplay.o cmdutils.o .libs
-	$(CC) $(LDFLAGS) -o $@ ffplay.o cmdutils.o $(FFLIBS) $(EXTRALIBS) $(SDL_LIBS)
+	$(CC) $(LDFLAGS) -o $@ ffplay.o cmdutils.o $(EXTRALIBS) $(SDL_LIBS)
 
-ffplay$(EXESUF): ffplay_g$(EXESUF)
+%$(EXESUF): %_g$(EXESUF)
 	cp -p $< $@
 	$(STRIP) $@
 
+version.h:
+	$(SRC_PATH)/version.sh "$(SRC_PATH)"
+
 output_example$(EXESUF): output_example.o .libs
-	$(CC) $(LDFLAGS) -o $@ output_example.o $(FFLIBS) $(EXTRALIBS)
+	$(CC) $(LDFLAGS) -o $@ output_example.o $(EXTRALIBS)
 
 qt-faststart$(EXESUF): qt-faststart.c
-	$(CC) $(SRC_PATH)/qt-faststart.c -o qt-faststart$(EXESUF)
+	$(CC) $(CFLAGS) $< -o $@
+
+cws2fws$(EXESUF): cws2fws.c
+	$(CC) $< -o $@ -lz
 
 ffplay.o: ffplay.c
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c -o $@ $< 
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c -o $@ $<
+
+ffmpeg.o ffplay.o ffserver.o: version.h
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $< 
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 videohook: .libs
 	$(MAKE) -C vhook all
@@ -124,13 +114,15 @@ videohook: .libs
 documentation:
 	$(MAKE) -C doc all
 
-.PHONY: install
+install: install-progs install-libs install-headers install-man $(INSTALLVHOOK)
 
-install: all install-man $(INSTALLVHOOK)
-	$(MAKE) -C libavcodec install
-	$(MAKE) -C libavformat install
+ifeq ($(BUILD_SHARED),yes)
+install-progs: $(PROGS) install-libs
+else
+install-progs: $(PROGS)
+endif
 	install -d "$(bindir)"
-	install -c -s -m 755 $(PROG) "$(bindir)"
+	install -c $(INSTALLSTRIP) -m 755 $(PROGS) "$(bindir)"
 
 # create the window installer
 wininstaller: all install
@@ -138,68 +130,134 @@ wininstaller: all install
 
 # install man from source dir if available
 install-man:
-ifneq ($(CONFIG_WIN32),yes)
-	if [ -f $(SRC_PATH)/doc/ffmpeg.1 ] ; then \
+ifneq ($(CONFIG_MINGW),yes)
+	if [ -f doc/ffmpeg.1 ] ; then \
 	    install -d "$(mandir)/man1" ; \
-	    install -m 644 $(MANPAGE) "$(mandir)/man1" ; \
+	    install -m 644 $(MANPAGES) "$(mandir)/man1" ; \
 	fi
 endif
 
 install-vhook:
 	$(MAKE) -C vhook install
 
-installlib:
-	$(MAKE) -C libavcodec installlib
-	$(MAKE) -C libavformat installlib
+install-libs:
+	$(MAKE) -C libavutil   install-libs
+	$(MAKE) -C libavcodec  install-libs
+	$(MAKE) -C libavformat install-libs
+ifeq ($(CONFIG_PP),yes)
+	$(MAKE) -C libpostproc install-libs
+endif
+ifeq ($(CONFIG_SWSCALER),yes)
+	$(MAKE) -C libswscale  install-libs
+endif
+
+ifeq ($(BUILD_SHARED),yes)
+	-$(LDCONFIG)
+endif
+
+install-headers:
+	$(MAKE) -C libavutil   install-headers
+	$(MAKE) -C libavcodec  install-headers
+	$(MAKE) -C libavformat install-headers
+ifeq ($(CONFIG_PP),yes)
+	$(MAKE) -C libpostproc install-headers
+endif
+	$(MAKE) -C libswscale  install-headers
+
+uninstall: uninstall-progs uninstall-libs uninstall-headers uninstall-man uninstall-vhook
+
+uninstall-progs:
+	rm -f $(addprefix $(bindir)/, $(ALLPROGS))
+
+uninstall-man:
+ifneq ($(CONFIG_MINGW),yes)
+	rm -f $(addprefix $(mandir)/man1/,$(ALLMANPAGES))
+endif
+
+uninstall-vhook:
+	$(MAKE) -C vhook uninstall
+
+uninstall-libs:
+	$(MAKE) -C libavutil   uninstall-libs
+	$(MAKE) -C libavcodec  uninstall-libs
+	$(MAKE) -C libavformat uninstall-libs
+	$(MAKE) -C libpostproc uninstall-libs
+
+uninstall-headers:
+	$(MAKE) -C libavutil   uninstall-headers
+	$(MAKE) -C libavcodec  uninstall-headers
+	$(MAKE) -C libavformat uninstall-headers
+	$(MAKE) -C libpostproc uninstall-headers
+	-rmdir "$(incdir)"
+	-rmdir "$(prefix)/include/postproc"
 
 dep:	depend
 
 depend: .depend
-	make -C libavcodec depend
-	make -C libavformat depend
+	$(MAKE) -C libavutil   depend
+	$(MAKE) -C libavcodec  depend
+	$(MAKE) -C libavformat depend
+ifeq ($(CONFIG_PP),yes)
+	$(MAKE) -C libpostproc depend
+endif
+ifeq ($(CONFIG_SWSCALER),yes)
+	$(MAKE) -C libswscale  depend
+endif
 ifeq ($(BUILD_VHOOK),yes)
-	make -C vhook depend
+	$(MAKE) -C vhook       depend
 endif
 
-.depend: $(SRCS)
-	$(CC) -MM $(CFLAGS) $(SDL_CFLAGS) $^ 1>.depend
+.depend: $(SRCS) version.h
+	$(CC) -MM $(CFLAGS) $(SDL_CFLAGS) $(SRCS) 1>.depend
 
 .libs: lib
 	@test -f .libs || touch .libs
-	@for i in $(DEP_LIBS) ; do if $(TEST) $$i -nt .libs ; then touch .libs; fi ; done
+	@for i in $(DEP_LIBS) ; do if test $$i -nt .libs ; then touch .libs; fi ; done
 
-clean: $(CLEANVHOOK)
-	$(MAKE) -C libavcodec clean
+clean:
+	$(MAKE) -C libavutil   clean
+	$(MAKE) -C libavcodec  clean
 	$(MAKE) -C libavformat clean
-	$(MAKE) -C tests clean
-	rm -f *.o *.d *~ .libs .depend gmon.out TAGS ffmpeg_g$(EXESUF) ffplay_g$(EXESUF) $(PROG) $(PROGTEST)
+	$(MAKE) -C libpostproc clean
+	$(MAKE) -C libswscale  clean
+	$(MAKE) -C tests       clean
+	$(MAKE) -C vhook       clean
+	$(MAKE) -C doc         clean
+	rm -f *.o *.d *~ .libs gmon.out TAGS \
+	   $(ALLPROGS) $(ALLPROGS_G) $(PROGTEST) $(QTFASTSTART)
 
-clean-vhook:
-	$(MAKE) -C vhook clean
-
+# Note well: config.log is NOT removed.
 distclean: clean
-	$(MAKE) -C libavcodec distclean
-	rm -f config.mak config.h
+	$(MAKE) -C libavutil   distclean
+	$(MAKE) -C libavcodec  distclean
+	$(MAKE) -C libavformat distclean
+	$(MAKE) -C libpostproc distclean
+	$(MAKE) -C libswscale  distclean
+	$(MAKE) -C tests       distclean
+	$(MAKE) -C vhook       distclean
+	rm -f .depend version.h config.* *.pc
 
 TAGS:
 	etags *.[ch] libavformat/*.[ch] libavcodec/*.[ch]
 
 # regression tests
 
-libavtest test mpeg4 mpeg test-server fulltest: ffmpeg$(EXESUF)
+codectest libavtest test-server fulltest test mpeg4 mpeg: $(PROGS)
 	$(MAKE) -C tests $@
 
 # tar release (use 'make -k tar' on a checkouted tree)
-FILE=ffmpeg-$(shell grep "\#define FFMPEG_VERSION " libavcodec/avcodec.h | \
+FILE=ffmpeg-$(shell grep "\#define FFMPEG_VERSION " version.h | \
                     cut -d "\"" -f 2 )
 
 tar:
 	rm -rf /tmp/$(FILE)
 	cp -r . /tmp/$(FILE)
-	( cd /tmp ; tar zcvf ~/$(FILE).tar.gz $(FILE) --exclude CVS )
+	( cd /tmp ; tar zcvf ~/$(FILE).tar.gz $(FILE) --exclude .svn )
 	rm -rf /tmp/$(FILE)
 
-.PHONY: lib
+.PHONY: all lib videohook documentation install* wininstaller uninstall*
+.PHONY: dep depend clean distclean TAGS tar
+.PHONY: codectest libavtest test-server fulltest test mpeg4 mpeg
 
 ifneq ($(wildcard .depend),)
 include .depend

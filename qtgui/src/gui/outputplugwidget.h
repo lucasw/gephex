@@ -42,9 +42,9 @@ namespace gui
     virtual void mouseMoveEvent(QMouseEvent*);
 
   public:
-    OutputPlugWidget(QWidget* parent, const char* name, 
+    OutputPlugWidget(QWidget* parent,
 		     const QPixmap& free_, const QPixmap& busy_,
-		     std::string _name, std::string _type,
+		     const std::string& name, const std::string& type,
 		     int _index, int _ID);
 
     signals:

@@ -27,14 +27,14 @@
 #include <string>
 #include <vector>
 
-#include <qmenubar.h>
-#include <qtoolbar.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qtoolbar.h>
 
 #include "imoduleinfobasestation.h"
 #include "guimodel/imoduleclassview.h"
 #include "utils/autoptr.h"
 
-class QMainWindow;
+class QAction;
 
 namespace utils {
   class Buffer;
@@ -49,7 +49,7 @@ namespace gui
   {
     Q_OBJECT
   public:
-    ModuleClassView(QPopupMenu* parent);
+    ModuleClassView(QMenu* parent);
 
     virtual ~ModuleClassView();
     //virtual void hasChanged(const std::list<ChangeInfo>& changedClasses);
@@ -63,24 +63,22 @@ namespace gui
 
 	void clear();
 private slots:
-void moduleClassSelected(int);
+void moduleClassSelected(QAction*);
 
     signals:
-void selectModuleClass(const std::string& moduleClassName);
+ void selectModuleClass(const std::string& moduleClassName);
 
   private:
-    QPopupMenu* m_menu;
+    QMenu* m_menu;
 
-    std::map<std::string,QPopupMenu*> groups;
-    std::map<std::string,QPopupMenu*> menues;
+    std::map<std::string,QMenu*> groups;
+    std::map<std::string,QMenu*> menues;
 
     typedef std::map<std::string,utils::AutoPtr<ModuleInfo> > ModuleInfoMap;
-    ModuleInfoMap infos;
-    std::vector<std::string> mClassID2Name;
+    ModuleInfoMap infos; 
 
-    std::map<std::string,int> m_itemIDs;
-
- 
+    typedef std::map<std::string, QAction*> ActionMap;
+    ActionMap m_actions;
   };
 
 } // end of namespace gui

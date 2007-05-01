@@ -26,4 +26,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = numlfomodule.h numlfomodule_auto.c
-EXTRA_DIST = numlfomodule.dsp numlfomodule.mak numlfomodule.dep
+EXTRA_DIST = numlfomodule.vcproj numlfomodule.dsp numlfomodule.mak numlfomodule.dep

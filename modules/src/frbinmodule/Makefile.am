@@ -1,4 +1,4 @@
-libdir = @gphx_module_lib_dir@
+bindir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -8,7 +8,18 @@ frbinmodule_auto.c: frbinmodule.spec frbinmodule.h
 frbinmodule.h: frbinmodule.spec
 	$(PLUC) h @srcdir@/frbinmodule.spec
 
-lib_LTLIBRARIES = frbinmodule.la
+EXEEXT=.@SHAREDLIBEXT@
+
+bin_PROGRAMS = frbinmodule
+
+frbinmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
+frbinmodule_CXXFLAGS = $(AM_CXXFLAGS) @SHARED_COMP_FLAGS@
+
+if SHARED_USE_DEF_FILE
+DEFFILE=frbinmodule.def
+else
+DEFFILE=
+endif
 
 if WITH_AVIFILE
 AVIFILE_sOURCES = avifiledriver.h avifiledriver.cpp
@@ -30,7 +41,25 @@ if WITH_FFMPEG
 FFMPEG_sOURCES = ffmpegdriver.h ffmpegdriver.cpp
 endif
 
-frbinmodule_la_SOURCES = \
+if OS_WINDOWS
+PLT_sOURCES = \
+        vfwdriver.cpp \
+	vfwdriver.h \
+	timer.cpp \
+	timer.h
+
+# TODO: directx with cygwin disabled for now
+#if HAVE_DX
+#DX_sOURCES = \
+#	dshowdriver.cpp \
+#	dshowdriver.h
+#endif
+
+WIN32_LIBS = -lvfw32 -lgdi32
+
+endif
+
+frbinmodule_SOURCES = \
 	frbinmodule_auto.c \
 	frbinmodule.cpp \
 	frbinmodule.h \
@@ -41,15 +70,14 @@ frbinmodule_la_SOURCES = \
 	bmpdriver.cpp \
 	driverfactory.h \
 	framecache.h \
-	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES) $(FFMPEG_sOURCES)
+	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES) $(FFMPEG_sOURCES) $(PLT_sOURCES) $(DX_sOURCES)
 
-frbinmodule_la_LDFLAGS = \
-        -module -avoid-version -no-undefined \
-        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@
+frbinmodule_LDFLAGS = @SHARED_LD_FLAGS@ \
+        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@ $(DX_LIBS) $(WIN32_LIBS)
 
-frbinmodule_la_LIBADD = -lstdc++ -lscale
+frbinmodule_LDADD = -lstdc++ -lscale
 
-frbinmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a
+frbinmodule_DEPENDENCIES = @builddir@/../libscale/libscale.a
 
 INCLUDES = \
 	-I @srcdir@/../../../engine/src/engine \
@@ -58,10 +86,7 @@ INCLUDES = \
 	-I @srcdir@/../../../types/src/numbertype \
 	-I @srcdir@/../../../types/src/stringtype \
 	-I @srcdir@/../../../types/src/framebuffertype \
-	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS) @FFMPEG_CFLAGS@
+	$(AVIFILE_CXXFLAGS) $(SDL_IMAGE_cFLAGS) @FFMPEG_CFLAGS@ $(DX_CXXFLAGS)
 
 DISTCLEANFILES = frbinmodule.h frbinmodule_auto.c
-EXTRA_DIST = frbinmodule.dsp frbinmodule.mak frbinmodule.dep \
-	dshowdriver.cpp dshowdriver.h \
-	vfwdriver.cpp vfwdriver.h \
-	timer.cpp timer.h
+EXTRA_DIST = frbinmodule.vcproj frbinmodule.dsp frbinmodule.mak frbinmodule.dep

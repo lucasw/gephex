@@ -622,12 +622,11 @@ namespace renderer
 	  in->unPlug();
       }
 		
-    // remove the module from the sink list
-    if (n->getOutputs().size() == 0)
-      {
-	m_sinks.remove(block); 
-      }
-	
+    // remove the module from the sink list	  
+
+    if (n->getOutputs().size() == 0 || !n->isDeterministic())
+	m_sinks.remove(block);
+
     // remove it from the module set
     // the module control block should be deleted here by its autoptr
     m_modules.erase(it);

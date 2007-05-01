@@ -41,6 +41,12 @@ namespace gui
     virtual TypeView* construct(QWidget* parent, const ParamMap&) const;
   };
 
+  class DialNumberViewConstructor : public TypeViewConstructor
+  {
+  public:
+    DialNumberViewConstructor();
+    virtual TypeView* construct(QWidget* parent, const ParamMap&) const;
+  };
 }
 
 #endif

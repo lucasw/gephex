@@ -28,5 +28,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = oscoutmodule.h oscoutmodule_auto.c
 
-#EXTRA_DIST = oscoutmodule.dsp oscoutmodule.mak oscoutmodule.dep
+#EXTRA_DIST = oscoutmodule.vcproj oscoutmodule.dsp oscoutmodule.mak oscoutmodule.dep
 

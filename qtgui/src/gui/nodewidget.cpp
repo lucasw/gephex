@@ -25,10 +25,10 @@
 #include <iostream>
 #include <cassert>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qtooltip.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/QMouseEvent>
 
 #include "nodeproperty.h"
 
@@ -206,31 +206,35 @@ namespace gui
 
 
 
-  NodeWidget::NodeWidget(QWidget* parent,const char* name,
-			 WFlags fl,int _id,const ModuleInfo& _info,
+  NodeWidget::NodeWidget(QWidget* parent,
+			 Qt::WFlags fl,int _id,const ModuleInfo& _info,
 			 const PicManager& picz,
 			 const utils::AutoPtr<ControlValueDispatcher>& dispatcher, 
 			 IModelControlReceiver& mcr,
 			 KeyboardManager* kbManager,
 			 IErrorReceiver& log,
 			 const std::string& media_path)
-    : QWidget(parent,name,fl), id(_id), m_pictures(picz), dragMode(false),
+    : QWidget(parent,fl), id(_id), m_pictures(picz), dragMode(false),
       m_time(0), m_kbManager(kbManager), m_log(log)
   {
-    setFixedSize(50, 50);
-    setBackgroundPixmap(m_pictures.node_pic());
-	
+    setFixedSize(50, 60);	
     this->setMouseTracking(true);
 
     modName = _info.getName();
     m_group = _info.getGroup();
     m_icon = new QPixmap(_info.getIcon().getPtr());
-    QToolTip::add(this, (m_group + ":" + modName).c_str());
+    setToolTip((m_group + ":" + modName).c_str());
 
-    QHBoxLayout* mainLayout = new QHBoxLayout(this);
-    QVBoxLayout* inputLayout = new QVBoxLayout();
-    QVBoxLayout* midLayout = new QVBoxLayout();
+    QHBoxLayout* mainLayout   = new QHBoxLayout(this);
+    QVBoxLayout* inputLayout  = new QVBoxLayout();
     QVBoxLayout* outputLayout = new QVBoxLayout();
+
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+    inputLayout->setMargin(0);
+    inputLayout->setSpacing(0);
+    outputLayout->setMargin(0);
+    outputLayout->setSpacing(0);
 
     for(unsigned int i=0;i < _info.getInputs().size(); ++i)
       {
@@ -251,7 +255,7 @@ namespace gui
         QPixmap inplug_free = m_pictures.plug_pic(type, false);
         QPixmap inplug_busy = m_pictures.plug_pic(type, true);
 	utils::AutoPtr<InputPlugWidget> 
-	  newInput (new InputPlugWidget(this, 0, 
+	  newInput (new InputPlugWidget(this,
                                         inplug_free,
 					inplug_busy,
 					_info.getInputs()[i].name,
@@ -272,8 +276,6 @@ namespace gui
 	    inputs[i]->show();
 	  }
 		
-	connect(&*inputs[i], SIGNAL(beginLineDraw()), this, 
-		SLOT(beginLineDraw_()));
 
 	connect(&*inputs[i], SIGNAL(redrawLine(const QPoint&,const QPoint&)),
 		this, SLOT(redrawLine_(const QPoint&,const QPoint&)));
@@ -294,8 +296,6 @@ namespace gui
 	//		this, SLOT(moveInputToProperties(int)));
       }
 	
-    mainLayout->addLayout(inputLayout);
-    mainLayout->addLayout(midLayout);
 	
     for(unsigned int j=0;j<_info.getOutputs().size();j++)
       {
@@ -303,7 +303,7 @@ namespace gui
         QPixmap outplug_free = m_pictures.plug_pic(type, false);
         QPixmap outplug_busy = m_pictures.plug_pic(type, true);
 	utils::AutoPtr<OutputPlugWidget> 
-	  newOutput(new OutputPlugWidget(this, 0,
+	  newOutput(new OutputPlugWidget(this,
 					 outplug_free,
 					 outplug_busy,
 					 _info.getOutputs()[j].name,
@@ -312,8 +312,6 @@ namespace gui
 	outputLayout->addWidget(&*outputs[j]);
 	outputs[j]->show();
 		
-	connect(&*outputs[j], SIGNAL(beginLineDraw()),
-		this, SLOT(beginLineDraw_()));
 	connect(&*outputs[j], SIGNAL(redrawLine(const QPoint&,const QPoint&)),
 		this, SLOT(redrawLine_(const QPoint&,const QPoint&)));
 		
@@ -328,7 +326,6 @@ namespace gui
 		this, SLOT(mouseOverOutputPlug_(const OutputPlugWidget*)));
       }
 	
-    mainLayout->addLayout(outputLayout);
 	
     m_properties = 
       utils::AutoPtr<IPropertyDescription>(new NodeProperty(_info,
@@ -336,6 +333,10 @@ namespace gui
 							    dispatcher,
 							    mcr,
 							    media_path));
+
+    mainLayout->addLayout(inputLayout);
+    mainLayout->addSpacing(m_icon->width());
+    mainLayout->addLayout(outputLayout);
   }
 
   NodeWidget::~NodeWidget()     
@@ -359,12 +360,12 @@ namespace gui
   {
     clickedPos = e->pos();
     
-    if (e->button() == LeftButton)
+    if (e->button() == Qt::LeftButton)
       {
         dragMode = true;
         emit clickedLeft(this);
       }
-    else if (e->button() == RightButton)
+    else if (e->button() == Qt::RightButton)
       {
         emit beenRightClicked(this, e->globalPos());
       }
@@ -382,9 +383,18 @@ namespace gui
   void NodeWidget::paintEvent(QPaintEvent* /*e*/)
   {
     QPainter p(this);
-    p.drawPixmap (5,5, *icon());
+
+    int x = (width() - icon()->width()) / 2;
+    int y = (height() - icon()->height()) / 2;
+    p.drawPixmap (x, y, *icon());
     //p.drawText(10/*abs(50-modName.length())/2*/, 28, modName.c_str());
+    
+    /*p.drawRect(QRect(0, 0, 5, height()-1));
+    p.drawRect(QRect(width()-7, 0, width()-2, height()-1));
+    p.drawRect(QRect(0, 0, width()-1, y));
+    p.drawRect(QRect(0, height()-y-1, width()-1, height()-y-1));*/
   }
+
 
   void NodeWidget::setTime(double t)
   {
@@ -399,11 +409,6 @@ namespace gui
   const IPropertyDescription& NodeWidget::getProperties() const
   {
     return *m_properties;
-  }
-
-  void NodeWidget::beginLineDraw_()
-  {
-    emit beginLineDraw();
   }
 
   void NodeWidget::redrawLine_(const QPoint& from, const QPoint& to)

@@ -200,7 +200,7 @@ AVStream *FFMpegWriter::add_video_stream(AVFormatContext *oc, int codec_id)
         exit(1);
     }
     
-    c = &st->codec;
+    c = st->codec;
     c->codec_id = (CodecID)codec_id;
     c->codec_type = CODEC_TYPE_VIDEO;
 
@@ -210,8 +210,8 @@ AVStream *FFMpegWriter::add_video_stream(AVFormatContext *oc, int codec_id)
     c->width = x_res;  
     c->height = y_res;
     /* frames per second */
-    c->frame_rate = 25;  
-    c->frame_rate_base = 1;
+    //    c->frame_rate = 25;  
+    //    c->frame_rate_base = 1;
     c->gop_size = 12; /* emit one intra frame every twelve frames at most */
 
     // to kick???
@@ -241,7 +241,7 @@ void FFMpegWriter::open_video(AVFormatContext *oc, AVStream *st)
     AVCodec *codec;
     AVCodecContext *c;
 
-    c = &st->codec;
+    c = st->codec;
 
     /* find the video encoder */
     codec = avcodec_find_encoder(c->codec_id);
@@ -309,7 +309,7 @@ AVFrame *FFMpegWriter::alloc_picture(int pix_fmt, int width, int height)
 
 void FFMpegWriter::close_video(AVFormatContext *oc, AVStream *st)
 {
-    avcodec_close(&st->codec);
+    avcodec_close(st->codec);
     av_free(picture->data[0]);
     av_free(picture);
     if (tmp_picture) {
@@ -328,7 +328,7 @@ void FFMpegWriter::write_video_frame(AVFormatContext *oc, AVStream *st, AVFrame 
 
     AVFrame *final_picture;
         
-    c = &st->codec;
+    c = st->codec;
 
     // convert the rgba32 input image to codec-format
     img_convert((AVPicture *)picture, c->pix_fmt, 

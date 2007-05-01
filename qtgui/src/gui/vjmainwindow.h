@@ -28,16 +28,17 @@
 #include <stdexcept>
 #include <memory>
 
-#include <qmainwindow.h>
+#include <QtGui/qmainwindow.h>
 
 #include "interfaces/irendererstatusreceiver.h"
 
 #include "utils/autoptr.h"
 
-class QPopupMenu;
+class QMenu;
 class QTabWidget;
 class QSplitter;
 class QAction;
+class QDockWidget;
 
 namespace utils 
 {
@@ -61,124 +62,145 @@ namespace gui
   class ProxyErrorReceiver;
 
   class VJMainWindow : public QMainWindow, public IRendererStatusReceiver
-    {
-      Q_OBJECT
-	public: 
+  {
+    Q_OBJECT
+  public: 
 
-      typedef utils::AutoPtr<utils::StructReader> StructReaderPtr;
+    typedef utils::AutoPtr<utils::StructReader> StructReaderPtr;
 
 
-      VJMainWindow(QWidget* parent, const char* name,
-                   const utils::ConfigManager& config,
-                   const std::string& ipc_locator,
-                   const std::string& conf_base_dir);
+    VJMainWindow(QWidget* parent,
+                 const utils::ConfigManager& config,
+                 const std::string& ipc_locator,
+                 const std::string& conf_base_dir);
 
-      virtual ~VJMainWindow();
+    virtual ~VJMainWindow();
 
-      virtual void started(  );
-      virtual void stopped(  );
-      virtual void renderedGraphChanged( const std::string& graphID );
+    virtual void started();
+    virtual void stopped();
+    virtual void renderedGraphChanged( const std::string& graphID );
 	
-    signals:
-      void quitSignal(void);
+ signals:
+    void quitSignal(void);
 
-      void renderedGraphChangedSignal( const std::string& graphID );
+    void renderedGraphChangedSignal( const std::string& graphID );
 	
-      public slots:
-	void connectToEngine();
-      void disconnectFromEngine();
+  public slots:
+    void connectToEngine();
+    void disconnectFromEngine();
 	
-      void startStop();
-      void displayStatusText(const std::string& s);
+    void startStop();
+    void displayStatusText(const std::string& s);
 
-      void displayProperties(const IPropertyDescription&);
-	  void undisplayProperties();
-      void displayErrorMessage(const std::string& text);
+    void displayProperties(const IPropertyDescription&);
+    void undisplayProperties();
+    void displayErrorMessage(const std::string& text);
 
-      void setCaption(const std::string&);
-      void newGraph();
+    void setCaption(const std::string&);
+    void newGraph();
 
 
-    private slots:
-	  void quitSlot();
-	  void pollNetwork();
-      void setRendererState();
-      //      void setKeyGrabState(bool state);
-      void shutDown();
-      void synchronize();
-      void aboutSlot();
-      void changesSlot();
+  private slots:
+    void quitSlot();
+    void pollNetwork();
+    void setRendererState();
+    //      void setKeyGrabState(bool state);
+    void shutDown();
+    void synchronize();
+    void aboutSlot();
+    void changesSlot();
+
+    void showLogSlot();
 	
-    private:
-      void createActions(void);
-      void buildMenuBar(void);
-      void buildModuleBar(void);
-      void buildSceleton(void);
-      void fillSceleton(void);
+  private:
 
-      void unbuildModuleBar(void);
-      void clearSceleton(void);
+    void closeEvent(QCloseEvent* event);
 
-      void connectToRealEngine() throw (std::runtime_error);
-      void disconnectFromRealEngine() throw (std::runtime_error);
+    void writeSettings();
+    void readSettings();
+
+    void createActions(void);
+    void buildMenuBar(void);
+    void buildModuleBar(void);
+    void buildSceleton(void);
+
+    void unbuildModuleBar(void);
+    void clearSceleton(void);
+
+    void connectToRealEngine() throw (std::runtime_error);
+    void disconnectFromRealEngine() throw (std::runtime_error);
       
-      // Actions
-      QAction* quitAction;
+    // Actions
+    QAction* quitAction;
       
-      QAction* newGraphAction;
-      QAction* rendererStateAction;
-      QAction* connectToEngineAction;
-      QAction* disConnectToEngineAction;
-      QAction* synchronizeEngineAction;
-      QAction* shutDownEngineAction;
-      //      QAction* keyGrabStateAction;
-	  QAction* aboutAction;
-	  QAction* changesAction;
+    QAction* newGraphAction;
+    QAction* rendererStateAction;
+    QAction* connectToEngineAction;
+    QAction* disConnectToEngineAction;
+    QAction* synchronizeEngineAction;
+    QAction* shutDownEngineAction;
+    //      QAction* keyGrabStateAction;
+    QAction* aboutAction;
+    QAction* changesAction;
+    QAction* m_showLogAction;
       
-      // widgets
-      QWidget* centralWidget;
-      QSplitter* splitVertical;
-      QSplitter* splitHorizontal;
-      EditorWidget* editorWidget;
-      QTabWidget* leftTab;
-      QTabWidget* belowTab;
-      QWidget* editor;
+    // widgets
+    EditorWidget* editorWidget;
+    LogWindow* logWindow;
 
-      LogWindow* logWindow;
+    std::auto_ptr<ProxyErrorReceiver> m_error_proxy;
+    std::auto_ptr<EngineWrapper> engineWrapper;
 
-      std::auto_ptr<ProxyErrorReceiver> m_error_proxy;
-      std::auto_ptr<EngineWrapper> engineWrapper;
-
-      bool running;
-      bool connected;	
+    bool running;
+    bool connected;	
 	
-      ModuleClassView* moduleClassView;      
-      GraphNameView* graphNameView;      
+    ModuleClassView* moduleClassView;      
+    GraphNameView* graphNameView;      
 
-      enum {CONNECT_ENGINE, 
-	    DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
-	    STARTSTOP_ENGINE,
-	    KEYGRAB_ON, KEYGRAB_OFF};
+    enum {CONNECT_ENGINE, 
+          DISCONNECT_ENGINE, SHUTDOWN_ENGINE, SYNCHRONIZE_ENGINE,
+          STARTSTOP_ENGINE,
+          KEYGRAB_ON, KEYGRAB_OFF};
 	
-      QPopupMenu* effectMenue;
-      QPopupMenu* graphMenue;
-      PicSwitch* switcher;
+    QMenu* effectMenue;
+    QMenu* graphMenue;
+    PicSwitch* switcher;
 
-      PropertyView* propertyView;
+    PropertyView* propertyView;
 	
-      QPopupMenu* help;
+    QMenu* help;
 
-      int propertyTabID;
+    int propertyTabID;
 
-      const utils::ConfigManager& m_config;
+    const utils::ConfigManager& m_config;
 
-      KeyboardManager* m_kbManager;
+    KeyboardManager* m_kbManager;
 
-      std::string m_conf_base_dir;
-    };
+    std::string m_conf_base_dir;
+
+    // members below are used for reading settings
+
+    QByteArray   m_winState;
+
+    QDockWidget* m_propDock;
+    QDockWidget* m_graphDock;
+    QDockWidget* m_logDock;
+
+    bool   m_propDockFloating;
+    QSize  m_propDockSize;
+    QPoint m_propDockPos;
+
+    bool   m_graphDockFloating;
+    QSize  m_graphDockSize;
+    QPoint m_graphDockPos;
+
+    bool   m_logDockFloating;
+    QSize  m_logDockSize;
+    QPoint m_logDockPos;
+
+    bool   m_logDockHidden;
+  };
 
 } // end of namespace gui
 
 #endif
-
-

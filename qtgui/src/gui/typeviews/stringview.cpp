@@ -22,11 +22,12 @@
 
 #include "stringview.h"
 
-#include <iostream>
 #include <sstream>
+#include <iostream>
 
-#include <qvalidator.h>
-#include <qlineedit.h>
+#include <QtGui/qvalidator.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/QHBoxLayout>
 
 #include <utils/structreader.h>
 #include <utils/buffer.h>
@@ -41,7 +42,8 @@ namespace gui
     StringView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params)
     {
-      m_lineEdit = new QLineEdit("", this, 0);
+      m_lineEdit = new QLineEdit(this);
+      m_layout->addWidget(m_lineEdit);
 
       connect(m_lineEdit, SIGNAL(returnPressed()),
 	      this, SLOT(lineeditChanged()));
@@ -77,7 +79,8 @@ namespace gui
 public slots:
     void lineeditChanged()
     {
-      const char* text = m_lineEdit->text().latin1();
+      QByteArray raw = m_lineEdit->text().toUtf8();
+      const char* text = raw.constData();
 
       //      std::cout << "Lineedit text = '" << text << "'" << std::endl;
       utils::Buffer 

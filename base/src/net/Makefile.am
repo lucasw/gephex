@@ -1,4 +1,4 @@
-EXTRA_DIST = net.dsp net.mak net.dep \
+EXTRA_DIST = net.vcproj net.dsp net.mak net.dep \
 	fhsocket.cpp fhsocket.h \
 	namedpipeserversocket.cpp namedpipeserversocket.h \
 	namedpipeclientsocket.cpp namedpipeclientsocket.h \
@@ -8,6 +8,25 @@ TESTS=nettest
 
 check_PROGRAMS = nettest
 noinst_LIBRARIES = libgphxnetwork.a
+
+if OS_WINDOWS
+PLT_SOURCS = \
+	namedpipeclientsocket.cpp \
+	namedpipeserversocket.cpp \
+	fhsocket.cpp
+
+PLT_HEADRS = \
+	namedpipeclientsocket.h \
+	namedpipeserversocket.h \
+	fhsocket.h
+else
+PLT_SOURCS = \
+	domainserversocket.cpp \
+	domainclientsocket.cpp
+PLT_HEADRS = \
+	domainserversocket.h \
+	domainclientsocket.h
+endif
 
 libgphxnetwork_a_SOURCES = \
 		netexceptions.cpp \
@@ -20,9 +39,7 @@ libgphxnetwork_a_SOURCES = \
 		tcpclientsocket.cpp \
 		fdsocket.cpp \
 		socketadaptor.cpp \
-		domainserversocket.cpp \
-		domainclientsocket.cpp \
-		convertbin.cpp
+		convertbin.cpp $(PLT_SOURCS)
 
 noinst_HEADERS = \
 		protocol.h \
@@ -45,14 +62,12 @@ noinst_HEADERS = \
 		socketadaptor.h \
 		tagdispatcher.h \
 		tagdispatcher.cpp \
-		domainserversocket.h \
-		domainclientsocket.h \
 		protocoltest.h \
 		tcpsockettest.h \
 		tagdispatchertest.h \
 		taggertest.h \
 		domainsockettest.h \
-		convertbin.h
+		convertbin.h $(PLT_HEADRS)
 
 INCLUDES = -I @srcdir@/.. -I @srcdir@/../../../util/include
 

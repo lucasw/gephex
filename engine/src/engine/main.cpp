@@ -171,7 +171,7 @@ int main(int argc, const char* argv[])
       signals.setSignal(SIGTERM, signal_handler);
       signals.setSignal(SIGABRT, signal_handler);
       signals.setSignal(SIGPIPE, signal_handler);
-#elif defined(OS_WIN32)
+#elif defined(OS_WIN32) && defined(COMP_VC)
       _set_se_translator( my_se_translator );
       if (SetConsoleCtrlHandler( (PHANDLER_ROUTINE) signal_handler, TRUE) == 0)
 	throw std::runtime_error("Could not set control handler!"); 

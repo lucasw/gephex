@@ -1,5 +1,4 @@
-includedir = @includedir@/gephex
-include_HEADERS = \
+noinst_HEADERS = \
 	minmax.h \
 	sstream_compat \
 	unistd.h

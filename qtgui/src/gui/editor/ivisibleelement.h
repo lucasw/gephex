@@ -23,7 +23,7 @@
 #ifndef INCLUDED_IVISIBLE_ELEMENT_H
 #define INCLUDED_IVISIBLE_ELEMENT_H
 
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
 
 namespace gui {
   class IVisibleElement : public QWidget

@@ -37,4 +37,5 @@ SUBDIRS = \
 	effectvnoisemodule \
 	effectvripplemodule \
 	effectvpredatormodule \
+	effectvholomodule \
 	effectv1dmodule

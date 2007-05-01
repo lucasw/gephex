@@ -39,9 +39,10 @@ class InputPlugWidget : public gui::PlugWidget
 
   public:
     typedef std::map<std::string, std::string> ParamMap;
-    InputPlugWidget(QWidget* parent, const char* name,
+    InputPlugWidget(QWidget* parent,
 		    const QPixmap& free_, const QPixmap& busy_,  
-		    std::string _name, std::string _type,
+		    const std::string& name,
+		    const std::string& type,
 		    const ParamMap& params,
 		    int _index, int _ID, bool _inPropertyDialog);
 

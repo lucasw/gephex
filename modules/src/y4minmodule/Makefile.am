@@ -32,4 +32,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = y4minmodule.h y4minmodule_auto.c
 
-EXTRA_DIST = y4minmodule.dsp y4minmodule.mak y4minmodule.dep
+EXTRA_DIST = y4minmodule.vcproj y4minmodule.dsp y4minmodule.mak y4minmodule.dep

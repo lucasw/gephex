@@ -17,7 +17,7 @@ effectvblurzoommodule_la_SOURCES = \
         effectvblurzoommodule.spec \
         effectvblurzoommodule.xpm
 
-EXTRA_DIST = blurzoom.c effectvblurzoommodule.dsp effectvblurzoommodule.mak effectvblurzoommodule.dep
+EXTRA_DIST = blurzoom.c  effectvblurzoommodule.dsp effectvblurzoommodule.mak effectvblurzoommodule.dep
 
 effectvblurzoommodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

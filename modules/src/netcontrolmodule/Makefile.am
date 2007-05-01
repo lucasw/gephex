@@ -23,7 +23,7 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../types/src/numbertype \
 		-I @srcdir@/../../../types/src/miditype 
 
- 
+netcontrolmodule_la_LIBADD = $(LIB_SOCKET_FLAGS)
 
 DISTCLEANFILES = netcontrolmodule.h netcontrolmodule_auto.c
-EXTRA_DIST = netcontrolmodule.dsp netcontrolmodule.mak netcontrolmodule.dep
+EXTRA_DIST = netcontrolmodule.vcproj netcontrolmodule.dsp netcontrolmodule.mak netcontrolmodule.dep

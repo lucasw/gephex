@@ -25,10 +25,10 @@
 #include <sstream>
 #include <cmath>
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qcolordialog.h>
-#include <qtooltip.h>
+#include <QtGui/QLayout>
+#include <QtGui/QPushButton>
+
+#include <QtGui/QColorDialog>
 
 namespace gui
 {
@@ -41,13 +41,10 @@ namespace gui
     ColorView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params), m_current("")
     {
-      QHBoxLayout* l = new QHBoxLayout(this);
-      m_select = new QPushButton("Select",this);
-      m_select->setMinimumSize(40, 33);
-      //select->setMaximumSize(60, 20);
-      //select->resize(40, 20);	
+      m_select = new QPushButton(this);
+
+      m_layout->addWidget(m_select);
       m_select->show();
-      l->addWidget(m_select);
 
       connect(m_select, SIGNAL(clicked()), this, SLOT(selectColor()));
     }
@@ -61,11 +58,11 @@ namespace gui
       QColor newColor = stringToColor(m_current);
 
       m_select->setPalette(QPalette(newColor));
-      QToolTip::add(this, m_current.c_str());
+      setToolTip(m_current.c_str());
     }
 
 private slots:
-void selectColor()
+    void selectColor()
     {
       QColor oldColor;
       if (m_current != "")
@@ -74,18 +71,17 @@ void selectColor()
       if (!oldColor.isValid())
 	  oldColor = QColor(128, 128, 128);
       
-      QColor tmp 
-	= QColorDialog::getColor ( oldColor, this, "ColorSelector") ;
+      QColor tmp = QColorDialog::getColor(oldColor, this) ;
 		
-    if (tmp.isValid())
-      {
-	std::string s = colorToString(tmp);
+      if (tmp.isValid())
+	{
+	  std::string s = colorToString(tmp);
 
-	utils::Buffer
-	  bu(reinterpret_cast<const unsigned char*>(s.c_str()), s.length()+1);
+	  utils::Buffer
+	    bu(reinterpret_cast<const unsigned char*>(s.c_str()), s.length()+1);
 
-	emit valueChanged(bu);
-      }
+	  emit valueChanged(bu);
+	}
     }
 
   private:
@@ -117,7 +113,7 @@ void selectColor()
 	return os.str();
     }
 
-    QButton* m_select;
+    QAbstractButton* m_select;
     std::string m_current;
   };
 

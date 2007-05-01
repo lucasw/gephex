@@ -30,6 +30,7 @@
 #endif
 
 #include "audiooutdriver.h"
+#include "a_cvt.h"
 
 #if defined(WITH_ASOUNDLIB)
 #include "alsaoutdriver.h"
@@ -41,6 +42,10 @@
 
 #if defined(OS_WIN32)
 #include "waveoutdriver.h"
+#endif
+
+#if defined(OS_DARWIN)
+#include "coreaudiooutdriver.h"
 #endif
 
 #ifndef max
@@ -129,8 +134,6 @@ void update(void* instance)
   InstancePtr inst = (InstancePtr) instance;
   MyInstancePtr my = inst->my;
   char buffer[256];
-  int len;
-  int num_samples;
   int device  = trim_int(inst->in_device->number, 0, 256);
   int latency = trim_int(inst->in_latency->number, 0, 1000);
   const char* driver_name = inst->in_driver->text;
@@ -178,6 +181,14 @@ void update(void* instance)
 	}
       else
 #endif
+#if defined(OS_DARWIN)
+      if (m_driver_name == "coreaudio")
+	{
+	  my->drv = new CoreAudioOutDriver();
+	  s_log(2, "Using CoreAudio driver");
+	}
+      else
+#endif
 #if defined(WITH_ASOUNDLIB)
 	{
 	  my->drv = new AlsaOutDriver();
@@ -202,6 +213,14 @@ void update(void* instance)
           else
             s_log(2, "Unkown driver - using WaveOut driver");
 	}
+#elif defined(OS_DARWIN)
+	{
+	  my->drv = new CoreAudioOutDriver();
+          if (m_driver_name == "default")
+            s_log(2, "Using CoreAudio driver");
+          else
+            s_log(2, "Unkown driver - using CoreAudio driver");
+	}
 #else
 #error No audio driver !
 #endif
@@ -213,19 +232,20 @@ void update(void* instance)
   if (device != my->device_number || latency != my->latency 
       || !my->drv->is_open())
     {
-      int num_periods;
       if (my->drv->is_open())
 	my->drv->close();
     
-      num_periods = (int) max(1, (int) (((double)latency/1000.)
-					* SAMPLE_RATE) / NUM_SAMPLES);
+      const int num_periods = (int) max(1,
+					(int) (0.5 + (((double)latency/1000.)
+					  * SAMPLE_RATE) / NUM_SAMPLES));
 
       try
 	{
 	  my->drv->open(device,
 			SAMPLE_RATE,
 			SAMPLE_FORMAT,
-			CHANNELS, NUM_SAMPLES,
+			CHANNELS,
+			NUM_SAMPLES,
 			num_periods);
 
 	  my->device_number = device;
@@ -240,22 +260,17 @@ void update(void* instance)
   if (!my->drv->is_open())
     return;  
 
-  unsigned char* sample_buffer;
-  double* samples = inst->in_audio->samples;
-  int i;
+  const int num_samples = inst->in_audio->len;
+  unsigned char* sample_buffer
+    = new unsigned char[num_samples * BYTES_PER_SAMPLE];
 
-  num_samples = inst->in_audio->len;
-  sample_buffer = new unsigned char[num_samples * BYTES_PER_SAMPLE];
-  for (i = 0; i < num_samples; ++i)
-    {
-      // this should work on big endian machines as well
-      int value = (int) (samples[i] * ((1 << 15) -1));
-      sample_buffer[2*i]   = (unsigned char)   value & 0x00ff;
-      sample_buffer[2*i+1] = (unsigned char) ((value & 0xff00) >> 8);
-    }
+  a_cvt_double_to_16le_mono(inst->in_audio->samples,
+			    reinterpret_cast<int16_t*>(sample_buffer),
+			    num_samples);
+
   try
     {
-      len = my->drv->write(sample_buffer, num_samples);
+      int len = my->drv->write(sample_buffer, num_samples);
       assert(len >= 0);
     }
   catch (std::exception& e)

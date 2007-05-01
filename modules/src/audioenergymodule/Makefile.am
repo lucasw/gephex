@@ -19,7 +19,7 @@ audioenergymodule_la_SOURCES = \
 	fft.hh
 
 EXTRA_DIST = fft.cpp \
-             audioenergymodule.dsp audioenergymodule.mak audioenergymodule.dep
+             audioenergymodule.vcproj audioenergymodule.dsp audioenergymodule.mak audioenergymodule.dep
 
 audioenergymodule_la_LDFLAGS = -module -avoid-version -no-undefined
 

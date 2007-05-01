@@ -24,7 +24,7 @@
 
 #include <cassert>
 
-#include <qscrollview.h>
+#include <QtCore/QSettings>
 
 #include "grapheditor.h"
 #include "grapheditorwindow.h"
@@ -45,118 +45,136 @@ namespace gui
 
   typedef std::map<std::string, std::string> ParamMap;
 
-  EditorWidget::EditorWidget(QWidget* parent, const char* name,
+  EditorWidget::EditorWidget(QWidget* parent,
 			     GraphModel& graphModel,
 			     IModelControlReceiver& model,
 			     ControlModel& controlModel,
 			     ModuleClassView& base,
-				 const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
+                             const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
 			     IModuleStatisticsSender& mss,
 			     IModelStatusSender& msts,
 			     KeyboardManager* kbManager,
 			     IErrorReceiver& log,
 			     const std::string& media_path)
 
-  : QSplitter(Vertical,parent,name)
-{
-  //  this->resize(400,400);
+    : QSplitter(Qt::Vertical,parent)
+  {
+    GraphEditorWindow* geWindow = new GraphEditorWindow(this,
+                                                        graphModel,base,
+                                                        dispatcher,model,
+                                                        kbManager, log,
+                                                        media_path);
+
+    graphEditor = geWindow->graphEditor();
+
+
+    graphModel.registerGraphView(*graphEditor);
+    controlModel.registerControlConnectView(*graphEditor);
+    mss.registerModuleStatisticsReceiver(*graphEditor);	
+    msts.registerModelStatusReceiver(*graphEditor);
+
+    connect(&base,SIGNAL(selectModuleClass(const std::string&)),
+            graphEditor,SLOT(moduleClassSelected(const std::string&)));
+
+    /*  connect(&extendedBase, SIGNAL(selectModuleClass(const std::string&)),
+        graphEditor, SLOT(moduleClassSelected(const std::string&)));*/
   
-  GraphEditorWindow* geWindow = new GraphEditorWindow(this,"graph",0,
-						      graphModel,base,
-						      dispatcher,model,
-						      kbManager, log,
-						      media_path);
+    connect(graphEditor,SIGNAL(statusText(const std::string&)),
+            this,SLOT(displayStatusText(const std::string&)));
 
-  graphEditor = geWindow->graphEditor();
+    connect(graphEditor,SIGNAL(displayProperties(const IPropertyDescription&)),
+            this,SLOT(displayProperties_(const IPropertyDescription&)));
 
-  graphModel.registerGraphView(*graphEditor);
-  controlModel.registerControlConnectView(*graphEditor);
-  mss.registerModuleStatisticsReceiver(*graphEditor);	
-  msts.registerModelStatusReceiver(*graphEditor);
+    connect(graphEditor,SIGNAL(undisplayProperties()),
+            this,SLOT(undisplayProperties_()));
 
-  connect(&base,SIGNAL(selectModuleClass(const std::string&)),
-	  graphEditor,SLOT(moduleClassSelected(const std::string&)));
+    connect(graphEditor,
+            SIGNAL(newEditGraph(const std::string&,
+                                const std::string&)),
+            this,
+            SLOT(newEditGraphSlot(const std::string&,
+                                  const std::string&)));
 
-/*  connect(&extendedBase, SIGNAL(selectModuleClass(const std::string&)),
-	  graphEditor, SLOT(moduleClassSelected(const std::string&)));*/
+    ControlEditorWindow* ceWindow = new ControlEditorWindow(0,
+                                                            controlModel,
+                                                            model,
+                                                            dispatcher,
+                                                            media_path);
+
+    controlEditor = ceWindow->controlEditor();
+
+    controlModel.registerControlView(*controlEditor);
   
-  connect(graphEditor,SIGNAL(statusText(const std::string&)),
-	  this,SLOT(displayStatusText(const std::string&)));
+    connect(graphEditor,SIGNAL(createControl(const std::string&,
+                                             const std::string&,int,int,
+                                             const ParamMap&,
+                                             const QPoint&)),
+            controlEditor,SLOT(selectWidgetType(const std::string&,
+                                                const std::string&,int,int,
+                                                const ParamMap&,
+                                                const QPoint&)));
 
-  connect(graphEditor,SIGNAL(displayProperties(const IPropertyDescription&)),
-	  this,SLOT(displayProperties_(const IPropertyDescription&)));
+    connect(controlEditor, SIGNAL(inputSelected(int, int)),
+            graphEditor, SLOT(highlightInput(int, int)));
 
-  connect(graphEditor,SIGNAL(undisplayProperties()),
-	  this,SLOT(undisplayProperties_()));
-
-  connect(graphEditor,SIGNAL(newEditGraph(const std::string&,
-					  const std::string&)),
-	  this,SLOT(newEditGraphSlot(const std::string&,const std::string&)));
-
-  ControlEditorWindow* ceWindow = new ControlEditorWindow(this,"control",0,
-							  controlModel,
-							  model,
-							  dispatcher,
-							  media_path);
-
-  ceWindow->parentWidget()->move(0,210);
-  ceWindow->move(0,210);
-
-  controlEditor = ceWindow->controlEditor();
-
-  controlModel.registerControlView(*controlEditor);
-  
-  connect(graphEditor,SIGNAL(createControl(const std::string&,
-					   const std::string&,int,int,
-					   const ParamMap&,
-					   const QPoint&)),
-	  controlEditor,SLOT(selectWidgetType(const std::string&,
-					      const std::string&,int,int,
-					      const ParamMap&,
-					      const QPoint&)));
-
-  connect(controlEditor, SIGNAL(inputSelected(int, int)),
-          graphEditor, SLOT(highlightInput(int, int)));
-
-  connect(graphEditor,SIGNAL(deleteControl(int,int)),
-	  controlEditor,SLOT(deleteControl(int,int)));
-
-    //model.newGraph("DefaultGraph");
-  //model.changeEditGraph("DefaultGraph","default");
-  //model.changeRenderedGraph("DefaultGraph","default");
-
-  //this->tile();
-}
-
-EditorWidget::~EditorWidget(){
-	//TODO: perhaps unregister
-}
+    connect(graphEditor,SIGNAL(deleteControl(int,int)),
+            controlEditor,SLOT(deleteControl(int,int)));
 
 
-void EditorWidget::displayStatusText(const std::string& s)
-{
-	emit statusText(s);
-}
+    QSizePolicy policy = geWindow->sizePolicy();
+    policy.setHorizontalStretch(1);
+    policy.setVerticalStretch(2);
+    geWindow->setSizePolicy(policy);
+    
+    policy = ceWindow->sizePolicy();
+    policy.setHorizontalStretch(1);
+    policy.setVerticalStretch(1);
+    ceWindow->setSizePolicy(policy);
 
-void EditorWidget::displayProperties_(const IPropertyDescription& pd)
-{
-  emit displayProperties(pd);
-}
+    addWidget(geWindow);
+    addWidget(ceWindow);
 
-void EditorWidget::undisplayProperties_()
-{
-  emit undisplayProperties();
-}
+    QSettings settings;
+    if (settings.contains("editorSplitterState"))
+      {
+	restoreState(settings.value("editorSplitterState").toByteArray());
+      }
+  }
+
+  EditorWidget::~EditorWidget()
+  {
+    QSettings settings;
+    QByteArray state = saveState();
+    settings.setValue("editorSplitterState", state);
+
+    //TODO: perhaps unregister
+  }
 
 
-void EditorWidget::newEditGraphSlot(const std::string&g, const std::string&s)
-{
-  emit newEditGraph(g,s);
-}
+  void EditorWidget::displayStatusText(const std::string& s)
+  {
+    emit statusText(s);
+  }
 
-void EditorWidget::newRenderedGraphSlot(const std::string&g)
-{
-  emit newRenderedGraph(g);
-}
+  void EditorWidget::displayProperties_(const IPropertyDescription& pd)
+  {
+    emit displayProperties(pd);
+  }
+
+  void EditorWidget::undisplayProperties_()
+  {
+    emit undisplayProperties();
+  }
+
+
+  void EditorWidget::newEditGraphSlot(const std::string&g, const std::string&s)
+  {
+    emit newEditGraph(g,s);
+  }
+
+  void EditorWidget::newRenderedGraphSlot(const std::string&g)
+  {
+    emit newRenderedGraph(g);
+  }
 
 } // end of namespace gui

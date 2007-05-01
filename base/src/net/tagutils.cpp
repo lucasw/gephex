@@ -33,13 +33,13 @@ namespace net {
 				const std::string& tag,
 				const utils::Buffer& b)
   {
-    unsigned int l = tag.length() + 1 + sizeof(unsigned int);
+    const uint32_t payload_length = tag.length()+1;
+    const unsigned int l = payload_length + sizeof(uint32_t);
     unsigned char* data = new unsigned char[l];
     
-    unsigned int* length = reinterpret_cast<unsigned int*>(data);
-    *length = tag.length()+1;
+    convert_uint32_to_le(payload_length, data);
     
-    memcpy(data+sizeof(unsigned int), tag.c_str(), tag.length()+1);
+    memcpy(data+sizeof(uint32_t), tag.c_str(), payload_length);
     
     dst = utils::Buffer(data, l) + b;
 
@@ -51,15 +51,15 @@ namespace net {
 				const utils::Buffer& src)
   {
     const unsigned char* data = src.getPtr();
-    const unsigned int l = *reinterpret_cast<const unsigned int*>(data);
+    const uint32_t l = convert_uint32_from_le(data);
 
     //std::cout << "src = '" << /*src <<*/ "', l = '" << l << "'" << std::endl;
     
-    dst = utils::Buffer(data + sizeof(unsigned int) + l,
-			src.getLen() - l - sizeof(unsigned int));
+    dst = utils::Buffer(data + sizeof(uint32_t) + l,
+			src.getLen() - l - sizeof(uint32_t));
 
     tag = std::string(reinterpret_cast<const char*>(data 
-						    + sizeof(unsigned int)),
+						    + sizeof(uint32_t)),
 		      l-1);
 
     //std::cout << "dst = '" << /*dst 

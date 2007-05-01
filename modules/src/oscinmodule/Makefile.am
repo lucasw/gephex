@@ -28,5 +28,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = oscinmodule.h oscinmodule_auto.c
 
-#EXTRA_DIST = oscinmodule.dsp oscinmodule.mak oscinmodule.dep
+#EXTRA_DIST = oscinmodule.vcproj oscinmodule.dsp oscinmodule.mak oscinmodule.dep
 

@@ -26,7 +26,7 @@
 #include <string>
 #include <map>
 
-#include <qframe.h>
+#include <QtGui/qframe.h>
 
 #include "interfaces/icontrolvaluereceiver.h"
 

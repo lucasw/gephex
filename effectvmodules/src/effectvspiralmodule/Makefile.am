@@ -17,7 +17,7 @@ effectvspiralmodule_la_SOURCES = \
         effectvspiralmodule.spec \
         effectvspiralmodule.xpm
 
-EXTRA_DIST = spiral.c effectvspiralmodule.dsp effectvspiralmodule.mak effectvspiralmodule.dep
+EXTRA_DIST = spiral.c  effectvspiralmodule.dsp effectvspiralmodule.mak effectvspiralmodule.dep
 
 effectvspiralmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

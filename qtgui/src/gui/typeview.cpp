@@ -22,25 +22,31 @@
 
 #include "typeview.h"
 
-#include <qwidget.h>
-#include <qtooltip.h>
-
 #include <iostream>
+
+#include <QtGui/qwidget.h>
+#include <QtGui/QHBoxLayout>
 
 namespace gui 
 {
 
 TypeView::TypeView(QWidget* parent, const ParamMap& params)
-  : QWidget(parent, "TypeView", 0), m_params(params)
+  : QWidget(parent,  0), m_params(params)
 {
-  setFocusPolicy(QWidget::ClickFocus);
+  setFocusPolicy(Qt::ClickFocus);
+  setSizePolicy(QSizePolicy::MinimumExpanding,
+                QSizePolicy::MinimumExpanding);
+
+  m_layout = new QHBoxLayout(this);
+  m_layout->setMargin(0);
+  m_layout->setSpacing(0);
 
   ParamMap::const_iterator it = m_params.find("help");
   if (it != m_params.end())
     {
       std::string toolTip = it->second;
       
-      QToolTip::add(this,toolTip.c_str());
+      setToolTip(toolTip.c_str());
     }
 }
 

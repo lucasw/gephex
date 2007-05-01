@@ -27,6 +27,7 @@
 #define EMULATE_INTTYPES
 #include "avformat.h"
 #include "avcodec.h"
+#include "avutil.h"
 
 
 class FFMpegWriter

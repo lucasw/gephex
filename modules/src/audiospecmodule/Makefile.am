@@ -19,7 +19,7 @@ audiospecmodule_la_SOURCES = \
         audiospecmodule.xpm
 
 EXTRA_DIST = fft.cpp \
-	audiospecmodule.dsp audiospecmodule.mak audiospecmodule.dep
+	audiospecmodule.vcproj audiospecmodule.dsp audiospecmodule.mak audiospecmodule.dep
 
 audiospecmodule_la_LDFLAGS = -module -avoid-version -no-undefined
 audiospecmodule_la_LIBADD = -lstdc++

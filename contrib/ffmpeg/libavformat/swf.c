@@ -3,21 +3,25 @@
  * Copyright (c) 2000 Fabrice Bellard.
  * Copyright (c) 2003 Tinic Uro.
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 #include "avformat.h"
+#include "bitstream.h"
+#include "riff.h"    /* for CodecTag */
 
 /* should have a generic way to indicate probable size */
 #define DUMMY_FILE_SIZE   (100 * 1024 * 1024)
@@ -29,12 +33,12 @@
 #define TAG_FREECHARACTER 3
 #define TAG_PLACEOBJECT   4
 #define TAG_REMOVEOBJECT  5
-#define TAG_STREAMHEAD    45
+#define TAG_STREAMHEAD    18
 #define TAG_STREAMBLOCK   19
 #define TAG_JPEG2         21
 #define TAG_PLACEOBJECT2  26
 #define TAG_STREAMHEAD2   45
-#define TAG_VIDEOSTREAM	  60
+#define TAG_VIDEOSTREAM   60
 #define TAG_VIDEOFRAME    61
 
 #define TAG_LONG         0x100
@@ -43,8 +47,6 @@
 #define FLAG_MOVETO      0x01
 #define FLAG_SETFILL0    0x02
 #define FLAG_SETFILL1    0x04
-
-#define SWF_VIDEO_CODEC_FLV1	0x02
 
 #define AUDIO_FIFO_SIZE 65536
 
@@ -60,7 +62,7 @@ typedef struct {
 
     offset_t duration_pos;
     offset_t tag_pos;
-    
+
     int samples_per_frame;
     int sound_samples;
     int video_samples;
@@ -78,6 +80,12 @@ typedef struct {
     int video_type;
     int audio_type;
 } SWFContext;
+
+static const CodecTag swf_codec_tags[] = {
+    {CODEC_ID_FLV1, 0x02},
+    {CODEC_ID_VP6F, 0x04},
+    {0, 0},
+};
 
 static const int sSampleRates[3][4] = {
     {44100, 48000, 32000, 0},
@@ -119,7 +127,7 @@ static int swf_mp3_info(void *data, int *byteSize, int *samplesPerFrame, int *sa
     int bitRate = 0;
     int bitsPerSlot = sBitsPerSlot[layerID];
     int isPadded = ((header >> 9) & 0x01);
-    
+
     if ( (( header >> 21 ) & 0x7ff) != 0x7ff ) {
         return 0;
     }
@@ -147,7 +155,7 @@ static int swf_mp3_info(void *data, int *byteSize, int *samplesPerFrame, int *sa
     return 1;
 }
 
-#ifdef CONFIG_ENCODERS
+#ifdef CONFIG_MUXERS
 static void put_swf_tag(AVFormatContext *s, int tag)
 {
     SWFContext *swf = s->priv_data;
@@ -202,7 +210,7 @@ static inline void max_nbits(int *nbits_ptr, int val)
         *nbits_ptr = n;
 }
 
-static void put_swf_rect(ByteIOContext *pb, 
+static void put_swf_rect(ByteIOContext *pb,
                          int xmin, int xmax, int ymin, int ymax)
 {
     PutBitContext p;
@@ -210,7 +218,7 @@ static void put_swf_rect(ByteIOContext *pb,
     int nbits, mask;
 
     init_put_bits(&p, buf, sizeof(buf));
-    
+
     nbits = 0;
     max_nbits(&nbits, xmin);
     max_nbits(&nbits, xmax);
@@ -224,7 +232,7 @@ static void put_swf_rect(ByteIOContext *pb,
     put_bits(&p, nbits, xmax & mask);
     put_bits(&p, nbits, ymin & mask);
     put_bits(&p, nbits, ymax & mask);
-    
+
     flush_put_bits(&p);
     put_buffer(pb, buf, pbBufPtr(&p) - p.buf);
 }
@@ -242,15 +250,15 @@ static void put_swf_line_edge(PutBitContext *pb, int dx, int dy)
     mask = (1 << nbits) - 1;
     put_bits(pb, 4, nbits - 2); /* 16 bits precision */
     if (dx == 0) {
-      put_bits(pb, 1, 0); 
-      put_bits(pb, 1, 1); 
+      put_bits(pb, 1, 0);
+      put_bits(pb, 1, 1);
       put_bits(pb, nbits, dy & mask);
     } else if (dy == 0) {
-      put_bits(pb, 1, 0); 
-      put_bits(pb, 1, 0); 
+      put_bits(pb, 1, 0);
+      put_bits(pb, 1, 0);
       put_bits(pb, nbits, dx & mask);
     } else {
-      put_bits(pb, 1, 1); 
+      put_bits(pb, 1, 1);
       put_bits(pb, nbits, dx & mask);
       put_bits(pb, nbits, dy & mask);
     }
@@ -267,7 +275,7 @@ static void put_swf_matrix(ByteIOContext *pb,
     int nbits;
 
     init_put_bits(&p, buf, sizeof(buf));
-    
+
     put_bits(&p, 1, 1); /* a, d present */
     nbits = 1;
     max_nbits(&nbits, a);
@@ -275,7 +283,7 @@ static void put_swf_matrix(ByteIOContext *pb,
     put_bits(&p, 5, nbits); /* nb bits */
     put_bits(&p, nbits, a);
     put_bits(&p, nbits, d);
-    
+
     put_bits(&p, 1, 1); /* b, c present */
     nbits = 1;
     max_nbits(&nbits, c);
@@ -323,14 +331,16 @@ static int swf_write_header(AVFormatContext *s)
     video_enc = NULL;
     audio_enc = NULL;
     for(i=0;i<s->nb_streams;i++) {
-        enc = &s->streams[i]->codec;
+        enc = s->streams[i]->codec;
         if (enc->codec_type == CODEC_TYPE_AUDIO)
             audio_enc = enc;
         else {
-            if ( enc->codec_id == CODEC_ID_FLV1 || enc->codec_id == CODEC_ID_MJPEG ) {
+            if ( enc->codec_id == CODEC_ID_VP6F ||
+                 enc->codec_id == CODEC_ID_FLV1 ||
+                 enc->codec_id == CODEC_ID_MJPEG ) {
                 video_enc = enc;
             } else {
-                av_log(enc, AV_LOG_ERROR, "SWF only supports FLV1 and MJPEG\n");
+                av_log(enc, AV_LOG_ERROR, "SWF only supports VP6, FLV1 and MJPEG\n");
                 return -1;
             }
         }
@@ -347,8 +357,8 @@ static int swf_write_header(AVFormatContext *s)
         swf->video_type = video_enc->codec_id;
         width = video_enc->width;
         height = video_enc->height;
-        rate = video_enc->frame_rate;
-        rate_base = video_enc->frame_rate_base;
+        rate = video_enc->time_base.den;
+        rate_base = video_enc->time_base.num;
     }
 
     if (!audio_enc ) {
@@ -360,21 +370,24 @@ static int swf_write_header(AVFormatContext *s)
     }
 
     put_tag(pb, "FWS");
-    if ( video_enc && video_enc->codec_id == CODEC_ID_FLV1 ) {
+    if ( video_enc && video_enc->codec_id == CODEC_ID_VP6F ) {
+        put_byte(pb, 8); /* version (version 8 and above support VP6 codec) */
+    } else if ( video_enc && video_enc->codec_id == CODEC_ID_FLV1 ) {
         put_byte(pb, 6); /* version (version 6 and above support FLV1 codec) */
     } else {
         put_byte(pb, 4); /* version (should use 4 for mpeg audio support) */
     }
-    put_le32(pb, DUMMY_FILE_SIZE); /* dummy size 
-                                      (will be patched if not streamed) */ 
+    put_le32(pb, DUMMY_FILE_SIZE); /* dummy size
+                                      (will be patched if not streamed) */
 
     put_swf_rect(pb, 0, width * 20, 0, height * 20);
     put_le16(pb, (rate * 256) / rate_base); /* frame rate */
     swf->duration_pos = url_ftell(pb);
     put_le16(pb, (uint16_t)(DUMMY_DURATION * (int64_t)rate / rate_base)); /* frame count */
-    
+
     /* define a shape with the jpeg inside */
-    if ( video_enc && video_enc->codec_id == CODEC_ID_FLV1 ) {
+    if ( video_enc && (video_enc->codec_id == CODEC_ID_VP6F ||
+                       video_enc->codec_id == CODEC_ID_FLV1 )) {
     } else if ( video_enc && video_enc->codec_id == CODEC_ID_MJPEG ) {
         put_swf_tag(s, TAG_DEFINESHAPE);
 
@@ -386,28 +399,28 @@ static int swf_write_header(AVFormatContext *s)
         put_byte(pb, 0x41); /* clipped bitmap fill */
         put_le16(pb, BITMAP_ID); /* bitmap ID */
         /* position of the bitmap */
-        put_swf_matrix(pb, (int)(1.0 * (1 << FRAC_BITS)), 0, 
+        put_swf_matrix(pb, (int)(1.0 * (1 << FRAC_BITS)), 0,
                         0, (int)(1.0 * (1 << FRAC_BITS)), 0, 0);
         put_byte(pb, 0); /* no line style */
-    
+
         /* shape drawing */
         init_put_bits(&p, buf1, sizeof(buf1));
         put_bits(&p, 4, 1); /* one fill bit */
         put_bits(&p, 4, 0); /* zero line bit */
-     
+
         put_bits(&p, 1, 0); /* not an edge */
         put_bits(&p, 5, FLAG_MOVETO | FLAG_SETFILL0);
         put_bits(&p, 5, 1); /* nbits */
         put_bits(&p, 1, 0); /* X */
         put_bits(&p, 1, 0); /* Y */
         put_bits(&p, 1, 1); /* set fill style 1 */
-    
+
         /* draw the rectangle ! */
         put_swf_line_edge(&p, width, 0);
         put_swf_line_edge(&p, 0, height);
         put_swf_line_edge(&p, -width, 0);
         put_swf_line_edge(&p, 0, -height);
-    
+
         /* end of shape */
         put_bits(&p, 1, 0); /* not an edge */
         put_bits(&p, 5, 0);
@@ -417,7 +430,7 @@ static int swf_write_header(AVFormatContext *s)
 
         put_swf_end_tag(s);
     }
-    
+
     if (audio_enc && audio_enc->codec_id == CODEC_ID_MP3 ) {
         int v;
 
@@ -449,7 +462,7 @@ static int swf_write_header(AVFormatContext *s)
         put_byte(&s->pb, v);
         put_le16(&s->pb, swf->samples_per_frame);  /* avg samples per frame */
         put_le16(&s->pb, 0);
-        
+
         put_swf_end_tag(s);
     }
 
@@ -457,7 +470,7 @@ static int swf_write_header(AVFormatContext *s)
     return 0;
 }
 
-static int swf_write_video(AVFormatContext *s, 
+static int swf_write_video(AVFormatContext *s,
                            AVCodecContext *enc, const uint8_t *buf, int size)
 {
     SWFContext *swf = s->priv_data;
@@ -465,7 +478,7 @@ static int swf_write_video(AVFormatContext *s,
     int c = 0;
     int outSize = 0;
     int outSamples = 0;
-    
+
     /* Flash Player limit */
     if ( swf->swf_frame_number == 16000 ) {
         av_log(enc, AV_LOG_INFO, "warning: Flash Player limit of 16000 frames reached\n");
@@ -479,13 +492,13 @@ retry_swf_audio_packet:
             int mp3SampleRate = 0;
             int mp3IsMono = 0;
             int mp3SamplesPerFrame = 0;
-            
+
             /* copy out mp3 header from ring buffer */
             uint8_t header[4];
             for (c=0; c<4; c++) {
                 header[c] = swf->audio_fifo[(swf->audio_in_pos+outSize+c) % AUDIO_FIFO_SIZE];
             }
-            
+
             if ( swf_mp3_info(header,&mp3FrameSize,&mp3SamplesPerFrame,&mp3SampleRate,&mp3IsMono) ) {
                 if ( ( swf->audio_size-outSize ) >= mp3FrameSize ) {
                     outSize += mp3FrameSize;
@@ -496,7 +509,7 @@ retry_swf_audio_packet:
                 }
             } else {
                 /* invalid mp3 data, skip forward
-                we need to do this since the Flash Player 
+                we need to do this since the Flash Player
                 does not like custom headers */
                 swf->audio_in_pos ++;
                 swf->audio_size --;
@@ -504,14 +517,15 @@ retry_swf_audio_packet:
                 goto retry_swf_audio_packet;
             }
         }
-        
+
         /* audio stream is behind video stream, bail */
         if ( ( swf->sound_samples + outSamples + swf->samples_per_frame ) < swf->video_samples ) {
             return 0;
         }
     }
 
-            if ( swf->video_type == CODEC_ID_FLV1 ) {
+            if ( swf->video_type == CODEC_ID_VP6F ||
+                 swf->video_type == CODEC_ID_FLV1 ) {
                 if ( swf->video_frame_number == 0 ) {
                     /* create a new video object */
                     put_swf_tag(s, TAG_VIDEOSTREAM);
@@ -520,9 +534,9 @@ retry_swf_audio_packet:
                     put_le16(pb, enc->width);
                     put_le16(pb, enc->height);
                     put_byte(pb, 0);
-                    put_byte(pb, SWF_VIDEO_CODEC_FLV1);
+                    put_byte(pb,codec_get_tag(swf_codec_tags,swf->video_type));
                     put_swf_end_tag(s);
-                    
+
                     /* place the video object for the first time */
                     put_swf_tag(s, TAG_PLACEOBJECT2);
                     put_byte(pb, 0x36);
@@ -545,10 +559,10 @@ retry_swf_audio_packet:
                     put_le16(pb, swf->video_frame_number );
                     put_swf_end_tag(s);
                 }
-    
+
                     /* set video frame data */
                     put_swf_tag(s, TAG_VIDEOFRAME | TAG_LONG);
-                    put_le16(pb, VIDEO_ID); 
+                    put_le16(pb, VIDEO_ID);
                     put_le16(pb, swf->video_frame_number++ );
                     put_buffer(pb, buf, size);
                     put_swf_end_tag(s);
@@ -559,29 +573,29 @@ retry_swf_audio_packet:
                     put_le16(pb, SHAPE_ID); /* shape ID */
                     put_le16(pb, 1); /* depth */
                     put_swf_end_tag(s);
-                
+
                     /* free the bitmap */
                     put_swf_tag(s, TAG_FREECHARACTER);
                     put_le16(pb, BITMAP_ID);
                     put_swf_end_tag(s);
                 }
-        
+
                 put_swf_tag(s, TAG_JPEG2 | TAG_LONG);
-        
+
                 put_le16(pb, BITMAP_ID); /* ID of the image */
-        
+
                 /* a dummy jpeg header seems to be required */
-                put_byte(pb, 0xff); 
+                put_byte(pb, 0xff);
                 put_byte(pb, 0xd8);
                 put_byte(pb, 0xff);
                 put_byte(pb, 0xd9);
                 /* write the jpeg image */
                 put_buffer(pb, buf, size);
-        
+
                 put_swf_end_tag(s);
-        
+
                 /* draw the shape */
-        
+
                 put_swf_tag(s, TAG_PLACEOBJECT);
                 put_le16(pb, SHAPE_ID); /* shape ID */
                 put_le16(pb, 1); /* depth */
@@ -590,7 +604,7 @@ retry_swf_audio_packet:
             } else {
                 /* invalid codec */
             }
-    
+
             swf->swf_frame_number ++;
 
     swf->video_samples += swf->samples_per_frame;
@@ -604,7 +618,7 @@ retry_swf_audio_packet:
             put_byte(pb,swf->audio_fifo[(swf->audio_in_pos+c) % AUDIO_FIFO_SIZE]);
         }
         put_swf_end_tag(s);
-    
+
         /* update FIFO */
         swf->sound_samples += outSamples;
         swf->audio_in_pos += outSize;
@@ -615,13 +629,13 @@ retry_swf_audio_packet:
     /* output the frame */
     put_swf_tag(s, TAG_SHOWFRAME);
     put_swf_end_tag(s);
-    
+
     put_flush_packet(&s->pb);
-    
+
     return 0;
 }
 
-static int swf_write_audio(AVFormatContext *s, 
+static int swf_write_audio(AVFormatContext *s,
                            AVCodecContext *enc, const uint8_t *buf, int size)
 {
     SWFContext *swf = s->priv_data;
@@ -651,7 +665,7 @@ static int swf_write_audio(AVFormatContext *s,
 
 static int swf_write_packet(AVFormatContext *s, AVPacket *pkt)
 {
-    AVCodecContext *codec = &s->streams[pkt->stream_index]->codec;
+    AVCodecContext *codec = s->streams[pkt->stream_index]->codec;
     if (codec->codec_type == CODEC_TYPE_AUDIO)
         return swf_write_audio(s, codec, pkt->data, pkt->size);
     else
@@ -667,14 +681,14 @@ static int swf_write_trailer(AVFormatContext *s)
 
     video_enc = NULL;
     for(i=0;i<s->nb_streams;i++) {
-        enc = &s->streams[i]->codec;
+        enc = s->streams[i]->codec;
         if (enc->codec_type == CODEC_TYPE_VIDEO)
             video_enc = enc;
     }
 
     put_swf_tag(s, TAG_END);
     put_swf_end_tag(s);
-    
+
     put_flush_packet(&s->pb);
 
     /* patch file size and number of frames if not streamed */
@@ -685,24 +699,24 @@ static int swf_write_trailer(AVFormatContext *s)
         url_fseek(pb, swf->duration_pos, SEEK_SET);
         put_le16(pb, video_enc->frame_number);
     }
-    
+
     av_free(swf->audio_fifo);
 
     return 0;
 }
-#endif //CONFIG_ENCODERS
+#endif //CONFIG_MUXERS
 
 /*********************************************/
 /* Extract FLV encoded frame and MP3 from swf
    Note that the detection of the real frame
    is inaccurate at this point as it can be
-   quite tricky to determine, you almost certainly 
+   quite tricky to determine, you almost certainly
    will get a bad audio/video sync */
 
 static int get_swf_tag(ByteIOContext *pb, int *len_ptr)
 {
     int tag, len;
-    
+
     if (url_feof(pb))
         return -1;
 
@@ -712,6 +726,7 @@ static int get_swf_tag(ByteIOContext *pb, int *len_ptr)
     if (len == 0x3f) {
         len = get_le32(pb);
     }
+//    av_log(NULL, AV_LOG_DEBUG, "Tag: %d - Len: %d\n", tag, len);
     *len_ptr = len;
     return tag;
 }
@@ -722,7 +737,7 @@ static int swf_probe(AVProbeData *p)
     /* check file header */
     if (p->buf_size <= 16)
         return 0;
-    if (p->buf[0] == 'F' && p->buf[1] == 'W' &&
+    if ((p->buf[0] == 'F' || p->buf[0] == 'C') && p->buf[1] == 'W' &&
         p->buf[2] == 'S')
         return AVPROBE_SCORE_MAX;
     else
@@ -743,7 +758,14 @@ static int swf_read_header(AVFormatContext *s, AVFormatParameters *ap)
         return -1;
     s->priv_data = swf;
 
-    if ((get_be32(pb) & 0xffffff00) != MKBETAG('F', 'W', 'S', 0))
+    tag = get_be32(pb) & 0xffffff00;
+
+    if (tag == MKBETAG('C', 'W', 'S', 0))
+    {
+        av_log(s, AV_LOG_ERROR, "Compressed SWF format not supported\n");
+        return AVERROR_IO;
+    }
+    if (tag != MKBETAG('F', 'W', 'S', 0))
         return AVERROR_IO;
     get_le32(pb);
     /* skip rectangle size */
@@ -752,9 +774,9 @@ static int swf_read_header(AVFormatContext *s, AVFormatParameters *ap)
     url_fskip(pb, len);
     frame_rate = get_le16(pb);
     get_le16(pb); /* frame count */
-    
-    /* The Flash Player converts 8.8 frame rates 
-       to milliseconds internally. Do the same to get 
+
+    /* The Flash Player converts 8.8 frame rates
+       to milliseconds internally. Do the same to get
        a correct framerate */
     swf->ms_per_frame = ( 1000 * 256 ) / frame_rate;
     swf->samples_per_frame = 0;
@@ -766,8 +788,8 @@ static int swf_read_header(AVFormatContext *s, AVFormatParameters *ap)
         if (tag < 0) {
             if ( ast || vst ) {
                 if ( vst && ast ) {
-                    vst->codec.frame_rate = ast->codec.sample_rate / swf->samples_per_frame;
-                    vst->codec.frame_rate_base = 1;
+                    vst->codec->time_base.den = ast->codec->sample_rate / swf->samples_per_frame;
+                    vst->codec->time_base.num = 1;
                 }
                 break;
             }
@@ -775,21 +797,23 @@ static int swf_read_header(AVFormatContext *s, AVFormatParameters *ap)
             return AVERROR_IO;
         }
         if ( tag == TAG_VIDEOSTREAM && !vst) {
+            int codec_id;
             swf->ch_id = get_le16(pb);
             get_le16(pb);
             get_le16(pb);
             get_le16(pb);
             get_byte(pb);
             /* Check for FLV1 */
-            if ( get_byte(pb) == SWF_VIDEO_CODEC_FLV1 ) {
+            codec_id = codec_get_id(swf_codec_tags, get_byte(pb));
+            if ( codec_id ) {
                 vst = av_new_stream(s, 0);
                 av_set_pts_info(vst, 24, 1, 1000); /* 24 bit pts in ms */
-    
-                vst->codec.codec_type = CODEC_TYPE_VIDEO;
-                vst->codec.codec_id = CODEC_ID_FLV1;
+
+                vst->codec->codec_type = CODEC_TYPE_VIDEO;
+                vst->codec->codec_id = codec_id;
                 if ( swf->samples_per_frame ) {
-                    vst->codec.frame_rate = 1000. / swf->ms_per_frame;
-                    vst->codec.frame_rate_base = 1;
+                    vst->codec->time_base.den = 1000. / swf->ms_per_frame;
+                    vst->codec->time_base.num = 1;
                 }
             }
         } else if ( ( tag == TAG_STREAMHEAD || tag == TAG_STREAMHEAD2 ) && !ast) {
@@ -805,38 +829,39 @@ static int swf_read_header(AVFormatContext *s, AVFormatParameters *ap)
                     get_le16(pb);
                 }
                 ast = av_new_stream(s, 1);
-                av_set_pts_info(ast, 24, 1, 1000); /* 24 bit pts in ms */
                 if (!ast)
                     return -ENOMEM;
+                av_set_pts_info(ast, 24, 1, 1000); /* 24 bit pts in ms */
 
                 if (v & 0x01)
-                    ast->codec.channels = 2;
+                    ast->codec->channels = 2;
                 else
-                    ast->codec.channels = 1;
+                    ast->codec->channels = 1;
 
                 switch((v>> 2) & 0x03) {
                 case 1:
-                    ast->codec.sample_rate = 11025;
+                    ast->codec->sample_rate = 11025;
                     break;
                 case 2:
-                    ast->codec.sample_rate = 22050;
+                    ast->codec->sample_rate = 22050;
                     break;
                 case 3:
-                    ast->codec.sample_rate = 44100;
+                    ast->codec->sample_rate = 44100;
                     break;
                 default:
                     av_free(ast);
                     return AVERROR_IO;
                 }
-                ast->codec.codec_type = CODEC_TYPE_AUDIO;
-                ast->codec.codec_id = CODEC_ID_MP3;
+                ast->codec->codec_type = CODEC_TYPE_AUDIO;
+                ast->codec->codec_id = CODEC_ID_MP3;
+                ast->need_parsing = 1;
             }
         } else {
             url_fskip(pb, len);
         }
     }
     url_fseek(pb, firstTagOff, SEEK_SET);
-    
+
     return 0;
 }
 
@@ -846,36 +871,35 @@ static int swf_read_packet(AVFormatContext *s, AVPacket *pkt)
     ByteIOContext *pb = &s->pb;
     AVStream *st = 0;
     int tag, len, i, frame;
-    
+
     for(;;) {
         tag = get_swf_tag(pb, &len);
-        if (tag < 0) 
+        if (tag < 0)
             return AVERROR_IO;
         if (tag == TAG_VIDEOFRAME) {
             for( i=0; i<s->nb_streams; i++ ) {
-        	st = s->streams[i];
+                st = s->streams[i];
                 if (st->id == 0) {
                     if ( get_le16(pb) == swf->ch_id ) {
                         frame = get_le16(pb);
-                        av_new_packet(pkt, len-4);
+                        av_get_packet(pb, pkt, len-4);
                         pkt->pts = frame * swf->ms_per_frame;
                         pkt->stream_index = st->index;
-                        get_buffer(pb, pkt->data, pkt->size);
                         return pkt->size;
                     } else {
                         url_fskip(pb, len-2);
                         continue;
                     }
                 }
-            }    
+            }
             url_fskip(pb, len);
         } else if (tag == TAG_STREAMBLOCK) {
             for( i=0; i<s->nb_streams; i++ ) {
-        	st = s->streams[i];
+                st = s->streams[i];
                 if (st->id == 1) {
-                    av_new_packet(pkt, len);
+                    url_fskip(pb, 4);
+                    av_get_packet(pb, pkt, len-4);
                     pkt->stream_index = st->index;
-                    get_buffer(pb, pkt->data, pkt->size);
                     return pkt->size;
                 }
             }
@@ -892,7 +916,8 @@ static int swf_read_close(AVFormatContext *s)
      return 0;
 }
 
-static AVInputFormat swf_iformat = {
+#ifdef CONFIG_SWF_DEMUXER
+AVInputFormat swf_demuxer = {
     "swf",
     "Flash format",
     sizeof(SWFContext),
@@ -901,9 +926,9 @@ static AVInputFormat swf_iformat = {
     swf_read_packet,
     swf_read_close,
 };
-
-#ifdef CONFIG_ENCODERS
-static AVOutputFormat swf_oformat = {
+#endif
+#ifdef CONFIG_SWF_MUXER
+AVOutputFormat swf_muxer = {
     "swf",
     "Flash format",
     "application/x-shockwave-flash",
@@ -915,13 +940,4 @@ static AVOutputFormat swf_oformat = {
     swf_write_packet,
     swf_write_trailer,
 };
-#endif //CONFIG_ENCODERS
-
-int swf_init(void)
-{
-    av_register_input_format(&swf_iformat);
-#ifdef CONFIG_ENCODERS
-    av_register_output_format(&swf_oformat);
-#endif //CONFIG_ENCODERS
-    return 0;
-}
+#endif

@@ -1,4 +1,4 @@
-EXTRA_DIST = utils.dsp utils.mak utils.dep
+EXTRA_DIST = utils.vcproj utils.dsp utils.mak utils.dep
 
 TESTS=utilstest
 

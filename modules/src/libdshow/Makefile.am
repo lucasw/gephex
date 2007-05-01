@@ -1,4 +1,4 @@
-EXTRA_DIST = libdshow.dsp libdshow.mak libdshow.dep \
+EXTRA_DIST = libdshow.vcproj libdshow.dsp libdshow.mak libdshow.dep \
 	dshowutils.cpp \
 	dshowutils.h \
 	samplecallback.cpp \

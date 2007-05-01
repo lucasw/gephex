@@ -26,7 +26,6 @@
 #include <string> 
 #include <vector>
 
-//#include <qwidget.h>
 class QWidget;
 
 namespace gui
@@ -39,6 +38,8 @@ namespace gui
    * This class aims to be a simple and clean wrapper for the QT QListView.
    * It is much less flexible than QListView an the performance is
    * probably worse.
+   *
+   * Note: with Qt >= 4.0, there is probably a much better way to do this.
    */
 
   class TreeView
@@ -46,7 +47,7 @@ namespace gui
   public:
 
     TreeView(QWidget* parent, const std::string& name,
-		const std::vector<std::string>& columnNames);
+             const std::vector<std::string>& columnNames);
 
     virtual ~TreeView();
 
@@ -55,7 +56,7 @@ namespace gui
     /**
      * Inserts a new Item into the TreeView.
      * @param item is the Item that is inserted
-     * @param parent is the parent item. If parent=0 item will be
+     * @param parent is the parent item. If parent==0, item will be
      *               inserted as a top level item
      */
     void insertItem(TreeViewItem& item, TreeViewItem* parent);

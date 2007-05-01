@@ -1,7 +1,7 @@
 /*
- * imlib2 based hook 
+ * imlib2 based hook
  * Copyright (c) 2002 Philip Gladstone
- * 
+ *
  * This module implements a text overlay for a video image. Currently it
  * supports a fixed overlay or reading the text from a file. The string
  * is passed through strftime so that it is easy to imprint the date and
@@ -19,31 +19,34 @@
  * This module is very much intended as an example of what could be done.
  * For example, you could overlay an image (even semi-transparent) like
  * TV stations do. You can manipulate the image using imlib2 functions
- * in any way. 
+ * in any way.
  *
  * One caution is that this is an expensive process -- in particular the
  * conversion of the image into RGB and back is time consuming. For some
  * special cases -- e.g. painting black text -- it would be faster to paint
  * the text into a bitmap and then combine it directly into the YUV
- * image. However, this code is fast enough to handle 10 fps of 320x240 on a 
+ * image. However, this code is fast enough to handle 10 fps of 320x240 on a
  * 900MHz Duron in maybe 15% of the CPU.
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include "framehook.h"
+#include "swscale.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,7 +58,9 @@
 #include <sys/time.h>
 #include <time.h>
 #include <X11/Xlib.h>
-#include <Imlib2.h>                                                             
+#include <Imlib2.h>
+
+static int sws_flags = SWS_BICUBIC;
 
 typedef struct {
     int dummy;
@@ -66,6 +71,11 @@ typedef struct {
     int x;
     int y;
     struct _CachedImage *cache;
+
+    // This vhook first converts frame to RGB ...
+    struct SwsContext *toRGB_convert_ctx;
+    // ... and then converts back frame from RGB to initial format
+    struct SwsContext *fromRGB_convert_ctx;
 } ContextInfo;
 
 typedef struct _CachedImage {
@@ -85,8 +95,11 @@ void Release(void *ctx)
         imlib_free_image();
         av_free(ci->cache);
     }
-    if (ctx)
+    if (ctx) {
+        sws_freeContext(ci->toRGB_convert_ctx);
+        sws_freeContext(ci->fromRGB_convert_ctx);
         av_free(ctx);
+    }
 }
 
 int Configure(void **ctxp, int argc, char *argv[])
@@ -138,13 +151,15 @@ int Configure(void **ctxp, int argc, char *argv[])
         return -1;
     }
     imlib_context_set_font(ci->fn);
-    imlib_context_set_direction(IMLIB_TEXT_TO_RIGHT);                           
+    imlib_context_set_direction(IMLIB_TEXT_TO_RIGHT);
 
     if (color) {
         char buff[256];
         int done = 0;
 
-        f = fopen("/usr/lib/X11/rgb.txt", "r");
+        f = fopen("/usr/share/X11/rgb.txt", "r");
+        if (!f)
+            f = fopen("/usr/lib/X11/rgb.txt", "r");
         if (!f) {
             fprintf(stderr, "Failed to find rgb.txt\n");
             return -1;
@@ -213,20 +228,29 @@ void Process(void *ctx, AVPicture *picture, enum PixelFormat pix_fmt, int width,
     imlib_context_set_image(image);
     data = imlib_image_get_data();
 
-    if (pix_fmt != PIX_FMT_RGBA32) {
         avpicture_fill(&picture1, (uint8_t *) data, PIX_FMT_RGBA32, width, height);
-        if (img_convert(&picture1, PIX_FMT_RGBA32, 
-                        picture, pix_fmt, width, height) < 0) {
-            goto done;
-        }
-    } else {
-        av_abort();
+
+    // if we already got a SWS context, let's realloc if is not re-useable
+    ci->toRGB_convert_ctx = sws_getCachedContext(ci->toRGB_convert_ctx,
+                                width, height, pix_fmt,
+                                width, height, PIX_FMT_RGBA32,
+                                sws_flags, NULL, NULL, NULL);
+    if (ci->toRGB_convert_ctx == NULL) {
+        av_log(NULL, AV_LOG_ERROR,
+               "Cannot initialize the toRGB conversion context\n");
+        exit(1);
     }
+
+// img_convert parameters are          2 first destination, then 4 source
+// sws_scale   parameters are context, 4 first source,      then 2 destination
+    sws_scale(ci->toRGB_convert_ctx,
+             picture->data, picture->linesize, 0, height,
+             picture1.data, picture1.linesize);
 
     imlib_image_set_has_alpha(0);
 
     {
-        int wid, hig, h_a, v_a;                                                   
+        int wid, hig, h_a, v_a;
         char buff[1000];
         char tbuff[1000];
         char *tbp = ci->text;
@@ -267,13 +291,20 @@ void Process(void *ctx, AVPicture *picture, enum PixelFormat pix_fmt, int width,
         }
     }
 
-    if (pix_fmt != PIX_FMT_RGBA32) {
-        if (img_convert(picture, pix_fmt, 
-                        &picture1, PIX_FMT_RGBA32, width, height) < 0) {
-        }
+    ci->fromRGB_convert_ctx = sws_getCachedContext(ci->fromRGB_convert_ctx,
+                                    width, height, PIX_FMT_RGBA32,
+                                    width, height, pix_fmt,
+                                    sws_flags, NULL, NULL, NULL);
+    if (ci->fromRGB_convert_ctx == NULL) {
+        av_log(NULL, AV_LOG_ERROR,
+               "Cannot initialize the fromRGB conversion context\n");
+        exit(1);
     }
+// img_convert parameters are          2 first destination, then 4 source
+// sws_scale   parameters are context, 4 first source,      then 2 destination
+    sws_scale(ci->fromRGB_convert_ctx,
+             picture1.data, picture1.linesize, 0, height,
+             picture->data, picture->linesize);
 
-done:
-    ;
 }
 

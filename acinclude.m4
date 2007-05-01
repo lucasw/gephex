@@ -144,6 +144,77 @@ decoder = Creators::CreateVideoDecoder(bh) ],
     fi
     rm -f conf.avifiletest
 ])
+dnl dx.m4
+dnl set directx compiler and linker flags
+dnl Note: the variable DXSDK_DIR must be set
+dnl or --with-dxsdk-dir must be given
+dnl
+dnl AM_PATH_DX(MINIMUM_VERSION, 
+dnl            [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+AC_DEFUN([AM_PATH_DX],
+[
+AC_CHECKING([for DirectX ...])
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+saved_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+saved_LIBRARY_PATH="$LIBRARY_PATH"
+saved_CXXFLAGS="$CXXFLAGS"
+saved_LDFLAGS="$LDFLAGS"
+saved_LIBS="$LIBS"
+
+HAVE_DX=no
+min_dx_version=ifelse([$1], ,8.0, $1)
+
+AC_ARG_WITH([dxsdk-dir],
+  [AC_HELP_STRING([--with-dxsdk-dir=PFX],
+                  [Prefix where DirectX is installed (optional, if not given, the environment variable DXSDK_DIR is used)])],
+  dxsdk_dir="$withval",
+  dxsdk_dir=""
+)
+
+dnl Check whether the headers can be found
+
+if test "x$dxsdk_dir" = "x"
+then
+  dxsdk_dir=$DXSDK_DIR
+  AC_MSG_NOTICE([using environment variable DXSDK_DIR...])
+fi
+
+AC_MSG_NOTICE([looking in $dxsdk_dir/Include ...])
+
+if test -e $dxsdk_dir/Include/ddraw.h
+then
+  HAVE_DX=yes
+  DX_CXXFLAGS="-I$dxsdk_dir/Include"
+  DX_LIBS="-L$dxsdk_dir/Lib -lddraw"
+
+  AC_MSG_RESULT([found in $dxsdk_dir])
+else
+  AC_MSG_RESULT([not found])
+  HAVE_DX=no
+fi
+
+if test "x$HAVE_DX" = "xyes"
+then
+  ifelse([$2], , :, [$2])
+else
+  ifelse([$3], , :, [$3])
+fi
+
+AC_SUBST(DX_CXXFLAGS)
+AC_SUBST(DX_LIBS)
+
+AC_LANG_RESTORE()
+
+LD_LIBRARY_PATH="$saved_LD_LIBRARY_PATH"
+LIBRARY_PATH="$saved_LIBRARY_PATH"
+CXXFLAGS="$saved_CXXFLAGS"
+LDFLAGS="$saved_LDFLAGS"
+LIBS="$saved_LIBS"
+dnl rm -f conf.qttest
+])
 
 dnl 
 dnl CHECK_EXTRA_LIB([LIB-NAME], [LIB-CHECK], [DEFAULT],
@@ -228,11 +299,14 @@ dnl    - replaced AC_ERROR with AC_MSG_RESULT
 dnl    - moved evaluation of ACTION-IF-FOUND and ACTION-IF-NOT-FOUND
 dnl      to the end
 dnl    - added a lot more guess dirs
+dnl    - adapted to qt4 only
+dnl    - adapted to mac os x frameworks
 dnl     
 dnl Original version from Rik Hemsley:
 dnl   Copyright (C) 2001 Rik Hemsley (rikkus) <rik@kde.org>
 
-dnl AM_PATH_QT(MINIMUM_VERSION, SHAREDLIBEXT, 
+
+dnl AM_PATH_QT(MINIMUM_VERSION, LIBEXT, 
 dnl            [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN([AM_PATH_QT],
 [
@@ -249,15 +323,14 @@ saved_LIBS="$LIBS"
 
 # the test looks inside the following files to find the qt headers, libs
 # and binaries
-GUESS_QT_INC_DIRS="$QTDIR/include $QTDIR/include/qt /usr/include /usr/include/qt /usr/include/qt3 /usr/local/include /usr/local/include/qt /usr/local/include/qt3 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt3 /usr/lib/qt/include /usr/lib/qt3/include /usr/lib/qt-3/include /usr/lib/qt-3.0/include /usr/lib/qt-3.1/include /usr/lib/qt-3.2/include /usr/lib/qt-3.3/include /usr/lib/qt-3.4/include /sw/include/qt"
+GUESS_QT_INC_DIRS="$QTDIR/include $QTDIR/include/qt /usr/include /usr/include/qt  /usr/include/qt4 /usr/local/include /usr/local/include/qt /usr/local/include/qt4 /usr/X11R6/include/ /usr/X11R6/include/qt /usr/X11R6/include/X11/qt /usr/X11R6/include/qt4 /usr/lib/qt/include /usr/lib/qt4/include /usr/lib/qt-4/include /usr/lib/qt-4.0/include /usr/lib/qt-4.1/include /usr/lib/qt-4.2/include /sw/include/qt"
 
-GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt3/lib /usr/lib/qt-3/lib /usr/lib/qt-3.0/lib /usr/lib/qt-3.1/lib /usr/lib/qt-3.2/lib /usr/lib/qt-3.3/lib /usr/lib/qt-3.4/lib /sw/lib"
+GUESS_QT_LIB_DIRS="$QTDIR/lib /usr/lib /usr/local/lib /usr/X11R6/lib /usr/local/qt/lib /usr/lib/qt/lib /usr/lib/qt4/lib /usr/lib/qt-4/lib /usr/lib/qt-4.0/lib /usr/lib/qt-4.1/lib /usr/lib/qt-4.2/lib /usr/lib/qt-4.3/lib /usr/lib/qt-4.4/lib /sw/lib"
 
-GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt2 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt3/bin /usr/lib/qt-3/bin /usr/lib/qt-3.0/bin /usr/lib/qt-3.1/bin /usr/lib/qt-3.2/bin /usr/lib/qt-3.3/bin /usr/lib/qt-3.4/bin /sw/bin"
-
+GUESS_QT_BIN_DIRS="$QTDIR/bin /usr/bin /usr/local/bin /usr/local/bin/qt4 /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt4/bin /usr/lib/qt-4/bin /usr/lib/qt-340/bin /usr/lib/qt-4.1/bin /usr/lib/qt-4.2/bin /usr/lib/qt-4.3/bin /usr/lib/qt-4.4/bin /sw/bin"
 
 HAVE_QT=no
-min_qt_version=ifelse([$1], ,2.3.0, $1)
+min_qt_version=ifelse([$1], ,4.0.0, $1)
 
 AC_ARG_WITH([qt-libdir],
   [AC_HELP_STRING([--with-qt-libdir=PFX],
@@ -291,13 +364,26 @@ else
 
   for dir in $GUESS_QT_INC_DIRS
   do
-    if test -e $dir/qt.h
+    if test -e $dir/qobject.h || test -e $dir/Qt/qobject.h
     then
-      qt_incdir=$dir
+      qt_incdir="$dir -I$dir/QtCore"
       AC_MSG_RESULT([assuming $dir])
       break
     fi
+
+    if test -e $dir/../lib/QtCore.framework/Headers/qobject.h
+    then
+      qt_incdir="$dir/../lib/QtCore.framework/Headers -F$dir/../lib"
+      AC_MSG_RESULT([using frameworks, assuming $dir])
+      break
+    fi
+
   done
+
+  if test "x$qt_incdir" = "x"
+  then
+    AC_MSG_RESULT([not found])
+  fi
 
 fi
 
@@ -305,51 +391,47 @@ dnl If we weren't given qt_libdir, have a guess.
 
 AC_MSG_CHECKING([library path])
 
-qt_mt=no
-
 if test "x$qt_libdir" != "x"
 then
   AC_MSG_RESULT([specified as $qt_libdir])
- if test -e $qt_libdir/libqt.$2
- then
-     qt_mt=no
- else
-     qt_mt=yes
- fi
 else
-
   for dir in $GUESS_QT_LIB_DIRS
   do
-    if test -e $dir/libqt.$2
+    if test -e $dir/libQtCore.$2
     then
       qt_libdir=$dir
-      AC_MSG_RESULT([assuming $dir/libqt.$2])
+      qt_ld_flag="-lQtCore -lQtGui"
+      AC_MSG_RESULT([assuming $dir])
+      break
+    fi
+
+    if test -e $dir/libQtCore4.$2
+    then
+      qt_libdir=$dir
+      qt_ld_flag="-lQtCore4 -lQtGui4"
+      AC_MSG_RESULT([assuming $dir])
+      break
+    fi
+
+    dnl Look for frameworks
+
+    if test -e $dir/QtCore.framework
+    then
+      qt_libdir=$dir
+      qt_ld_flag="-F$dir -framework QtCore -framework QtGui"
+      AC_MSG_RESULT([using frameworks, assuming $dir])
       break
     fi
   done
 
-dnl if not found look for libqt-mt
-  if test "x$qt_libdir" = "x"
+  if test "x$qt_ld_flag" = "x"
   then
-    for dir in $GUESS_QT_LIB_DIRS
-    do
-      if test -e $dir/libqt-mt.$2
-      then
-        qt_mt=yes
-        qt_libdir=$dir
-        AC_MSG_RESULT([assuming $dir/libqt-mt.$2])
-        break
-      fi
-    done
+    AC_MSG_RESULT([not found])
   fi
+
 fi
 
-if test "x$qt_mt" = "xno"
-then
-  qt_ld_flag="-lqt"
-else
-  qt_ld_flag="-lqt-mt"
-fi
+
 dnl If we weren't given qt_bindir, have a guess.
 
 AC_MSG_CHECKING([binary directory])
@@ -368,6 +450,11 @@ else
       break
     fi
   done
+
+  if test "x$qt_bindir" = "x"
+  then
+    AC_MSG_RESULT([not found])
+  fi
 fi
 
 dnl ifelse is talked about in m4 docs
@@ -375,7 +462,7 @@ dnl ifelse is talked about in m4 docs
 if test "x$qt_incdir" = "x"
 then
   AC_MSG_RESULT([Can't find includes])
-elif test "x$qt_libdir" = "x"
+elif test "x$qt_ld_flag" = "x"
 then
   AC_MSG_RESULT([Can't find library])
 elif test "x$qt_bindir" = "x"
@@ -385,10 +472,12 @@ else
   HAVE_QT=yes
 fi
 
-  LDFLAGS="$LDFLAGS -L$qt_libdir"
-  LIBS="$LIBS $qt_ld_flag"
-  CXXFLAGS="$CXXFLAGS -I$qt_incdir"
-  LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$qt_libdir"
+LDFLAGS="$LDFLAGS -L$qt_libdir"
+LIBS="$LIBS $qt_ld_flag"
+
+CXXFLAGS="$CXXFLAGS -I$qt_incdir"
+
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$qt_libdir"
 
 dnl we got this far, now start checking if we have the right version
 if test "x$HAVE_QT" = "xyes"
@@ -401,7 +490,7 @@ then
 #include <stdlib.h>
 #include <string.h>
 
-#include <qglobal.h>
+#include <QtCore/qglobal.h>
 
 int
 main ()
@@ -439,6 +528,7 @@ main ()
 	HAVE_QT=yes
     ],
     [
+	AC_MSG_RESULT(no)
         HAVE_QT=no
     ])
 fi
@@ -468,6 +558,7 @@ then
   if test "x$found_qt" = "xyes"
   then
     QT_CXXFLAGS="-I$qt_incdir"
+
     QT_LIBS="-L$qt_libdir $qt_ld_flag"
     MOC="$qt_bindir/moc"
     UIC="$qt_bindir/uic"

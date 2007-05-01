@@ -26,4 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = audiowavegenmodule.h audiowavegenmodule_auto.c
-EXTRA_DIST = audiowavegenmodule.dsp audiowavegenmodule.mak audiowavegenmodule.dep
+EXTRA_DIST = audiowavegenmodule.vcproj audiowavegenmodule.dsp audiowavegenmodule.mak audiowavegenmodule.dep

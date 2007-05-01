@@ -22,9 +22,8 @@
 
 #include "propertyview.h"
 
-#include <qlayout.h>
-#include <qtable.h>
-//#include <qscrollview.h>
+#include <QtGui/QLayout>
+#include <QtGui/QTableWidget>
 
 #include "ipropertydescription.h"
 #include "iwidgetconstructor.h"
@@ -35,14 +34,14 @@ namespace gui
   static const int NUM_ROWS = 32;
 
   PropertyView::PropertyView(QWidget* parent)
-    : QWidget(parent,"Property View",0), table(0)
+    : QWidget(parent), table(0)
   {
-	  m_layout = new QHBoxLayout(this);
+    m_layout = new QHBoxLayout(this);
   }
 
   PropertyView::~PropertyView()
   {
-	  deleteTable();
+    deleteTable();
   }
 
   void PropertyView::deleteTable()
@@ -58,17 +57,8 @@ namespace gui
 	    ctor->destroyWidget(w);
 	  }
 
-		/* for (int i = 0; i < table->numRows(); ++i)
-	  {
-	    for (int j = 0; j < table->numCols(); ++j)
-	      {
-		if (table->cellWidget(i,j) != 0)
-		  table->clearCellWidget(i,j);
-	      }
-	  }*/
-
-	delete table;
 	widgetCtors.clear();
+	delete table;
 	table = 0;
       }
   }
@@ -79,61 +69,43 @@ namespace gui
 
     std::list<PropertyEntry> entries = desc.getEntries();
 
-    table = new QTable( entries.size() , 3, this, "Property Table");
-	  
-    QHeader* header = table->horizontalHeader();
-	
-    header->setLabel(0,"Property", 85);
-    header->setLabel(1,"Value", 115);
-    header->setLabel(2,"hide", 30);
-	
-    table->setLeftMargin( 0 );
-    table->verticalHeader()->hide();
+    table = new QTableWidget(entries.size(), 2, this);
+	      
+    QStringList headerLabels;
+    headerLabels.append("Value");
+    headerLabels.append("Hide");
+
+    table->setHorizontalHeaderLabels(headerLabels);
+
     table->setShowGrid(false);
 
-    // resize colum if content is larger then columsize
-    /*      for (int i = 0; i < 3; ++i)
-	    table->setColumnStretchable(i,true);*/
-
-    for (int i = 0; i < table->numRows(); ++i)
-      {
-	table->setRowHeight(i,10);
-	//	  table->setRowStretchable(i, true);
-      }
-    
     int rowIndex = 0;
     for (std::list<PropertyEntry>::const_iterator it = entries.begin(); 
-	 it != entries.end(); ++it)
+	 it != entries.end(); ++it, ++rowIndex)
       {
 	const PropertyEntry& current = *it;
 		
-	table->setItem(rowIndex,0,new QTableItem( table, QTableItem::Never,
-						   current.getName().c_str()));
+	table->setVerticalHeaderItem(rowIndex,
+				     new QTableWidgetItem(current.getName().c_str()));
 
 	const std::list<const IWidgetConstructor*>& wCtors = current.getWidgetCtors();
-	int colIndex = 1;
+	int colIndex = 0;
 	for (std::list<const IWidgetConstructor*>::const_iterator it2 = wCtors.begin();
-	     it2 != wCtors.end(); ++it2)
+	     it2 != wCtors.end(); ++it2, ++colIndex)
 	  {
 	    const IWidgetConstructor* ctor = *it2;
 	    QWidget* widget = ctor->constructWidget(table);
 
             if (table->rowHeight(rowIndex) < widget->height())
-              table->setRowHeight(rowIndex, widget->height());
+	      table->setRowHeight(rowIndex, widget->height());
 
 	    table->setCellWidget(rowIndex,colIndex,widget);
 	    
-	    widgetCtors.push_back(std::pair<const IWidgetConstructor*,
-				  QWidget*>(ctor,widget));
-
-	    ++colIndex;
+	    widgetCtors.push_back(std::make_pair(ctor,widget));
 	  }
-
-	++rowIndex;
       }
 
     m_layout->addWidget(table);
-    m_layout->activate();
     
     table->show();
   }

@@ -51,7 +51,7 @@ public:
   virtual void registerTypeClass(int id, const ITypeClass& typeClass);
 
 private:
-  typedef std::map<int, utils::AutoPtr<ITypeClass> > ClassMap;
+  typedef std::map<int, const ITypeClass* > ClassMap;
   ClassMap typeClasses;
 };
 

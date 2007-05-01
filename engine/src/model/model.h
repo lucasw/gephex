@@ -235,7 +235,7 @@ namespace model
       void deleteModule(utils::AutoPtr<Graph>, int moduleID);
 
 #ifndef NDEBUG
-      void Model::checkGraphSerialisation();
+      void checkGraphSerialisation();
 #endif
 
     };

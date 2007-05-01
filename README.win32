@@ -1,3 +1,21 @@
+0. Overview
+============
+
+This document describes how to build gephex on win32 with Visual Studio 6
+and Visual Studio .Net 2003.
+For an alternative way of building gephex with MinGW, please have a look
+at our wiki: http://wiki.gephex.org/BuildMinGW.
+
+
+One thing upfront: If you plan to build the gui with either version of
+Visual Studio you WILL need a recent version of Qt, that is,
+a version higher than 4.0.
+The open-source version will not work, because it contains libs only for
+MinGW, not for Visual Studio.
+
+
+1. Building with Visual Studio 6
+=================================
 
 The following programs and libraries are needed
 to compile gephex on win32:
@@ -5,7 +23,7 @@ to compile gephex on win32:
   * msvc 6 (for higher versions (7/2003.NET) see at the bottom)
   * python
   * nasm
-  * libqt (2.3nc)
+  * libqt
   * sdl
   * sdl-image
   * sdl-ttf
@@ -34,8 +52,8 @@ If everything works out, the necessary dlls are now in
 There are two ways to build gephex
 (all paths are relative to your gephex dir):
 
- 1/ via the vs6 ide
- ------------------
+ 1.1 via the vs6 ide
+ ----------------------
 
  Create the following empty folders in your gephex dir:
 
@@ -61,8 +79,8 @@ There are two ways to build gephex
    * dummy (builds all modules and types)
 
 
- 2/ via the commandline
- -----------------------
+ 1.2 via the commandline
+ -------------------------
 
  Unfortunately, vs6 puts hard paths into .mak files and .dep files.
  Although the dsp files are controlled by the above environment variables,
@@ -109,7 +127,7 @@ into <gephex-dir>/bin. The following dlls are needed:
     - zlib.dll
 
   from qt:
-    - qt-mt230nc.dll
+    - qt*.dll
 
   from ffmpeg:
     - avformat.dll
@@ -118,13 +136,9 @@ into <gephex-dir>/bin. The following dlls are needed:
 
  Good luck!
 
-ADD-ON: Compiling with Visual Studio .NET 2003:
 
-One thing upfront: If you plan to build the gui with VS.NET 2003, you WILL
-need a recent version, that is, a version higher than 3.0. AFAIK the only way
-to get such a version is to buy the following book:
-"C++ GUI Programming with QT 3", ISBN: 0131240722
-If you know any other way to get a qt version 3.0, please tell us.
+2. Compiling with Visual Studio .NET 2003
+===========================================
 
 The prerequisits are basically the same as with Visual Studio 6, so before you
 start compiling, get all the 3rd party libraries listed in the first section of
@@ -160,5 +174,3 @@ will also need to copy the msvcrt7.dll runtime files from your Visual
 Studio directory to gephex/bin (multithreaded dll).
 
 Good luck again....
-
-

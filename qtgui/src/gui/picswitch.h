@@ -25,19 +25,17 @@
 
 #include <vector>
 
-#include <qwidget.h>
-#include <qpixmap.h>
-
-class QToolButton;
+#include <QtGui/QToolButton>
+#include <QtGui/QPixmap>
 
 namespace gui
 {
 
-class PicSwitch : public QWidget
+class PicSwitch : public QToolButton
 {
 	Q_OBJECT
 public:
-	PicSwitch(QWidget* parent, const char* name,const QPixmap& pm1, const QPixmap& pm2);
+	PicSwitch(QWidget* parent, const QPixmap& pm1, const QPixmap& pm2);
 	
 public slots:
 	void setPic(int index);
@@ -50,9 +48,7 @@ signals:
 
 private:
 	std::vector<QPixmap> pics;
-	QToolButton* button;
 	int current;
-
 };
 
 } // end of namespace

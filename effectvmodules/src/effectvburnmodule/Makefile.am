@@ -17,7 +17,7 @@ effectvburnmodule_la_SOURCES = \
         effectvburnmodule.spec \
         effectvburnmodule.xpm
 
-EXTRA_DIST = burn.c effectvburnmodule.dsp effectvburnmodule.mak effectvburnmodule.dep
+EXTRA_DIST = burn.c  effectvburnmodule.dsp effectvburnmodule.mak effectvburnmodule.dep
 
 effectvburnmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

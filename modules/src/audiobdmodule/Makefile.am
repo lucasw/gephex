@@ -27,4 +27,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = audiobdmodule.h audiobdmodule_auto.c
-EXTRA_DIST = audiobdmodule.dsp audiobdmodule.mak audiobdmodule.dep
+EXTRA_DIST = audiobdmodule.vcproj audiobdmodule.dsp audiobdmodule.mak audiobdmodule.dep

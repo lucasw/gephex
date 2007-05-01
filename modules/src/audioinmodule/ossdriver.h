@@ -33,7 +33,8 @@ public:
   OSSDriver();
   virtual ~OSSDriver();
 
-  void open(device_id_t device,
+  void open(logT logger,
+	    device_id_t device,
 	    int sample_rate,
 	    sample_format format,
 	    int channels);

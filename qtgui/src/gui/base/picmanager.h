@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <qpixmap.h>
+#include <QtGui/qpixmap.h>
 
 namespace gui
 {

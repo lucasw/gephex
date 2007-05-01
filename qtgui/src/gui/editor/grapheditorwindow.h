@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include <qmainwindow.h>
+#include <QtGui/QScrollArea>
 
 #include "utils/autoptr.h"
 
@@ -41,23 +41,22 @@ namespace gui
   class GraphEditor;
   class KeyboardManager;
 
-  class GraphEditorWindow : public QMainWindow
+  class GraphEditorWindow : public QScrollArea
   {
   public:
-    GraphEditorWindow(QWidget* parent, const char* name, WFlags fl,
+    GraphEditorWindow(QWidget* parent,
 		      GraphModel& contr,
 		      const IModuleInfoBaseStation&,
-			  const utils::AutoPtr<ControlValueDispatcher>& dispatcher_,
+                      const utils::AutoPtr<ControlValueDispatcher>& dispatcher_,
 		      IModelControlReceiver&,
 		      KeyboardManager* kbManager,
-              IErrorReceiver& log,
+                      IErrorReceiver& log,
 		      const std::string& media_path);
 
     GraphEditor* graphEditor();
 
   private:
     GraphEditor* m_graphEditor;
-
   };
 
 

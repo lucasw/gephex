@@ -17,7 +17,7 @@ effectvsparkmodule_la_SOURCES = \
 	effectvsparkmodule.spec \
 	effectvsparkmodule.xpm
 
-EXTRA_DIST = spark.c effectvsparkmodule.dsp effectvsparkmodule.mak effectvsparkmodule.dep
+EXTRA_DIST = spark.c  effectvsparkmodule.dsp effectvsparkmodule.mak effectvsparkmodule.dep
 
 effectvsparkmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

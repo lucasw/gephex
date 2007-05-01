@@ -17,7 +17,7 @@ effectvrdsmodule_la_SOURCES = \
         effectvrdsmodule.spec \
         effectvrdsmodule.xpm
 
-EXTRA_DIST = rds.c effectvrdsmodule.dsp effectvrdsmodule.mak effectvrdsmodule.dep
+EXTRA_DIST = rds.c  effectvrdsmodule.dsp effectvrdsmodule.mak effectvrdsmodule.dep
 
 effectvrdsmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

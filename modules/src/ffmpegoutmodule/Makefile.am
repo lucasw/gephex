@@ -35,4 +35,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = ffmpegoutmodule.h ffmpegoutmodule_auto.c
 
-EXTRA_DIST = ffmpegoutmodule.dsp ffmpegoutmodule.mak ffmpegoutmodule.dep
+EXTRA_DIST = ffmpegoutmodule.vcproj ffmpegoutmodule.dsp ffmpegoutmodule.mak ffmpegoutmodule.dep

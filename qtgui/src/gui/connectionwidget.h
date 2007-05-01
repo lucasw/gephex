@@ -24,9 +24,10 @@
 #define INCLUDED_CONNECTION_WIDGET_H
 
 
-#include <qpoint.h>
+#include <QtCore/qpoint.h>
 
 class QWidget;
+class QPainter;
 
 namespace gui
 {

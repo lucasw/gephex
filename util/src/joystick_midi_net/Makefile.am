@@ -1,4 +1,4 @@
-EXTRA_DIST = joystick_midi_net.dsp joystick_midi_net.mak joystick_midi_net.dep
+EXTRA_DIST = joystick_midi_net.vcproj joystick_midi_net.dsp joystick_midi_net.mak joystick_midi_net.dep
 
 bin_PROGRAMS = joystick_midi_net
 

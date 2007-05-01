@@ -27,5 +27,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = signalplotmodule.h signalplotmodule_auto.c
 
-EXTRA_DIST = signalplotmodule.dsp signalplotmodule.mak signalplotmodule.dep
+EXTRA_DIST = signalplotmodule.vcproj signalplotmodule.dsp signalplotmodule.mak signalplotmodule.dep
 

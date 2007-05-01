@@ -38,29 +38,26 @@ TypeFactory::~TypeFactory()
 {
 }
 
-IType* TypeFactory::buildNew(int id/*,void* ptr*/) const //TODO void* muss weg
+IType* TypeFactory::buildNew(int id) const
 {
 	ClassMap::const_iterator i = typeClasses.find(id);
 	if (i == typeClasses.end())
 	{
-		throw std::runtime_error("Ungültige  ID");
+		throw std::runtime_error("unknown type ID");
 	}
 
-	utils::AutoPtr<ITypeClass> tClass = i->second;
-
-	IType* newType = tClass->buildInstance();
-	return newType;
+	return i->second->buildInstance();
 }
 
-void TypeFactory::registerTypeClass(int id,const ITypeClass& typeClass)
+void TypeFactory::registerTypeClass(int id, const ITypeClass& typeClass)
 {
-	ClassMap::const_iterator i = typeClasses.find(id);
-	if (i != typeClasses.end())
-	{
-	  throw std::runtime_error("Typ ID existiert bereits");
-	}
+  ClassMap::const_iterator i = typeClasses.find(id);
+  if (i != typeClasses.end())
+    {
+      throw std::runtime_error("type ID already exists");
+    }
 	
-	typeClasses[id] = utils::AutoPtr<ITypeClass>( typeClass.clone() );
+  typeClasses[id] = &typeClass;
 }
 
 } // end of namespace

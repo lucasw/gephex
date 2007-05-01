@@ -34,4 +34,4 @@ INCLUDES = \
 	-I @srcdir@/../../../util/src/libjoystick
 
 DISTCLEANFILES = joystickmodule.h joystickmodule_auto.c
-EXTRA_DIST = joystickmodule.dsp joystickmodule.mak joystickmodule.dep
+EXTRA_DIST = joystickmodule.vcproj joystickmodule.dsp joystickmodule.mak joystickmodule.dep

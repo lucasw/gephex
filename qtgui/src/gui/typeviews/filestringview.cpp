@@ -22,18 +22,17 @@
 
 #include "filestringview.h"
 
-#include <iostream> //debug only
 #include <sstream>
+#include <iostream> //debug only
 #include <algorithm>
 #include <list>
 #include <cassert>
 #include <cctype> //tolower
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qfiledialog.h>
-#include <qtooltip.h>
-#include <qmessagebox.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/QPushButton>
+#include <QtGui/qfiledialog.h>
+#include <QtGui/qmessagebox.h>
 
 #include "utils/structreader.h"
 #include "utils/stringtokenizer.h"
@@ -85,6 +84,12 @@ namespace gui
     return t1 == t2;
   }
 
+  // TODO: workaround for mingw 3.4.2
+  static char my_tolower(char c)
+  {
+    return tolower(c);
+  }
+
   /**
    * Returns true iff s begins with prefix.
    */
@@ -92,10 +97,10 @@ namespace gui
   {
 #if defined(PATH_IS_CASE_INSENSITIVE)
 	  std::transform(prefix.begin(), prefix.end(),
-		             prefix.begin(), tolower);
+			 prefix.begin(), my_tolower);
 
 	  std::transform(s.begin(), s.end(),
-		             s.begin(), tolower);
+			 s.begin(), my_tolower);
 #endif
 
     return prefix.length() <= s.length() &&
@@ -197,13 +202,12 @@ namespace gui
 	  throw std::runtime_error("media_path is empty");
 	}
 
-      QHBoxLayout* l = new QHBoxLayout(this);
-      m_select = new QPushButton("Select",this);
-      m_select->setMinimumSize(40, 33);
-      //select->setMaximumSize(60, 20);
-      //select->resize(40, 20);	
+      this->setMinimumSize(100, 24);
+      m_select = new QPushButton(this);
+
+      m_layout->addWidget(m_select);
+
       m_select->show();
-      l->addWidget(m_select);
 
       connect(m_select, SIGNAL(clicked()), this, SLOT(selectFile()));
     }
@@ -232,11 +236,11 @@ namespace gui
         }
 
       m_select->setText(QString(dumm));
-      QToolTip::add(this, QString(dumm));
+      setToolTip(QString(dumm));
     }
 
 private slots:
-void userSelectedFile(const QString& name_)
+    void userSelectedFile(const QString& name_)
     {
     }
 
@@ -248,16 +252,16 @@ void userSelectedFile(const QString& name_)
           path = m_media_dirs.back();
           first_select = false;
         }
-      QStringList files = QFileDialog::getOpenFileNames (m_fullMask.c_str(), 
+      QStringList files = QFileDialog::getOpenFileNames (this,
+							 "choose files",
 							 path.c_str(),
-							 this, "file selector",
-							 "choose files");
+							 m_fullMask.c_str());
 
       //      QStringList::const_iterator it=files.begin();
       std::string name("");
       for (QStringList::Iterator it = files.begin(); it != files.end(); ++it)
 	{
-          std::string fname = (*it).latin1();
+          std::string fname = (*it).toUtf8().constData();
           if (it != files.begin())
             name += ",";
 
@@ -275,7 +279,7 @@ void userSelectedFile(const QString& name_)
     }
 
   private:
-    QButton* m_select;
+    QPushButton* m_select;
     std::string m_fullMask;
 
     typedef std::list<std::string> DirList;

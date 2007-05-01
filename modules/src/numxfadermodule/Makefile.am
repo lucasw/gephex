@@ -25,4 +25,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = numxfadermodule.h numxfadermodule_auto.c
-EXTRA_DIST = numxfadermodule.dsp numxfadermodule.mak numxfadermodule.dep
+EXTRA_DIST = numxfadermodule.vcproj numxfadermodule.dsp numxfadermodule.mak numxfadermodule.dep

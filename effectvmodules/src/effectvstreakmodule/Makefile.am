@@ -17,7 +17,7 @@ effectvstreakmodule_la_SOURCES = \
         effectvstreakmodule.spec \
         effectvstreakmodule.xpm
 
-EXTRA_DIST = streak.c effectvstreakmodule.dsp effectvstreakmodule.mak effectvstreakmodule.dep
+EXTRA_DIST = streak.c  effectvstreakmodule.dsp effectvstreakmodule.mak effectvstreakmodule.dep
 
 effectvstreakmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

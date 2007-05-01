@@ -23,16 +23,16 @@ const char* getInputSpec(int index) {
     return "input_spec { type=typ_FrameBufferType id=b const=true strong_dependency=true  } ";
   break;
   case 1:
-    return "input_spec { type=typ_NumberType id=left const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=left const=true strong_dependency=true default=[0] } ";
   break;
   case 2:
-    return "input_spec { type=typ_NumberType id=right const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=right const=true strong_dependency=true default=[0] } ";
   break;
   case 3:
-    return "input_spec { type=typ_NumberType id=up const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=up const=true strong_dependency=true default=[0] } ";
   break;
   case 4:
-    return "input_spec { type=typ_NumberType id=down const=true strong_dependency=true default=0 } ";
+    return "input_spec { type=typ_NumberType id=down const=true strong_dependency=true default=[0] } ";
   break;
  }
  return 0;

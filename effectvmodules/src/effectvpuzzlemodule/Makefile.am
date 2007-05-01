@@ -17,7 +17,7 @@ effectvpuzzlemodule_la_SOURCES = \
 	effectvpuzzlemodule.spec \
 	effectvpuzzlemodule.xpm
 
-EXTRA_DIST = puzzle.c effectvpuzzlemodule.dsp effectvpuzzlemodule.mak effectvpuzzlemodule.dep
+EXTRA_DIST = puzzle.c  effectvpuzzlemodule.dsp effectvpuzzlemodule.mak effectvpuzzlemodule.dep
 
 effectvpuzzlemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

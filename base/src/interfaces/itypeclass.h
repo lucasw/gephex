@@ -29,7 +29,6 @@ class ITypeClass
 {
 public:
 	virtual ~ITypeClass() {}
-	virtual ITypeClass* clone() const = 0;
 	virtual IType* buildInstance() const = 0;
 };
 

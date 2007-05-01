@@ -25,8 +25,8 @@
 
 #include <string>
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/qpixmap.h>
 
 namespace gui
 {
@@ -37,14 +37,17 @@ namespace gui
   public:
     enum PlugStatus {PLUG_FREE, PLUG_CONNECTED};
 
-    PlugWidget(QWidget* parent, const char* name, 
-	       std::string _name, std::string _type, int _index, int _ID, 
-	       const QPixmap& free_, const QPixmap& busy_);
+    PlugWidget(QWidget* parent,
+	       const std::string& name,
+	       const std::string& type,
+	       int index, int ID, 
+	       const QPixmap& free_,
+	       const QPixmap& busy_);
 
-    std::string getType() const { return type; }
-    int getIndex() const { return index; }
-    int getID() const { return ID; }
-    std::string getName() const { return name; }
+    std::string getType() const { return m_type; }
+    int getIndex() const { return m_index; }
+    int getID() const { return m_ID; }
+    std::string getName() const { return m_name; }
     void setStatus(PlugStatus status);
 
     void highlight();
@@ -52,22 +55,23 @@ namespace gui
 
   protected:
     virtual void mousePressEvent(QMouseEvent*);
-       
+    virtual void paintEvent(QPaintEvent*);       
+
     signals:
-    void beginLineDraw();
     void redrawLine(const QPoint& from, const QPoint& to);
 
   private:
-    const std::string name;
-    const std::string type;
-    const int index;
-    const int ID;
+    const std::string m_name;
+    const std::string m_type;
+    const int m_index;
+    const int m_ID;
     PlugStatus m_status;
 
   protected:
-    bool lineDrawMode;
-    const QPixmap freePic;	
-    const QPixmap busyPic;
+    bool m_lineDrawMode;
+    const QPixmap m_freePic;	
+    const QPixmap m_busyPic;
+    QPixmap m_pixmap;
 
   };
 

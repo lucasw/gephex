@@ -22,30 +22,41 @@
 
 #include "plugwidget.h"
 
+#include <QtGui/QMouseEvent>
+#include <QtGui/qpainter.h>
+
 namespace gui
 {
-  PlugWidget::PlugWidget(QWidget* parent, const char* name,
-			 std::string _name, std::string _type, 
-			 int _index, int _ID, const QPixmap& free_, 
+  PlugWidget::PlugWidget(QWidget* parent,
+			 const std::string& name,
+			 const std::string& type, 
+			 int index,
+			 int ID,
+			 const QPixmap& free_, 
 			 const QPixmap& busy_)
-    : QWidget(parent,name,WStyle_Customize|WStyle_NoBorder/*|WStyle_Dialog*/),
-      name(_name), type(_type), index(_index), ID(_ID), m_status(PLUG_FREE),
-      lineDrawMode(false), freePic(free_), busyPic(busy_)
+    : QWidget(parent),
+      m_name(name), m_type(type), m_index(index), m_ID(ID), m_status(PLUG_FREE),
+      m_lineDrawMode(false),
+      m_freePic(free_), m_busyPic(busy_), m_pixmap(free_)
   {
     this->setFixedSize(8, 8);
-    this->setBackgroundPixmap(freePic);
     this->setMouseTracking(true);
   }
 
   void PlugWidget::mousePressEvent(QMouseEvent* e)
   {
-    if(e->button() == LeftButton)
+    if(e->button() == Qt::LeftButton)
       {
-	emit beginLineDraw();
-	lineDrawMode = true;
+	m_lineDrawMode = true;
       }
   }
 
+  void PlugWidget::paintEvent(QPaintEvent*)
+  {
+    QPainter p(this);
+    p.drawPixmap(0, 0, m_pixmap);
+    p.drawRect(QRect(0, 0, width()-1, height()-1));
+  }
 
   void PlugWidget::setStatus(PlugStatus status)
   {
@@ -53,19 +64,26 @@ namespace gui
     switch (status)
       {
       case PLUG_FREE:
-        setBackgroundPixmap(freePic);
+        {
+          m_pixmap = m_freePic;
+        }
         break;
       case PLUG_CONNECTED:
-        setBackgroundPixmap(busyPic);
+        {
+          m_pixmap = m_busyPic;
+        }
         break;
       }
+    update();
   }
 
   void PlugWidget::highlight()
   {
-    QPixmap hp(busyPic);
+    QPixmap hp(m_busyPic);
     hp.fill(Qt::yellow);
-    setBackgroundPixmap(hp);
+
+    m_pixmap = hp;
+    update();
   }
 
   void PlugWidget::removeHighlight()

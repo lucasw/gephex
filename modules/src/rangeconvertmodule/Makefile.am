@@ -27,4 +27,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = rangeconvertmodule.h rangeconvertmodule_auto.c
-EXTRA_DIST = rangeconvertmodule.dsp rangeconvertmodule.mak rangeconvertmodule.dep
+EXTRA_DIST = rangeconvertmodule.vcproj rangeconvertmodule.dsp rangeconvertmodule.mak rangeconvertmodule.dep

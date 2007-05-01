@@ -1,4 +1,4 @@
-EXTRA_DIST = netinterfaces.dsp netinterfaces.mak netinterfaces.dep
+EXTRA_DIST = netinterfaces.vcproj netinterfaces.dsp netinterfaces.mak netinterfaces.dep
 
 INCLUDES= -I @builddir@/.. -I @srcdir@/.. -I @top_srcdir@/util/include
 

@@ -17,7 +17,7 @@ effectvdizzymodule_la_SOURCES = \
         effectvdizzymodule.spec \
         effectvdizzymodule.xpm
 
-EXTRA_DIST = dizzy.c effectvdizzymodule.dsp effectvdizzymodule.mak effectvdizzymodule.dep
+EXTRA_DIST = dizzy.c  effectvdizzymodule.dsp effectvdizzymodule.mak effectvdizzymodule.dep
 
 effectvdizzymodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

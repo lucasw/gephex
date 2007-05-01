@@ -29,4 +29,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../libmidi
 
 DISTCLEANFILES = doepfermodule.h doepfermodule_auto.c
-EXTRA_DIST = doepfermodule.dsp doepfermodule.mak doepfermodule.dep
+EXTRA_DIST = doepfermodule.vcproj doepfermodule.dsp doepfermodule.mak doepfermodule.dep

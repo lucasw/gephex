@@ -25,8 +25,9 @@
 #include <sstream>
 #include <cmath>
 
-#include <qvalidator.h>
-#include <qlineedit.h>
+#include <QtGui/qvalidator.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/QHBoxLayout>
 
 #include <utils/structreader.h>
 #include <utils/buffer.h>
@@ -41,21 +42,23 @@ namespace gui
     UnboundedNumberView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params), m_value(-1.0)
     {
-	  utils::StructReader sr(params);
-      m_lineEdit = new QLineEdit("", this, 0);
+      utils::StructReader sr(params);
+      m_lineEdit = new QLineEdit(this);
 
-	  int precision = sr.getIntValue("precision", 6);
-	  std::string display_format = sr.getStringValue("display_format",
-		                                             "auto");
+      m_layout->addWidget(m_lineEdit);
+
+      int precision = sr.getIntValue("precision", 6);
+      std::string display_format = sr.getStringValue("display_format",
+                                                     "auto");
 
       m_lineEdit->setValidator(new QDoubleValidator(this));
 
-	  m_os.precision(precision);
-	  if (display_format == "fixed")
-		  m_os.setf(std::ios::fixed, std::ios::floatfield);
-	  else if (display_format == "scientific")
-		  m_os.setf(std::ios::scientific, std::ios::floatfield);
-	  // else don't set -> automatic mode
+      m_os.precision(precision);
+      if (display_format == "fixed")
+        m_os.setf(std::ios::fixed, std::ios::floatfield);
+      else if (display_format == "scientific")
+        m_os.setf(std::ios::scientific, std::ios::floatfield);
+      // else don't set -> automatic mode
 
       connect(m_lineEdit, SIGNAL(returnPressed()),
 	      this, SLOT(lineeditChanged()));
@@ -84,7 +87,8 @@ namespace gui
 public slots:
     void lineeditChanged()
     {
-      const char* text = m_lineEdit->text().latin1();
+      QByteArray raw = m_lineEdit->text().toUtf8();
+      const char* text = raw.constData();
 
       //      std::cout << "Lineedit text = '" << text << "'" << std::endl;
       utils::Buffer 
@@ -96,8 +100,8 @@ public slots:
 		
   private:
     QLineEdit* m_lineEdit;
-	double m_value;
-	std::ostringstream m_os;
+    double m_value;
+    std::ostringstream m_os;
   };
 
   // constructor

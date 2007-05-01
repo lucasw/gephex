@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include <qmainwindow.h>
+#include <QtGui/QScrollArea>
 
 #include "utils/autoptr.h"
 
@@ -37,12 +37,13 @@ namespace gui
   class ControlModel;
   class ControlValueDispatcher;
 
-class ControlEditorWindow : public QMainWindow
+class ControlEditorWindow : public QScrollArea
 {
 public:
-  ControlEditorWindow(QWidget* parent, const char* name, WFlags fl,
-		      ControlModel& cModel, IModelControlReceiver& model,
-			  const utils::AutoPtr<ControlValueDispatcher>& disp,
+  ControlEditorWindow(QWidget* parent,
+		      ControlModel& cModel,
+                      IModelControlReceiver& model,
+                      const utils::AutoPtr<ControlValueDispatcher>& disp,
 		      const std::string& media_path);
 
   ControlEditor* controlEditor();

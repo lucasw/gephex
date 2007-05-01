@@ -22,12 +22,13 @@
 
 #include "controleditor.h"
 
+#include <iostream>
 #include <stdexcept>
 #include <cassert>
-#include <iostream>
 
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QMenu>
+#include <QtGui/QMouseEvent>
 
 #include "mouseover.h"
 
@@ -48,15 +49,20 @@ namespace gui
 
   //------------------------------------------------------------------------
 
-  ControlEditor::ControlEditor(QWidget* parent, const char* name, WFlags fl,
+  ControlEditor::ControlEditor(QWidget* parent,
 			       ControlModel& cModel, 
 			       IModelControlReceiver& model,
                                const utils::AutoPtr<ControlValueDispatcher>& disp,
 			       const std::string& media_path)
-    : QWidget(parent,name,fl),  m_controller(&cModel), 
-      m_model(&model), m_factory(new TypeViewFactory(media_path)),
-      currentNodeID(-1), currentInputIndex(-1), currentWidgetType(""),
-      currentControl(0), m_controlValueDispatcher(disp)
+    : QWidget(parent),
+      m_controller(&cModel), 
+      m_model(&model),
+      m_factory(new TypeViewFactory(media_path)),
+      currentNodeID(-1),
+      currentInputIndex(-1),
+      currentWidgetType(""),
+      currentControl(0),
+      m_controlValueDispatcher(disp)
   {
   }
 
@@ -64,6 +70,7 @@ namespace gui
   {
     delete m_factory;
   }
+
 
   void ControlEditor::controlChanged(int nodeID, int inputIndex,
 				     const utils::Buffer& b)
@@ -144,7 +151,8 @@ namespace gui
 	return;
       }
     ControlWidget* which = cewit->second;
-    which->move(p.x(),p.y());
+    which->move(std::max(0, p.x()),
+                std::max(0, p.y()));
   }
 
   void ControlEditor::controlDeleted(int controlID)
@@ -228,7 +236,8 @@ namespace gui
       }
     LabelWidget* which = lewit->second;
 
-    which->move(p.x(), p.y());
+    which->move(std::max(0, p.x()),
+                std::max(0, p.y()));
   }
 
   void ControlEditor::labelDeleted(int labelID)
@@ -274,22 +283,20 @@ namespace gui
     else
       {
 	//std::cout << "List is not empty..." << std::endl;
-	QPopupMenu *popme = new QPopupMenu(0, "pop");
+	QMenu *popme = new QMenu("pop");
 		
-	int id = 0;
 	for (TypeViewFactory::TypeViewInfoList::const_iterator
 	       i = infos.begin();
 	     i != infos.end(); ++i)
 	  {
-	    //  std::cout << "Inserting " << i->getName()
-	    //      << ", id = " << id << std::endl;
-	    popme->insertItem(i->getName().c_str(),id);
-	    id2Identifier[id] = i->getID();
-	    ++id;
+	    QAction* ac = new QAction(i->getName().c_str(), popme);
+	    ac->setData(QVariant(i->getID().c_str()));
+
+	    popme->addAction(ac);
 	  }
 
-	connect(popme,SIGNAL(activated(int)),
-		this,SLOT(widgetTypeSelected(int)));
+	connect(popme,SIGNAL(triggered(QAction*)),
+		this,SLOT(actionTriggeredSlot(QAction*)));
 	popme->popup(pos);
       }
   }
@@ -311,16 +318,16 @@ namespace gui
       }
   }
 
-  void ControlEditor::widgetTypeSelected(int wType)
+  void ControlEditor::actionTriggeredSlot(QAction* action)
   {
-    currentWidgetType = id2Identifier[wType];
+    currentWidgetType = action->data().toString().toUtf8().constData();
   }
 
   void ControlEditor::mousePressEvent(QMouseEvent* e)
   {
     clickedPos = Point( e->pos().x(), e->pos().y() );
 
-    if (e->button() == LeftButton)
+    if (e->button() == Qt::LeftButton)
       {
 	try
 	  {
@@ -339,15 +346,18 @@ namespace gui
 	    QMessageBox::information( 0, "Error", err.what() );
 	  }
       }
-    else if (e->button() == RightButton)
+    else if (e->button() == Qt::RightButton)
       {
-        QPopupMenu *popme = new QPopupMenu(0, "contextpop");
-        popme->insertItem("Add Label", LABEL_ADD);
+        QMenu* popme = new QMenu("contextpop");
 	
-        connect(popme,SIGNAL(activated(int)),this,
-                SLOT(contextPopupActivated(int)));
+	QAction* labelAction = new QAction("Add Label", popme);
 
-        popme->popup(this->mapToGlobal(e->pos()));        
+        popme->addAction(labelAction);
+	
+        connect(labelAction,SIGNAL(triggered()),this,
+                SLOT(addLabelSlot()));
+
+        popme->popup(e->globalPos());        
       }
   }
 
@@ -375,12 +385,14 @@ namespace gui
 
   void ControlEditor::openPopup(ControlWidget* which, const QPoint& pos)
   {
-    QPopupMenu *popme = new QPopupMenu(0, "pop");
-    popme->insertItem("Kill",CONTROLELEMENTWIDGET_KILL);
+    QMenu *popme = new QMenu("pop");
+
+    QAction* killAction = new QAction("Kill", popme);
+    popme->addAction(killAction);
 	
     currentControl = which;
-    connect(popme,SIGNAL(activated(int)),this,
-	    SLOT(controlPopupActivated(int)));
+    connect(killAction, SIGNAL(triggered()),
+	    this, SLOT(killControlSlot()));
 
     popme->popup(pos);
   }
@@ -410,76 +422,51 @@ namespace gui
 
   void ControlEditor::openLabelPopup(LabelWidget* which, const QPoint& pos)
   {
-    QPopupMenu *popme = new QPopupMenu(0, "labelpop");
-    popme->insertItem("Kill", LABEL_KILL);
+    QMenu* popme = new QMenu("labelpop");
+
+    QAction* killAction = new QAction("Kill", popme);
+    popme->addAction(killAction);
 	
     currentLabel = which;
-    connect(popme,SIGNAL(activated(int)),this,
-	    SLOT(labelPopupActivated(int)));
+    connect(killAction,SIGNAL(triggered()),
+	    this, SLOT(killLabelSlot()));
 
     popme->popup(pos);
   }
 
-  void ControlEditor::controlPopupActivated(int action)
+  void ControlEditor::killControlSlot()
   {
-    switch(action)
+    int controlID = currentControl->controlID();
+    try
       {
-      case CONTROLELEMENTWIDGET_KILL:
-	{
-	  int controlID = currentControl->controlID();
-	  try
-	    {
-	      m_controller->delControl(controlID);
-	    }
-	  catch (std::exception& err)
-	    {
-	      QMessageBox::information( 0, "Error", err.what() );
-	    }
-	}
-	break;
-      default:
-	QMessageBox::information( 0, "Error", "what?" );
+	m_controller->delControl(controlID);
+      }
+    catch (std::exception& err)
+      {
+	QMessageBox::information( 0, "Error", err.what() );
       }
   }
 
-  void ControlEditor::labelPopupActivated(int action)
+  void ControlEditor::killLabelSlot()
   {
-    switch(action)
+    int labelID = currentLabel->id();
+    try
       {
-      case LABEL_KILL:
-	{
-	  int labelID = currentLabel->id();
-	  try
-	    {
-	      m_controller->delLabel(labelID);
-	    }
-	  catch (std::exception& err)
-	    {
-	      QMessageBox::information( 0, "Error", err.what() );
-	    }
-	}
-	break;
-      default:
-	QMessageBox::information( 0, "Error", "what?" );
+	m_controller->delLabel(labelID);
+      }
+    catch (std::exception& err)
+      {
+	QMessageBox::information( 0, "Error", err.what() );
       }
   }
 
-  void ControlEditor::contextPopupActivated(int action)
+  void ControlEditor::addLabelSlot()
   {
-    switch(action)
-      {
-      case LABEL_ADD:
-	{
-          const std::string
-            text = AskForStringDialog::open(0, "New Label",
-                                            "Enter label text");
+    const std::string
+      text = AskForStringDialog::open(0, "New Label",
+				      "Enter label text");
 
-          m_controller->addLabel(clickedPos, text);
-	}
-	break;
-      default:
-	QMessageBox::information( 0, "Error", "what?" );
-      }
+    m_controller->addLabel(clickedPos, text);
   }
 
 

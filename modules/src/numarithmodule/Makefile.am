@@ -26,4 +26,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = numarithmodule.h numarithmodule_auto.c
-EXTRA_DIST = numarithmodule.dsp numarithmodule.mak numarithmodule.dep
+EXTRA_DIST = numarithmodule.vcproj numarithmodule.dsp numarithmodule.mak numarithmodule.dep

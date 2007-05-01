@@ -1,4 +1,4 @@
-EXTRA_DIST = engine.dsp engine.mak engine.dep
+EXTRA_DIST = engine.vcproj engine.dsp engine.mak engine.dep
 
 includedir = @includedir@/gephex
 libdir = @libdir@/gephex

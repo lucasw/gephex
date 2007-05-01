@@ -59,7 +59,8 @@ OSSDriver::~OSSDriver()
     this->close();
 }
 
-void OSSDriver::open(device_id_t device,
+void OSSDriver::open(logT /*logger*/,
+		     device_id_t device,
                      int sample_rate,
                      sample_format format,
                      int channels)

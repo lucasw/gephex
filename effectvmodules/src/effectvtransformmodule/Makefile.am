@@ -17,7 +17,7 @@ effectvtransformmodule_la_SOURCES = \
         effectvtransformmodule.spec \
         effectvtransformmodule.xpm
 
-EXTRA_DIST = transform.c effectvtransformmodule.dsp effectvtransformmodule.mak effectvtransformmodule.dep
+EXTRA_DIST = transform.c  effectvtransformmodule.dsp effectvtransformmodule.mak effectvtransformmodule.dep
 
 effectvtransformmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

@@ -1,12 +1,12 @@
-EXTRA_DIST = editor.dsp editor.mak editor.dep
+EXTRA_DIST = editor.vcproj editor.dsp editor.mak editor.dep
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex
 
 INCLUDES = \
 	-I $(srcdir)/../.. \
-	-I $(srcdir)/../../../../base/src/ \
-	-I @builddir@/../../../../base/src/ \
+	-I $(srcdir)/../../../../base/src \
+	-I @builddir@/../../../../base/src \
 	-I $(srcdir)/.. \
         -I $(top_srcdir)/util/include \
 	$(QT_CXXFLAGS)

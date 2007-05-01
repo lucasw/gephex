@@ -33,4 +33,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = y4moutputmodule.h y4moutputmodule_auto.c
 
-EXTRA_DIST = y4moutputmodule.dsp y4moutputmodule.mak y4moutputmodule.dep
+EXTRA_DIST = y4moutputmodule.vcproj y4moutputmodule.dsp y4moutputmodule.mak y4moutputmodule.dep

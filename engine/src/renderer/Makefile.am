@@ -1,4 +1,4 @@
-EXTRA_DIST = renderer.dsp renderer.mak renderer.dep
+EXTRA_DIST = renderer.vcproj renderer.dsp renderer.mak renderer.dep
 
 baseincludedir = @includedir@/gephex
 libdir = @libdir@/gephex

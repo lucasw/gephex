@@ -13,18 +13,19 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 #include <assert.h>
 
 #define F 100
 #define SIZE 2048
 
-uint64_t exp16_table[20]={
+uint64_t exp16_table[21]={
      65537,
      65538,
      65540,
@@ -45,6 +46,7 @@ uint64_t exp16_table[20]={
     484249,
    3578144,
  195360063,
+ 582360139072LL,
 };
 #if 1
 // 16.16 fixpoint exp()
@@ -60,14 +62,15 @@ static unsigned int exp16(unsigned int a){
     return out;
 }
 // 16.16 fixpoint log()
-static uint64_t log16(uint64_t a){
+static int64_t log16(uint64_t a){
     int i;
     int out=0;
-    
-    assert(a >= (1<<16));
+
+    if(a < 1<<16)
+        return -log16((1LL<<32) / a);
     a<<=16;
-    
-    for(i=19;i>=0;i--){
+
+    for(i=20;i>=0;i--){
         int64_t b= exp16_table[i];
         if(a<(b<<16)) continue;
         out |= 1<<i;
@@ -100,36 +103,51 @@ int main(int argc,char* argv[]){
     FILE *f[2];
     uint8_t buf[2][SIZE];
     uint64_t psnr;
-    
-    if(argc!=3){
-        printf("tiny_psnr <file1> <file2>\n");
+    int len= argc<4 ? 1 : atoi(argv[3]);
+    int64_t max= (1<<(8*len))-1;
+    int shift= argc<5 ? 0 : atoi(argv[4]);
+    int skip_bytes = argc<6 ? 0 : atoi(argv[5]);
+
+    if(argc<3){
+        printf("tiny_psnr <file1> <file2> [<elem size> [<shift> [<skip bytes>]]]\n");
+        printf("for wav files use the following:\n");
+        printf("./tiny_psnr file1.wav file2.wav 2 0 44 to skip the header.\n");
         return -1;
     }
-    
-    f[0]= fopen(argv[1], "r");
-    f[1]= fopen(argv[2], "r");
+
+    f[0]= fopen(argv[1], "rb");
+    f[1]= fopen(argv[2], "rb");
+    fseek(f[shift<0], shift < 0 ? -shift : shift, SEEK_SET);
+
+    fseek(f[0],skip_bytes,SEEK_CUR);
+    fseek(f[1],skip_bytes,SEEK_CUR);
 
     for(i=0;;){
         if( fread(buf[0], SIZE, 1, f[0]) != 1) break;
         if( fread(buf[1], SIZE, 1, f[1]) != 1) break;
-        
+
         for(j=0; j<SIZE; i++,j++){
-            const int a= buf[0][j];
-            const int b= buf[1][j];
+            int64_t a= buf[0][j];
+            int64_t b= buf[1][j];
+            if(len==2){
+                a= (int16_t)(a | (buf[0][++j]<<8));
+                b= (int16_t)(b | (buf[1][  j]<<8));
+            }
             sse += (a-b) * (a-b);
         }
     }
-    
-    dev= int_sqrt((sse*F*F)/i);
+
+    if(!i) i=1;
+    dev= int_sqrt( ((sse/i)*F*F) + (((sse%i)*F*F) + i/2)/i );
     if(sse)
-        psnr= (log16(256*256*255*255LL*i/sse)*284619LL*F + (1<<31)) / (1LL<<32);
+        psnr= ((2*log16(max<<16) + log16(i) - log16(sse))*284619LL*F + (1<<31)) / (1LL<<32);
     else
         psnr= 100*F-1; //floating point free infinity :)
-    
-    printf("stddev:%3d.%02d PSNR:%2d.%02d bytes:%d\n", 
-        (int)(dev/F), (int)(dev%F), 
+
+    printf("stddev:%3d.%02d PSNR:%2d.%02d bytes:%d\n",
+        (int)(dev/F), (int)(dev%F),
         (int)(psnr/F), (int)(psnr%F),
-        i);
+        i*len);
     return 0;
 }
 

@@ -10,18 +10,6 @@
 	".\c_moduletables.h"\
 	
 
-.\c_module.cpp : \
-	"..\..\..\base\src\interfaces\imodule.h"\
-	"..\..\..\base\src\interfaces\itype.h"\
-	"..\..\..\base\src\interfaces\itypefactory.h"\
-	"..\..\..\base\src\utils\autoptr.h"\
-	".\c_functiontypes.h"\
-	".\c_input.h"\
-	".\c_module.h"\
-	".\c_moduletables.h"\
-	".\c_output.h"\
-	
-
 .\c_output.cpp : \
 	"..\..\..\base\src\interfaces\imodule.h"\
 	"..\..\..\base\src\interfaces\itype.h"\
@@ -41,6 +29,7 @@
 .\c_type.cpp : \
 	"..\..\..\base\src\interfaces\itype.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\sharedlibrary.h"\
 	".\c_functiontypes.h"\
 	".\c_type.h"\
@@ -52,6 +41,7 @@
 	"..\..\..\base\src\interfaces\itypeclass.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
 	"..\..\..\base\src\utils\sharedlibrary.h"\
+	"..\..\..\base\src\utils\structreader.h"\
 	".\c_functiontypes.h"\
 	".\c_type.h"\
 	".\c_typeclass.h"\
@@ -68,11 +58,13 @@
 	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
 	"..\..\..\base\src\interfaces\imoduleclassspecreceiver.h"\
 	"..\..\..\base\src\interfaces\imoduleclassspecsender.h"\
+	"..\..\..\base\src\interfaces\imoduleplugin.h"\
 	"..\..\..\base\src\interfaces\itypeclass.h"\
 	"..\..\..\base\src\interfaces\itypeclassinforeceiver.h"\
 	"..\..\..\base\src\interfaces\itypeclassreceiver.h"\
 	"..\..\..\base\src\interfaces\itypeclasssender.h"\
 	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\filesystem.h"\
 	"..\..\..\base\src\utils\ilogger.h"\
 	"..\..\..\base\src\utils\itokenizer.h"\
@@ -80,40 +72,137 @@
 	"..\..\..\base\src\utils\stringtokenizer.h"\
 	"..\..\..\base\src\utils\structreader.h"\
 	"..\..\..\config.h"\
-	"..\..\..\util\include\basic_types.h"\
 	".\c_functiontypes.h"\
-	".\c_moduleclass.h"\
 	".\c_moduletables.h"\
 	".\c_typeclass.h"\
 	".\c_typetables.h"\
 	".\dllloader.h"\
-	".\frei0r.h"\
-	".\frei0rwrapper.h"\
+	".\frei0r_module_plugin.h"\
+	".\gephex_module_class.h"\
+	".\gephex_module_plugin.h"\
+	".\gephex_type_plugin.h"\
 	".\moduleclassspec.h"\
 	".\moduleinfoutils.h"\
 	".\nameresolver.h"\
-	".\typedllloader.h"\
 	
 
-.\frei0rwrapper.cpp : \
+.\frei0r_module.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_functiontypes.h"\
+	".\c_input.h"\
+	".\c_moduletables.h"\
+	".\c_output.h"\
+	".\frei0r_module.h"\
+	
+
+.\frei0r_module_class.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\imoduleplugin.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
+	"..\..\..\base\src\utils\structreader.h"\
 	"..\..\..\config.h"\
 	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
 	"..\..\..\types\src\numbertype\numbertype.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\engine\dllutils.h"\
+	"..\renderer\typefactory.h"\
 	".\c_functiontypes.h"\
 	".\c_moduletables.h"\
 	".\frei0r.h"\
 	".\frei0r.xpm"\
-	".\frei0rwrapper.h"\
+	".\frei0r_module.h"\
+	".\frei0r_module_class.h"\
+	".\frei0r_module_plugin.h"\
+	".\moduleclassspec.h"\
+	".\moduleinfoutils.h"\
+	".\nameresolver.h"\
+	
+
+.\frei0r_module_plugin.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\imoduleplugin.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\frei0r.h"\
+	".\frei0r_module_class.h"\
+	".\frei0r_module_plugin.h"\
+	".\moduleclassspec.h"\
+	
+
+.\gephex_module.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	".\c_functiontypes.h"\
+	".\c_input.h"\
+	".\c_moduletables.h"\
+	".\c_output.h"\
+	".\gephex_module.h"\
+	
+
+.\gephex_module_class.cpp : \
+	"..\..\..\base\src\interfaces\imodule.h"\
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\itype.h"\
+	"..\..\..\base\src\interfaces\itypefactory.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
+	"..\..\..\base\src\utils\structreader.h"\
+	"..\renderer\typefactory.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\gephex_module.h"\
+	".\gephex_module_class.h"\
+	".\moduleclassspec.h"\
+	".\moduleinfoutils.h"\
+	".\nameresolver.h"\
+	
+
+.\gephex_module_plugin.cpp : \
+	"..\..\..\base\src\interfaces\imoduleclass.h"\
+	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\interfaces\imoduleplugin.h"\
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\buffer.h"\
+	"..\..\..\base\src\utils\ilogger.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_moduletables.h"\
+	".\gephex_module_class.h"\
+	".\gephex_module_plugin.h"\
+	".\moduleclassspec.h"\
+	
+
+.\gephex_type_plugin.cpp : \
+	"..\..\..\base\src\utils\autoptr.h"\
+	"..\..\..\base\src\utils\sharedlibrary.h"\
+	".\c_functiontypes.h"\
+	".\c_typetables.h"\
+	".\gephex_type_plugin.h"\
 	
 
 .\moduleclassspec.cpp : \
 	"..\..\..\base\src\interfaces\imoduleclassspec.h"\
+	"..\..\..\base\src\utils\buffer.h"\
 	".\moduleclassspec.h"\
 	
 
 .\moduleinfoutils.cpp : \
+	"..\..\..\base\src\utils\buffer.h"\
 	"..\..\..\base\src\utils\itokenizer.h"\
 	"..\..\..\base\src\utils\stringtokenizer.h"\
 	"..\..\..\base\src\utils\structreader.h"\
@@ -124,14 +213,6 @@
 
 .\nameresolver.cpp : \
 	".\nameresolver.h"\
-	
-
-.\typedllloader.cpp : \
-	"..\..\..\base\src\utils\autoptr.h"\
-	"..\..\..\base\src\utils\sharedlibrary.h"\
-	".\c_functiontypes.h"\
-	".\c_typetables.h"\
-	".\typedllloader.h"\
 	
 
 !IF  "$(CFG)" == "dllloader - Win32 Release"

@@ -28,4 +28,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = noisemodule.h noisemodule_auto.c
 
-EXTRA_DIST = noisemodule.dsp noisemodule.mak noisemodule.dep
+EXTRA_DIST = noisemodule.vcproj noisemodule.dsp noisemodule.mak noisemodule.dep

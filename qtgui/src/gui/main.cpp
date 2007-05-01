@@ -27,20 +27,15 @@
 #include "config.h"
 #endif
 
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
+#include <QtGui/QApplication>
+#include <QtGui/QMessageBox>
+#include <QtGui/QPixmap>
+#include <QtGui/QIcon>
 
 #ifdef OS_WIN32
-#include <qwindowsstyle.h>
 #include <memory>
-typedef QWindowsStyle GePhexStyle;
-#else
-#include <qmotifstyle.h>
-typedef QMotifStyle GePhexStyle;
 #endif
 
-#include "ownstyle.h"
 #include "vjmainwindow.h"
 
 #include "utils/configmanager.h"
@@ -126,8 +121,6 @@ int main( int argc, const char* argv[] )
 {
   QApplication app( argc, (char**) argv );
 
-  app.setStyle( new gui::OwnStyle<GePhexStyle>() );
-  
   try
     {
       using namespace utils;
@@ -205,15 +198,15 @@ int main( int argc, const char* argv[] )
             throw std::runtime_error("Unknown IPC Type: " + ipc_type);
           }
 
-      gui::VJMainWindow mainWin ( 0, "GePhex main window", config,
-                                  ipc_locator, get_conf_base_dir());
+      gui::VJMainWindow mainWin ( 0,
+				  config,
+                                  ipc_locator,
+				  get_conf_base_dir());
 
-      mainWin.setIcon(QPixmap(logo_data));
+      app.setWindowIcon(QIcon(QPixmap(logo_data)));
 
       app.connect(&mainWin, SIGNAL(quitSignal(void)), &app, SLOT(quit(void)));
-      app.setMainWidget(&mainWin);
 
-      mainWin.resize(640, 480);
       mainWin.show();    
 
       mainWin.connectToEngine();

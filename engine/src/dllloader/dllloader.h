@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -23,36 +23,30 @@
 #ifndef INCLUDED_DLLLOADER_H
 #define INCLUDED_DLLLOADER_H
 
-#include <map>
+#include <list>
+#include <vector>
 #include <string>
 #include <stdexcept>
-#include <vector>
-#include <cassert>
 
 #include "interfaces/imoduleclassinfosender.h"
 #include "interfaces/imoduleclasssender.h"
 #include "interfaces/imoduleclassspecsender.h"
-
 #include "interfaces/itypeclasssender.h"
 
 #include "utils/autoptr.h"
-
-struct frei0r_funs_t;
+#include "nameresolver.h"
 
 namespace utils 
 {
-  class Buffer;
   class SharedLibrary;
   class ILogger;
 }
 
-class NameResolver;
-class CTypeFunctionTable;
-class CModuleFunctionTable;
+class CTypeClass;
+class IModulePlugin; 
 
 namespace dllloader
 {
-
   /**
    * Die Klasse Dllloader kuemmert sich um das dynamische Nachladen
    * von Typ und Modul dlls.
@@ -65,32 +59,45 @@ namespace dllloader
     {
 
     public:
-      typedef utils::AutoPtr<utils::SharedLibrary> SharedLibraryPtr;
-
-
       /**
-       * Erzeugt neuen DllLoader.
-       * @param logger used for reporting errors
+       * Create a new dllloader
+       *
+       * \param logger used for reporting errors
+       *
+       * \param infoReceiver Receiver for ui specific module data
+       * \param specReceiver receiver for typesystem specific module data
+       * \param	classReceiver receiver of the loaded modules
+       * \param typeClassReceiver receiver of the loaded type plugins
+       *
+       * \param module_path search loactions for the module plugins
+       * \param type_path search loactions for the type plugins
+       * \param frei0r_path search loactions for the frei0r plugins
        */
       DllLoader(utils::AutoPtr<utils::ILogger>& logger,
-		IModuleClassInfoReceiver&,
-		IModuleClassSpecReceiver&,
-		IModuleClassReceiver&,
-		ITypeClassReceiver&,
+		IModuleClassInfoReceiver& infoReceiver,
+		IModuleClassSpecReceiver& specReceiver,
+		IModuleClassReceiver& classReceiver,
+		ITypeClassReceiver& typeClassReceiver,
 		const std::string& module_path,
 		const std::string& type_path,
 		const std::string& frei0r_path);
 
+      /**
+       * Destroy the Dllloader
+       * 
+       * This unloads all shared libraries and invalidates all loaded plugins
+       */
       virtual ~DllLoader();
 
 
       /**
-       * call this on connect of ModuleClassInfoReceiver
+       * call this to sent the ui specific module data
        */
       virtual void synchronize();
 
 
       // TODO remove these functions from the public interfaces
+      // it is not supported to change the receivers after construction
       void registerModuleClassInfoReceiver(IModuleClassInfoReceiver& r)
 	{assert(false);}
       void registerModuleClassSpecReceiver(IModuleClassSpecReceiver& r)
@@ -101,48 +108,29 @@ namespace dllloader
 	{assert(false);}
       
     private:
-      /**
-       * Liest und verarbeitet die module und die typ dateien.
-       */
-      void readDlls(const std::vector<std::string>& modules,
-		    const std::vector<std::string>& types,
-		    const std::vector<std::string>& frei0rs);
+      /** hold shared libraries during lifetime of the object */
+      std::list< utils::AutoPtr<utils::SharedLibrary> > m_shared_libraries;
 
+      /** hold types during lifetime of the dllloader */
+      std::list< utils::AutoPtr<CTypeClass> > m_gephex_types;
       
-      SharedLibraryPtr loadDll(const std::string& filename);
-      std::string getDllName(const std::string& filename);
+      /** hold plugins during lifetime of the dllloader */
+      std::list< utils::AutoPtr<IModulePlugin> >
+	m_module_plugins;
 
-      void loadFrei0r(frei0r_funs_t&, SharedLibraryPtr sl,
-			      const std::string moduleName);
-
-      void loadModule(SharedLibraryPtr,
-                      const std::string& moduleName);
-
-      void processModFile(const std::string&);
-      void processFrei0rFile(const std::string&);
-      void processTypeFile(const std::string& name);
-
-      
-      void constructModuleClass(CModuleFunctionTable* fTable,
-				SharedLibraryPtr sl,
-                                const std::string& moduleName,
-				frei0r_funs_t*);
-
-      NameResolver* resolver;
+      /** for unique ids */
+      NameResolver resolver;
 
       IModuleClassInfoReceiver& m_infoReceiver;
       IModuleClassReceiver& m_classReceiver;
       IModuleClassSpecReceiver& m_specReceiver;
       ITypeClassReceiver& m_typeClassReceiver;
 
-      std::map<std::string,std::string> m_mod2fileName;
-      std::map<std::string,std::string> m_typ2fileName;
-      std::map<std::string,std::string> m_f0r2fileName;
-
-      std::map<std::string,SharedLibraryPtr> m_moduleHandles;
-      std::map<std::string,utils::AutoPtr<utils::Buffer> > m_moduleInfos;
-
       utils::AutoPtr<utils::ILogger> m_logger;
+
+      void processModFile(const std::string&);
+      void processFrei0rFile(const std::string&);
+      void processTypeFile(const std::string& name);
     };
 }
 

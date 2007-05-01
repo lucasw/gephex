@@ -32,8 +32,9 @@
 class IDriverConstructor
 {
 public:
-	virtual std::list<std::string> supported_extensions() const = 0;
-	virtual VideoFileDriver* create() const = 0;
+  virtual ~IDriverConstructor() {}
+  virtual std::list<std::string> supported_extensions() const = 0;
+  virtual VideoFileDriver* create() const = 0;
 };
 
 template <class DRV>
@@ -44,7 +45,7 @@ public:
 
 	std::list<std::string> supported_extensions() const
 	{ 
-		return DRV::supported_extensions();
+	  return DRV::supported_extensions();
 	}
 
 	VideoFileDriver* create() const
@@ -76,7 +77,9 @@ public:
 	void register_driver(IDriverConstructor* ctor)
 	{		
 		typedef std::list<std::string> ExtList;
-		ExtList el = ctor->supported_extensions();
+		
+		ExtList el (ctor->supported_extensions());
+		
 		for (ExtList::const_iterator it = el.begin(); it != el.end(); ++it)
 		{
 			CtorMap::iterator cit = m_ctors.find(*it);

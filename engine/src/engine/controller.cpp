@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2004
+ Copyright (C) 2001-2005
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -21,11 +21,10 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "controller.h"
-#include <iostream>
+
 #if defined (HAVE_CONFIG_H)
 #include "config.h"
 #endif
-
 
 #if defined(OS_POSIX)
 #include "domainserversocket.h"
@@ -35,6 +34,8 @@
 
 #include "netlogger.h"
 #include "buffer.h"
+
+#include <iostream>
 
 namespace engine
 {
@@ -60,13 +61,16 @@ namespace engine
   {
     ++m_time;
 
+#if (ENGINE_VERBOSITY > 0)
     if (m_ttl != 0)
       std::cout << m_time << std::endl;
+#endif
     
     if (m_time == m_ttl)
       m_ctrl->shutDown();
     return true;
-  }
+    
+}
 
 
 
@@ -238,26 +242,33 @@ namespace engine
 		     config.get_string_param("module_path"),
 		     config.get_string_param("type_path"),
 		     config.get_string_param("frei0r_path")));
-    
-    std::cout << "Reading graphs...";
-    std::cout.flush();
-    pModel.updateFileSystem();
-    std::cout << "   done\n";
 
+#if (ENGINE_VERBOSITY > 0)
+        std::cout << "Reading graphs...";
+    std::cout.flush();
+#endif
+    pModel.updateFileSystem();
+#if (ENGINE_VERBOSITY > 0)
+    std::cout << "   done\n";
+#endif
     std::string render_graph_id=config.get_string_param("render_graph_id");
     std::string render_snap_id =config.get_string_param("render_snap_id");
 
     //create graph and snapshot if they don't already exist
     if( !pModel.check_for_graph_id(render_graph_id) )
       {
+#if (ENGINE_VERBOSITY > 0)
 	std::cout << "create new graph: " << render_graph_id << std::endl;
+#endif
 	pModel.newGraphWithID(render_graph_id, render_graph_id, false);
       }
 	
     if( !pModel.check_for_snap_id(render_graph_id,render_snap_id) )
       {
+#if (ENGINE_VERBOSITY > 0)
 	std::cout << "create new snap: " << render_graph_id << " "
 		  << render_snap_id << std::endl;
+#endif
 	pModel.newControlValueSetWithID(render_graph_id,
 					render_snap_id,
 					render_snap_id);
@@ -301,7 +312,9 @@ namespace engine
   {
     if (socket != 0)
       {
-        std::cout << "connection down\n";	  
+#if (ENGINE_VERBOSITY > 0)
+        std::cout << "connection down\n";
+#endif
         delete socket;
         socket = 0;			  
         first_time = true;
@@ -340,7 +353,9 @@ namespace engine
         // established
         if (socket != 0 && first_time)
           {
+#if (ENGINE_VERBOSITY > 0)
             std::cout << "connection up\n";
+#endif
             netPoller.set_socket(socket);
             bufferedSender->enable();			  
 			  

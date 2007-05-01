@@ -17,7 +17,7 @@ effectvnoisemodule_la_SOURCES = \
         effectvnoisemodule.spec \
         effectvnoisemodule.xpm
 
-EXTRA_DIST = noise.c effectvnoisemodule.dsp effectvnoisemodule.mak effectvnoisemodule.dep
+EXTRA_DIST = noise.c  effectvnoisemodule.dsp effectvnoisemodule.mak effectvnoisemodule.dep
 
 effectvnoisemodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

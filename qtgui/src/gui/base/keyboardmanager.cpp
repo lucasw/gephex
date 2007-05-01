@@ -25,7 +25,8 @@
 #include <list>
 #include <map>
 
-#include <qwidget.h>
+#include <QtGui/qwidget.h>
+#include <QtGui/QKeyEvent>
 
 #include "ikeylistener.h"
 #include "key.h"
@@ -46,7 +47,7 @@ namespace gui {
   class KeyGrabberImpl : public QWidget
   {
   public:
-    KeyGrabberImpl() : QWidget(0, "keyGrabber") { }
+    KeyGrabberImpl() : QWidget(0) { }
 
     ~KeyGrabberImpl() {};
 
@@ -144,21 +145,25 @@ namespace gui {
     {
       //TODO: this assumes, that the constants in qnamespace.h and key.h
       // are exactly the same
+#if 0
       int state = e.state();
       int modifierMask = 0;
 
       //      std::cout << "State is "  << state << std::endl;
 
-      if (state & ShiftButton)
+      if (state & Qt::ShiftButton)
 	modifierMask |= gui::Key::ShiftModifier;
 
-      if (state & AltButton)
+      if (state & Qt::AltButton)
 	modifierMask |= gui::Key::AltModifier;
 
-      if (state & ControlButton)
+      if (state & Qt::ControlButton)
 	modifierMask |= gui::Key::CtrlModifier;
 
       return gui::Key(e.key(), modifierMask);
+#endif
+      // TODO: not working currently
+      return gui::Key(0, 0);
     }
 
   private:

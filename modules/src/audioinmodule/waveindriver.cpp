@@ -54,10 +54,11 @@ WaveInDriver::~WaveInDriver()
     this->close();
 }
 
-void WaveInDriver::open(device_id_t device,
-		   int sample_rate,
-		   sample_format form,
-		   int channels)
+void WaveInDriver::open(logT /*logger*/,
+			device_id_t device,
+			int sample_rate,
+			sample_format form,
+			int channels)
 {
   if (this->is_open())
     throw std::logic_error("Device already open");

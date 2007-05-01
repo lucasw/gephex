@@ -15,4 +15,4 @@ libcolorconv_a_SOURCES = libcolorconv.cpp libcolorconv.h
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include
 
-EXTRA_DIST = libcolorconv_x86.asm libcolorconv.dsp libcolorconv.mak libcolorconv.mak
+EXTRA_DIST = libcolorconv_x86.asm libcolorconv.vcproj libcolorconv.dsp libcolorconv.mak libcolorconv.mak

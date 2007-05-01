@@ -22,10 +22,9 @@
 
 #include "controlwidget.h"
 
-#include <qtooltip.h>
-#include <qlabel.h>
-#include <qlayout.h>
-
+#include <QtGui/qlabel.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/QMouseEvent>
 #include "typeview.h"
 
 namespace gui
@@ -37,23 +36,20 @@ namespace gui
 			       int inIndex,
 			       const ParamMap& params,
 			       const TypeViewConstructor* con)
-    : QFrame(parent,name.c_str(),0), m_name(name),
+    : QFrame(parent), m_name(name),
       m_controlID(controlID), m_nodeID(nodeID),
       m_inputIndex(inIndex), dragMode(false), m_label(0), m_view(0)
   {
     setFrameStyle(QFrame::Box|QFrame::Sunken);
-    setLineWidth(2);
+    setLineWidth(1);
     setMidLineWidth(0);
-    //    setName(name);
 
     m_view = con->construct(this, params);
 
-    QSize size = m_view->size();
-    this->resize(QSize(size.width()+4, size.height()+4));
-    //    m_view->move(1,1);
-    //    m_view->show();
+    QHBoxLayout* l = new QHBoxLayout(this);
+    l->setMargin(2);
+    l->setSpacing(0);
 
-    QHBoxLayout* l = new QHBoxLayout(this,2);
     l->addWidget(m_view);
 
     this->show();
@@ -91,7 +87,7 @@ namespace gui
   {
     m_name = newName;
     std::string toolTipText = m_name;
-    QToolTip::add(this,toolTipText.c_str());
+    setToolTip(toolTipText.c_str());
 	
     QWidget* parent;
     bool move = false;
@@ -129,12 +125,12 @@ namespace gui
   void ControlWidget::mousePressEvent(QMouseEvent* e)
   {
     clickedPos = e->pos();
-    if(e->button() == LeftButton)
+    if(e->button() == Qt::LeftButton)
       {
 	dragMode = true;
         this->raise();
       }
-    else if (e->button() == RightButton)
+    else if (e->button() == Qt::RightButton)
       {
 	emit beenRightClicked(this, e->globalPos());
       }

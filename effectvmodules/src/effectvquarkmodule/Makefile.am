@@ -17,7 +17,7 @@ effectvquarkmodule_la_SOURCES = \
         effectvquarkmodule.spec \
         effectvquarkmodule.xpm
 
-EXTRA_DIST = quark.c effectvquarkmodule.dsp effectvquarkmodule.mak effectvquarkmodule.dep
+EXTRA_DIST = quark.c  effectvquarkmodule.dsp effectvquarkmodule.mak effectvquarkmodule.dep
 
 effectvquarkmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

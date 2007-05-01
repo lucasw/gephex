@@ -37,6 +37,7 @@ ALL : "$(OUTDIR)\audiooutmodule.dll"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\a_cvt.obj"
 	-@erase "$(INTDIR)\audiooutmodule.obj"
 	-@erase "$(INTDIR)\audiooutmodule_auto.obj"
 	-@erase "$(INTDIR)\outbuffer.obj"
@@ -50,7 +51,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../../../types/src/stringtype" /I "../../../types/src/audiotype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "audiooutmodule_EXPORTS" /D "WIN32" /D "NDEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\audiooutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /G6 /MD /W3 /GX /O2 /Ob2 /I "../audioinmodule" /I "../../../types/src/stringtype" /I "../../../types/src/audiotype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "audiooutmodule_EXPORTS" /D "WIN32" /D "NDEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\audiooutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -94,6 +95,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\audiooutmodule.def"
 LINK32_OBJS= \
+	"$(INTDIR)\a_cvt.obj" \
 	"$(INTDIR)\audiooutmodule.obj" \
 	"$(INTDIR)\audiooutmodule_auto.obj" \
 	"$(INTDIR)\outbuffer.obj" \
@@ -131,6 +133,7 @@ ALL : ".\audiooutmodule_auto.c" ".\audiooutmodule.h" ".\audiooutmodule.def" "$(O
 
 
 CLEAN :
+	-@erase "$(INTDIR)\a_cvt.obj"
 	-@erase "$(INTDIR)\audiooutmodule.obj"
 	-@erase "$(INTDIR)\audiooutmodule_auto.obj"
 	-@erase "$(INTDIR)\outbuffer.obj"
@@ -150,7 +153,7 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 CPP=cl.exe
-CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../../../types/src/stringtype" /I "../../../types/src/audiotype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "audiooutmodule_EXPORTS" /D "WIN32" /D "_DEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\audiooutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MDd /W2 /Gm /GX /ZI /Od /I "../audioinmodule" /I "../../../types/src/stringtype" /I "../../../types/src/audiotype" /I "../../../types/src/numbertype" /I "../../../" /I "../../../engine/src/engine" /I "../../../util/include" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "audiooutmodule_EXPORTS" /D "WIN32" /D "_DEBUG" /D "HAVE_CONFIG_H" /Fp"$(INTDIR)\audiooutmodule.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -194,6 +197,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\audiooutmodule.def"
 LINK32_OBJS= \
+	"$(INTDIR)\a_cvt.obj" \
 	"$(INTDIR)\audiooutmodule.obj" \
 	"$(INTDIR)\audiooutmodule_auto.obj" \
 	"$(INTDIR)\outbuffer.obj" \
@@ -232,6 +236,12 @@ $(DS_POSTBUILD_DEP) : ".\audiooutmodule_auto.c" ".\audiooutmodule.h" ".\audioout
 
 
 !IF "$(CFG)" == "audiooutmodule - Win32 Release" || "$(CFG)" == "audiooutmodule - Win32 Debug"
+SOURCE=..\audioinmodule\a_cvt.cpp
+
+"$(INTDIR)\a_cvt.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
 SOURCE=.\audiooutmodule.cpp
 
 "$(INTDIR)\audiooutmodule.obj" : $(SOURCE) "$(INTDIR)" ".\audiooutmodule.h"
@@ -239,7 +249,7 @@ SOURCE=.\audiooutmodule.cpp
 
 SOURCE=.\audiooutmodule_auto.c
 
-"$(INTDIR)\audiooutmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\audiooutmodule.h"
+"$(INTDIR)\audiooutmodule_auto.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\outbuffer.c

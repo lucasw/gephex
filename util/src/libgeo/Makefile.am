@@ -1,4 +1,4 @@
-EXTRA_DIST = libgeo.dsp libgeo.mak libgeo.dep
+EXTRA_DIST = libgeo.vcproj libgeo.dsp libgeo.mak libgeo.dep
 
 noinst_LIBRARIES = libgeo.a
 

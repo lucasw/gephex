@@ -87,9 +87,10 @@ public:
 				   32,rmask, gmask, bmask, amask);
     if(m_image == NULL)
       {
-        std::ostringstream os;
-        os << "CreateRGBSurface failed: " <<  SDL_GetError();
-        throw std::runtime_error(os.str().c_str());
+	SDL_FreeSurface(tmp_image);
+	std::ostringstream os;
+	os << "CreateRGBSurface failed: " <<  SDL_GetError();
+	throw std::runtime_error(os.str().c_str());
       }
 
     SDL_Rect all;

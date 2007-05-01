@@ -11,3 +11,5 @@ SUBDIRS = \
 	positiontype \
 	rgbtype \
 	stringtype
+
+EXTRA_DIST = types.sln

@@ -1,4 +1,4 @@
-EXTRA_DIST = positiontype.dsp positiontype.mak positiontype.dep \
+EXTRA_DIST = positiontype.vcproj positiontype.dsp positiontype.mak positiontype.dep \
 	positiontype.def
 
 includedir = @includedir@/gephex/types
@@ -9,10 +9,6 @@ INCLUDES  =  	-I @srcdir@/../../../engine/src/engine \
 lib_LTLIBRARIES = positiontype.la
 
 positiontype_la_SOURCES = positiontype.c
-positiontype_la_LDFLAGS = -module -avoid-version
+positiontype_la_LDFLAGS = -module -avoid-version -no-undefined
 
 include_HEADERS = positiontype.h
-
-
-
-

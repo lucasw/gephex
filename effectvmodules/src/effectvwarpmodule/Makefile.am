@@ -17,7 +17,7 @@ effectvwarpmodule_la_SOURCES = \
         effectvwarpmodule.spec \
         effectvwarpmodule.xpm
 
-EXTRA_DIST = warp.c effectvwarpmodule.dsp effectvwarpmodule.mak effectvwarpmodule.dep
+EXTRA_DIST = warp.c  effectvwarpmodule.dsp effectvwarpmodule.mak effectvwarpmodule.dep
 
 effectvwarpmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

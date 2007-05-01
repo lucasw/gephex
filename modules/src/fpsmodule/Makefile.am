@@ -25,4 +25,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = fpsmodule.h fpsmodule_auto.c
-EXTRA_DIST = fpsmodule.dsp fpsmodule.mak fpsmodule.dep
+EXTRA_DIST = fpsmodule.vcproj fpsmodule.dsp fpsmodule.mak fpsmodule.dep

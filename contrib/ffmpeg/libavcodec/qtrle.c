@@ -2,19 +2,21 @@
  * Quicktime Animation (RLE) Video Decoder
  * Copyright (C) 2004 the ffmpeg project
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
 
@@ -58,8 +60,8 @@ typedef struct QtrleContext {
   }
 
 #define CHECK_PIXEL_PTR(n) \
-  if (pixel_ptr + n > pixel_limit) { \
-    av_log (s->avctx, AV_LOG_INFO, "Problem: pixel_ptr >= pixel_limit (%d >= %d)\n", \
+  if ((pixel_ptr + n > pixel_limit) || (pixel_ptr + n < 0)) { \
+    av_log (s->avctx, AV_LOG_INFO, "Problem: pixel_ptr = %d, pixel_limit = %d\n", \
       pixel_ptr + n, pixel_limit); \
     return; \
   } \
@@ -119,6 +121,7 @@ static void qtrle_decode_4bpp(QtrleContext *s)
                 /* there's another skip code in the stream */
                 CHECK_STREAM_PTR(1);
                 pixel_ptr += (8 * (s->buf[stream_ptr++] - 1));
+                CHECK_PIXEL_PTR(0);  /* make sure pixel_ptr is positive */
             } else if (rle_code < 0) {
                 /* decode the run length code */
                 rle_code = -rle_code;
@@ -209,6 +212,7 @@ static void qtrle_decode_8bpp(QtrleContext *s)
                 /* there's another skip code in the stream */
                 CHECK_STREAM_PTR(1);
                 pixel_ptr += (4 * (s->buf[stream_ptr++] - 1));
+                CHECK_PIXEL_PTR(0);  /* make sure pixel_ptr is positive */
             } else if (rle_code < 0) {
                 /* decode the run length code */
                 rle_code = -rle_code;
@@ -249,7 +253,7 @@ static void qtrle_decode_16bpp(QtrleContext *s)
     int header;
     int start_line;
     int lines_to_change;
-    signed char rle_code;
+    int rle_code;
     int row_ptr, pixel_ptr;
     int row_inc = s->frame.linesize[0];
     unsigned short rgb16;
@@ -290,6 +294,7 @@ static void qtrle_decode_16bpp(QtrleContext *s)
                 /* there's another skip code in the stream */
                 CHECK_STREAM_PTR(1);
                 pixel_ptr += (s->buf[stream_ptr++] - 1) * 2;
+                CHECK_PIXEL_PTR(0);  /* make sure pixel_ptr is positive */
             } else if (rle_code < 0) {
                 /* decode the run length code */
                 rle_code = -rle_code;
@@ -326,7 +331,7 @@ static void qtrle_decode_24bpp(QtrleContext *s)
     int header;
     int start_line;
     int lines_to_change;
-    signed char rle_code;
+    int rle_code;
     int row_ptr, pixel_ptr;
     int row_inc = s->frame.linesize[0];
     unsigned char r, g, b;
@@ -367,6 +372,7 @@ static void qtrle_decode_24bpp(QtrleContext *s)
                 /* there's another skip code in the stream */
                 CHECK_STREAM_PTR(1);
                 pixel_ptr += (s->buf[stream_ptr++] - 1) * 3;
+                CHECK_PIXEL_PTR(0);  /* make sure pixel_ptr is positive */
             } else if (rle_code < 0) {
                 /* decode the run length code */
                 rle_code = -rle_code;
@@ -404,10 +410,10 @@ static void qtrle_decode_32bpp(QtrleContext *s)
     int header;
     int start_line;
     int lines_to_change;
-    signed char rle_code;
+    int rle_code;
     int row_ptr, pixel_ptr;
     int row_inc = s->frame.linesize[0];
-    unsigned char r, g, b;
+    unsigned char a, r, g, b;
     unsigned int argb;
     unsigned char *rgb = s->frame.data[0];
     int pixel_limit = s->frame.linesize[0] * s->avctx->height;
@@ -446,15 +452,16 @@ static void qtrle_decode_32bpp(QtrleContext *s)
                 /* there's another skip code in the stream */
                 CHECK_STREAM_PTR(1);
                 pixel_ptr += (s->buf[stream_ptr++] - 1) * 4;
+                CHECK_PIXEL_PTR(0);  /* make sure pixel_ptr is positive */
             } else if (rle_code < 0) {
                 /* decode the run length code */
                 rle_code = -rle_code;
                 CHECK_STREAM_PTR(4);
-                stream_ptr++;  /* skip the alpha (?) byte */
+                a = s->buf[stream_ptr++];
                 r = s->buf[stream_ptr++];
                 g = s->buf[stream_ptr++];
                 b = s->buf[stream_ptr++];
-                argb = (r << 16) | (g << 8) | (b << 0);
+                argb = (a << 24) | (r << 16) | (g << 8) | (b << 0);
 
                 CHECK_PIXEL_PTR(rle_code * 4);
 
@@ -468,11 +475,11 @@ static void qtrle_decode_32bpp(QtrleContext *s)
 
                 /* copy pixels directly to output */
                 while (rle_code--) {
-                    stream_ptr++;  /* skip the alpha (?) byte */
+                    a = s->buf[stream_ptr++];
                     r = s->buf[stream_ptr++];
                     g = s->buf[stream_ptr++];
                     b = s->buf[stream_ptr++];
-                    argb = (r << 16) | (g << 8) | (b << 0);
+                    argb = (a << 24) | (r << 16) | (g << 8) | (b << 0);
                     *(unsigned int *)(&rgb[pixel_ptr]) = argb;
                     pixel_ptr += 4;
                 }
@@ -529,10 +536,6 @@ static int qtrle_decode_frame(AVCodecContext *avctx,
                               uint8_t *buf, int buf_size)
 {
     QtrleContext *s = (QtrleContext *)avctx->priv_data;
-
-    /* no supplementary picture */
-    if (buf_size == 0)
-        return 0;
 
     s->buf = buf;
     s->size = buf_size;

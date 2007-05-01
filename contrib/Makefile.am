@@ -40,10 +40,11 @@ if WITH_FFMPEG
 	echo $(distdir)
 	mkdir $(distdir)/ffmpeg
 	cp -r ${srcdir}/ffmpeg $(distdir)
-	SAVEDIR=`pwd` && cd $(distdir)/ffmpeg && rm -rf "./{arch}" && find . -name ".arch-ids" -o -name "*.o" -o -name "*.so" -o -name "*.a" | xargs rm -rf && rm -rf qt-faststart ffplay ffplay_g output_example ffmpeg_g ffmpeg ffserver ffserver_g .libs config.status config.h config.mak && cd ${SAVEDIR}
+	SAVEDIR=`pwd` && cd $(distdir)/ffmpeg && rm -rf "./{arch}" && find . -name ".arch-ids" -o -name ".svn" -o -name "*.o" -o -name "*.so" -o -name "*.so.??" -o -name "*.dylib" -o -name "*.a" | xargs rm -rf && rm -rf qt-faststart ffplay ffplay_g output_example ffmpeg_g ffmpeg ffserver ffserver_g .libs config.status config.h config.mak && cd ${SAVEDIR}
 endif
 
 distclean-local:
 if WITH_FFMPEG
-	if test "x${srcdir}" != "x."; then rm -rf ffmpeg/config.log ffmpeg/doc/Makefile ffmpeg/config.mak ffmpeg/config.h ffmpeg/qt-faststart; fi
+	if test "x${srcdir}" != "x."; then rm -rf ffmpeg/config.log ffmpeg/config.err ffmpeg/doc/Makefile ffmpeg/config.mak ffmpeg/config.h ffmpeg/qt-faststart ffmpeg/libavutil.pc ffmpeg/libavutil-uninstalled.pc ffmpeg/libavcodec.pc ffmpeg/libavcodec-uninstalled.pc ffmpeg/libavformat.pc ffmpeg/libavformat-uninstalled.pc ffmpeg/libpostproc.pc ffmpeg/libpostproc-uninstalled.pc ffmpeg/libswscale.pc ffmpeg/libswscale-uninstalled.pc; fi
 endif
+

@@ -2,19 +2,21 @@
  * Westwood Studios VQA Video Decoder
  * Copyright (C) 2003 the ffmpeg project
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
 
@@ -107,7 +109,7 @@ typedef struct VqaContext {
     unsigned char *buf;
     int size;
 
-    unsigned int palette[PALETTE_COUNT];
+    uint32_t palette[PALETTE_COUNT];
 
     int width;   /* width of a frame */
     int height;   /* height of a frame */
@@ -151,6 +153,10 @@ static int vqa_decode_init(AVCodecContext *avctx)
     s->vqa_version = vqa_header[0];
     s->width = LE_16(&vqa_header[6]);
     s->height = LE_16(&vqa_header[8]);
+    if(avcodec_check_dimensions(avctx, s->width, s->height)){
+        s->width= s->height= 0;
+        return -1;
+    }
     s->vector_width = vqa_header[10];
     s->vector_height = vqa_header[11];
     s->partial_count = s->partial_countdown = vqa_header[13];
@@ -452,7 +458,7 @@ static void vqa_decode_chunk(VqaContext *s)
         index_shift = 4;
     else
         index_shift = 3;
-    for (y = 0; y < s->frame.linesize[0] * s->height; 
+    for (y = 0; y < s->frame.linesize[0] * s->height;
         y += s->frame.linesize[0] * s->vector_height) {
 
         for (x = y; x < y + s->width; x += 4, lobytes++, hibytes++) {
@@ -463,7 +469,7 @@ static void vqa_decode_chunk(VqaContext *s)
             switch (s->vqa_version) {
 
             case 1:
-/* still need sample media for this case (only one game, "Legend of 
+/* still need sample media for this case (only one game, "Legend of
  * Kyrandia III : Malcolm's Revenge", is known to use this version) */
                 lines = 0;
                 break;
@@ -513,7 +519,7 @@ static void vqa_decode_chunk(VqaContext *s)
         if (s->partial_countdown == 0) {
 
             /* time to replace codebook */
-            memcpy(s->codebook, s->next_codebook_buffer, 
+            memcpy(s->codebook, s->next_codebook_buffer,
                 s->next_codebook_buffer_index);
 
             /* reset accounting */
@@ -536,8 +542,8 @@ static void vqa_decode_chunk(VqaContext *s)
         if (s->partial_countdown == 0) {
 
             /* decompress codebook */
-            decode_format80(s->next_codebook_buffer, 
-                s->next_codebook_buffer_index, 
+            decode_format80(s->next_codebook_buffer,
+                s->next_codebook_buffer_index,
                 s->codebook, s->codebook_size, 0);
 
             /* reset accounting */

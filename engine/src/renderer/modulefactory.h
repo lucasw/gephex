@@ -69,7 +69,7 @@ public:
   //  virtual std::list<std::string> getAllNames() const;// todo
 
 private:
-  typedef std::map<const std::string,utils::AutoPtr<IModuleClass> > ClassMap;
+  typedef std::map<const std::string, const IModuleClass* > ClassMap;
   ClassMap moduleClasses;
 };
 

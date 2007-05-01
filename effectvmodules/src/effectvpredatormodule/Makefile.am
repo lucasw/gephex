@@ -17,7 +17,7 @@ effectvpredatormodule_la_SOURCES = \
         effectvpredatormodule.spec \
         effectvpredatormodule.xpm
 
-EXTRA_DIST = predator.c effectvpredatormodule.dsp effectvpredatormodule.mak effectvpredatormodule.dep
+EXTRA_DIST = predator.c  effectvpredatormodule.dsp effectvpredatormodule.mak effectvpredatormodule.dep
 
 effectvpredatormodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

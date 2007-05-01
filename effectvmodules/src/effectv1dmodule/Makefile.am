@@ -17,7 +17,7 @@ effectv1dmodule_la_SOURCES = \
         effectv1dmodule.spec \
         effectv1dmodule.xpm
 
-EXTRA_DIST = 1d.c effectv1dmodule.dsp effectv1dmodule.mak effectv1dmodule.dep
+EXTRA_DIST = 1d.c  effectv1dmodule.dsp effectv1dmodule.mak effectv1dmodule.dep
 
 effectv1dmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

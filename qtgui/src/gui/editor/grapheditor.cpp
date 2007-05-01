@@ -26,14 +26,16 @@
 #include <stdexcept>
 #include <cassert>
 
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qwhatsthis.h>
-#include <qpopupmenu.h>
-#include <qmessagebox.h>
-#include <qtimer.h>
+#include <QtGui/QPainter>
+#include <QtGui/qframe.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qlayout.h>
+#include <QtCore/qvariant.h>
+#include <QtGui/qwhatsthis.h>
+#include <QtGui/qmessagebox.h>
+#include <QtCore/qtimer.h>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QMenu>
 
 #include "interfaces/imodelcontrolreceiver.h"
 #include "interfaces/ierrorreceiver.h"
@@ -45,7 +47,6 @@
 #include "nodewidget.h"
 #include "inputplugwidget.h"
 #include "outputplugwidget.h"
-#include "modulebutton.h"
 #include "connectionwidget.h"
 
 #include "base/keyboardmanager.h"
@@ -59,7 +60,7 @@ namespace gui
 
   static const int TIMER_MS = 1000;
 
-  GraphEditor::GraphEditor(QWidget* parent, const char* name, WFlags fl, 
+  GraphEditor::GraphEditor(QWidget* parent,
 			   GraphModel& contrl,
 			   const IModuleInfoBaseStation& _infos,
 			   const utils::AutoPtr<ControlValueDispatcher>& _dispatcher,
@@ -67,7 +68,7 @@ namespace gui
 			   KeyboardManager* kbManager,
 			   IErrorReceiver& log,
 			   const std::string& media_path)
-    : QWidget( parent, name, fl ),
+    : QWidget( parent),
       nodes(), 
       connections(),
       selectedConnectionPair(-1,-1),
@@ -101,7 +102,7 @@ namespace gui
   {
     const ModuleInfo& mi = infos->getModuleInfo(moduleClassName);
 
-    NodeWidget* nWidget = new NodeWidget(this,0,0,modID,
+    NodeWidget* nWidget = new NodeWidget(this,0,modID,
 					 mi, m_picmanager, dispatcher, model,
 					 m_kbManager, m_log,
 					 m_media_path);
@@ -142,9 +143,6 @@ namespace gui
     connect(nWidget,SIGNAL(beenRightClicked(NodeWidget*, const QPoint&)),
 	    this,SLOT(openPopup(NodeWidget*, const QPoint&)));
 
-    connect(nWidget, SIGNAL(beginLineDraw()), this, 
-	    SLOT(beginLineDraw()));
-
     connect(nWidget, SIGNAL(redrawLine(const QPoint&,const QPoint&)),
 	    this, SLOT(redrawLine(const QPoint&,const QPoint&)));
 
@@ -155,7 +153,7 @@ namespace gui
 
     connect(nWidget,
 	    SIGNAL(connectionRequestFromOutput(const OutputPlugWidget*,
-							const QPoint&)),
+                                               const QPoint&)),
 	    this, SLOT(connectionRequestFromOutput(const OutputPlugWidget*,
 						   const QPoint&)));
 
@@ -210,7 +208,7 @@ namespace gui
 								inputIndex),
 						 connWidget));
 
-    this->repaint();
+    update();
   }
 
   void GraphEditor::modulesDisconnected( int moduleID,int inputIndex)
@@ -232,7 +230,7 @@ namespace gui
     delete cWidget;
     connections.erase(cwit);
 
-    this->repaint();
+    update();
   }
 
   void GraphEditor::moduleDeleted(int moduleID)
@@ -288,7 +286,9 @@ namespace gui
 			       "GraphEditor::moduleMoved()");
 
     NodeWidget* nWidget = it->second;
-    nWidget->move(p.x(),p.y());
+    nWidget->move(std::max(0, p.x()),
+                  std::max(0, p.y()));
+    update();
   }
 
   void GraphEditor::controlConnected(int nodeID, int inputIndex)
@@ -311,6 +311,8 @@ namespace gui
 
     if (!in->isVisible())
       in->setVisible();
+
+    nWidget->update();
   }
 
   void GraphEditor::controlDisconnected(int nodeID, int inputIndex)
@@ -330,6 +332,8 @@ namespace gui
 
     this->decConnectionCount(in);
     hasControl[in] = false;
+
+    nWidget->update();
   }
 
   void GraphEditor::modExecTimeSignal(int nodeID, double time)
@@ -343,30 +347,27 @@ namespace gui
     nWidget->setTime(time);    
   }
 
-  void GraphEditor::beginLineDraw()
+  namespace
   {
-    oldLineFrom = QPoint(0,0);
-    oldLineTo = QPoint(0,0);
+    QRegion CreateRegion(const QPoint& p1, const QPoint& p2)
+    {
+      const int x_tl = std::min(p1.x(), p2.x());
+      const int y_tl = std::min(p1.y(), p2.y());
+
+      const int x_br = std::max(p1.x(), p2.x());
+      const int y_br = std::max(p1.y(), p2.y());
+
+      return QRegion(x_tl, y_tl, x_br - x_tl + 2, y_br - y_tl + 1);
+    }
   }
 
   void GraphEditor::redrawLine(const QPoint& from, const QPoint& to)
   {
-    mainPainter.begin(this);
-	
-    QPen pen(SolidLine);
-    pen.setColor(QColor(255,255,255));
-    mainPainter.setPen(pen);
-	
-    RasterOp rop = mainPainter.rasterOp();
-    mainPainter.setRasterOp(XorROP);
-    mainPainter.drawLine(oldLineFrom,oldLineTo);
-    mainPainter.drawLine(from, to);
-    mainPainter.setRasterOp(rop);
-    mainPainter.end();	
-	
-    oldLineFrom = from;
-    oldLineTo = to;
-	
+    update(CreateRegion(from, to) + CreateRegion(m_currentFrom, m_currentTo));
+
+    m_currentFrom = from;
+    m_currentTo = to;
+
     const InputPlugWidget* in = getInputPlugByPos(to);
     if (in != 0)
       {
@@ -377,19 +378,6 @@ namespace gui
       {
 	mouseOverOutputPlug(out);
       }
-  }
-
-  void GraphEditor::removeOldLine()
-  {
-    mainPainter.begin(this);
-    QPen pen(SolidLine);
-    pen.setColor(QColor(255,255,255));
-    mainPainter.setPen(pen);
-    RasterOp rop = mainPainter.rasterOp();
-    mainPainter.setRasterOp(XorROP);
-    mainPainter.drawLine(oldLineFrom,oldLineTo);
-    mainPainter.setRasterOp(rop);
-    mainPainter.end();
   }
 
   const InputPlugWidget* GraphEditor::getInputPlugByPos(const QPoint& to) const
@@ -427,24 +415,35 @@ namespace gui
   void GraphEditor::connectionRequestFromInput(const InputPlugWidget* in, 
 					       const QPoint& to)
   {
-    removeOldLine();
-	
+    m_currentFrom = m_currentTo = QPoint(0, 0);
 	
     const OutputPlugWidget* out = getOutputPlugByPos(to);
 	
     if (out != 0)
-      connectionRequest(in, out);
+      {
+        connectionRequest(in, out);
+      }
+    else
+      {
+        update();
+      }
   }
 
   void GraphEditor::connectionRequestFromOutput(const OutputPlugWidget* out, 
 						const QPoint& to)
   {
-    removeOldLine();
+    m_currentFrom = m_currentTo = QPoint(0, 0);
 	
     const InputPlugWidget* in = getInputPlugByPos(to);
 	
     if (in != 0)
-      connectionRequest(in, out);
+      {
+        connectionRequest(in, out);
+      }
+    else
+      {
+        update();
+      }
   }
 
   void GraphEditor::connectionRequest(const InputPlugWidget* in,
@@ -463,7 +462,7 @@ namespace gui
 
     if (in->getType() != out->getType())
       {
-	emit statusText("Typen sind nicht gleich!");
+	emit statusText("the types are incompatible");
       }
     else
       {
@@ -491,8 +490,8 @@ namespace gui
 
   void GraphEditor::nodeWidgetMoved(NodeWidget* n, const QPoint& pos)
   {
-    repaint(true); //TODO saulahm
     n->move(mapFromGlobal(pos));
+    update();
   }
 
   void GraphEditor::nodeWidgetReleased(NodeWidget* n,const QPoint& pos)
@@ -516,188 +515,172 @@ namespace gui
 
   void GraphEditor::openPopup(InputPlugWidget* in)
   {
-    QPopupMenu *popme = new QPopupMenu(0, "pop"); //TODO: wird das deleted?
+    QMenu *popme = new QMenu("pop"); //TODO: wird das deleted?
 
     if (!hasControl[in])
-      popme->insertItem("Connect control",PLUGWIDGET_CONNECT_TO_CONTROL);
+      {
+	QAction* connectAction = new QAction("Connect control", popme);
+	popme->addAction(connectAction);
+	//PLUGWIDGET_CONNECT_TO_CONTROL
+	connect(connectAction, SIGNAL(triggered()),
+		this, SLOT(connectToControlSlot()));
+      }
     else
-      popme->insertItem("Remove control",PLUGWIDGET_REMOVE_CONTROL);
+      {
+	QAction* removeAction = new QAction("Remove Control", popme);
+	popme->addAction(removeAction);
+	//PLUGWIDGET_REMOVE_CONTROL
+	connect(removeAction, SIGNAL(triggered()),
+		this, SLOT(removeControlSlot()));
+      }
 
     if ((numConnections[in] == 1 && !hasControl[in]) || numConnections[in] > 1)
-      popme->insertItem("Disconnect",PLUGWIDGET_DISCONNECT);
+      {
+	QAction* disconnectAction = new QAction("Disconnect", popme);
+	popme->addAction(disconnectAction);
+	//PLUGWIDGET_DISCONNECT
+	connect(disconnectAction, SIGNAL(triggered()),
+		this, SLOT(disconnectSlot()));
+      }
 
-    //    popme->insertItem("Hide Input",PLUGWIDGET_HIDE_INPUT); //TODO
-	
     currentInput = in;
-    connect(popme,SIGNAL(activated(int)),this,SLOT(inputPopupActivated(int)));
     popme->popup(in->mapToGlobal(QPoint(0,0)));
   }
 
   void GraphEditor::openPopup(NodeWidget* which, const QPoint& pos)
   {
-    QPopupMenu *popme = new QPopupMenu(0, "pop"); //TODO: wird das deleted?
-    popme->insertItem("Properties",NODEWIDGET_PROPERTIES);
-    popme->insertItem("Internals",NODEWIDGET_INTERNALS);
-    popme->insertItem("Kill",NODEWIDGET_KILL);
-	
+    QMenu* popme = new QMenu("pop");
+
+    QAction* propAction      = new QAction("Properties", popme);
+    QAction* internalsAction = new QAction("Internals", popme);
+    QAction* killAction      = new QAction("Kill", popme);
+
+    popme->addAction(propAction);
+    popme->addAction(internalsAction);
+    popme->addAction(killAction);
+
+    connect(propAction, SIGNAL(triggered()), this, SLOT(propertySlot()));
+    connect(internalsAction, SIGNAL(triggered()), this, SLOT(internalsSlot()));
+    connect(killAction, SIGNAL(triggered()), this, SLOT(killNodeSlot()));
+
     currentNode = which;
-    connect(popme,SIGNAL(activated(int)),this,SLOT(nodePopupActivated(int)));
-	
     popme->popup(pos);
   }
 
   void GraphEditor::openPopup(ConnectionWidget* /*which*/, const QPoint& pos)
   {
-    QPopupMenu *popme = new QPopupMenu(0, "pop"); //TODO: wird das deleted?
+    QMenu* popme = new QMenu("pop");
+    
+    QAction* killAction = new QAction("Kill", popme);
+    popme->addAction(killAction);
 	
-    popme->insertItem("Kill",CONNECTIONWIDGET_KILL);
-	
-    connect(popme,SIGNAL(activated(int)),this,
-	    SLOT(connectionPopupActivated(int)));
+    connect(killAction, SIGNAL(triggered()), this, SLOT(killConnectionSlot()));
 	
     popme->popup(this->mapToGlobal(pos));
   }
 
-  void GraphEditor::nodePopupActivated(int action)
+  void GraphEditor::propertySlot()
   {
-    switch(action)
+    if (m_property_id != currentNode->getID())
       {
-      case NODEWIDGET_KILL:
-	{
-	  int moduleID = currentNode->getID();
-          if (moduleID == m_property_id)
-            {
-              m_property_id = -1;
-              emit undisplayProperties();
-            }
-	  try
-	    {
-	      model.deleteModule(moduleID);
-	    }
-	  catch (std::exception& err)
-	    {
-	      m_log.error(err.what() );
-	    }
-	}
-	break;
-      case NODEWIDGET_PROPERTIES:
-	if (m_property_id != currentNode->getID())
-	  {
-	    emit displayProperties(currentNode->getProperties());
-	    m_property_id = currentNode->getID();
-	  }
-	break;
-      case NODEWIDGET_INTERNALS:
-	{
-          std::ostringstream caption;
-          caption << currentNode->moduleClassName() << ":"
-                  << currentNode->getID() << " Internals";
-
-          std::ostringstream txt;
-          txt << "id:\t" << currentNode->getID() << "\n"
-              << "class:\t" << currentNode->moduleClassName() << "\n"
-              << "group:\t" << currentNode->group() << "\n"
-              << "#in:\t" << currentNode->getInputs().size() << "\n"
-              << "#out:\t" << currentNode->getOutputs().size() << "\n"
-              << "time:\t" << currentNode->getTime() << " ms\n";
-
-          QMessageBox::about(this, 
-                             caption.str().c_str(),
-                             txt.str().c_str());
-	}
-        break;
-      default:
-	m_log.error("what (nodePopupActivated)?" );
+	emit displayProperties(currentNode->getProperties());
+	m_property_id = currentNode->getID();
       }
   }
 
-  void GraphEditor::inputPopupActivated(int action)
+  void GraphEditor::internalsSlot()
   {
-    switch(action)
-      {
-      case PLUGWIDGET_CONNECT_TO_CONTROL:
-	{
-	  std::string name;
-	  int nodeID = currentInput->getID();
+    std::ostringstream caption;
+    caption << currentNode->moduleClassName() << ":"
+	    << currentNode->getID() << " Internals";
 
-	  std::map<int,NodeWidget*>::const_iterator it = nodes.find(nodeID);
-	  if (it == nodes.end())
-	    {
-	      name = "FEHLER beim Fehler. GraphEditor::inputPopupActivated()";
-	    }
-	  else
-	    {
-	      NodeWidget* n = it->second;
-	      name = n->moduleClassName();
-	    }
+    std::ostringstream txt;
+    txt << "id:\t" << currentNode->getID() << "\n"
+	<< "class:\t" << currentNode->moduleClassName() << "\n"
+	<< "group:\t" << currentNode->group() << "\n"
+	<< "#in:\t" << currentNode->getInputs().size() << "\n"
+	<< "#out:\t" << currentNode->getOutputs().size() << "\n"
+	<< "time:\t" << currentNode->getTime() << " ms\n";
+
+    QMessageBox::about(this, 
+		       caption.str().c_str(),
+		       txt.str().c_str());
+  }
+
+  void GraphEditor::killNodeSlot()
+  {
+    int moduleID = currentNode->getID();
+    if (moduleID == m_property_id)
+      {
+	m_property_id = -1;
+	emit undisplayProperties();
+      }
+    try
+      {
+	model.deleteModule(moduleID);
+      }
+    catch (std::exception& err)
+      {
+	m_log.error(err.what() );
+      }
+  }
+
+  void GraphEditor::connectToControlSlot()
+  {
+    std::string name;
+    int nodeID = currentInput->getID();
+
+    std::map<int,NodeWidget*>::const_iterator it = nodes.find(nodeID);
+    if (it == nodes.end())
+      {
+	name = "FEHLER beim Fehler. GraphEditor::inputPopupActivated()";
+      }
+    else
+      {
+	NodeWidget* n = it->second;
+	name = n->moduleClassName();
+      }
 		 
-	  name += ':';
-	  name += currentInput->getName();
+    name += ':';
+    name += currentInput->getName();
 		
-	  emit createControl(name,currentInput->getType(),
-			     currentInput->getID(), 
-			     currentInput->getIndex(),
-			     currentInput->getParams(),
-			     currentInput->mapToGlobal(QPoint(0,0)));
-	}
-	break;
-      case PLUGWIDGET_REMOVE_CONTROL:
-	{
-	  emit deleteControl(currentInput->getID(),currentInput->getIndex());
-	}
-	break;
-      case PLUGWIDGET_DISCONNECT:
-	{
-	  model.disconnectModules(currentInput->getID(),
-				  currentInput->getIndex());
-	}
-	break;
-      case PLUGWIDGET_HIDE_INPUT:
-	{
-	  try
-	    {
-	      currentInput->setInvisible();
-	    }
-	  catch (std::runtime_error& e)
-	    {
-	      m_log.error(e.what() );
-	    }
-	}
-	break;
-      default:
-	m_log.error("Leider noch nicht "
-                    "implementiert. Aber für nen 1000er "
-                    "mehr laesst sich da schon was machen..." );
-      }
+    emit createControl(name,currentInput->getType(),
+		       currentInput->getID(), 
+		       currentInput->getIndex(),
+		       currentInput->getParams(),
+		       currentInput->mapToGlobal(QPoint(0,0)));
   }
 
-  void GraphEditor::connectionPopupActivated(int action)
+  void GraphEditor::removeControlSlot()
   {
-    switch(action)
+    emit deleteControl(currentInput->getID(),currentInput->getIndex());
+  }
+
+  void GraphEditor::disconnectSlot()
+  {
+    model.disconnectModules(currentInput->getID(),
+			    currentInput->getIndex());
+
+  }
+
+  void GraphEditor::killConnectionSlot()
+  {
+    try
       {
-      case CONNECTIONWIDGET_KILL:
-	{
-	  try
-	    {
-	      ConnectionMap::const_iterator 
-		it = connections.find(selectedConnectionPair);
-	      if (it == connections.end())
-		{
-		  throw std::runtime_error("Internal Compiler error!");
-		}
-	      ConnectionWidget* cw = it->second;
-	      int id = cw->getInPlug().getID();
-	      int index = cw->getInPlug().getIndex();
-	      model.disconnectModules(id,index);
-	    }
-	  catch (std::exception& err)
-	    {
-	      m_log.error(err.what() );
-	    }
-	}
-	break;
-      default:
-	m_log.error("what (connectionPopupActivated) ?" );
+	ConnectionMap::const_iterator 
+	  it = connections.find(selectedConnectionPair);
+	if (it == connections.end())
+	  {
+	    throw std::runtime_error("Internal Compiler error!");
+	  }
+	ConnectionWidget* cw = it->second;
+	int id = cw->getInPlug().getID();
+	int index = cw->getInPlug().getIndex();
+	model.disconnectModules(id,index);
+      }
+    catch (std::exception& err)
+      {
+	m_log.error(err.what() );
       }
   }
 
@@ -757,27 +740,27 @@ namespace gui
 
     if (nearest_connection != connections.end())
       {
-        if(e->button() == LeftButton)
+        if(e->button() == Qt::LeftButton)
           {	
             if (selectedConnectionPair != nearest_connection->first)
               {
                 selectedConnectionPair = nearest_connection->first;
-                repaint(true);
+                update();
               }
           }
-        else if (e->button() == RightButton)
+        else if (e->button() == Qt::RightButton)
           {
             selectedConnectionPair = nearest_connection->first;
-            repaint(true);
+            update();
             this->openPopup(nearest_connection->second, e->pos());
           }
       }
-    else if (e->button() == LeftButton)
+    else if (e->button() == Qt::LeftButton)
       {
 	if (selectedConnectionPair != std::make_pair(-1,-1))
 	  {
 	    selectedConnectionPair = std::make_pair(-1,-1);
-	    repaint(true);
+	    update();
 	  }
 		
 	try
@@ -798,12 +781,10 @@ namespace gui
 
   void GraphEditor::paintEvent ( QPaintEvent * /*e*/ )
   {
-    //    QPixmap buffer(this->height(), this->width());
-    //    buffer.fill(this->paletteBackgroundColor());
+    QPainter mainPainter(this);
 
-    mainPainter.begin(this);
-    QPen pen1(SolidLine);
-    QPen pen2(SolidLine);
+    QPen pen1(Qt::SolidLine);
+    QPen pen2(Qt::SolidLine);
     pen1.setColor(QColor(0,0,0));
     pen2.setColor(QColor(0,255,0));
 	
@@ -841,14 +822,18 @@ namespace gui
                                  msg.str().c_str());
 	  }
       }
+
+
+    // Draw current connection attempt
+    if (m_currentFrom != QPoint(0,0) &&
+        m_currentTo != QPoint(0,0))
+      {
+        QPen pen(Qt::SolidLine);
+        pen.setColor(QColor(20,14,255));
+        mainPainter.setPen(pen);
 	
-    mainPainter.end();
-
-    //    mainPainter.begin(this);
-
-    //    bitBlt(this, 0, 0, &buffer, 0, 0, -1, -1, Qt::CopyROP, false);
-
-    //    mainPainter.end();
+        mainPainter.drawLine(m_currentFrom, m_currentTo);
+      }
   }
 
   void GraphEditor::highlightInput(int moduleID, int inputIndex)
@@ -887,7 +872,9 @@ namespace gui
     highlightedInput = in;
 
     if (in)
-      in->highlight();
+      {
+        in->highlight();
+      }
   }
 
   void GraphEditor::timer_fired()

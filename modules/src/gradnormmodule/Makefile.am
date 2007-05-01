@@ -1,4 +1,4 @@
-libdir = @gphx_module_lib_dir@
+bindir = @gphx_module_lib_dir@
 
 PLUC=python @top_srcdir@/modules/pluc.py
 
@@ -9,18 +9,21 @@ gradnormmodule_auto.c: gradnormmodule.spec gradnormmodule.h
 gradnormmodule.h: gradnormmodule.spec
 	$(PLUC) h @srcdir@/gradnormmodule.spec
 
-lib_LTLIBRARIES = gradnormmodule.la
+EXEEXT=.@SHAREDLIBEXT@
 
+bin_PROGRAMS = gradnormmodule
+
+gradnormmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
 
 @builddir@/roberts_cross_x86.o: @srcdir@/roberts_cross_x86.asm
 	@NASM@ @NASM_FLAGS@ -o @builddir@/roberts_cross_x86.o @srcdir@/roberts_cross_x86.asm
 
 if OPT_INCLUDE_MMX
-gradnormmodule_la_LIBADD = @builddir@/roberts_cross_x86.o\
+gradnormmodule_LDADD = @builddir@/roberts_cross_x86.o\
 	-lcpuinfo \
 	-L@builddir@/../../../util/src/cpuinfo
 
-gradnormmodule_la_DEPENDENCIES= \
+gradnormmodule_DEPENDENCIES= \
 	@builddir@/roberts_cross_x86.o \
 	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 
@@ -28,14 +31,14 @@ cpuinfoINCLUDES  = -I @srcdir@/../../../util/src/cpuinfo
 
 endif
 
-gradnormmodule_la_SOURCES = \
+gradnormmodule_SOURCES = \
         gradnormmodule_auto.c \
         gradnormmodule.cpp \
         gradnormmodule.h \
         gradnormmodule.spec \
         gradnormmodule.xpm $(3DNOW_sOURCES)
 
-gradnormmodule_la_LDFLAGS = -module -avoid-version -no-undefined
+gradnormmodule_LDFLAGS = @SHARED_LD_FLAGS@
 
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../util/include \
@@ -45,4 +48,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = gradnormmodule.h gradnormmodule_auto.c
-EXTRA_DIST = gradnormmodule.dsp gradnormmodule.mak gradnormmodule.dep roberts_cross_x86.asm
+EXTRA_DIST = gradnormmodule.vcproj gradnormmodule.dsp gradnormmodule.mak gradnormmodule.dep roberts_cross_x86.asm

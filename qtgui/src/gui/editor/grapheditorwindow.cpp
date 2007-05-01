@@ -22,44 +22,40 @@
 
 #include "grapheditorwindow.h"
 
-#include <qscrollview.h>
-
 #include "grapheditor.h"
 
 namespace gui
 {
 
-GraphEditorWindow::GraphEditorWindow(QWidget* parent, const char* name, 
-				     WFlags fl, GraphModel& graphModel,
-				     const IModuleInfoBaseStation& base,
-					 const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
-				     IModelControlReceiver& mod,
-				     KeyboardManager* kbManager,
-                                     IErrorReceiver& log,
-				     const std::string& media_path)
-  : QMainWindow(parent,name,fl)
-{
-  QScrollView* graphScroller = new QScrollView(this);
-
-  m_graphEditor = new GraphEditor(graphScroller->viewport(),"graph",
-				  0,graphModel,base,dispatcher,mod,
-				  kbManager, log, media_path);
+  GraphEditorWindow::GraphEditorWindow(QWidget* parent,
+                                       GraphModel& graphModel,
+                                       const IModuleInfoBaseStation& base,
+                                       const utils::AutoPtr<ControlValueDispatcher>& dispatcher,
+                                       IModelControlReceiver& mod,
+                                       KeyboardManager* kbManager,
+                                       IErrorReceiver& log,
+                                       const std::string& media_path)
+    : QScrollArea(parent)
+  {
+    m_graphEditor = new GraphEditor(this,
+                                    graphModel,
+				    base,
+				    dispatcher,
+				    mod,
+                                    kbManager,
+				    log,
+				    media_path);
   
-  this->setCaption("Graph");
+    m_graphEditor->setMinimumSize(4000, 4000);
   
-  graphScroller->addChild(m_graphEditor);
-  m_graphEditor->resize(2000,2000);
-  graphScroller->resize(200, 400);
-  this->resize(400,200);
-  graphScroller->center(1000,1000);
+    setWidget(m_graphEditor);
+    setWidgetResizable(true);
+  }
 
-  this->setCentralWidget(graphScroller);
-}
-
-GraphEditor* GraphEditorWindow::graphEditor()
-{
-  return m_graphEditor;
-}
+  GraphEditor* GraphEditorWindow::graphEditor()
+  {
+    return m_graphEditor;
+  }
 
 } // end of namespace gui
 

@@ -111,7 +111,7 @@ int setOutput(void* instance,int index, void* typePointer)
 
 int getInfo(char* buf,int bufLen)
 {
-  static const char* INFO = "info { name=[Out] group=[Audio] inputs=[4 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Audio-Stream Latency(ms){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1000] hidden=[true] help=[[Latency in ms - increase if you have gaps in the playback]] } Driver{widget_type=[combo_box] values=[default,waveout,alsa,oss] hidden=[true] } ] outputs=[0] type=xpm } ";
+  static const char* INFO = "info { name=[Out] group=[Audio] inputs=[4 Device{lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[256] hidden=[true] } Audio-Stream Latency(ms){lower_bound=[0] widget_type=[number_selector] step_size=[1] higher_bound=[1000] hidden=[true] help=[[Latency in ms - increase if you have gaps in the playback]] } Driver{widget_type=[combo_box] values=[default,waveout,alsa,oss,coreaudio] hidden=[true] } ] outputs=[0] type=xpm } ";
   char* tmpBuf;
   int reqLen = 1 + strlen(INFO) + getSizeOfXPM(audiooutmodule_xpm);
   if (buf != 0 && reqLen <= bufLen)

@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="typeviews"
+	ProjectGUID="{C0D82B08-39F4-4D2D-9D41-D04ABD410A31}"
+	SccProjectName=""
+	SccLocalPath="">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\../../../lib"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="../../../../base/src,../../,$(QTDIR)/include,../../../"
+				PreprocessorDefinitions="NDEBUG;_LIB;WIN32;HAVE_CONFIG_H;QT_DLL"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="TRUE"
+				PrecompiledHeaderFile=".\Release/typeviews.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\../../../lib\typeviews.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\../../../lib"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="../../../../base/src,../../,$(QTDIR)/include,../../../"
+				PreprocessorDefinitions="QT_DLL;_DEBUG;_LIB;WIN32;HAVE_CONFIG_H"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="TRUE"
+				PrecompiledHeaderFile=".\Debug/typeviews.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\../../../lib\typeviews.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Quellcodedateien"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath="boundednumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="checkboxnumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="colorview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="comboboxstringview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="dialnumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="filestringview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="fontview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="frameview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="positionview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="radionumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="slidernumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="stringview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="unboundednumberview.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header-Dateien"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="boundednumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="checkboxnumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="colorview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="comboboxstringview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="dialnumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="filestringview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="fontview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="frameview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="positionview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="radionumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="slidernumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="stringview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="unboundednumberview.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Mocing and postmocing $(InputPath) ..."
+						CommandLine="$(QTDIR)/bin/moc -o $(InputName)_moc_cpp_.cpp $(InputName).cpp
+python ../../../../build/postmoc.py $(InputName)_moc_cpp_.cpp &gt; $(InputName)_moc_cpp.cpp
+del $(InputName)_moc_cpp_.cpp
+"
+						Outputs="$(InputName)_moc_cpp.cpp"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\..\..\config_h.win32">
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\config.h
+"
+					Outputs="..\..\..\config.h"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\config.h
+"
+					Outputs="..\..\..\config.h"/>
+			</FileConfiguration>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

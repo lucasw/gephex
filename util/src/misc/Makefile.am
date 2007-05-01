@@ -1,7 +1,6 @@
-EXTRA_DIST = misc.dsp misc.mak misc.dep
+EXTRA_DIST = misc.vcproj misc.dsp misc.mak misc.dep
 
 baseincludedir = @includedir@/gephex
-includedir = @includedir@/gephex/misc
 libdir = @libdir@/gephex
 
 check_PROGRAMS = crandgentest
@@ -10,7 +9,7 @@ noinst_LIBRARIES = libmisc.a
 
 libmisc_a_SOURCES = libmisc.c #cpuinfo.cpp cpuspeed.cpp fastmemcpy.cpp timer.cpp
 
-include_HEADERS = crandgen.h #cpuinfo.h cpuspeed.h fastmemcpy.h timer.h
+noinst_HEADERS = crandgen.h #cpuinfo.h cpuspeed.h fastmemcpy.h timer.h
 
 INCLUDES = -I @top_srcdir@/util/include
 

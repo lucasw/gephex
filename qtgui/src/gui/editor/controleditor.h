@@ -27,17 +27,19 @@
 #include <map>
 #include <string>
 
-#include <qwidget.h>
+#include <QtGui/QWidget>
 
 #include "guimodel/icontrolview.h"
 #include "guimodel/point.h"
 
 #include "utils/autoptr.h"
 
-namespace utils {
+namespace utils
+{
   class Buffer;
 }
 
+class QAction;
 class IModelControlReceiver;
 
 namespace gui
@@ -56,13 +58,9 @@ namespace gui
   {
     Q_OBJECT
   public:
-    enum {CONTROLELEMENTWIDGET_KILL} ControlAction;
-    enum {LABEL_KILL} LabelAction;
-    enum {LABEL_ADD} ContextAction;
-
     typedef std::map<std::string, std::string> ParamMap;
 
-    ControlEditor(QWidget* parent, const char* name, WFlags fl,
+    ControlEditor(QWidget* parent,
 		  ControlModel& cModel, IModelControlReceiver& model,
 		  const utils::AutoPtr<ControlValueDispatcher>& disp,
 		  const std::string& media_path);
@@ -101,13 +99,13 @@ public slots:
     void openLabelPopup(LabelWidget*, const QPoint&);
 
   protected slots:
-    void widgetTypeSelected(int);
+    void actionTriggeredSlot(QAction*);
 
-    void controlPopupActivated(int action);
+    void killControlSlot();
 
-    void labelPopupActivated(int action);
+    void killLabelSlot();
 
-    void contextPopupActivated(int action);
+    void addLabelSlot();
 
     // this slot is used to check wether the mouse is over a controlwidget 
     //    void checkMouse();
@@ -138,7 +136,6 @@ public slots:
     std::string currentWidgetType;
     ParamMap currentParams;
 
-    std::map<int,std::string> id2Identifier;
     ControlWidget* currentControl;
 
     LabelWidget* currentLabel;

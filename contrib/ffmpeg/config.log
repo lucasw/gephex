@@ -1,0 +1,2 @@
+Sun Apr 29 17:21:34 CEST 2007
+   ./configure  --prefix=/home/georg/gphx/ --disable-ffserver --disable-ffplay --enable-shared --enable-memalign-hack 

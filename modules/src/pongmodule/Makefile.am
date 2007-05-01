@@ -28,5 +28,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = pongmodule.h pongmodule_auto.c
 
-EXTRA_DIST = pongmodule.dsp pongmodule.mak pongmodule.dep
+EXTRA_DIST = pongmodule.vcproj pongmodule.dsp pongmodule.mak pongmodule.dep
 

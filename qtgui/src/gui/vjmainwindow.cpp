@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
-  Copyright (C) 2001-2003 
+  Copyright (C) 2001-2006
 
   Georg Seidel <georg@gephex.org> 
   Martin Bayer <martin@gephex.org> 
@@ -22,16 +22,18 @@
 
 #include "vjmainwindow.h"
 
-#include <iostream>
 #include <sstream>
+#include <iostream>
 
-#include <qmenubar.h>
-#include <qlayout.h>
-#include <qtabwidget.h>
-#include <qstatusbar.h>
-#include <qsplitter.h>
-#include <qtimer.h>
-#include <qaction.h>
+#include <QtCore/QSettings>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/qtabwidget.h>
+#include <QtGui/qstatusbar.h>
+#include <QtGui/qsplitter.h>
+#include <QtCore/qtimer.h>
+#include <QtGui/QDockWidget>
+#include <QtGui/QCloseEvent>
 
 #include "base/propertyview.h"
 #include "base/logwindow.h"
@@ -45,8 +47,8 @@
 
 #include "picswitch.h"
 
-#include "dialogs/aboutdialogimpl.h"
-#include "dialogs/changesdialogimpl.h"
+#include "dialogs/aboutdialog.h"
+#include "dialogs/changesdialog.h"
 #include "dialogs/newgraphdialog.h"
 
 #include "interfaces/ienginecontrolreceiver.h"
@@ -108,12 +110,12 @@ namespace gui
     IErrorReceiver* m_client;
   };
   
-  VJMainWindow::VJMainWindow(QWidget* parent, const char* name,
+  VJMainWindow::VJMainWindow(QWidget* parent,
                              const utils::ConfigManager& config,
                              const std::string& ipc_locator,
                              const std::string& conf_base_dir)
 			     
-    : QMainWindow(parent,name),
+    : QMainWindow(parent),
       m_error_proxy(new ProxyErrorReceiver()),
       engineWrapper(new EngineWrapper(config.get_string_param("ipc_type"),
                                       ipc_locator,
@@ -125,16 +127,21 @@ namespace gui
       m_kbManager(0),
       m_conf_base_dir(conf_base_dir)
   {
+    QCoreApplication::setOrganizationName("gephex");
+    QCoreApplication::setOrganizationDomain("gephex.org");
+    QCoreApplication::setApplicationName("gephex-gui");
+
+    readSettings();
+
     createActions();
 
     buildMenuBar();
     
-    switcher = new PicSwitch(statusBar(), "switcher!",
-                             roter_mann, gruener_mann);
+    switcher = new PicSwitch(statusBar(),
+                             roter_mann,
+			     gruener_mann);
 
-    statusBar()->addWidget(switcher,0,TRUE);
-    
-    buildSceleton();
+    statusBar()->addPermanentWidget(switcher);
     
     connect(switcher, SIGNAL(clicked(int)), this, SLOT(startStop()));
     
@@ -147,6 +154,8 @@ namespace gui
 
   VJMainWindow::~VJMainWindow()
   {
+    writeSettings();
+
     delete graphNameView;
 
     //TODO: the kbmanager is currently not used (set to 0)
@@ -155,6 +164,70 @@ namespace gui
     // but the keyboardmanager gets deleted before the nodewidgets
     // (they get deleted by qt).
     // Possible solution: keep keyboardmanager in a utils::AutoPtr.
+  }
+
+  void VJMainWindow::closeEvent(QCloseEvent* event)
+  {
+    event->accept();
+  }
+
+  namespace
+  {
+    QPoint pmax(const QPoint& a, const QPoint& b)
+    {
+      return QPoint(a.x() >= b.x() ? a.x() : b.x(),
+		    a.y() >= b.y() ? a.y() : b.y());
+    }
+  }
+
+  void VJMainWindow::writeSettings()
+  {
+    QSettings settings;
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
+
+    settings.setValue("mainWindowState", saveState());
+
+    // They all float down here...
+    settings.setValue("propertyDockFloating", m_propDock->isFloating());
+    settings.setValue("graphDockFloating", m_graphDock->isFloating());
+    settings.setValue("logDockFloating", m_logDock->isFloating());
+
+    settings.setValue("propertyDockPos", pmax(QPoint(0, 20),m_propDock->pos()));
+    settings.setValue("propertyDockSize", m_propDock->size());
+    
+    settings.setValue("graphDockPos", pmax(QPoint(0, 20), m_graphDock->pos()));
+    settings.setValue("graphDockSize", m_graphDock->size());
+
+    settings.setValue("logDockPos", pmax(QPoint(0, 20), m_logDock->pos()));
+    settings.setValue("logDockSize", m_logDock->size());
+    settings.setValue("logDockHidden", m_logDock->isHidden());
+  }
+
+  void VJMainWindow::readSettings()
+  {
+    QSettings settings;
+    QPoint position = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size      = settings.value("size", QSize(640, 480)).toSize();
+
+    resize(size);
+    move(position);
+
+    m_winState = settings.value("mainWindowState").toByteArray();
+
+    m_propDockFloating = settings.value("propertyDockFloating").toBool();
+    m_propDockSize = settings.value("propertyDockSize",QSize(100,400)).toSize();
+    m_propDockPos = settings.value("propertyDockPos",QPoint(0, 0)).toPoint();
+
+    m_graphDockFloating = settings.value("graphDockFloating").toBool();
+    m_graphDockSize = settings.value("graphDockSize", QSize(100,400)).toSize();
+    m_graphDockPos = settings.value("graphDockPos", QPoint(0,0)).toPoint();
+
+    m_logDockFloating = settings.value("logDockFloating").toBool();
+    m_logDockSize = settings.value("logDockSize", QSize(100,400)).toSize();
+    m_logDockPos = settings.value("logDockPos", QPoint(0,0)).toPoint();
+
+    m_logDockHidden = settings.value("logDockHidden", false).toBool();
   }
 
 
@@ -177,8 +250,7 @@ namespace gui
 
   void VJMainWindow::quitSlot()
   {
-	
-	emit quitSignal();
+    emit quitSignal();
   }
 
   void VJMainWindow::pollNetwork()
@@ -232,52 +304,51 @@ namespace gui
 
   void VJMainWindow::createActions()
   {
-    quitAction= new QAction(this,"QuitAction");
+    quitAction= new QAction("QuitAction", this);
     quitAction->setText("Quit");
     quitAction->setToolTip ("exit the application");
-    quitAction->setAccel(Qt::CTRL+Qt::Key_Q);
+    quitAction->setShortcut(QString("Ctrl+Q"));
     quitAction->setEnabled(true);
     connect(quitAction, SIGNAL(activated()),
-		    this, SLOT(quitSlot()));
+	    this, SLOT(quitSlot()));
 
-    newGraphAction= new QAction(this,"NewGraphAction");
+    newGraphAction= new QAction("NewGraphAction", this);
     newGraphAction->setText("New Graph");
     newGraphAction->setToolTip ("create a new graph");
-    //newGraphAction->setAccel(Qt::CTRL+Qt::Key_Q);
     newGraphAction->setEnabled(false);
     connect(newGraphAction,SIGNAL(activated()),this,SLOT(newGraph()));
 
-    rendererStateAction= new QAction(this,"RendererStateAction",false);
+    rendererStateAction= new QAction("RendererStateAction", this);
     rendererStateAction->setText("start/stop rendering");
     rendererStateAction->setToolTip ("starts and stops the renderer");
     rendererStateAction->setEnabled(false);
-    rendererStateAction->setAccel(Qt::CTRL + Qt::Key_Space);
-    rendererStateAction->setToggleAction ( false );
+    rendererStateAction->setShortcut(QString("Ctrl+ "));
+    rendererStateAction->setCheckable( false );
     connect(rendererStateAction, SIGNAL(activated()),
 	    this,SLOT(setRendererState( )));      
 
-    connectToEngineAction= new QAction(this,"ConnectToEngineAction");
+    connectToEngineAction= new QAction("ConnectToEngineAction", this);
     connectToEngineAction->setText("Connect");
     connectToEngineAction->setToolTip ("connect to the engine");
     connectToEngineAction->setEnabled(false);
     connect(connectToEngineAction,SIGNAL(activated()),
 	    this,SLOT(connectToEngine()));
 
-    disConnectToEngineAction= new QAction(this,"disConnectToEngineAction");
+    disConnectToEngineAction= new QAction("disConnectToEngineAction", this);
     disConnectToEngineAction->setText("Disconnect");
     disConnectToEngineAction->setToolTip ("disconnect from the engine");
     disConnectToEngineAction->setEnabled(false);
     connect(disConnectToEngineAction,SIGNAL(activated()),
 	    this,SLOT(disconnectFromEngine()));
 
-    synchronizeEngineAction= new QAction(this,"synchronizeEngineAction");
+    synchronizeEngineAction= new QAction("synchronizeEngineAction", this);
     synchronizeEngineAction->setText("Sync");
     synchronizeEngineAction->setToolTip ("sync the gui with the engine");
     synchronizeEngineAction->setEnabled(false);
     connect(synchronizeEngineAction,SIGNAL(activated()),
 	    this,SLOT(synchronize()));
     
-    shutDownEngineAction= new QAction(this,"shutDownEngineAction");
+    shutDownEngineAction= new QAction("shutDownEngineAction", this);
     shutDownEngineAction->setText("kill the engine");
     shutDownEngineAction->setToolTip ("terminates the engine process");
     shutDownEngineAction->setEnabled(false);
@@ -288,37 +359,39 @@ namespace gui
     keyGrabStateAction->setText("Grab keyboard");
     keyGrabStateAction->setToolTip ("turn the keygrabber on/off");
     keyGrabStateAction->setEnabled(false);
-    keyGrabStateAction->setToggleAction ( true );
+    keyGrabStateAction->setCheckable ( true );
     connect(keyGrabStateAction,SIGNAL(toggled(bool)),
     this,SLOT(setKeyGrabState( bool )));*/
     
-    aboutAction= new QAction(this,"aboutAction");
+    aboutAction= new QAction("aboutAction", this);
     aboutAction->setText("About GePhex");
     //aboutAction->setToolTip ("shows some stuff");
-    //aboutAction->setAccel(Qt::CTRL+Qt::Key_A);
     aboutAction->setEnabled(true);
     connect(aboutAction,SIGNAL(activated()),this,SLOT(aboutSlot()));
 
-    changesAction= new QAction(this,"changesAction");
+    changesAction= new QAction("changesAction", this);
     changesAction->setText("Changes");
     changesAction->setToolTip ("Shows changes to previous version");
-    //changesAction->setAccel(Qt::CTRL+Qt::Key_A);
     changesAction->setEnabled(true);
     connect(changesAction,SIGNAL(activated()),this,SLOT(changesSlot()));
+
+    m_showLogAction = new QAction("showLogAction", this);
+    m_showLogAction->setText("Show Message Window");
+    m_showLogAction->setCheckable( true );
+    m_showLogAction->setToolTip("Shows/hides the Message Window");
+    connect(m_showLogAction, SIGNAL(activated()), this, SLOT(showLogSlot()));
   }
   
   void VJMainWindow::buildMenuBar(void)
   {
-    QPopupMenu* file = new QPopupMenu(this);
-    menuBar()->insertItem("File",file,1,1);
-    quitAction->addTo(file);
+    QMenu* file = menuBar()->addMenu("&File");
+    file->addAction(quitAction);
 
-    QPopupMenu* server = new QPopupMenu(this);
-    menuBar()->insertItem("Server",server,2,2);
-    connectToEngineAction->addTo(server);
-    disConnectToEngineAction->addTo(server);
-    //synchronizeEngineAction->addTo(server);
-    shutDownEngineAction->addTo(server);
+    QMenu* server = menuBar()->addMenu("&Server");
+    server->addAction(connectToEngineAction);
+    server->addAction(disConnectToEngineAction);
+    //server->addAction(synchronizeEngineAction);
+    server->addAction(shutDownEngineAction);
 
     /*
     QPopupMenu* graphMenu = new QPopupMenu(this);
@@ -326,30 +399,28 @@ namespace gui
     newGraphAction->addTo(graphMenu);
     */
 
-    QPopupMenu* startstop = new QPopupMenu(this);
-    menuBar()->insertItem("Engine",startstop,3,3);
-    rendererStateAction->addTo(startstop);
+    QMenu* startstop = menuBar()->addMenu("&Engine");
+    startstop->addAction(rendererStateAction);
 
     /*QPopupMenu* keyboard = new QPopupMenu(this);
       menuBar()->insertItem("Keyboard", keyboard,4,4);
       keyGrabStateAction->addTo(keyboard);*/
 
-    effectMenue = new QPopupMenu(this);
-    menuBar()->insertItem("Effects",effectMenue,6,6);
+    effectMenue = menuBar()->addMenu("&Effects");
 
-    help = new QPopupMenu(this);
-    menuBar()->insertItem("Help", help,7,7);
-    aboutAction->addTo(help);
-    changesAction->addTo(help);
+    QMenu* windows = menuBar()->addMenu("&Windows");
+    windows->addAction(m_showLogAction);
+
+    help = menuBar()->addMenu("&Help");
+    help->addAction(aboutAction);
+    help->addAction(changesAction);
+
+    menuBar()->show();
   }
 
 
   void VJMainWindow::buildModuleBar(void)
   {
-    //moved to buildMenuBar
-    //effectMenue = new QPopupMenu(this);
-    //menuBar()->insertItem("Effekte",effectMenue,6,6);
-  
     moduleClassView = new ModuleClassView(effectMenue);
 
     // moduleClassView->show();
@@ -372,77 +443,82 @@ namespace gui
 
   void VJMainWindow::buildSceleton()
   {
-    centralWidget = new QWidget(this, "CentralWidget");
-	
-    splitVertical = new QSplitter(Qt::Vertical, centralWidget,
-                                  "SplitVertical");
-	
-    splitHorizontal = new QSplitter(Qt::Horizontal, splitVertical,
-                                    "SplitHorizontal");
-
-    leftTab = new QTabWidget(splitHorizontal,"LeftTab");
-    leftTab->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,
-                                       QSizePolicy::Maximum));
-	
-
-    editor = new QWidget(splitHorizontal, "space for editor");
-#if QT_VERSION >= 300
-    editor->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
-                                      QSizePolicy::Maximum));
-
-    splitHorizontal->setResizeMode(editor, QSplitter::FollowSizeHint);
-    splitHorizontal->setResizeMode(leftTab, QSplitter::FollowSizeHint);
-#endif
-    belowTab = new QTabWidget(splitVertical, "BelowTab");
-    belowTab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,
-                                        QSizePolicy::Minimum));
-    splitVertical->setResizeMode(belowTab,QSplitter::FollowSizeHint);
-    
-    logWindow = new LogWindow(belowTab);
-    engineWrapper->errorSender().registerErrorReceiver(*logWindow);
-    belowTab->addTab(logWindow, "Messages");
-
-    m_error_proxy->set_client(logWindow);
-
-    setCentralWidget(centralWidget);
-
-    // layout
-    QVBoxLayout* topLayout = new QVBoxLayout(centralWidget);
-    topLayout->addWidget(splitVertical);	
-
-    centralWidget->show();
-  }
-
-  void VJMainWindow::fillSceleton(void)
-  {
-
-    graphNameView = new GraphNameView(leftTab,
+    m_graphDock = new QDockWidget("Graphs",this);
+    m_graphDock->setObjectName("graphDock");
+    graphNameView = new GraphNameView(m_graphDock,
 				      engineWrapper->modelControlReceiver(),
                                       *logWindow);
+    m_graphDock->setWidget(graphNameView->widget());
+
+    m_graphDock->setFeatures(QDockWidget::DockWidgetMovable |
+			     QDockWidget::DockWidgetFloatable);
+
+    addDockWidget(Qt::RightDockWidgetArea,m_graphDock);
+
+    m_graphDock->resize(m_graphDockSize);
+    if (m_graphDockFloating)
+      {
+        m_graphDock->setFloating(true);
+        m_graphDock->move(m_graphDockPos);
+      }
+
+
+
+    m_propDock = new QDockWidget("Properties",this);
+    m_propDock->setObjectName("propDock");
+    propertyView = new PropertyView(m_propDock);
+    m_propDock->setWidget(propertyView);
+
+    m_propDock->setFeatures(QDockWidget::DockWidgetMovable |
+                          QDockWidget::DockWidgetFloatable);
+
+    addDockWidget(Qt::LeftDockWidgetArea, m_propDock);
+
+    m_propDock->resize(m_propDockSize);
+    if (m_propDockFloating)
+      {
+        m_propDock->setFloating(true);
+        m_propDock->move(m_propDockPos);
+      }
+
+    m_logDock = new QDockWidget("Messages", this);
+    m_logDock->setObjectName("logDock");
+    logWindow = new LogWindow(m_logDock);
+    m_logDock->setWidget(logWindow);
+    addDockWidget(Qt::BottomDockWidgetArea, m_logDock);
+
+    m_logDock->resize(m_logDockSize);
+    if (m_logDockFloating)
+      {
+        m_logDock->setFloating(true);
+        m_logDock->move(m_logDockPos);
+      }
+
+    if (m_logDockHidden)
+      {
+        m_logDock->hide();
+      }
+
+
+    engineWrapper->errorSender().registerErrorReceiver(*logWindow);
+    m_error_proxy->set_client(logWindow);
+
     engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);
 
-    editorWidget = new EditorWidget(editor,"Editorwidget",
+
+    editorWidget = new EditorWidget(this,
 				    engineWrapper->graphModel(),
 				    engineWrapper->modelControlReceiver(),
 				    engineWrapper->controlModel(),
 				    *moduleClassView,
-                                    /* *moduleClassTabView,*/
 				    engineWrapper->controlValueDispatcher(),
 				    engineWrapper->moduleStatisticsSender(),
 				    engineWrapper->modelStatusSender(),
 				    &*m_kbManager, *logWindow,
 				    m_config.get_string_param("media_path"));
 
-    editorWidget->show();
-    QVBoxLayout* editorLayout = new QVBoxLayout(editor);
-    editorLayout->addWidget(editorWidget);    
+    editorWidget->setObjectName("editorWidget");
 
-    propertyView = new PropertyView(leftTab);
-    leftTab->addTab(propertyView,"Properties");
-    propertyTabID = leftTab->currentPageIndex();
-    leftTab->addTab(graphNameView->widget(),"Graphs");
-    
-    
     connect(editorWidget,SIGNAL(statusText(const std::string&)),
 	    this,SLOT(displayStatusText(const std::string&)));
 
@@ -467,24 +543,14 @@ namespace gui
             this, SLOT(undisplayProperties()));
 
     engineWrapper->rendererStatusSender().registerRendererStatusReceiver(*this);
+    setCentralWidget(editorWidget);
+
+    restoreState(m_winState);
   }
 
   void VJMainWindow::clearSceleton()
   {
-
-    if (graphNameView)
-      {
-        delete graphNameView;
-        graphNameView = 0;
-      }
-
-    if (centralWidget) 
-      {
-	//this->removeChild(centralWidget);
-	delete centralWidget;
-	centralWidget = 0;
-        buildSceleton();	
-      }
+    delete graphNameView;
   }
 
   void VJMainWindow::newGraph()
@@ -506,12 +572,12 @@ namespace gui
 	  {
 	    throw std::runtime_error("already connected");
 	  }
+
+	statusBar()->showMessage("connecting to the engine ...");
+
+	buildModuleBar();
+        buildSceleton();
 	
-	statusBar()->message("connecting to the engine ...");
-
-        buildModuleBar();
-        fillSceleton();
-
 	try
 	  {
 	    this->connectToRealEngine();
@@ -519,7 +585,7 @@ namespace gui
 	catch (std::runtime_error& e) 
 	  {
 	    // start engine
-            statusBar()->message("trying to spawn gephex-engine...");
+            statusBar()->showMessage("trying to spawn gephex-engine...");
             std::vector<std::string> args;
             std::string binary_name =
               m_config.get_string_param("engine_binary");
@@ -553,13 +619,13 @@ namespace gui
             // give engine some time to start up
             utils::Timing::sleep(1000);
 
-            statusBar()->message("trying to connect...");
+            statusBar()->showMessage("trying to connect...");
             // try to connect
 	    this->connectToRealEngine();
 	  }
 
 
-	statusBar()->message("connected");
+	statusBar()->showMessage("connected");
 
         connected=true;
       } 
@@ -569,7 +635,7 @@ namespace gui
 	displayErrorMessage(e.what());
         connectToEngineAction->setEnabled(true);
         utils::Timing::sleep(1000);
-        this->clearSceleton();
+        //this->clearSceleton();
         this->unbuildModuleBar();
       }
   }
@@ -587,10 +653,9 @@ namespace gui
     this->disconnectFromRealEngine();
 
     this->clearSceleton();
-
     this->unbuildModuleBar();
 		
-    statusBar()->message("disconnected");
+    statusBar()->showMessage("disconnected");
   }
 
 
@@ -602,7 +667,7 @@ namespace gui
 
   void VJMainWindow::displayStatusText(const std::string& s)
   {
-    statusBar()->message(s.c_str(),2500);
+    statusBar()->showMessage(s.c_str(),2500);
   }
 
 
@@ -610,7 +675,6 @@ namespace gui
   {
     try {
       propertyView->displayProperties(pd);
-      leftTab->setCurrentPage(propertyTabID);
     }
     catch (std::runtime_error& e)
       {
@@ -621,7 +685,7 @@ namespace gui
   void VJMainWindow::undisplayProperties()
   {
     try {
-      propertyView->undisplayProperties();      
+      propertyView->undisplayProperties();
     }
     catch (std::runtime_error& e)
       {
@@ -639,7 +703,7 @@ namespace gui
 
   void VJMainWindow::setCaption(const std::string& text)
   {
-    QWidget::setCaption(text.c_str());
+    QWidget::setWindowTitle(text.c_str());
   }
 
 
@@ -650,7 +714,7 @@ namespace gui
 
   void VJMainWindow::aboutSlot()
   {
-    AboutDialog* dlg = new AboutDialogImpl(this);
+    AboutDialog* dlg = new AboutDialog(this);
     dlg->show();
   }
 
@@ -658,6 +722,14 @@ namespace gui
   {
     ChangesDialog* dlg = new ChangesDialog(this);
     dlg->show();
+  }
+
+  void VJMainWindow::showLogSlot()
+  {
+    if (m_logDock->isHidden())
+      m_logDock->show();
+    else
+      m_logDock->hide();
   }
 
   void VJMainWindow::shutDown()

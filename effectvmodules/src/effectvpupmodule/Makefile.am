@@ -17,7 +17,7 @@ effectvpupmodule_la_SOURCES = \
         effectvpupmodule.spec \
         effectvpupmodule.xpm
 
-EXTRA_DIST = pup.c effectvpupmodule.dsp effectvpupmodule.mak effectvpupmodule.dep
+EXTRA_DIST = pup.c  effectvpupmodule.dsp effectvpupmodule.mak effectvpupmodule.dep
 
 effectvpupmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

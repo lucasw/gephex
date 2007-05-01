@@ -1,0 +1,1480 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="netinterfaces"
+	ProjectGUID="{F862A9D7-7F4A-439D-9CEA-2668517D83F9}"
+	SccProjectName=""
+	SccLocalPath="">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="2"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="..,../../,../../../util/src/include"
+				PreprocessorDefinitions="NDEBUG;_LIB;HAVE_CONFIG_H"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Release/netinterfaces.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\../../lib\netinterfaces.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\../../lib"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="..,../../,../../../util/include"
+				PreprocessorDefinitions="_DEBUG;_LIB;HAVE_CONFIG_H"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Debug/netinterfaces.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\../../lib\netinterfaces.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1031"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Quellcodedateien"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath="controlvaluereceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="controlvaluesendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="enginecontrolreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="enginecontrolsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="errorreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="errorsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphdatareceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphdatasendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphnamereceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="graphnamesendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelcontrolreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelcontrolsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelstatusreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modelstatussendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassinforeceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassinfosendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrolreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrolsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassnamereceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleclassnamesendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleconstructiondumbreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduleconstructiondumbsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduledatareceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="moduledatasendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modulestatisticsreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="modulestatisticssendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="renderercontrolreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="renderercontrolsendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="rendererstatusreceivernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="rendererstatussendernet.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Autocreated Headers"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="controlvaluereceivernet.h">
+			</File>
+			<File
+				RelativePath="controlvaluesendernet.h">
+			</File>
+			<File
+				RelativePath="enginecontrolreceivernet.h">
+			</File>
+			<File
+				RelativePath="enginecontrolsendernet.h">
+			</File>
+			<File
+				RelativePath="errorreceivernet.h">
+			</File>
+			<File
+				RelativePath="errorsendernet.h">
+			</File>
+			<File
+				RelativePath="graphdatareceivernet.h">
+			</File>
+			<File
+				RelativePath="graphdatasendernet.h">
+			</File>
+			<File
+				RelativePath="graphnamereceivernet.h">
+			</File>
+			<File
+				RelativePath="graphnamesendernet.h">
+			</File>
+			<File
+				RelativePath="modelcontrolreceivernet.h">
+			</File>
+			<File
+				RelativePath="modelcontrolsendernet.h">
+			</File>
+			<File
+				RelativePath="modelstatusreceivernet.h">
+			</File>
+			<File
+				RelativePath="modelstatussendernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassinforeceivernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassinfosendernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrolreceivernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrolsender.h">
+			</File>
+			<File
+				RelativePath="moduleclassloadercontrolsendernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassnamereceivernet.h">
+			</File>
+			<File
+				RelativePath="moduleclassnamesendernet.h">
+			</File>
+			<File
+				RelativePath="moduleconstructiondumbreceivernet.h">
+			</File>
+			<File
+				RelativePath="moduleconstructiondumbsendernet.h">
+			</File>
+			<File
+				RelativePath="moduledatareceivernet.h">
+			</File>
+			<File
+				RelativePath="moduledatasendernet.h">
+			</File>
+			<File
+				RelativePath="modulestatisticsreceivernet.h">
+			</File>
+			<File
+				RelativePath="modulestatisticssendernet.h">
+			</File>
+			<File
+				RelativePath="renderercontrolreceivernet.h">
+			</File>
+			<File
+				RelativePath="renderercontrolsendernet.h">
+			</File>
+			<File
+				RelativePath="rendererstatusreceivernet.h">
+			</File>
+			<File
+				RelativePath="rendererstatussendernet.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Interfaces"
+			Filter="if">
+			<File
+				RelativePath="..\interfaces\controlvalue.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\enginecontrol.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\error.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\graphdata.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\graphname.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\modelcontrol.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\modelstatus.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleclass.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleclassinfo.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleclassloadercontrol.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleclassname.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleclassspec.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleconstructiondumb.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduleconstructionsmart.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\moduledata.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\modulestatistics.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\modulestatisticssmart.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\renderercontrol.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\rendererstatus.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\serializedgraph.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\smartcontrolvalue.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\typeclass.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\typeclassinfo.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\typeclassloadercontrol.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\interfaces\typeclassname.if">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating netinterface headers and implementations for $(InputPath) ..."
+						CommandLine="python ../../nic.py nrh . &quot;$(InputPath)&quot;
+python ../../nic.py nrc . &quot;$(InputPath)&quot;
+python ../../nic.py nsh . &quot;$(InputPath)&quot;
+python ../../nic.py nsc . &quot;$(InputPath)&quot;
+"
+						Outputs="$(InputName)receivernet.h;$(InputName)receivernet.cpp;$(InputName)sendernet.h;$(InputName)sendernet.cpp"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

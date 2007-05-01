@@ -28,5 +28,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = numoscmodule.h numoscmodule_auto.c
 
-#EXTRA_DIST = numoscmodule.dsp numoscmodule.mak numoscmodule.dep
+#EXTRA_DIST = numoscmodule.vcproj numoscmodule.dsp numoscmodule.mak numoscmodule.dep
 

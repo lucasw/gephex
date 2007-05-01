@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <qlabel.h>
+#include <QtGui/qlabel.h>
 
 namespace gui
 {

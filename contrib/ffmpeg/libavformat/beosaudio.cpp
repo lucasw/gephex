@@ -2,19 +2,21 @@
  * BeOS audio play interface
  * Copyright (c) 2000, 2001 Fabrice Bellard.
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include <signal.h>
@@ -287,8 +289,8 @@ static int audio_write_header(AVFormatContext *s1)
     int ret;
 
     st = s1->streams[0];
-    s->sample_rate = st->codec.sample_rate;
-    s->channels = st->codec.channels;
+    s->sample_rate = st->codec->sample_rate;
+    s->channels = st->codec->channels;
     ret = audio_open(s, 1, NULL);
     if (ret < 0)
         return -EIO;
@@ -365,10 +367,10 @@ static int audio_read_header(AVFormatContext *s1, AVFormatParameters *ap)
         return -EIO;
     }
     /* take real parameters */
-    st->codec.codec_type = CODEC_TYPE_AUDIO;
-    st->codec.codec_id = s->codec_id;
-    st->codec.sample_rate = s->sample_rate;
-    st->codec.channels = s->channels;
+    st->codec->codec_type = CODEC_TYPE_AUDIO;
+    st->codec->codec_id = s->codec_id;
+    st->codec->sample_rate = s->sample_rate;
+    st->codec->channels = s->channels;
     return 0;
     av_set_pts_info(s1, 48, 1, 1000000);  /* 48 bits pts in us */
 }
@@ -419,7 +421,7 @@ static int audio_read_close(AVFormatContext *s1)
     return 0;
 }
 
-static AVInputFormat audio_in_format = {
+static AVInputFormat audio_demuxer = {
     "audio_device",
     "audio grab and output",
     sizeof(AudioData),
@@ -431,7 +433,7 @@ static AVInputFormat audio_in_format = {
     AVFMT_NOFILE,
 };
 
-AVOutputFormat audio_out_format = {
+AVOutputFormat audio_muxer = {
     "audio_device",
     "audio grab and output",
     "",
@@ -454,8 +456,8 @@ extern "C" {
 int audio_init(void)
 {
     main_thid = find_thread(NULL);
-    av_register_input_format(&audio_in_format);
-    av_register_output_format(&audio_out_format);
+    av_register_input_format(&audio_demuxer);
+    av_register_output_format(&audio_muxer);
     return 0;
 }
 

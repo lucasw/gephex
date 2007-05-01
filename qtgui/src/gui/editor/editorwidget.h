@@ -24,10 +24,10 @@
 #define EDITORWIDGET_H
 
 #include <string>
-#include <qwidget.h>
-//#include <qworkspace.h>
-//#include <qtabwidget.h>
-#include <qsplitter.h>
+#include <QtGui/qwidget.h>
+//#include <QtGui/qworkspace.h>
+//#include <QtGui/qtabwidget.h>
+#include <QtGui/qsplitter.h>
 
 //class QWidget;
 
@@ -54,7 +54,7 @@ namespace gui
   class EditorWidget : public QSplitter {
     Q_OBJECT
   public: 
-    EditorWidget(QWidget *parent, const char *name, 
+    EditorWidget(QWidget *parent, 
 		 GraphModel& graphModel,IModelControlReceiver& model,
 		 ControlModel& controlModel,
 		 ModuleClassView&,

@@ -23,15 +23,37 @@ OSS_sOURCES = \
 	ossdriver.h
 endif
 
+if OS_DARWIN
+MAC_sOURCES = \
+	coreaudiodriver.cpp \
+	coreaudiodriver.h \
+	coreaudioconvert.cpp \
+	coreaudioconvert.h \
+	coreaudiohelpers.cpp \
+	coreaudiohelpers.h
+
+MAC_lDFLAGS = -framework CoreAudio -framework AudioToolBox
+endif
+
+if OS_WINDOWS
+W32_sOURCES = \
+	audiobuffer.c \
+	audiobuffer.h \
+	waveindriver.cpp \
+	waveindriver.h
+endif
+
 audioinmodule_la_SOURCES = \
         audioinmodule_auto.c \
         audioinmodule.cpp \
         audioinmodule.h \
+	a_cvt.cpp \
+	a_cvt.h \
         audioinmodule.spec \
         audioinmodule.xpm \
-	audioindriver.h $(OSS_sOURCES) $(ALSALIB_sOURCES)
+	audioindriver.h $(OSS_sOURCES) $(ALSALIB_sOURCES) $(MAC_sOURCES) $(W32_sOURCES)
 
-audioinmodule_la_LDFLAGS = -module -avoid-version -no-undefined
+audioinmodule_la_LDFLAGS = -module -avoid-version -no-undefined $(MAC_lDFLAGS)
 audioinmodule_la_LIBADD = $(ALSALIB_lDFLAGS)
 
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
@@ -41,6 +63,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../types/src/stringtype 
 
 DISTCLEANFILES = audioinmodule.h audioinmodule_auto.c
-EXTRA_DIST = audioinmodule.dsp audioinmodule.mak audioinmodule.dep \
-	waveindriver.cpp waveindriver.h \
-	audiobuffer.c audiobuffer.h
+EXTRA_DIST = audioinmodule.vcproj audioinmodule.dsp audioinmodule.mak audioinmodule.dep

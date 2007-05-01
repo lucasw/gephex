@@ -23,7 +23,7 @@
 #ifndef INCLUDED_HIDE_BUTTON_H
 #define INCLUDED_HIDE_BUTTON_H
 
-#include <qcheckbox.h>
+#include <QtGui/qcheckbox.h>
 
 namespace gui
 {

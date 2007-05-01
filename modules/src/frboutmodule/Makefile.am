@@ -39,6 +39,24 @@ SDL_cFLAGS=@SDL_CFLAGS@
 SDL_lD_FLAGS=@SDL_LD_FLAGS@
 endif
 
+if OS_WINDOWS
+PLT_sOURCES = \
+	gdioutput.c \
+	gdioutput.h \
+	multimonitor.c \
+	multimonitor.h
+
+# TODO: for now, gl on windows is not maintained
+#if WITH_GL
+#GL_sOURCES = \
+#        gloutput.h \
+#	gloutput.cpp \
+#	glutil.h \
+#	wglutil.c
+#endif
+
+else # not OS_WINDOWS
+
 if WITH_GL
 GLLIBS = -lGL
 GL_sOURCES = \
@@ -46,6 +64,9 @@ GL_sOURCES = \
 	gloutput.cpp \
 	glutil.h \
 	glxutil.c
+endif
+
+PLT_sOURCES =
 endif
 
 frboutmodule_la_SOURCES = \
@@ -56,7 +77,7 @@ frboutmodule_la_SOURCES = \
         frboutmodule.xpm \
         outputdriver.h \
 	slist.h \
-	slist.c $(X11_sOURCES) $(V4L_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES)
+	slist.c $(X11_sOURCES) $(V4L_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES) $(PLT_sOURCES)
 
 
 frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale -L/usr/X11R6/lib -L@builddir@/../libcolorconv
@@ -75,6 +96,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = frboutmodule.h frboutmodule_auto.c
-EXTRA_DIST = frboutmodule.dsp frboutmodule.mak frboutmodule.dep \
-	gdioutput.c gdioutput.h \
-	multimonitor.c multimonitor.h
+EXTRA_DIST = frboutmodule.vcproj frboutmodule.dsp frboutmodule.mak frboutmodule.dep

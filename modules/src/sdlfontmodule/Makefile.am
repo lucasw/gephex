@@ -35,4 +35,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
            
 DISTCLEANFILES = sdlfontmodule.h sdlfontmodule_auto.c
 
-EXTRA_DIST = sdlfontmodule.dsp sdlfontmodule.mak sdlfontmodule.dep
+EXTRA_DIST = sdlfontmodule.vcproj sdlfontmodule.dsp sdlfontmodule.mak sdlfontmodule.dep

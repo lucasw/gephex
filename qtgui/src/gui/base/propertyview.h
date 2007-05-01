@@ -24,10 +24,10 @@
 #define INCLUDED_PROPERTY_VIEW_H
 
 #include <list>
-#include <qwidget.h>
+#include <QtGui/QWidget>
 
 
-class QTable;
+class QTableWidget;
 class QHBoxLayout;
 
 /**
@@ -70,44 +70,41 @@ class QHBoxLayout;
 namespace gui
 {
 
-class IPropertyDescription;
-class IWidgetConstructor;
+  class IPropertyDescription;
+  class IWidgetConstructor;
 
-class PropertyView : public QWidget
-{
-public:
-	/**
-	 * Erzeugt eine neue PropertyView.
-	 * @param parent Das Vater Widget der View.
-	 */
-	PropertyView(QWidget* parent);
+  class PropertyView : public QWidget
+    {
+    public:
+      /**
+       * Erzeugt eine neue PropertyView.
+       * @param parent Das Vater Widget der View.
+       */
+      PropertyView(QWidget* parent);
 
-	~PropertyView();
+      ~PropertyView();
 
-	/**
-	 * Zeigt die Eigenschaften an die in desc beschrieben sind.
-	 * Die entsprechenden Widgets werden mithilfe der IWidgetConstructor 
-	 * Objekte erzeugt. 
-	 * Die Widgets werden wieder gelöscht, wenn displayProperties()
-	 * das nächste Mal aufgerufen wird.
-	 * @param desc Eine Beschreibung der Eigenschaften eines Objekts.
-	 */
-	void displayProperties(const IPropertyDescription& desc);
+      /**
+       * Zeigt die Eigenschaften an die in desc beschrieben sind.
+       * Die entsprechenden Widgets werden mithilfe der IWidgetConstructor 
+       * Objekte erzeugt. 
+       * Die Widgets werden wieder gelöscht, wenn displayProperties()
+       * das nächste Mal aufgerufen wird.
+       * @param desc Eine Beschreibung der Eigenschaften eines Objekts.
+       */
+      void displayProperties(const IPropertyDescription& desc);
 
-	void undisplayProperties();
+      void undisplayProperties();
 
-private:
-	QTable* table;
-	QHBoxLayout* m_layout;
+    private:
+      QTableWidget* table;
+      QHBoxLayout* m_layout;
 
-	std::list<std::pair<const IWidgetConstructor*,QWidget*> > widgetCtors;
+      std::list<std::pair<const IWidgetConstructor*,QWidget*> > widgetCtors;
 
-	void deleteTable();
-};
+      void deleteTable();
+    };
 
 }
 
 #endif
-
-
-

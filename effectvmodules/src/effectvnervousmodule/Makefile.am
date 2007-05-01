@@ -17,7 +17,7 @@ effectvnervousmodule_la_SOURCES = \
         effectvnervousmodule.spec \
         effectvnervousmodule.xpm
 
-EXTRA_DIST = nervous.c effectvnervousmodule.dsp effectvnervousmodule.mak effectvnervousmodule.dep
+EXTRA_DIST = nervous.c  effectvnervousmodule.dsp effectvnervousmodule.mak effectvnervousmodule.dep
 
 effectvnervousmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

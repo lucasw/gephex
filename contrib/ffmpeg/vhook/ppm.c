@@ -1,20 +1,22 @@
 /*
- * PPM Video Hook 
+ * PPM Video Hook
  * Copyright (c) 2003 Charles Yates
  *
- * This library is free software; you can redistribute it and/or
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * FFmpeg is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include <stdio.h>
@@ -24,6 +26,10 @@
 #include <sys/wait.h>
 #include <ctype.h>
 #include "framehook.h"
+#include "avformat.h"
+#include "swscale.h"
+
+static int sws_flags = SWS_BICUBIC;
 
 /** Bi-directional pipe structure.
 */
@@ -39,7 +45,7 @@ rwpipe;
 /** Create a bidirectional pipe for the given command.
 */
 
-rwpipe *rwpipe_open( int argc, char *argv[] )
+static rwpipe *rwpipe_open( int argc, char *argv[] )
 {
     rwpipe *this = av_mallocz( sizeof( rwpipe ) );
 
@@ -55,14 +61,15 @@ rwpipe *rwpipe_open( int argc, char *argv[] )
 
         if ( this->pid == 0 )
         {
-            char *command = av_mallocz( 10240 );
+#define COMMAND_SIZE 10240
+            char *command = av_mallocz( COMMAND_SIZE );
             int i;
 
             strcpy( command, "" );
             for ( i = 0; i < argc; i ++ )
             {
-                strcat( command, argv[ i ] );
-                strcat( command, " " );
+                pstrcat( command, COMMAND_SIZE, argv[ i ] );
+                pstrcat( command, COMMAND_SIZE, " " );
             }
 
             dup2( output[ 0 ], STDIN_FILENO );
@@ -73,7 +80,7 @@ rwpipe *rwpipe_open( int argc, char *argv[] )
             close( output[ 0 ] );
             close( output[ 1 ] );
 
-            execl("/bin/sh", "sh", "-c", command, NULL );
+            execl("/bin/sh", "sh", "-c", command, (char*)NULL );
             exit( 255 );
         }
         else
@@ -92,7 +99,7 @@ rwpipe *rwpipe_open( int argc, char *argv[] )
 /** Read data from the pipe.
 */
 
-FILE *rwpipe_reader( rwpipe *this )
+static FILE *rwpipe_reader( rwpipe *this )
 {
     if ( this != NULL )
         return this->reader;
@@ -103,7 +110,7 @@ FILE *rwpipe_reader( rwpipe *this )
 /** Write data to the pipe.
 */
 
-FILE *rwpipe_writer( rwpipe *this )
+static FILE *rwpipe_writer( rwpipe *this )
 {
     if ( this != NULL )
         return this->writer;
@@ -114,13 +121,13 @@ FILE *rwpipe_writer( rwpipe *this )
 /* Read a number from the pipe - assumes PNM style headers.
 */
 
-int rwpipe_read_number( rwpipe *rw )
+static int rwpipe_read_number( rwpipe *rw )
 {
     int value = 0;
     int c = 0;
     FILE *in = rwpipe_reader( rw );
 
-    do 
+    do
     {
         c = fgetc( in );
 
@@ -145,7 +152,7 @@ int rwpipe_read_number( rwpipe *rw )
 /** Read a PPM P6 header.
 */
 
-int rwpipe_read_ppm_header( rwpipe *rw, int *width, int *height )
+static int rwpipe_read_ppm_header( rwpipe *rw, int *width, int *height )
 {
     char line[ 3 ];
     FILE *in = rwpipe_reader( rw );
@@ -165,7 +172,7 @@ int rwpipe_read_ppm_header( rwpipe *rw, int *width, int *height )
 /** Close the pipe and process.
 */
 
-void rwpipe_close( rwpipe *this )
+static void rwpipe_close( rwpipe *this )
 {
     if ( this != NULL )
     {
@@ -179,14 +186,20 @@ void rwpipe_close( rwpipe *this )
 /** Context info for this vhook - stores the pipe and image buffers.
 */
 
-typedef struct 
+typedef struct
 {
     rwpipe *rw;
     int size1;
     char *buf1;
     int size2;
     char *buf2;
-} 
+
+    // This vhook first converts frame to RGB ...
+    struct SwsContext *toRGB_convert_ctx;
+    // ... then processes it via a PPM command pipe ...
+    // ... and finally converts back frame from RGB to initial format
+    struct SwsContext *fromRGB_convert_ctx;
+}
 ContextInfo;
 
 /** Initialise the context info for this vhook.
@@ -229,7 +242,7 @@ void Process(void *ctx, AVPicture *picture, enum PixelFormat pix_fmt, int width,
         err = 1;
 
     /* Convert to RGB24 if necessary */
-    if ( !err && pix_fmt != PIX_FMT_RGB24 ) 
+    if ( !err && pix_fmt != PIX_FMT_RGB24 )
     {
         int size = avpicture_get_size(PIX_FMT_RGB24, width, height);
 
@@ -244,8 +257,24 @@ void Process(void *ctx, AVPicture *picture, enum PixelFormat pix_fmt, int width,
         if ( !err )
         {
             avpicture_fill(&picture1, ci->buf1, PIX_FMT_RGB24, width, height);
-            if (img_convert(&picture1, PIX_FMT_RGB24, picture, pix_fmt, width, height) < 0)
-                err = 1;
+
+            // if we already got a SWS context, let's realloc if is not re-useable
+            ci->toRGB_convert_ctx = sws_getCachedContext(ci->toRGB_convert_ctx,
+                                        width, height, pix_fmt,
+                                        width, height, PIX_FMT_RGB24,
+                                        sws_flags, NULL, NULL, NULL);
+            if (ci->toRGB_convert_ctx == NULL) {
+                av_log(NULL, AV_LOG_ERROR,
+                       "Cannot initialize the toRGB conversion context\n");
+                exit(1);
+            }
+
+// img_convert parameters are          2 first destination, then 4 source
+// sws_scale   parameters are context, 4 first source,      then 2 destination
+            sws_scale(ci->toRGB_convert_ctx,
+                     picture->data, picture->linesize, 0, height,
+                     picture1.data, picture1.linesize);
+
             pict = &picture1;
         }
     }
@@ -292,22 +321,28 @@ void Process(void *ctx, AVPicture *picture, enum PixelFormat pix_fmt, int width,
     /* Convert the returned PPM back to the input format */
     if ( !err )
     {
-        /* Actually, this is wrong, since the out_width/out_height returned from the
-         * filter won't necessarily be the same as width and height - img_resample 
-         * won't scale rgb24, so the only way out of this is to convert to something 
-         * that img_resample does like [which may or may not be pix_fmt], rescale 
-         * and finally convert to pix_fmt... slow, but would provide the most flexibility.
-         *
-         * Currently, we take the upper left width/height pixels from the filtered image,
-         * smaller images are going to be corrupted or cause a crash.
-         *
-         * Finally, what should we do in case of this call failing? Up to now, failures
-         * are gracefully ignored and the original image is returned - in this case, a
-         * failure may corrupt the input.
+        /* The out_width/out_height returned from the PPM
+         * filter won't necessarily be the same as width and height
+         * but it will be scaled anyway to width/height.
          */
-        if (img_convert(picture, pix_fmt, &picture2, PIX_FMT_RGB24, width, height) < 0) 
-        {
+        av_log(NULL, AV_LOG_DEBUG,
+                  "PPM vhook: Input dimensions: %d x %d Output dimensions: %d x %d\n",
+                  width, height, out_width, out_height);
+        ci->fromRGB_convert_ctx = sws_getCachedContext(ci->fromRGB_convert_ctx,
+                                        out_width, out_height, PIX_FMT_RGB24,
+                                        width,     height,     pix_fmt,
+                                        sws_flags, NULL, NULL, NULL);
+        if (ci->fromRGB_convert_ctx == NULL) {
+            av_log(NULL, AV_LOG_ERROR,
+                   "Cannot initialize the fromRGB conversion context\n");
+            exit(1);
         }
+
+// img_convert parameters are          2 first destination, then 4 source
+// sws_scale   parameters are context, 4 first source,      then 2 destination
+        sws_scale(ci->fromRGB_convert_ctx,
+                 picture2.data, picture2.linesize, 0, out_height,
+                 picture->data, picture->linesize);
     }
 }
 
@@ -324,6 +359,8 @@ void Release(void *ctx)
         rwpipe_close( ci->rw );
         av_free( ci->buf1 );
         av_free( ci->buf2 );
+        sws_freeContext(ci->toRGB_convert_ctx);
+        sws_freeContext(ci->fromRGB_convert_ctx);
         av_free(ctx);
     }
 }

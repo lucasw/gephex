@@ -22,19 +22,20 @@
 
 #include "moduleclassview.h"
 
+#include <sstream>
+
 #include <string>
 #include <vector>
-#include <sstream>
 #include <stdexcept>
 
-#include <qcombobox.h>
+#include <QtGui/qcombobox.h>
 
 #include "guimodel/moduleinfo.h"
 #include "guimodel/xpm.h"
 
 namespace gui
 {
-  ModuleClassView::ModuleClassView(QPopupMenu* menu)
+  ModuleClassView::ModuleClassView(QMenu* menu)
     : QObject(menu), m_menu(menu)
   {	
   }
@@ -49,18 +50,13 @@ namespace gui
     utils::AutoPtr<ModuleInfo> mi ( new ModuleInfo(minfo) );
     infos.insert(std::make_pair(moduleClassName,mi));
     std::string group = mi->getGroup();
-    QPopupMenu* currentGroup = 0;
-    std::map<std::string,QPopupMenu*>::const_iterator
+    QMenu* currentGroup = 0;
+    std::map<std::string,QMenu*>::const_iterator
       it = groups.find(group);
     if (it == groups.end())
       {
-        currentGroup = new QPopupMenu(m_menu);
-        m_menu->insertItem(group.c_str(),currentGroup);
+        currentGroup = m_menu->addMenu(group.c_str());
         groups[group] = currentGroup;
-		
-        connect(currentGroup,SIGNAL(activated(int)),
-                this,SLOT(moduleClassSelected(int)));
-        //currentGroup->show();
       }
     else
       {
@@ -68,46 +64,34 @@ namespace gui
       }
 
     menues[moduleClassName] = currentGroup;
-	
-    const char* bla = mi->getName().c_str();
-	
-    /*ModuleButton* mb1 = new ModuleButton(classID, currentGroup,bla);
-      mb1->setTextLabel(bla);
-      mb1->setPixmap(QPixmap(mi->getIcon()->getPtr()));
-      mb1->setController(m_controller);*/
-	
-    //currentGroup->insertItem(mb1);
 
-    mClassID2Name.push_back(moduleClassName);
-	
+    QAction* ac = new QAction(mi->getName().c_str(), currentGroup);
+    ac->setIcon(QPixmap(mi->getIcon().getPtr()));
+    ac->setData(QVariant(moduleClassName.c_str()));
+    currentGroup->addAction(ac);
 
-    int id = currentGroup->insertItem(QPixmap(mi->getIcon().getPtr()),
-                                      mi->getName().c_str(),
-                                      mClassID2Name.size()-1); 
+    connect(currentGroup, SIGNAL(triggered(QAction*)),
+	    this, SLOT(moduleClassSelected(QAction*)));
 
-    m_itemIDs[moduleClassName] = id;
-	
-    //m_buttons[classID] = mb1;
-				
+    m_actions.insert(std::make_pair(moduleClassName, ac));
   }
 
   void ModuleClassView::moduleClassUnloaded(const std::string& moduleClassName)
   {
-    std::map<std::string,int>::iterator 
-      it = m_itemIDs.find(moduleClassName);
+    ActionMap::iterator it = m_actions.find(moduleClassName);
 
-    if (it == m_itemIDs.end())
+    if (it == m_actions.end())
       throw std::runtime_error("Fehler bei moduleClassUnloaded()");
 
-    int id = it->second;
-    m_itemIDs.erase(it);
+    QAction* ac = it->second;
+    m_actions.erase(it);
 
-    std::map<std::string,QPopupMenu*>::iterator 
+    std::map<std::string,QMenu*>::iterator 
       jt = menues.find(moduleClassName);
     if (jt == menues.end())
       throw std::runtime_error("Fehler bei moduleClassUnloaded()");
 
-    QPopupMenu* menu = jt->second;
+    QMenu* menu = jt->second;
     menues.erase(jt);
 
     ModuleInfoMap::iterator kt = infos.find(moduleClassName);
@@ -116,12 +100,13 @@ namespace gui
 	
     infos.erase(kt);
 
-    menu->removeItem(id);
+    menu->removeAction(ac);
   }
 
-  void ModuleClassView::moduleClassSelected(int mClassID)
+  void ModuleClassView::moduleClassSelected(QAction* ac)
   {
-    emit selectModuleClass(mClassID2Name[mClassID]);
+    std::string moduleClassName = ac->data().toString().toUtf8().constData();
+    emit selectModuleClass(moduleClassName);
   }
 
   const ModuleInfo& 
@@ -140,14 +125,7 @@ namespace gui
   void ModuleClassView::clear()
   {
     infos.clear();
-    mClassID2Name.clear();
-    m_itemIDs.clear();	
-
-    /*for (std::map<std::string,QPopupMenu*>::iterator it = groups.begin();
-      it != groups.end(); ++it)
-      {
-      delete it->second;
-      }*/
+    m_actions.clear();	
 
     groups.clear();
     menues.clear();

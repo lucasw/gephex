@@ -1,5 +1,7 @@
 #include "labelwidget.h"
 
+#include <QtGui/QMouseEvent>
+
 namespace gui
 {
   LabelWidget::LabelWidget(QWidget* parent, int id, const std::string& text)
@@ -26,12 +28,12 @@ namespace gui
   void LabelWidget::mousePressEvent(QMouseEvent* e)
   {
     clickedPos = e->pos();
-    if(e->button() == LeftButton)
+    if(e->button() == Qt::LeftButton)
       {
 	dragMode = true;
         this->raise();
       }
-    else if (e->button() == RightButton)
+    else if (e->button() == Qt::RightButton)
       {
 	emit beenRightClicked(this, e->globalPos());
       }

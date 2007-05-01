@@ -1,4 +1,4 @@
-libdir = @gphx_module_lib_dir@
+bindir = @gphx_module_lib_dir@
 
 PLUC=python @srcdir@/../../pluc.py
 
@@ -8,19 +8,23 @@ imgarithmodule_auto.c: imgarithmodule.spec imgarithmodule.h
 imgarithmodule.h: imgarithmodule.spec
 	$(PLUC) h @srcdir@/imgarithmodule.spec
 
-lib_LTLIBRARIES = imgarithmodule.la
+EXEEXT=.@SHAREDLIBEXT@
+
+bin_PROGRAMS = imgarithmodule
+
+imgarithmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
 
 @builddir@/imgarithmodule_x86.o: @srcdir@/imgarithmodule_x86.asm
 	@NASM@ @NASM_FLAGS@ -o @builddir@/imgarithmodule_x86.o @srcdir@/imgarithmodule_x86.asm
 
 
 if OPT_INCLUDE_MMX
-imgarithmodule_la_LIBADD = \
+imgarithmodule_LDADD = \
 	@builddir@/imgarithmodule_x86.o \
 	-lcpuinfo -L@builddir@/../../../util/src/cpuinfo 
 
 
-imgarithmodule_la_DEPENDENCIES= \
+imgarithmodule_DEPENDENCIES= \
 	@builddir@/imgarithmodule_x86.o \
 	@builddir@/../../../util/src/cpuinfo/libcpuinfo.a
 
@@ -28,7 +32,7 @@ cpuinfoINCLUDES = -I @srcdir@/../../../util/src/cpuinfo
 endif
 
 
-imgarithmodule_la_SOURCES = \
+imgarithmodule_SOURCES = \
 	imgarithmodule_auto.c \
 	imgarithmodule.c \
 	imgarithmodule.h \
@@ -36,7 +40,7 @@ imgarithmodule_la_SOURCES = \
 	imgarithmodule.xpm
 
 
-imgarithmodule_la_LDFLAGS = -module -avoid-version 
+imgarithmodule_LDFLAGS = @SHARED_LD_FLAGS@
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
@@ -47,4 +51,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = imgarithmodule.h imgarithmodule_auto.c
 
-EXTRA_DIST = imgarithmodule.dsp imgarithmodule.mak imgarithmodule.dep imgarithmodule_x86.asm
+EXTRA_DIST = imgarithmodule.vcproj imgarithmodule.dsp imgarithmodule.mak imgarithmodule.dep imgarithmodule_x86.asm

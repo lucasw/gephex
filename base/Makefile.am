@@ -1,4 +1,4 @@
 SUBDIRS = src
 
-EXTRA_DIST=nic.py
+EXTRA_DIST = nic.py
 

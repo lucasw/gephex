@@ -97,7 +97,7 @@ namespace utils
   void* SharedLibrary::loadSymbol(const std::string& name) const
   {
 #if defined(OS_WIN32)
-    return GetProcAddress(m_impl->handle,name.c_str());
+    return (void*) GetProcAddress(m_impl->handle,name.c_str());
 #elif defined(OS_POSIX)
     return dlsym(m_impl->handle,name.c_str());
 #endif

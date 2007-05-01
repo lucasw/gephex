@@ -17,7 +17,7 @@ effectvsimuramodule_la_SOURCES = \
         effectvsimuramodule.spec \
         effectvsimuramodule.xpm
 
-EXTRA_DIST = simura.c effectvsimuramodule.dsp effectvsimuramodule.mak effectvsimuramodule.dep
+EXTRA_DIST = simura.c  effectvsimuramodule.dsp effectvsimuramodule.mak effectvsimuramodule.dep
 
 effectvsimuramodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

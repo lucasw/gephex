@@ -17,7 +17,7 @@ effectvwarholmodule_la_SOURCES = \
         effectvwarholmodule.spec \
         effectvwarholmodule.xpm
 
-EXTRA_DIST = warhol.c effectvwarholmodule.dsp effectvwarholmodule.mak effectvwarholmodule.dep
+EXTRA_DIST = warhol.c  effectvwarholmodule.dsp effectvwarholmodule.mak effectvwarholmodule.dep
 
 effectvwarholmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

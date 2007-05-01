@@ -21,82 +21,83 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "propertywidget.h"
+
+#include <QtGui/QWidget>
+//#include <QtGui/qtooltip.h>
+#include <QtGui/QBoxLayout>
+
 #include "interfaces/imodelcontrolreceiver.h"
-
-#include <iostream>
-
-#include <qwidget.h>
-#include <qtooltip.h>
-#include <qlayout.h>
 
 #include "typeview.h"
 
 namespace gui 
 {
 
-PropertyWidget::PropertyWidget(QWidget* parent, const char* name, WFlags fl, 
-			       int nodeID, int inIndex, int controlID, 
-			       IModelControlReceiver& mcr_,
-			       const ParamMap& params,
-			       const TypeViewConstructor& con)
-  : QWidget(parent, name, fl), m_controlID(controlID), m_nodeID(nodeID),
-    m_inputIndex(inIndex), mcr(mcr_), m_view(0)
-{
-  setFocusPolicy(QWidget::ClickFocus);
+  PropertyWidget::PropertyWidget(QWidget* parent,
+                                 Qt::WFlags fl, 
+                                 int nodeID, int inIndex, int controlID, 
+                                 IModelControlReceiver& mcr_,
+                                 const ParamMap& params,
+                                 const TypeViewConstructor& con)
+    : QWidget(parent,  fl), m_controlID(controlID), m_nodeID(nodeID),
+      m_inputIndex(inIndex), mcr(mcr_), m_view(0)
+  {
+    setFocusPolicy(Qt::ClickFocus);
   
-  m_view = con.construct(this, params);
-   this->resize(m_view->width(), m_view->height());
+    m_view = con.construct(this, params);
 
-  QHBoxLayout* l = new QHBoxLayout(this);
+    QHBoxLayout* l = new QHBoxLayout(this);
+    l->setMargin(2);
+    l->setSpacing(0);
     
-  m_view->show();
-  l->addWidget(m_view);
+    l->addWidget(m_view);
 
-  connect(m_view, SIGNAL(valueChanged(const utils::Buffer&)),
-	  this, SLOT(changeValue(const utils::Buffer&)));
+    connect(m_view, SIGNAL(valueChanged(const utils::Buffer&)),
+            this, SLOT(changeValue(const utils::Buffer&)));
+
+    show();
   }
 
-PropertyWidget::~PropertyWidget()
-{
-  //std::cout << "ljsdhlksdgh" << std::endl;
-}
+  PropertyWidget::~PropertyWidget()
+  {
+  }
 
-void PropertyWidget::controlValueChanged(int /*nodeID*/,int /*intputIndex*/,
-					 const utils::Buffer& newValue)
-{
-  m_view->valueChange(newValue);
-}
+  void PropertyWidget::controlValueChanged(int /*nodeID*/,int /*intputIndex*/,
+                                           const utils::Buffer& newValue)
+  {
+    m_view->valueChange(newValue);
+  }
 
-int PropertyWidget::getControlID() const
-{
-  return m_controlID;
-}
+  int PropertyWidget::getControlID() const
+  {
+    return m_controlID;
+  }
 
-int PropertyWidget::getNodeID() const
-{
-  return m_nodeID;
-}
+  int PropertyWidget::getNodeID() const
+  {
+    return m_nodeID;
+  }
 
-int PropertyWidget::getInputIndex() const
-{
-  return m_inputIndex;
-}
+  int PropertyWidget::getInputIndex() const
+  {
+    return m_inputIndex;
+  }
 
-void PropertyWidget::setValue(const utils::Buffer& b)
-{
-	mcr.setInputValue(m_nodeID, m_inputIndex, b);
-}
-void PropertyWidget::changeValue(const utils::Buffer& b)
-{
-  setValue(b);
-}
+  void PropertyWidget::setValue(const utils::Buffer& b)
+  {
+    mcr.setInputValue(m_nodeID, m_inputIndex, b);
+  }
+  void PropertyWidget::changeValue(const utils::Buffer& b)
+  {
+    setValue(b);
+  }
 
-void PropertyWidget::syncInputValuesStarted()
-{
-}
+  void PropertyWidget::syncInputValuesStarted()
+  {
+  }
 
-void PropertyWidget::syncInputValuesFinished()
-{
-}
+  void PropertyWidget::syncInputValuesFinished()
+  {
+  }
 
 }

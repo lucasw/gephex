@@ -37,6 +37,7 @@ ALL : "$(OUTDIR)\audioinmodule.dll"
 
 
 CLEAN :
+	-@erase "$(INTDIR)\a_cvt.obj"
 	-@erase "$(INTDIR)\audiobuffer.obj"
 	-@erase "$(INTDIR)\audioinmodule.obj"
 	-@erase "$(INTDIR)\audioinmodule_auto.obj"
@@ -94,6 +95,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\audioinmodule.def"
 LINK32_OBJS= \
+	"$(INTDIR)\a_cvt.obj" \
 	"$(INTDIR)\audiobuffer.obj" \
 	"$(INTDIR)\audioinmodule.obj" \
 	"$(INTDIR)\audioinmodule_auto.obj" \
@@ -131,6 +133,7 @@ ALL : ".\audioinmodule_auto.c" ".\audioinmodule.h" ".\audioinmodule.def" "$(OUTD
 
 
 CLEAN :
+	-@erase "$(INTDIR)\a_cvt.obj"
 	-@erase "$(INTDIR)\audiobuffer.obj"
 	-@erase "$(INTDIR)\audioinmodule.obj"
 	-@erase "$(INTDIR)\audioinmodule_auto.obj"
@@ -194,6 +197,7 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi3
 DEF_FILE= \
 	".\audioinmodule.def"
 LINK32_OBJS= \
+	"$(INTDIR)\a_cvt.obj" \
 	"$(INTDIR)\audiobuffer.obj" \
 	"$(INTDIR)\audioinmodule.obj" \
 	"$(INTDIR)\audioinmodule_auto.obj" \
@@ -232,6 +236,11 @@ $(DS_POSTBUILD_DEP) : ".\audioinmodule_auto.c" ".\audioinmodule.h" ".\audioinmod
 
 
 !IF "$(CFG)" == "audioinmodule - Win32 Release" || "$(CFG)" == "audioinmodule - Win32 Debug"
+SOURCE=.\a_cvt.cpp
+
+"$(INTDIR)\a_cvt.obj" : $(SOURCE) "$(INTDIR)"
+
+
 SOURCE=.\audiobuffer.c
 
 "$(INTDIR)\audiobuffer.obj" : $(SOURCE) "$(INTDIR)"
@@ -244,7 +253,7 @@ SOURCE=.\audioinmodule.cpp
 
 SOURCE=.\audioinmodule_auto.c
 
-"$(INTDIR)\audioinmodule_auto.obj" : $(SOURCE) "$(INTDIR)" ".\audioinmodule.h"
+"$(INTDIR)\audioinmodule_auto.obj" : $(SOURCE) "$(INTDIR)"
 
 
 SOURCE=.\waveindriver.cpp

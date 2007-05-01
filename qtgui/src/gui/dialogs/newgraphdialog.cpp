@@ -20,12 +20,12 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <QtGui/qlabel.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qpushbutton.h>
+#include <QtCore/qvariant.h>
+#include <QtGui/qtooltip.h>
+#include <QtGui/qwhatsthis.h>
 
 #include "newgraphdialog.h"
 
@@ -33,19 +33,20 @@ namespace gui
 {
   
   NewGraphDialog::NewGraphDialog(const std::string& text )
-    : QDialog( 0 , "New Graph Dialog" , true)
+    : QDialog()
   {
+    setModal(true);
     resize( 227, 60 ); 
-    setProperty( "caption", "New Graph Dialog" );
+    setWindowTitle("New Graph Dialog" );
     
-    LineEdit1 = new QLineEdit( this, "New Graph Name" );
+    LineEdit1 = new QLineEdit( this );
     LineEdit1->setGeometry( QRect( 10, 30, 120, 22 ) ); 
     
-    TextLabel = new QLabel( this, "TextLabel" );
+    TextLabel = new QLabel( this );
     TextLabel->setGeometry( QRect( 10, 7, 180, 13 ) ); 
     TextLabel->setProperty( "text", text.c_str() );
     
-    DoneButton = new QPushButton( this, "DoneButton" );
+    DoneButton = new QPushButton( this );
     DoneButton->setGeometry( QRect( 160, 30, 60, 26 ) ); 
     DoneButton->setProperty( "text", "Done" );
     
@@ -66,7 +67,7 @@ namespace gui
     
     dialog.exec();
     
-    return dialog.LineEdit1->text().latin1();
+    return dialog.LineEdit1->text().toUtf8().constData();
   }
   
 }

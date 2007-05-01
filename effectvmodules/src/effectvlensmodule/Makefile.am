@@ -17,7 +17,7 @@ effectvlensmodule_la_SOURCES = \
 	effectvlensmodule.spec \
 	effectvlensmodule.xpm
 
-EXTRA_DIST = lens.c effectvlensmodule.dsp effectvlensmodule.mak effectvlensmodule.dep
+EXTRA_DIST = lens.c  effectvlensmodule.dsp effectvlensmodule.mak effectvlensmodule.dep
 
 effectvlensmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

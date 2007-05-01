@@ -31,5 +31,5 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 DISTCLEANFILES = midiccdecmodule.h midiccdecmodule_auto.c
 
-#EXTRA_DIST = midiccdecmodule.dsp midiccdecmodule.mak midiccdecmodule.dep
+#EXTRA_DIST = midiccdecmodule.vcproj midiccdecmodule.dsp midiccdecmodule.mak midiccdecmodule.dep
 

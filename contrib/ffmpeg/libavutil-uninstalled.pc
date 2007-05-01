@@ -1,0 +1,12 @@
+prefix=
+exec_prefix=
+libdir=${pcfiledir}/libavutil
+includedir=${pcfiledir}/libavutil
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 49.0.2
+Requires:
+Conflicts:
+Libs: ${libdir}/libavutil.a
+Cflags: -I${includedir}

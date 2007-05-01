@@ -18,20 +18,15 @@
  
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 #include "frameview.h"
 
-#include <sstream>
-#include <iostream>
-
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qlabel.h>
-#include <qpainter.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QImage>
+#include <QtGui/QLabel>
+#include <QtGui/QBoxLayout>
 
 namespace gui
 {
@@ -44,14 +39,13 @@ namespace gui
     FrameView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params)
     {
-      QHBoxLayout* l = new QHBoxLayout(this);
       m_view = new QLabel(this);
-      m_view->setMinimumSize(16, 16);
+      m_view->setMinimumSize(20, 15);
       m_view->setScaledContents ( true );
-      //select->setMaximumSize(60, 20);
-      resize(32, 32);
+      m_view->setSizeIncrement(4, 3);
+      m_layout->addWidget(m_view);
+
       m_view->show();
-      l->addWidget(m_view);
     }
 		
     virtual ~FrameView() {}
@@ -60,11 +54,11 @@ namespace gui
     {
       const char* dataPtr= reinterpret_cast<const char*>(newValue.getPtr());
 
-	  if (!dataPtr)
-		return;
+      if (!dataPtr)
+        return;
 
       // todo
-      QImage img(16,16,32);
+      QImage img(16,16,QImage::Format_RGB32);
       for (int y=0;y!=16;++y)
 	for (int x=0;x!=16;++x)
 	  {
@@ -75,10 +69,8 @@ namespace gui
 	    img.setPixel ( x, 15-y, qRgb(r,g,b));
 	  }
       
-      QPixmap pix(16, 16);
-      pix.convertFromImage(img);
+      QPixmap pix(QPixmap::fromImage(img));
       m_view->setPixmap(pix);
-      //repaint();
     }
 
   private:

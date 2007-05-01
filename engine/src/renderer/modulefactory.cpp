@@ -62,7 +62,7 @@ namespace renderer
 				 "ModuleFactory::registerModuleClass()");
       }
 	
-    moduleClasses[name] = utils::AutoPtr<IModuleClass>(moduleClass.clone());
+    moduleClasses[name] = &moduleClass;
   }
 
   void ModuleFactory::unregisterModuleClass(const std::string& name)

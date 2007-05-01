@@ -26,10 +26,13 @@
 #include <string>
 #include <map>
 
-//#include <qframe.h>
-#include <qwidget.h>
+//#include <QtGui/qframe.h>
+#include <QtGui/qwidget.h>
 
 #include "utils/buffer.h"
+
+
+class QBoxLayout;
 
 namespace gui
 {
@@ -48,6 +51,9 @@ namespace gui
     signals:
 
     void valueChanged(const utils::Buffer& newValue);
+
+  protected:
+    QBoxLayout* m_layout;
 
   private:
     ParamMap m_params;

@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 #include "a52.h"
 #include "a52_internal.h"
@@ -84,7 +84,7 @@ int32_t a52_bitstream_get_bh_2 (a52_state_t * state, uint32_t num_bits)
 
     if (num_bits != 0)
 	result = (result << num_bits) | (state->current_word >> (32 - num_bits));
-	
+
     state->bits_left = 32 - num_bits;
 
     return result;

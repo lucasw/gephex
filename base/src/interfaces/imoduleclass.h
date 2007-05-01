@@ -23,17 +23,25 @@
 #ifndef INCLUDED_IMODULE_CLASS_H
 #define INCLUDED_IMODULE_CLASS_H
 
+#include <string>
+
 class IModule;
 class ITypeFactory;
+class ModuleClassSpec;
+
+namespace utils
+{
+  class Buffer;
+}
 
 class IModuleClass
 {
 public:
   virtual ~IModuleClass() {}
-  virtual IModuleClass* clone() const = 0;
+  virtual const std::string& name() const = 0;
+  virtual const utils::Buffer& info() const = 0;
+  virtual const ModuleClassSpec& spec() const = 0;
   virtual IModule* buildInstance(const ITypeFactory& tFactory) const = 0;
-
-
 };
 
 #endif

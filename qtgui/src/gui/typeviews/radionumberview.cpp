@@ -18,23 +18,24 @@
  
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 #include "radionumberview.h"
 
 #include <sstream>
 #include <cmath>
 
-#include <qlayout.h>
-#include <qradiobutton.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/qradiobutton.h>
 
 #include "utils/structreader.h"
 
 
 /**
-* RadioButton: mögliche true/false -Werte können mittels 
-* true_value= bzw. false_value= aus dem Modul übergeben werden. 
-*/
+ * RadioButton: mögliche true/false -Werte können mittels 
+ * true_value= bzw. false_value= aus dem Modul übergeben werden. 
+ */
 namespace gui
 {
 
@@ -55,15 +56,11 @@ namespace gui
       m_trueVal = sr.getDoubleValue("true_value", 1);
       m_falseVal = sr.getDoubleValue("false_value", 0);
     	
-      QHBoxLayout* l = new QHBoxLayout(this);
       m_radio = new QRadioButton(this);
-      l->addWidget(m_radio);
-
-      //m_radio->setMinimumSize(40, 33);
-      this->resize(m_radio->sizeHint());
+      m_layout->addWidget(m_radio);
 		
-      connect(m_radio, SIGNAL(stateChanged(int)),
-              this, SLOT(radiobuttonChanged(int)));
+      connect(m_radio, SIGNAL(toggled(bool)),
+              this, SLOT(radiobuttonChanged(bool)));
 
       m_radio->show();
     }
@@ -74,24 +71,24 @@ namespace gui
       double raw;
       is >> raw;
 		
-	  bool checked = fabs(raw - m_trueVal) < fabs(raw - m_falseVal);
+      bool checked = fabs(raw - m_trueVal) < fabs(raw - m_falseVal);
       if (checked != m_isChecked)
         {          
           m_setCheckedCalled = true;
-		  m_isChecked = checked;
+          m_isChecked = checked;
           if(checked)
-		  {
-            m_radio->setChecked(true);
-		  }
+            {
+              m_radio->setChecked(true);
+            }
           else
-		  {		
-            m_radio->setChecked(false);
-		  }
+            {		
+              m_radio->setChecked(false);
+            }
         }
     }
 		
-private slots:
-void radiobuttonChanged(int)
+  private slots:
+    void radiobuttonChanged(bool)
     {
       if (!m_setCheckedCalled)
         {
@@ -102,7 +99,7 @@ void radiobuttonChanged(int)
           else
             os << m_falseVal;
 
-		  m_isChecked = !m_isChecked;
+          m_isChecked = !m_isChecked;
 
           os.flush();          
 

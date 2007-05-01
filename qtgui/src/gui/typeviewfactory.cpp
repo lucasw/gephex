@@ -35,7 +35,6 @@
 #include "typeviews/boundednumberview.h"
 #include "typeviews/unboundednumberview.h"
 #include "typeviews/slidernumberview.h"
-#include "typeviews/dialnumberview.h"
 #include "typeviews/radionumberview.h"
 #include "typeviews/checkboxnumberview.h"
 

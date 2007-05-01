@@ -17,7 +17,7 @@ effectvchameleonmodule_la_SOURCES = \
         effectvchameleonmodule.spec \
         effectvchameleonmodule.xpm
 
-EXTRA_DIST = chameleon.c effectvchameleonmodule.dsp effectvchameleonmodule.mak effectvchameleonmodule.dep
+EXTRA_DIST = chameleon.c  effectvchameleonmodule.dsp effectvchameleonmodule.mak effectvchameleonmodule.dep
 
 effectvchameleonmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

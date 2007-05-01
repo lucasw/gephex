@@ -26,9 +26,9 @@
 #include <cmath>
 #include <cassert>
 
-#include <qslider.h>
-#include <qlayout.h>
-//#include <qmessagebox.h>
+#include <QtGui/QSlider>
+#include <QtGui/QDial>
+#include <QtGui/QBoxLayout>
 
 #include "utils/buffer.h"
 #include "utils/structreader.h"
@@ -37,87 +37,105 @@ namespace gui
 {
 
   static const int RESOLUTION = 255;
-  class SliderNumberView : public gui::TypeView
+  class SchlonzNumberView : public gui::TypeView
   {
     Q_OBJECT
     
   public:
-    SliderNumberView(QWidget* parent, Qt::Orientation orient,
-		     const ParamMap& params)
-      : TypeView(parent, params), m_setValueCalled(false), m_value(0)
+    SchlonzNumberView(QWidget* parent,
+                      Qt::Orientation orient,
+                      bool isDial,
+                      const ParamMap& params)
+      : TypeView(parent, params), m_setValueCalled(false)
     {
-      if (orient == QSlider::Vertical)
-	{
-	  this->resize(24, 100);
-	}
-      else
-	{
-	  this->resize(100,24);
-	}
-
       utils::StructReader sr(params);
-      m_lowVal    = sr.getDoubleValue("lower_bound", 0);
-      m_highVal   = sr.getDoubleValue("higher_bound", 1);
+      m_lowVal        = sr.getDoubleValue("lower_bound", 0);
+      double highVal  = sr.getDoubleValue("higher_bound", 1);
+      
+      m_scale = (highVal - m_lowVal) / static_cast<double>(RESOLUTION);
+      if (m_scale == 0)
+        m_scale = 1;
+
+      if (!isDial)
+        m_slider = new QSlider(orient, this);
+      else
+        m_slider = new QDial(this);
 	
-      m_slider = new QSlider(0, RESOLUTION, 1, 0, orient, this, "slider");
-	
-      QBoxLayout* layout = new QBoxLayout(this,QBoxLayout::TopToBottom,0);
-      layout->addWidget(m_slider);
+      m_slider->setMinimum(0);
+      m_slider->setMaximum(RESOLUTION);
+      m_slider->setPageStep(1);
+      m_slider->setValue(0);
+
+      m_layout->addWidget(m_slider);
 
       connect(m_slider, SIGNAL(valueChanged(int)),
 	      this, SLOT(sliderChanged(int)));
+
     }
 
-    virtual void valueChange(const utils::Buffer& newValue) {
+    virtual void valueChange(const utils::Buffer& newValue)
+    {
 
       std::istringstream is(reinterpret_cast<const char*>(newValue.getPtr()));
+
       double raw = 0;
       is >> raw;
-      double d = (raw - m_lowVal) / (m_highVal - m_lowVal) * RESOLUTION;
+      double d = (raw - m_lowVal) / m_scale;
 
       if (d < 0)
-		  d = 0;
+        d = 0;
       else if (d > RESOLUTION)
-		  d = RESOLUTION;
+        d = RESOLUTION;
 
-      if (fabs(d - m_value) > 0.00001)
-	  {
-		  m_setValueCalled = true;
-		  m_value = d;
-		  m_slider->setValue(static_cast<int>(d));
-	  }
+      const int newVal = static_cast<int>(floor(d + 0.5));
+
+      /*printf("valueChange(), str='%s', value=%i, newValue=%i\n",
+             reinterpret_cast<const char*>(newValue.getPtr()),
+             m_slider->value(), newVal);*/
+
+
+      if (newVal != m_slider->value())
+        {
+          //printf("Setting slider value\n");
+          m_setValueCalled = true;
+          m_slider->setValue(newVal);
+        }
     }
 
-private slots:
+  private slots:
     void sliderChanged(int newVal)
-    {      	
-	  if (!m_setValueCalled)
-	  {
-		  double i = newVal / (double) RESOLUTION;
-		  i = i * (m_highVal - m_lowVal) + m_lowVal;
+    {
+      /*printf("sliderChanged( %i ), value=%i, m_setValueCalled=%i\n",
+        newVal, m_slider->value(), m_setValueCalled);*/
+
+      if (!m_setValueCalled)
+        {
+          const double scaled = newVal * m_scale + m_lowVal;
 		  
-		  if (fabs(i - m_value) > 0.00001)
-		  {
-			  std::ostringstream s;
-			  s << i;
-			  std::string data = s.str();
-			  const unsigned char*
-				  udata = reinterpret_cast<const unsigned char*>(data.c_str());
-			  emit valueChanged(utils::Buffer(udata, data.length()+1));	
-		  }
-	  }
-	  else
-	  {
-		  m_setValueCalled = false;
-	  }
+          std::ostringstream s;
+          s << scaled;
+          const std::string data = s.str();
+          const unsigned char*
+                udata = reinterpret_cast<const unsigned char*>(data.c_str());
+
+          //printf("sending '%s'\n", s.str().c_str());
+          
+          emit valueChanged(utils::Buffer(udata, data.length()+1));	
+        }
+      else
+        {
+          m_setValueCalled = false;
+        }
+
+      /*printf("after: value=%i, m_setValueCalled=%i\n",
+        m_slider->value(), m_setValueCalled);*/
     }
 
   private:
-    QSlider* m_slider;
-	bool m_setValueCalled;
-    double m_value;
-    double m_lowVal;
-    double m_highVal;
+    QAbstractSlider* m_slider;
+    bool     m_setValueCalled;
+    double   m_lowVal;
+    double   m_scale;
   };
 
 
@@ -126,20 +144,31 @@ private slots:
   HSliderNumberViewConstructor::HSliderNumberViewConstructor()
     : TypeViewConstructor("horizontal slider", "hslider") {}
 
-  TypeView* HSliderNumberViewConstructor::construct(QWidget* parent,
-					   const ParamMap& params) const
+  TypeView*
+  HSliderNumberViewConstructor::construct(QWidget* parent,
+                                          const ParamMap& params) const
   {
-    return new SliderNumberView(parent, QSlider::Horizontal, params);
+    return new SchlonzNumberView(parent, Qt::Horizontal, false, params);
   }
  
 
   VSliderNumberViewConstructor::VSliderNumberViewConstructor()
     : TypeViewConstructor("vertical slider", "vslider") {}
 
-  TypeView* VSliderNumberViewConstructor::construct(QWidget* parent,
-					   const ParamMap& params) const
+  TypeView*
+  VSliderNumberViewConstructor::construct(QWidget* parent,
+                                          const ParamMap& params) const
   {
-    return new SliderNumberView(parent, QSlider::Vertical, params);
+    return new SchlonzNumberView(parent, Qt::Vertical, false, params);
+  }
+
+  DialNumberViewConstructor::DialNumberViewConstructor()
+    : TypeViewConstructor("dial", "dial") {}
+
+  TypeView* DialNumberViewConstructor::construct(QWidget* parent,
+                                                 const ParamMap& params) const
+  {
+    return new SchlonzNumberView(parent, Qt::Vertical, true, params);
   }
 
 }

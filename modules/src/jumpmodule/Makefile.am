@@ -25,4 +25,4 @@ INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
  
 
 DISTCLEANFILES = jumpmodule.h jumpmodule_auto.c
-EXTRA_DIST = jumpmodule.dsp jumpmodule.mak jumpmodule.dep
+EXTRA_DIST = jumpmodule.vcproj jumpmodule.dsp jumpmodule.mak jumpmodule.dep

@@ -17,7 +17,7 @@ effectvfiremodule_la_SOURCES = \
 	effectvfiremodule.spec \
 	effectvfiremodule.xpm
 
-EXTRA_DIST = fire.c effectvfiremodule.dsp effectvfiremodule.mak effectvfiremodule.dep
+EXTRA_DIST = fire.c  effectvfiremodule.dsp effectvfiremodule.mak effectvfiremodule.dep
 
 effectvfiremodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

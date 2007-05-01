@@ -1,4 +1,4 @@
-EXTRA_DIST = libjoystick.dsp libjoystick.mak libjoystick.dep \
+EXTRA_DIST = libjoystick.vcproj libjoystick.dsp libjoystick.mak libjoystick.dep \
 	win32joystickdriver.cpp win32joystickdriver.h
 
 noinst_LTLIBRARIES = libjoystick.la

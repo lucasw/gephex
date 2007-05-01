@@ -25,9 +25,9 @@
 #include <sstream>
 #include <iostream>
 
-#include <qlayout.h>
-#include <qpainter.h>
-
+#include <QtGui/qlayout.h>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 
 #include "utils/buffer.h"
 
@@ -39,8 +39,26 @@ namespace gui
   {
     Q_OBJECT
   public:
-    KleinesFeld(QWidget* parent, int xsize_, int ysize_);
+    KleinesFeld(QWidget* parent,
+                const QSize& preferredSize,
+                const QSize& minimumSize);
+
     void setPos(const QPoint& p);
+
+    QPoint pos() const
+    {
+      return m_pos;
+    }
+
+    QSize sizeHint() const
+    {
+      return m_preferredSize;
+    }
+
+    QSize minimumSizeHint() const
+    {
+      return m_minimumSize;
+    }
 
   signals:
     void posChanged(const QPoint&);
@@ -53,10 +71,10 @@ namespace gui
 
   private:
     void drawCuteLittleCross(const QPoint& p, QPainter& painter);
-    QPoint pos, oldPos;
-    QPainter mainPainter;
-    int xsize;
-    int ysize;
+
+    QPoint m_pos;
+    QSize  m_preferredSize;
+    QSize  m_minimumSize;
   };
 
 
@@ -67,16 +85,25 @@ namespace gui
     PositionView(QWidget* parent, const ParamMap& params)
       : TypeView(parent, params), m_setValueCalled(false)
     {
-      this->resize(160, 120);
+      static const int PREFERRED_WIDTH  = 160;
+      static const int PREFERRED_HEIGHT = 120;
+      static const int MIN_WIDTH  = 40;
+      static const int MIN_HEIGHT = 30;
 
-      m_mausFresser = new KleinesFeld(this,width()-10,height()-10);
+
+      m_mausFresser = new KleinesFeld(this,
+                                      QSize(PREFERRED_WIDTH,
+                                            PREFERRED_HEIGHT),
+                                      QSize(MIN_WIDTH,
+                                            MIN_HEIGHT));
+
+      m_mausFresser->setSizeIncrement(4, 3);
+
+      m_layout->addWidget(m_mausFresser);
       m_mausFresser->show();
 
-      QBoxLayout* layout = new QBoxLayout(this, QBoxLayout::TopToBottom);
-
-      layout->addWidget(m_mausFresser);
-
-      connect(m_mausFresser, SIGNAL(posChanged(const QPoint&)),
+      connect(m_mausFresser,
+              SIGNAL(posChanged(const QPoint&)),
 	      this, SLOT(kleinesfeldChanged(const QPoint&)));
     }
 
@@ -89,41 +116,44 @@ namespace gui
       is >> x;
       is >> y;
 
-      int x_ = (int) (m_mausFresser->width()  * x);
+      QPoint newPos
+        = QPoint(static_cast<int>(m_mausFresser->width()*x + 0.5),
+                 static_cast<int>(m_mausFresser->height()*y + 0.5));
 
-      int y_ = (int) (m_mausFresser->height() * y);
-
-      m_setValueCalled = true;
-      m_mausFresser->setPos(QPoint(x_,y_));
+      if (m_mausFresser->pos() != newPos)
+        {
+          m_setValueCalled = true;
+          m_mausFresser->setPos(newPos);
+        }
     }
 
 public slots:
-   void kleinesfeldChanged(const QPoint& p)
+void kleinesfeldChanged(const QPoint& p)
     {
-    if (!m_setValueCalled)
-      {
-	if(p.x()<0 || p.x() >= width() || p.y() < 0 || p.y() >= height())
-	  {
-	    return;
-	  }
+      if (!m_setValueCalled)
+        {
+          if (p.x()<0 || p.x() >= width() || p.y() < 0 || p.y() >= height())
+            {
+              return;
+            }
 	
-	double x = ((double) p.x() / m_mausFresser->width());
-	double y = ((double) p.y() / m_mausFresser->height());
+          double x = ((double) p.x() / m_mausFresser->width());
+          double y = ((double) p.y() / m_mausFresser->height());
 		
-	std::ostringstream os;
+          std::ostringstream os;
 		
-	os << x << " " << y;
-	std::string str = os.str();
-	const char* txt = str.c_str();
-	utils::Buffer
-	  b = utils::Buffer(reinterpret_cast<const unsigned char*>(txt),
-			    str.length() + 1);
-	emit valueChanged(b);
-      }
-    else
-      {
-	m_setValueCalled = false;
-      }
+          os << x << " " << y;
+          const std::string str = os.str();
+          const char* txt = str.c_str();
+          utils::Buffer
+            b = utils::Buffer(reinterpret_cast<const unsigned char*>(txt),
+                              str.length() + 1);
+          emit valueChanged(b);
+        }
+      else
+        {
+          m_setValueCalled = false;
+        }
     }
 
   private:
@@ -147,28 +177,28 @@ public slots:
 
 
 
-  KleinesFeld::KleinesFeld(QWidget* parent, int xsize_, int ysize_)
-    : QWidget(parent,"kleines feld"), oldPos(-100,-100),
-      xsize(xsize_), ysize(ysize_)
+  KleinesFeld::KleinesFeld(QWidget* parent,
+                           const QSize& preferredSize,
+                           const QSize& minimumSize)
+    : QWidget(parent),
+      m_pos(preferredSize.width()/2, preferredSize.height()/2),
+      m_preferredSize(preferredSize),
+      m_minimumSize(minimumSize)
   {
-    this->resize(xsize,ysize);
+    setSizePolicy(QSizePolicy::MinimumExpanding,
+                  QSizePolicy::MinimumExpanding);
   }
 
   /**************************************************************************/
 
   void KleinesFeld::paintEvent(QPaintEvent* /*pe*/)
   {
-    mainPainter.begin(this);
-    QPen pen1(SolidLine);
+    QPainter mainPainter(this);
+    QPen pen1(Qt::SolidLine);
     pen1.setColor(QColor(0,0,0));
     mainPainter.setPen(pen1);
-    RasterOp rop = mainPainter.rasterOp();
-    mainPainter.setRasterOp(Qt::CopyROP);
-    this->drawCuteLittleCross(pos,mainPainter);
-    mainPainter.setRasterOp(rop);
-    mainPainter.end();	
+    drawCuteLittleCross(m_pos,mainPainter);
   }
-
 
 
   void KleinesFeld::mouseMoveEvent(QMouseEvent* e)
@@ -185,9 +215,14 @@ public slots:
    * This has happened with qt >= 3.0 (but not 2.3).
    * TODO: verify this works with qt 2.3
    */
-  void KleinesFeld::mousePressEvent(QMouseEvent*) {};  
-  void KleinesFeld::mouseReleaseEvent(QMouseEvent* e) {};
+  void KleinesFeld::mousePressEvent(QMouseEvent* e)
+  {
+    setPos(e->pos());
+  }
 
+  void KleinesFeld::mouseReleaseEvent(QMouseEvent* /*e*/)
+  {
+  }
 
   void KleinesFeld::drawCuteLittleCross(const QPoint& p, QPainter& painter)
   {
@@ -197,34 +232,14 @@ public slots:
   }
 
   void KleinesFeld::setPos(const QPoint& p)
-  {		
-    pos = p;	
-    mainPainter.begin(this);
-    QPen pen1(SolidLine);
-    pen1.setColor(this->backgroundColor());
-
-    mainPainter.setPen(pen1);
-    RasterOp rop = mainPainter.rasterOp();
-
-    mainPainter.setRasterOp(Qt::XorROP);
-		
-    if (oldPos != pos)
+  {
+    if (p != m_pos)
       {
-	this->drawCuteLittleCross(oldPos,mainPainter);
-	this->drawCuteLittleCross(pos,mainPainter);
+        m_pos = p;
+
+        emit posChanged(m_pos);
+        update();
       }
-
-    mainPainter.setRasterOp(rop);
-		
-    mainPainter.end();
-
-    oldPos = pos;
-
-    //    std::cout << "New position = (" << pos.x() << "," << pos.y()
-    //      << ")" << std::endl;
-	
-    emit posChanged(pos);
-    //repaint();
   }
 
 

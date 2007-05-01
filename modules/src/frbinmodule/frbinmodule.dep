@@ -8,28 +8,7 @@
 	".\videofiledriver.h"\
 	
 
-.\dshowdriver.cpp : \
-	"..\..\..\..\..\dxsdk\include\audevcod.h"\
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
-	"..\..\..\..\..\dxsdk\include\dshow.h"\
-	"..\..\..\..\..\dxsdk\include\dxtrans.h"\
-	"..\..\..\..\..\dxsdk\include\qedit.h"\
-	"..\..\..\util\include\basic_types.h"\
-	"..\libdshow\dshowutils.h"\
-	"..\libscale\libscale.h"\
-	".\dshowdriver.h"\
-	".\timer.h"\
-	".\videofiledriver.h"\
-	
-
 .\ffmpegdriver.cpp : \
-	"..\..\..\contrib\ffmpeg\libavcodec\avcodec.h"\
-	"..\..\..\contrib\ffmpeg\libavcodec\common.h"\
-	"..\..\..\contrib\ffmpeg\libavcodec\rational.h"\
-	"..\..\..\contrib\ffmpeg\libavformat\avformat.h"\
-	"..\..\..\contrib\ffmpeg\libavformat\avio.h"\
-	"..\..\..\contrib\ffmpeg\libavformat\rtsp.h"\
-	"..\..\..\contrib\ffmpeg\libavformat\rtspcodes.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\libscale\libscale.h"\
 	".\ffmpegdriver.h"\
@@ -42,19 +21,19 @@
 	
 
 .\frbinmodule.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
 	"..\..\..\config.h"\
 	"..\..\..\engine\src\engine\dllmodule.h"\
 	"..\..\..\types\src\framebuffertype\framebuffertype.h"\
 	"..\..\..\types\src\numbertype\numbertype.h"\
 	"..\..\..\types\src\stringtype\stringtype.h"\
 	"..\..\..\util\include\basic_types.h"\
+	".\avifiledriver.h"\
 	".\bmpdriver.h"\
 	".\driverfactory.h"\
-	".\dshowdriver.h"\
 	".\ffmpegdriver.h"\
 	".\framecache.h"\
 	".\frbinmodule.h"\
+	".\mpeg3driver.h"\
 	".\sdlimagedriver.h"\
 	".\vfwdriver.h"\
 	".\videofiledriver.h"\
@@ -75,27 +54,27 @@
 .\sdlimagedriver.cpp : \
 	"..\..\..\..\sdl\include\begin_code.h"\
 	"..\..\..\..\sdl\include\close_code.h"\
-	"..\..\..\..\sdl\include\sdl.h"\
-	"..\..\..\..\sdl\include\sdl_active.h"\
-	"..\..\..\..\sdl\include\sdl_audio.h"\
-	"..\..\..\..\sdl\include\sdl_byteorder.h"\
-	"..\..\..\..\sdl\include\sdl_cdrom.h"\
-	"..\..\..\..\sdl\include\sdl_error.h"\
-	"..\..\..\..\sdl\include\sdl_events.h"\
-	"..\..\..\..\sdl\include\sdl_getenv.h"\
-	"..\..\..\..\sdl\include\sdl_joystick.h"\
-	"..\..\..\..\sdl\include\sdl_keyboard.h"\
-	"..\..\..\..\sdl\include\sdl_keysym.h"\
-	"..\..\..\..\sdl\include\sdl_main.h"\
-	"..\..\..\..\sdl\include\sdl_mouse.h"\
-	"..\..\..\..\sdl\include\sdl_mutex.h"\
-	"..\..\..\..\sdl\include\sdl_quit.h"\
-	"..\..\..\..\sdl\include\sdl_rwops.h"\
-	"..\..\..\..\sdl\include\sdl_timer.h"\
-	"..\..\..\..\sdl\include\sdl_types.h"\
-	"..\..\..\..\sdl\include\sdl_version.h"\
-	"..\..\..\..\sdl\include\sdl_video.h"\
-	"..\..\..\..\sdl_image\include\sdl_image.h"\
+	"..\..\..\..\sdl\include\SDL.h"\
+	"..\..\..\..\sdl\include\SDL_active.h"\
+	"..\..\..\..\sdl\include\SDL_audio.h"\
+	"..\..\..\..\sdl\include\SDL_byteorder.h"\
+	"..\..\..\..\sdl\include\SDL_cdrom.h"\
+	"..\..\..\..\sdl\include\SDL_error.h"\
+	"..\..\..\..\sdl\include\SDL_events.h"\
+	"..\..\..\..\sdl\include\SDL_getenv.h"\
+	"..\..\..\..\sdl\include\SDL_joystick.h"\
+	"..\..\..\..\sdl\include\SDL_keyboard.h"\
+	"..\..\..\..\sdl\include\SDL_keysym.h"\
+	"..\..\..\..\sdl\include\SDL_main.h"\
+	"..\..\..\..\sdl\include\SDL_mouse.h"\
+	"..\..\..\..\sdl\include\SDL_mutex.h"\
+	"..\..\..\..\sdl\include\SDL_quit.h"\
+	"..\..\..\..\sdl\include\SDL_rwops.h"\
+	"..\..\..\..\sdl\include\SDL_timer.h"\
+	"..\..\..\..\sdl\include\SDL_types.h"\
+	"..\..\..\..\sdl\include\SDL_version.h"\
+	"..\..\..\..\sdl\include\SDL_video.h"\
+	"..\..\..\..\sdl_image\include\SDL_image.h"\
 	"..\..\..\config.h"\
 	"..\..\..\util\include\basic_types.h"\
 	"..\libscale\libscale.h"\
@@ -104,12 +83,10 @@
 	
 
 .\timer.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
 	".\timer.h"\
 	
 
 .\vfwdriver.cpp : \
-	"..\..\..\..\..\dxsdk\include\basetsd.h"\
 	"..\..\..\util\include\basic_types.h"\
 	".\vfwdriver.h"\
 	".\videofiledriver.h"\

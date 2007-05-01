@@ -17,7 +17,7 @@ effectvshagadelicmodule_la_SOURCES = \
         effectvshagadelicmodule.spec \
         effectvshagadelicmodule.xpm
 
-EXTRA_DIST = shagadelic.c effectvshagadelicmodule.dsp effectvshagadelicmodule.mak effectvshagadelicmodule.dep
+EXTRA_DIST = shagadelic.c  effectvshagadelicmodule.dsp effectvshagadelicmodule.mak effectvshagadelicmodule.dep
 
 effectvshagadelicmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

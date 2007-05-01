@@ -33,10 +33,10 @@ gephex-gui.1: $(srcdir)/gephex-gui.xml
 all-local: documentation.html gephex.1 gephex-engine.1 gephex-gui.1
 
 documentation.html: $(srcdir)/documentation.xml  $(srcdir)/module-api*.xml  $(srcdir)/type-api*.xml $(srcdir)/images/*.png
-	if test "x${DBXSLDIR}" = "x"; then touch documentation.html; else xsltproc --xinclude --param shade.verbatim 1 -o documentation.html ${DBXSLDIR}/html/docbook.xsl $(srcdir)/documentation.xml; fi
+	if test "x${DBXSLDIR}" = "x"; then touch documentation.html; else xsltproc --xinclude -o documentation.html ${DBXSLDIR}/html/docbook.xsl $(srcdir)/documentation.xml; fi
 
 documentation.fo: $(srcdir)/documentation.xml  $(srcdir)/module-api*.xml  $(srcdir)/type-api*.xml $(srcdir)/images/*.png
-	if test "x${DBXSLDIR}" = "x"; then touch documentation.fo; else xsltproc --stringparam draft.mode no --stringparam fop.extensions 1 --xinclude --param shade.verbatim 1 -o documentation.fo ${DBXSLDIR}/fo/docbook.xsl $(srcdir)/documentation.xml; fi
+	if test "x${DBXSLDIR}" = "x"; then touch documentation.fo; else xsltproc --stringparam draft.mode no --stringparam fop.extensions 1 --xinclude -o documentation.fo ${DBXSLDIR}/fo/docbook.xsl $(srcdir)/documentation.xml; fi
 
 documentation.pdf: $(srcdir)/documentation.fo 
 	if test "x${DBXSLDIR}" = "x"; then touch documentation.pdf; else fop -d documentation.fo documentation.pdf; fi

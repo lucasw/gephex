@@ -1,4 +1,4 @@
-EXTRA_DIST = base.dsp base.mak base.dep
+EXTRA_DIST = base.vcproj base.dsp base.mak base.dep
 noinst_LIBRARIES = libguibase.a
 
 CPP_FILES = \

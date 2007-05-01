@@ -17,7 +17,7 @@ effectvscrollmodule_la_SOURCES = \
         effectvscrollmodule.spec \
         effectvscrollmodule.xpm
 
-EXTRA_DIST = scroll.c effectvscrollmodule.dsp effectvscrollmodule.mak effectvscrollmodule.dep
+EXTRA_DIST = scroll.c  effectvscrollmodule.dsp effectvscrollmodule.mak effectvscrollmodule.dep
 
 effectvscrollmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 

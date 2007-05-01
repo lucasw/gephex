@@ -27,4 +27,4 @@ INCLUDES = -I@srcdir@/../../../engine/src/engine \
 
 
 DISTCLEANFILES = dplmodule.h dplmodule_auto.c
-EXTRA_DIST = dplmodule.dsp dplmodule.mak dplmodule.dep
+EXTRA_DIST = dplmodule.vcproj dplmodule.dsp dplmodule.mak dplmodule.dep

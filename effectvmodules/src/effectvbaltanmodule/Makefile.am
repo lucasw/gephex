@@ -17,7 +17,7 @@ effectvbaltanmodule_la_SOURCES = \
         effectvbaltanmodule.spec \
         effectvbaltanmodule.xpm
 
-EXTRA_DIST = baltan.c effectvbaltanmodule.dsp effectvbaltanmodule.mak effectvbaltanmodule.dep
+EXTRA_DIST = baltan.c  effectvbaltanmodule.dsp effectvbaltanmodule.mak effectvbaltanmodule.dep
 
 effectvbaltanmodule_la_LIBADD = -leffectv -L@builddir@/../libeffectv
 
