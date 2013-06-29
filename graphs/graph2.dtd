@@ -1,0 +1,40 @@
+<!ELEMENT graph (nodes, connections, snapshots)>
+<!ATTLIST graph
+    id   ID    #REQUIRED
+    name CDATA #REQUIRED>
+
+<!ELEMENT nodes (node+)>
+<!ELEMENT connections (connect+)>
+<!ELEMENT snapshots (snapshot+)>
+
+<!ELEMENT node (data)>
+<!ATTLIST node
+    id   ID    #REQUIRED
+    type CDATA #REQUIRED>
+
+<!ELEMENT snapshot (values)>
+<!ATTLIST snapshot
+     id   ID    #REQUIRED
+     name CDATA #REQUIRED>
+
+<!ELEMENT values (value+)>
+<!ELEMENT value (buf)>
+<!ATTLIST value
+     moduleid    ID  #REQUIRED
+     plugid      ID  #REQUIRED>
+         
+
+<!ELEMENT buf (d)>
+<!ATTLIST buf len CDATA #REQUIRED>
+<!ELEMENT d (#PCDATA)>
+
+<!ELEMENT connect EMPTY>
+<!ATTLIST connect fromid   IDREF #REQUIRED
+                  fromplug IDREF #REQUIRED
+                  toid     IDREF #REQUIRED
+                  toplug   IDREF #REQUIRED>
+
+
+<!ELEMENT data (dataitem+)>
+<!ELEMENT dataitem buf)>
+<!ATTLIST dataitem key ID (#REQUIRED)>

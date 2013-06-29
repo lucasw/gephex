@@ -1,0 +1,93 @@
+#!/bin/sh
+
+#
+# This is the common GePhex wrapper script.
+# It checks wether GePhex is started for the first time.
+# If so, it creates the config file and copies the examples.
+#
+# Don't call it directly! Instead, call gephex-engine or
+# gephex-gui. These are symlinks to this file.
+#
+# TODO: better error handling
+# Note: the prefix variable is replaced at configure time
+
+HOME_DIR=$HOME
+CONF_DIR_BASE=$HOME_DIR/.gephex
+CONF_DIR=$CONF_DIR_BASE/0.4
+DATA_PATH=@prefix@/share/gephex/
+
+if [ ! -e $CONF_DIR_BASE ]; then
+    echo "You started gephex for the first time!"
+
+    echo "Creating $CONF_DIR..."
+    mkdir $CONF_DIR_BASE
+    mkdir $CONF_DIR
+    mkdir $CONF_DIR/graphs
+
+    echo "Copying and adapting default config file..."
+    cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g | sed s:__HOME_DIR__:$HOME_DIR:g > $CONF_DIR/gephex.conf
+
+    echo "Copying example graphs..."
+    GRAPHS="example1 example2 example3 noise fzcam4 kaleidoskop"
+    for i in $GRAPHS; do cp $DATA_PATH/graphs/$i $CONF_DIR/graphs; done
+
+    echo "...done!"
+    echo "Everything is set up."
+    echo "Starting GePhex, have fun."
+else
+    # ~/.gephex already exists
+    # move to ~/.gephex/0.4/ if necessary (before version 0.4.1)
+    # also adapt gephex.conf, because module_path, type_path and
+    # graph_path have changed in 0.4.1
+    if [ ! -e $CONF_DIR ]; then
+      echo "Moving old configuration data from '$CONF_DIR_BASE'"
+      echo "to new location '$CONF_DIR'"
+
+      mkdir $CONF_DIR
+
+      mv $CONF_DIR_BASE/graphs $CONF_DIR
+
+      if [ -e $CONF_DIR_BASE/run_in_terminal.sh ]; then
+        mv $CONF_DIR_BASE/run_in_terminal.sh $CONF_DIR
+      fi
+
+      # adapt the graph_path to new location
+      sed 's|[.]gephex/graphs|.gephex/0.4/graphs|' $CONF_DIR_BASE/gephex.conf > $CONF_DIR/gephex.conf
+
+      # adapt module path
+      sed 's|lib/gephex/modules|lib/gephex-0.4/modules|' $CONF_DIR/gephex.conf > $CONF_DIR/gephex.conf.tmp
+
+      # adapt type path
+      sed 's|lib/gephex/types|lib/gephex-0.4/types|' $CONF_DIR/gephex.conf.tmp > $CONF_DIR/gephex.conf
+
+      rm $CONF_DIR_BASE/gephex.conf
+      rm $CONF_DIR/gephex.conf.tmp
+    fi   
+fi
+
+if [ ! -e $CONF_DIR/run_in_terminal.sh ]; then
+    echo "$CONF_DIR/run_in_terminal.sh does not exist, copying default one..."
+    cp $DATA_PATH/run_in_terminal.sh $CONF_DIR/
+    chmod ug+x $CONF_DIR/run_in_terminal.sh
+    echo "...done!"
+fi
+
+# determine which symlink was called
+test_engine=`echo $0 | grep gephex-engine`
+test_gui=`echo $0 | grep gephex-gui`
+test_gephex=`echo $0 | grep gephex`
+
+if test "x$test_engine" != "x"; then
+    @prefix@/bin/gephex-engine-real $*
+elif test "x$test_gui" != "x"; then
+    @prefix@/bin/gephex-gui-real $*
+elif test "x$test_gephex" != "x"; then
+    $CONF_DIR/run_in_terminal.sh @prefix@/bin/gephex-engine-real &
+    sleep 2
+    @prefix@/bin/gephex-gui-real
+else
+    echo "Please don't call this script directly."
+    echo "Use the symlinks gephex-engine and gephex-gui, so I know"
+    echo "what to do."
+fi
+

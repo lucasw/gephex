@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-update">
+
+  <refnamediv>
+    <refname>update</refname>
+    <refpurpose>process the inputs and assigns the results to the outputs</refpurpose>
+  </refnamediv>
+  
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>update</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>After all necessary inputs and outputs are set with the <function>setInput</function> and <function>setOutput</function> the engine can call <function>update</function> to assign the results to the outputs. </para>
+
+  </refsect1>
+</refentry>
+

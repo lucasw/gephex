@@ -1,0 +1,21 @@
+name: RendererStatus
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ started
+
+ /**
+  *
+  */
+ stopped
+
+ /**
+  *
+  */
+ renderedGraphChanged string graphID
+

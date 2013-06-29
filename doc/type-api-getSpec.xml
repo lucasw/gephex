@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-getSpec">
+  <refnamediv>
+    <refname>getSpec</refname>
+    <refpurpose>Returns the spec string of type.</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>const char* <function>getSpec</function></funcdef>
+        <paramdef><parameter>void</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This method returns the specification string of type. This is a c-string with some properties about the type. At the moment this is just the identifier of the type. It is neccessary that this id string is unique cause the type checking in the engine is based on this property.</para> 
+
+<para>For a type called IntType the c-string would look like this:</para> 
+<para>
+ <programlisting>
+  "typ_spec { name=typ_IntType; }" 
+ </programlisting>
+</para>
+
+<para> &lt;SPECSTRING&gt; := typ_spec { (&lt;ATTRIBUTENAME&gt;=&lt;ATTRIBUTEVALUE&gt;)+ }</para>
+
+<para>The name attribute is the only type property used in this version of the api.</para>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>The method returns the specification data encoded as a zero terminated string. The pointer to this string is valid till calling shutDown.</para>
+
+  </refsect1>
+</refentry>

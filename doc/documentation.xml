@@ -1,0 +1,2137 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<book>
+ <bookinfo>
+  <title>The GePhex Book</title>
+  <author>
+   <firstname>Martin</firstname> <surname>Bayer</surname>
+   <affiliation>
+    <address><email>bayer@fmi.uni-passau.de</email></address>
+   </affiliation>
+  </author>
+  <author>
+   <firstname>Georg</firstname> <surname>Seidel</surname>
+   <affiliation>
+    <address><email>georg@gephex.org</email></address>
+   </affiliation>
+  </author>
+
+    <legalnotice>
+    <para>
+    This document is free; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version. 
+    </para>
+
+    <para>
+    This document is distributed in the hope that it will be useful,
+    but <emphasis>WITHOUT ANY WARRANTY</emphasis>; without even the
+    implied warranty of <emphasis>MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE</emphasis>. See the GNU General Public License
+    for more details.
+    </para>
+
+    <para>
+    You should have received a copy of the GNU General Public
+    License along with this program; if not, write to the Free
+    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+    MA 02111-1307 USA
+    </para>
+    </legalnotice>
+
+<copyright><year>2002</year>
+    <year>2003</year>
+    <year>2004</year>
+    <year>2005</year>
+    <year>2007</year>
+<holder>Martin Bayer</holder>
+<holder>Georg Seidel</holder>
+</copyright>
+  
+  <abstract>
+<para>GePhex is an interactive effect system for video jockeys. The effects can be controlled with external devices like joysticks, web-cams, or midi-devices. New effects can be designed in a GUI (Graphical User Interface) by composing basic effects into more complex ones.</para>
+
+<para>This book gives new users an introduction to the GePhex system. The basic concept of effect-graphs is described. The reader learns how to use the system and the steps to create new effects. The last chapters hold information for developers.</para>
+  </abstract>
+ </bookinfo>
+
+ <chapter id="chapter.introduction"><title>Introduction</title>
+  <sect1 id="sec.what_is_gephex"><title>What is GePhex</title>
+
+<para>GePhex is a software-based interactive video-effect system. Video jockeys can use this system to modify or recombine existing footage or create new video effects in an interactive process. External devices like joysticks, midi-keyboards, or web-cams can influence the real-time video generation.</para>
+
+<para>
+
+<itemizedlist>
+
+<listitem><para>GePhex is Free Software.
+You can use, distribute and modify GePhex under the terms of the GPL.
+</para></listitem>
+
+<listitem><para>GePhex is a multi platform project. Supported operating systems are Win32, Linux, and Mac OS X. There is also a port to FreeBSD.</para></listitem>
+</itemizedlist>
+</para>
+<para>
+
+GePhex allows the construction and modification of video-effects on
+different levels:
+
+<itemizedlist>
+<listitem><para>The users view of a video-effect is a data-flow graph with sources, modifiers and destinations. The data in these effect-graphs are typed. That means the inputs and outputs of the modules have types e.g. video, color or number. The user can create complex effects by connecting inputs and outputs of the same type.</para></listitem>
+
+<listitem><para>Not all inputs must be connected. The user can set the values for unconnected inputs with the GUI. These values can be saved in so called snapshots.</para></listitem>
+
+<listitem><para>The effects can be influenced by the environment in two ways. First, special source-modules inject data from hardware devices like midi-devices, web-cams, or joysticks. Second it is also possible to connect special GUI elements to the inputs of a module (think slide-bars, color choosers, file dialogs, ...).</para></listitem>
+
+<listitem><para>Developers can extend the system with the plugin mechanism for modules and types.</para></listitem>
+
+</itemizedlist>
+</para>
+  </sect1>
+  <sect1 id="sec.gephex_history"><title>GePhex's History</title>
+<para>
+
+<itemizedlist>
+
+  <listitem><para>
+      The project started in the late summer 2001.
+  </para></listitem>
+
+  <listitem><para>
+      In autumn 2002 was the first public vjing session at the fmi party
+      on the campus of the university of Passau, Germany.
+  </para></listitem>
+
+  <listitem><para>
+      In autumn 2003 there was a public session in Vienna and another
+      session at the fmi party in Passau, Germany.
+  </para></listitem>
+
+  <listitem><para>
+      In December 2003 we released the first stable version (0.0.4).
+  </para></listitem>
+
+  <listitem><para>
+      In June 2004 we released the second stable version (0.4).
+      At this time we also started with the design of version 0.5,
+      which will be a complete rewrite. As of the time of this
+      writing (March 2005), there is only a minimal prototype system of
+      gephex-0.5.
+  </para></listitem>
+
+  <listitem><para>
+      In November 2004, we were invited to the 
+      <ulink url="http://www.piksel.org"><citetitle>piksel</citetitle></ulink>
+      meeting in Bergen, Norway. We released version 0.4.1 shortly before.
+  </para></listitem>
+
+  <listitem><para>
+      Version 0.4.2 was released some weeks after piksel. It includes
+      support for 
+      <ulink url="http://www.piksel.org/Frei0r"> 
+	<citetitle>frei0r</citetitle></ulink>,
+      a simple effect API we designed in Norway,
+      and some other stuff we did there (e.g. v4l2 support).
+  </para></listitem>
+
+  <listitem><para>
+      In February 2005, experimental support for Mac OS X and ports of most 
+      <ulink url="http://effectv.sf.net"><citetitle>effecTV</citetitle></ulink>
+      effects was added to version 0.4.3.
+  </para></listitem>
+
+  <listitem><para>
+      In April 2007, frei0r 1.1 support was added and the GUI was ported to
+      Qt 4.1 in the release 0.4.4.
+  </para></listitem>
+
+</itemizedlist>
+
+</para>
+  </sect1>
+
+  <sect1 id="sec.security_note"><title>Security Note</title>
+    <para>
+      With the default configuration the GePhex engine listens at the
+      TCP port 6666. The GUI connects to this port to control the engine.
+      There is no authentication necessary to connect to the engine.
+      This could be a security hole if used in a hostile environment.
+      Never start this software as root and don't use it in an network
+      that is connected to the internet without protection (e.g. a firewall).
+    </para>
+  </sect1>
+
+
+<sect1 id="sec.gephex_components"><title>GePhex's Components</title>
+  <sect2 id="sec.the_engine"><title>The Engine</title>
+    <para>
+      The engine can be started from the console with the
+      <filename>gephex-engine</filename> command.
+      The only environment variable that is used is
+      <varname>DISPLAY</varname> for the output under X11.
+
+      All options are set in the configuration file
+      <filename>~/.gephex/0.4/gephex.conf</filename>.
+      If this file does not exist, a default configuration file is created.
+    </para>
+
+    <para>
+      <screen>
+common {
+    media_path           = [/home/tmp/seidel/gphx/share/gephex]
+}
+
+engine {
+    module_path          = [/home/tmp/seidel/gphx/lib/gephex/modules/]
+    type_path            = [/home/tmp/seidel/gphx/lib/gephex/types/]
+    frei0r_path          = [/home/cip/seidel/.frei0r-1/lib/]
+    graph_path           = [/home/cip/seidel/.gephex/0.4/graphs/]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    ipc_type             = [inet]
+    ipc_port             = [6666]
+    renderer_interval    = [40]
+    net_interval         = [40]
+}
+...
+</screen>
+</para>
+
+<para>
+In the following, a <literal>path</literal> is a semicolon separated
+list of directories, which are searched by the engine in the given
+order.
+</para>
+
+<para>
+<varname>media_path</varname> is used for both engine and gui. It tells
+the engine and the gui where media (i.e. images, videos, fonts, ...)
+is located.
+
+<table frame="none" id="table.options_gephex_engine"><title>Options for gephex-engine</title>
+<tgroup cols="3">
+  <colspec align="left"/>
+  <colspec align="left"/>
+  <colspec align="right"/>
+  <colspec align="right"/>
+  <thead>
+    <row>
+      <entry>Option</entry>
+      <entry>Explanation</entry>
+      <entry>Type</entry>
+      <entry>Optional</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry><varname>module_path</varname></entry>
+      <entry>
+	tells the engine where to look for gephex effect modules
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>type_path</varname></entry>
+      <entry>
+	tells the engine where to look for gephex types
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>frei0r_path</varname></entry>
+      <entry>
+	tells the engine where to look for
+	<ulink url="http://www.piksel.org/Frei0r"> 
+	  <citetitle>frei0r</citetitle></ulink> effects
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>graph_path</varname></entry>
+      <entry>
+	<para>
+	  tells the engine the location of the user created graphs.
+	  The first directory in this path is used to store new graphs.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_type</varname></entry>
+      <entry>
+	<para>
+	  tells the engine how to connect to the user interface.
+	  You can select between <literal>inet</literal> for a
+	  internet-protocol based communication, on Unix platforms
+	  <literal>unix</literal> for Unix domain sockets and
+	  <literal>namedpipe</literal> for named pipes on win32 systems.
+	  If engine and GUI run on the same host the usage of non ip based
+	  communication is preferred because it has less overhead.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_unix_node_prefix</varname></entry>
+      <entry>
+	specifies where the unix node (fifo) is created when using
+	<varname>ipc_type</varname> <literal>unix</literal>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_port</varname></entry>
+      <entry>
+	specifies the port number when using
+	<varname>ipc_type</varname> <literal>inet</literal>
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>renderer_interval</varname></entry>
+      <entry>
+	tells the engine how often the current graph should be
+	updated. It expects the time between updates in milliseconds.
+	A value of 40 is equivalent to 25 updates per second.
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>net_interval</varname></entry>
+      <entry>
+	tells the engine how often to read commands from the user
+	interface.It expects the time between reads in milliseconds. 
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>autostart</varname></entry>
+      <entry>
+	if set, the engine automatically starts the update loop
+      </entry>
+      <entry>bool</entry>
+      <entry>yes</entry>
+    </row>
+    
+    <row>
+      <entry><varname>render_graph_id</varname></entry>
+      <entry>
+	the id of the graph that should be loaded at the beginning
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>render_snap_id</varname></entry>
+      <entry>
+	the id of the snapshot that should be loaded at the beginning
+      </entry>
+      <entry>string</entry>
+      <entry>yes</entry>
+    </row>
+
+    <row>
+      <entry><varname>ttl</varname></entry>
+      <entry>
+	time to live: if the value is not 0, the engine terminates
+	itself after <varname>ttl</varname> update cycles
+      </entry>
+      <entry>int</entry>
+      <entry>yes</entry>
+    </row>
+
+  </tbody>
+  </tgroup>
+</table>
+</para>
+
+<para>
+All options that can be set in the config file can be overridden from the
+command line. For example
+<screen>
+  > gephex-engine --ipc_port=1234
+</screen>
+overrides the value of the option <varname>ipc_port</varname>.
+</para>
+
+<para>
+  The <literal>--help</literal> option shows a list of available parameters
+  with a short help text.
+  <screen>
+    > gephex-engine --help
+                  welcome to...
+       ---             _           ---
+    ----              | |            ----
+  ----   __ _ ___ _ __| |  ___ _  __  ----
+ -----  / _' | - \ '_ \ |_/ - \ \/ /  -----
+------ | (_| | --/ |_) |  \ --/&gt;  &lt;   ------
+ -----  \__. | \_| .__/ |' |\_/ /\ \  -----
+  ----   ._' |\__/ |  |_||_|__//  \_| ----
+   ----  |__/    |_|                 ----
+      ---                          ---
+
+[version:    "0.4.3"]
+[build time: "Mar  5 2005 - 00:13:18"]
+Usage: /Users/georg/gphx//bin/gephex-engine-real [options]
+The allowed options are:
+  --media_path  List of directories that contain videos, images and fonts (separated by ';')
+...
+  </screen>
+</para>
+
+</sect2>
+
+<sect2 id="sec.the_gui"><title>The GUI (graphical user interface)</title>
+<para>
+The gui can be started on the console with the <filename>gephex-gui</filename> command.
+There are two environment variablse that influence the guis behaviour,
+see the note at the end of the section.
+All options are set in the configuration file
+<filename>~/.gephex/0.4/gephex.conf</filename>.
+If this file does not exist a default configuration file is created.
+</para>
+
+<para>
+<screen>
+common {
+    media_path           = [/home/tmp/seidel/gphx/share/gephex]
+}
+
+...
+
+gui {
+    ipc_type             = [inet]
+    ipc_inet_hostname    = [localhost]
+    ipc_port             = [6666]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    engine_binary        = [/home/tmp/seidel/gphx/bin/gephex-engine]
+}
+</screen>
+</para>
+
+<para>
+<varname>media_path</varname> is used for both engine and gui. It is a
+semicolon separated list of directories, which contain media for GePhex
+(i.e. images, videos, fonts, ...).
+</para>
+
+<table frame="none" id="table.options_gephex_gui"><title>Options for gephex-gui</title>
+<tgroup cols="3">
+  <colspec align="left"/>
+  <colspec align="left"/>
+  <colspec align="right"/>
+  <colspec align="right"/>
+  <thead>
+    <row>
+      <entry>Option</entry>
+      <entry>Explanation</entry>
+      <entry>Type</entry>
+      <entry>Optional</entry>
+    </row>
+  </thead>
+  <tbody>
+
+    <row>
+      <entry><varname>ipc_type</varname></entry>
+      <entry>
+	<para>
+	  tells the engine how to connect to the user interface.
+	  You can select between <literal>inet</literal> for a
+	  internet-protocol based communication, on Unix platforms
+	  <literal>unix</literal> for Unix domain sockets and
+	  <literal>namedpipe</literal> for named pipes on win32 systems.
+	  If engine and GUI run on the same host the usage of non ip based
+	  communication is preferred because it has less overhead.
+	</para>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_unix_node_prefix</varname></entry>
+      <entry>
+	specifies where the unix node (fifo) is created when using
+	<varname>ipc_type</varname> <literal>unix</literal>
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>ipc_port</varname></entry>
+      <entry>
+	specifies where the number when using
+	<varname>ipc_type</varname> <literal>inet</literal>
+      </entry>
+      <entry>int</entry>
+      <entry>no</entry>
+    </row>
+
+    <row>
+      <entry><varname>engine_binary</varname></entry>
+      <entry>
+	the full path of the engine executable.
+	It is used to spawn a engine process if necessary.
+      </entry>
+      <entry>string</entry>
+      <entry>no</entry>
+    </row>
+
+  </tbody>
+</tgroup>
+</table>
+
+<para>
+All options that can be set in the config file can be overridden from the
+command line. For example
+<screen>
+  > gephex-gui --media_path=/mnt/data/footage/
+</screen>
+overrides the value of the option <varname>media_path</varname>.
+</para>
+
+<para>
+  The <literal>--help</literal> option shows a list of available parameters
+  with a short help text.
+  <screen>
+    > gephex-gui --help
+Usage: /Users/georg/gphx//bin/gephex-gui-real [options]
+The allowed options are:
+  --media_path  List of directories that contain videos, images and fonts (separated by ';')
+...
+  </screen>
+</para>
+
+</sect2>
+
+<sect2 id="sec.the_gephex_script"><title>The GePhex Script</title>
+<para>
+  On unix platforms, a script called gephex is installed.
+  It takes care of starting the engine and the gui.
+</para>
+<para>
+  The engine is started in an x-terminal-emulator, which defaults
+  to x-terminal-emulator, and if that does not exists on your
+  system xterm is used.
+</para>
+<para>
+  To override this behavior, you can set the GEPHEX_XTERM
+  environment variable. Make sure that your terminal emulator
+  accepts the "-e" flag to execute a program.
+  To add extra flags to your terminal emulator, use the
+  GEPHEX_XTERM_FLAGS environment variable.
+  Example:
+<screen>
+   > GEPHEX_XTERM=aterm GEPHEX_XTERM_FLAGS="-fg green -bg black" gephex
+</screen>
+</para>
+<para>
+  If you need even more control, look at the file
+  ~/.gephex/run_in_terminal.sh. If you want to restore the default for some
+  reason, it's OK to simply delete it, gephex will copy the default file
+  if it does not find it there.
+</para>
+<note> <para> The gui uses the same mechanism to start the engine, so
+you can provide the GEPHEX_XTERM* variables for the gui, too. </para></note>
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="chapter.installation"><title>Installation</title>
+<para>Since GePhex is free software you can get the source code and compile it on you own.
+Or if you have one of our core platforms you can download the precompiled binaries from our <ulink url="http://www.gephex.org"><citetitle>website</citetitle></ulink>.</para>
+
+<sect1 id="sec.building"><title>Building from the Sources</title>
+
+  <para>
+    It is not very difficult to compile your own version of GePhex.
+    Especially on Unix, if you already installed software with "configure" 
+    and "make install" there should be no big surprises for you here.
+    On windows, you need a copy of ms visual studio 6 and several libraries.
+  </para>
+
+  <para>
+    Before we can start we must get a version of the GePhex source code.
+    There are official releases as tar balls on the 
+    <ulink url="http://www.gephex.org/download.php"><citetitle>website</citetitle></ulink> and the developer versions available via <ulink url="http://www.abridgegame.org/darcs/"><citetitle>darcs</citetitle></ulink>.
+  </para> 
+
+
+  <sect2 id="sec.getting_sources_from_repository"> <title> Getting the latest Version from the Repository </title>
+    <para>
+      To get the latest sources, you need <ulink url="http://darcs.net/DarcsWiki/CategoryBinaries"><citetitle>darcs</citetitle></ulink>. The following command will fetch the latest version:
+      <screen>
+bash@host:~$ darcs get http://darcs.gephex.org/gephex/gephex--main--0.4
+      </screen>
+    </para>
+  </sect2>
+  <sect2 id="sec.getting_distribution"> <title> Getting a Distribution-Tarball </title>
+   <para>
+      Visit our
+      <ulink url="http://gephex.org/download.php">
+        <citetitle>download page</citetitle>
+      </ulink> and get a release.
+       Let's assume the tar ball is called 
+       <filename>gephex-0.4.tar.gz</filename>.
+      Just unpack the file.
+     <screen>
+bash@host:~$ tar xvzf gephex-0.4.tar.gz
+gephex-0.4/AUTHORS
+gephex-0.4/BUGS
+gephex-0.4/ChangeLog
+gephex-0.4/INSTALL
+...
+     </screen>
+     On windows you can use, for example, 
+     <ulink url="http://www.rarlab.com"><citetitle>WinRAR</citetitle></ulink>
+     to unpack the file.
+   </para>
+  </sect2>
+
+<sect2 id="sec.building.unix"><title>Building on Unix Platforms</title>
+
+  <sect3 id="sec.bootstrapping"> <title> Bootstrapping </title>
+   <para>
+     This step is only necessary when you got the latest sources from the
+     repository. The distributed tar balls are already "bootstrapped".
+   </para>
+
+   <para>
+      To do the bootstrapping, you need some additional software.
+      This includes autoconf and automake and some additional packages
+      to build the documentation etc.
+      You should use rather new versions of automake and autoconf.
+      For automake, 1.8 is known to work and 1.4 is known to *not*
+      work with our build system. For autoconf, 2.59 is known to work.
+   </para>
+   <note>
+     <para>
+       When installing from a tar ball, this software is *not* needed!
+     </para>
+   </note>
+
+   <itemizedlist>
+     <listitem><para>
+       <ulink url="http://www.gnu.org/software/autoconf/">
+         <citetitle> autoconf</citetitle></ulink>
+       <ulink url="http://www.gnu.org/software/automake/">
+         <citetitle> automake</citetitle></ulink>
+       <ulink url="http://www.gnu.org/software/libtool/">
+         <citetitle> libtool</citetitle></ulink>
+     </para></listitem>
+     <listitem><para>
+       <ulink url="http://www.python.org/">
+         <citetitle> python</citetitle></ulink>
+     </para></listitem>
+     <listitem><para>
+       <ulink url="http://docbook.sourceforge.net/projects/docbook/">
+         <citetitle>  DocBook DTD</citetitle></ulink>
+       <ulink url="http://docbook.sourceforge.net/projects/xsl/">
+         <citetitle>  DocBook XSL Stylesheets</citetitle></ulink>
+       <ulink url="http://xmlsoft.org/XSLT/">
+         <citetitle> xsltproc</citetitle></ulink>
+       <ulink url="http://docbook2x.sourceforge.net">
+         <citetitle> docbook2x</citetitle></ulink>
+     </para></listitem>
+   </itemizedlist>
+
+<para>
+  GePhex uses autoconf and automake for the configuration and generation of
+  Makefiles.
+  Use the script <filename>bootstrap.sh</filename> to create the
+  build-system without further intervention.
+  <screen>
+bash@host:~$ cd GePhex
+bash@host:~/GePhex$./bootstrap.sh
+running aclocal ...
+running libtoolize --force ...
+running autoheader ...
+running automake --add-missing --copy ...
+running autoconf ...
+
+./configure has been successfully built!
+See './configure --help' for available options 
+  </screen>
+</para>
+
+</sect3>
+
+<sect3 id="sec.configure_and_build"> <title> Configure and Build </title>
+  <para>
+    This step configures the build system for your system.
+    You need the following libraries to get all the features of GePhex:
+
+    <itemizedlist>
+      <listitem><para>
+        <ulink url="http://doc.trolltech.com/3.3/index.html">
+          <citetitle> libqt</citetitle></ulink>
+        <ulink url="http://www.xfree.org/">
+          <citetitle> xlib</citetitle></ulink>
+      </para></listitem>
+
+      <listitem><para>
+        <ulink url="http://www.libsdl.org/index.php">
+          <citetitle> libsdl</citetitle></ulink>
+        <ulink url="http://www.libpng.org/pub/png/libpng.html">
+          <citetitle> libpng</citetitle></ulink>
+        <ulink url="http://www.mesa3d.org/">
+          <citetitle> mesa</citetitle></ulink>
+        <ulink url="http://avifile.sourceforge.net/">
+          <citetitle> avifile</citetitle></ulink>
+        <ulink url="http://alsa-project.org/">
+          <citetitle> alsa</citetitle></ulink>
+        <ulink url="http://aa-project.sourceforge.net/aalib/">
+          <citetitle> aalib</citetitle></ulink>
+      </para></listitem>
+    </itemizedlist>
+  </para>
+  <para>
+    At the very least you should have libqt and xlib installed.
+    If not the GUI will not be built.
+  </para>
+
+  <para>
+    At this point you can choose the location where the software should be
+    installed. Some special options to include/exclude features can
+    also be activated here.
+    Normally it is not necessary to use any special parameters because
+    everything is checked automatically by the configure script.
+  </para>
+  <para>
+    To see the available options you can use the
+    <filename> configure </filename> script:
+    <screen>
+bash@host:~/GePhex$./configure --help
+`configure' configures this package to adapt to many kinds of systems.
+...
+Installation directories:
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [/usr/local]
+...
+Optional Features:
+...
+  --enable-mmx            Turn on MMX support (still runs on x86 that don't
+                          have MMX) [default=yes]
+  --enable-serialize-framebuffer
+                          Serialize the framebuffer type (for previews in the
+                          gui) [default=no]
+
+ Optional Packages:
+...
+
+  --with-SDL_IMAGE        Turn on SDL_IMAGE support (default=yes).
+  --with-SDL_TTF          Turn on SDL_TTF support (default=yes).
+  --with-AVIFILE          Turn on AVIFILE support (default=no).
+  --with-MPEG3            Turn on MPEG3 support (default=no).
+  --with-LIBPNG           Turn on LIBPNG support (default=no).
+  --with-AALIB            Turn on AALIB support (default=yes).
+  --with-ASOUNDLIB        Turn on ASOUNDLIB support (default=yes).
+  --with-V4L              Turn on V4L support (default=yes).
+  --with-OSS              Turn on OSS support (default=yes).
+  --with-LINUX_JOYSTICK   Turn on LINUX_JOYSTICK support (default=yes).
+  --with-FFMPEG           Turn on FFMPEG support (default=yes).
+
+Some influential environment variables:
+...
+  FRBINCACHE  The size of the cache of the image source module in MB
+...
+    </screen>
+  </para>
+
+  <para>
+    So let's do the actual configuration:
+    <screen>
+bash@host:~/GePhex$ ./configure --prefix=/usr
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for g++... g++
+...
+    </screen>
+  </para>
+
+  <para>
+    Now we can start the build process.
+    Depending on you system this could take a long time.
+    <screen>
+bash@host:~/GePhex$ make
+make  all-recursive
+make[1]: Entering directory `/home/martin/code/gephex/GePhex'
+Making all in base
+make[2]: Entering directory `/home/martin/code/gephex/GePhex/base'
+Making all in src
+make[3]: Entering directory `/home/martin/code/gephex/GePhex/base/src'
+...
+    </screen>
+  </para>
+</sect3>
+
+<sect3 id="sec.installation"> <title> Installation </title>
+  <para>
+    The following command installs the software on your system.
+    The two binaries for the user interface <filename>gephex-gui</filename>
+    and the rendering engine <filename>gephex-engine</filename> and
+    the gephex wrapper script <filename>gephex</filename> will be
+    installed in the <filename>PREFIX/bin</filename> directory and the
+    location of the plugins is in <filename>PREFIX/lib/gephex</filename>.
+    <screen>
+bash@host:~/GePhex# make install
+    </screen>
+  </para>
+  <note>
+    <para>
+      You might need to be root to install (depending on the 
+      installation prefix you chose).
+    </para>
+  </note>
+</sect3>
+
+<sect3 id="sec.create_debian_package"> <title>Create your own Debian Packages</title>
+
+<para>Users of the Debian GNU/Linux OS can create Debian binary packages from the source and install these as root with dpkg.</para>
+
+<para>To build Debian packages you need these Debian packages installed:
+<itemizedlist>
+<listitem><para>debhelper</para></listitem>
+<listitem><para>libqt3-mt-dev</para></listitem>
+<listitem><para>libsdl1.2-dev</para></listitem>
+<listitem><para>xlibmesa-dev</para></listitem>
+<listitem><para>libpng12-dev</para></listitem>
+<listitem><para>libavifile-0.7-dev</para></listitem>
+<listitem><para>libsdl-ttf2.0-dev</para></listitem>
+<listitem><para>libasound2-dev</para></listitem>
+<listitem><para>libmpeg3-dev</para></listitem>
+<listitem><para>libsdl-image1.2-dev</para></listitem>
+<listitem><para>automake1.8</para></listitem>
+<listitem><para>libtool</para></listitem>
+<listitem><para>autoconf</para></listitem>
+<listitem><para>python</para></listitem>
+<listitem><para>docbook-xml</para></listitem>
+<listitem><para>docbook-xsl</para></listitem>
+<listitem><para>docbook2x</para></listitem>
+<listitem><para>xsltproc</para></listitem>
+</itemizedlist>
+</para>
+
+<para>Not all necessary files for building the Debian packages are included in the dist tar balls. You need to get a full copy of the gephex source tree from the repository. The necessary steps to do this are described above.</para> 
+
+<para>First bootstrap the clean source tree by calling the bootstrap.sh script in the root of the source tree. Then build the packages with the dpkg-buildpackage commando. After a successful build you can install the generated packages as superuser with dpkg.
+
+<screen>
+bash@host:~/GePhex$ ./bootstrap
+bash@host:~/GePhex$ fakeroot dpkg-buildpackage
+bash@host:~/GePhex$ sudo dpkg -i ../gephex_0.4-1_i386.deb
+</screen>
+
+</para>
+</sect3>
+</sect2>
+
+<sect2 id="sec.building.macosx"><title>Building on Mac OS X</title>
+
+<para>
+Content has been moved to this wiki
+<ulink url="http://wiki.gephex.org/BuildMacOSX"> <citetitle>article</citetitle></ulink>.
+</para>
+
+</sect2>
+
+<sect2 id="sec.building.win32"><title>Building on Windows</title>
+
+<para>
+There is also an alternative way to build gephex using MinGW.
+The below description is outdated, it works only for gephex version 0.4.3 or
+less.
+
+See this wiki <ulink url="http://wiki.gephex.org/BuildMinGW"> <citetitle>article</citetitle> </ulink>.
+</para>
+
+<sect3 id="sec.what_you_need"><title>What you need</title>  
+<para>
+The following programs and libraries are needed
+to compile gephex on win32:
+
+<itemizedlist>
+  <listitem><para> ms visual studio 6 (at least the command line interpreter)
+  </para></listitem>
+  <listitem><para> <ulink url="http://www.python.org/download/"> <citetitle>python</citetitle> </ulink> </para></listitem>
+  <listitem><para> <ulink url="http://nasm.sourceforge.net/"><citetitle>nasm</citetitle></ulink> </para></listitem>
+  <listitem><para><ulink url="http://www.trolltech.com/download/qt/download_noncomm.html"><citetitle> libqt (2.3nc)</citetitle></ulink> </para></listitem>
+  <listitem><para><ulink url="http://libsdl.org"><citetitle>sdl</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://www.libsdl.org/projects/SDL_image"><citetitle>sdl-image</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://www.libsdl.org/projects/SDL_ttf"><citetitle>sdl-ttf (choose the devel zip file for visual studio 6)</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://www.microsoft.com/windows/directx/default.aspx"><citetitle>directx sdk</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://ffmpeg.sourceforge.net"><citetitle>ffmpeg (distributed with GePhex in source form)</citetitle></ulink></para></listitem>
+  <listitem><para><ulink url="http://www.mingw.org"><citetitle>MinGW/MSYS (needed to compile ffmpeg)</citetitle></ulink></para></listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="sec.env_and_path"><title>Environment and Path</title>
+<para>
+The python, nasm and qt (uic, moc) binaries must be in the PATH.
+You need to set up the following environment variables:
+
+<variablelist>
+<varlistentry>
+<term>SDL_DIR</term>
+   <listitem><para>base dir of SDL</para></listitem>
+</varlistentry>
+  <varlistentry><term>SDL_DIR</term><listitem><para>base dir of sdl</para></listitem></varlistentry>
+  <varlistentry><term>SDL_IMAGE_DIR</term><listitem><para>base dir of sdl-image</para></listitem></varlistentry>
+  <varlistentry><term>SDL_TTF_DIR</term><listitem><para>base dir of sdl-ttf</para></listitem></varlistentry>
+  <varlistentry><term>QTDIR</term><listitem><para>base dir of qt</para></listitem></varlistentry>
+  <varlistentry><term>DXSDK_DIR</term><listitem><para>base dir of directx sdk</para></listitem></varlistentry>
+
+</variablelist>
+</para>
+</sect3>
+
+<sect3 id="sec.building_ffmpeg"><title>Building ffmpeg</title>
+<para>
+Before building GePhex, ffmpeg must be built.
+Fire up MSYS and chdir into <quote>${gephex-dist}/contrib/ffmpeg</quote>.
+Then execute
+<screen>
+ > ./configure --enable-shared
+ > make
+</screen>
+If everything works out, the necessary dlls are now in
+<quote>${gephex-dist}/contrib/ffmpeg/libavformat</quote> and
+<quote>${gephex-dist}/contrib/ffmpeg/libavcodec</quote>.
+
+There are two ways to build GePhex (all paths are relative to your gephex dir):
+</para>
+</sect3>
+<sect3 id="sec.building_with_vs_ide"><title>Building with the Visual Studio IDE</title>
+<para>
+
+ Create the following empty folders in your gephex dir:
+
+<itemizedlist>
+<listitem><para><filename>$gephex-dir/dlls</filename></para></listitem>
+<listitem><para><filename>$gephex-dir/dlls/modules</filename></para></listitem>
+<listitem><para><filename>$gephex-dir/dlls/types</filename></para></listitem>
+<listitem><para><filename>$gephex-dir/graphs</filename></para></listitem>
+</itemizedlist>
+
+ Copy 
+
+ <itemizedlist>
+   <listitem><para><filename>$gephex-dir/data/gephexw.conf.default</filename> to <filename>$gephex-dir/gephex.conf</filename>,</para></listitem>
+
+ <listitem><para><filename>$gephex-dir/config_h.win32</filename> to <filename>$gephex-dir/config.h</filename>, and</para></listitem>
+
+ <listitem><para>the graphs in <filename>$gephex-dir/examples/graphs</filename> to <filename>$gephex-dir/graphs</filename>.</para></listitem>
+ </itemizedlist>
+
+ Fire up vs6 and open <filename>$gephex-dir/build/gephex.dsw</filename>.
+
+ Choose your configuration (Release/Debug).
+
+ You have to build three projects:
+<itemizedlist>
+<listitem><para>engine</para></listitem>
+<listitem><para>gui</para></listitem>
+<listitem><para>dummy (builds all modules and types)</para></listitem>
+</itemizedlist>
+
+</para>
+</sect3>
+
+<sect3 id="sec.building_cmd_line"><title>Building via the Command Line</title>
+<para>
+
+<note><para>
+ Unfortunately, vs6 puts hard paths into .mak files and .dep files.
+ Although the dsp files are controlled by the above environment variables,
+ the console build will probably only work if you have installed
+ the gephex source and your libraries into the following directories:
+
+ <itemizedlist>
+<listitem><para><filename>GEPHEX_DIR</filename> = <filename>c:/code/gephex-0.4</filename> (and _not_ <filename>c:/code/gephex-0.4.x</filename>!) </para></listitem>
+<listitem><para><filename>SDL_DIR</filename> = <filename>c:/code/sdl</filename> </para></listitem>
+<listitem><para><filename>SDL_IMAGE_DIR</filename> = <filename>c:/code/sdl_image</filename> </para></listitem>
+<listitem><para><filename>SDL_TTF_DIR</filename> = <filename>c:/code/sdl_ttf</filename> </para></listitem>
+<listitem><para><filename>QTDIR</filename> = <filename>c:/code/qt</filename> </para></listitem>
+<listitem><para><filename>DXSDK_DIR</filename> = <filename>c:/dxsdk</filename> </para></listitem>
+ </itemizedlist>
+
+ Additionally, you have to rename your gephex dir to <filename>C:\code\gephex-0.4</filename>.
+
+ (If anybody knows a better way to create the .mak and .dep files, please
+  tell us!)
+</para></note>
+
+
+ The batch file <filename>$gephex-dir/build/make_all.bat</filename> should build everything.
+ <screen>
+   > cd build
+   > make_all Release
+ </screen>
+
+ <note><para>
+ <filename>nmake</filename> seems to crash when called from inside cygwin.
+ Use the windows command line instead.
+ </para></note>
+
+</para>
+</sect3>
+
+<sect3 id="sec.making_it_work"><title>Making it work</title>
+<para>
+
+Wether you built GePhex with the IDE or with the CLI, you need to make sure
+that the dlls of the libraries are found when gephex is started.
+The easiest thing is to put them into <filename>$gephex-dir/bin</filename>.
+Alternatively, you could put the dlls into a system path, like
+<filename>c:\windows</filename>.
+The following dlls are needed:
+
+<itemizedlist>
+<listitem><para>sdl.dll</para></listitem>
+<listitem><para>sdl_ttf.dll</para></listitem>
+<listitem><para>sdl_image.dll</para></listitem>
+<listitem><para>jpeg.dll</para></listitem>
+<listitem><para>libpng1.dll</para></listitem>
+<listitem><para>zlib.dll</para></listitem>
+<listitem><para>qt-mt230nc.dll</para></listitem>
+<listitem><para>avcodec.dll</para></listitem>
+<listitem><para>avformat.dll</para></listitem>
+</itemizedlist>
+
+Instead of copying these files manually, you can put them into
+<filename>C:\gphx_dist_data\extra_dlls</filename>.
+Then, you can use the script
+<filename>$gephex-dir/build/make_binary_dist.bat</filename> to create
+a working binary distribution.
+<screen>
+  > cd build
+  > make_binary_dist C:\my_gephex_0.4_dist
+</screen>
+
+<note><para>
+You need the recode utility, available with the 
+<ulink url="http://unxutils.sourceforge.net/">
+<citetitle>UnxUtils</citetitle></ulink> for this batch file.
+</para></note>
+
+</para>
+</sect3>
+</sect2>
+</sect1>
+
+<sect1 id="sec.precompiled_versions"><title>Precompiled Versions</title>
+
+<sect2 id="sec.apt"><title>Using our APT Repository </title>
+<para>The Debian binary package format is the common way to install software on a Debian GNU/Linux system. Using the dpkg, a medium-level tool to install, build, remove and manage Debian GNU/Linux packages, the system stays in a consistent state after changes to the software installation or configuration. The proper deinstallation and upgrade to a other version of the application package is guaranteed.</para>
+
+<para>Add the GePhex apt repository lines to your /etc/apt/sources.list and install GePhex with apt-get:
+<screen>
+bash@host:~$ sudo cat >> /etc/apt/sources.list
+deb http://www.gephex.org/debian/ unstable main 
+bash@host:~$ sudo apt-get install gephex
+</screen>
+</para>
+</sect2>
+
+<sect2 id="sec.windows_binary_dist"><title>Windows binary Distribution</title>
+<para>
+  Just get the windows binary .rar or .zip file and unpack it.
+  GePhex can be started from the <filename>bin</filename> directory.
+</para>
+</sect2>
+</sect1>
+
+</chapter>
+
+
+ <chapter id="chapter.guided_tour"><title>Guided Tour</title>
+
+ <sect1 id="sec.starting_gephex">
+   <title> Starting GePhex </title>
+     <sect2 id="sec.unix">  <title> UNIX </title>
+       <para>
+          You can start GePhex by executing 
+          <filename>gephex</filename>.
+       </para>
+       <para>
+          If you chose your own prefix for the install, make sure the 
+          gephex binary is in the path.
+       </para>
+     </sect2>
+     <sect2 id="sec.windows">  <title> Windows </title>
+       <para>
+          Just go into the bin directory of your GePhex directory and
+          execute the gephex-engine and gephex-gui (in that order).
+       </para>
+     </sect2>
+ </sect1>
+
+ <sect1 id="sec.gephex_graphical_ui">
+   <title> The GePhex Graphical User Interface </title>
+   <mediaobject>
+   <imageobject>
+      <imagedata fileref="images/gui_1.png"/>
+   </imageobject>
+   <textobject> <phrase>The GUI (just started).</phrase> </textobject>
+   <caption> <para> The GUI (just started). </para> </caption>
+ </mediaobject>
+
+   <sect2 id="sec.structure_gui">
+     <title> Structure of the GUI </title>
+     <para>
+        As you can see in the image, the GUI (Graphical User Interface)
+        is divided into four major areas.
+        The areas are marked with a red pen.
+        <itemizedlist>
+          <listitem>
+            <para>
+              1: Info-window. Used for properties of effects and
+              for loading and saving effect-graphs,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              2: Graph-window. Used to edit effect-graphs.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              3: Control-window. Used to control running effect-graphs.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              4: Message-window. Used to display error
+              and warning messages.
+            </para>
+          </listitem>  
+        </itemizedlist>
+     </para>
+   </sect2>
+   <sect2 id="sec.first_graph">
+     <title> The First Graph </title>
+     <para>
+        The most important concept for using GePhex is that of an effect-graph.
+        An effect-graph is a number of simple basic effects, combined to
+        perform a more complex effect.
+     </para>
+     <para>
+        Since GePhex works with graphs, we have to tell it which graph
+        we want to edit.
+        Do this by clicking on the "Graphs" tab in the info-window.
+        To create a new graph, right-click on the "Graphs" item inside the
+        tab (see next image).
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_2.png"/>
+       </imageobject>
+       <textobject> <phrase>Creating a graph.</phrase> </textobject>
+       <caption> <para> Creating a graph </para> </caption>
+     </mediaobject>
+     <para>
+        When the context-menu opens up, just select "New Graph".
+        Enter "first" in the dialog.
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_3.png"/>
+       </imageobject>
+       <textobject> <phrase> Choosing the name of the graph.</phrase>
+       </textobject>
+       <caption> <para> Choosing the name of the graph </para> </caption>
+     </mediaobject>
+     <para>
+       Now you see another item called "first" in the tree-view below
+       "default". This is our new graph.
+       To activate it, click on the arrow (or plus symbol) left to "first".
+       Click on the appearing child item "default".
+     </para>
+     <note>
+       <para>
+         This child item is a "snapshot" of the graph. For now you just
+         need to know, that you need one active graph with one active snapshot
+         in order to create an effect.
+       </para>
+     </note>
+     <para>
+       The letters "r" and "e"
+       tell you that graph "first" is active (with current snapshot "default").
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_4.png"/>
+       </imageobject>
+       <textobject> <phrase>Activating the graph.</phrase> </textobject>
+       <caption> <para> Activating the graph </para> </caption>
+     </mediaobject>
+   </sect2>
+ 
+   <sect2 id="sec.adding_effects"> <title> Adding Effects to the Graph </title>
+     <para>
+       Now we have created a new graph. But it is not very useful yet, because
+       it is empty. So let's create some effects.
+     </para>
+     <para>
+       To do so, open the "Effects" menu in the top-level menu-bar.
+       Choose "Sources"->"Image Source".
+       Then click into the graph window as shown in the next image.
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_5.png"/>
+       </imageobject>
+       <textobject> <phrase>Adding an basic effect.</phrase> </textobject>
+       <caption> <para> Adding an basic effect </para> </caption>
+     </mediaobject>
+     <para>
+       Do the same for "Effects"->"Outputs"->"Image Output" 
+       and "Effects"->"Filter"->"FlashFader".
+       Arrange them as in the next image (You can simply move them around with
+       the mouse).
+     </para>
+     <para>
+       The red boxes on the left side of the basic effects are
+       inputs, the blue buttons on the right are outputs.
+     </para>
+     <para>
+       Connect the effects as shown in the next picture:
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_6.png"/>
+       </imageobject>
+       <textobject> <phrase>Connecting effects.</phrase> </textobject>
+       <caption> <para> Connecting effects </para> </caption>
+     </mediaobject>
+     <para>
+       The graph we have created so far is still very simple. In fact,
+       you would not call such a graph an effect at all.
+       What it does is simply loading a bitmap, eventually flashing it and
+       displaying it to the screen.
+     </para>
+     <para>
+       You can think of this graph in terms of data flow:
+       data comes from a source (the image source), flows through the
+       flash-fader filter and is displayed in the sink (the image output).
+     </para>
+   </sect2>
+   <sect2 id="sec.configuring_the_graph"> <title> Configuring the Graph </title>
+     <para>
+        This is simple. We just choose a bitmap.
+        Right-click on the "Image Source"-effect and choose "Properties"
+        in the context menu. Now the info-window displays the properties
+        of the image source:
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_7.png"/>
+       </imageobject>
+       <textobject> <phrase>Properties</phrase> </textobject>
+       <caption> <para> Properties </para> </caption>
+     </mediaobject>
+     <para>
+       Click on the button next to "Filename" and choose a nice image file.
+     </para>
+   </sect2>
+   <sect2 id="sec.running_the_graph"> <title> Running and controlling the Graph </title>
+     <para>
+        Simple again. Just click on the little red fellow on the bottom right.
+        You should see the output window opening and displaying the bmp file
+        you chose.
+        To inform you that it is running, GePhex turns the red fellow to a
+        green fellow.
+     </para>
+     <para>
+        To control the flash-fader effect we must add a control at the upper
+        input of the flash-fader.
+        The following picture explains how you can add a control to an input: 
+     </para>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="images/gui_8.png"/>
+       </imageobject>
+       <textobject> <phrase>Creating a control.</phrase> </textobject>
+       <caption> <para> Creating a control </para> </caption>
+     </mediaobject>
+     <para>
+       Just try it!
+     </para>
+     <note>
+       <para>
+         GePhex must be running for the control changes to take effect!.
+       </para>
+     </note>
+   </sect2>
+
+   <sect2 id="sec.saving_the_graph"> <title> Saving the Graph </title>
+     <para>
+        Click on the "Graphs" tab in the info-window.
+        Right-click on "first" and choose "Save Graph".
+        Done. The graph will be already there when you start next time.
+     </para>
+   </sect2>
+ </sect1>
+
+ </chapter>
+
+ <chapter id="chapter.basic_concepts"><title>Basic Concepts</title>
+ <para>
+   TODO: this chapter needs a lot of work
+ </para>
+  <sect1 id="sec.three_states"><title>The three States of Graphs in the Renderer</title>
+<para>
+  The Renderer knows three states for a graph:
+  <itemizedlist>
+    <listitem><para>
+	The graph is not loaded. No internal state of the modules is
+	stored and obvious no calculation is done in this state.
+    </para></listitem>
+
+    <listitem><para>
+	The graph is loaded in the renderer. The modules remember their
+	internal states e.g. the framebuffer of an xfader with loopback.
+	But no calculation is allowed in this state.
+    </para></listitem>
+
+    <listitem><para>
+	Only in the state active are any calculations done.
+    </para></listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+  So how can I distinguish these states? How can I change between them?
+  What do they imply for the usage of gephex?
+</para>
+  </sect1>
+
+ </chapter>
+
+
+<chapter id="chapter.example_graphs"><title>Example Graphs</title>
+
+    <para>
+      On UNIX systems, the examples are installed automatically when 
+      you run GePhex for the first time. If not, it might be necessary
+      to remove the <filename>~/.gephex/0.4</filename> directory from an
+      older version of GePhex.
+
+      <note><para>
+	  This could delete your graphs, so backup
+	  <filename>~/.gephex/0.4/graphs</filename> if necessary.
+      </para> </note>
+    </para>
+
+<sect1 id="sec.example1"><title>Example1: Tunnel-Vision</title>
+  <para>
+     Shows how to use the tunnel.
+  </para>
+  <para>
+     Try to attach the frbinmodule (Image Source) module instead of the 
+     isingnoize.
+  </para>
+</sect1>
+<sect1 id="sec.example2"><title>Example2: Plasma</title>
+  <para>
+     Simple plasma effect graph.
+  </para>
+</sect1>
+<sect1 id="sec.example3"><title>Example3: A simple Feedback Loop</title>
+  <para>
+     Try to change the zoom and rotation of the rotozoom-module.
+     If you choose the right parameters, it should look like if you film
+     a monitor that displays what you film...
+  </para>
+</sect1>
+</chapter>
+
+  <chapter id="chapter.module_reference">
+    <title>Module Reference</title>
+
+    <sect1 id="sec.generators">
+      <title>Generators</title>
+
+      <sect2 id="sec.ifsmodule">
+        <title>ifsmodule</title>
+
+<para>Linear iterated function systems are a fractal type. The module renders these kind of ifs parameter sets to a image.</para>
+
+<mediaobject>
+   <imageobject>
+      <imagedata fileref="images/ifs.png"/>
+   </imageobject>
+   <textobject>
+      <phrase>This is an example for the output of the ifs module.</phrase>
+   </textobject>
+
+   <caption>
+      <para>
+      This IFS fractal is rendered in gray scale mode.
+      </para>
+   </caption>
+</mediaobject>
+
+    </sect2>
+  </sect1>
+
+  <sect1 id="sec.input_modules">
+    <title>Input Modules</title>
+
+<para>In this section all modules are listed, who's main goal is to inject data in from external sources in signal graph.</para>
+
+    <sect2  id="sec.avifilemodule">
+      <title>Video-playback (avifilemodule)</title>
+
+      <sect3 id="sec.avifilemodule.desc">
+        <title>Description</title>
+
+<para>There are different video file-formats. Some can be streamed via net. Others allow random access to each video frame. For some there is a normative standard. mpeg 1,2 and 4 are an example for these kinds. avi, quicktime or real video are (re)defined by their vendors. In most cases the video format is just a wrapper for a video stream encoded with a concrete videocodec.</para>
+
+<para>The avifile library extracts the compressed video data from the file formats and and provides with the help of its plugins a lot of codecs to decode the frame sequences. The actual support for one format depends on compile time options and the existence of other libraries on your system. Further information is provided at the homepage of the <ulink url="http://www.avifile.sourceforge.net"> <citetitle>avifile</citetitle></ulink> project.</para>
+
+      </sect3>
+
+      <sect3 id="sec.avifilemodule.inputs">
+        <title>Inputs</title>
+
+<para>The first input is the name and path of the video file.</para>
+
+<para>There are two way to control the playback-position. If the seek input is false the module plays the film sequential frame by frame. The playback starts at the the beginning and plays the sequence once. If the seek input is true the playback-position is controlled by the position input. A zero means jump to the beginning and a 1 to the end. If a signal generator is connected to the position the film can be played in reverse, faster or slower just depending on the parameters of the generator.</para>
+
+      </sect3>
+
+      <sect3 id="sec.avifilemodule.outputs">
+        <title>Outputs</title>
+
+<para>The first output is the video-stream.</para>
+
+<para>The second output is the playback-position in the stream. If the seek is active this is the same as the seek-position but if we disabled seeking this position follows the playback. This output enables looping of parts or setting breakpoints at an arbitrary position.</para>
+
+      </sect3>
+
+      <sect3 id="sec.avifilemodule.notes">
+        <title>Notes</title>
+
+<para>Many codecs don't allow fast seeking to an arbitrary video position. This isn't a problem for standard video playback applications. User of a video effect systems want to reverse the playback direction and jump to an random position in the video-footage. Sequential playback is boring. Watch you favorite movie in sine waves!</para>
+
+<para>For random access to the video footage it is often necessary to re-encode the material to frame-based codecs like mjpeg. Tools like 
+<ulink url="http://ffmpeg.sourceforge.net/index.php">
+  <citetitle>ffmpeg</citetitle></ulink>,
+<ulink url="http://www.mplayerhq.hu/homepage/design7/news.html">
+  <citetitle>mencoder</citetitle></ulink>, or
+<ulink url="http://www.virtualdub.org/">
+  <citetitle>virtual dub</citetitle></ulink>
+are very helpful for these tasks.
+</para>
+
+      </sect3>
+
+    </sect2>
+
+    <sect2 id="sec.capturemodule"> 
+      <title>Video for Linux (capturemodule)</title>
+
+      <sect3 id="sec.capturemodule.desc">
+        <title>Description</title>
+
+<para>It is possible to attach several different video-input devices to the computer. Video signals from analog camcorders or vcrs are typically injected by a frame-grabber adapter on the PCI-bus. Digital cameras or low cost web-cams can be connected via USB(2) oder Firewire.</para>
+
+<para>Most operating systems with multimedia capabilities provide a convenience layer between the video-device drivers and the application. All devices are handled independent of the connection type in a similar fashion.</para>
+
+<para>Video4Linux (V4L) is the video capture/overlay API of the linux kernel. It is based on the programming interface introduced by the bttv driver. This is a consumer frame-grabber chip used in most tv cards.</para> 
+
+<para>In the 2.6 linux kernel series this api was be replaced by the successor <ulink url="http://bytesex.org/v4l/spec/"> <citetitle>Video for Linux Two</citetitle></ulink>. The capturemodule works with both versions.</para>
+
+      </sect3>
+    
+      <sect3 id="sec.capturemodule.inputs"> 
+        <title>Inputs</title>
+
+<para>The first input is the number of the video device. A setup with a web-cam and a bttv card e.g. uses the device-files /dev/video0 and /dev/video1. You have to set 0 or 1 at this input.</para>
+
+<para>It is possible to switch the device during rendering. But with some hardware/driver combinations this results in one or two broken frames.</para>
+
+<para>The other two inputs tell the frame-grabber the image resolution. A resolution 0,0 forces the grabber to choose any supported resolution.</para>
+
+      </sect3>
+
+      <sect3 id="sec.capturemodule.outputs">
+        <title>Output</title>
+
+<para>The captured frames are sent to the output. In case of an invalid video-device, unsupported image size or any other error a black, full transparent one pixel sized image is returned.</para>
+ 
+      </sect3>
+
+      <sect3 id="sec.capturemodule.notes">
+        <title>Notes</title>
+
+<para>The current version of this module is tested with the 2.4.20 kernel drivers of the the <ulink url="http://www.smcc.demon.nl/webcam/"><citetitle>usb web-cam PCVC740K "ToUCam Pro"</citetitle></ulink> from Phillips and the <ulink url="http://bytesex.org/bttv/"><citetitle>pci bttv848 frame-grabber card win-TV radio</citetitle></ulink>.</para>
+
+<para>Further informations about video4linux driver- and user-space programming can be found in the kernel documentation (kernel-source-2.4.20/Documentation/video4linux/API.html and kernel-source-2.4.20/Documentation/DocBook/videobook.tmpl) and in the <ulink url="https://listman.redhat.com/mailman/listinfo/video4linux-list"><citetitle>video4linux mailing list</citetitle></ulink>.</para>
+
+      </sect3>
+
+    </sect2>
+
+ </sect1>
+  </chapter>
+
+ <chapter id="chapter.type_reference"><title>Type Reference</title>
+
+ <sect1 id="sec.numbertype"><title>NumberType</title>
+  <para>
+    64 bit IEEE floating-point value.
+  </para>
+ </sect1>
+
+ <sect1 id="sec.framebuffertype"><title>FrameBufferType</title>
+  <para>
+     32-bit BGRA Framebuffertype.
+     Orientation is top-down (topmost line is first line in memory).
+  </para>
+ </sect1>
+
+</chapter>
+
+  <chapter id="chapter.developer_info"><title>Developer Information</title>
+
+<para>The last chapter described the core effect-modules and data-types included with the GePhex package. None of these are hard-coded in the GePhex engine. All of them are plugins that are loaded at startup time.</para>
+
+<para>This part describes the design for the plugin interfaces.</para>
+
+<para>The main design goal for these two interfaces was simplicity. It should be possible for a programmer to create a new effect within hours and not days. For the modules there exists a code generator which generates Makefiles, stub code and templates to free the programmer from cut and copy operations.</para>
+
+    <sect1 id="sec.adding_new_data_types">
+      <title>Adding new Data Types</title>
+
+<para>The focus of the GePhex Framework are streams of video-data. The video streams flow from video sources to the output sinks. To control this flow other types of streams are needed. From simple numbers for controlling the video mixers to complex data types for some special effects, we need different types in the data-flow graph.</para>
+
+<para>The system must be extensible to audio, color-palettes and whatever will be interesting in the future. The types in GePhex are just plugins. You can extend the gephex system with support for new types by providing a shared library, that exports the implementation of a special c-API. The GePhex system loads this library at runtime and creates a type class.</para>
+
+<para>Recently the midi-type was added. And now we have a module that injects the incoming data from the midi interface into the signal graph. Another module converts the midi-type stream and several number-type outputs. This way, effects with number-types as inputs can be controlled via midi-devices. No changes or rebuilds of the GePhex base system were necessary to add this functionality.</para> 
+<para>The modules receive typed values and generate others. Why does the engine need to know anything about the types? Isn't it enough that the affected modules know about the type?</para>
+
+<para>It is right that the engine doesn't need many internals of the types to do its job, but there are some actions the engine must take care of:</para>
+
+<para>
+<itemizedlist>
+<listitem><para>Provide some informations like the name to the user</para></listitem>
+<listitem><para>The renderer must create default values for unconnected inputs</para></listitem>
+<listitem><para>The value of type objects must be transfered in a serialized form to the user front-end</para></listitem>
+</itemizedlist>
+</para>
+
+<para>These the type plugins are like the module plugins shared libraries. They export pointers to functions. The engine then calls these functions if necessary. The symbol names, the signature and the semantic of these are described in the next section.</para>
+
+      <sect2 id="sec.type_c_api">
+        <title>The c-API</title>
+
+<para>A GePhex data type plugin is a shared library. There is exact one data type in each library file. The file suffix is .so on the Unix platforms and .dll on ms windows system. Each library exports a set of function symbols as defined in the following section.</para>
+
+<para>The GePhex type API consists of a required and an additional part. Every type plugin must implement the required part. The loader of a type plugin must ignore plugins that don't export these symbols. By implementing functions of the additional part the serialization and automatic subtype conversion functionality can be enabled. But not for all effects these features are necessary.</para>
+
+<para>The first group of function are independent of type instances. The functions <function>init</function> and <function>shutdown</function> handle the (un)loading of the plugin. <function>getInfo</function> and <function>getSpec</function> allow the host application to query information about the type from the plugin.</para>
+
+<para>The second group is instance based. There are functions to create and destroy type objects like <function>newInstance</function> and <function>deleteInstance</function>. Others <function>assign</function> and <function>convertType</function> instances. The created instances are identified by objects of the type TypeInstanceID this is a unique id with the size of a pointer. It is up to the user of the type plugin to ensure not to mix type object identifier and functions of different types.</para>
+
+<para>There are two optional features a type can provide: (de)serialization and type attributes.</para> 
+
+<para>Type attributes describe different representations of values and allow to convert between them. A color is can be in the RGB, YUV or HSV color-space. The color doesn't change if the convert between them. It is just the representation that changes. A color type can have a attribute color-space and some functions to convert transparent from one space to another. Types that have attributes must implement <function>convertType</function> and <function>attributesEqual</function>.</para>
+
+<para>To store type instances or to transfer them via network it isn't enough to store/transfer the TypeInstanceID we must store the real value not the identifier. The functions <function>serialize</function> and <function>deSerialize</function> convert type instances to a byte-stream and back.</para>
+
+        <sect3 id="sec.required_methods">
+          <title>Required Methods</title>
+<xi:include 
+    xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-init.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-shutDown.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-getInfo.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-getSpec.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-newInstance.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-deleteInstance.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-assign.xml" />
+        </sect3>
+
+        <sect3 id="sec.optional_methods">
+          <title>Optional Methods</title>
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-serialize.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-deSerialize.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-attributesEqual.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-convertType.xml" />
+
+        </sect3>
+      </sect2>
+
+      <sect2 id="sec.example_data_type">
+        <title>An Example for a new Data Type</title>
+
+<para>The following chapter describes the necessary steps to implement a new data type plugin. The new type will be a color palette. Mathematically this is is a mapping from an interval to the color-space. Since the standard color-space in the GePhex is the red-green-blue color-model with 256 discrete steps from each color-channel and a source space with 256 elements the palette can easily implemented as a array with 256 RGBA entries.</para>
+
+<para>The implementation of the new type is split up in two files: palettetype.h and palettetype.c. The .c file includes the header and will be compiled to the shared library. In the .c files are the exported functions defined. The memory layout of the type and all helper methods resists in the header-file, cause all modules that use the type include the header and do not link with the shared library.</para>
+
+<para>We define the memory layout of the new type in the header in a straight forward way:
+<programlisting>
+typedef struct PaletteType_
+{
+  uint_32 pal[256];
+} PaletteType;
+</programlisting>
+
+uint_32 is a typedef for an unsigned integer with 32 bit size. It is defined in the header <filename>basic_types.h</filename>. The 32 bits of the integer are composed by the 4 color components red, green, blue and alpha.</para>
+
+<para>The next step is to define the functions of the shared library. To keep it simple we'll implement only the necessary core methods: <function>getInfo</function>,<function>getSpec</function>,<function>deleteInstance</function>,<function>newInstance</function> and <function>assign</function></para>
+
+<para>The implementation of getInfo and getSpec are similarly for all types  their propose is to deliver type-specific info strings to the caller. For the new type we set these two strings to:</para>
+
+<para> "typ_spec { name=typ_PaletteType; }" and "info { name=Palette }".</para>
+
+<para>
+<programlisting>
+const char* getSpec(void)
+{
+  // return the specification string
+  return "typ_spec { name=typ_PaletteType; }";
+}
+
+int getInfo (char* buf,int bufLen)
+{
+  static const char* INFO = "info { name=Palette }";
+  int reqLen = strlen(INFO) + 1;
+  // check if the buffer is big enough
+  if (buf != 0 &amp;&amp; reqLen &lt;= bufLen)
+    {
+      // the string fits in, copy it
+      memcpy(buf,INFO,reqLen);
+    }
+  return reqLen;
+</programlisting>
+</para>
+
+<para>The other three mandatory functions are the constructor, the destructor and assignment method. In the .c file we place simple wrappers to the real methods in the header. This ensures that modules and the engine use the same implementation since the modules include the type-headers and the engine loads the shared libraries.
+</para>
+<para>
+<programlisting>
+void* newInstance(void)
+{
+  return palette_newInstance();
+}
+
+void assign(void* dst,const void* src)
+{
+  palette_assign((PaletteType*)dst,(const PaletteType*)src);
+}
+
+void deleteInstance(void* pal)
+{
+  palette_deleteInstance((PaletteType*) pal);
+}
+</programlisting>
+</para>
+
+<para> The actual implementation of the functions <function>palette_newInstance</function>, <function>palette_assign</function> and <function>palette_deleteInstance</function> is in the header.</para>
+
+<para>The creation of a new type object is split into two functions: one for memory allocation and the other for initialization it with the default value.</para>
+
+<para>
+<programlisting> 
+// initialize a palette with the default value
+static __inline void number_initInstance(PaletteType* newType)
+{
+  int i;
+  for(i=0;i!=256;++i)
+    {
+      newType->palette[i] = 0x00000000;
+    }
+}
+
+// allocate memory for a new palette type-object and initialize it
+static __inline PaletteType* palette_newInstance(void)
+{
+  PaletteType* newType = (PaletteType*) malloc(sizeof(PaletteType));
+  palette_initInstance(newType);
+  return newType;
+}
+</programlisting>
+</para>
+ 
+<para>The assign method just copies the entries of the source array to the destination.</para>
+<para>
+<programlisting> 
+// assign the value of the source palette to the destination palette
+static __inline void palette_assign(PaletteType* dst,const PaletteType* src)
+{ 
+  dst->palette = src->palette;
+int i;
+  for(i=0;i!=256;++i)
+    {
+      dst->palette[i] = src->palette[i];
+    }
+}
+</programlisting>
+</para>
+
+<para>The type allocates memory the destructor must free this resource for reuse.</para>
+<para>
+<programlisting> 
+/* frees the allocated memory for a palette type object */
+static __inline void palette_deleteInstance(PaletteType* pal)
+{
+  free(pal);
+}
+</programlisting> 
+</para>
+</sect2>
+
+   </sect1>
+   <sect1 id="sec.new_effect_modules">
+     <title>Adding new Effect Modules</title>
+
+<para>
+To add a new effect module, it is best to use pluc, our plugin code generator.
+It can produce much of the boilerplate code from a simple module
+specification (see <xref linkend="sec.pluc"/>).
+</para>
+
+<para>
+While a module must export plain C functions, it is possible to use other
+languages for the implementation. Many of GePhex's modules are internally
+written in C++.
+</para>
+
+<para>
+The most important function of a module is update. Here the module can read
+the input values and produce new output values.
+</para>
+
+<para>The outputs and needed inputs are always initialized by the engine
+before the update method is called.
+The module itself is responsible to convert outputs and inputs if necessary
+(E.g. some modules want both their input images to have the same resolution,
+or they want to have the output image to be the same resolution as the input
+image).
+</para>
+
+    <sect2 id="sec.module_c_api"><title>The C-API</title>
+<para>A module is a shared library that exports some c functions. In the following section the necessary and the optional methods and their semantics are described.</para>
+
+<sect3 id="sec.core_methods"><title>The Core Methods</title>
+<para> Every module must implement these functions and export their symbol. The loader of the shared library must ignore modules with missing symbols.</para>
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-init.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-shutDown.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getSpec.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getInfo.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getInputSpec.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getOutputSpec.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-newInstance.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-deleteInstance.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-setInput.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-setOutput.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-update.xml" />
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getInputAttributes.xml" />
+
+</sect3>
+
+<sect3 id="sec.module_optional_methods"><title>Optional Methods</title>
+<para>
+To enable additional functionality the shared library must export some of the the following methods. The functions are used for optimization:
+<itemizedlist>
+<listitem><para>In some cases not all inputs of a module need to be calculated. A switch for example has three inputs and one output. The control input decides which of the two other inputs should be assigned to the output. If the control input is known there is only one of the two inputs needed. We can eliminate the costs for calculating the subtree starting at the unused input by first calculation the control input and when we know its value only calculating one of the two other inputs.</para></listitem>
+<listitem><para>To copy big type objects like images is expensive. In some cases we know that a module copies the value of an input to an output and makes no or little changes. In this case the engine can eliminate a copy if the input object is exclusively used by only one module.</para></listitem>
+</itemizedlist>
+</para>
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-getPatchLayout.xml" />
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-strongDependenciesCalculated.xml" />
+
+      </sect3>
+
+    </sect2>
+
+    <sect2 id="sec.pluc">
+      <title>Pluc the Skeleton Generator</title>
+
+<para>
+The c-api design allows module developers to write their plugins in almost
+any programming language.
+This is achieved by a very low-level interface between host and plugin.
+</para>
+
+<para>
+Pluc is distributed with GePhex in the <filename>modules</filename>
+ subdirectory.
+</para>
+
+<para>
+Many module functions are very simple and have just some lines of code.
+We want to implement a module that outputs the maximum of its number
+inputs. In c++ this would be a one-liner:
+</para>
+<programlisting>
+double output1,input1,input2;
+output1 = std::max(input1,input2)
+</programlisting>
+<para>
+But the effort needed to export this piece of code via the c-api interface
+is huge. This is the reason why the pluc.py stub generator exists.
+</para>
+
+<para>
+The idea of pluc is that many properties of a module are described in a 
+spec file. Pluc can generate from this file:
+</para>
+<itemizedlist>
+<listitem><para>
+the build-system files (for automake and MS Visual Studio)
+</para></listitem>
+<listitem><para>
+a convenience layer to abstract from the c-api
+</para></listitem>
+<listitem><para>
+a minimum skeleton code for the module implementation
+that can be used as a basis for implementing the function.
+</para></listitem>
+</itemizedlist>
+
+<para>Sample invocations of pluc:
+<screen>
+pluc.py dsp testmodule.spec 
+pluc.py am testmodule.spec 
+pluc.py skel testmodule.spec 
+</screen>
+As can be seen, the first argument to pluc is a command.
+The second is the filename of the plugin specification.
+<table id="table.pluc_commands"><title>Most important pluc commands</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>am</entry><entry>Creates an automake Makefile.am</entry></row>
+<row><entry>dsp</entry><entry>Creates a Visual Studio project</entry></row>
+<row><entry>skel</entry><entry>Creates skeleton code for the plugin</entry></row>
+</tbody></tgroup></table>
+</para>
+
+<sect3 id="sec.spec_files"> <title>Syntax and semantics of the spec file</title>
+
+<para>
+A spec file consists of three parts. Each part is composed of an identifier
+followed by a block enclosed in curly braces.
+The first part contains global settings that determine the behavior of the
+whole module.
+The second part contains settings for all inputs of the module.
+The third part contains settings for all outputs of the module.
+</para>
+
+<sect4 id="sec.global_settings"> <title>Global settings</title>
+
+<para>
+The global settings begin with a unique name for the module, by
+convention prefixed with "mod_". To stick with the example from above
+we choose "mod_max".
+</para>
+
+<table id="table.module_mandatory_in_settings">
+  <title>Mandatory global settings</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>name</entry><entry>STRING</entry></row>
+<row><entry>deterministic</entry><entry>BOOL</entry></row>
+<row><entry>group</entry><entry>STRING</entry></row>
+<row><entry>xpm</entry><entry>FILENAME</entry></row>
+<row><entry>author</entry><entry>STRING</entry></row>
+<row><entry>version</entry><entry>STRING</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+<variablelist>
+<varlistentry>
+<term>name</term>
+   <listitem><para>the name that is visible to the user</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>deterministic</term> 
+   <listitem><para>specifies if the module produces the
+     same output whenever the input is the same. This is for example not true
+    for a module that produces random numbers.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>group</term> 
+    <listitem><para>allows to group several effects</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>xpm</term> 
+    <listitem><para>the name of a xpm file that is used as an icon
+                    for this module</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<para>
+The following settings are optional:
+</para>
+<itemizedlist>
+<listitem><para>enablePatching: BOOL</para></listitem>
+</itemizedlist>
+</sect4>
+
+<sect4 id="sec.input_settings"> <title>Input Settings</title>
+<para>
+The settings in the input block determine the type, default value and other
+attributes for every input.
+</para>
+
+<para>
+The input block is composed of several blocks, one for each input.
+</para>
+
+<para>
+<table id="table.mandatory_in_settings"><title>Mandatory input settings</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>name</entry><entry>STRING</entry></row>
+<row><entry>type</entry><entry>STRING</entry></row>
+<row><entry>const</entry><entry>BOOL</entry></row>
+<row><entry>strong_dependency</entry><entry>BOOL</entry></row>
+</tbody>
+</tgroup>
+</table>
+</para>
+
+<para>
+<variablelist>
+<varlistentry>
+<term>name</term>
+   <listitem><para>the name that is visible to the user</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>type</term> 
+   <listitem><para>the type of the input (number, framebuffer, audio, color,...)     </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>const</term>
+   <listitem><para>true iff the module does not change the value of the input
+       </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>strong_dependency</term>
+   <listitem><para>true iff this input is needed every frame</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<para>
+These attributes are optional.
+<table id="table.optional_in_settings"><title>Optional input settings</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>default</entry><entry>STRING</entry></row>
+<row><entry>version</entry><entry>STRING</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+<note>
+<para>
+You can provide more optional settings. They are not checked by the
+engine and can be used to give more information to the gui.
+</para>
+</note>
+</para>
+
+<para>
+Here is an input block with two number inputs.
+<screen>
+inputs
+{
+    lhs
+    {
+      name              = x
+      type              = typ_NumberType
+      const             = true
+      strong_dependency = true
+      default           = 0
+      widget_type       = unboundednumber_selector
+    }
+
+    rhs
+    {
+      name              = y
+      type              = typ_NumberType
+      const             = true
+      strong_dependency = true
+      widget_type       = unboundednumber_selector
+      default           = 0
+    }
+}
+</screen>
+</para>
+
+</sect4>
+
+<sect4 id="sec.output_settings"> <title>Output Settings</title>
+<para>
+The settings in the output block determine the type and name for every output.
+</para>
+
+<para>
+The output block is composed of several blocks, one for each output.
+</para>
+
+<para>
+<table id="table.mandatory_out_settings">
+  <title>Mandatory Output Settings</title>
+<tgroup cols='2'>
+<tbody>
+<row><entry>name</entry><entry>STRING</entry></row>
+<row><entry>type</entry><entry>STRING</entry></row>
+</tbody>
+</tgroup>
+</table>
+</para>
+
+<para>
+Example for an output block with one output:
+<screen>
+outputs
+{
+    r
+    {
+    name              = Result
+    type              = typ_NumberType
+    }
+}
+</screen>
+</para>
+
+</sect4>
+
+</sect3>
+
+</sect2>
+
+    <sect2 id="sec.example_module">
+      <title>An Example for a new Module</title>
+
+<para>Putting all together, the complete spec for our <literal>max</literal>
+module looks like this:
+<screen>
+mod_maxmodule
+{
+    name              = Maximator
+    deterministic     = true
+    group             = Number
+    xpm               = maxmodule.xpm
+    author            = Zardoz
+    version           = 1.0
+}
+
+inputs
+{
+    lhs
+    {
+      name              = x
+      type              = typ_NumberType
+      const             = true
+      strong_dependency = true
+      default           = 0
+      widget_type       = unboundednumber_selector
+    }
+
+    rhs
+    {
+      name              = y
+      type              = typ_NumberType
+      const             = true
+      strong_dependency = true
+      widget_type       = unboundednumber_selector
+      default           = 0
+    }
+}
+
+outputs
+{
+    r
+    {
+      name              = Result
+      type              = typ_NumberType
+    }
+}
+</screen>
+</para>
+
+<para>
+Let's assume the spec file is called <filename>maxmodule.spec</filename>.
+The next step is to produce a <filename>Makefile.am </filename>
+and the skeleton code:
+<screen>
+ > pluc.py am maxmodule.spec
+ > pluc.py skel maxmodule.spec
+</screen>
+</para>
+<para>
+The skeleton code will be called maxmodule.c. After you have included
+the <filename>Makefile.am</filename> into your build system, the
+glue code will be automatically generated when you compile the maxmodule.
+So whats left to do is to edit the <literal>update</literal> method
+in <filename>maxmodule.c</filename>:
+<screen>
+void update(void* instance)
+{
+  InstancePtr inst    = (InstancePtr) instance;
+
+  inst->out_r->number = max(inst->in_lhs->number, inst->in_rhs->number);
+}
+</screen>
+That's all!
+</para>
+
+
+    </sect2>
+
+  </sect1>
+</chapter>
+</book>
+

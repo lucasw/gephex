@@ -1,0 +1,18 @@
+MOCS=askforstringdialog_moc.cpp controleditor_moc.cpp controlwidget_moc.cpp dllselectordialog_moc.cpp editorwidget_moc.cpp grapheditor_moc.cpp graphnameview_moc.cpp hidebutton_moc.cpp inputplugwidget_moc.cpp moduleclassview_moc.cpp nodewidget_moc.cpp outputplugwidget_moc.cpp picswitch_moc.cpp plugwidget_moc.cpp propertywidget_moc.cpp sequenceeditor_moc.cpp sequencenameview_moc.cpp sequencewidget_moc.cpp videowallcontrollwidget_moc.cpp vjmainwindow_moc.cpp
+
+
+
+ALL: $(MOCS)
+
+%_moc.cpp: %.h
+	moc -o $@ $<
+
+clean:
+	rm *moc*
+
+
+
+
+
+
+

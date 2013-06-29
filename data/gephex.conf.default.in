@@ -1,0 +1,23 @@
+common {
+    media_path           = [@prefix@/share/gephex]
+}
+
+engine {
+    type_path            = [__CONF_DIR__/types/;@gphx_type_lib_dir@/]
+    module_path          = [__CONF_DIR__/modules/;@gphx_module_lib_dir@/]
+    frei0r_path          = [__HOME_DIR__/.frei0r-1/lib/;/usr/local/lib/frei0r-1/;/usr/lib/frei0r-1/]
+    graph_path           = [__CONF_DIR__/graphs/]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    ipc_type             = [inet]
+    ipc_port             = [6666]
+    renderer_interval    = [40]
+    net_interval         = [40]
+}
+
+gui {
+    ipc_type             = [inet]
+    ipc_inet_hostname    = [localhost]
+    ipc_port             = [6666]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    engine_binary        = [@prefix@/bin/gephex-engine]
+}

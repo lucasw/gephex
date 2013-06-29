@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-setOutput">
+
+  <refnamediv>
+    <refname>setOutput</refname>
+    <refpurpose>sets the referenz to the typeobject to assign the output value</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>int <function>setOutput</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+        <paramdef>int <parameter>outputIndex</parameter></paramdef>
+        <paramdef>void* <parameter>typeObject</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>A module doesn't create an output type-object with an <function>update</function>. It assigns the calculated values to the output objects provided by the caller. This method sets the <parameter>type-object</parameter> for the output with index <parameter>outputIndex</parameter> of the module <parameter>instance</parameter>.</para>
+
+  </refsect1>
+
+</refentry>

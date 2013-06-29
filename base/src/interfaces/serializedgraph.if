@@ -1,0 +1,11 @@
+name: SerializedGraph
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ graphSerialized string graphName, string serializedGraph
+

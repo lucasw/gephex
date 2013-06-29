@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getPatchLayout">
+
+  <refnamediv>
+    <refname>getPatchLayout</refname>
+    <refpurpose>returns the patch-layout for the next update</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>getPatchLayout</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+        <paramdef>int** <parameter>out2in</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This function returns the patch-layout for the next update. This is a mapping of all outputs to the inputs. If an output is mapped to an input the engine must ensure that before the <function>update</function> the output has the same value as the input. If no mapping is requested for an output there are no guarantees for the value of the output object. It must be called direct before <function>update</function>. Every output entry holds the index of the input that should be patched to the output. The array has entries for every output. Every output entry holds the index of the input that should be patched to the output. It the entry is -1 the no patching is requested.</para>
+
+  </refsect1>
+</refentry>

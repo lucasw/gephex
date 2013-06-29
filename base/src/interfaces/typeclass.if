@@ -1,0 +1,17 @@
+name: TypeClass
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+ /**
+  *
+  */
+ typeClassLoaded int TypeClassID,const ITypeClass& typeClass
+
+ /**
+  *
+  */
+ typeClassUnloaded int TypeClassID
+
+

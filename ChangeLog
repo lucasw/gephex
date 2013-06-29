@@ -1,0 +1,186 @@
+2004-06-06  Martin Bayer  <martin@gephex.org>  
+
+	* Released 0.4
+	  
+2004-06-06  Martin Bayer  <martin@gephex.org>  
+
+	* Released 0.4pre3
+
+	* source distribution now contains win32 build files for ms vs6
+
+	* updated effecTV ports from effecTV-0.3.8 to effecTV-0.3.9 (bug #43)
+
+	* converted documentation from sgml to xml
+	
+2004-04-29  Martin Bayer  <martin@gephex.org>  
+
+	* Released 0.4pre2
+
+	* merged v4l code into capturemodule
+	  
+	* improved configure script (support for different libraries can be 
+	turned off now)
+  
+	* updated documentation
+  
+	* added gephex binary on unix platforms
+  
+	* optimized gradientnormmodule
+  
+	* improved pixelizer (block size can now be changed in both dimensions)
+  
+	* bug fixes ( #28, #30, #34, #35, #36, #37, #38, #40, #41, #42 )
+
+2004-04-04  Martin Bayer  <martin@gephex.org>  
+
+	* Released 0.4pre1
+
+	* the v4l code is merged into the capturemodule
+
+2003-12-14  Martin Bayer  <martin@gephex.org>  
+
+	* Released 0.0.4
+
+	* gui now spawns a new engine process if connect fails 
+	  
+	* changed names of menu-items in the gui 
+
+	* added icon and about dialog to the gui 
+
+	* changed graph format. Old graphs will not work. 
+
+	* changed image source: removed automatic seeking and changed from an 
+	[0,1] position input to [0, num_frames-1] position input
+       
+	* frboutmodule (unix only): ximage, xshm and gl output driver now use 
+	the DISPLAY environment variable if their display-property is set to 
+	"default"
+
+	* removed debug messages 
+
+	* added the ifs (iterated function system) effects to the win32 version
+
+	* merged config files engine.conf and gui.conf to gephex.conf 
+
+	* added wrapper script for better installation (example graphs are 
+	installed under linux now, too)
+
+	* fixed several bugs (some listed below)
+	- fixed radio button
+	- frboutmodule: crash if depth of the xserver is not 32 
+	- frboutmodule: crash when using xshm driver on remote xserver 
+	- isingnoize: crash when input size is set to zero
+	- engine: memory leaks
+	- network: fixed endianess issue in the protocol 
+
+	* changed from debug to release target for engine and gui on win32 
+	(unix version already was non-debug per default)	
+
+2003-11-04  Martin Bayer  <bayer@fmi.uni-passau.de>  
+
+	* Released 0.0.4beta2
+
+	* removed nonfunctional and unneeded functionality
+	- sequencer
+	- playlist
+	- tons of old and unneeded code
+	- folders for graphs
+        
+	* fixed several open bugs
+	- fixed crash when deleting module that is connected to a patched input
+	- fixed bug that moved modules in the grapheditor
+	- fixed engine crash when gui disconnects
+	- fixed bug in protocol when the datareceiver throws an exception
+	- enhanced robustness of protocol (resync)
+	- fixed "lost value" problem of spinbox widget
+
+	* gui and engine now run independent, when one app crashes the other 
+	one continues
+
+	* gui can detach from engine and reconnect later
+
+	* improved startup speed (loading the plugins took very long before)
+
+	* new modules:
+	- font module that can use any true type font (uses sdl_ttf)
+	- several more effecTV ports (sparkTV, quarkTV, ...)
+	- pixelizer effect
+	
+	* new gl output driver in frboutmodule (uses textures)
+
+	* more bugfixes and small improvements in engine, gui and modules
+
+2003-10-09  Martin Bayer  <bayer@fmi.uni-passau.de>  
+
+	* released 0.0.4alpha2
+	  
+	* audio type and some audio modules (beat detection works, but it's 
+	still pretty dumb)
+
+	* Grapheditor shows icons of the modules now
+
+	* merged several modules for better usability:
+	(plz see README if you want to convert old graphs)
+	- all framebuffer outputs are merged into frboutmodule (the same module
+	for linux and windows, this way the graphs are more portable) [note 
+	that some outputs like glout and sdlout are commented out for the 
+	moment due to their bad performance]
+	- bmpmodule, avifilemodule, libmpeg3loader, videomodule, 
+	directshowmodule are merged into frbinmodule (again only one module 
+	for all plattforms)
+	- addmodule and submodule have been merged into arithmodule (which now 
+	can do a lot more than just addition and subtraction)
+	- imgmulmodule, imgaddmodule, imgsubmodule, invertmodule have been 
+	fixed and merged into imgarithmodule
+
+	* all framebuffer output drivers now support control over brightness, 
+	contrast, gamma
+
+	* new aalib driver in frboutmodule
+
+	* new modules: 
+	- gradnormmoule  : shows the edges of an image
+	- twolayermodule : turns an image to black and white
+	- audio(in|out)module : in and output, supports alsa and os on posix 
+	 platforms and wavein/out on win32
+	 - audiobdmodule  : simple beat detection
+	 
+	* default graph is now edited and rendered graph at startup
+    
+	* removed output size from rotary zoomer, the size of the input 
+	framebuffer is used instead
+   
+	* new check-box property widget
+
+   	* fixed some bugs and glitches
+
+2003-05-06  Martin Bayer  <bayer@fmi.uni-passau.de>
+  
+  
+	* Released 0.0.4alpha1
+
+  
+	* NumberType changed from unsigned int (32 bit) to IEEE 64 bit floating
+	point value. This changes nearly all effects.
+
+	* Many bugfixes
+
+	* Color-format and framebuffer orientation fixed to BGRA top down 
+	(i.e. first line in memory ist upper most line)
+
+	* Ported some effects from EffecTV
+
+	* Improved the build system (library tests etc.)
+
+	* Midiinput now works for Linux and WIN32
+
+	* Updated the documentation
+
+	* Avifile support for Linux
+
+	* Isingnoize and IFS effects
+
+	* Better control- and propertywidgets (refactored them to use common 
+	code)
+
+

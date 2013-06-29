@@ -1,0 +1,116 @@
+<html>
+<body>
+<pre>
+<h1>Erstellungsprotokoll</h1>
+<h3>
+--------------------Konfiguration: engine - Win32 Debug--------------------
+</h3>
+<h3>Befehlszeilen</h3>
+Erstellen der temporären Datei  "C:\DOKUME~1\RUFUST~1.FIR\LOKALE~1\Temp\RSP17.tmp" mit Inhalten
+[
+/nologo /MDd /w /W0 /Gm /Gi /GX /ZI /Od /I "..\utils" /I "..\net" /I "..\interfaces" /D "_CONSOLE" /D "_MBCS" /D "WIN32" /D "_DEBUG" /D "VERBOSE_ENGINE" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\code\vjmax\src\engine\autodllloader.cpp"
+"C:\code\vjmax\src\engine\cmodule.cpp"
+"C:\code\vjmax\src\engine\cmoduleclass.cpp"
+"C:\code\vjmax\src\engine\ctypeclass.cpp"
+"C:\code\vjmax\src\engine\cxtype.cpp"
+"C:\code\vjmax\src\engine\dllloader.cpp"
+"C:\code\vjmax\src\engine\engine.cpp"
+"C:\code\vjmax\src\engine\enginecontroller.cpp"
+"C:\code\vjmax\src\engine\input.cpp"
+"C:\code\vjmax\src\engine\main.cpp"
+"C:\code\vjmax\src\engine\moduleclassspec.cpp"
+"C:\code\vjmax\src\engine\moduleconstructionreceivernet.cpp"
+"C:\code\vjmax\src\engine\moduleconstructor.cpp"
+"C:\code\vjmax\src\engine\modulefactory.cpp"
+"C:\code\vjmax\src\engine\moduleinfo.cpp"
+"C:\code\vjmax\src\engine\moduleinfofactory.cpp"
+"C:\code\vjmax\src\engine\nameresolver.cpp"
+"C:\code\vjmax\src\engine\output.cpp"
+"C:\code\vjmax\src\engine\outputplug.cpp"
+"C:\code\vjmax\src\engine\runtimesystem.cpp"
+"C:\code\vjmax\src\engine\scheduler.cpp"
+"C:\code\vjmax\src\engine\streamlogger.cpp"
+"C:\code\vjmax\src\engine\typeconstructor.cpp"
+"C:\code\vjmax\src\engine\typefactory.cpp"
+"C:\code\vjmax\src\engine\typeinfo_.cpp"
+"C:\code\vjmax\src\engine\typeinfofactory.cpp"
+]
+Creating command line "cl.exe @C:\DOKUME~1\RUFUST~1.FIR\LOKALE~1\Temp\RSP17.tmp" 
+Erstellen der temporären Datei  "C:\DOKUME~1\RUFUST~1.FIR\LOKALE~1\Temp\RSP18.tmp" mit Inhalten
+[
+wsock32.lib /nologo /subsystem:console /incremental:yes /pdb:"c:\code\vjmax\bin\engine.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"odbccp32" /nodefaultlib:"ole32" /nodefaultlib:"uuid" /nodefaultlib:"winspool" /nodefaultlib:"shell32" /nodefaultlib:"user32" /nodefaultlib:"gdi32" /out:"c:\code\vjmax\bin\engine.exe" /pdbtype:sept 
+.\Debug\autodllloader.obj
+.\Debug\cmodule.obj
+.\Debug\cmoduleclass.obj
+.\Debug\ctypeclass.obj
+.\Debug\cxtype.obj
+.\Debug\dllloader.obj
+.\Debug\engine.obj
+.\Debug\enginecontroller.obj
+.\Debug\input.obj
+.\Debug\main.obj
+.\Debug\moduleclassspec.obj
+.\Debug\moduleconstructionreceivernet.obj
+.\Debug\moduleconstructor.obj
+.\Debug\modulefactory.obj
+.\Debug\moduleinfo.obj
+.\Debug\moduleinfofactory.obj
+.\Debug\nameresolver.obj
+.\Debug\output.obj
+.\Debug\outputplug.obj
+.\Debug\runtimesystem.obj
+.\Debug\scheduler.obj
+.\Debug\streamlogger.obj
+.\Debug\typeconstructor.obj
+.\Debug\typefactory.obj
+.\Debug\typeinfo_.obj
+.\Debug\typeinfofactory.obj
+..\..\lib\net.lib
+\code\vjmax\lib\utils.lib
+]
+Erstellen der Befehlzeile "link.exe @C:\DOKUME~1\RUFUST~1.FIR\LOKALE~1\Temp\RSP18.tmp"
+<h3>Ausgabefenster</h3>
+Kompilierung läuft...
+autodllloader.cpp
+cmodule.cpp
+cmoduleclass.cpp
+ctypeclass.cpp
+cxtype.cpp
+dllloader.cpp
+engine.cpp
+enginecontroller.cpp
+input.cpp
+main.cpp
+moduleclassspec.cpp
+moduleconstructionreceivernet.cpp
+c:\code\vjmax\src\engine\moduleconstructionreceivernet.cpp(22) : error C2660: 'sendCommand' : Funktion akzeptiert keine 2 Parameter
+c:\code\vjmax\src\engine\moduleconstructionreceivernet.cpp(32) : error C2660: 'sendCommand' : Funktion akzeptiert keine 2 Parameter
+c:\code\vjmax\src\engine\moduleconstructionreceivernet.cpp(41) : error C2660: 'sendCommand' : Funktion akzeptiert keine 2 Parameter
+c:\code\vjmax\src\engine\moduleconstructionreceivernet.cpp(50) : error C2660: 'sendCommand' : Funktion akzeptiert keine 2 Parameter
+moduleconstructor.cpp
+modulefactory.cpp
+moduleinfo.cpp
+moduleinfofactory.cpp
+nameresolver.cpp
+output.cpp
+outputplug.cpp
+runtimesystem.cpp
+Generieren von Code...
+Kompilieren...
+scheduler.cpp
+streamlogger.cpp
+typeconstructor.cpp
+typefactory.cpp
+typeinfo_.cpp
+typeinfofactory.cpp
+Generieren von Code...
+Fehler beim Ausführen von cl.exe.
+
+
+
+<h3>Ergebnisse</h3>
+engine.exe - 4 Fehler, 0 Warnung(en)
+</pre>
+</body>
+</html>

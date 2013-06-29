@@ -1,0 +1,23 @@
+common {
+    media_path           = [../examples/]
+}
+
+engine {
+    module_path          = [../dlls/modules/]
+    frei0r_path          = [../dlls/frei0rs/]
+    type_path            = [../dlls/types/]
+    graph_path           = [../graphs/]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    ipc_type             = [inet]
+    ipc_port             = [6666]
+    renderer_interval    = [40]
+    net_interval         = [40]
+}
+
+gui {
+    ipc_type             = [inet]
+    ipc_inet_hostname    = [localhost]
+    ipc_port             = [6666]
+    ipc_namedpipe_servername = [.]
+    engine_binary        = [./gephex-engine.exe]
+}

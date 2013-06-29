@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-getInfo">
+  <refnamediv>
+    <refname>getInfo</refname>
+    <refpurpose>querys the user description of the type</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>int <function>getInfo</function></funcdef>
+        <paramdef>char* <parameter>buf</parameter></paramdef>
+        <paramdef>int <parameter>bufLen</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>buf</parameter></term>
+	<listitem>
+	  <para>This is a pointer to a buffer of size bufLen. This buffer can be modified by the method. If the buffer is big enough the info string is written in it.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>bufLen</parameter></term>
+	<listitem>
+	  <para>bufLen is the size of the buffer buf in bytes.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+
+  <refsect1>
+    <title>Description</title>
+
+<para>The getInfo function allows the caller to query some information about the type plugin. These are intended for the user presentation and not needed for rendering an effect. At the moment the caller can get a short description of the type. In the future extensions for i18n, icons and color information will be supported.</para> 
+
+<para>The semantic of this function is that the caller provides a pointer to an allocated array buf of size bufLen. If the infostring fits in that array the string is written in the buffer and the size of the zero-terminated string is returned. If the buffer is to small no changes to the buffer are applied and the needed size is returned.</para>
+
+<para>The format of the information string is composed like the following example.</para>
+
+<para>
+  <programlisting>
+    "info { name=Palette }"
+  </programlisting>
+</para> 
+
+<para> &lt;INFOSTRING&gt; := info { (&lt;ATTRIBUTENAME&gt;=&lt;ATTRIBUTEVALUE&gt;)+ }</para>
+
+<para>
+At the moment name ist the only attribute that is used.
+</para>
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>It returns the size of the 0 terminated string written in the buffer. If the buffer was to small to store all requested information the needed size is returned and the buffer stays unchanged.</para>
+
+  </refsect1>
+
+</refentry>

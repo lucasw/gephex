@@ -1,0 +1,17 @@
+name: EngineControl
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+
+  /**
+   * Veranlasst die engine dazu alle Netzwerkverbindungen zu kappen.
+   */
+  disconnect
+
+  /**
+   * Beendet die Engine.
+   */
+  shutDown
+

@@ -1,0 +1,81 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>ChangesDialogBase</class>
+  <widget class="QDialog" name="ChangesDialogBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>470</width>
+        <height>343</height>
+      </rect>
+    </property>
+    <property name="windowTitle" >
+      <string>Changes</string>
+    </property>
+    <property name="windowIcon" >
+      <pixmap>image0</pixmap>
+    </property>
+    <property name="sizeGripEnabled" >
+      <bool>true</bool>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>11</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QTextBrowser" name="changes_view" />
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <spacer name="Horizontal Spacing2" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="ok_button" >
+              <property name="text" >
+                <string>&amp;Leave</string>
+              </property>
+              <property name="autoDefault" >
+                <bool>true</bool>
+              </property>
+              <property name="default" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <pixmapfunction></pixmapfunction>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="1927" >789ce594bf4ec33010c6f73c85956e114acf112889501f01891109313877b660e80265a810ef8ecf49cb053b21a2450c7ccaf07df64ffe73b6b32ed4dded8d2ad6d9cbceec9e50e1a3795605bd6eb7fbfb87cd5b965f82f25fa3747e91e52b856a0500150047c3b1b12d34c4b1e3d8d640bae65886680db4a1173922e84a87481ced95aefb6843ec2adfcdd17174ce4f15262a172aac71997e8b353f67bb486764516a964524a9799616b31eb5424956ee8402df7bc4637b92c530f8e0bb09163f57726045bb64fd7049f6d03e6249b024588a58d99ff45f58eab712d620fdc92cf5b7806b267dccf2390db2639f648f724ea604eb26f4ff585133375fb3e1be84fa3be19367dcf78fdec5c419cb7b68637f16f6dbbb2edf50ec4ff8a7fe1d5b9a65cadfafb30f5988d520</data>
+    </image>
+  </images>
+</ui>

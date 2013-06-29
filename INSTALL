@@ -1,0 +1,23 @@
+Please read README first!
+
+To install gephex from source on windows, see README.win32.
+
+To install gephex on mac os x, see README.macosx
+
+To install gephex on unix platforms, perform the following steps:
+
+1. Type "./configure" (you may choose a different installation prefix
+   with --prefix=<your prefix here>, default is /usr/)
+
+   Please see ./configure --help for details.
+
+2. Type make
+
+3. Type make install (you might need to become root for this step)
+
+4. Go into <your chosen prefix>/bin and start gephex
+
+5. Have fun!
+
+For a more detailed documentation see:
+  http://www.gephex.org/docu/documentation.html#sec.building

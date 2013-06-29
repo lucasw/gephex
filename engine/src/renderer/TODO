@@ -1,0 +1,16 @@
+-typdlls
+-doxygen oder sowas
+-Das Testframework besser anwendbar machen !!!
+-Mehr Tests
+-Die komischen Beziehungen zw. EngineController, Engine und RuntimeSystem
+ aufräumen (v.a. der enginecontroller ist scheisse)
+-Alles kommentieren
+-die visual projekte anpassen
+-automake noch so irgendwie besser machen (-W -Wall, qt, ...)
+-dllloader: Fehlerbehandlung und defaultfunktionen falls optionale 
+	    funktionen nicht exportiert werden
+-fehlerbehandlung im runtimesystem und auch sonst überall
+-Netzwerkbefehl um daten an einzelne module zu senden
+-Netzwerkschnittstelle kommentieren
+-spezifikation von dem string den getInfo zurückgibt
+-In output den splitter einbauen (outputplugs muessen const-Eigenschaft haben)

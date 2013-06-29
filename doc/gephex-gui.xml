@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="gephex-gui">
+  <refentryinfo>
+    <author>
+      <firstname>Martin</firstname> <surname>Bayer</surname>
+      <affiliation>
+	<address><email>martin@gephex.org</email></address>
+      </affiliation>
+    </author>
+    <author>
+      <firstname>Philipp</firstname> <surname>Promesberger</surname>
+      <affiliation>
+	<address><email>coma@gephex.org</email></address>
+      </affiliation>
+    </author>
+    <author>
+      <firstname>Georg</firstname> <surname>Seidel</surname>
+      <affiliation>
+        <address><email>georg@gephex.org</email></address>
+      </affiliation>
+    </author>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>gephex-gui</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  
+  <refnamediv>
+    <refname>gephex-gui</refname>
+    <refpurpose>gui for the video effect software</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>
+<application>gephex-gui</application>
+is the graphical front-end of the interactive video effect system gephex.
+When the engine (<citerefentry> <refentrytitle>gephex-engine</refentrytitle> <manvolnum>1</manvolnum> </citerefentry>) is not running, a new engine is spawned. Otherwise the gui connects to the running engine.
+
+The GEPHEX_XTERM environment variable is used to choose
+an x terminal emulator in which the engine is started,
+if it is spawned.
+The GEPHEX_XTERM_FLAGS variable can be used to pass extra flags
+to this terminal emulator.
+</para>
+
+<para>
+All parameters that are set in the config file can be overridden from the
+command line. Please see the html documentation for the full description.
+</para>
+
+<para>The projects main intent is to create a framework that allows video-jockeys to design complex real-time video effects. The user can influence parameters 
+and data flow with interactive controls like joysticks or midi devices.</para>
+  </refsect1>
+
+  <refsect1>
+    <title>Files</title>
+  <para><filename>~/.gephex/0.4/gephex.conf</filename></para>
+  </refsect1>
+
+  <refsect1>
+    <title>See also</title>
+    <para><citerefentry> <refentrytitle>gephex</refentrytitle>
+    <manvolnum>1</manvolnum> </citerefentry></para>
+    <para><citerefentry> <refentrytitle>gephex-engine</refentrytitle>
+    <manvolnum>1</manvolnum> </citerefentry></para>
+    <para>
+      http://www.gephex.org for the original source archive.
+    </para>
+  </refsect1>
+
+</refentry>
+

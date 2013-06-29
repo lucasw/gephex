@@ -1,0 +1,27 @@
+Core Developers:
+
+Georg Seidel <georg@gephex.org>
+Martin Bayer <martin@gephex.org>
+Phillip Promesberger <coma@gephex.org>
+
+Module developers:
+
+Michael Mandl <mandlm@gephex.org>
+Sven Schnelle <svens@gmx.de>
+
+
+Some files inside effectvmodules are taken from the EffecTV project
+(path relative to 'effectvmodules/src/'):
+
+effectXmodule/X.c
+
+where X is the name of the effecTV effect.
+
+libeffectv/libeffectv.c (contains some wrapper code)
+
+The files are taken from the 0.3.8 and 0.3.9 release.
+Most files except libeffectv.c are unmodified, some contain
+small changes (event handling commented out, ...)
+
+Please look at these files and http://effectv.sourceforge.net
+for the copyright.

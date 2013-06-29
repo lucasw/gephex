@@ -1,0 +1,2240 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNUNG: DIESE ARBEITSBEREICHSDATEI DARF NICHT BEARBEITET ODER GELÖSCHT WERDEN!
+
+###############################################################################
+
+Project: "TestFramework"="..\base\src\TestFramework\TestFramework.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audioaddmodule"="..\modules\src\audioaddmodule\audioaddmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiobdmodule"="..\modules\src\audiobdmodule\audiobdmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audioenergymodule"="..\modules\src\audioenergymodule\audioenergymodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audioinmodule"="..\modules\src\audioinmodule\audioinmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiooutmodule"="..\modules\src\audiooutmodule\audiooutmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiospecmodule"="..\modules\src\audiospecmodule\audiospecmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiosynthmodule"="..\modules\src\audiosynthmodule\audiosynthmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiotype"="..\types\src\audiotype\audiotype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiovismodule"="..\modules\src\audiovismodule\audiovismodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "audiowavegenmodule"="..\modules\src\audiowavegenmodule\audiowavegenmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "base"="..\qtgui\src\gui\base\base.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "blurmodule"="..\modules\src\blurmodule\blurmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "bwmodule"="..\modules\src\bwmodule\bwmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "capturemodule"="..\modules\src\capturemodule\capturemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libdshow
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "centermodule"="..\modules\src\centermodule\centermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "chromakeymodule"="..\modules\src\chromakeymodule\chromakeymodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "color2numbermodule"="..\modules\src\color2numbermodule\color2numbermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "cpuinfo"="..\util\src\cpuinfo\cpuinfo.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dialogs"="..\qtgui\src\gui\dialogs\dialogs.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "diffmodule"="..\modules\src\diffmodule\diffmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dllloader"="..\engine\src\dllloader\dllloader.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "doepfermodule"="..\modules\src\doepfermodule\doepfermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmidi
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dplmodule"="..\modules\src\dplmodule\dplmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dummy"=".\dummy\dummy.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name audioaddmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiobdmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audioenergymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audioinmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiooutmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiospecmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiosynthmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiotype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiovismodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name audiowavegenmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name blurmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name bwmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name capturemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name color2numbermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name diffmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name doepfermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvagingmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvburnmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvcyclemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdotmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvedgemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvfiremodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvlensmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvlifemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvpuzzlemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvquarkmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvsparkmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name envtype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name flashmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name flipflopmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name font3Dmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fonttype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fpsmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name framebuffertype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name frbinmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name frboutmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name funparsemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gradnormmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ifsgenmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ifsmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ifstype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ifsxfadermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name imagebuffermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name imgarithmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name isingnoizemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joystickmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name jumpmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name lfotype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name midiinmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name miditype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netcontrolmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numarithmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name number2colormodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numbermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numbertype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numenvmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numlfomodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numposmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name numxfadermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name overlaymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name pixelizemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name planemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plasmamodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name positiontype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name posnummodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name rangeconvertmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name resultmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name rgbtype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name rotozoommodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sdlfontmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name serialmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name signalgenmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name staticcolormodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name stringtokenizermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name stringtype
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name tunnelmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name twolayermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xfademodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dplmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name chromakeymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name noisemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name y4minmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name y4moutputmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ffmpegoutmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name pongmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name signalplotmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name centermodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name timesourcemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvbaltanmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvblurzoommodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvchameleonmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdicemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdiffmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvdizzymodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvmatrixmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvmosaicmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvnervousmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvnoisemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvpupmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrdsmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrevmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvripplemodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvrndmmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvscrollmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvshagadelicmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvsimuramodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvspiralmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvstreakmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvtransformmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvwarholmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectvwarpmodule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name effectv1dmodule
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "editor"="..\qtgui\src\gui\editor\editor.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "effectv1dmodule"="..\effectvmodules\src\effectv1dmodule\effectv1dmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvagingmodule"="..\effectvmodules\src\effectvagingmodule\effectvagingmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvbaltanmodule"="..\effectvmodules\src\effectvbaltanmodule\effectvbaltanmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvblurzoommodule"="..\effectvmodules\src\effectvblurzoommodule\effectvblurzoommodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvburnmodule"="..\effectvmodules\src\effectvburnmodule\effectvburnmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvchameleonmodule"="..\effectvmodules\src\effectvchameleonmodule\effectvchameleonmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvcyclemodule"="..\effectvmodules\src\effectvcyclemodule\effectvcyclemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdicemodule"="..\effectvmodules\src\effectvdicemodule\effectvdicemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdiffmodule"="..\effectvmodules\src\effectvdiffmodule\effectvdiffmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdizzymodule"="..\effectvmodules\src\effectvdizzymodule\effectvdizzymodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvdotmodule"="..\effectvmodules\src\effectvdotmodule\effectvdotmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvedgemodule"="..\effectvmodules\src\effectvedgemodule\effectvedgemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvfiremodule"="..\effectvmodules\src\effectvfiremodule\effectvfiremodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvlensmodule"="..\effectvmodules\src\effectvlensmodule\effectvlensmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvlifemodule"="..\effectvmodules\src\effectvlifemodule\effectvlifemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvmatrixmodule"="..\effectvmodules\src\effectvmatrixmodule\effectvmatrixmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvmosaicmodule"="..\effectvmodules\src\effectvmosaicmodule\effectvmosaicmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvnervousmodule"="..\effectvmodules\src\effectvnervousmodule\effectvnervousmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvnoisemodule"="..\effectvmodules\src\effectvnoisemodule\effectvnoisemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvpupmodule"="..\effectvmodules\src\effectvpupmodule\effectvpupmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvpuzzlemodule"="..\effectvmodules\src\effectvpuzzlemodule\effectvpuzzlemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvquarkmodule"="..\effectvmodules\src\effectvquarkmodule\effectvquarkmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvrdsmodule"="..\effectvmodules\src\effectvrdsmodule\effectvrdsmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvrevmodule"="..\effectvmodules\src\effectvrevmodule\effectvrevmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvripplemodule"="..\effectvmodules\src\effectvripplemodule\effectvripplemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvrndmmodule"="..\effectvmodules\src\effectvrndmmodule\effectvrndmmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvscrollmodule"="..\effectvmodules\src\effectvscrollmodule\effectvscrollmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvshagadelicmodule"="..\effectvmodules\src\effectvshagadelicmodule\effectvshagadelicmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvsimuramodule"="..\effectvmodules\src\effectvsimuramodule\effectvsimuramodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvsparkmodule"="..\effectvmodules\src\effectvsparkmodule\effectvsparkmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvspiralmodule"="..\effectvmodules\src\effectvspiralmodule\effectvspiralmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvstreakmodule"="..\effectvmodules\src\effectvstreakmodule\effectvstreakmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvtransformmodule"="..\effectvmodules\src\effectvtransformmodule\effectvtransformmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvwarholmodule"="..\effectvmodules\src\effectvwarholmodule\effectvwarholmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "effectvwarpmodule"="..\effectvmodules\src\effectvwarpmodule\effectvwarpmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libeffectv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "engine"="..\engine\src\engine\engine.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name interfaces
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name net
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netinterfaces
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name utils
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dllloader
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name model
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name renderer
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "envtype"="..\types\src\envtype\envtype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ffmpegoutmodule"="..\modules\src\ffmpegoutmodule\ffmpegoutmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "flashmodule"="..\modules\src\flashmodule\flashmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "flipflopmodule"="..\modules\src\flipflopmodule\flipflopmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "font3Dmodule"="..\modules\src\font3Dmodule\font3Dmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fonttype"="..\types\src\fonttype\fonttype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fpsmodule"="..\modules\src\fpsmodule\fpsmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "framebuffertype"="..\types\src\framebuffertype\framebuffertype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "frbinmodule"="..\modules\src\frbinmodule\frbinmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libdshow
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "frboutmodule"="..\modules\src\frboutmodule\frboutmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "funparsemodule"="..\modules\src\funparsemodule\funparsemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gradnormmodule"="..\modules\src\gradnormmodule\gradnormmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gui"="..\qtgui\src\gui\gui.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name controlwidgets
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name utils
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name interfaces
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name net
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netinterfaces
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name base
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dialogs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name editor
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name guimodel
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name typeviews
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "guimodel"="..\qtgui\src\guimodel\guimodel.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name interfaces
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netinterfaces
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ifsgenmodule"="..\modules\src\ifsgenmodule\ifsgenmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ifsmodule"="..\modules\src\ifsmodule\ifsmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ifstype"="..\types\src\ifstype\ifstype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ifsxfadermodule"="..\modules\src\ifsxfadermodule\ifsxfadermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "imagebuffermodule"="..\modules\src\imagebuffermodule\imagebuffermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "imgarithmodule"="..\modules\src\imgarithmodule\imgarithmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "interfaces"="..\base\src\interfaces\interfaces.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "isingnoizemodule"="..\modules\src\isingnoizemodule\isingnoizemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "joystick_midi_net"="..\util\src\joystick_midi_net\joystick_midi_net.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libjoystick
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joystickmodule"="..\modules\src\joystickmodule\joystickmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libjoystick
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "jumpmodule"="..\modules\src\jumpmodule\jumpmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "lfotype"="..\types\src\lfotype\lfotype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libcolorconv"="..\modules\src\libcolorconv\libcolorconv.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libdshow"="..\modules\src\libdshow\libdshow.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libeffectv"="..\effectvmodules\src\libeffectv\libeffectv.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libgeo"="..\util\src\libgeo\libgeo.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libgrid"="..\modules\src\libgrid\libgrid.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libjoystick"="..\util\src\libjoystick\libjoystick.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libmidi"="..\modules\src\libmidi\libmidi.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libscale"="..\modules\src\libscale\libscale.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "midiinmodule"="..\modules\src\midiinmodule\midiinmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmidi
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "miditype"="..\types\src\miditype\miditype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "misc"="..\util\src\misc\misc.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "model"="..\engine\src\model\model.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "net"="..\base\src\net\net.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "netcontrolmodule"="..\modules\src\netcontrolmodule\netcontrolmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "netinterfaces"="..\base\src\netinterfaces\netinterfaces.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "noisemodule"="..\modules\src\noisemodule\noisemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numarithmodule"="..\modules\src\numarithmodule\numarithmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "number2colormodule"="..\modules\src\number2colormodule\number2colormodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numbermodule"="..\modules\src\numbermodule\numbermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numbertype"="..\types\src\numbertype\numbertype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numenvmodule"="..\modules\src\numenvmodule\numenvmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numlfomodule"="..\modules\src\numlfomodule\numlfomodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numposmodule"="..\modules\src\numposmodule\numposmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "numxfadermodule"="..\modules\src\numxfadermodule\numxfadermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "overlaymodule"="..\modules\src\overlaymodule\overlaymodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "pixelizemodule"="..\modules\src\pixelizemodule\pixelizemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "planemodule"="..\modules\src\planemodule\planemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libgrid
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "plasmamodule"="..\modules\src\plasmamodule\plasmamodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libgrid
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "pongmodule"="..\modules\src\pongmodule\pongmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "positiontype"="..\types\src\positiontype\positiontype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "posnummodule"="..\modules\src\posnummodule\posnummodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "rangeconvertmodule"="..\modules\src\rangeconvertmodule\rangeconvertmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "renderer"="..\engine\src\renderer\renderer.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "resultmodule"="..\modules\src\resultmodule\resultmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "rgbtype"="..\types\src\rgbtype\rgbtype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "rotozoommodule"="..\modules\src\rotozoommodule\rotozoommodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libgeo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sdlfontmodule"="..\modules\src\sdlfontmodule\sdlfontmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "signalgenmodule"="..\modules\src\signalgenmodule\signalgenmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "signalplotmodule"="..\modules\src\signalplotmodule\signalplotmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "staticcolormodule"="..\modules\src\staticcolormodule\staticcolormodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "stringtokenizermodule"="..\modules\src\stringtokenizermodule\stringtokenizermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "stringtype"="..\types\src\stringtype\stringtype.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "timesourcemodule"="..\modules\src\timesourcemodule\timesourcemodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tunnelmodule"="..\modules\src\tunnelmodule\tunnelmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libgrid
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "twolayermodule"="..\modules\src\twolayermodule\twolayermodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "typeviews"="..\qtgui\src\gui\typeviews\typeviews.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "utils"="..\base\src\utils\utils.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "xfademodule"="..\modules\src\xfademodule\xfademodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cpuinfo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "y4minmodule"="..\modules\src\y4minmodule\y4minmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libcolorconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "y4moutputmodule"="..\modules\src\yuv4mpeg2module\y4moutputmodule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libcolorconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libscale
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

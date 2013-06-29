@@ -1,0 +1,34 @@
+package: gephex
+Version: 0.4.3
+Revision: 1
+Maintainer: Georg Seidel <georg@gephex.org>
+HomePage: http://www.gephex.org
+License: GPL
+DocFiles: AUTHORS COPYING README README.macosx INSTALL NEWS
+Description: Modular interactive real-time vj software
+Source: http://www.gephex.org/download/src/%n-%v.tar.bz2
+Source-MD5: 46eb6185cb2e48de1ff35870d65e82b5
+#Source: file:///Users/georg/%n-%v.tar.gz
+#Source-MD5: d7cf52a608d9aa7ccfff3b938d5bdff3
+Depends: x11-shlibs, qt3-shlibs, sdl-shlibs, sdl-image-shlibs, sdl-ttf-shlibs
+BuildDepends: x11-dev, qt3-dev, sdl, sdl-image, sdl-ttf
+ConfigureParams: --mandir=%p/share/man
+PostInstScript: <<
+ rm -rf %p/bin/gephex-engine %p/bin/gephex-gui %p/bin/gephex
+ ln -s %p/bin/gephex-wrapper %p/bin/gephex-engine
+ ln -s %p/bin/gephex-wrapper %p/bin/gephex-gui
+ ln -s %p/bin/gephex-wrapper %p/bin/gephex
+<<
+DescDetail:<<
+gephex is a modular video jockey software.
+The base visuals can be chosen from sources like video files or cameras.
+Then they can be modified by filters and mixers. Each modifier has several
+parameters, that can be controlled by signal-generators, input devices
+like joysticks, sound cards, or midi-devices.
+
+gephex runs on GNU/Linux, Win32, Mac OS X, and FreeBSD.
+The effect engine is independent from the user interface, which can
+be de- and attached at runtime.
+All effects and media streams are extendible by plugins.
+gephex is written in C++.
+<<

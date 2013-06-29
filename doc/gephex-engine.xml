@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="gephex-engine">
+  <refentryinfo>
+    <author>
+      <firstname>Martin</firstname> <surname>Bayer</surname>
+      <affiliation>
+	<address><email>martin@gephex.org</email></address>
+      </affiliation>
+    </author>
+    <author>
+      <firstname>Philipp</firstname> <surname>Promesberger</surname>
+      <affiliation>
+	<address><email>coma@gephex.org</email></address>
+      </affiliation>
+    </author>
+    <author>
+      <firstname>Georg</firstname> <surname>Seidel</surname>
+      <affiliation>
+        <address><email>georg@gephex.org</email></address>
+      </affiliation>
+    </author>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>gephex-engine</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  
+  <refnamediv>
+    <refname>gephex-engine</refname>
+    <refpurpose>back-end for the video effect software</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para><application>gephex-engine</application> is the main component of the interactive video effect system gephex. You have to start the engine and can then connect with the <citerefentry> <refentrytitle>gephex-gui</refentrytitle>
+    <manvolnum>1</manvolnum> </citerefentry>.</para>
+
+<para>
+All parameters are set in the config file. All supported parameters
+can be overridden from the command line. Please see the html documentation
+for the full description.
+</para>
+
+<para>The projects main intent is to create a framework that allows video-jockeys to design complex real-time video effects. The user can influence parameters 
+and data flow with interactive controls like joysticks or midi devices.</para>
+  </refsect1>
+
+  <refsect1>
+    <title>Files</title>
+  <para><filename>~/.gephex/0.4/gephex.conf</filename></para>
+  </refsect1>
+
+  <refsect1>
+    <title>See also</title>
+    <para><citerefentry> <refentrytitle>gephex</refentrytitle>
+    <manvolnum>1</manvolnum> </citerefentry></para>
+    <para><citerefentry> <refentrytitle>gephex-gui</refentrytitle>
+    <manvolnum>1</manvolnum> </citerefentry></para>
+    <para>
+      http://www.gephex.org for the original source archive.
+    </para>
+  </refsect1>
+
+</refentry>
+

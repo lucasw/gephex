@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-newInstance">
+
+  <refnamediv>
+    <refname>newInstance</refname>
+    <refpurpose>create a new instance of the module</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void* <function>newInstance</function></funcdef>
+        <paramdef>void</paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>By calling this method a new instance of the module class is created. The return value is a pointer to the instance. This pointer may only be used by the methods of the same module class. The caller must always ensure that these instance pointers fit to the corresponding functions. There needn't be any internal type check in the module implementation. After using this instance the allocated resources must be released by calling <function>deleteInstance</function>.</para>
+
+  </refsect1>
+</refentry>

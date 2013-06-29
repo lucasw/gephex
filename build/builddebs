@@ -1,0 +1,105 @@
+#! /bin/sh
+
+versionkey="0.0.4alpha"
+version=0.0.4cvs`date -u +%Y%m%d%H%M%S`
+
+cvsmode="update"
+jailmode="leave"
+httpproxy="http://molehill:3128"
+
+case "$cvsmode" in
+    checkout)    
+	echo "checkout cvs tree";
+	rm -rf GePhex;
+	cvs co GePhex;
+        mv configure.ac configure.ac.cvs;;
+    update) 
+	echo "update cvs tree";
+	cd GePhex
+	cvs update -d
+        mv configure.ac configure.ac.cvs
+	cd ..;;
+    leave)
+	echo "leave cvs tree";;
+esac
+
+cd GePhex
+sed s/$versionkey/$version/ configure.ac.cvs > configure.ac
+./bootstrap.sh
+./configure
+make dist
+
+mv gephex-$version.tar.gz ../gephex_$version.orig.tar.gz 
+cd ..
+
+tar xvzf gephex_$version.orig.tar.gz
+
+# copy debian dir from CVS to the modified version
+cp -r GePhex/debian gephex-$version
+rm -rf gephex-$version/debian/CVS
+
+# update changelog
+mv  gephex-$version/debian/changelog gephex-$version/debian/changelog.old
+echo "gephex ($version-1) unstable; urgency=low" >> gephex-$version/debian/changelog
+echo " "  >> gephex-$version/debian/changelog
+echo "  * build from cvs"  >> gephex-$version/debian/changelog
+echo " "  >> gephex-$version/debian/changelog
+echo " -- Martin Bayer <bayer@fmi.uni-passau.de>  "`date -R` >> gephex-$version/debian/changelog
+echo " "  >> gephex-$version/debian/changelog
+cat gephex-$version/debian/changelog.old >>  gephex-$version/debian/changelog
+
+
+# generate debian source package (.dsc, orig.tar.gz, diff.gz)
+dpkg-source -b gephex-$version gephex_$version.orig.tar.gz
+
+rm -rf dists
+mkdir dists
+mkdir base
+touch override
+
+for dist in woody sid; do    
+
+    case "$dist" in
+	sid) 
+	    distaltname=unstable;;
+	woody)
+	    distaltname=stable;;
+	sarge)
+	    distaltname=testing;;
+    esac
+
+    mkdir dists/$dist
+    mkdir dists/$dist/main
+    mkdir dists/$dist/main/source
+
+    cp gephex_$version.orig.tar.gz dists/$dist/main/source
+    cp gephex_$version-*.dsc dists/$dist/main/source
+    cp gephex_$version-*.diff.gz dists/$dist/main/source
+    #cp gephex_$version-*.changes dists/$dist/main/source
+
+    dpkg-scansources dists/$dist/main/source > dists/$dist/main/source/Sources
+    gzip dists/$dist/main/source/Sources
+
+    case "$jailmode" in
+	checkout)    
+	    echo "create new base.tar.gz for $dist";
+
+	    pbuilder create --basetgz ./ --mirror http://ftp.debian.org/debian --othermirror "deb http://marillat.free.fr/ $distaltname main" --distribution $dist --http-proxy $httpproxy ;
+	    mv builddebs.tmp base/$dist.tar.gz;;
+	update)
+	    pbuilder update --basetgz ./base/$dist.tar.gz --mirror http://ftp.debian.org/debian --othermirror "deb http://marillat.free.fr/ $distaltname main" --distribution $dist --http-proxy $httpproxy ;
+	    	    echo "update jails for $dist";;
+	leave)   
+	    echo "leave jails for $dist";;
+    esac
+
+    mkdir dists/$dist/main/binary-i386    
+    pbuilder build --basetgz ./base/$dist.tar.gz --buildresult dists/$dist/main/binary-i386  dists/$dist/main/source/gephex_$version-*.dsc    
+
+    dpkg-scanpackages dists/$dist/main/binary-i386 override > dists/$dist/main/binary-i386/Packages
+    gzip dists/$dist/main/binary-i386/Packages;
+done
+
+
+scp -r dists mbay@shell.sourceforge.net:/home/groups/g/ge/gephex/htdocs/debian
+

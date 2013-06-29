@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-setInput">
+
+  <refnamediv>
+    <refname>setInput</refname>
+    <refpurpose>Sets the reference to the typeobject with the input value</refpurpose> 
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>int <function>setInput</function></funcdef>
+        <paramdef>void* <parameter>instance</parameter></paramdef>
+        <paramdef>int <parameter>inputIndex</parameter></paramdef>
+        <paramdef>void* <parameter>typeObject</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>The <parameter>typeObject</parameter> that holds the value for the input with index <parameter>inputIndex</parameter> of the module <parameter>instance</parameter> are set with this function. If the input is declared as const the module may not change the value of the type object because the engine can in this case provide it to another module as input.</para>
+
+  </refsect1>
+</refentry>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-shutDown">
+
+  <refnamediv>
+    <refname>shutDown</refname>
+    <refpurpose>closes the module plugin</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>void <function>shutDown</function></funcdef>
+        <paramdef>void</paramdef>
+     </funcprototype>
+   </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This function must be called before unloading the shared library. After invoking <function>shutdown</function> no other methods of the module may be called. In this method all class-wide resources allocated e.g. by the <function>init</function> function must be released. Before calling this method all instances created with <function>newInstance</function> must be deleted by calling <function>deleteInstance</function></para>
+
+  </refsect1>
+</refentry>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="module-api-getspec">
+
+  <refnamediv>
+    <refname>getSpec</refname>
+    <refpurpose>querys the spefification from the module</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>char* <function>getSpec</function></funcdef>
+        <paramdef>void</paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Description</title>
+
+<para>This function querys a specification string from the modules plugin. It stores the unique string identifier of the module, the number of inputs and outputs
+</para>
+<para>
+  <programlisting>
+mod_spec 
+   { 
+     name = mod_STRING; 
+     number_of_inputs = UINT; 
+     number_of_outputs = UINT; 
+     deterministic = BOOL 
+   }</programlisting>
+</para>
+
+  </refsect1>
+
+  <refsect1>
+    <title>Return Value</title>
+
+<para>The module specification string is returned as a pointer to a zero terminated char array. This pointer stays valid until calling <function>shutDown</function>.</para>
+  </refsect1>
+</refentry>

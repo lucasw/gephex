@@ -1,0 +1,101 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{german}
+\usepackage{a4}
+\usepackage[latin1]{inputenc}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+
+\author{Martin Bayer}
+\title{GePhex - Echtzeit Videoeffektsystem}
+
+\begin{document}
+
+% alles über gephex
+\section{Projektbeschreibung}
+GePhex ist ein interaktives Videoeffektsystem auf Softwarebasis. Die Entwicklung von neuen Effekten geschieht auf mehreren Abstraktionsstufenstufen.
+
+\begin{itemize}
+\item Neue Module und Datentypen können von einem Programmierer über eine Erweiterungsschnittstelle hinzugefügt werden. Diese Schnittstelle ist relativ einfach gehalten und ermöglicht es sehr schnell neue Effektmodule zu entwickeln.
+
+\item Ein Videoeffekt wird vom Benutzer mit einem Signalflussgraphen modelliert. Die Ein- und Ausgänge der Module werden dabei über stark typisierte Leitungen miteinander  verknüpft. 
+
+\item Mögliche Interaktionen können durch externe Eingabegeräte, wie z.B. MIDI Klaviertastatur, MIDI Steuerelemente oder Joystick ausgelöst werden. Der Benutzer kann sich jedoch auch selbst eine grafische Benutzeroberfläche für jeden Signalgraphen erzeugen und doch Parameter mit Maus und Tastatur modifizieren.
+
+\item Eine Kombination von mehreren Effektgraphen ist durch Sequenzen und Playlisten möglich.
+\end{itemize} 
+
+\begin{figure}[htbp]
+        \begin{center}
+        \epsfig{file=editor.eps, width=80mm}
+        \end{center}
+        \caption{\emph{Der Grapheditor mit einem einfachen Effekt}}
+        \label{editor}
+\end{figure}
+
+Die generierten Videodaten können in einem Fenster auf dem Bildschirm, oder in voller Größe auf einen zweitem Videoausgang angezeigt werden.
+
+\paragraph{Entwicklungsmodel}
+Die Entwicklung der Software erfolgt als dezentrales Opensource Projekt. Eine Versionsverwaltungssystem und eine Bugtrackingdatenbank ermöglichen die Zusammenarbeit der Entwickler. Die Kommunikation über Mailinglisten und IRC wird durch unregelmäßige Entwicklertreffen unterstützt. 
+
+\paragraph{Implementierungsrahmen}
+GePhex soll auf möglichst vielen Rechnerplattformen und Betriebssystemen nativ verfügbar sein. Die Entwicklungssprache ist C++, wobei aus Portabilitätsgründen auf eine strenge Einhaltung des ANSI C++ Standards geachtet wird. 
+Die Erweiterungsmodule sind größtenteils in C geschrieben und enthalten aus Effizienzgründen teilweise alternative handoptimierten Assembler Implementierungen, um die SMID Erweiterungen aktueller Prozessoren auszunutzen
+
+Aktuell werden als Plattformen Debian GNU/Linux und MS Windows 2000 auf x86 Prozessoren unterstützt. Erste Versuche von Portierungen auf BSD Derivate wie Apple MacOS X und NetBSD wurden unternommen.
+
+\paragraph{Design}
+Der Berechnungsserver ist strikt von der Benutzeroberfläche über eine Netzverbindung getrennt, dazu wurde ein leichtgewichtiger RPC Mechanismus inclusive des dazugehörigen IDL Compiliers entwickelt. Die internen Komponenten des Berechnungsservers, wie Renderer, Sequenzer und Model sind ebenfalls durch diese IDL Interfaces getrennt, nur wird hier kein Code für die Netztransparenz erzeugt. Die Entwicklung und das Testen von Erweiterungsmodulen wird durch zur Laufzeit austauschbare Effekte und Datentypen vereinfacht
+
+\paragraph{Erweiterungsschnittstellen}
+Für die Erweiterungsmodule wurde eine C-API entworfen um weitgehend sprach- und compilierunabhängig PlugIns programmieren zu können. Aus einer abstrakten Beschreibungssprache werden zur Kompilierzeit komfortable C-stubs generiert. 
+
+\pagebreak 
+\section{geplante Erweiterungen}
+Der nächste Abschnitt beschreibt die Erweiterungen, welche im Rahmen des Programmierpraktikums implementiert werden sollen.
+
+\subsection{Videoeingang}
+An einem Rechner können viele verschiedenen Videoeingabegeräte angeschlossen werden.
+Videosignale von analog Videokameras oder Videorecordern werden typischerweise über eine Framegrabberkarte am PCI-Bus eingespeist. Digitale Videokameras oder Webcams sind normalerweise über USB oder Firewire mit dem PC verbunden. 
+Die Anwendungsprogramme steuern dieser Geräte bei den Linuxkernel 2.2 und 2.4 über die V4L API an. Die Nachfolgeschnittstelle V4L2 befindet sich noch in der Experimentierphase und für nur wenige Gerätetreiber sind bislang portiert.
+Wie alle offiziellen Kernelschnittstellen ist auch V4l sehr nahe an der Hardware. Beispielsweise werden vom Betriebsystem bzw. dessen Treibern keine Formatkonvertierungen durchgeführt. Viele Webcams liefern das Videosignal nur in einem komprimierten YUV Format, die Wandlung in ein Standardformat wie RGBA32 muss durch die Anwendung geschehen.
+
+Der Schwerpunkt der Entwicklung dieses Moduls liegt bei
+\begin{itemize}
+\item der Ansteuerung der Geräte über V4L Schnittstelle und
+\item der Formatkonvertierungen.
+\end{itemize}
+
+Die V4L unterstützt leider keine Virtualisierung der Geräte, deshalb können sie zur gleichen Zeit immer nur einmal geöffnet sein. Die VideoIn Module sollen jedoch in mehreren Signalgraphen gleichzeitig exisitieren können, solange diese nicht gleichzeitig gerechnet werden. Um dies zu ermöglichen wird ein zentraler Zugriffspunkt benötigt, der alle Videogeräte verwaltet und gleichzeitige Zugriffe verhindert.
+
+Ein VideoInput Modul soll als Eingänge den Namen des Videogeräts und die gewünschte Auflösung haben. Die Auswahl der Videoquelle und des Videoformats kann damit flexibel zur Laufzeit erfolgen.
+
+An dem einzigen Ausgang liegt das gewünschte Videosignal an.
+
+Die Implementierung soll an der folgenden Hardware getestet werden:
+\begin{enumerate}
+\item WinTV PCI - TV Karte mit BT848 Chip
+\item Logitech Quickcam 3000 Pro - CCD Webcam mit USB Anschluss
+\end{enumerate}
+
+\subsection{Videodatei Modul}
+Die Linux Version von GePhex kann momentan noch keine Videodateien dekodieren und in den Signalgraphen einspeisen. Das zu entwickelnde Modul soll die \textit{avifile} Bibliothek verwenden um diese Fähigkeit nachzurüsten.
+
+Die Bibliothek verwendet dazu eine Plugin Architektur um verschiedene externe Bibliotheken zu integrieren und rechtlich problematischen Code zu isolieren. Das \textit{FFMpeg} Plugin ist in der Lage nativ mpeg (1,2 und 4), wmv und einige andere Formate decodieren. Es existieren für MS Windows zahlreiche kostenlose PlugIns zur Dekompression von AVI Dateien. Die \textit{avifile} Bibliothek verwendet diese, indem es Teile der Win32 API emuliert und die Decoder dlls läd und in dieses Umfeld einbindet. Leider ist diese Methode nur für x86 Prozessoren möglich, da der Prozessor nicht emuliert wird. 
+
+Als Eingabe erhält das Module den Dateinamen der abzuspielenden Videodatei und als Ausgabe liefert es einen Videostream. Nach Möglichkeit sollen auch Abspielgeschwindigkeit und Richtung parametrierbar sein.
+
+\subsection{Debian Pakete}
+Langfristiges Ziel ist die Integration der Software in das Debian GNU/Linux Betriebssystem. Dazu müssen Scripten entwickelt werden, um aus den Quellen Debian Source Packete zu erstellen, aus denen dann Binärpakete erzeugt werden. Dabei soll sowohl die letzte stabile Version des Betriebssystems 3.0 (woody) unterstützt werden, als auch die aktuelle Entwicklerversion (sid).
+
+Für eine sinnvolle Integration müssen eine Benutzerdokumentation für die ausführbaren Dateien (man pages) und Beschreibungsdateien für die Menüeinträge erstellt werden. Eine verbesserte Integration in das Paketmanagement System APT, ein Debian spezifisches System zum Installieren, Aktualisieren und Konfigurieren von Software aus dezentralen Quellen, ist ebenfalls geplant.
+
+\subsection{Dokumentation der Modul API}
+Neue Entwickler werden das GePhex Framework natürlich nur dann verwenden, wenn die Erweiterungsschnittstellen gut dokumentiert sind und Beispiel Code existiert. Im Rahmen des Praktikums soll an einem einfachen Beispiel erklärt werden wie neue Module in das Projekt eingebunden werden und auf welche Besonderheiten zu achten ist. Zusätzlich soll die Dokumentation der Modul- und Typ-API erstellt werden.
+
+\end{document}

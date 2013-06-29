@@ -1,0 +1,43 @@
+name: RendererControl
+
+ /**
+  * TODO: descr. of the interface
+  */
+
+  /**
+   *
+   */  
+   start
+
+  /**
+   *
+   */
+   stop
+
+   /**
+     * Daten an ein Modul schicken.
+     * @param moduleID Modul, das die Daten empfangen soll
+     * @param inputIndex
+     * @param data Daten, die das Modul empfangen soll
+     */
+  setInputValue string graphName, int nodeID,int inputIndex,buffer buf
+  
+  /**
+   * Veranlasst den Renderer dazu, dem ControlValueReceiver
+   * den Wert eines Inputs mitzuteilen.
+   * @param nodeID     Das Modul dessen Input synchronisiert werden soll
+   * @param inputIndex Der Input des Moduls
+   */
+  syncInputValue string graphName, int nodeID, int inputIndex
+
+  /**
+   *
+   */
+  synchronizeInputValues string graphName
+
+  /**
+   *
+   */
+  synchronize
+
+

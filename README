@@ -1,0 +1,39 @@
+
+Where to get the source
+------------------------
+
+If this is a binary release, you can get the source at http://www.gephex.org.
+
+ffmpeg
+-------
+
+The source release contains the ffmpeg sources in contrib/ffmpeg.
+It's a recent cvs snapshot, and has not been modified.
+
+Check http://ffmpeg.sf.net for details on ffmpeg.
+
+
+EffecTV
+--------
+
+This release contains effects that have been ported from EffecTV
+(http://effectv.sf.net).
+The sources are in './effectvmodules'.
+
+Thanks to the EffecTV people for their cool effects!
+
+
+Important note:
+---------------
+
+  On unix platforms, the layout of the ~/.gephex directory has
+  changed with 0.4.1. All files that previously have been
+  in "~/.gephex/" are now moved to the new directory 
+  "~/.gephex/0.4/". This change is done automatically when you first
+  start gephex-0.4.1. Note that after that, you cannot simply start
+  an older version of gephex, because it cannot find the config files
+  and will create new ones.
+
+
+For documentation, please have a look at doc/documentation.html 
+or http://www.gephex.org.

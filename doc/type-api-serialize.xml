@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+<refentry id="type-api-serialize">
+  <refnamediv>
+    <refname>serialize</refname>
+    <refpurpose>serialize the value</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <funcsynopsis>
+      <funcsynopsisinfo>typedef void* TypeInstanceID;</funcsynopsisinfo>
+      <funcprototype>
+        <funcdef>int <function>serialize</function></funcdef>
+        <paramdef>TypeInstanceID <parameter>instance</parameter></paramdef>
+        <paramdef>char* <parameter>buffer</parameter></paramdef>
+        <paramdef>int <parameter>bufferLen</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>Arguments</title>
+    <variablelist>
+      <varlistentry>
+	<term><parameter>instance</parameter></term>
+	<listitem>
+<para>The value of this type instance will be serialized in the <parameter>buffer</parameter>. The value of <parameter>instance</parameter> stays unchanged.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>buffer</parameter></term>
+	<listitem>
+<para>This is a pointer to an buffer with the size <parameter>bufferLen</parameter>. If the buffer is big enough the value of <parameter>instance</parameter> will be stored serialized in this buffer.</para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><parameter>bufferLen</parameter></term>
+	<listitem>
+<para>This is the size of the <parameter>buffer</parameter> in bytes.</para>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+
+    <title>Description</title>
+<para>The function serializes the value of <parameter>instance</parameter> into the <parameter>buffer</parameter> with the size <parameter>bufferLen</parameter>. If the buffer provided by the caller isn't big enough for the serialized value the <parameter>buffer</parameter> is not changed and the required size is returned. In the other case the value of <parameter>instance</parameter> is written as a bytesequence to the front of the buffer and the number of used bytes is returned.</para>
+
+<para>This method is optional. If you want to provide the (de)serialisation functionality you must also implement the <function>deSerialize</function> method.
+</para>
+
+  </refsect1>
+
+  <refsect1>
+
+    <title>Return Value</title>
+<para>If the buffer is big enough the number of written bytes is returned. In the other case the return value is the number of needed bytes.</para>
+  </refsect1>
+
+
+</refentry>

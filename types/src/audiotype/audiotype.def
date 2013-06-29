@@ -1,0 +1,12 @@
+LIBRARY AUDIOTYPE
+DESCRIPTION "description"
+EXPORTS
+ newInstance @1
+ deleteInstance @2
+ assign @3
+ serialize @4
+ deSerialize @5
+ shutDown @6
+ init @7
+ getSpec @8
+ getInfo @9

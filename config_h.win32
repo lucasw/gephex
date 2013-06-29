@@ -1,0 +1,22 @@
+#ifndef INCLUDED_CONFIG_H
+#define INCLUDED_CONFIG_H
+
+#define COMP_VC
+#define OS_WIN32
+
+#define CPU_I386
+#define CPU_I486
+#define CPU_I586
+
+#define OPT_INCLUDE_MMX
+#undef OPT_SERIALIZE_FRAMEBUFFER
+
+#define VERSION "0.4.5"
+
+#define FRBINMODULE_CACHE_SIZE 128
+
+#define WITH_FFMPEG
+#define WITH_SDL
+#define WITH_SDL_IMAGE
+
+#endif
