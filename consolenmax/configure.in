@@ -1,0 +1,93 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/engine2/main.cpp)
+AM_INIT_AUTOMAKE(gephex,0.0.1)
+
+dnl Checks for programs.
+AC_PROG_CXX
+
+AM_PROG_LIBTOOL  
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -ldl:
+dnl AC_CHECK_LIB(dl, main)
+dnl Replace `main' with a function in -ltestframework:
+dnl AC_CHECK_LIB(testframework, main)
+
+dnl Checks for header files.
+AC_CHECK_HEADER(windows.h,AC_DEFINE(WIN32),AC_DEFINE(LINUX))
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl AC_C_CONST
+
+dnl Checks for library functions.
+
+dnl options
+OPT_DEBUG
+OPT_GCC3
+
+
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(CXX)
+AC_SUBST(CC)
+
+
+AC_OUTPUT(
+Makefile
+src/Makefile
+src/modules/Makefile
+src/modules/tunnelmodule/Makefile
+src/modules/rotozoommodule/Makefile
+src/modules/blurmodule/Makefile
+src/modules/addmodule/Makefile
+src/modules/resultmodule/Makefile
+src/modules/numbermodule/Makefile
+src/modules/gloutmodule/Makefile
+src/modules/bmpmodule/Makefile
+src/modules/invertmodule/Makefile
+src/modules/sdloutputmodule/Makefile
+src/modules/xfademodule/Makefile
+src/modules/plasma/Makefile
+src/modules/gloutmodule/Makefile
+src/modules/tunnelmodule/Makefile
+src/modules/cubesmodule/Makefile
+src/modules/bwmodule/Makefile
+src/modules/hsvmodule/Makefile
+src/modules/splitmodule/Makefile
+src/modules/combinemodule/Makefile
+src/modules/interference/Makefile
+src/modules/signalgenmodules/Makefile
+src/modules/starfield/Makefile
+src/modules/imgsubmodule/Makefile
+src/modules/imgaddmodule/Makefile
+src/modules/imgmulmodule/Makefile
+src/modules/staticcolormodule/Makefile
+src/modules/v4lmodule/Makefile
+src/modules/numposmodule/Makefile
+src/modules/posnummodule/Makefile
+src/modules/functions/Makefile
+src/modules/functions/jumpmodule/Makefile
+src/modules/functions/numxfadermodule/Makefile
+src/modules/colorcyclermodule/Makefile
+src/TestFramework/Makefile
+src/thread/Makefile
+src/utils/Makefile
+src/net/Makefile
+src/netinterfaces/Makefile
+src/consolenmax/Makefile
+src/sequencer/Makefile
+src/dllloader/Makefile
+src/model/Makefile
+src/renderer/Makefile
+src/engine2/Makefile
+src/guimodel/Makefile
+src/gui/Makefile
+src/gui/controlwidgets/Makefile
+src/gui/propertywidgets/Makefile
+src/types/numbertype/Makefile
+src/types/stringtype/Makefile
+src/types/framebuffertype/Makefile
+src/types/positiontype/Makefile
+src/types/rgbtype/Makefile
+src/types/Makefile
+)

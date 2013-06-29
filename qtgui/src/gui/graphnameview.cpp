@@ -82,6 +82,8 @@ namespace gui
       return popme;      
     }
 
+  protected slots:
+
     void newGraphSlot()
     {
       bool retry=true;
@@ -507,19 +509,14 @@ protected slots:
    *
    * If fullPath ends with a "/" the result is the same.
    *
-   * If fillPath has only one or zero components ("/one/" or "/"), then
+   * If fullPath has only one or zero components ("/one/" or "/"), then
    * path will be "" and last will be "one" or "/".
    */
-  void extractPath(const std::string& fullPath, std::string& path, std::string& last)
+  void extractPath(const std::string& fullPath,
+		   std::string& path,
+		   std::string& last)
   {
     utils::StringTokenizer sr(fullPath);
-
-    /*if (fullPath[fullPath.length()-1] == '/')
-      {
-      path = fullPath.substr(0, fullPath.length()-1);
-      last = "";
-      return;
-      }*/
 
     path = "";
     last = "";
@@ -600,7 +597,10 @@ protected slots:
         else                // create a graph
           {
             folder = false;
-            GraphItemPtr tmp( new GraphItem(graphID,folderName+"/", fileName, m_model) );
+            GraphItemPtr tmp( new GraphItem(graphID,
+					    folderName+"/",
+					    fileName,
+					    m_model) );
             m_graphs[graphID] = tmp;
             m_treeView->insertItem(*tmp, parent);
             it = m_graphs.find(graphID);
@@ -752,7 +752,8 @@ protected slots:
     const unsigned int minNameLength=1;
 
     // allowed characters in name
-    const std::string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    const std::string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      "abcdefghijklmnopqrstuvwxyz1234567890";
 
     if (name.length()>maxNameLength||name.length()<minNameLength)
       {
@@ -763,7 +764,8 @@ protected slots:
     for(std::string::const_iterator it=name.begin();it!=name.end();++it)
       {
         std::string::const_iterator it2 = std::find(allowedCharacters.begin(),
-                                                    allowedCharacters.end(),*it);
+                                                    allowedCharacters.end(),
+						    *it);
         if (it2==allowedCharacters.end())
           {
             // this character is not allowed
@@ -773,7 +775,6 @@ protected slots:
 
     return true;
   }
-
 
 }
 

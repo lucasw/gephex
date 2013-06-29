@@ -22,13 +22,13 @@ EXTRA_DIST     =  \
 DISTCLEANFILES = documentation.html gephex.1 gephex-engine.1 gephex-gui.1
 
 gephex.1: $(srcdir)/gephex.xml
-	if test "x${DB2M}" = "x"; then  touch gephex.1; else ${DB2M} $(srcdir)/gephex.xml > gephex.1; fi
+	if test "x${DB2M}" = "x"; then  touch gephex.1; else ${DB2M} $(srcdir)/gephex.xml; fi
 
 gephex-engine.1: $(srcdir)/gephex-engine.xml
-	if test "x${DB2M}" = "x"; then  touch gephex-engine.1; else ${DB2M} $(srcdir)/gephex-engine.xml > gephex-engine.1; fi
+	if test "x${DB2M}" = "x"; then  touch gephex-engine.1; else ${DB2M} $(srcdir)/gephex-engine.xml; fi
 
 gephex-gui.1: $(srcdir)/gephex-gui.xml
-	if test "x${DB2M}" = "x"; then  touch gephex-gui.1; else ${DB2M} $(srcdir)/gephex-gui.xml > gephex-gui.1; fi
+	if test "x${DB2M}" = "x"; then  touch gephex-gui.1; else ${DB2M} $(srcdir)/gephex-gui.xml; fi
 
 all-local: documentation.html gephex.1 gephex-engine.1 gephex-gui.1
 

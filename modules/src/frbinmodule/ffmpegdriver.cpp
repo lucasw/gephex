@@ -1,6 +1,6 @@
 /* This source file is a part of the GePhex Project.
 
- Copyright (C) 2001-2005
+ Copyright (C) 2001-2008
 
  Georg Seidel <georg@gephex.org> 
  Martin Bayer <martin@gephex.org> 
@@ -35,9 +35,12 @@
 #define EMULATE_INTTYPES
 #endif
 
-#include "avformat.h"
-#include "avcodec.h"
-#include "avutil.h"
+extern "C"
+{
+#include "libavformat/avformat.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/avutil.h"
+}
 
 #include "libscale.h"
 
@@ -239,7 +242,6 @@ struct FFMpegDriverImpl
     AVFormatParameters params;
     
     memset(&params, 0, sizeof(params));
-    params.image_format  = 0;
     params.initial_pause = 1;
 
     // open input file without format or bufffer size

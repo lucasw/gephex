@@ -240,7 +240,8 @@ void f0rwrapper_update (void* instance)
       wr->funs->destruct(wr->f0r_instance);
       wr->f0r_instance = wr->funs->construct(attribs.xsize, attribs.ysize);
 
-      assert(wr->f0r_instance); // TODO
+      if (wr->f0r_instance == 0)
+	throw std::runtime_error("frei0r construct returned 0");
 
       wr->width  = attribs.xsize;
       wr->height = attribs.ysize;

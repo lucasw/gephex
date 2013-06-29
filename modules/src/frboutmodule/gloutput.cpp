@@ -49,10 +49,6 @@ extern "C"
 
 #define VERBOSE_GL_OUTPUT 1;
 
-static const char* classname = "GE-PHEX_GL_OUTPUT_WINDOW";
-
-
-
 //-----------------------------------------------------------------------
 
 struct DriverInstance 
@@ -60,15 +56,15 @@ struct DriverInstance
   int        win_xsize;
   int        win_ysize;
   int        tex_xsize;
-  int        tex_ysize;
-  
+  int        tex_ysize;  
 };
 
 //-----------------------------------------------------------------------
 
 static struct DriverInstance* GL_new_instance(const char* server_name,
 					      int xpos, int ypos,
-					      int width, int height, int mmx_supported,
+					      int width, int height,
+					      int mmx_supported,
 					      char* error_text, int buflen);
 
 static void GL_destroy(struct DriverInstance* sh);
@@ -80,9 +76,6 @@ static int GL_blit(struct DriverInstance* sh,
                     const unsigned char* fb, int width, int height,
 		   struct blit_params* params,
                     char* error_text, int buflen);
-
-//-----------------------------------------------------------------------
-
 
 //-----------------------------------------------------------------------
 
@@ -105,7 +98,6 @@ struct OutputDriver* GL_get_driver()
   drv->inst          = 0;
   return drv;
 }
-
 
 //-----------------------------------------------------------------------
 
@@ -134,7 +126,8 @@ GL_new_instance(const char* server_name,
       sh->tex_xsize = 1; 
       sh->tex_ysize = 1;
       
-      if(!initOutput("Ge-Phex OpenGL Output Window", server_name,sh->win_xsize, sh->win_ysize, 32))
+      if (!initOutput("Ge-Phex OpenGL Output Window",
+		     server_name,sh->win_xsize, sh->win_ysize, 32))
 	{
 	  throw std::runtime_error("Could not initialize the GLOutput window!"); 
 	}
@@ -206,7 +199,7 @@ static int GL_blit(struct DriverInstance* sh,
   else
     mirror_x=1;
 
-double mirror_y;
+  double mirror_y;
   if (params->mirrory)
     mirror_y=-1;
   else
@@ -217,14 +210,15 @@ double mirror_y;
   int new_tex_xsize=2;
   int new_tex_ysize=2;
   
-  while(new_tex_xsize<img_xsize)  new_tex_xsize*=2;
-  while(new_tex_ysize<img_ysize) new_tex_ysize*=2;
+  while (new_tex_xsize<img_xsize) new_tex_xsize*=2;
+  while (new_tex_ysize<img_ysize) new_tex_ysize*=2;
   
   if ((new_tex_xsize!=sh->tex_xsize)||(new_tex_ysize!=sh->tex_ysize))
     {
       // alloc the texture
       char* buf =(char*)malloc(new_tex_xsize*new_tex_ysize*4);
-      glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,new_tex_xsize,new_tex_ysize,0,GL_BGRA,GL_UNSIGNED_BYTE,buf);
+      glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,new_tex_xsize,new_tex_ysize,
+		   0,GL_BGRA,GL_UNSIGNED_BYTE,buf);
       free(buf);
     }
 
@@ -232,7 +226,8 @@ double mirror_y;
   sh->tex_ysize=new_tex_ysize;
   
   // blit with texture
-  glTexSubImage2D(GL_TEXTURE_2D,0,0,0,img_xsize,img_ysize,GL_BGRA,GL_UNSIGNED_BYTE,fb);
+  glTexSubImage2D(GL_TEXTURE_2D,0,0,0,img_xsize,img_ysize,
+		  GL_BGRA,GL_UNSIGNED_BYTE,fb);
   
   glBegin(GL_QUADS);
   glTexCoord2f(0,(double)img_ysize/(double)sh->tex_ysize);
@@ -244,7 +239,8 @@ double mirror_y;
   glTexCoord2f((double)img_xsize/(double)sh->tex_xsize,0);
   glVertex2f(+1*mirror_x,+1*mirror_y);
   
-  glTexCoord2f((double)img_xsize/(double)sh->tex_xsize,(double)img_ysize/(double)sh->tex_ysize);
+  glTexCoord2f((double)img_xsize/(double)sh->tex_xsize,
+	       (double)img_ysize/(double)sh->tex_ysize);
   glVertex2f(+1*mirror_x,-1*mirror_y);
   glEnd();
 

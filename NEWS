@@ -1,3 +1,13 @@
+0.4.5:
+------
+
+  * quartz based video output driver (Mac OS X)
+
+  * support for latest ffmpeg
+
+  * bug fixes
+
+
 0.4.4:
 ------
 
@@ -318,4 +328,3 @@
     * Fixed countless bugs 
 
     * Reworked network code (support for unix domain sockets + named pipes)
-

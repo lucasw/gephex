@@ -257,7 +257,6 @@ private slots:
 							 path.c_str(),
 							 m_fullMask.c_str());
 
-      //      QStringList::const_iterator it=files.begin();
       std::string name("");
       for (QStringList::Iterator it = files.begin(); it != files.end(); ++it)
 	{

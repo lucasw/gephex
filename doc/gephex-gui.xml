@@ -1,18 +1,29 @@
 <?xml version="1.0"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<book>
-<article>
 <refentry id="gephex-gui">
-  <docinfo>
+  <refentryinfo>
     <author>
       <firstname>Martin</firstname> <surname>Bayer</surname>
       <affiliation>
-        <address><email>bayer@fmi.uni-passau.de</email></address>
+	<address><email>martin@gephex.org</email></address>
       </affiliation>
     </author>
-  </docinfo>
+    <author>
+      <firstname>Philipp</firstname> <surname>Promesberger</surname>
+      <affiliation>
+	<address><email>coma@gephex.org</email></address>
+      </affiliation>
+    </author>
+    <author>
+      <firstname>Georg</firstname> <surname>Seidel</surname>
+      <affiliation>
+        <address><email>georg@gephex.org</email></address>
+      </affiliation>
+    </author>
+  </refentryinfo>
+
   <refmeta>
     <refentrytitle>gephex-gui</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -28,7 +39,7 @@
 
 <para>
 <application>gephex-gui</application>
-is the graphical front-end of the interactive video effect system GePhex.
+is the graphical front-end of the interactive video effect system gephex.
 When the engine (<citerefentry> <refentrytitle>gephex-engine</refentrytitle> <manvolnum>1</manvolnum> </citerefentry>) is not running, a new engine is spawned. Otherwise the gui connects to the running engine.
 
 The GEPHEX_XTERM environment variable is used to choose
@@ -59,17 +70,9 @@ and data flow with interactive controls like joysticks or midi devices.</para>
     <para><citerefentry> <refentrytitle>gephex-engine</refentrytitle>
     <manvolnum>1</manvolnum> </citerefentry></para>
     <para>
-      http://www.gephex.org for the original source and main arch archive.
+      http://www.gephex.org for the original source archive.
     </para>
   </refsect1>
 
-  <refsect1>
-    <title>Authors</title>
-    <para>Martin Bayer <email>martin@gephex.org</email></para>
-    <para>Georg Seidel <email>georg@gephex.org</email></para>
-    <para>Philipp Promesberger <email>coma@gephex.org</email></para>
-  </refsect1>
-
 </refentry>
-</article>
-</book>
+

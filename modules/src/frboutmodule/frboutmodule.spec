@@ -130,7 +130,7 @@ inputs
         hidden            = true
         default           = default
         widget_type       = combo_box
-        values            = default,SDL,GL,aalib,vloopback
+        values            = default,x11,SDL,GL,aalib,vloopback,quartz
     }
 
     server

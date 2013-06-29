@@ -28,7 +28,7 @@ if [ ! -e $CONF_DIR_BASE ]; then
     cat $DATA_PATH/gephex.conf.default | sed s:__CONF_DIR__:$CONF_DIR:g | sed s:__HOME_DIR__:$HOME_DIR:g > $CONF_DIR/gephex.conf
 
     echo "Copying example graphs..."
-    GRAPHS="example1 example2 example3 noise fzcam4"
+    GRAPHS="example1 example2 example3 noise fzcam4 kaleidoskop"
     for i in $GRAPHS; do cp $DATA_PATH/graphs/$i $CONF_DIR/graphs; done
 
     echo "...done!"

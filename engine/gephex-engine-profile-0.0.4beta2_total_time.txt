@@ -1,0 +1,130 @@
+
+sortiert nach % zeit func+subfunc
+---------------------------------------------------------------------------------------------
+
+1,0		1144,220	1,0	1144,220	2819879	std::ios_base::rdstate(void)(controller.obj)
+
+1,0		23,888	0,0	1208,305	7233	std::basic_istream<char,structstd::char_traits<char>>::read(char*,int)(bufferutils.obj)
+
+1,0		266,572	0,2	1135,249	55270	std::operator<<(classstd::basic_ostream<char,structstd::char_traits<char>>&,char)(modelstatusreceivernet.obj)
+
+1,0		321,926	0,3	1126,855	7233	std::basic_streambuf<char,structstd::char_traits<char>>::xsgetn(char*,int)(controller.obj)
+
+1,0		33,443	0,0	1140,272	62	model::Model::moduleClassUnloaded(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,0		4,267	0,0	1112,866	1208	renderer::Renderer::setInputValue(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,0		42,710	0,0	1161,664	1489	utils::operator<<(classstd::basic_ostream<char,structstd::char_traits<char>>&,classutils::String
+1,0		5,905	0,0	1132,760	7233	std::basic_streambuf<char,structstd::char_traits<char>>::sgetn(char*,int)(bufferutils.obj)
+
+1,0		8,763	0,0	1164,235	33	model::Model::changeRenderedGraph(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,0		9,130	0,0	1125,014	62	dllloader::ModuleInfo::enrichInfo(charconst*,int,classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>
+1,1		0,137	0,0	1295,574	1	dllloader::DllLoader::unloadAll(void)(dllloader.obj)
+
+1,1		1,374	0,0	1234,072	257	engine::NetLogger::error(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,1		1,421	0,0	1254,286	276	_moduleLog(dllloader.obj)
+
+1,1		1283,581	1,1	1283,581	855288	operatordelete(void*)(delop.obj)
+
+1,1		2,884	0,0	1291,267	62	dllloader::DllLoader::unloadModuleClass(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,2		0,021	0,0	1360,895	1	engine::Controller::~Controller(void)(controller.obj)
+
+1,2		113,555	0,1	1360,192	6999	utils::ownSubstr(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,2		558,398	0,5	1390,744	725289	std::ios_base::operator!(void)(engineconfig.obj)
+
+1,3		15,419	0,0	1474,107	503	utils::StructScanner::processContent(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,3		298,137	0,3	1529,111	78229	std::basic_streambuf<char,structstd::char_traits<char>>::xsputn(charconst*,int)(controller.obj)
+
+1,4		28,956	0,0	1670,817	13085	net::Tagger<classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>,classnet::StringTagUtil>::send(class
+1,4		73,782	0,1	1602,893	78229	std::basic_streambuf<char,structstd::char_traits<char>>::sputn(charconst*,int)(controller.obj)
+
+1,5		1109,169	1,0	1706,469	1368590	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::_Eos(unsignedint)(controller.obj)
+
+1,5		112,892	0,1	1752,428	85686	std::list<classIInput*,classstd::allocator<classIInput*>
+1,5		1180,172	1,0	1799,740	1434785	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::max_size(void)(controller.obj)
+
+1,5		244,553	0,2	1754,859	33793	std::num_put<char,classstd::ostreambuf_iterator<char,structstd::char_traits<char>>>::_Iput(classstd::ostreambuf_iterator<char,struct
+1,5		336,515	0,3	1793,986	418559	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::~basic_string<char,structstd::char_traits<char>,classstd::allocator<char>
+1,6		100,352	0,1	1891,056	13558	COutput::getConnectedInputs(void)(c_output.obj)
+
+1,6		119,624	0,1	1818,487	32304	std::num_put<char,classstd::ostreambuf_iterator<char,structstd::char_traits<char>>>::do_put(classstd::ostreambuf_iterator<char,struct
+1,6		32,147	0,0	1850,634	32304	std::num_put<char,classstd::ostreambuf_iterator<char,structstd::char_traits<char>>>::put(classstd::ostreambuf_iterator<char,struct
+1,6		495,145	0,4	1839,273	114220	std::list<classIInput*,classstd::allocator<classIInput*>
+1,6		611,978	0,5	1883,914	114220	std::list<classIInput*,classstd::allocator<classIInput*>
+1,7		1004,138	0,9	2028,550	1454981	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::_Tidy(bool)(controller.obj)
+
+1,7		121,743	0,1	1934,125	99953	std::list<classIInput*,classstd::allocator<classIInput*>
+1,8		1,509	0,0	2092,249	503	utils::StructReader::StructReader(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,8		1,626	0,0	2072,619	503	utils::StructScanner::scan(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+1,8		2036,647	1,8	2036,852	657	CType::convert(classITypeconst&,classTypeAttributesconst
+1,9		300,288	0,3	2222,277	68771	std::operator<<(classstd::basic_ostream<char,structstd::char_traits<char>>&,charconst
+2,0		1525,006	1,3	2326,060	1927664	std::ios_base::good(void)(controller.obj)
+
+2,0		188,567	0,2	2331,824	85686	CInput::update(void)(c_input.obj)
+
+2,1		745,790	0,6	2452,045	306548	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::_Copy(unsignedint)(controller.obj)
+
+2,2		371,733	0,3	2606,726	211400	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::assign(charconst*,unsigned
+2,4		106,097	0,1	2750,730	9458	utils::operator<<(classstd::basic_ostream<char,structstd::char_traits<char>>&,classutils::Buffer
+2,5		135,469	0,1	2958,863	11498	utils::checktagloop(classstd::basic_istream<char,structstd::char_traits<char>>&,classstd::basic_string<char,struct
+2,5		193,565	0,2	2913,040	32304	std::basic_ostream<char,structstd::char_traits<char>>::operator<<(int)(namedpipeserversocket.obj)
+
+2,6		1567,401	1,3	2984,317	1031223	std::basic_filebuf<char,structstd::char_traits<char>>::uflow(void)(engineconfig.obj)
+
+2,6		271,540	0,2	3017,891	211135	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::assign(charconst*)
+2,8		2,261	0,0	3288,210	64	dllloader::DllLoader::loadModule(classutils::AutoPtr<classutils::SharedLibrary>,classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>
+2,8		299,755	0,3	3307,532	26672	std::num_get<char,classstd::istreambuf_iterator<char,structstd::char_traits<char>>>::_Getifld(char*,class
+2,8		46,929	0,0	3233,758	64	dllloader::DllLoader::constructModuleClass(classCModuleFunctionTable*,classutils::AutoPtr<classutils::SharedLibrary>,classstd::basic_string<char,struct
+2,9		268,881	0,2	3383,527	209940	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>
+3,0		0,427	0,0	3482,957	64	dllloader::DllLoader::loadModuleClass(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+3,0		950,707	0,8	3524,087	791481	std::basic_streambuf<char,structstd::char_traits<char>>::sbumpc(void)(engineconfig.obj)
+
+3,1		111,450	0,1	3582,221	26354	std::num_get<char,classstd::istreambuf_iterator<char,structstd::char_traits<char>>>::do_get(classstd::istreambuf_iterator<char,struct
+3,1		26,117	0,0	3608,339	26354	std::num_get<char,classstd::istreambuf_iterator<char,structstd::char_traits<char>>>::get(classstd::istreambuf_iterator<char,struct
+3,5		0,410	0,0	4030,197	66	ModuleClassLoaderControlSenderNet::dataReceived(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+3,8		1360,733	1,2	4406,252	794442	std::basic_istream<char,structstd::char_traits<char>>::ipfx(bool)(engineconfig.obj)
+3,8		272,904	0,2	4360,497	27812	SimpleStrategy::dependencies(classstd::list<classIInput*,classstd::allocator<classIInput
+4,2		0,140	0,0	4848,497	21	model::GraphFileSystem::loadGraph(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+4,3		609,657	0,5	5015,909	794442	std::basic_istream<char,structstd::char_traits<char>>::sentry::sentry(classbasic_istream<char,structstd::char_traits<char>>::sentry
+4,5		0,395	0,0	5231,258	66	model::`anonymousnamespace'::lookForGraph(classbasic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::basic_string<char,struct
+4,5		118,112	0,1	5264,973	26354	std::basic_istream<char,structstd::char_traits<char>>::operator>>(int&)(structreader.obj)
+4,9		1441,029	1,2	5681,741	1128237	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::_Grow(unsignedint,bool)(controller.obj)
+5,3		12,071	0,0	6174,722	7712	renderer::ControlValueReceiverWrapper::controlValueChanged(int,int,classutils::Bufferconst&)(renderer.obj)
+5,3		1328,732	1,1	6096,152	879460	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::append(unsignedint,char)(controller.obj)
+5,3		35,987	0,0	6162,651	7712	model::Model::controlValueChanged(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+5,5		70,291	0,1	6435,069	8957	ControlValueReceiverNet::controlValueChanged(int,int,classutils::Bufferconst&)(controlvaluereceivernet.obj)
+5,9		744,493	0,6	6840,644	879460	std::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>::operator+=(char)(engineconfig.obj)
+6,0		3,989	0,0	6936,660	33	model::Model::changeEditGraph(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+6,8		265,686	0,2	7927,456	101636	CModule::dependencies(void)(c_module.obj)
+7,6		8833,188	7,6	8833,188	342	utils::Timing::sleep(unsignedlong)(timing.obj)
+8,0		0,255	0,0	9342,007	1	model::Model::updateFileSystem(void)(model.obj)
+8,6		184,097	0,2	9962,704	7233	utils::operator>>(classstd::basic_istream<char,structstd::char_traits<char>>&,classutils::Buffer
+8,7		0,084	0,0	10050,943	1	engine::Controller::Controller(classController::EngineConfigconst&)(controller.obj)
+9,0		570,169	0,5	10502,352	14431	renderer::`anonymousnamespace'::sendInputValues(classutils::AutoPtr<classrenderer::ModuleControlBlock>,classIControlValueReceiver*,class
+9,5		2277,694	2,0	11073,390	758777	std::basic_istream<char,structstd::char_traits<char>>::get(void)(engineconfig.obj)
+11,5		1444,208	1,2	13382,679	755390	std::basic_istream<char,structstd::char_traits<char>>::get(char&)(xmlutils.obj)
+17,1		975,968	0,8	19887,616	102391	utils::checktag(classstd::basic_istream<char,structstd::char_traits<char>>&,classstd::basic_string<char,struct
+17,2		0,581	0,0	19982,378	2	model::Model::sendExistingGraphs(void)(model.obj)
+17,3		0,017	0,0	20030,708	2	model::Model::synchronize(void)(model.obj)
+
+24,9		4,132	0,0	28864,527	3	model::GraphFileSystem::getNames(classstd::map<classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>,class
+25,2		2,109	0,0	29215,263	132	ModelControlSenderNet::dataReceived(classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>const
+28,6		0,636	0,0	33262,535	202	net::Tagger<classstd::basic_string<char,structstd::char_traits<char>,classstd::allocator<char>>,classnet::StringTagUtil>::dataReceived(class
+28,7		0,664	0,0	33276,209	202	net::Tagger<unsignedint,classnet::UInt32TagUtil>::dataReceived(classutils::Bufferconst&)
+28,7		0,726	0,0	33271,229	202	net::TagDispatcher<unsignedint>::dataReceived(unsignedintconst&,classutils::Buffer
+28,7		4,543	0,0	33285,269	2463	net::Protocol::dataReceived(classutils::Bufferconst&)(protocol.obj)
+
+28,8		107,698	0,1	33389,388	169	model::deserializeGraph(classstd::basic_istream<char,structstd::char_traits<char>>&,classmodel::Graph
+29,0		19,566	0,0	33663,736	2484	engine::NetPoller::run(void)(controller.obj)
+
+31,5		35303,696	30,4	36574,905	14431	CModule::update(void)(c_module.obj)
+
+53,0		657,420	0,6	61566,228	2300	renderer::RuntimeSystem::update(classIControlValueReceiver*,classIModuleStatisticsReceiver*)(runtimesystem.obj)
+
+53,1		10,937	0,0	61675,903	2475	renderer::Renderer::run(void)(renderer.obj)
+
+90,0		0,002	0,0	104478,651	1	engine::Controller::start(void)(controller.obj)
+
+90,0		68,668	0,1	104478,649	1	engine::Scheduler::run(void)(scheduler.obj)
+
+99,9		0,024	0,0	115954,437	1	_main(main.obj)
+
+	

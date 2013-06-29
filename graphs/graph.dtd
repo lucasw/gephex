@@ -1,0 +1,28 @@
+<!ELEMENT graph (id, name, nodes, connections, snapshots)>
+
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT nodes (node+)>
+<!ELEMENT connections (connect+)>
+<!ELEMENT snapshots (snapshot+)>
+
+<!ELEMENT node (id, type, data)>
+<!ELEMENT type (#PCDATA)>
+
+<!ELEMENT snapshot (id, name, values)>
+
+<!ELEMENT values (value+)>
+
+<!ELEMENT value (plug, buf)>
+<!ELEMENT plug (node_id, plug_id)>
+<!ELEMENT node_id (#PCDATA)>
+<!ELEMENT plug_id (#PCDATA)>
+<!ELEMENT buf (#PCDATA)>
+
+<!ELEMENT connect (from, to)>
+<!ELEMENT from (node_id, plug_id)>
+<!ELEMENT to (node_id, plug_id)>
+
+<!ELEMENT data (dataitem+)>
+<!ELEMENT dataitem (key, buf)>
+<!ELEMENT key (#PCDATA)>

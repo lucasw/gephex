@@ -24,11 +24,16 @@
 #include <iostream>
 #include <map>
 
+#if defined _MSC_VER
 #define EMULATE_INTTYPES
-#include "avformat.h"
-#include "avcodec.h"
-#include "avutil.h"
+#endif
 
+extern "C"
+{
+#include "libavformat/avformat.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/avutil.h"
+}
 
 class FFMpegWriter
 {

@@ -34,6 +34,10 @@
 #include "gdioutput.h"
 #endif
 
+#if defined(OS_DARWIN)
+#include "quartzoutput.h"
+#endif
+
 #if defined(HAVE_X11)
 #include "x11output.h"
 #endif
@@ -351,15 +355,31 @@ int init(logT log_function)
     {
       char et[TEMP_BUF_SIZE];
       snprintf(et, sizeof(et),
-               "Could not init GDI driver: '%s' - skipping");
+               "Could not init GDI driver: '%s' - skipping",
+	       buffer);
       s_log(0, et);
     }
   else
     insert_driver("GDI",    GDI_get_driver);
 #endif
 
+#if defined(OS_DARWIN)
+  if (!Quartz_init(buffer, sizeof(buffer)))
+    {
+      char et[TEMP_BUF_SIZE];
+      snprintf(et, sizeof(et),
+               "Could not init quartz driver: '%s' - skipping",
+	       buffer);
+      s_log(0, et);
+    }
+  else
+    {
+      insert_driver("quartz", Quartz_get_driver);
+    }
+#endif
+
 #if defined(HAVE_X11)
-  insert_driver("X11",    X11_get_driver);
+  insert_driver("x11",    X11_get_driver);
 #endif
 
 #if defined(WITH_SDL)

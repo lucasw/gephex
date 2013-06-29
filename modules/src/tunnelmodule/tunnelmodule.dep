@@ -1,8 +1,0 @@
-# Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von tunnelmodule.mak
-
-!IF  "$(CFG)" == "tunnelmodule - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "tunnelmodule - Win32 Debug"
-
-!ENDIF 
-

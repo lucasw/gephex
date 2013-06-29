@@ -46,7 +46,8 @@ static int s_ysize;
 }*/
 
 // init a opengl window by the native windowsystem
-int initOutput(const char* caption, const char* display_name ,int xres, int yres, int bpp)
+int initOutput(const char* caption, const char* display_name,
+	       int xres, int yres, int bpp)
 {
   int dummy; // only to trick the glxquery fun
   XVisualInfo  *vi; // to store some info abot the screen

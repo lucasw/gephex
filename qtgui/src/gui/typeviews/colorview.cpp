@@ -42,6 +42,7 @@ namespace gui
       : TypeView(parent, params), m_current("")
     {
       m_select = new QPushButton(this);
+      m_select->setAutoFillBackground(true);
 
       m_layout->addWidget(m_select);
       m_select->show();

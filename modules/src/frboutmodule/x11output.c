@@ -49,8 +49,8 @@
 
 //-----------------------------------------------------------------------
 
-static const int MAX_RES_X = 1024;//2560;
-static const int MAX_RES_Y = 768;//1600;
+static const int MAX_RES_X = 2560;
+static const int MAX_RES_Y = 1600;
 
 static const int USE_XSHM = 0x01;
 static const int USE_XV   = 0x02;

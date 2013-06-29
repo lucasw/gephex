@@ -1,0 +1,29 @@
+
+
+tcpserver/-- (connect)
+   client  | (accept)     [1]             [1]               [n]
+   socket  -----------> ISocket  <---- Protocol <------ Tagger<uint_32>
+                          |                                 ^   
+                          |	    (registerDataListener)  | 
+			  v [1]				    |  [n]
+                     SocketAdaptor		    Tagger<std::string>
+                          | [1]			            ^                 
+		       Protocol                             | (constructor)
+	    		  v [1]			            |  [n]
+       	    	    Tagger<uint_32>		       XReceiverNet
+	    		  |			            ^              
+	    		  | (registerInterpreter)           |                 
+	    		  v [1]			            |  [m]            
+       	           TagDispatcher<uint_32>           Model/Renderer/Sequencer/
+	    		  |                           Guimodel...
+	    		  | (registerDataListener) 
+	    		  v [m]
+		   Tagger<std:.string>
+			  |
+			  | (registerInterpreter)
+			  v [m]
+	    	      XSenderNet
+	    		  |
+	    		  | (registerXReceiver)
+	    		  v [m]
+		Model/Renderer/Sequencer/Guimodel...

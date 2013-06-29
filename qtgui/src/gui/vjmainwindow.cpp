@@ -309,14 +309,14 @@ namespace gui
     quitAction->setToolTip ("exit the application");
     quitAction->setShortcut(QString("Ctrl+Q"));
     quitAction->setEnabled(true);
-    connect(quitAction, SIGNAL(activated()),
+    connect(quitAction, SIGNAL(triggered()),
 	    this, SLOT(quitSlot()));
 
     newGraphAction= new QAction("NewGraphAction", this);
     newGraphAction->setText("New Graph");
     newGraphAction->setToolTip ("create a new graph");
     newGraphAction->setEnabled(false);
-    connect(newGraphAction,SIGNAL(activated()),this,SLOT(newGraph()));
+    connect(newGraphAction,SIGNAL(triggered()),this,SLOT(newGraph()));
 
     rendererStateAction= new QAction("RendererStateAction", this);
     rendererStateAction->setText("start/stop rendering");
@@ -324,35 +324,35 @@ namespace gui
     rendererStateAction->setEnabled(false);
     rendererStateAction->setShortcut(QString("Ctrl+ "));
     rendererStateAction->setCheckable( false );
-    connect(rendererStateAction, SIGNAL(activated()),
+    connect(rendererStateAction, SIGNAL(triggered()),
 	    this,SLOT(setRendererState( )));      
 
     connectToEngineAction= new QAction("ConnectToEngineAction", this);
     connectToEngineAction->setText("Connect");
     connectToEngineAction->setToolTip ("connect to the engine");
     connectToEngineAction->setEnabled(false);
-    connect(connectToEngineAction,SIGNAL(activated()),
+    connect(connectToEngineAction,SIGNAL(triggered()),
 	    this,SLOT(connectToEngine()));
 
     disConnectToEngineAction= new QAction("disConnectToEngineAction", this);
     disConnectToEngineAction->setText("Disconnect");
     disConnectToEngineAction->setToolTip ("disconnect from the engine");
     disConnectToEngineAction->setEnabled(false);
-    connect(disConnectToEngineAction,SIGNAL(activated()),
+    connect(disConnectToEngineAction,SIGNAL(triggered()),
 	    this,SLOT(disconnectFromEngine()));
 
     synchronizeEngineAction= new QAction("synchronizeEngineAction", this);
     synchronizeEngineAction->setText("Sync");
     synchronizeEngineAction->setToolTip ("sync the gui with the engine");
     synchronizeEngineAction->setEnabled(false);
-    connect(synchronizeEngineAction,SIGNAL(activated()),
+    connect(synchronizeEngineAction,SIGNAL(triggered()),
 	    this,SLOT(synchronize()));
     
     shutDownEngineAction= new QAction("shutDownEngineAction", this);
     shutDownEngineAction->setText("kill the engine");
     shutDownEngineAction->setToolTip ("terminates the engine process");
     shutDownEngineAction->setEnabled(false);
-    connect(shutDownEngineAction,SIGNAL(activated()),
+    connect(shutDownEngineAction,SIGNAL(triggered()),
 	    this,SLOT(shutDown()));
 
     /*    keyGrabStateAction= new QAction(this,"keyGrabStateAction");
@@ -367,19 +367,19 @@ namespace gui
     aboutAction->setText("About GePhex");
     //aboutAction->setToolTip ("shows some stuff");
     aboutAction->setEnabled(true);
-    connect(aboutAction,SIGNAL(activated()),this,SLOT(aboutSlot()));
+    connect(aboutAction,SIGNAL(triggered()),this,SLOT(aboutSlot()));
 
     changesAction= new QAction("changesAction", this);
     changesAction->setText("Changes");
     changesAction->setToolTip ("Shows changes to previous version");
     changesAction->setEnabled(true);
-    connect(changesAction,SIGNAL(activated()),this,SLOT(changesSlot()));
+    connect(changesAction,SIGNAL(triggered()),this,SLOT(changesSlot()));
 
     m_showLogAction = new QAction("showLogAction", this);
     m_showLogAction->setText("Show Message Window");
     m_showLogAction->setCheckable( true );
     m_showLogAction->setToolTip("Shows/hides the Message Window");
-    connect(m_showLogAction, SIGNAL(activated()), this, SLOT(showLogSlot()));
+    connect(m_showLogAction, SIGNAL(triggered()), this, SLOT(showLogSlot()));
   }
   
   void VJMainWindow::buildMenuBar(void)

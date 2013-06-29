@@ -1,0 +1,20 @@
+<model>
+<moduleinfos>
+<moduleinfo> "mod_stringModule" "String" 0  1 "typ_string""String" 1 </moduleinfo>
+<moduleinfo> "mod_glOutputModule" "GLoutput" 1 "typ_framebuffer""Bild" 0  0 </moduleinfo>
+<moduleinfo> "mod_tunnelModule" "Tunnel" 3 "typ_number""Zahl""typ_number""Zahl""typ_framebuffer""Bild" 1 "typ_framebuffer""Bild" 0 </moduleinfo>
+</moduleinfos>
+<nodes>
+<node> mod_tunnelModule 249 151 </node>
+<node> mod_glOutputModule 333 125 </node>
+</nodes>
+<controlmodules>
+<node> mod_stringModule 37 49 </node>
+</controlmodules>
+<connections>
+<connection> 0 0 1 0 </connection>
+</connections>
+<controls>
+<control> 2 0 3 1 37 49 </control>
+</controls>
+</model>

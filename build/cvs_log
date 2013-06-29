@@ -1,0 +1,112 @@
+#!/usr/bin/perl -Wall
+
+# @cvslog  contains the output of cvs log
+# %empty   contains the number of empty log messages, key is the author's name
+# %authors contains 1s; keys are authors' names - so keys(%authors) is a list
+#          of all authors' names
+
+$\='';
+
+@cvslog = `cvs -z9 log`;
+
+
+print "Project statistics:\n\n";
+print "Empty log messages:\n";
+
+# parse cvs log
+for ($i=0; $i<@cvslog ; $i++) {
+    chomp($cvslog[$i]);
+    if ($cvslog[$i] =~ /author: (\w*);/){
+	$author=$1;
+	
+	$authors{$author}=1; # this builds the list of authors; after this, 
+	                     # keys($authors) is the list of all authors;
+
+	# ------- check for empty log messages --------------------
+	if ($cvslog[$i+1] eq "*** empty log message ***\n") {
+	    unless ($empty{$author}){ 
+		$empty{$author}=1; # initialize hash;
+	    } else {
+		$empty{$author}++; 
+	    }
+	}
+	# ---------------------------------------------------------
+	# --------- count lines added/removed ---------------------
+	if ($cvslog[$i] =~ /lines: \+(\d+) \-(\d+)/){
+	    $add = $1;
+	    $rem = $2;
+	    $del = $1-$2;
+	    # added lines
+	    unless ($added{$author}){
+		$added{$author}=$add;
+	    } else {
+		$added{$author}+=$add;
+	    }	    
+	    # removed lines
+	    unless ($removed{$author}){
+		$removed{$author}=$rem;
+	    } else {
+		$removed{$author}+=$rem;
+	    }	    
+	    # delta
+	    unless ($delta{$author}){
+		$delta{$author}=$del;
+	    } else {
+		$delta{$author}+=$del;
+	    }	    
+	}
+    }
+}
+
+#ensure that every author is entered in %empty, with 0 if not previously present
+foreach(sort(keys(%authors))){
+    unless ($empty{$_}){
+   	$empty{$_} = 0;
+    }
+}
+
+#make array of references to two-element (<author>,<empty_count>) arrays
+foreach (keys(%empty)) {
+    push(@refarr, [$_,$empty{$_}]);
+}
+
+#sort by name
+
+print "Sorted by name:\n";
+foreach(sort {$$a[0] cmp $$b[0]} @refarr) {
+    print "$$_[0] : $$_[1] \n";
+}
+
+#sort by value
+
+print "Sorted by value:\n";
+foreach(reverse(sort {$$a[1] <=> $$b[1]} @refarr)) {
+    print "$$_[0] : $$_[1] \n";
+}
+
+
+print "\nLOC Statistics:\n";
+
+#ensure that every author is entered in %added, %removed and %delta with 0 if not previously present
+foreach(sort(keys(%authors))){
+    unless ($added{$_}){
+   	$added{$_} = 0;
+    }
+    unless ($removed{$_}){
+   	$removed{$_} = 0;
+    }
+    unless ($delta{$_}){
+   	$delta{$_} = 0;
+    }
+}
+foreach (sort(keys(%authors))) {
+    push(@loc, [$_, $added{$_}, $removed{$_}, $delta{$_}]);
+}
+
+print "Sorted by name:\n";
+print "lines added, removed, delta\n";
+
+foreach(@loc){
+    print "$$_[0]: $$_[1], $$_[2], $$_[3]\n";
+}
+

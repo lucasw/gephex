@@ -46,6 +46,7 @@
     <year>2003</year>
     <year>2004</year>
     <year>2005</year>
+    <year>2007</year>
 <holder>Martin Bayer</holder>
 <holder>Georg Seidel</holder>
 </copyright>
@@ -57,8 +58,8 @@
   </abstract>
  </bookinfo>
 
- <chapter><title>Introduction</title>
-  <sect1><title>What is GePhex</title>
+ <chapter id="chapter.introduction"><title>Introduction</title>
+  <sect1 id="sec.what_is_gephex"><title>What is GePhex</title>
 
 <para>GePhex is a software-based interactive video-effect system. Video jockeys can use this system to modify or recombine existing footage or create new video effects in an interactive process. External devices like joysticks, midi-keyboards, or web-cams can influence the real-time video generation.</para>
 
@@ -90,7 +91,7 @@ different levels:
 </itemizedlist>
 </para>
   </sect1>
-  <sect1><title>GePhex's History</title>
+  <sect1 id="sec.gephex_history"><title>GePhex's History</title>
 <para>
 
 <itemizedlist>
@@ -142,12 +143,17 @@ different levels:
       effects was added to version 0.4.3.
   </para></listitem>
 
+  <listitem><para>
+      In April 2007, frei0r 1.1 support was added and the GUI was ported to
+      Qt 4.1 in the release 0.4.4.
+  </para></listitem>
+
 </itemizedlist>
 
 </para>
   </sect1>
 
-  <sect1><title>Security Note</title>
+  <sect1 id="sec.security_note"><title>Security Note</title>
     <para>
       With the default configuration the GePhex engine listens at the
       TCP port 6666. The GUI connects to this port to control the engine.
@@ -159,8 +165,8 @@ different levels:
   </sect1>
 
 
-<sect1><title>GePhex's Components</title>
-  <sect2><title>The Engine</title>
+<sect1 id="sec.gephex_components"><title>GePhex's Components</title>
+  <sect2 id="sec.the_engine"><title>The Engine</title>
     <para>
       The engine can be started from the console with the
       <filename>gephex-engine</filename> command.
@@ -199,11 +205,12 @@ list of directories, which are searched by the engine in the given
 order.
 </para>
 
+<para>
 <varname>media_path</varname> is used for both engine and gui. It tells
 the engine and the gui where media (i.e. images, videos, fonts, ...)
 is located.
 
-<table frame="none"><title>Options for gephex-engine</title>
+<table frame="none" id="table.options_gephex_engine"><title>Options for gephex-engine</title>
 <tgroup cols="3">
   <colspec align="left"/>
   <colspec align="left"/>
@@ -357,6 +364,7 @@ is located.
   </tbody>
   </tgroup>
 </table>
+</para>
 
 <para>
 All options that can be set in the config file can be overridden from the
@@ -394,7 +402,7 @@ The allowed options are:
 
 </sect2>
 
-<sect2><title>The GUI (graphical user interface)</title>
+<sect2 id="sec.the_gui"><title>The GUI (graphical user interface)</title>
 <para>
 The gui can be started on the console with the <filename>gephex-gui</filename> command.
 There are two environment variablse that influence the guis behaviour,
@@ -428,7 +436,7 @@ semicolon separated list of directories, which contain media for GePhex
 (i.e. images, videos, fonts, ...).
 </para>
 
-<table frame="none"><title>Options for gephex-gui</title>
+<table frame="none" id="table.options_gephex_gui"><title>Options for gephex-gui</title>
 <tgroup cols="3">
   <colspec align="left"/>
   <colspec align="left"/>
@@ -518,7 +526,7 @@ The allowed options are:
 
 </sect2>
 
-<sect2><title>The GePhex Script</title>
+<sect2 id="sec.the_gephex_script"><title>The GePhex Script</title>
 <para>
   On unix platforms, a script called gephex is installed.
   It takes care of starting the engine and the gui.
@@ -551,7 +559,7 @@ you can provide the GEPHEX_XTERM* variables for the gui, too. </para></note>
 </sect1>
 </chapter>
 
-<chapter><title>Installation</title>
+<chapter id="chapter.installation"><title>Installation</title>
 <para>Since GePhex is free software you can get the source code and compile it on you own.
 Or if you have one of our core platforms you can download the precompiled binaries from our <ulink url="http://www.gephex.org"><citetitle>website</citetitle></ulink>.</para>
 
@@ -567,41 +575,19 @@ Or if you have one of our core platforms you can download the precompiled binari
   <para>
     Before we can start we must get a version of the GePhex source code.
     There are official releases as tar balls on the 
-    <ulink url="http://www.gephex.org/download.php"><citetitle>website</citetitle></ulink> and the developer versions available via <ulink url="http://www.gnu.org/software/gnu-arch/"><citetitle>arch</citetitle></ulink>.
+    <ulink url="http://www.gephex.org/download.php"><citetitle>website</citetitle></ulink> and the developer versions available via <ulink url="http://www.abridgegame.org/darcs/"><citetitle>darcs</citetitle></ulink>.
   </para> 
 
 
-  <sect2> <title> Getting the latest Version from the Arch Archive </title>
+  <sect2 id="sec.getting_sources_from_repository"> <title> Getting the latest Version from the Repository </title>
     <para>
-      I assume that you use the tla arch-client. 
-      To get the latest version you need to register the gephex archive.
-      The name of the archive is <filename>gephex@gephex.org--2004</filename>
-      and the location is <filename>http://arch.gephex.org/gephex/2004</filename>.
+      To get the latest sources, you need <ulink url="http://darcs.net/DarcsWiki/CategoryBinaries"><citetitle>darcs</citetitle></ulink>. The following command will fetch the latest version:
       <screen>
-bash@host:~$ tla register-archive http://arch.gephex.org/gephex/2004
-Registering archive: gephex@gephex.org--2004
-bash@host:~$ 
+bash@host:~$ darcs get http://darcs.gephex.org/gephex/gephex--main--0.4
       </screen>
-    </para>
-
-   <para>
-      The full name of the revision is <filename>gephex--main--0.4</filename>:
-      <screen>
-bash@host:~$ tla get -A gephex@gephex.org--2004 gephex--main--0.4 GePhex
-* from archive cached: gephex@gephex.org--2004/gephex--main--0.4--patch-1727
-* patching for revision: gephex@gephex.org--2004/gephex--main--0.4--patch-1728
-* making pristine copy
-* tree version set gephex@gephex.org--2004/gephex--main--0.4
-bash@host:~$
-      </screen>
-      This command will fetch the latest version of gephex into the directory
-      <filename>./GePhex</filename>.
-    </para>
-    <para>
-    If you have questions regarding arch please have a look at the projects <ulink url="http://www.gnu.org/software/gnu-arch/"><citetitle>homepage</citetitle></ulink>.
     </para>
   </sect2>
-  <sect2> <title> Getting a Distribution-Tarball </title>
+  <sect2 id="sec.getting_distribution"> <title> Getting a Distribution-Tarball </title>
    <para>
       Visit our
       <ulink url="http://gephex.org/download.php">
@@ -626,9 +612,9 @@ gephex-0.4/INSTALL
 
 <sect2 id="sec.building.unix"><title>Building on Unix Platforms</title>
 
-  <sect3> <title> Bootstrapping </title>
+  <sect3 id="sec.bootstrapping"> <title> Bootstrapping </title>
    <para>
-     This step is only necessary when you got the sources from the arch
+     This step is only necessary when you got the latest sources from the
      repository. The distributed tar balls are already "bootstrapped".
    </para>
 
@@ -692,7 +678,7 @@ See './configure --help' for available options
 
 </sect3>
 
-<sect3> <title> Configure and Build </title>
+<sect3 id="sec.configure_and_build"> <title> Configure and Build </title>
   <para>
     This step configures the build system for your system.
     You need the following libraries to get all the features of GePhex:
@@ -803,7 +789,7 @@ make[3]: Entering directory `/home/martin/code/gephex/GePhex/base/src'
   </para>
 </sect3>
 
-<sect3> <title> Installation </title>
+<sect3 id="sec.installation"> <title> Installation </title>
   <para>
     The following command installs the software on your system.
     The two binaries for the user interface <filename>gephex-gui</filename>
@@ -823,7 +809,7 @@ bash@host:~/GePhex# make install
   </note>
 </sect3>
 
-<sect3> <title>Create your own Debian Packages</title>
+<sect3 id="sec.create_debian_package"> <title>Create your own Debian Packages</title>
 
 <para>Users of the Debian GNU/Linux OS can create Debian binary packages from the source and install these as root with dpkg.</para>
 
@@ -850,7 +836,7 @@ bash@host:~/GePhex# make install
 </itemizedlist>
 </para>
 
-<para>Not all necessary files for building the Debian packages are included in the dist tar balls. You need to get a full copy of the gephex source tree from the arch repository. The necessary steps to do this are described above.</para> 
+<para>Not all necessary files for building the Debian packages are included in the dist tar balls. You need to get a full copy of the gephex source tree from the repository. The necessary steps to do this are described above.</para> 
 
 <para>First bootstrap the clean source tree by calling the bootstrap.sh script in the root of the source tree. Then build the packages with the dpkg-buildpackage commando. After a successful build you can install the generated packages as superuser with dpkg.
 
@@ -866,8 +852,10 @@ bash@host:~/GePhex$ sudo dpkg -i ../gephex_0.4-1_i386.deb
 
 <sect2 id="sec.building.macosx"><title>Building on Mac OS X</title>
 
+<para>
 Content has been moved to this wiki
 <ulink url="http://wiki.gephex.org/BuildMacOSX"> <citetitle>article</citetitle></ulink>.
+</para>
 
 </sect2>
 
@@ -881,7 +869,7 @@ less.
 See this wiki <ulink url="http://wiki.gephex.org/BuildMinGW"> <citetitle>article</citetitle> </ulink>.
 </para>
 
-<sect3><title>What you need</title>  
+<sect3 id="sec.what_you_need"><title>What you need</title>  
 <para>
 The following programs and libraries are needed
 to compile gephex on win32:
@@ -901,7 +889,7 @@ to compile gephex on win32:
 </itemizedlist>
 </para>
 </sect3>
-<sect3><title>Environment and Path</title>
+<sect3 id="sec.env_and_path"><title>Environment and Path</title>
 <para>
 The python, nasm and qt (uic, moc) binaries must be in the PATH.
 You need to set up the following environment variables:
@@ -921,7 +909,7 @@ You need to set up the following environment variables:
 </para>
 </sect3>
 
-<sect3><title>Building ffmpeg</title>
+<sect3 id="sec.building_ffmpeg"><title>Building ffmpeg</title>
 <para>
 Before building GePhex, ffmpeg must be built.
 Fire up MSYS and chdir into <quote>${gephex-dist}/contrib/ffmpeg</quote>.
@@ -937,7 +925,7 @@ If everything works out, the necessary dlls are now in
 There are two ways to build GePhex (all paths are relative to your gephex dir):
 </para>
 </sect3>
-<sect3><title>Building with the Visual Studio IDE</title>
+<sect3 id="sec.building_with_vs_ide"><title>Building with the Visual Studio IDE</title>
 <para>
 
  Create the following empty folders in your gephex dir:
@@ -973,7 +961,7 @@ There are two ways to build GePhex (all paths are relative to your gephex dir):
 </para>
 </sect3>
 
-<sect3><title>Building via the Command Line</title>
+<sect3 id="sec.building_cmd_line"><title>Building via the Command Line</title>
 <para>
 
 <note><para>
@@ -1012,7 +1000,7 @@ There are two ways to build GePhex (all paths are relative to your gephex dir):
 </para>
 </sect3>
 
-<sect3><title>Making it work</title>
+<sect3 id="sec.making_it_work"><title>Making it work</title>
 <para>
 
 Wether you built GePhex with the IDE or with the CLI, you need to make sure
@@ -1055,7 +1043,7 @@ You need the recode utility, available with the
 </sect2>
 </sect1>
 
-<sect1><title>Precompiled Versions</title>
+<sect1 id="sec.precompiled_versions"><title>Precompiled Versions</title>
 
 <sect2 id="sec.apt"><title>Using our APT Repository </title>
 <para>The Debian binary package format is the common way to install software on a Debian GNU/Linux system. Using the dpkg, a medium-level tool to install, build, remove and manage Debian GNU/Linux packages, the system stays in a consistent state after changes to the software installation or configuration. The proper deinstallation and upgrade to a other version of the application package is guaranteed.</para>
@@ -1069,7 +1057,7 @@ bash@host:~$ sudo apt-get install gephex
 </para>
 </sect2>
 
-<sect2><title>Windows binary Distribution</title>
+<sect2 id="sec.windows_binary_dist"><title>Windows binary Distribution</title>
 <para>
   Just get the windows binary .rar or .zip file and unpack it.
   GePhex can be started from the <filename>bin</filename> directory.
@@ -1080,11 +1068,11 @@ bash@host:~$ sudo apt-get install gephex
 </chapter>
 
 
- <chapter><title>Guided Tour</title>
+ <chapter id="chapter.guided_tour"><title>Guided Tour</title>
 
- <sect1>
+ <sect1 id="sec.starting_gephex">
    <title> Starting GePhex </title>
-     <sect2>  <title> UNIX </title>
+     <sect2 id="sec.unix">  <title> UNIX </title>
        <para>
           You can start GePhex by executing 
           <filename>gephex</filename>.
@@ -1094,7 +1082,7 @@ bash@host:~$ sudo apt-get install gephex
           gephex binary is in the path.
        </para>
      </sect2>
-     <sect2>  <title> Windows </title>
+     <sect2 id="sec.windows">  <title> Windows </title>
        <para>
           Just go into the bin directory of your GePhex directory and
           execute the gephex-engine and gephex-gui (in that order).
@@ -1102,7 +1090,7 @@ bash@host:~$ sudo apt-get install gephex
      </sect2>
  </sect1>
 
- <sect1>
+ <sect1 id="sec.gephex_graphical_ui">
    <title> The GePhex Graphical User Interface </title>
    <mediaobject>
    <imageobject>
@@ -1112,7 +1100,7 @@ bash@host:~$ sudo apt-get install gephex
    <caption> <para> The GUI (just started). </para> </caption>
  </mediaobject>
 
-   <sect2>
+   <sect2 id="sec.structure_gui">
      <title> Structure of the GUI </title>
      <para>
         As you can see in the image, the GUI (Graphical User Interface)
@@ -1144,7 +1132,7 @@ bash@host:~$ sudo apt-get install gephex
         </itemizedlist>
      </para>
    </sect2>
-   <sect2>
+   <sect2 id="sec.first_graph">
      <title> The First Graph </title>
      <para>
         The most important concept for using GePhex is that of an effect-graph.
@@ -1203,7 +1191,7 @@ bash@host:~$ sudo apt-get install gephex
      </mediaobject>
    </sect2>
  
-   <sect2> <title> Adding Effects to the Graph </title>
+   <sect2 id="sec.adding_effects"> <title> Adding Effects to the Graph </title>
      <para>
        Now we have created a new graph. But it is not very useful yet, because
        it is empty. So let's create some effects.
@@ -1252,7 +1240,7 @@ bash@host:~$ sudo apt-get install gephex
        flash-fader filter and is displayed in the sink (the image output).
      </para>
    </sect2>
-   <sect2> <title> Configuring the Graph </title>
+   <sect2 id="sec.configuring_the_graph"> <title> Configuring the Graph </title>
      <para>
         This is simple. We just choose a bitmap.
         Right-click on the "Image Source"-effect and choose "Properties"
@@ -1270,7 +1258,7 @@ bash@host:~$ sudo apt-get install gephex
        Click on the button next to "Filename" and choose a nice image file.
      </para>
    </sect2>
-   <sect2> <title> Running and controlling the Graph </title>
+   <sect2 id="sec.running_the_graph"> <title> Running and controlling the Graph </title>
      <para>
         Simple again. Just click on the little red fellow on the bottom right.
         You should see the output window opening and displaying the bmp file
@@ -1300,7 +1288,7 @@ bash@host:~$ sudo apt-get install gephex
      </note>
    </sect2>
 
-   <sect2> <title> Saving the Graph </title>
+   <sect2 id="sec.saving_the_graph"> <title> Saving the Graph </title>
      <para>
         Click on the "Graphs" tab in the info-window.
         Right-click on "first" and choose "Save Graph".
@@ -1311,11 +1299,11 @@ bash@host:~$ sudo apt-get install gephex
 
  </chapter>
 
- <chapter><title>Basic Concepts</title>
+ <chapter id="chapter.basic_concepts"><title>Basic Concepts</title>
  <para>
    TODO: this chapter needs a lot of work
  </para>
-  <sect1><title>The three States of Graphs in the Renderer</title>
+  <sect1 id="sec.three_states"><title>The three States of Graphs in the Renderer</title>
 <para>
   The Renderer knows three states for a graph:
   <itemizedlist>
@@ -1346,7 +1334,7 @@ bash@host:~$ sudo apt-get install gephex
  </chapter>
 
 
-<chapter><title>Example Graphs</title>
+<chapter id="chapter.example_graphs"><title>Example Graphs</title>
 
     <para>
       On UNIX systems, the examples are installed automatically when 
@@ -1360,7 +1348,7 @@ bash@host:~$ sudo apt-get install gephex
       </para> </note>
     </para>
 
-<sect1><title>Example1: Tunnel-Vision</title>
+<sect1 id="sec.example1"><title>Example1: Tunnel-Vision</title>
   <para>
      Shows how to use the tunnel.
   </para>
@@ -1369,12 +1357,12 @@ bash@host:~$ sudo apt-get install gephex
      isingnoize.
   </para>
 </sect1>
-<sect1><title>Example2: Plasma</title>
+<sect1 id="sec.example2"><title>Example2: Plasma</title>
   <para>
      Simple plasma effect graph.
   </para>
 </sect1>
-<sect1><title>Example3: A simple Feedback Loop</title>
+<sect1 id="sec.example3"><title>Example3: A simple Feedback Loop</title>
   <para>
      Try to change the zoom and rotation of the rotozoom-module.
      If you choose the right parameters, it should look like if you film
@@ -1383,13 +1371,13 @@ bash@host:~$ sudo apt-get install gephex
 </sect1>
 </chapter>
 
-  <chapter>
+  <chapter id="chapter.module_reference">
     <title>Module Reference</title>
 
-    <sect1>
+    <sect1 id="sec.generators">
       <title>Generators</title>
 
-      <sect2>
+      <sect2 id="sec.ifsmodule">
         <title>ifsmodule</title>
 
 <para>Linear iterated function systems are a fractal type. The module renders these kind of ifs parameter sets to a image.</para>
@@ -1412,15 +1400,15 @@ bash@host:~$ sudo apt-get install gephex
     </sect2>
   </sect1>
 
-  <sect1>
+  <sect1 id="sec.input_modules">
     <title>Input Modules</title>
 
 <para>In this section all modules are listed, who's main goal is to inject data in from external sources in signal graph.</para>
 
-    <sect2>
+    <sect2  id="sec.avifilemodule">
       <title>Video-playback (avifilemodule)</title>
 
-      <sect3>
+      <sect3 id="sec.avifilemodule.desc">
         <title>Description</title>
 
 <para>There are different video file-formats. Some can be streamed via net. Others allow random access to each video frame. For some there is a normative standard. mpeg 1,2 and 4 are an example for these kinds. avi, quicktime or real video are (re)defined by their vendors. In most cases the video format is just a wrapper for a video stream encoded with a concrete videocodec.</para>
@@ -1429,7 +1417,7 @@ bash@host:~$ sudo apt-get install gephex
 
       </sect3>
 
-      <sect3>
+      <sect3 id="sec.avifilemodule.inputs">
         <title>Inputs</title>
 
 <para>The first input is the name and path of the video file.</para>
@@ -1438,7 +1426,7 @@ bash@host:~$ sudo apt-get install gephex
 
       </sect3>
 
-      <sect3>
+      <sect3 id="sec.avifilemodule.outputs">
         <title>Outputs</title>
 
 <para>The first output is the video-stream.</para>
@@ -1447,7 +1435,7 @@ bash@host:~$ sudo apt-get install gephex
 
       </sect3>
 
-      <sect3>
+      <sect3 id="sec.avifilemodule.notes">
         <title>Notes</title>
 
 <para>Many codecs don't allow fast seeking to an arbitrary video position. This isn't a problem for standard video playback applications. User of a video effect systems want to reverse the playback direction and jump to an random position in the video-footage. Sequential playback is boring. Watch you favorite movie in sine waves!</para>
@@ -1466,10 +1454,10 @@ are very helpful for these tasks.
 
     </sect2>
 
-    <sect2> 
+    <sect2 id="sec.capturemodule"> 
       <title>Video for Linux (capturemodule)</title>
 
-      <sect3>
+      <sect3 id="sec.capturemodule.desc">
         <title>Description</title>
 
 <para>It is possible to attach several different video-input devices to the computer. Video signals from analog camcorders or vcrs are typically injected by a frame-grabber adapter on the PCI-bus. Digital cameras or low cost web-cams can be connected via USB(2) oder Firewire.</para>
@@ -1482,7 +1470,7 @@ are very helpful for these tasks.
 
       </sect3>
     
-      <sect3>
+      <sect3 id="sec.capturemodule.inputs"> 
         <title>Inputs</title>
 
 <para>The first input is the number of the video device. A setup with a web-cam and a bttv card e.g. uses the device-files /dev/video0 and /dev/video1. You have to set 0 or 1 at this input.</para>
@@ -1493,14 +1481,14 @@ are very helpful for these tasks.
 
       </sect3>
 
-      <sect3>
+      <sect3 id="sec.capturemodule.outputs">
         <title>Output</title>
 
 <para>The captured frames are sent to the output. In case of an invalid video-device, unsupported image size or any other error a black, full transparent one pixel sized image is returned.</para>
  
       </sect3>
 
-      <sect3>
+      <sect3 id="sec.capturemodule.notes">
         <title>Notes</title>
 
 <para>The current version of this module is tested with the 2.4.20 kernel drivers of the the <ulink url="http://www.smcc.demon.nl/webcam/"><citetitle>usb web-cam PCVC740K "ToUCam Pro"</citetitle></ulink> from Phillips and the <ulink url="http://bytesex.org/bttv/"><citetitle>pci bttv848 frame-grabber card win-TV radio</citetitle></ulink>.</para>
@@ -1514,15 +1502,15 @@ are very helpful for these tasks.
  </sect1>
   </chapter>
 
- <chapter><title>Type Reference</title>
+ <chapter id="chapter.type_reference"><title>Type Reference</title>
 
- <sect1><title>NumberType</title>
+ <sect1 id="sec.numbertype"><title>NumberType</title>
   <para>
     64 bit IEEE floating-point value.
   </para>
  </sect1>
 
- <sect1><title>FrameBufferType</title>
+ <sect1 id="sec.framebuffertype"><title>FrameBufferType</title>
   <para>
      32-bit BGRA Framebuffertype.
      Orientation is top-down (topmost line is first line in memory).
@@ -1531,7 +1519,7 @@ are very helpful for these tasks.
 
 </chapter>
 
-  <chapter><title>Developer Information</title>
+  <chapter id="chapter.developer_info"><title>Developer Information</title>
 
 <para>The last chapter described the core effect-modules and data-types included with the GePhex package. None of these are hard-coded in the GePhex engine. All of them are plugins that are loaded at startup time.</para>
 
@@ -1539,8 +1527,8 @@ are very helpful for these tasks.
 
 <para>The main design goal for these two interfaces was simplicity. It should be possible for a programmer to create a new effect within hours and not days. For the modules there exists a code generator which generates Makefiles, stub code and templates to free the programmer from cut and copy operations.</para>
 
-    <sect1>
-      <title>Adding new data types</title>
+    <sect1 id="sec.adding_new_data_types">
+      <title>Adding new Data Types</title>
 
 <para>The focus of the GePhex Framework are streams of video-data. The video streams flow from video sources to the output sinks. To control this flow other types of streams are needed. From simple numbers for controlling the video mixers to complex data types for some special effects, we need different types in the data-flow graph.</para>
 
@@ -1561,7 +1549,7 @@ are very helpful for these tasks.
 
 <para>These the type plugins are like the module plugins shared libraries. They export pointers to functions. The engine then calls these functions if necessary. The symbol names, the signature and the semantic of these are described in the next section.</para>
 
-      <sect2>
+      <sect2 id="sec.type_c_api">
         <title>The c-API</title>
 
 <para>A GePhex data type plugin is a shared library. There is exact one data type in each library file. The file suffix is .so on the Unix platforms and .dll on ms windows system. Each library exports a set of function symbols as defined in the following section.</para>
@@ -1578,8 +1566,8 @@ are very helpful for these tasks.
 
 <para>To store type instances or to transfer them via network it isn't enough to store/transfer the TypeInstanceID we must store the real value not the identifier. The functions <function>serialize</function> and <function>deSerialize</function> convert type instances to a byte-stream and back.</para>
 
-        <sect3>
-          <title>Required methods</title>
+        <sect3 id="sec.required_methods">
+          <title>Required Methods</title>
 <xi:include 
     xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-init.xml" />
 
@@ -1593,8 +1581,8 @@ are very helpful for these tasks.
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-assign.xml" />
         </sect3>
 
-        <sect3>
-          <title>Optional methods</title>
+        <sect3 id="sec.optional_methods">
+          <title>Optional Methods</title>
 
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-serialize.xml" />
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="type-api-deSerialize.xml" />
@@ -1605,8 +1593,8 @@ are very helpful for these tasks.
         </sect3>
       </sect2>
 
-      <sect2>
-        <title>An example for a new data type</title>
+      <sect2 id="sec.example_data_type">
+        <title>An Example for a new Data Type</title>
 
 <para>The following chapter describes the necessary steps to implement a new data type plugin. The new type will be a color palette. Mathematically this is is a mapping from an interval to the color-space. Since the standard color-space in the GePhex is the red-green-blue color-model with 256 discrete steps from each color-channel and a source space with 256 elements the palette can easily implemented as a array with 256 RGBA entries.</para>
 
@@ -1726,7 +1714,8 @@ static __inline void palette_deleteInstance(PaletteType* pal)
 </sect2>
 
    </sect1>
-   <sect1><title>Adding new effect modules</title>
+   <sect1 id="sec.new_effect_modules">
+     <title>Adding new Effect Modules</title>
 
 <para>
 To add a new effect module, it is best to use pluc, our plugin code generator.
@@ -1753,10 +1742,10 @@ or they want to have the output image to be the same resolution as the input
 image).
 </para>
 
-    <sect2><title>The C-API</title>
+    <sect2 id="sec.module_c_api"><title>The C-API</title>
 <para>A module is a shared library that exports some c functions. In the following section the necessary and the optional methods and their semantics are described.</para>
 
-<sect3><title>The Core Methods</title>
+<sect3 id="sec.core_methods"><title>The Core Methods</title>
 <para> Every module must implement these functions and export their symbol. The loader of the shared library must ignore modules with missing symbols.</para>
 
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"  href="module-api-init.xml" />
@@ -1778,7 +1767,7 @@ image).
 
 </sect3>
 
-<sect3><title>Optional Methods</title>
+<sect3 id="sec.module_optional_methods"><title>Optional Methods</title>
 <para>
 To enable additional functionality the shared library must export some of the the following methods. The functions are used for optimization:
 <itemizedlist>
@@ -1795,7 +1784,7 @@ To enable additional functionality the shared library must export some of the th
     </sect2>
 
     <sect2 id="sec.pluc">
-      <title>Pluc the skeleton generator</title>
+      <title>Pluc the Skeleton Generator</title>
 
 <para>
 The c-api design allows module developers to write their plugins in almost
@@ -1847,7 +1836,7 @@ pluc.py skel testmodule.spec
 </screen>
 As can be seen, the first argument to pluc is a command.
 The second is the filename of the plugin specification.
-<table><title>Most important pluc commands</title>
+<table id="table.pluc_commands"><title>Most important pluc commands</title>
 <tgroup cols='2'>
 <tbody>
 <row><entry>am</entry><entry>Creates an automake Makefile.am</entry></row>
@@ -1856,7 +1845,7 @@ The second is the filename of the plugin specification.
 </tbody></tgroup></table>
 </para>
 
-<sect3> <title>Syntax and semantics of the spec file</title>
+<sect3 id="sec.spec_files"> <title>Syntax and semantics of the spec file</title>
 
 <para>
 A spec file consists of three parts. Each part is composed of an identifier
@@ -1867,7 +1856,7 @@ The second part contains settings for all inputs of the module.
 The third part contains settings for all outputs of the module.
 </para>
 
-<sect4> <title>Global settings</title>
+<sect4 id="sec.global_settings"> <title>Global settings</title>
 
 <para>
 The global settings begin with a unique name for the module, by
@@ -1875,7 +1864,8 @@ convention prefixed with "mod_". To stick with the example from above
 we choose "mod_max".
 </para>
 
-<table><title>Mandatory global settings</title>
+<table id="table.module_mandatory_in_settings">
+  <title>Mandatory global settings</title>
 <tgroup cols='2'>
 <tbody>
 <row><entry>name</entry><entry>STRING</entry></row>
@@ -1923,7 +1913,7 @@ The following settings are optional:
 </itemizedlist>
 </sect4>
 
-<sect4> <title>Input settings</title>
+<sect4 id="sec.input_settings"> <title>Input Settings</title>
 <para>
 The settings in the input block determine the type, default value and other
 attributes for every input.
@@ -1934,7 +1924,7 @@ The input block is composed of several blocks, one for each input.
 </para>
 
 <para>
-<table><title>Mandatory input settings</title>
+<table id="table.mandatory_in_settings"><title>Mandatory input settings</title>
 <tgroup cols='2'>
 <tbody>
 <row><entry>name</entry><entry>STRING</entry></row>
@@ -1974,7 +1964,7 @@ The input block is composed of several blocks, one for each input.
 
 <para>
 These attributes are optional.
-<table><title>Optional input settings</title>
+<table id="table.optional_in_settings"><title>Optional input settings</title>
 <tgroup cols='2'>
 <tbody>
 <row><entry>default</entry><entry>STRING</entry></row>
@@ -2021,7 +2011,7 @@ inputs
 
 </sect4>
 
-<sect4> <title>Output settings</title>
+<sect4 id="sec.output_settings"> <title>Output Settings</title>
 <para>
 The settings in the output block determine the type and name for every output.
 </para>
@@ -2031,7 +2021,8 @@ The output block is composed of several blocks, one for each output.
 </para>
 
 <para>
-<table><title>Mandatory output settings</title>
+<table id="table.mandatory_out_settings">
+  <title>Mandatory Output Settings</title>
 <tgroup cols='2'>
 <tbody>
 <row><entry>name</entry><entry>STRING</entry></row>
@@ -2061,8 +2052,8 @@ outputs
 
 </sect2>
 
-    <sect2>
-      <title>An example for a new module</title>
+    <sect2 id="sec.example_module">
+      <title>An Example for a new Module</title>
 
 <para>Putting all together, the complete spec for our <literal>max</literal>
 module looks like this:

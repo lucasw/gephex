@@ -1,0 +1,8 @@
+login
+add_ 1
+add_ 2
+add_ 3
+add_ 3
+conn 2 0 0 0
+conn 3 0 0 1
+conn 0 0 1 0

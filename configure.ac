@@ -4,7 +4,7 @@ AC_PREREQ(2.59) dnl force autoconf version
 AC_CONFIG_SRCDIR([base/src/utils/autoptr.h])
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE(gephex,0.4.4)
+AM_INIT_AUTOMAKE(gephex,0.4.5)
 AM_CONFIG_HEADER(config.h)
 
 # Checks for programs.
@@ -399,8 +399,8 @@ if test "x$use_ffmpeg" = "xyes"; then
  abs_builddir=`pwd`
 
  AC_SUBST(FFMPEG_LDFLAGS,"${abs_builddir}/contrib/ffmpeg/libavformat/libavformat.a ${abs_builddir}/contrib/ffmpeg/libavcodec/libavcodec.a ${abs_builddir}/contrib/ffmpeg/libavutil/libavutil.a -lz")
-# AC_SUBST(FFMPEG_LDFLAGS,"-L${abs_builddir}/contrib/ffmpeg/libavcodec -lavcodec -lz -L${abs_builddir}/contrib/ffmpeg/libavformat -lavformat")
- AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR}/libavcodec -I${FFMPEG_DIR}/libavformat -I${FFMPEG_DIR}/libavutil")
+
+ AC_SUBST(FFMPEG_CFLAGS,"-I${FFMPEG_DIR} -D__STDC_CONSTANT_MACROS")
 
  echo Calling ffmpeg configure with flags:
  echo "${FFMPEG_CONFIG_DIR}/configure $FFMPEG_CONFIGURE_FLAGS"
@@ -414,21 +414,26 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 AC_SUBST(gphx_module_lib_dir, '$(prefix)/lib/gephex-0.4/modules')
 AC_SUBST(gphx_type_lib_dir, '$(prefix)/lib/gephex-0.4/types')
 
-# check for docbook2x and docbook xslt
+# check for xmlto, docbook2x and docbook xslt (in that order)
 
-AC_MSG_CHECKING([docbook2x command])
-
-GUESS_DOCBOOK2MAN="`which docbook2x-man` `which docbook2man`"
+AC_MSG_CHECKING([command to convert from docbook to man])
 
 docbooktoxman=""
-for cmd in $GUESS_DOCBOOK2MAN
-do
-  if test -e $cmd
-  then
-    docbooktoxman=$cmd
-    break
-  fi
-done
+if test -e `which xmlto`
+then
+  docbooktoxman="`which xmlto` man"
+else
+  GUESS_DOCBOOK2MAN="`which docbook2x-man` `which docbook2man`"
+
+  for cmd in $GUESS_DOCBOOK2MAN
+  do
+    if test -e $cmd
+    then
+      docbooktoxman=$cmd
+      break
+    fi
+  done
+fi
 
 if test "x$docbooktoxman" = "x"; then
   AC_MSG_RESULT([not found])

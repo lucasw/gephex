@@ -1,0 +1,4 @@
+graph { display: block }
+
+nodes, connections, snapshots  { display: list-item; list-style-type: square }
+

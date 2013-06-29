@@ -69,6 +69,16 @@ endif
 PLT_sOURCES =
 endif
 
+if OS_DARWIN
+MAC_sOURCES = \
+	quartzoutput.c \
+	quartzoutput.h
+MAC_lDFLAGS=-framework Carbon
+else
+MAC_sOURCES =
+MAC_lDFLAGS=
+endif
+
 frboutmodule_la_SOURCES = \
         frboutmodule_auto.c \
         frboutmodule.c \
@@ -76,11 +86,10 @@ frboutmodule_la_SOURCES = \
         frboutmodule.spec \
         frboutmodule.xpm \
         outputdriver.h \
-	slist.h \
-	slist.c $(X11_sOURCES) $(V4L_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES) $(PLT_sOURCES)
+        slist.h \
+	slist.c $(X11_sOURCES) $(V4L_sOURCES) $(AALIB_sOURCES) $(SDL_sOURCES) $(GL_sOURCES) $(PLT_sOURCES) $(MAC_sOURCES)
 
-
-frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale -L/usr/X11R6/lib -L@builddir@/../libcolorconv
+frboutmodule_la_LDFLAGS = -module -avoid-version -no-undefined -L/usr/X11R6/lib -L@builddir@/../libscale -L/usr/X11R6/lib -L@builddir@/../libcolorconv $(MAC_lDFLAGS)
 frboutmodule_la_LIBADD = -lscale -lcolorconv -lX11 -lXext -lXv $(AALIB_lDFLAGS) $(SDL_lD_FLAGS) $(GLLIBS)
 
 frboutmodule_la_DEPENDENCIES = @builddir@/../libscale/libscale.a \
