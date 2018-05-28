@@ -23,6 +23,7 @@
 #include "comboboxstringview.h"
 
 #include <iostream>
+#include <stdio.h>
 
 #include <QtGui/qcombobox.h>
 #include <QtGui/qlayout.h>

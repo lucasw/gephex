@@ -22,6 +22,7 @@
 
 #include "circularbuffer.h"
 
+#include <cstring>
 #include <stdexcept>
 #include <cassert>
 
@@ -68,11 +69,11 @@ namespace utils
           throw std::runtime_error("Could not allocate memory");
 
         int l1 = min_(len, m_capacity - m_begin);
-        memcpy(new_data, m_data + m_begin, l1);
+        std::memcpy(new_data, m_data + m_begin, l1);
         if (l1 < len)
           {
             int l2 = len - l1;
-            memcpy(new_data + l1, m_data, l2);				
+            std::memcpy(new_data + l1, m_data, l2);
           }
 			
         delete[] m_data;
@@ -90,12 +91,12 @@ namespace utils
     const unsigned char* bptr = buf.getPtr();
 
     int l1 = min_(m_capacity - m_end, blen);
-    memcpy(m_data + m_end, bptr, l1);
+    std::memcpy(m_data + m_end, bptr, l1);
 
     if (l1 < blen)
       {
         int l2 = blen - l1;
-        memcpy(m_data, bptr+l1, l2);
+        std::memcpy(m_data, bptr+l1, l2);
         m_end = l2;
       }
     else
@@ -115,12 +116,12 @@ namespace utils
     unsigned char* dst = new unsigned char[len];
 
     int l1 = min_(len, m_capacity - m_begin);
-    memcpy(dst, m_data + m_begin, l1);
+    std::memcpy(dst, m_data + m_begin, l1);
 
     if (l1 < len)
       {
         int l2 = len - l1;
-        memcpy(dst + l1, m_data, l2);
+        std::memcpy(dst + l1, m_data, l2);
         m_begin = l2;
       }
     else

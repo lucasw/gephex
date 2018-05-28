@@ -5,5 +5,6 @@ libmidi_a_SOURCES = libmidi.c \
 		    libmidi.h \
 		    midiutil.h
 
+CFLAGS = @CFLAGS@ -fPIC
 INCLUDES = -I$(top_srcdir)/util/include
 EXTRA_DIST = libmidi.vcproj libmidi.dsp libmidi.mak libmidi.dep

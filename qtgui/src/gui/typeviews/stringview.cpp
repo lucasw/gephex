@@ -22,6 +22,7 @@
 
 #include "stringview.h"
 
+#include <cstring>
 #include <sstream>
 #include <iostream>
 
@@ -85,7 +86,7 @@ public slots:
       //      std::cout << "Lineedit text = '" << text << "'" << std::endl;
       utils::Buffer 
 	b = utils::Buffer(reinterpret_cast<const unsigned char*>(text),
-			  strlen(text)+1);
+			  std::strlen(text)+1);
 
       emit valueChanged(b);
     }

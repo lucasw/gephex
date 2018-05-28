@@ -169,6 +169,7 @@ fi
 
 dnl ifelse is talked about in m4 docs
 
+qt_ld_flag="-lQtCore -lQtGui"
 if test "x$qt_incdir" = "x"
 then
   AC_MSG_RESULT([Can't find includes])

@@ -29,8 +29,10 @@
 #endif
 
 #if defined(OS_POSIX)
+#include <cstdlib>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 #elif defined(OS_WIN32)
 #include <windows.h>
 namespace utils { static std::string get_error_text(); }

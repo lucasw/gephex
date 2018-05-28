@@ -27,6 +27,7 @@
 #include <memory>
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 
 //----------------------------------------------------------------------
 
@@ -192,9 +193,9 @@ static void flip(uint_32* data, int_32 width, int_32 height)
 	int y;
 	for (y = height/2; y >= 0; --y)
 	{
-		memcpy(buffer, data + y*width, bps);
-		memcpy(data +y*width, data +(height-y-1)*width, bps);
-		memcpy(data + (height-y-1)*width, buffer, bps);
+	  std::memcpy(buffer, data + y*width, bps);
+	  std::memcpy(data +y*width, data +(height-y-1)*width, bps);
+	  std::memcpy(data + (height-y-1)*width, buffer, bps);
 	}
 	delete[] buffer;
 }

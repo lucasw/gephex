@@ -21,7 +21,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "tagutils.h"
-
+#include <cstring>
 #include "convertbin.h"
 #include "utils/buffer.h"
 
@@ -39,7 +39,7 @@ namespace net {
     
     convert_uint32_to_le(payload_length, data);
     
-    memcpy(data+sizeof(uint32_t), tag.c_str(), payload_length);
+    std::memcpy(data+sizeof(uint32_t), tag.c_str(), payload_length);
     
     dst = utils::Buffer(data, l) + b;
 

@@ -21,7 +21,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "fdsocket.h"
-
+#include <cstring>
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -90,7 +90,7 @@ namespace net
       else if (len == -1 && errno != EINTR)
 	{
 	  std::string msg = "Could not send: ";
-	  msg += strerror(errno);
+	  msg += std::strerror(errno);
 	  if (errno == EPIPE)
 	    throw BrokenPipeException(msg);
 	  else
