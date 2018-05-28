@@ -6,6 +6,8 @@ To install gephex on mac os x, see README.macosx
 
 To install gephex on unix platforms, perform the following steps:
 
+0. ./boostrap.sh
+
 1. Type "./configure" (you may choose a different installation prefix
    with --prefix=<your prefix here>, default is /usr/)
 
