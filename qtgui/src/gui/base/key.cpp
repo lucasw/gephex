@@ -77,11 +77,14 @@ public:
     
   }
 
+  // http://www.daniweb.com/forums/thread57296.html
+  struct Lowey { int operator()(int c) { return std::tolower(c); } };
+
   std::string toLower(const std::string s)
   {
 	  std::string ret;
 	  ret = s;
-	  std::transform(ret.begin(),ret.end(), ret.begin(), tolower);
+	  std::transform(ret.begin(),ret.end(), ret.begin(), Lowey());
 
 	  return ret;
   }

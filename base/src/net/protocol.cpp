@@ -26,6 +26,7 @@
 
 #include <cassert>
 #include <cstdio>
+#include <cstring>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -223,7 +224,7 @@ namespace net
 
     assert(bufferPos+bytesToRead <= bufferEnd);
     assert(dataPos+bytesToRead <= dataEnd);
-    memcpy(bufferPos,dataPos,bytesToRead);
+    std::memcpy(bufferPos,dataPos,bytesToRead);
     bufferPos += bytesToRead;
     dataPos   += bytesToRead;
     bytesLeft -= bytesToRead;
@@ -292,7 +293,7 @@ namespace net
 		    bytesLeft -= (syncPoint + sizeof(Header));;
 		    bufferPos  = bufferBegin + sizeof(Header);
             
-		    memcpy(bufferBegin, dataPos, sizeof(Header));
+		    std::memcpy(bufferBegin, dataPos, sizeof(Header));
                     dataPos += sizeof(Header);
 		    
 		    header = Header(bufferBegin);

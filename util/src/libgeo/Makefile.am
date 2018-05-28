@@ -1,5 +1,6 @@
 EXTRA_DIST = libgeo.vcproj libgeo.dsp libgeo.mak libgeo.dep
 
+CFLAGS = @CFLAGS@ -fPIC
 noinst_LIBRARIES = libgeo.a
 
 libgeo_a_SOURCES = libgeo.c

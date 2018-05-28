@@ -37,7 +37,7 @@ namespace gui
 			
       for (int i = 0; i < m_len; ++i)
         {
-          int currentLen = strlen(ptr[i])+1;
+          int currentLen = std::strlen(ptr[i])+1;
           m_ptr[i] = new char[currentLen];
           memcpy(m_ptr[i],ptr[i],currentLen);
         }

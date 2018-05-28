@@ -1,6 +1,7 @@
 libdir = @gphx_module_lib_dir@
 noinst_LIBRARIES = libcolorconv.a
 
+CPPFLAGS = @CPPFLAGS@ -fPIC
 @builddir@/libcolorconv_x86.o: @srcdir@/libcolorconv_x86.asm
 	@NASM@ @NASM_FLAGS@ -o @builddir@/libcolorconv_x86.o @srcdir@/libcolorconv_x86.asm
 
