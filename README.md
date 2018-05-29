@@ -1,3 +1,9 @@
+
+Graph based image generation and manipulation:
+
+![gephex ui](/doc/images/gephex.png?raw=true "gephex ui")
+
+
 Example Build
 -------------
 
