@@ -12,7 +12,7 @@ EXEEXT=.@SHAREDLIBEXT@
 
 bin_PROGRAMS = tunnelmodule
 
-tunnelmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@
+tunnelmodule_CFLAGS = $(AM_CFLAGS) @SHARED_COMP_FLAGS@ -shared
 
 if SHARED_USE_DEF_FILE
 DEFFILE=tunnelmodule.def
@@ -26,7 +26,7 @@ tunnelmodule_SOURCES = 	tunnelmodule_auto.c \
 				tunnelmodule.spec \
 				tunnelmodule.xpm
 
-tunnelmodule_LDFLAGS = @SHARED_LD_FLAGS@
+tunnelmodule_LDFLAGS = @SHARED_LD_FLAGS@ -lm -Wc,-shared
 
 tunnelmodule_LDADD = -lgrid -L@builddir@/../libgrid
 

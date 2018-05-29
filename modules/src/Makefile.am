@@ -40,13 +40,6 @@ endif
 # TODO(lucasw) not building
 # /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crt1.o: In function `_start':
 # (.text+0x20): undefined reference to `main'
-# chromakeymodule
-# frbinmodule
-# gradnormmodule
-# imgarithmodule
-# staticcolormodule
-# tunnelmodule
-# xfademodule $(PLT_DRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)
 SUBDIRS = libgrid \
 	libmidi \
 	libscale \
@@ -110,6 +103,14 @@ SUBDIRS = libgrid \
 	signalplotmodule \
 	stringtokenizermodule \
 	timesourcemodule \
-	twolayermodule
+	twolayermodule \
+	imgarithmodule \
+	chromakeymodule \
+	frbinmodule \
+	staticcolormodule \
+  tunnelmodule
+# gradnormmodule
+# xfademodule $(PLT_DRS) $(JOYSTICK_DIRS) $(SDL_TTF_DIRS) $(V4L_DIRS) $(PNG_DIRS) $(AUDIO_DIRS) $(FFMPEG_DIRS)
+
 
 EXTRA_DIST = modules.sln

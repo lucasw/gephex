@@ -73,7 +73,7 @@ frbinmodule_SOURCES = \
 	framecache.cpp $(AVIFILE_sOURCES) $(MPEG3_sOURCES) $(SDL_IMAGE_sOURCES) $(FFMPEG_sOURCES) $(PLT_sOURCES) $(DX_sOURCES)
 
 frbinmodule_LDFLAGS = @SHARED_LD_FLAGS@ \
-        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@ $(DX_LIBS) $(WIN32_LIBS)
+        -L@builddir@/../libscale $(AVIFILE_LDFLAGS) $(SDL_IMAGE_lDFLAGS) $(MPEG3_lDFLAGS) @FFMPEG_LDFLAGS@ $(DX_LIBS) $(WIN32_LIBS) -Wc,-shared
 
 frbinmodule_LDADD = -lstdc++ -lscale
 

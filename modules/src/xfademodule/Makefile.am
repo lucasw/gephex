@@ -39,7 +39,7 @@ xfademodule_DEPENDENCIES = \
 cpuinfoINCLUDES       = -I @srcdir@/../../../util/src/cpuinfo
 endif
 
-xfademodule_LDFLAGS = @SHARED_LD_FLAGS@
+xfademodule_LDFLAGS = @SHARED_LD_FLAGS@ -Wc,-shared
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \

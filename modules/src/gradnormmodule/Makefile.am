@@ -38,7 +38,7 @@ gradnormmodule_SOURCES = \
         gradnormmodule.spec \
         gradnormmodule.xpm $(3DNOW_sOURCES)
 
-gradnormmodule_LDFLAGS = @SHARED_LD_FLAGS@
+gradnormmodule_LDFLAGS = @SHARED_LD_FLAGS@ -Wc,-shared
 
 INCLUDES = -I@srcdir@/../../../engine/src/engine \
            -I@srcdir@/../../../util/include \

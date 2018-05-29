@@ -41,7 +41,7 @@ staticcolormodule_SOURCES = 	staticcolormodule_auto.c \
 				staticcolormodule.spec \
 				staticcolormodule.xpm
 
-staticcolormodule_LDFLAGS = @SHARED_LD_FLAGS@
+staticcolormodule_LDFLAGS = @SHARED_LD_FLAGS@ -Wc,-shared
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \

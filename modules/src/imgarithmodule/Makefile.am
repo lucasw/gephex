@@ -40,7 +40,8 @@ imgarithmodule_SOURCES = \
 	imgarithmodule.xpm
 
 
-imgarithmodule_LDFLAGS = @SHARED_LD_FLAGS@ -lm
+imgarithmodule_LDFLAGS = @SHARED_LD_FLAGS@ -lm -Wc,-shared
+# LDFLAGS = @LDFLAGS@ -shared
 
 INCLUDES = 	-I @srcdir@/../../../engine/src/engine \
 		-I @srcdir@/../../../util/include \
