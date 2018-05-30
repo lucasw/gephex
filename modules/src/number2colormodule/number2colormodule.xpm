@@ -1,5 +1,5 @@
 /* XPM */
-static char * number2colormodule_xpm[] = {
+static const char * number2colormodule_xpm[] = {
 "40 40 997 2",
 "  	c None",
 ". 	c #000000",

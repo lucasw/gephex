@@ -1,5 +1,5 @@
 /* XPM */
-static char * numarithmodule_xpm[] = {
+static const char * numarithmodule_xpm[] = {
 "40 40 1252 2",
 "  	c None",
 ". 	c #EFF2D6",

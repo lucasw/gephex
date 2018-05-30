@@ -1,5 +1,5 @@
 /* XPM */
-static char* midicontrolmodule_xpm[] = {
+static const char * midicontrolmodule_xpm[] = {
 "40 40 38 1",
 "  c #000080",
 "! c #C0C0C0",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvstreakmodule_xpm[] = {
+static const char * effectvstreakmodule_xpm[] = {
 "40 40 1364 2",
 "  	c None",
 ". 	c #696969",

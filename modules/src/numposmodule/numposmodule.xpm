@@ -1,5 +1,5 @@
 /* XPM */
-static char * numposmodule_xpm[] = {
+static const char * numposmodule_xpm[] = {
 "40 40 696 2",
 "  	c None",
 ". 	c #FFFFFF",

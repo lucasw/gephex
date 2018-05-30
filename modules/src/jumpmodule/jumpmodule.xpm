@@ -1,5 +1,5 @@
 /* XPM */
-static char * jumpmodule_xpm[] = {
+static const char * jumpmodule_xpm[] = {
 "40 40 141 2",
 "  	c None",
 ". 	c #F0F0F0",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * numoscmodule_xpm[] = {
+static const char * numoscmodule_xpm[] = {
 "40 40 1542 2",
 "  	c None",
 ". 	c #101010",

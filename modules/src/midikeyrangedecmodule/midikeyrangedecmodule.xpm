@@ -1,5 +1,5 @@
 /* XPM */
-static char * midikeyrangedecmodule_xpm[] = {
+static const char * midikeyrangedecmodule_xpm[] = {
 "40 40 678 2",
 "  	c None",
 ". 	c #FDFDFD",

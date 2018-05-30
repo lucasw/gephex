@@ -1,5 +1,5 @@
 /* XPM */
-static char * ifsmodule_xpm[] = {
+static const char * ifsmodule_xpm[] = {
 "40 40 798 2",
 "  	c None",
 ". 	c #000000",

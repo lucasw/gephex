@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static __inline int getNumberOfStringsXPM(char* xpm[])
+static __inline int getNumberOfStringsXPM(const char* xpm[])
 {
 	int height;
 	int width;
@@ -36,7 +36,7 @@ static __inline int getNumberOfStringsXPM(char* xpm[])
 }
 
 
-static __inline int getSizeOfXPM(char* xpm[])
+static __inline int getSizeOfXPM(const char* xpm[])
 {
 	int i;
 	int size = 0;

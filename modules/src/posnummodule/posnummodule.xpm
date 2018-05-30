@@ -1,5 +1,5 @@
 /* XPM */
-static char * posnummodule_xpm[] = {
+static const char * posnummodule_xpm[] = {
 "40 40 605 2",
 "  	c None",
 ". 	c #FFFFFF",

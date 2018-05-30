@@ -1,5 +1,5 @@
 /* XPM */
-static char * y4moutputmodule_xpm[] = {
+static const char * y4moutputmodule_xpm[] = {
 "40 40 1596 2",
 "  	c #474225",
 ". 	c #58552E",

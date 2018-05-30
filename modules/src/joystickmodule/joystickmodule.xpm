@@ -1,5 +1,5 @@
 /* XPM */
-static char * joystickmodule_xpm[] = {
+static const char * joystickmodule_xpm[] = {
 "40 40 786 2",
 "  	c None",
 ". 	c #FFFFFF",

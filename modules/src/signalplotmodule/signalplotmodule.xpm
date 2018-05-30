@@ -1,5 +1,5 @@
 /* XPM */
-static char * signalplotmodule_xpm[] = {
+static const char * signalplotmodule_xpm[] = {
 "40 40 622 2",
 "  	c None",
 ". 	c #FCFAF8",

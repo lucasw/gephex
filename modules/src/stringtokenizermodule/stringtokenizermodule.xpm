@@ -1,5 +1,5 @@
 /* XPM */
-static char * stringtokenizermodule_xpm[] = {
+static const char * stringtokenizermodule_xpm[] = {
 "40 40 1574 2",
 "  	c None",
 ". 	c #87825E",

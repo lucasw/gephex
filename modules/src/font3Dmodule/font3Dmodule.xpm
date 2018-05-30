@@ -1,5 +1,5 @@
 /* XPM */
-static char* font3dmodule_xpm[] = {
+static const char* font3dmodule_xpm[] = {
 "40 40 4 1 14 16",
 "  c None",
 "! c #000000",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvlifemodule_xpm[] = {
+static const char * effectvlifemodule_xpm[] = {
 "40 40 1579 2",
 "  	c None",
 ". 	c #4A493E",

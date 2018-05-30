@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvsparkmodule_xpm[] = {
+static const char * effectvsparkmodule_xpm[] = {
 "40 40 1552 2",
 "  	c None",
 ". 	c #949586",

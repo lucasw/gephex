@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvnervousmodule_xpm[] = {
+static const char * effectvnervousmodule_xpm[] = {
 "40 40 1459 2",
 "  	c None",
 ". 	c #756E48",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * doepfermodule_xpm[] = {
+static const char * doepfermodule_xpm[] = {
 "40 40 1226 2",
 "  	c None",
 ". 	c #FFFFFF",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * diffmodule_xpm[] = {
+static const char * diffmodule_xpm[] = {
 "40 40 560 2",
 "  	c None",
 ". 	c #FFFFFF",

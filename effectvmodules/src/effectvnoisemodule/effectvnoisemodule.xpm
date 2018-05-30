@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvnoisemodule_xpm[] = {
+static const char * effectvnoisemodule_xpm[] = {
 "40 40 150 2",
 "  	c None",
 ". 	c #0000C5",

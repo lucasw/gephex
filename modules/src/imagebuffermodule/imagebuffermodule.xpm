@@ -1,5 +1,5 @@
 /* XPM */
-static char * imagebuffermodule_xpm[] = {
+static const char * imagebuffermodule_xpm[] = {
 "40 40 430 2",
 "  	c None",
 ". 	c #000000",

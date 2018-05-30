@@ -1,5 +1,5 @@
 /* XPM */
-static char * signalgenmodule_xpm[] = {
+static const char * signalgenmodule_xpm[] = {
 "40 40 282 2",
 "  	c None",
 ". 	c #FEFDFE",

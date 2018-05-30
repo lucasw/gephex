@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvholomodule_xpm[] = {
+static const char * effectvholomodule_xpm[] = {
 "40 40 135 2",
 "  	c #040404",
 ". 	c #050505",

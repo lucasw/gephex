@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvburnmodule_xpm[] = {
+static const char * effectvburnmodule_xpm[] = {
 "40 40 1482 2",
 "  	c None",
 ". 	c #838C7A",

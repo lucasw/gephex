@@ -1,5 +1,5 @@
 /* XPM */
-static char *gephex-logo[] = {
+static const char *gephex-logo[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 3 1",
 "  c black",

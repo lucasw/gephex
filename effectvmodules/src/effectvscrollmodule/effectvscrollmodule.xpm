@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvscrollmodule_xpm[] = {
+static const char * effectvscrollmodule_xpm[] = {
 "40 40 1387 2",
 "  	c None",
 ". 	c #4B423D",

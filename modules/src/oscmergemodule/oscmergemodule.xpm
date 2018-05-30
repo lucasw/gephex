@@ -1,5 +1,5 @@
 /* XPM */
-static char * oscmergemodule_xpm[] = {
+static const char * oscmergemodule_xpm[] = {
 "40 40 1542 2",
 "  	c None",
 ". 	c #101010",

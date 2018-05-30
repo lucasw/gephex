@@ -1,5 +1,5 @@
 /* XPM */
-static char * dplmodule_xpm[] = {
+static const char * dplmodule_xpm[] = {
 "40 40 1278 2",
 "  	c #000000",
 ". 	c #13050D",

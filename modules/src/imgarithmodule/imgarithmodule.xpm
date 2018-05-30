@@ -1,5 +1,5 @@
 /* XPM */
-static char * imgarithmodule_xpm[] = {
+static const char * imgarithmodule_xpm[] = {
 "40 40 1361 2",
 "  	c None",
 ". 	c #CEC3AD",

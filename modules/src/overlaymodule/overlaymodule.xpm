@@ -1,5 +1,5 @@
 /* XPM */
-static char * overlaymodule_xpm[] = {
+static const char * overlaymodule_xpm[] = {
 "40 40 1192 2",
 "  	c None",
 ". 	c #F8E0DC",

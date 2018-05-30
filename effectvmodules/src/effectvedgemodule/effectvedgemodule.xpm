@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvedgemodule_xpm[] = {
+static const char * effectvedgemodule_xpm[] = {
 "40 40 1233 2",
 "  	c None",
 ". 	c #010101",

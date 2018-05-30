@@ -1,5 +1,5 @@
 /* XPM */
-static char * audiobdmodule_xpm[] = {
+static const char * audiobdmodule_xpm[] = {
 "40 40 211 2",
 "  	c None",
 ". 	c #F4F4F4",

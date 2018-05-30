@@ -1,5 +1,5 @@
 /* XPM */
-static char * flipflopmodule_xpm[] = {
+static const char * flipflopmodule_xpm[] = {
 "40 40 123 2",
 "  	c None",
 ". 	c #FFFFFF",

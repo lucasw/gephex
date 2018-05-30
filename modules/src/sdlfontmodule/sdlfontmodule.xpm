@@ -1,5 +1,5 @@
 /* XPM */
-static char * sdlfontmodule_xpm[] = {
+static const char * sdlfontmodule_xpm[] = {
 "40 40 180 2",
 "  	c None",
 ". 	c #FEFEFE",

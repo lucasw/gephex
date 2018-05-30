@@ -1,5 +1,5 @@
 /* XPM */
-static char * timesourcemodule_xpm[] = {
+static const char * timesourcemodule_xpm[] = {
 "40 40 1349 2",
 "  	c #360000",
 ". 	c #340000",

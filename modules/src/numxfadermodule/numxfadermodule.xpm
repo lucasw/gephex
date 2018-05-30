@@ -1,5 +1,5 @@
 /* XPM */
-static char * numxfadermodule_xpm[] = {
+static const char * numxfadermodule_xpm[] = {
 "40 40 122 2",
 "  	c None",
 ". 	c #FFFFFF",

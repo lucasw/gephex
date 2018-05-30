@@ -1,5 +1,5 @@
 /* XPM */
-static char * ifsgenmodule_xpm[] = {
+static const char * ifsgenmodule_xpm[] = {
 "40 40 804 2",
 "  	c None",
 ". 	c #FFFFFF",

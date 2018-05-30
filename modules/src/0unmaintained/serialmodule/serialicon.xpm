@@ -1,6 +1,6 @@
 /* XPM */
 
-static char * serialicon_xpm[] = {
+static const char * serialicon_xpm[] = {
 "32 32 2 1",
 " 	c None",
 ".	c #000000",

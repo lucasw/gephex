@@ -1,5 +1,5 @@
 /* XPM */
-static char * bwmodule_xpm[] = {
+static const char * bwmodule_xpm[] = {
 "40 44 44 1",
 " 	c None",
 ".	c #FF0000",

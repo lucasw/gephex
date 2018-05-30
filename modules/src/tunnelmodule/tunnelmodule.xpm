@@ -1,5 +1,5 @@
 /* XPM */
-static char * tunnelmodule_xpm[] = {
+static const char * tunnelmodule_xpm[] = {
 "40 40 1595 2",
 "  	c None",
 ". 	c #55827C",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * numenvmodule_xpm[] = {
+static const char * numenvmodule_xpm[] = {
 "40 40 696 2",
 "  	c None",
 ". 	c #FFFFFF",

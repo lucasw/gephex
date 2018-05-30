@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvchameleonmodule_xpm[] = {
+static const char * effectvchameleonmodule_xpm[] = {
 "40 40 1598 2",
 "  	c None",
 ". 	c #9C4846",

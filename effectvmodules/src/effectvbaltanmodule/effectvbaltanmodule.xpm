@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvbaltanmodule_xpm[] = {
+static const char * effectvbaltanmodule_xpm[] = {
 "40 40 1455 2",
 "  	c None",
 ". 	c #AAA68C",

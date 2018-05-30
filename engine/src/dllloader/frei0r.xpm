@@ -1,5 +1,5 @@
 /* XPM */
-static char * frei0r_xpm[] = {
+static const char * frei0r_xpm[] = {
 "40 40 893 2",
 "  	c #FEFEFE",
 ". 	c #FDFFFE",

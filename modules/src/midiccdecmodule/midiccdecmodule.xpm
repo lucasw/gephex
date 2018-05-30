@@ -1,5 +1,5 @@
 /* XPM */
-static char * midiccdecmodule_xpm[] = {
+static const char * midiccdecmodule_xpm[] = {
 "40 40 1226 2",
 "  	c None",
 ". 	c #FFFFFF",

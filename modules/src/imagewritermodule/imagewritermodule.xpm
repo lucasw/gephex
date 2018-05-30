@@ -1,5 +1,5 @@
 /* XPM */
-static char * imagewritermodule_xpm[] = {
+static const char * imagewritermodule_xpm[] = {
 "40 40 262 2",
 "  	c None",
 ". 	c #6EECE6",

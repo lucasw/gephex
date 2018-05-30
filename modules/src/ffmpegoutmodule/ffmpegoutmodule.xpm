@@ -1,5 +1,5 @@
 /* XPM */
-static char * ffmpegoutmodule_xpm[] = {
+static const char * ffmpegoutmodule_xpm[] = {
 "40 40 1514 2",
 "  	c #2D2520",
 ". 	c #2F2622",

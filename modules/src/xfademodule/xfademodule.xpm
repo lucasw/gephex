@@ -1,5 +1,5 @@
 /* XPM */
-static char *xfademodule_xpm[] = {
+static const char *xfademodule_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    40    40      256            2",
 /* colors */

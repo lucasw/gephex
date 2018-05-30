@@ -1,5 +1,5 @@
 /* XPM */
-static char *colorizemodule_xpm[]={
+static const char *colorizemodule_xpm[]={
 "40 44 3 1",
 "a c #0000ff",
 "# c #00ff00",

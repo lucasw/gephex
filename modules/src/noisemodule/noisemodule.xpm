@@ -1,5 +1,5 @@
 /* XPM */
-static char * noisemodule_xpm[] = {
+static const char * noisemodule_xpm[] = {
 "40 40 251 2",
 "  	c None",
 ". 	c #101010",

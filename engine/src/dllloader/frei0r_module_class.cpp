@@ -573,7 +573,7 @@ frei0r_create_info(const f0r_plugin_info_t& f0r_info,
   offset = tmpBuf + os.str().length() + 1;
   for (i = 0; i < lines; ++i)
     {
-      char* source = frei0r_xpm[i];
+      const char* source = frei0r_xpm[i];
       memcpy(offset,source,strlen(source)+1);
       offset += strlen(source) + 1;
     }                       

@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvsimuramodule_xpm[] = {
+static const char * effectvsimuramodule_xpm[] = {
 "40 40 789 2",
 "  	c None",
 ". 	c #3DA29F",

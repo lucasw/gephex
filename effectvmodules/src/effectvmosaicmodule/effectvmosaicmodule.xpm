@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvmosaicmodule_xpm[] = {
+static const char * effectvmosaicmodule_xpm[] = {
 "40 40 1219 2",
 "  	c None",
 ". 	c #405061",

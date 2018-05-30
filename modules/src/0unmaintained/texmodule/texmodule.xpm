@@ -1,5 +1,5 @@
 /* XPM */
-static char *texmodule_xpm[] = {
+static const char *texmodule_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    40    40      256            2",
 /* colors */

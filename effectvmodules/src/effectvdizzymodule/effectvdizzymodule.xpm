@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvdizzymodule_xpm[] = {
+static const char * effectvdizzymodule_xpm[] = {
 "40 40 1476 2",
 "  	c None",
 ". 	c #586D7C",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * audiowavegenmodule_xpm[] = {
+static const char * audiowavegenmodule_xpm[] = {
 "40 40 852 2",
 "  	c None",
 ". 	c #060001",

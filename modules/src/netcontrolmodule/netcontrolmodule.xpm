@@ -1,5 +1,5 @@
 /* XPM */
-static char * netcontrolmodule_xpm[] = {
+static const char * netcontrolmodule_xpm[] = {
 "40 40 1565 2",
 "  	c None",
 ". 	c #6A7F8F",

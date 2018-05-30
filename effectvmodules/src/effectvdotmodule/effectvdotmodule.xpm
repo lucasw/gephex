@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvdotmodule_xpm[] = {
+static const char * effectvdotmodule_xpm[] = {
 "40 40 142 2",
 "  	g None",
 ". 	g #B7B7B7",

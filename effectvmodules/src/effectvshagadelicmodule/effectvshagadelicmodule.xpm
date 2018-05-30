@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvshagadelicmodule_xpm[] = {
+static const char * effectvshagadelicmodule_xpm[] = {
 "53 40 641 2",
 "  	c None",
 ". 	c #000000",

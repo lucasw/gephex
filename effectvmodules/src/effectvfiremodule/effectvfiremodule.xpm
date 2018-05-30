@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvfiremodule_xpm[] = {
+static const char * effectvfiremodule_xpm[] = {
 "40 40 423 2",
 "  	c None",
 ". 	c #000000",

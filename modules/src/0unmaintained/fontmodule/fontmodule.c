@@ -410,7 +410,7 @@ int getInfo(char* buf,int bufLen)
 		for (i = 0; i < lines; ++i)
 		{
 			
-			char* source = font_xpm[i];
+			const char* source = font_xpm[i];
 			memcpy(offset,source,strlen(source)+1);
 			offset += strlen(source) + 1;
 		}			

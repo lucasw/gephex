@@ -1,5 +1,5 @@
 /* XPM */
-static char * pixelizemodule_xpm[] = {
+static const char * pixelizemodule_xpm[] = {
 "40 40 1392 2",
 "  	c None",
 ". 	c #FCFEFB",

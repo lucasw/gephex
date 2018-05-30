@@ -1,5 +1,5 @@
 /* XPM */
-static char * rangeconvertmodule_xpm[] = {
+static const char * rangeconvertmodule_xpm[] = {
 "40 40 234 2",
 "  	c None",
 ". 	c #FFFFFF",

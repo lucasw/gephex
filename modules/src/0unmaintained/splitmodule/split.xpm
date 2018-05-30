@@ -1,5 +1,5 @@
 /* XPM */
-static char * split_xpm[] = {
+static const char * split_xpm[] = {
 "40 44 2 1",
 " 	c None",
 ".	c #000000",

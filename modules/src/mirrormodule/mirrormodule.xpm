@@ -1,5 +1,5 @@
 /* XPM */
-static char *mirrormodule_xpm[]={
+static const char *mirrormodule_xpm[]={
 "40 44 2 1",
 ". c #000000",
 "# c #ffffff",

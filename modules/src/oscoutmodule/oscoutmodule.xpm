@@ -1,5 +1,5 @@
 /* XPM */
-static char * oscoutmodule_xpm[] = {
+static const char * oscoutmodule_xpm[] = {
 "40 40 1542 2",
 "  	c None",
 ". 	c #101010",

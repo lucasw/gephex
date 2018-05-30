@@ -1,5 +1,5 @@
 /* XPM */
-static char * audiospecmodule_xpm[] = {
+static const char * audiospecmodule_xpm[] = {
 "40 40 888 2",
 "  	c None",
 ". 	c #A7A7A7",

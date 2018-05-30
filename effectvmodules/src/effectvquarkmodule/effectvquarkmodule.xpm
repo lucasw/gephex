@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvquarkmodule_xpm[] = {
+static const char * effectvquarkmodule_xpm[] = {
 "40 40 1165 2",
 "  	c None",
 ". 	c #D5DDD6",

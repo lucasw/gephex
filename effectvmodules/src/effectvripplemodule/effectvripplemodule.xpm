@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvripplemodule_xpm[] = {
+static const char * effectvripplemodule_xpm[] = {
 "40 40 1503 2",
 "  	c None",
 ". 	c #72736A",

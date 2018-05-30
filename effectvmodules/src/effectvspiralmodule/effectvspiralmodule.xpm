@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvspiralmodule_xpm[] = {
+static const char * effectvspiralmodule_xpm[] = {
 "40 40 1337 2",
 "  	c #84949E",
 ". 	c #595B5E",

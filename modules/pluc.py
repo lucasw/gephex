@@ -507,7 +507,7 @@ int getInfo(char* buf,int bufLen)
       offset = tmpBuf + strlen(INFO) + 1;
       for (i = 0; i < lines; ++i)
         {
-          char* source = XXX_XPMNAME_XXX[i];
+          const char* source = XXX_XPMNAME_XXX[i];
           memcpy(offset,source,strlen(source)+1);
           offset += strlen(source) + 1;
         }                       

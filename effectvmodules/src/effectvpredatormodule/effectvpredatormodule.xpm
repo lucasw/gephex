@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvpredatormodule_xpm[] = {
+static const char * effectvpredatormodule_xpm[] = {
 "40 40 1561 2",
 "  	c None",
 ". 	c #777579",

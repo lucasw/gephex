@@ -1,5 +1,5 @@
 /* XPM */
-static char * ifsxfadermodule_xpm[] = {
+static const char * ifsxfadermodule_xpm[] = {
 "40 40 1133 2",
 "  	c None",
 ". 	c #4041FE",

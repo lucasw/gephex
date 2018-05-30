@@ -1,5 +1,5 @@
 /* XPM */
-static char * capturemodule_xpm[] = {
+static const char * capturemodule_xpm[] = {
 "40 40 947 2",
 "  	c None",
 ". 	c #FFFFFF",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * frboutmodule_xpm[] = {
+static const char * frboutmodule_xpm[] = {
 "40 40 168 2",
 "  	c None",
 ". 	c #FCFEFC",

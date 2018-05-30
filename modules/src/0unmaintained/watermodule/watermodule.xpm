@@ -1,5 +1,5 @@
 /* XPM */
-static char *watermodule_xpm[] = {
+static const char *watermodule_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    32    32      256            2",
 /* colors */

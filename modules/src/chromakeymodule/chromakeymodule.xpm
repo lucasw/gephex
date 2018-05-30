@@ -1,5 +1,5 @@
 /* XPM */
-static char * chromakeymodule_xpm[] = {
+static const char * chromakeymodule_xpm[] = {
 "40 40 1388 2",
 "  	c #493550",
 ". 	c #4A3751",

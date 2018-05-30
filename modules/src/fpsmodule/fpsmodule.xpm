@@ -1,5 +1,5 @@
 /* XPM */
-static char * fpsmodule_xpm[] = {
+static const char * fpsmodule_xpm[] = {
 "40 40 931 2",
 "  	c None",
 ". 	c #010200",

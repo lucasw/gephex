@@ -1,5 +1,5 @@
 /* XPM */
-static char * effectvblurzoommodule_xpm[] = {
+static const char * effectvblurzoommodule_xpm[] = {
 "40 40 1509 2",
 "  	c None",
 ". 	c #ACB046",

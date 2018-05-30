@@ -1,5 +1,5 @@
 /* XPM */
-static char * inter_xpm[] = {
+static const char * inter_xpm[] = {
 "40 44 2 1",
 " 	c None",
 ".	c #000000",
