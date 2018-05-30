@@ -205,10 +205,12 @@ static void read16bit(int_16* dst, FILE* file)
 {
   char c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read16bit");
   *dst = c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read16bit");
   *dst |= (c << 8);
 }
 
@@ -217,16 +219,20 @@ static void read32bit(int_32* dst, FILE* file)
 {
   unsigned char c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst = c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 8);
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 16);
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 24);
 }
 
@@ -235,16 +241,20 @@ static void read32bit_u(uint_32* dst, FILE* file)
 {
   unsigned char c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst = c;
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 8);
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 16);
 
-  fread(&c, 1, 1, file);
+  if (fread(&c, 1, 1, file) != 1)
+    throw std::runtime_error("could not read32bit");
   *dst |= (c << 24);
 }
 
