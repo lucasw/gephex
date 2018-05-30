@@ -86,7 +86,7 @@ static __inline void env_deSerialize(const char* buffer,int len, EnvType* env)
 	}
 	else
 	{
-	  sscanf(buffer,"%f %f %f %f %f",&env->amount, &env->attack, &env->decay, &env->sustain_level, &env->release);
+	  sscanf(buffer,"%lf %lf %lf %lf %lf",&env->amount, &env->attack, &env->decay, &env->sustain_level, &env->release);
 	}
 }
 

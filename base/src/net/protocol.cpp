@@ -281,7 +281,7 @@ namespace net
 		if (syncPoint == -1)
 		  {
 		    fprintf(stderr,
-                            "Skipping whole packet (%i bytes)\n",
+                            "Skipping whole packet (%li bytes)\n",
                             dataEnd - dataPos);
 		    bufferPos = bufferBegin;
 		    return;
