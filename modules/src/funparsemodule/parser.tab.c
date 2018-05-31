@@ -671,8 +671,10 @@ while (YYID (0))
 /* YYLEX -- calling `yylex' with the right arguments.  */
 
 #ifdef YYLEX_PARAM
+extern int yylex(void* lval, void* val2);
 # define YYLEX yylex (&yylval, YYLEX_PARAM)
 #else
+extern int yylex(void* lval);
 # define YYLEX yylex (&yylval)
 #endif
 
