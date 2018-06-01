@@ -557,15 +557,30 @@ void rotozoom_mirror(const struct input_params_t* p,
       for (x = p->xsize_result-1; x >= 0; --x, x_a += tr.AX, x_b += tr.BX)
 	{
 	  int u, v;
+          // The abs is the source of the mirroring, but it only
+          // mirrors around one point- need to continue flipping
+          // which the count below accomplishes.
 	  u = abs(x_a >> 16);
 	  v = abs(x_b >> 16);
   
           // turned out to be much faster than a % operator
           // (on an athlon-xp 2200+ with gcc-3.3.4)
+          int count = 0;
           while (u >= xsize_src)
+          {
+            count += 1;
             u -= xsize_src;
+          }
+          if (count % 2 == 1)
+            u = xsize_src - u;
+          count = 0;
           while (v >= ysize_src)
+          {
+            count += 1;
             v -= ysize_src;
+          }
+          if (count % 2 == 1)
+            v = ysize_src - v;
 
           *result = src[u + v*xsize_src];//(y_<<9)+ (y_<<7)];
 
