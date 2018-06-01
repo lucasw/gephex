@@ -43,7 +43,11 @@
 #define lrint(a) ((long int) a)
 #endif
 
-__inline int_32 cvt_to_fp(double a)
+// undefined symbol
+//__inline int_32 cvt_to_fp(double a)
+// __inline__ int_32 cvt_to_fp(double a)
+static inline int_32 cvt_to_fp(double a)
+// int_32 cvt_to_fp(double a)  // this works but perhaps is slower
 {
   return (int_32) lrint(FIXEDPNT_SCALE * a);
 }

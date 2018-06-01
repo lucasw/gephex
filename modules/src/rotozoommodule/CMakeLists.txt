@@ -33,10 +33,15 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 # add_definitions(-DPIC)
 # target_compile_definitions(${PROJECT_NAME} -DPIC)
 # -Wl, -soname?
-# set(NO_SONAME ON)
 # set(CMAKE_SHARED_LIBRARY_PREFIX "blah")
 add_library(${PROJECT_NAME} MODULE ${PROJECT_NAME}.c ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c)
+# Need to build libgeo
+# link_directories(-L./../../../util/src/)
+# target_link_libraries(${PROJECT_NAME} geo)
+# set(NO_SONAME ON)
+# Is there a target_link_definitions?
+# target_compile_definitions(${PROJECT_NAME} PRIVATE PIC)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX ""
+#    NO_SONAME True   # Doesn't work
 )
-#    LINK_FLAGS -soname
