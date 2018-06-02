@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(rotozoommodule)
 
-# Need to run these commands:
-# python ../../../../gephex/modules/src/rotozoommodule/../../pluc.py h ../../../../gephex/modules/src/rotozoommodule/rotozoommodule.spec
 add_custom_command(OUTPUT ${PROJECT_NAME}.h
     COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../pluc.py h ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -16,8 +14,6 @@ add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
     DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     COMMENT "generating ${PROJECT_NAME} header"
 )
-
-# python ../../../../gephex/modules/src/rotozoommodule/../../pluc.py c ../../../../gephex/modules/src/rotozoommodule/rotozoommodule.spec
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
@@ -43,5 +39,10 @@ target_link_libraries(${PROJECT_NAME} geo)
 # target_compile_definitions(${PROJECT_NAME} PRIVATE PIC)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX ""
-#    NO_SONAME True   # Doesn't work
+#    NO_SONAME True   # Doesn't work - but is it even needed?
+)
+
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/gephex-0.4/modules
+  PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
 )
