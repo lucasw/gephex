@@ -87,7 +87,7 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = combo_box
-        values            = regular,poly,mirror
+        values            = regular,poly,tile,mirror_x,mirror_y,mirror
         default           = regular
         help              = regular is stable, poly is faster
     }

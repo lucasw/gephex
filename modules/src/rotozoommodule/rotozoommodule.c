@@ -73,6 +73,7 @@ struct ALTransformFP {
 };
 
 struct input_params_t {
+  int mirror_mode;
   double zoom;
   double theta;
   int transpx;
@@ -245,6 +246,7 @@ struct EdgeBuffer {
 typedef struct _MyInstance {
 
   rotozoomT rotozoom;
+  int mirror_mode;
   struct EdgeBuffer edges;
   int usesEdgeBuffer;
 
@@ -270,6 +272,7 @@ MyInstance* construct()
   MyInstance* my = (MyInstancePtr) malloc(sizeof(MyInstance));
 
   my->rotozoom = 0;
+  my->mirror_mode = 0;
   my->usesEdgeBuffer = 0;
 
   my->edges.yres = 0;
@@ -292,6 +295,8 @@ void destruct(MyInstance* my)
 void calc_parameters(void* instance, struct input_params_t* p)
 {
   InstancePtr inst = (InstancePtr) instance;  
+
+  p->mirror_mode    = inst->my->mirror_mode;
 
   p->xsize_src    = inst->in_texture->xsize;
   p->ysize_src    = inst->in_texture->ysize;
@@ -324,7 +329,12 @@ void strongDependencies(Instance* inst, int neededInputs[])
   my->text_needed = 1;
   my->back_needed = 1;
 
-  if (strcmp("mirror", inst->in_routine->text) == 0)
+  int repeat = (strcmp("tile", inst->in_routine->text) == 0) ||
+      (strcmp("mirror_x", inst->in_routine->text) == 0) ||
+      (strcmp("mirror_y", inst->in_routine->text) == 0) ||
+      (strcmp("mirror", inst->in_routine->text) == 0);
+
+  if (repeat)
     {
       neededInputs[in_background] = 0;
       my->back_needed = 0;
@@ -387,7 +397,6 @@ void update(void* instance)
   struct input_params_t p;
 
   int copy_background = trim_bool(inst->in_copy_background->number);
-  calc_parameters(instance, &p);
 
   if (strcmp(my->oldRoutine.text, inst->in_routine->text) != 0)
     {
@@ -405,10 +414,32 @@ void update(void* instance)
 	  my->rotozoom = rotozoom2;
 	  my->usesEdgeBuffer = 1;
 	}
+      else if (strcmp(my->oldRoutine.text, "tile") == 0)
+      {
+        s_log(2, "Using tile rotozooming");
+        my->rotozoom = rotozoom_mirror;
+        my->mirror_mode = 0;
+        my->usesEdgeBuffer = 0;
+      }
+      else if (strcmp(my->oldRoutine.text, "mirror_x") == 0)
+      {
+        s_log(2, "Using mirror x rotozooming");
+        my->rotozoom = rotozoom_mirror;
+        my->mirror_mode = 1;
+        my->usesEdgeBuffer = 0;
+      }
+      else if (strcmp(my->oldRoutine.text, "mirror_y") == 0)
+      {
+        s_log(2, "Using mirror y rotozooming");
+        my->rotozoom = rotozoom_mirror;
+        my->mirror_mode = 2;
+        my->usesEdgeBuffer = 0;
+      }
       else if (strcmp(my->oldRoutine.text, "mirror") == 0)
 	{
 	  s_log(2, "Using mirror rotozooming");
 	  my->rotozoom = rotozoom_mirror;
+    my->mirror_mode = 3;
 	  my->usesEdgeBuffer = 0;
 	}
       else
@@ -424,6 +455,8 @@ void update(void* instance)
 	  my->usesEdgeBuffer = 0;
 	}
     }
+
+  calc_parameters(instance, &p);
 
   if (no_zoom_and_no_rotation_and_no_transp(&p))
     return;
@@ -560,30 +593,43 @@ void rotozoom_mirror(const struct input_params_t* p,
       int_32 x_b = y_a;
       for (x = p->xsize_result-1; x >= 0; --x, x_a += tr.AX, x_b += tr.BX)
 	{
-	  int u, v;
           // The abs is the source of the mirroring, but it only
           // mirrors around one point- need to continue flipping
           // which the count below accomplishes.
-	  u = abs(x_a >> 16);
-	  v = abs(x_b >> 16);
-  
+
+	        int u = x_a >> 16;
           // turned out to be much faster than a % operator
           // (on an athlon-xp 2200+ with gcc-3.3.4)
+          // TODO(lucasw) re-check that, would simplify this a bunch to use modulo
           int count = 0;
           while (u >= xsize_src)
           {
             count += 1;
             u -= xsize_src;
           }
-          if (count % 2 == 1)
+          while (u < 0)
+          {
+            count += 1;
+            u += xsize_src;
+          }
+
+          if ((p->mirror_mode & 0x1) && (count % 2 == 1))
             u = xsize_src - u;
+
           count = 0;
+	        int v = x_b >> 16;
           while (v >= ysize_src)
           {
             count += 1;
             v -= ysize_src;
           }
-          if (count % 2 == 1)
+          while (v < 0)
+          {
+            count += 1;
+            v += ysize_src;
+          }
+
+          if ((p->mirror_mode & 0x2) && (count % 2 == 1))
             v = ysize_src - v;
 
           *result = src[u + v*xsize_src];//(y_<<9)+ (y_<<7)];
