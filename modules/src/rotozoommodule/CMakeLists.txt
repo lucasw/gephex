@@ -37,7 +37,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 add_library(${PROJECT_NAME} MODULE ${PROJECT_NAME}.c ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c)
 # Need to build libgeo
 # link_directories(-L./../../../util/src/)
-# target_link_libraries(${PROJECT_NAME} geo)
+target_link_libraries(${PROJECT_NAME} geo)
 # set(NO_SONAME ON)
 # Is there a target_link_definitions?
 # target_compile_definitions(${PROJECT_NAME} PRIVATE PIC)
