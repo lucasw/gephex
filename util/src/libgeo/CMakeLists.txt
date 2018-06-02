@@ -5,7 +5,10 @@ project(libgeo)
 message(${CMAKE_CURRENT_LIST_DIR})
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-add_library(${PROJECT_NAME} SHARED ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c)
+# TODO(lucasw) is there a static vs shared speed difference?
+# add_library(${PROJECT_NAME} SHARED ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c)
+add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c)
+set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # TODO(lucasw) maybe don't need all these, do need basic_types.h
 include_directories(${CMAKE_CURRENT_LIST_DIR}
