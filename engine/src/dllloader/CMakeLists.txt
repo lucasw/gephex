@@ -15,6 +15,8 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
+
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} STATIC
   ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.cpp
@@ -55,40 +57,23 @@ add_library(${PROJECT_NAME} STATIC
   ${CMAKE_CURRENT_LIST_DIR}/frei0r_module_plugin.h
   ${CMAKE_CURRENT_LIST_DIR}/frei0r.h
   ${CMAKE_CURRENT_LIST_DIR}/frei0r.xpm
-  imoduleclassinfosender.h
-)
-
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/interfaces)
-# add_custom_command(OUTPUT interfaces/imoduleclassinfossender.h
-add_custom_command(OUTPUT imoduleclassinfosender.h
-    PRE_BUILD
-    COMMAND python ${CMAKE_HOME_DIRECTORY}/base/nic.py is ${CMAKE_CURRENT_BINARY_DIR}/interfaces ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/moduleclassinfo.if
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}  # /interfaces
-# DEPENDS ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
-    DEPENDS ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/moduleclassinfo.if
-    COMMENT "generating imoduleclassinfosender.h"
-    )
-
-# add_custom_target(imoduleclassinfosender_h imoduleclassinfosender.h)
-# add_dependencies(${PROJECT_NAME}
-#  # imoduleclassinfosender.h
-#   imoduleclassinfosender_h
-#)
-
-if(false)
-add_dependencies(${PROJECT_NAME}
-  interfaces/itypeclassreceiver.h
-  interfaces/itypeclassinforeceiver.h
-  interfaces/imoduleclassreceiver.h
-  interfaces/imoduleclassspecreceiver.h
   interfaces/imoduleclassinforeceiver.h
-  interfaces/imoduleclassnamereceiver.h
   interfaces/imoduleclassinfosender.h
+  interfaces/imoduleclassnamereceiver.h
+  interfaces/imoduleclassreceiver.h
   interfaces/imoduleclasssender.h
+  interfaces/imoduleclassspecreceiver.h
   interfaces/imoduleclassspecsender.h
+  interfaces/itypeclassinforeceiver.h
+  interfaces/itypeclassinfosender.h
+  interfaces/itypeclassreceiver.h
   interfaces/itypeclasssender.h
 )
-endif(false)
+
+if(false)
+set(SRC
+  )
+endif (false)
 
 # target_link_libraries(${PROJECT_NAME} geo)
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -96,6 +81,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+# add_dependencies(${PROJECT_NAME} build_all_interfaces)
 # install(TARGETS ${PROJECT_NAME}
 #   DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/gephex-0.4/modules
 #   PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE

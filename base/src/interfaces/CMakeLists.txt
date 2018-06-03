@@ -1,29 +1,29 @@
-cmake_minimum_required(VERSION 2.8)
-project(interfaces)
+# cmake_minimum_required(VERSION 2.8)
+# project(interfaces)
 
 set(IF_SOURCES
-	controlvalue.if
-	enginecontrol.if
-	error.if
-	graphname.if
-	modelcontrol.if
-	modelstatus.if
-	moduleclass.if
-	moduleclassinfo.if
-	moduleclassname.if
-	moduleclassspec.if
-	moduleconstructiondumb.if
-	moduleconstructionsmart.if
-	moduledata.if
-	graphdata.if
-	modulestatistics.if
-	modulestatisticssmart.if
-	renderercontrol.if
-	rendererstatus.if
-	serializedgraph.if
-	smartcontrolvalue.if
-	typeclass.if
-	typeclassinfo.if
+	controlvalue
+	enginecontrol
+	error
+	graphname
+	modelcontrol
+	modelstatus
+	moduleclass
+	moduleclassinfo
+	moduleclassname
+	moduleclassspec
+	moduleconstructiondumb
+	moduleconstructionsmart
+	moduledata
+	graphdata
+	modulestatistics
+	modulestatisticssmart
+	renderercontrol
+	rendererstatus
+	serializedgraph
+	smartcontrolvalue
+	typeclass
+	typeclassinfo
 )
 
 # TODO(lucasw) need to make these dependencies so when they change the
@@ -31,23 +31,36 @@ set(IF_SOURCES
 # imoduleclass.h imoduleplugin.h imoduleclassspec.h imodule.h itask.h
 # itypeclass.h itypefactory.h itype.h
 
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/interfaces)
+
 foreach(T_NAME ${IF_SOURCES})
+# message("'" ${T_NAME} "'")
 add_custom_command(OUTPUT interfaces/i${T_NAME}receiver.h
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../nic.py ir ${CMAKE_CURRENT_LIST_DIR}/${T_NAME}.if
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/interfaces
-    # DEPENDS ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${T_NAME}.if
-    COMMENT "generating ${T_NAME} receiver"
+    PRE_BUILD
+    COMMAND python ${CMAKE_HOME_DIRECTORY}/base/nic.py ir ${CMAKE_CURRENT_BINARY_DIR}/interfaces ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}  # /interfaces
+    DEPENDS ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
+    COMMENT "generating i${T_NAME}receiver.h"
 )
+# list(APPEND all_interfaces "interfaces/i${T_NAME}receiver.h")
+
+# add_custom_target(i${T_NAME}receiver_h interfaces/i${T_NAME}receiver.h)
 
 add_custom_command(OUTPUT interfaces/i${T_NAME}sender.h
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../nic.py is ${CMAKE_CURRENT_LIST_DIR}/${T_NAME}.if
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/interfaces
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${T_NAME}.if
-    COMMENT "generating ${T_NAME} sender"
+    PRE_BUILD
+    COMMAND python ${CMAKE_HOME_DIRECTORY}/base/nic.py is ${CMAKE_CURRENT_BINARY_DIR}/interfaces ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}  # /interfaces
+    DEPENDS ${CMAKE_HOME_DIRECTORY}/base/src/interfaces/${T_NAME}.if
+    COMMENT "generating i${T_NAME}sender.h"
 )
+# list(APPEND all_interfaces "interfaces/i${T_NAME}sender.h")
+
+# add_custom_target(i${T_NAME}sender_h interfaces/i${T_NAME}sender.h)
 
 endforeach()
+
+# add_custom_target(build_all_interfaces ALL
+#     DEPENDS ${all_interfaces})
 
 # install(TARGETS ${PROJECT_NAME}
 #   DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/gephex-0.4/modules
