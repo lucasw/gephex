@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(gephex)
 
+add_definitions(-DOS_POSIX)
+
+include_directories(
+  ${CMAKE_HOME_DIRECTORY}/engine/src
+)
+
 # include(base/src/interfaces/CMakeLists.txt)
 include(engine/src/dllloader/CMakeLists.txt)
 
