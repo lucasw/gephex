@@ -2,28 +2,28 @@
 # project(interfaces)
 
 set(IF_SOURCES
-	controlvalue
-	enginecontrol
-	error
-	graphname
-	modelcontrol
-	modelstatus
-	moduleclass
-	moduleclassinfo
-	moduleclassname
-	moduleclassspec
-	moduleconstructiondumb
-	moduleconstructionsmart
-	moduledata
-	graphdata
-	modulestatistics
-	modulestatisticssmart
-	renderercontrol
-	rendererstatus
-	serializedgraph
-	smartcontrolvalue
-	typeclass
-	typeclassinfo
+  controlvalue
+  enginecontrol
+  error
+  graphname
+  modelcontrol
+  modelstatus
+  moduleclass
+  moduleclassinfo
+  moduleclassname
+  moduleclassspec
+  moduleconstructiondumb
+  moduleconstructionsmart
+  moduledata
+  graphdata
+  modulestatistics
+  modulestatisticssmart
+  renderercontrol
+  rendererstatus
+  serializedgraph
+  smartcontrolvalue
+  typeclass
+  typeclassinfo
 )
 
 # TODO(lucasw) need to make these dependencies so when they change the

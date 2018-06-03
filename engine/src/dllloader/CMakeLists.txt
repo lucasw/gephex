@@ -70,11 +70,6 @@ add_library(${PROJECT_NAME} STATIC
   interfaces/itypeclasssender.h
 )
 
-if(false)
-set(SRC
-  )
-endif (false)
-
 # target_link_libraries(${PROJECT_NAME} geo)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX ""

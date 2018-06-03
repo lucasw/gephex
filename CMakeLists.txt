@@ -9,6 +9,7 @@ include_directories(
 
 # include(base/src/interfaces/CMakeLists.txt)
 include(engine/src/dllloader/CMakeLists.txt)
+include(engine/src/model/CMakeLists.txt)
 
 include(modules/src/frbinmodule/CMakeLists.txt)
 include(modules/src/frboutmodule/CMakeLists.txt)
