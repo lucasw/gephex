@@ -11,6 +11,7 @@ include_directories(
 include(engine/src/dllloader/CMakeLists.txt)
 include(engine/src/model/CMakeLists.txt)
 include(engine/src/renderer/CMakeLists.txt)
+include(base/src/net/CMakeLists.txt)
 
 include(modules/src/frbinmodule/CMakeLists.txt)
 include(modules/src/frboutmodule/CMakeLists.txt)
