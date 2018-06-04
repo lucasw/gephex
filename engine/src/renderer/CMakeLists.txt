@@ -30,6 +30,11 @@ add_library(${PROJECT_NAME} STATIC
   interfaces/imodulestatisticssmartsender.h
   interfaces/irendererstatussender.h
   interfaces/irendererstatusreceiver.h
+  interfaces/imoduleclassreceiver.h
+  interfaces/itypeclassreceiver.h
+  interfaces/imoduleconstructionsmartreceiver.h
+  interfaces/ismartcontrolvaluereceiver.h
+  interfaces/imodulestatisticssmartreceiver.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

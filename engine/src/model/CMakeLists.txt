@@ -59,6 +59,7 @@ add_library(${PROJECT_NAME} STATIC
   interfaces/icontrolvaluereceiver.h
   interfaces/imodulestatisticsreceiver.h
   interfaces/imodelstatusreceiver.h
+  interfaces/imoduleclassspecreceiver.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
