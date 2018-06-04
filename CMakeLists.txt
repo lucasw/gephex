@@ -13,6 +13,7 @@ include(engine/src/model/CMakeLists.txt)
 include(engine/src/renderer/CMakeLists.txt)
 include(base/src/netinterfaces/CMakeLists.txt)
 include(base/src/net/CMakeLists.txt)
+include(base/src/utils/CMakeLists.txt)
 
 include(modules/src/frbinmodule/CMakeLists.txt)
 include(modules/src/frboutmodule/CMakeLists.txt)
