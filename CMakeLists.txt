@@ -3,6 +3,42 @@ project(gephex)
 
 add_definitions(-DOS_POSIX)
 
+find_package(X11)
+set(HAVE_X11 ${X11_FOUND})
+
+if (UNIX AND NOT APPLE)
+set(OS_LINUX true)
+endif()
+
+# TODO(lucasw) this isn't working with the @PACKAGE@ in the config.h
+# set(PACKAGE "gephex")
+add_definitions(-DPACKAGE="gephex" -DVERSION="0.4.6")
+
+# TODO(lucasw) need to make this decision between linux or sdl
+set(WITH_LINUX_JOYSTICK true)
+
+# TODO(lucasw)
+# find_package(OSS)
+# set(WITH_OSS ${OSS_FOUND})
+set(WITH_OSS true)
+
+find_package(SDL)
+set(WITH_SDL ${SDL_FOUND})
+
+find_package(SDL_image)
+set(WITH_SDL_IMAGE ${SDL_image_FOUND})
+
+find_package(SDL_ttf)
+set(WITH_SDL_TTF ${SDL_ttf_FOUND})
+
+# TODO(lucasw)
+# find_package(V4L)
+# set(WITH_V4L ${V4L_FOUND})
+set(WITH_V4L true)
+
+find_package(PNG)
+set(WITH_LIBPNG ${PNG_FOUND})
+
 include(CheckIncludeFiles)
 check_include_files(dlfcn.h HAVE_DLFCN_H)
 check_include_files(inttypes.h HAVE_INTTYPES_H)
@@ -14,7 +50,8 @@ check_include_files(string.h HAVE_STRING_H)
 check_include_files(sys_stat.h HAVE_SYS_STAT_H)
 check_include_files(sys_types.h HAVE_SYS_TYPES_H)
 check_include_files(unistd.h HAVE_UNISTD_H)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_cmake.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_cmake.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h
+    @ONLY)
 
 include_directories(
   ${CMAKE_HOME_DIRECTORY}/engine/src

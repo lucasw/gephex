@@ -82,7 +82,7 @@
 #cmakedefine OS_WIN32
 
 /* Name of package */
-#cmakedefine PACKAGE
+#cmakedefine "@PACKAGE@"
 
 /* Define to the address where bug reports for this package should be sent. */
 #cmakedefine PACKAGE_BUGREPORT
