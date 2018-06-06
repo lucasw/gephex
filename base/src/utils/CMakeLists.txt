@@ -61,5 +61,8 @@ add_library(${PROJECT_NAME} STATIC
   ${CMAKE_CURRENT_LIST_DIR}/xmlutils.h
 )
 
+# TODO(lucasw) only link this if HAVE_DLFCN
+target_link_libraries(${PROJECT_NAME} dl)
+
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 

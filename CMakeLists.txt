@@ -3,6 +3,7 @@ project(gephex)
 
 add_definitions(-DOS_POSIX)
 
+###############################################################################
 find_package(X11)
 set(HAVE_X11 ${X11_FOUND})
 
@@ -52,11 +53,13 @@ check_include_files(sys_types.h HAVE_SYS_TYPES_H)
 check_include_files(unistd.h HAVE_UNISTD_H)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_cmake.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h
     @ONLY)
+###############################################################################
 
 include_directories(
   ${CMAKE_HOME_DIRECTORY}/engine/src
 )
 
+# Engine
 # include(base/src/interfaces/CMakeLists.txt)
 include(engine/src/dllloader/CMakeLists.txt)
 include(engine/src/model/CMakeLists.txt)
@@ -64,7 +67,9 @@ include(engine/src/renderer/CMakeLists.txt)
 include(base/src/netinterfaces/CMakeLists.txt)
 include(base/src/net/CMakeLists.txt)
 include(base/src/utils/CMakeLists.txt)
+include(engine/src/engine/CMakeLists.txt)
 
+# Modules
 include(modules/src/frbinmodule/CMakeLists.txt)
 include(modules/src/frboutmodule/CMakeLists.txt)
 include(util/src/libgeo/CMakeLists.txt)

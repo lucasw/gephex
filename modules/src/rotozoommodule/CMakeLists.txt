@@ -33,6 +33,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 # message("binary dir: " ${CMAKE_CURRENT_BINARY_DIR})
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} MODULE ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c)
+add_dependencies(${PROJECT_NAME} libgeo)
 target_link_libraries(${PROJECT_NAME} geo)
 # set(NO_SONAME ON)
 # Is there a target_link_definitions?
