@@ -1,0 +1,153 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+#ifndef INCLUDED_CONFIG_H
+#define INCLUDED_CONFIG_H
+
+/*
+#if defined(__GNUC__)
+#define COMP_GCC
+#endif
+*/
+
+/* Intel x86 compatible CPU >= 386 */
+#cmakedefine CPU_I386
+
+/* Size of the cache the frbinmodule uses (in MB) */
+#cmakedefine FRBINMODULE_CACHE_SIZE
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#cmakedefine HAVE_DLFCN_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#cmakedefine HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `socket' library (-lsocket). */
+#cmakedefine HAVE_LIBSOCKET
+
+/* Define to 1 if you have the <memory.h> header file. */
+#cmakedefine HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#cmakedefine HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#cmakedefine HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#cmakedefine HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#cmakedefine HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#cmakedefine HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#cmakedefine HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#cmakedefine HAVE_UNISTD_H
+
+/* build with x11 support */
+#cmakedefine HAVE_X11
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#cmakedefine LT_OBJDIR
+
+/* Include MMX support (only for x86 compatible CPUs) */
+#cmakedefine OPT_INCLUDE_MMX
+
+/* Serialize the FrameBuffer-Type */
+#cmakedefine OPT_SERIALIZE_FRAMEBUFFER
+
+/* *BSD build */
+#cmakedefine OS_BSD
+
+/* CYGWIN build */
+#cmakedefine OS_CYGWIN
+
+/* Darwin build */
+#cmakedefine OS_DARWIN
+
+/* Linux build */
+#cmakedefine OS_LINUX
+
+/* Any Posix compliant system */
+#cmakedefine OS_POSIX
+
+/* Sun Solaris build */
+#cmakedefine OS_SOLARIS
+
+/* native win32 build */
+#cmakedefine OS_WIN32
+
+/* Name of package */
+#cmakedefine PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#cmakedefine PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#cmakedefine PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#cmakedefine PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#cmakedefine PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#cmakedefine PACKAGE_URL
+
+/* Define to the version of this package. */
+#cmakedefine PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#cmakedefine STDC_HEADERS
+
+/* Version number of package */
+#cmakedefine VERSION
+
+/* build with AALIB support */
+#cmakedefine WITH_AALIB
+
+/* build with ASOUNDLIB support */
+#cmakedefine WITH_ASOUNDLIB
+
+/* build with AVIFILE support */
+#cmakedefine WITH_AVIFILE
+
+/* build with FFMPEG support */
+#cmakedefine WITH_FFMPEG
+
+/* build with GL support */
+#cmakedefine WITH_GL
+
+/* build with LIBPNG support */
+#cmakedefine WITH_LIBPNG
+
+/* build with LINUX_JOYSTICK support */
+#cmakedefine WITH_LINUX_JOYSTICK
+
+/* build with MPEG3 support */
+#cmakedefine WITH_MPEG3
+
+/* build with OSS support */
+#cmakedefine WITH_OSS
+
+/* build with SDL support */
+#cmakedefine WITH_SDL
+
+/* build with SDL_IMAGE support */
+#cmakedefine WITH_SDL_IMAGE
+
+/* build with SDL_TTF support */
+#cmakedefine WITH_SDL_TTF
+
+/* build with V4L support */
+#cmakedefine WITH_V4L
+
+/* Define to 1 if the X Window System is missing or not being used. */
+#cmakedefine X_DISPLAY_MISSING
+
+#endif   // CONFIG_H
