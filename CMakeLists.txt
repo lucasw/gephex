@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(gephex)
 
-add_definitions(-DOS_POSIX)
+add_definitions(-DHAVE_CONFIG_H)
 
 ###############################################################################
 find_package(X11)
@@ -9,6 +9,7 @@ set(HAVE_X11 ${X11_FOUND})
 
 if (UNIX AND NOT APPLE)
 set(OS_LINUX true)
+set(OS_POSIX true)
 endif()
 
 # TODO(lucasw) this isn't working with the @PACKAGE@ in the config.h
@@ -46,7 +47,10 @@ check_include_files(inttypes.h HAVE_INTTYPES_H)
 check_include_files(memory.h HAVE_MEMORY_H)
 check_include_files(stdint.h HAVE_STDINT_H)
 check_include_files(stdlib.h HAVE_STDLIB_H)
-check_include_files(strings.h HAVE_STRINGS_H)
+if(${SDL_FOUND})
+else()
+  check_include_files(strings.h HAVE_STRINGS_H)
+endif()
 check_include_files(string.h HAVE_STRING_H)
 check_include_files(sys_stat.h HAVE_SYS_STAT_H)
 check_include_files(sys_types.h HAVE_SYS_TYPES_H)
