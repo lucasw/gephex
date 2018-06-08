@@ -18,11 +18,23 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #cmakedefine HAVE_DLFCN_H
 
-/* Define to 1 if you have the <inttypes.h> header file. */
-#cmakedefine HAVE_INTTYPES_H
-
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #cmakedefine HAVE_LIBSOCKET
+
+/* build with SDL support */
+#cmakedefine WITH_SDL
+
+/* build with SDL_IMAGE support */
+#cmakedefine WITH_SDL_IMAGE
+
+/* build with SDL_TTF support */
+#cmakedefine WITH_SDL_TTF
+
+// these are redundant with SDL headers
+#ifndef WITH_SDL
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#cmakedefine HAVE_INTTYPES_H
 
 /* Define to 1 if you have the <memory.h> header file. */
 #cmakedefine HAVE_MEMORY_H
@@ -38,6 +50,8 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #cmakedefine HAVE_STRING_H
+
+#endif  // WITH_SDL
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #cmakedefine HAVE_SYS_STAT_H
@@ -134,15 +148,6 @@
 
 /* build with OSS support */
 #cmakedefine WITH_OSS
-
-/* build with SDL support */
-#cmakedefine WITH_SDL
-
-/* build with SDL_IMAGE support */
-#cmakedefine WITH_SDL_IMAGE
-
-/* build with SDL_TTF support */
-#cmakedefine WITH_SDL_TTF
 
 /* build with V4L support */
 #cmakedefine WITH_V4L

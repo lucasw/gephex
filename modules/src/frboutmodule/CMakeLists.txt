@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(frboutmodule)
 
+find_package(OpenGL REQUIRED)
+find_package(X11 REQUIRED)
 find_package(SDL)
+# TODO(lucasw) required if SDL is used?
+find_package(SDL_image)
 
 # TODO(lucasw) move these to higher lever cmake file
 add_custom_command(OUTPUT ${PROJECT_NAME}.h
@@ -53,10 +57,24 @@ add_library(${PROJECT_NAME} MODULE
 # mac?
   # ${CMAKE_CURRENT_LIST_DIR}/quartzoutput.c
 
-if(SDL_FOUND)
+target_link_libraries(${PROJECT_NAME} scale colorconv)
+
+# TODO(lwalter) maybe these can be made optional
+# TODO(lwalter) not sure what to bring Xv in with
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} Xv)
+target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES})
+
+if(${SDL_IMAGE_FOUND})
   # target_sources(${PROJECT_NAME} PRIVATE
   #   ${CMAKE_CURRENT_LIST_DIR}/sdlimagedriver.cpp)
-endif(SDL_FOUND)
+  target_link_libraries(${PROJECT_NAME} ${SDL_IMAGE_LIBRARIES})
+endif(${SDL_IMAGE_FOUND})
+
+if(${SDL_FOUND})
+  # target_sources(${PROJECT_NAME} PRIVATE
+  #   ${CMAKE_CURRENT_LIST_DIR}/sdlimagedriver.cpp)
+  target_link_libraries(${PROJECT_NAME} ${SDL_LIBRARY})
+endif(${SDL_FOUND})
 
 # target_link_libraries(${PROJECT_NAME} geo)
 set_target_properties(${PROJECT_NAME} PROPERTIES

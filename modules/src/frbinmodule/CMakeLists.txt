@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(frbinmodule)
 
 find_package(SDL)
+find_package(SDL_image)
 
 # TODO(lucasw) move these to higher lever cmake file
 add_custom_command(OUTPUT ${PROJECT_NAME}.h
@@ -47,9 +48,19 @@ add_library(${PROJECT_NAME} MODULE
   # ${CMAKE_CURRENT_LIST_DIR}/dshowdriver.cpp
   # ${CMAKE_CURRENT_LIST_DIR}/vfwdriver.cpp
 
+# TODO(lwalter) need to trigger the cmake file
+target_link_libraries(${PROJECT_NAME} scale)
+
+if(${SDL_IMAGE_FOUND})
+  # target_sources(${PROJECT_NAME} PRIVATE
+  #   ${CMAKE_CURRENT_LIST_DIR}/sdlimagedriver.cpp)
+  target_link_libraries(${PROJECT_NAME} ${SDL_IMAGE_LIBRARIES})
+endif(${SDL_IMAGE_FOUND})
+
 if(SDL_FOUND)
   target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/sdlimagedriver.cpp)
+  target_link_libraries(${PROJECT_NAME} ${SDL_LIBRARY})
 endif(SDL_FOUND)
 
 # target_link_libraries(${PROJECT_NAME} geo)

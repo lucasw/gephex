@@ -74,6 +74,8 @@ include(base/src/utils/CMakeLists.txt)
 include(engine/src/engine/CMakeLists.txt)
 
 # Modules
+include(modules/src/libscale/CMakeLists.txt)
+include(modules/src/libcolorconv/CMakeLists.txt)
 include(modules/src/frbinmodule/CMakeLists.txt)
 include(modules/src/frboutmodule/CMakeLists.txt)
 include(util/src/libgeo/CMakeLists.txt)
