@@ -75,9 +75,9 @@ namespace utils
     if (m_impl->handle == 0)
       {
 #if defined(OS_WIN32)
-	std::string msg = "Could not load shared libraray '" + path +"'";
+	std::string msg = "Could not load shared library '" + path +"'";
 #elif defined(OS_POSIX)
-	std::string msg = "Could not load shared libraray '" + path +"': "
+	std::string msg = "Could not load shared library '" + path +"': "
 	  + std::string(dlerror());
 #endif
 	throw std::runtime_error(msg.c_str()); 
