@@ -63,6 +63,10 @@ include_directories(
   ${CMAKE_HOME_DIRECTORY}/engine/src
 )
 
+# Gui
+include(qtgui/src/guimodel/CMakeLists.txt)
+include(qtgui/src/gui/CMakeLists.txt)
+
 # Engine
 # include(base/src/interfaces/CMakeLists.txt)
 include(engine/src/dllloader/CMakeLists.txt)
