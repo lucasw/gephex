@@ -21,9 +21,9 @@ libdialogs_a_SOURCES = \
 nodist_libdialogs_a_SOURCES = $(BUILT_SOURCES)
 
 aboutdialog_ui.h: aboutdialog.ui
-	$(UIC) @srcdir@/aboutdialog.ui > @builddir@/aboutdialog_ui.h
+	$(UIC) @srcdir@/aboutdialog.ui > @builddir@/ui_aboutdialog.h
 changesdialog_ui.h: changesdialog.ui
-	$(UIC) @srcdir@/changesdialog.ui > @builddir@/changesdialog_ui.h
+	$(UIC) @srcdir@/changesdialog.ui > @builddir@/ui_changesdialog.h
 
 INCLUDES = \
 	-I @srcdir@/../.. \

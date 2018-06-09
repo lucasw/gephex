@@ -778,5 +778,5 @@ protected slots:
 
 }
 
-#include "graphnameview_moc_cpp.cpp"
+// #include "graphnameview_moc_cpp.cpp"
 

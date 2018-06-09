@@ -23,7 +23,7 @@
 #ifndef INCLUDED_ABOUT_DIALOG_H
 #define INCLUDED_ABOUT_DIALOG_H
 
-#include "aboutdialog_ui.h"
+#include "ui_aboutdialog.h"
 
 class AboutDialog : public QDialog,
 		    public Ui_AboutDialog

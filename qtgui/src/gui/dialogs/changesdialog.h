@@ -23,7 +23,7 @@
 #ifndef INCLUDED_CHANGESDIALOG_H
 #define INCLUDED_CHANGESDIALOG_H
 
-#include "changesdialog_ui.h"
+#include "ui_changesdialog.h"
 
 class ChangesDialog : public QDialog,
 		      public Ui_ChangesDialogBase

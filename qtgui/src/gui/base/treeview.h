@@ -25,6 +25,9 @@
 
 #include <string> 
 #include <vector>
+#include <QtGui/QTreeWidget>
+
+#include "utils/autoptr.h"
 
 class QWidget;
 
@@ -33,7 +36,7 @@ namespace gui
 
   class TreeViewItem;
   class TreeViewImpl;
-
+  class ColumnTextChangeListenerImpl;
   /**
    * This class aims to be a simple and clean wrapper for the QT QListView.
    * It is much less flexible than QListView an the performance is
@@ -72,6 +75,37 @@ namespace gui
     
   };
 
+  class TreeViewImpl : public QTreeWidget
+  {
+    Q_OBJECT
+    public:
+      TreeViewImpl(QWidget* parent, const std::string& name,
+          const std::vector<std::string>& columnNames,
+          TreeView* treeview);
+      virtual ~TreeViewImpl();
+      void insertItem( TreeViewItem& item, TreeViewItem* parent);
+      void removeItem( TreeViewItem& item );
+    private:
+      TreeViewItem* findTreeViewItem(QTreeWidgetItem* item);
+      void mouseReleaseEvent(QMouseEvent* event);
+
+    private slots:
+      void itemClickedSlot(QTreeWidgetItem* item,
+          int column);
+      void itemActivatedSlot(QTreeWidgetItem* item,
+          int column);
+
+    private:
+      typedef QTreeWidgetItem* ItemImplPtr;
+      typedef utils::AutoPtr<ColumnTextChangeListenerImpl> TextChangeListenerPtr;
+      typedef std::map<TreeViewItem*,
+              std::pair<ItemImplPtr, TextChangeListenerPtr> > ImplMap;
+      ImplMap m_impls;
+      typedef std::map<QTreeWidgetItem*, TreeViewItem*> ItemMap;
+      ItemMap m_items;
+      TreeViewItem* activeItem;
+      TreeView* m_treeview;
+  };  // TreeViewImpl
 }
 
 #endif
