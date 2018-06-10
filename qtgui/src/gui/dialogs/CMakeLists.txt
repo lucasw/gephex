@@ -8,7 +8,10 @@ else()
   include(${QT_USE_FILE})
 endif()
 
+message(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/..
   ${CMAKE_CURRENT_LIST_DIR}/../..
   ${CMAKE_HOME_DIRECTORY}/base/src

@@ -36,7 +36,7 @@ namespace gui
 
 class AskForStringDialog : public QDialog
 { 
-    Q_OBJECT
+  // Q_OBJECT
 
 public:
     AskForStringDialog( QWidget* parent, const std::string& caption, const std::string& text );

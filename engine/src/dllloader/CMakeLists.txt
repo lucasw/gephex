@@ -15,7 +15,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
+include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} STATIC

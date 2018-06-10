@@ -18,11 +18,10 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_HOME_DIRECTORY}/base/src/interfaces
 )
 
-include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
+include(${CMAKE_HOME_DIRECTORY}/base/src/netinterfaces/interfaces.cmake)
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
 add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/main.cpp
   ${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp

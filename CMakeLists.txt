@@ -64,23 +64,22 @@ include_directories(
 )
 
 # Gui
-include(qtgui/src/guimodel/CMakeLists.txt)
-include(qtgui/src/gui/CMakeLists.txt)
+add_subdirectory(qtgui/src/guimodel)
+add_subdirectory(qtgui/src/gui)
 
 # Engine
-# include(base/src/interfaces/CMakeLists.txt)
-include(engine/src/dllloader/CMakeLists.txt)
-include(engine/src/model/CMakeLists.txt)
-include(engine/src/renderer/CMakeLists.txt)
-include(base/src/netinterfaces/CMakeLists.txt)
-include(base/src/net/CMakeLists.txt)
-include(base/src/utils/CMakeLists.txt)
-include(engine/src/engine/CMakeLists.txt)
+add_subdirectory(engine/src/dllloader)
+add_subdirectory(engine/src/model)
+add_subdirectory(engine/src/renderer)
+add_subdirectory(base/src/netinterfaces)
+add_subdirectory(base/src/net)  # gphxnetwork
+add_subdirectory(base/src/utils)
+add_subdirectory(engine/src/engine)
 
 # Modules
-include(modules/src/libscale/CMakeLists.txt)
-include(modules/src/libcolorconv/CMakeLists.txt)
-include(modules/src/frbinmodule/CMakeLists.txt)
-include(modules/src/frboutmodule/CMakeLists.txt)
-include(util/src/libgeo/CMakeLists.txt)
-include(modules/src/rotozoommodule/CMakeLists.txt)
+add_subdirectory(modules/src/libscale)
+add_subdirectory(modules/src/libcolorconv)
+add_subdirectory(modules/src/frbinmodule)
+add_subdirectory(modules/src/frboutmodule)
+add_subdirectory(util/src/libgeo)
+add_subdirectory(modules/src/rotozoommodule)

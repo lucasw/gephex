@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
-project(net)
+project(gphxnetwork)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../base/src
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
@@ -12,10 +13,10 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
-  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_HOME_DIRECTORY}/util/include
 )
 
-include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
+include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} STATIC

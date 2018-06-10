@@ -16,7 +16,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 )
 
 set(HDRS
-  ${CMAKE_CURRENT_LIST_DIR}/askforstringdialog.h
+  # ${CMAKE_CURRENT_LIST_DIR}/askforstringdialog.h
   ${CMAKE_CURRENT_LIST_DIR}/treeview.h
 )
 
@@ -25,6 +25,8 @@ if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
 else()
   qt4_wrap_cpp(${PROJECT_NAME}_MOCS ${HDRS})
 endif()
+
+include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
 # link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} STATIC
@@ -48,6 +50,7 @@ add_library(${PROJECT_NAME} STATIC
   ${CMAKE_CURRENT_LIST_DIR}/keyboardmanager.h
   ${CMAKE_CURRENT_LIST_DIR}/picmanager.h
   ${${PROJECT_NAME}_MOCS}
+  interfaces/ierrorreceiver.h
 )
 
 if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")

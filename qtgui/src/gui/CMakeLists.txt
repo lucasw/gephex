@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(gui)
+project(gephex-gui)
 
 if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
   find_package(Qt5Widgets REQUIRED)
@@ -9,25 +9,24 @@ else()
 endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/dialogs
   ${CMAKE_CURRENT_LIST_DIR}/../../../base/src
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/numbertype
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/positiontype
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/stringtype
-#  ${CMAKE_CURRENT_LIST_DIR}/../../../util/include
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
-  ${CMAKE_CURRENT_LIST_DIR}/../libscale
-  ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}/interfaces
-  ${CMAKE_CURRENT_BINARY_DIR}/netinterfaces
+  ${CMAKE_CURRENT_LIST_DIR}/..
   ${CMAKE_HOME_DIRECTORY}/base/src/interfaces
+  ${CMAKE_HOME_DIRECTORY}/util/include
 )
 
-include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/dialogs/CMakeLists.txt)
-include(${CMAKE_CURRENT_LIST_DIR}/base/CMakeLists.txt)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/dialogs)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/base)  # guibase
+
+include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -56,7 +55,7 @@ else()
   qt4_wrap_cpp(${PROJECT_NAME}_MOCS ${HDRS})
 endif()
 
-add_executable(gephex-${PROJECT_NAME}
+add_executable(${PROJECT_NAME}
   ${${PROJECT_NAME}_MOCS}
   ${CMAKE_CURRENT_LIST_DIR}/connectionwidget.cpp
   ${CMAKE_CURRENT_LIST_DIR}/controlwidget.cpp
@@ -97,16 +96,27 @@ add_executable(gephex-${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/typeviewfactory.h
   ${CMAKE_CURRENT_LIST_DIR}/vjmainwindow.h
   interfaces/imoduleclassnamesender.h
+  interfaces/icontrolvaluereceiver.h
+  interfaces/igraphnamereceiver.h
+  interfaces/irendererstatusreceiver.h
+  interfaces/imodelcontrolreceiver.h
+  interfaces/ierrorreceiver.h
+  interfaces/ienginecontrolreceiver.h
+  interfaces/irenderercontrolreceiver.h
+  interfaces/igraphnamesender.h
+  interfaces/ierrorsender.h
+  interfaces/irendererstatussender.h
+  interfaces/imoduleclassinforeceiver.h
 )
 
 target_link_libraries(${PROJECT_NAME}
   dialogs
   gphxnetwork
   guibase
-  guieditor
+  # guieditor
   guimodel
   netinterfaces
-  typeviews
+  # typeviews
   utils
 )
 
