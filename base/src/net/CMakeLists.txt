@@ -57,13 +57,14 @@ add_library(${PROJECT_NAME} STATIC
   ${CMAKE_CURRENT_LIST_DIR}/socketadaptor.h
   ${CMAKE_CURRENT_LIST_DIR}/tagdispatcher.h
   # ${CMAKE_CURRENT_LIST_DIR}/tagdispatcher.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/protocoltest.h
-  ${CMAKE_CURRENT_LIST_DIR}/tcpsockettest.h
-  ${CMAKE_CURRENT_LIST_DIR}/tagdispatchertest.h
-  # ${CMAKE_CURRENT_LIST_DIR}/taggertest.h
-  ${CMAKE_CURRENT_LIST_DIR}/domainsockettest.h
   ${CMAKE_CURRENT_LIST_DIR}/convertbin.h
 )
+
+# ${CMAKE_CURRENT_LIST_DIR}/protocoltest.h
+#   ${CMAKE_CURRENT_LIST_DIR}/tcpsockettest.h
+#   ${CMAKE_CURRENT_LIST_DIR}/tagdispatchertest.h
+#  # ${CMAKE_CURRENT_LIST_DIR}/taggertest.h
+#   ${CMAKE_CURRENT_LIST_DIR}/domainsockettest.h
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   PREFIX ""

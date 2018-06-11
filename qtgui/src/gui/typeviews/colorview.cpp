@@ -30,9 +30,10 @@
 
 #include <QtGui/QColorDialog>
 
+
 namespace gui
 {
-
+#if 0
   class ColorView : public gui::TypeView
   {
     Q_OBJECT
@@ -117,7 +118,7 @@ private slots:
     QAbstractButton* m_select;
     std::string m_current;
   };
-
+#endif
 
   // constructor
 
@@ -135,5 +136,3 @@ private slots:
   }
 
 }
-
-#include "colorview_moc_cpp.cpp"

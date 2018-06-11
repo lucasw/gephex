@@ -7,7 +7,21 @@ class QWidget;
 
 namespace gui
 {
-  class MouseOverImpl;
+  class MouseOverImpl : public QObject
+  {
+    Q_OBJECT
+  public:
+    MouseOverImpl(QWidget* parent);
+
+  signals:
+    void mouseOver(QWidget*);
+
+  protected:
+    bool eventFilter(QObject* o, QEvent* e);
+
+  private:
+    QWidget* m_parent;
+  };
 
   /**
    * Objects of this class  emit a signal once the mouse is 

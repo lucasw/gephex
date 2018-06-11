@@ -28,6 +28,7 @@
 #include <QtCore/QObject>
 
 #include "base/treeview.h"
+#include "base/treeviewitem.h"
 
 #include "interfaces/igraphnamereceiver.h"
 
@@ -39,12 +40,119 @@ class IErrorReceiver;
 
 namespace gui
 {
-
-  class FolderItem;
-  class GraphItem;
-  class SnapItem;
   class GraphNameView;
   class TreeView;
+
+  class FolderItem : public QObject, public TreeViewItem
+  {
+    Q_OBJECT
+    public:
+      enum Permission {NONE = 0, DENY_RENAME = 1, DENY_REMOVE = 2};
+
+      FolderItem(IModelControlReceiver& model,
+          const std::string graphID,
+          const std::string& path,
+          const std::string& displayName, int mask = NONE);
+
+      std::string getPath() const;
+      virtual void setColumnTextChangeListener(ColumnTextChangeListener& l);
+      virtual QMenu* getPropertyMenu();
+
+      protected slots:
+        void newGraphSlot();
+
+    private:
+      IModelControlReceiver& m_model;
+      std::string m_graphID;
+      std::string m_path;
+      std::string m_name;
+
+      int m_mask;
+  };
+
+  class GraphItem : public QObject, public TreeViewItem
+  {
+    Q_OBJECT
+    public:
+      GraphItem(const std::string& graphID,
+          const std::string& path,
+          const std::string& graphName,
+          IModelControlReceiver& model);
+
+      virtual ~GraphItem();
+
+      // must be called when a snapshot is added to this graph
+      void snapAdded();
+      // must be called when a snapshot is removed from this graph
+      void snapRemoved();
+      int numberOfSnaps() const;
+
+      virtual void setColumnTextChangeListener(ColumnTextChangeListener& l);
+      virtual QMenu* getPropertyMenu();
+      std::string graphID() const;
+      std::string graphName() const;
+      void setName(const std::string& newName);
+      void setStatus(const std::string& newStatus);
+
+      protected slots:
+        void saveGraphSlot();
+      void copyGraphSlot();
+      void renameGraphSlot();
+      void killGraphSlot();
+      void newSnapshotSlot();
+    private:
+      std::string m_graphID;
+      std::string m_path;
+      std::string m_graphName;
+      IModelControlReceiver& m_model;
+      int m_numberOfSnaps;
+  };
+
+  class GraphNameViewObject;
+
+  class SnapItem : public QObject, public TreeViewItem
+  {
+    Q_OBJECT
+    public:
+      SnapItem(const std::string& graphID,
+          const std::string& snapID,
+          const std::string& graphName,
+          const std::string& snapName,
+          IModelControlReceiver& model,
+          GraphNameViewObject& stupidObject);
+
+      virtual ~SnapItem();
+      virtual void setColumnTextChangeListener(ColumnTextChangeListener& l);
+      virtual void onActivate( int /*column*/ );
+      virtual QMenu* getPropertyMenu();
+
+      std::string graphID() const;
+      std::string snapID() const;
+      std::string graphName() const;
+      std::string snapName() const;
+      void setNames(const std::string& newGraphName,
+          const std::string& newSnapName);
+
+      void setStatus(const std::string& newStatus);
+
+      protected slots:
+        void editSlot();
+      void renderSlot();
+      void renameSlot();
+      void killSlot();
+      void copySlot();
+
+    private:
+      std::string m_graphID;
+      std::string m_snapID;
+      std::string m_graphName;
+      std::string m_snapName;
+      IModelControlReceiver& m_model;
+      GraphNameViewObject& m_stupidObject;
+
+      enum {RENAME_SNAPSHOT, KILL_SNAPSHOT, COPY_SNAPSHOT,
+        EDIT_GRAPH, RENDER_GRAPH};
+  };
 
   class GraphNameViewObject : public QObject
   {

@@ -24,7 +24,9 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 )
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/dialogs)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/editor)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/base)  # guibase
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/typeviews)  # guibase
 
 include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
@@ -32,9 +34,6 @@ link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(HDRS
   ${CMAKE_CURRENT_LIST_DIR}/controlwidget.h
-  ${CMAKE_CURRENT_LIST_DIR}/graphnameview.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/graphnameview.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/graphnameview.cpp
   ${CMAKE_CURRENT_LIST_DIR}/graphnameview.h
   ${CMAKE_CURRENT_LIST_DIR}/hidebutton.h
   ${CMAKE_CURRENT_LIST_DIR}/inputplugwidget.h
@@ -113,10 +112,10 @@ target_link_libraries(${PROJECT_NAME}
   dialogs
   gphxnetwork
   guibase
-  # guieditor
+  guieditor
   guimodel
   netinterfaces
-  # typeviews
+  typeviews
   utils
 )
 

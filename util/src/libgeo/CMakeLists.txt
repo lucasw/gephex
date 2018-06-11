@@ -18,6 +18,8 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/include
 )
 
+link_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
   PREFIX ""
 )

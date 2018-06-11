@@ -26,8 +26,34 @@
 
 #include "gui/typeview.h"
 
+#include <iostream>
+#include <stdio.h>
+
+#include <QtGui/qcombobox.h>
+#include <QtGui/qlayout.h>
+
+#include "utils/structreader.h"
+#include "utils/stringtokenizer.h"
+
 namespace gui
 {
+  class ComboboxStringView : public gui::TypeView
+  {
+    Q_OBJECT
+  public:
+    ComboboxStringView(QWidget* parent,
+		       const ParamMap& params);
+
+    void valueChange(const utils::Buffer& newValue);
+
+  public slots:
+    void comboboxChanged(const QString& s);
+
+  private:
+    typedef std::map<std::string, int> ValueMap;
+    ValueMap m_values;
+    QComboBox* m_box;
+  };
 
   class ComboboxStringViewConstructor : public TypeViewConstructor
   {

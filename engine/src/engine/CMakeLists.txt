@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(engine)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../base/src
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
@@ -13,9 +14,10 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}/interfaces
-  ${CMAKE_CURRENT_BINARY_DIR}/netinterfaces
   ${CMAKE_HOME_DIRECTORY}/base/src/interfaces
+  ${CMAKE_HOME_DIRECTORY}/base/src/net
+  ${CMAKE_HOME_DIRECTORY}/base/src/utils
+  ${CMAKE_HOME_DIRECTORY}/util/include
 )
 
 include(${CMAKE_HOME_DIRECTORY}/base/src/netinterfaces/interfaces.cmake)
@@ -33,13 +35,50 @@ add_executable(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/bufferedsender.h
   ${CMAKE_CURRENT_LIST_DIR}/bufferedsender.cpp
   ${CMAKE_CURRENT_LIST_DIR}/synced_tasks.h
+  interfaces/ienginecontrolreceiver.h
+  interfaces/imoduleconstructiondumbsender.h
+  interfaces/imoduleclassspecreceiver.h
+  interfaces/igraphnamesender.h
+  interfaces/imodelcontrolreceiver.h
+  interfaces/imoduleconstructionsmartsender.h
+  interfaces/imoduledatasender.h
+  interfaces/igraphdatasender.h
+  interfaces/iserializedgraphsender.h
+  interfaces/ismartcontrolvaluereceiver.h
+  interfaces/icontrolvaluesender.h
+  interfaces/imodulestatisticssender.h
+  interfaces/imodulestatisticssmartreceiver.h
+  interfaces/imodelstatussender.h
+  interfaces/irenderercontrolreceiver.h
+  interfaces/imoduleclassreceiver.h
+  interfaces/itypeclassreceiver.h
+  interfaces/imoduleconstructionsmartreceiver.h
+  interfaces/ismartcontrolvaluesender.h
+  interfaces/imodulestatisticssmartsender.h
+  interfaces/irendererstatussender.h
+  interfaces/imoduleclassinfosender.h
+  interfaces/imoduleclasssender.h
+  interfaces/imoduleclassspecsender.h
+  interfaces/itypeclasssender.h
+  netinterfaces/controlvaluereceivernet.h
+  netinterfaces/errorreceivernet.h
+  netinterfaces/graphdatareceivernet.h
+  netinterfaces/graphnamereceivernet.h
+  netinterfaces/modelcontrolsendernet.h
+  netinterfaces/modelstatusreceivernet.h
+  netinterfaces/moduleclassinforeceivernet.h
   netinterfaces/moduleconstructiondumbreceivernet.h
+  netinterfaces/moduledatareceivernet.h
+  netinterfaces/modulestatisticsreceivernet.h
+  netinterfaces/rendererstatusreceivernet.h
+  netinterfaces/renderercontrolsendernet.h
+  netinterfaces/enginecontrolsendernet.h
 )
 target_link_libraries(${PROJECT_NAME}
   dllloader
   model
   renderer
-  net
+  gphxnetwork
   netinterfaces
   utils
 )

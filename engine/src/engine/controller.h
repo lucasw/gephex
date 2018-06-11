@@ -23,20 +23,20 @@
 #ifndef INCLUDED_CONTROLLER_H
 #define INCLUDED_CONTROLLER_H
 
-#include "ienginecontrolreceiver.h"
+#include "interfaces/ienginecontrolreceiver.h"
 #include "itask.h"
 #include "isocket.h"
 
-#include "moduleconstructiondumbreceivernet.h"
-#include "moduleclassinforeceivernet.h"
-#include "moduledatareceivernet.h"
-#include "graphdatareceivernet.h"
-#include "controlvaluereceivernet.h"
-#include "modulestatisticsreceivernet.h"
-#include "modelstatusreceivernet.h"
-#include "graphnamereceivernet.h"
-#include "errorreceivernet.h"
-#include "rendererstatusreceivernet.h"
+#include "netinterfaces/moduleconstructiondumbreceivernet.h"
+#include "netinterfaces/moduleclassinforeceivernet.h"
+#include "netinterfaces/moduledatareceivernet.h"
+#include "netinterfaces/graphdatareceivernet.h"
+#include "netinterfaces/controlvaluereceivernet.h"
+#include "netinterfaces/modulestatisticsreceivernet.h"
+#include "netinterfaces/modelstatusreceivernet.h"
+#include "netinterfaces/graphnamereceivernet.h"
+#include "netinterfaces/errorreceivernet.h"
+#include "netinterfaces/rendererstatusreceivernet.h"
 
 #include "buffer.h"
 #include "tagger.h"
@@ -46,14 +46,14 @@
 
 #include "tcpserversocket.h"
 
-#include "modelcontrolsendernet.h"
-#include "renderercontrolsendernet.h"
-#include "enginecontrolsendernet.h"
+#include "netinterfaces/modelcontrolsendernet.h"
+#include "netinterfaces/renderercontrolsendernet.h"
+#include "netinterfaces/enginecontrolsendernet.h"
 
 #include "autoptr.h"
-#include "model.h"
-#include "renderer.h"
-#include "dllloader.h"
+#include "model/model.h"
+#include "renderer/renderer.h"
+#include "dllloader/dllloader.h"
 #include "scheduler.h"
 #include "synced_tasks.h"
 

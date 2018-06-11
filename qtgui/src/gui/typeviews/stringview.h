@@ -25,15 +25,86 @@
 
 #include "gui/typeview.h"
 
+#include <cstring>
+#include <sstream>
+#include <iostream>
+
+#include <QtGui/qvalidator.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/QHBoxLayout>
+
+#include <utils/structreader.h>
+#include <utils/buffer.h>
+
+
 namespace gui
 {
+  class StringView: public gui::TypeView
+  {
+    Q_OBJECT
+    public:
+      StringView(QWidget* parent, const ParamMap& params)
+        : TypeView(parent, params)
+      {
+        m_lineEdit = new QLineEdit(this);
+        m_layout->addWidget(m_lineEdit);
+
+        connect(m_lineEdit, SIGNAL(returnPressed()),
+            this, SLOT(lineeditChanged()));
+      }
+
+      virtual ~StringView() {}
+
+
+      virtual void valueChange(const utils::Buffer& newValue)
+      {
+        int len = newValue.getLen();
+        const char* raw;
+        if (len <= 0)
+        {
+          raw = "";
+          len = 1;
+        }
+        else
+        {
+          raw = reinterpret_cast<const char*>(newValue.getPtr());
+        }
+
+        if (raw[len-1] != 0)
+        {
+          std::cout << "ignoring string with missing termination\n";
+          return;
+        }
+        std::string doof( raw, len );
+
+        m_lineEdit->setText(doof.c_str());
+      }
+
+      public slots:
+        void lineeditChanged()
+        {
+          QByteArray raw = m_lineEdit->text().toUtf8();
+          const char* text = raw.constData();
+
+          //      std::cout << "Lineedit text = '" << text << "'" << std::endl;
+          utils::Buffer
+            b = utils::Buffer(reinterpret_cast<const unsigned char*>(text),
+                std::strlen(text)+1);
+
+          emit valueChanged(b);
+        }
+
+    private:
+      QLineEdit* m_lineEdit;
+  };
+
   class StringViewConstructor
     : public TypeViewConstructor
   {
-  public:
-    StringViewConstructor();
-    virtual TypeView* construct(QWidget* parent,
-				const ParamMap& params) const;
+    public:
+      StringViewConstructor();
+      virtual TypeView* construct(QWidget* parent,
+          const ParamMap& params) const;
   };
 }
 

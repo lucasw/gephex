@@ -34,7 +34,7 @@
 namespace gui
 {
 
-
+#if 0
   class KleinesFeld : public QWidget
   {
     Q_OBJECT
@@ -160,6 +160,7 @@ void kleinesfeldChanged(const QPoint& p)
     KleinesFeld* m_mausFresser;
     bool m_setValueCalled;
   };
+#endif
 
   // constructor klass
 
@@ -244,5 +245,3 @@ void kleinesfeldChanged(const QPoint& p)
 
 
 }
-
-#include "positionview_moc_cpp.cpp"

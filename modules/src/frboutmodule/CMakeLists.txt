@@ -23,6 +23,7 @@ add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
 )
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/numbertype

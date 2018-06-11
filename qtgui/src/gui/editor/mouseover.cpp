@@ -18,21 +18,13 @@ namespace gui
     return is_child(parent, child->parent());
   }
 
-  class MouseOverImpl : public QObject
-  {
-    Q_OBJECT
-  public:
-    MouseOverImpl(QWidget* parent)
+    MouseOverImpl::MouseOverImpl(QWidget* parent)
       : QObject(parent), m_parent(parent)
     {
       qApp->installEventFilter(this);
     }
 
-  signals:
-    void mouseOver(QWidget*);
- 
-  protected:
-    bool eventFilter(QObject* o, QEvent* e)
+    bool MouseOverImpl::eventFilter(QObject* o, QEvent* e)
     {
       if ( e->type() == QEvent::MouseMove &&
            is_child(m_parent, o) )
@@ -64,9 +56,6 @@ namespace gui
       return false;
     }
 
-  private:
-    QWidget* m_parent;
-  };
 
   MouseOver::MouseOver(QWidget* parent)
     : QObject(parent), m_impl(new MouseOverImpl(parent))
@@ -81,5 +70,3 @@ namespace gui
   }
 
 }
-
-#include "mouseover_moc_cpp.cpp"

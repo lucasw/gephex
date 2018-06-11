@@ -16,6 +16,7 @@ add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
 )
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
+  ${CMAKE_BINARY_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/numbertype
@@ -31,7 +32,9 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 # -Wl, -soname?
 # set(CMAKE_SHARED_LIBRARY_PREFIX "blah")
 # message("binary dir: " ${CMAKE_CURRENT_BINARY_DIR})
-link_directories(${CMAKE_CURRENT_BINARY_DIR})
+link_directories(${CMAKE_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}/util/src/libgeo  # TODO(lucasw) should this get pulled in below?
+)
 add_library(${PROJECT_NAME} MODULE ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c)
 add_dependencies(${PROJECT_NAME} libgeo)
 target_link_libraries(${PROJECT_NAME} geo)

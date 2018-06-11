@@ -45,31 +45,26 @@ namespace gui
 {
   static bool checkNamePolicy (const std::string& name);
 
-  class FolderItem : public QObject, public TreeViewItem
-  {
-    Q_OBJECT
-  public:
-    enum Permission {NONE = 0, DENY_RENAME = 1, DENY_REMOVE = 2};
 
-    FolderItem(IModelControlReceiver& model, 
+  FolderItem::FolderItem(IModelControlReceiver& model,
                const std::string graphID,
                const std::string& path,
-               const std::string& displayName, int mask = NONE)
+               const std::string& displayName, int mask)
       : m_model(model), m_graphID(graphID), m_path(path), 
       m_name(displayName), m_mask(mask) {}
 
-    std::string getPath() const
+    std::string FolderItem::getPath() const
     {
       return m_path;
     }
 
-    virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
+    void FolderItem::setColumnTextChangeListener(ColumnTextChangeListener& l)
     {
       TreeViewItem::setColumnTextChangeListener(l);
       l.textChanged(0, m_name);
     }
 
-    virtual QMenu* getPropertyMenu()
+    QMenu* FolderItem::getPropertyMenu()
     {
       QMenu* popme = new QMenu("TopPop");
 
@@ -82,9 +77,7 @@ namespace gui
       return popme;      
     }
 
-  protected slots:
-
-    void newGraphSlot()
+    void FolderItem::newGraphSlot()
     {
       bool retry=true;
       while(retry)
@@ -121,21 +114,7 @@ namespace gui
 	}
     }
 
-  private:
-    IModelControlReceiver& m_model;
-    std::string m_graphID;
-    std::string m_path;
-    std::string m_name;
-
-    int m_mask;
-
-  };
-
-  class GraphItem : public QObject, public TreeViewItem
-  {
-    Q_OBJECT
-  public:
-    GraphItem(const std::string& graphID,
+    GraphItem::GraphItem(const std::string& graphID,
 	      const std::string& path,
 	      const std::string& graphName,
 	      IModelControlReceiver& model)
@@ -145,32 +124,32 @@ namespace gui
              m_model(model),
 	     m_numberOfSnaps(0) {}
 
-    virtual ~GraphItem() {}
+    GraphItem::~GraphItem() {}
 
     // must be called when a snapshot is added to this graph
-    void snapAdded()
+    void GraphItem::snapAdded()
     {
       m_numberOfSnaps++;
     }
 
     // must be called when a snapshot is removed from this graph
-    void snapRemoved()
+    void GraphItem::snapRemoved()
     {
       m_numberOfSnaps--;
     }
 
-    int numberOfSnaps() const
+    int GraphItem::numberOfSnaps() const
     {
       return m_numberOfSnaps;
     }
 
-    virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
+    void GraphItem::setColumnTextChangeListener(ColumnTextChangeListener& l)
     {
       TreeViewItem::setColumnTextChangeListener(l);
       l.textChanged(0,m_graphName.c_str());
     }
 
-    virtual QMenu* getPropertyMenu()
+    QMenu* GraphItem::getPropertyMenu()
     {
       QMenu *popme = new QMenu("GraphPopup");
 
@@ -196,34 +175,33 @@ namespace gui
     }
 
 
-    std::string graphID() const
+    std::string GraphItem::graphID() const
     {
       return m_graphID;
     }
 
-    std::string graphName() const
+    std::string GraphItem::graphName() const
     {
       return m_graphName;
     }
 
-    void setName(const std::string& newName)
+    void GraphItem::setName(const std::string& newName)
     {
       m_graphName = newName;
       m_textListener->textChanged(0,newName.c_str());
     }
 
-    void setStatus(const std::string& newStatus)
+    void GraphItem::setStatus(const std::string& newStatus)
     {
       m_textListener->textChanged(1,newStatus.c_str());
     }
 
-protected slots:
-   void saveGraphSlot()
+   void GraphItem::saveGraphSlot()
     {
       m_model.saveGraph(m_graphID);
     }
 
-   void copyGraphSlot()
+   void GraphItem::copyGraphSlot()
     {
       bool retry=true;
       while(retry)
@@ -254,7 +232,7 @@ protected slots:
 	}
     }
 
-   void renameGraphSlot()
+   void GraphItem::renameGraphSlot()
     {
       bool retry=true;
       while(retry)
@@ -285,35 +263,19 @@ protected slots:
 	}
     }
 
-   void killGraphSlot()
+   void GraphItem::killGraphSlot()
     {
       m_model.deleteGraph(m_graphID);
     }
 
-   void newSnapshotSlot()
+   void GraphItem::newSnapshotSlot()
     {
       std::string newName = AskForStringDialog::open(0, "New Snapshot",
 						     "Enter a name");
       m_model.newControlValueSet(m_graphID, newName);
     }
-	  
-  private:
-    std::string m_graphID;
-    std::string m_path;
-    std::string m_graphName;
 
-    IModelControlReceiver& m_model;
-
-    int m_numberOfSnaps;
-
-  };
-
-
-  class SnapItem : public QObject, public TreeViewItem
-  {
-    Q_OBJECT
-  public:
-    SnapItem(const std::string& graphID,
+  SnapItem::SnapItem(const std::string& graphID,
 	     const std::string& snapID,
 	     const std::string& graphName,
 	     const std::string& snapName,
@@ -323,21 +285,21 @@ protected slots:
 	m_graphName(graphName), m_snapName(snapName),
 	m_model(model), m_stupidObject(stupidObject) {}
 
-    virtual ~SnapItem() {}
+    SnapItem::~SnapItem() {}
 
-    virtual void setColumnTextChangeListener(ColumnTextChangeListener& l)
+    void SnapItem::setColumnTextChangeListener(ColumnTextChangeListener& l)
     {
       TreeViewItem::setColumnTextChangeListener(l);
       l.textChanged(0,m_snapName.c_str());
     }
 
-    virtual void onActivate( int /*column*/ )
+    void SnapItem::onActivate( int /*column*/ )
     {
       this->editSlot();
       this->renderSlot();
     }
 
-    virtual QMenu* getPropertyMenu()
+    QMenu* SnapItem::getPropertyMenu()
     {
       QMenu *popme = new QMenu("pop");
 
@@ -362,27 +324,27 @@ protected slots:
       return popme;
     }
 
-    std::string graphID() const
+    std::string SnapItem::graphID() const
     {
       return m_graphID;
     }
 
-    std::string snapID() const
+    std::string SnapItem::snapID() const
     {
       return m_snapID;
     }
 
-    std::string graphName() const
+    std::string SnapItem::graphName() const
     {
       return m_graphName;
     }
 
-    std::string snapName() const
+    std::string SnapItem::snapName() const
     {
       return m_snapName;
     }
 
-    void setNames(const std::string& newGraphName,
+    void SnapItem::setNames(const std::string& newGraphName,
 		  const std::string& newSnapName)
     {
       m_graphName = newGraphName;
@@ -390,24 +352,23 @@ protected slots:
       m_textListener->textChanged(0,newSnapName.c_str());
     }
 
-    void setStatus(const std::string& newStatus)
+    void SnapItem::setStatus(const std::string& newStatus)
     {
       m_textListener->textChanged(1,newStatus.c_str());
     }
 
-protected slots:
-    void editSlot()
+    void SnapItem::editSlot()
     {
       m_stupidObject.undisplayProperties_();
       m_model.changeEditGraph(m_graphID, m_snapID);
     }
 
-    void renderSlot()
+    void SnapItem::renderSlot()
     {
       m_model.changeRenderedGraph(m_graphID, m_snapID);
     }
 
-    void renameSlot()
+    void SnapItem::renameSlot()
     {
       std::string 
 	newName = AskForStringDialog::open(0, "Rename Snapshot",
@@ -415,12 +376,12 @@ protected slots:
       m_model.renameControlValueSet(m_graphID, m_snapID, newName);
     }
 
-    void killSlot()
+    void SnapItem::killSlot()
     {
       m_model.deleteControlValueSet(m_graphID, m_snapID);
     }
 
-    void copySlot()
+    void SnapItem::copySlot()
     {
       std::string 
 	newName = AskForStringDialog::open(0, "Copy Snapshot",
@@ -428,21 +389,6 @@ protected slots:
 
       m_model.copyControlValueSet(m_graphID, m_snapID, newName);
     }
-
-  private:
-    std::string m_graphID;
-    std::string m_snapID;
-    std::string m_graphName;
-    std::string m_snapName;
-    IModelControlReceiver& m_model;
-    
-    GraphNameViewObject& m_stupidObject;
-
-    enum {RENAME_SNAPSHOT, KILL_SNAPSHOT, COPY_SNAPSHOT,
-	  EDIT_GRAPH, RENDER_GRAPH};
-
-
-  };
 
   GraphNameViewObject::GraphNameViewObject(QObject* parent,
 					   GraphNameView& view)

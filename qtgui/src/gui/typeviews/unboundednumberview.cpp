@@ -34,7 +34,7 @@
 
 namespace gui
 {
-
+#if 0
   class UnboundedNumberView: public gui::TypeView
   {
     Q_OBJECT
@@ -103,7 +103,7 @@ public slots:
     double m_value;
     std::ostringstream m_os;
   };
-
+#endif
   // constructor
 
   UnboundedNumberViewConstructor::UnboundedNumberViewConstructor()
@@ -118,5 +118,3 @@ public slots:
     return new UnboundedNumberView(parent, params);
   }
 }
-
-#include "unboundednumberview_moc_cpp.cpp"

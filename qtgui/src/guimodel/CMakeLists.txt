@@ -59,6 +59,10 @@ add_library(${PROJECT_NAME} STATIC
   netinterfaces/enginecontrolreceivernet.h
 )
 
+target_link_libraries(${PROJECT_NAME}
+  gphxnetwork
+)
+
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # install(TARGETS ${PROJECT_NAME}

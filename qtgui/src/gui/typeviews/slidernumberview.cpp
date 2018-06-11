@@ -35,7 +35,7 @@
 
 namespace gui
 {
-
+#if 0
   static const int RESOLUTION = 255;
   class SchlonzNumberView : public gui::TypeView
   {
@@ -137,9 +137,7 @@ namespace gui
     double   m_lowVal;
     double   m_scale;
   };
-
-
-
+#endif
 
   HSliderNumberViewConstructor::HSliderNumberViewConstructor()
     : TypeViewConstructor("horizontal slider", "hslider") {}
@@ -172,5 +170,3 @@ namespace gui
   }
 
 }
-
-#include "slidernumberview_moc_cpp.cpp"

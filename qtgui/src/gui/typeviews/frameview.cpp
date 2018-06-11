@@ -30,7 +30,7 @@
 
 namespace gui
 {
-
+#if 0
   class FrameView : public gui::TypeView
   {
     Q_OBJECT
@@ -76,7 +76,7 @@ namespace gui
   private:
     QLabel* m_view;
   };
-
+#endif
 
   // constructor
 
@@ -94,5 +94,3 @@ namespace gui
   }
 
 }
-
-#include "frameview_moc_cpp.cpp"

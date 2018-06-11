@@ -39,7 +39,7 @@
 namespace gui
 {
 
-
+#if 0
   class RadioNumberView : public gui::TypeView
   {
     Q_OBJECT
@@ -122,6 +122,7 @@ namespace gui
     double m_trueVal;
 
   };
+#endif
 
   // constructor
 
@@ -139,6 +140,3 @@ namespace gui
   }
 
 }
-
-#include "radionumberview_moc_cpp.cpp"
-

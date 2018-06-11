@@ -21,7 +21,6 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "comboboxstringview.h"
-
 #include <iostream>
 #include <stdio.h>
 
@@ -31,14 +30,10 @@
 #include "utils/structreader.h"
 #include "utils/stringtokenizer.h"
 
+
 namespace gui
 {
-
-  class ComboboxStringView : public gui::TypeView
-  {
-    Q_OBJECT		
-  public:
-    ComboboxStringView(QWidget* parent,
+    ComboboxStringView::ComboboxStringView(QWidget* parent,
 		       const ParamMap& params)
       : TypeView(parent, params)
     {
@@ -69,7 +64,7 @@ namespace gui
 	      this,SLOT(comboboxChanged(const QString&)));
     }
 
-    void valueChange(const utils::Buffer& newValue)
+    void ComboboxStringView::valueChange(const utils::Buffer& newValue)
     {
       int len = newValue.getLen();
       const char* raw;
@@ -105,9 +100,7 @@ namespace gui
         }
     }
 
-
-  public slots:
-    void comboboxChanged(const QString& s)
+    void ComboboxStringView::comboboxChanged(const QString& s)
     {
       QByteArray raw = s.toUtf8();
       const unsigned char* str 
@@ -115,12 +108,6 @@ namespace gui
 
       emit valueChanged(utils::Buffer(str,s.length()+1));
     }
-
-  private:
-    typedef std::map<std::string, int> ValueMap;
-    ValueMap m_values;
-    QComboBox* m_box;
-  };
 
   // constructor
 
@@ -137,5 +124,3 @@ namespace gui
   }
 
 }
-
-#include "comboboxstringview_moc_cpp.cpp"

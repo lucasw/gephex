@@ -12,7 +12,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
-  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}
 )
 
 include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)

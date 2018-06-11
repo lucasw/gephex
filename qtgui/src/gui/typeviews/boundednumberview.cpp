@@ -30,8 +30,10 @@
 
 #include "utils/structreader.h"
 
+
 namespace gui
 {
+#if 0
   class BoundedNumberView: public gui::TypeView
   {
     Q_OBJECT
@@ -40,12 +42,11 @@ namespace gui
       : TypeView(parent, params), m_setValueCalled(false)
     {
       utils::StructReader sr(params);
-    
       double lowVal    = sr.getDoubleValue("lower_bound", 0);
       double highVal   = sr.getDoubleValue("higher_bound", 1);
       double stepSize  = sr.getDoubleValue("step_size", 0.1);
       int precision    = sr.getIntValue("precision", 3);
-      std::string display_format = sr.getStringValue("display_format", 
+      std::string display_format = sr.getStringValue("display_format",
                                                      "auto");
       std::string special_value_text = sr.getStringValue("special_text",
                                                          "");
@@ -55,7 +56,6 @@ namespace gui
       m_spin->setRange(lowVal, highVal);
       m_spin->setDecimals(precision);
       m_spin->setSingleStep(stepSize);
-      
       if (!special_value_text.empty())
         m_spin->setSpecialValueText(special_value_text.c_str());
 
@@ -63,17 +63,15 @@ namespace gui
 
       m_layout->addWidget(m_spin);
       m_spin->show();
-		
       connect(m_spin, SIGNAL(valueChanged(double)),
               this, SLOT(spinboxChanged(double)));
     }
-		
+
     virtual void valueChange(const utils::Buffer& newValue)
     {
       std::istringstream is(reinterpret_cast<const char*>(newValue.getPtr()));
       double value = 0;
       is >> value;
-      
       if (fabs(value - m_spin->value()) >= 1 / pow(10, m_spin->decimals()))
         {
           m_setValueCalled = true;
@@ -91,7 +89,6 @@ namespace gui
           utils::Buffer
             newValue(reinterpret_cast<const unsigned char*>(os.str().c_str()),
                      os.str().length()+1);
-		  
           emit valueChanged(newValue);
         }
       else
@@ -102,10 +99,10 @@ namespace gui
 
   private:
     QDoubleSpinBox* m_spin;
-    bool m_setValueCalled;	
+    bool m_setValueCalled;
   };
- 
-	
+#endif
+
   // constructor
 
   BoundedNumberViewConstructor::BoundedNumberViewConstructor()
@@ -121,5 +118,3 @@ namespace gui
     return new BoundedNumberView(parent, params);
   }
 }
-
-#include "boundednumberview_moc_cpp.cpp"

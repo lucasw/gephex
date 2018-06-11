@@ -160,12 +160,7 @@ namespace gui
       }
   }
 
-  class FileStringView: public gui::TypeView
-  {
-    Q_OBJECT
-			
-  public:
-    FileStringView(QWidget* parent,
+    FileStringView::FileStringView(QWidget* parent,
 		   const ParamMap& params,
 		   const std::string& media_path)
       : TypeView(parent, params), first_select(true)
@@ -212,9 +207,9 @@ namespace gui
       connect(m_select, SIGNAL(clicked()), this, SLOT(selectFile()));
     }
 
-    virtual ~FileStringView() {}
+    FileStringView::~FileStringView() {}
 		
-    virtual void valueChange(const utils::Buffer& newValue)
+    void FileStringView::valueChange(const utils::Buffer& newValue)
     {
       int len = newValue.getLen();
       const char* dumm;
@@ -239,12 +234,11 @@ namespace gui
       setToolTip(QString(dumm));
     }
 
-private slots:
-    void userSelectedFile(const QString& name_)
+    void FileStringView::userSelectedFile(const QString& name_)
     {
     }
 
-    void selectFile()
+    void FileStringView::selectFile()
     {
       std::string path = "";
       if (first_select)
@@ -277,16 +271,6 @@ private slots:
 	}
     }
 
-  private:
-    QPushButton* m_select;
-    std::string m_fullMask;
-
-    typedef std::list<std::string> DirList;
-    DirList m_media_dirs;
-
-    bool first_select;
-  };
-	
   // constructor
 
   FileStringViewConstructor::FileStringViewConstructor(const std::string& media_path)
@@ -302,5 +286,3 @@ private slots:
   }
 
 }
-
-#include "filestringview_moc_cpp.cpp"

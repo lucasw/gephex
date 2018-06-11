@@ -26,18 +26,50 @@
 #include <string>
 
 #include "gui/typeview.h"
+#include <QtGui/QPushButton>
+
 
 namespace gui
 {
+
+  class FileStringView: public gui::TypeView
+  {
+    Q_OBJECT
+
+    public:
+      FileStringView(QWidget* parent,
+          const ParamMap& params,
+          const std::string& media_path);
+
+      virtual ~FileStringView();
+
+      virtual void valueChange(const utils::Buffer& newValue);
+
+      private slots:
+        void userSelectedFile(const QString& name_);
+
+      void selectFile();
+
+    private:
+      QPushButton* m_select;
+      std::string m_fullMask;
+
+      typedef std::list<std::string> DirList;
+      DirList m_media_dirs;
+
+      bool first_select;
+  };
+
+
   class FileStringViewConstructor : public TypeViewConstructor
   {
-  public:
-    FileStringViewConstructor(const std::string& media_path);
-    virtual TypeView* construct(QWidget* parent,
-				const ParamMap& params) const;
+    public:
+      FileStringViewConstructor(const std::string& media_path);
+      virtual TypeView* construct(QWidget* parent,
+          const ParamMap& params) const;
 
-  private:
-    std::string m_media_path;
+    private:
+      std::string m_media_path;
 
   };
 

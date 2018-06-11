@@ -43,8 +43,7 @@
  */
 namespace gui
 {
-
-
+#if 0
   class CheckBoxNumberView : public gui::TypeView
   {
     Q_OBJECT
@@ -152,6 +151,7 @@ namespace gui
     int m_value;
     int m_num_buttons;
   };
+#endif
 
   // constructor
 
@@ -169,6 +169,3 @@ namespace gui
   }
 
 }
-
-#include "checkboxnumberview_moc_cpp.cpp"
-

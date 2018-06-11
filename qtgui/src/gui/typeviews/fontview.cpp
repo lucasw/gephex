@@ -32,7 +32,7 @@
 
 namespace gui
 {
-	
+#if 0
   class FontView : public gui::TypeView
   {
     Q_OBJECT
@@ -203,7 +203,8 @@ public slots:
     }
 		
   };
-	
+#endif
+
   FontViewConstructor::FontViewConstructor()
     : TypeViewConstructor("font dialog", "font_selector")
   {
@@ -218,5 +219,3 @@ public slots:
   }
 	
 }
-
-#include "fontview_moc_cpp.cpp"

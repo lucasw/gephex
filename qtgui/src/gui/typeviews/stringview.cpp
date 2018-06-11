@@ -35,7 +35,7 @@
 
 namespace gui
 {
-
+#if 0
   class StringView: public gui::TypeView
   {
     Q_OBJECT
@@ -94,6 +94,7 @@ public slots:
   private:
     QLineEdit* m_lineEdit;
   };
+#endif
 
   // constructor
 
@@ -108,5 +109,3 @@ public slots:
     return new StringView(parent, params);
   }
 }
-
-#include "stringview_moc_cpp.cpp"
