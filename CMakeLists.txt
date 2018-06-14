@@ -76,6 +76,13 @@ add_subdirectory(base/src/net)  # gphxnetwork
 add_subdirectory(base/src/utils)
 add_subdirectory(engine/src/engine)
 
+# Types
+add_subdirectory(types/src/framebuffertype)
+add_subdirectory(types/src/numbertype)
+add_subdirectory(types/src/positiontype)
+add_subdirectory(types/src/rgbtype)
+add_subdirectory(types/src/stringtype)
+
 # Modules
 add_subdirectory(modules/src/libscale)
 add_subdirectory(modules/src/libcolorconv)
