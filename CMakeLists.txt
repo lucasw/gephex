@@ -63,6 +63,9 @@ include_directories(
   ${CMAKE_HOME_DIRECTORY}/engine/src
 )
 
+# Misc
+add_subdirectory(data)
+
 # Gui
 add_subdirectory(qtgui/src/guimodel)
 add_subdirectory(qtgui/src/gui)
