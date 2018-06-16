@@ -91,9 +91,9 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
   RENAME ${PROJECT_NAME}-real
 )
 
-install(CODE "execute_process( \
-    COMMAND ${CMAKE_COMMAND} -E create_symlink \
-    ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}-real \
-    ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME} \
-    )"
-)
+# install(CODE "execute_process( \
+#     COMMAND ${CMAKE_COMMAND} -E create_symlink \
+#     ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}-real \
+#     ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME} \
+#     )"
+# )
