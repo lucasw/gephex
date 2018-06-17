@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(rotozoommodule)
+project(imgarithmodule)
 
 # generate the .h and _auto.c files from the spec
 include(${CMAKE_HOME_DIRECTORY}/modules/pluc.cmake)

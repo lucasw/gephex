@@ -306,6 +306,7 @@ void calc_parameters(void* instance, struct input_params_t* p)
   p->theta = fmod((M_PI * inst->in_rot->number) / 180, 2*M_PI);
   p->zoom =  trim_double(inst->in_zoom->number,0.001,8);
 
+  // printf("%f %f\n", inst->in_disp->x, inst->in_disp->y);
   p->transpx = (int) ((3*p->xsize_result*trim_double(inst->in_disp->x,0,1))
                       -(p->xsize_result*1.5));
 

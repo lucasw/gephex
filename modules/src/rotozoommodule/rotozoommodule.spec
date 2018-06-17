@@ -88,7 +88,7 @@ inputs
         hidden            = true
         widget_type       = combo_box
         values            = regular,poly,tile,mirror_x,mirror_y,mirror
-        default           = regular
+        default           = mirror
         help              = regular is stable, poly is faster
     }
 
