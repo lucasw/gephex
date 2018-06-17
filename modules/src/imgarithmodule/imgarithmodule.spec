@@ -62,7 +62,7 @@ inputs
         strong_dependency = true
         hidden            = true
         widget_type       = combo_box
-        values            = x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x
+        values            = (1-c)*x + c*y,x + c*y,x - c*y,(1-c)*x + c*(x*y),x + c,x - c,x * 4*c,1 - x
         default           = x + c*y
         help              = x and y are the input images, c is the number input
     }

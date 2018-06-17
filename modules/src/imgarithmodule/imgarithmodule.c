@@ -75,6 +75,9 @@ extern void invert_mmx(uint_32 size, const unsigned char* framebuf1,
                        unsigned char* result, int amount);
 #endif
 
+static void xfade(uint_32 size, const unsigned char* framebuf1,
+                  const unsigned char* framebuf2,
+                  unsigned char* result, int amount);
 static void add(uint_32 size, const unsigned char* framebuf1,
                 const unsigned char* framebuf2,
                 unsigned char* result, int amount);
@@ -238,12 +241,38 @@ static void handle_params(InstancePtr inst)
   if (strcmp(my->operation.text, inst->in_op->text) != 0 ||
       strcmp(my->mmx.text, inst->in_mmx->text) != 0 ||
       my->op == 0)
-    {
+  {
       string_assign(&my->operation, inst->in_op);
       string_assign(&my->mmx, inst->in_mmx);
-		
+
+    if (strcmp(my->operation.text, "(1-c)*x + c*y") == 0)
+    {
+      my->binary = 1;
+      if (!mmx)
+      {
+        //              s_log(2, "Using regular add routine");
+        my->op = xfade;
+      }
+      else
+      {
+#if 0
+// #if defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
+        if (s_mmx_supported)
+        {
+          //                    s_log(2, "Using mmx add routine");
+          my->op = add_mmx;
+        }
+        else
+#endif
+        {
+          s_log(0, "No mmx support found, using 'regular' instead");
+          my->op = xfade;
+        }
+      }
+    }
+
       // add
-      if (strcmp(my->operation.text, "x + c*y") == 0)
+    else if (strcmp(my->operation.text, "x + c*y") == 0)
         {
           my->binary = 1;
           if (!mmx)
@@ -505,6 +534,27 @@ void strongDependencies(Instance* inst, int neededInputs[])
     neededInputs[in_input2] = 0;
   else if (my->amount == 0)
     neededInputs[in_input2] = 0;
+}
+
+//------------------------------------------------------------------------
+// XFADE
+static void xfade(uint_32 size, const unsigned char* framebuf1,
+                  const unsigned char* framebuf2,
+                  unsigned char* result, int amount)
+{
+  int i;
+
+  for(i = size * 4 - 1; i >= 0; --i)
+  {
+    int f1 = *framebuf1++;
+    int r = ((int) *framebuf2++);
+
+    r = (255 - amount) * f1 + amount * r;
+
+    r >>= 8;
+
+    *result++ = (unsigned char)r;
+  }
 }
 
 //------------------------------------------------------------------------
