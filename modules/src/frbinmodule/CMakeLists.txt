@@ -4,20 +4,7 @@ project(frbinmodule)
 find_package(SDL)
 find_package(SDL_image)
 
-# TODO(lucasw) move these to higher lever cmake file
-add_custom_command(OUTPUT ${PROJECT_NAME}.h
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../pluc.py h ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
-    COMMENT "generating ${PROJECT_NAME} header"
-)
-
-add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../pluc.py c ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
-    COMMENT "generating ${PROJECT_NAME} header"
-)
+include(${CMAKE_HOME_DIRECTORY}/modules/pluc.cmake)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_BINARY_DIR}
@@ -35,6 +22,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} MODULE
   ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.xpm
   # ${CMAKE_CURRENT_LIST_DIR}/avifiledriver.cpp
   ${CMAKE_CURRENT_LIST_DIR}/bmpdriver.cpp
   # ${CMAKE_CURRENT_LIST_DIR}/ffmpegdriver.cpp

@@ -24,7 +24,12 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 link_directories(${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/util/src/libgeo  # TODO(lucasw) should this get pulled in below?
 )
-add_library(${PROJECT_NAME} MODULE ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c)
+add_library(${PROJECT_NAME} MODULE
+  ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c
+  ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.xpm
+  ${PROJECT_NAME}.h
+  ${PROJECT_NAME}_auto.c
+)
 add_dependencies(${PROJECT_NAME} libgeo)
 target_link_libraries(${PROJECT_NAME} geo)
 # set(NO_SONAME ON)

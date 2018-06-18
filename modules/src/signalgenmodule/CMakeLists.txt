@@ -23,6 +23,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 # message("binary dir: " ${CMAKE_CURRENT_BINARY_DIR})
 add_library(${PROJECT_NAME} MODULE
   ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.xpm
   ${CMAKE_CURRENT_LIST_DIR}/signals.cpp
   ${CMAKE_CURRENT_LIST_DIR}/signals.h
   ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c
