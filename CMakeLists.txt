@@ -89,8 +89,10 @@ add_subdirectory(types/src/stringtype)
 # Modules
 add_subdirectory(modules/src/libscale)
 add_subdirectory(modules/src/libcolorconv)
+add_subdirectory(util/src/libgeo)
+
 add_subdirectory(modules/src/frbinmodule)
 add_subdirectory(modules/src/frboutmodule)
-add_subdirectory(util/src/libgeo)
 add_subdirectory(modules/src/imgarithmodule)
+add_subdirectory(modules/src/signalgenmodule)
 add_subdirectory(modules/src/rotozoommodule)
