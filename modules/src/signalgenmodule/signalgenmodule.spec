@@ -19,7 +19,7 @@ inputs
         const               = true
         strong_dependency   = true
         widget_type         = unboundednumber_selector
-        default             = 1
+        default             = 4
         hidden              = true
     }
 
@@ -30,7 +30,7 @@ inputs
         const               = true
         strong_dependency   = true
         widget_type         = unboundednumber_selector
-        default             = 1
+        default             = 0.01
         hidden              = true
     }
 
@@ -68,7 +68,7 @@ inputs
         hidden              = true
         widget_type         = combo_box
         values              = sinus,triangle,ramp,rectangle,noize
-        default             = sinus
+        default             = noize
     }
 
     mode
