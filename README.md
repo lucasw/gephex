@@ -4,8 +4,22 @@ Graph based image generation and manipulation:
 ![gephex ui](/doc/images/gephex.png?raw=true "gephex ui")
 
 
-Example Build
--------------
+CMake Build
+-----------
+
+```
+sudo apt install libqt4-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+mkdir build_gephex
+cd build_gephex
+cmake ../gephex
+make
+```
+
+Earlier Build System
+--------------------
+
+Once this is duplicated in CMake will remove it.
+Just archiving the entire build output would be good enough to duplicate in CMake later.
 
 On Ubuntu 16.04.
 
