@@ -11,8 +11,42 @@ CMake Build
 sudo apt install libqt4-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
 mkdir build_gephex
 cd build_gephex
-cmake ../gephex
+cmake ../gephex -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/other/install
 make
+make install
+```
+
+The binary will be in `engine/src/engine`
+
+gephex.conf
+-----------
+
+There needs to be a ~/.gephex/0.4/gephex.conf file of the form:
+
+```
+common {
+    media_path           = [/home/lucasw/other/install/share/gephex]
+}
+
+engine {
+    type_path            = [/home/lucasw/Desktop/gephex/types/;/home/lucasw/other/install/lib/gephex-0.4/types/]
+    module_path          = [/home/lucasw/Desktop/gephex/modules/;/home/lucasw/other/install/lib/gephex-0.4/modules/]
+    frei0r_path          = [/home/lucasw/.frei0r-1/lib/;/usr/local/lib/frei0r-1/;/usr/lib/frei0r-1/]
+    graph_path           = [/home/lucasw/Desktop/gephex/graphs/]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    ipc_type             = [inet]
+    ipc_port             = [6666]
+    renderer_interval    = [40]
+    net_interval         = [40]
+}
+
+gui {
+    ipc_type             = [inet]
+    ipc_inet_hostname    = [localhost]
+    ipc_port             = [6666]
+    ipc_unix_node_prefix = [/tmp/gephex_socket_]
+    engine_binary        = [/home/lucasw/other/install/bin/gephex-engine]
+}
 ```
 
 Earlier Build System
@@ -141,37 +175,6 @@ if test "xman" = "x"; then  touch gephex-gui.1; else man ./gephex-gui.xml; fi
   make[1]: Leaving directory '/home/lucasw/own/github/gephex/doc'
   Makefile:442: recipe for target 'install-recursive' failed
   make: *** [install-recursive] Error 1
-```
-
-gephex.conf
------------
-
-There needs to be a ~/.gephex/0.4/gephex.conf file of the form:
-
-```
-common {
-    media_path           = [/home/lucasw/other/install/share/gephex]
-}
-
-engine {
-    type_path            = [/home/lucasw/Desktop/gephex/types/;/home/lucasw/other/install/lib/gephex-0.4/types/]
-    module_path          = [/home/lucasw/Desktop/gephex/modules/;/home/lucasw/other/install/lib/gephex-0.4/modules/]
-    frei0r_path          = [/home/lucasw/.frei0r-1/lib/;/usr/local/lib/frei0r-1/;/usr/lib/frei0r-1/]
-    graph_path           = [/home/lucasw/Desktop/gephex/graphs/]
-    ipc_unix_node_prefix = [/tmp/gephex_socket_]
-    ipc_type             = [inet]
-    ipc_port             = [6666]
-    renderer_interval    = [40]
-    net_interval         = [40]
-}
-
-gui {
-    ipc_type             = [inet]
-    ipc_inet_hostname    = [localhost]
-    ipc_port             = [6666]
-    ipc_unix_node_prefix = [/tmp/gephex_socket_]
-    engine_binary        = [/home/lucasw/other/install/bin/gephex-engine]
-}
 ```
 
 Running
