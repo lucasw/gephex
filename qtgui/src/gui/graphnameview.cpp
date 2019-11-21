@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <QtGui/QPalette>
 #include <QtGui/qmenu.h>
 #include <QtGui/qmessagebox.h>
 
@@ -122,7 +123,8 @@ namespace gui
              m_path(path),
              m_graphName(graphName),
              m_model(model),
-	     m_numberOfSnaps(0) {}
+	     m_numberOfSnaps(0) {
+    }
 
     GraphItem::~GraphItem() {}
 

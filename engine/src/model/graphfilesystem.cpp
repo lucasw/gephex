@@ -69,8 +69,9 @@ namespace model
     std::map<std::string,std::string>::const_iterator it=
       graphNames2fileNames.find(graphID);
     if (it == graphNames2fileNames.end())
-      throw std::runtime_error("no graph with that name "
-                               "(GraphFileSystem::loadGraph)");
+      throw std::runtime_error("no graph with that name '" +
+                               graphID +
+                               "' (GraphFileSystem::loadGraph)");
     
     const std::string fileName = it->second;
     std::ifstream graphfile(fileName.c_str());

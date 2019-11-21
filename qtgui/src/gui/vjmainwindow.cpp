@@ -127,6 +127,8 @@ namespace gui
       m_kbManager(0),
       m_conf_base_dir(conf_base_dir)
   {
+    setStyleSheet("color: rgb(180, 180, 180); background-color: rgb(30, 30, 30);");
+
     QCoreApplication::setOrganizationName("gephex");
     QCoreApplication::setOrganizationDomain("gephex.org");
     QCoreApplication::setApplicationName("gephex-gui");
@@ -482,6 +484,7 @@ namespace gui
       }
 
     m_logDock = new QDockWidget("Messages", this);
+
     m_logDock->setObjectName("logDock");
     logWindow = new LogWindow(m_logDock);
     m_logDock->setWidget(logWindow);

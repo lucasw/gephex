@@ -36,6 +36,7 @@
 #include <QtCore/qtimer.h>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QMenu>
+#include <QtGui/QPalette>
 
 #include "interfaces/imodelcontrolreceiver.h"
 #include "interfaces/ierrorreceiver.h"
@@ -785,7 +786,7 @@ namespace gui
 
     QPen pen1(Qt::SolidLine);
     QPen pen2(Qt::SolidLine);
-    pen1.setColor(QColor(0,0,0));
+    pen1.setColor(QColor(160, 160, 160));
     pen2.setColor(QColor(0,255,0));
 	
     for (ConnectionMap::iterator i = connections.begin();
