@@ -91,7 +91,7 @@ namespace utils
        * @param path the name of the new dir
        * @throw TODO
        */
-      static void makeDir(const std::string& path) throw (std::runtime_error);
+      static void makeDir(const std::string& path);  // throw (std::runtime_error);
 
 
       /**
@@ -99,16 +99,16 @@ namespace utils
        * @param path the name of the dir
        * @throw TODO
        */
-      static void removeDir(const std::string& path)
-	throw (std::runtime_error);
+      static void removeDir(const std::string& path);
+      //	throw (std::runtime_error);
 
       /**
        * Lists the contents of a Directory.
        * @param path the name of the dir
        * @throw TODO
        */
-      static void listDir(const std::string& path,std::list<DirEntry>& entries)
-	throw (std::runtime_error);
+      static void listDir(const std::string& path,std::list<DirEntry>& entries);
+	    // throw (std::runtime_error);
 
       /**
        * Deletes a file. Directories cant be deleted with this function.

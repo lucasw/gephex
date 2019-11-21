@@ -64,7 +64,7 @@ int DirEntry::getSizeInBytes() const
 }
 
 
-void FileSystem::makeDir(const std::string& path) throw (std::runtime_error)
+void FileSystem::makeDir(const std::string& path)  // throw (std::runtime_error)
 {
 #if defined(OS_WIN32)
   int error = _mkdir(path.c_str());
@@ -81,7 +81,7 @@ void FileSystem::makeDir(const std::string& path) throw (std::runtime_error)
     }
 }
 
-void FileSystem::removeDir(const std::string& path) throw (std::runtime_error)
+void FileSystem::removeDir(const std::string& path)  // throw (std::runtime_error)
 {
 #if defined(OS_WIN32)
   int error = _rmdir(path.c_str());
@@ -98,7 +98,7 @@ void FileSystem::removeDir(const std::string& path) throw (std::runtime_error)
 }
 
 void FileSystem::listDir(const std::string& path,std::list<DirEntry>& entries)
-  throw (std::runtime_error)
+  // throw (std::runtime_error)
 {
 #if defined(OS_WIN32)
   struct _finddata_t c_file;
