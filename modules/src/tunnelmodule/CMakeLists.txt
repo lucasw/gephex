@@ -31,7 +31,7 @@ add_library(${PROJECT_NAME} MODULE
   ${PROJECT_NAME}_auto.c
 )
 
-add_dependencies(${PROJECT_NAME} libgeo libgrid)
+# add_dependencies(${PROJECT_NAME} geo grid)
 target_link_libraries(${PROJECT_NAME}
   geo
   grid

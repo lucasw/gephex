@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(plasmamodule)
+project(posnummodule)
 
 # generate the .h and _auto.c files from the spec
 include(${CMAKE_HOME_DIRECTORY}/modules/pluc.cmake)
@@ -24,14 +24,9 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
 add_library(${PROJECT_NAME} MODULE
   ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.c
   ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.xpm
-  ${PROJECT_NAME}.h ${PROJECT_NAME}_auto.c
+  ${PROJECT_NAME}.h
+  ${PROJECT_NAME}_auto.c
 )
-
-# add_dependencies(${PROJECT_NAME} libgrid)
-target_link_libraries(${PROJECT_NAME}
-  grid
-)
-
 # set(NO_SONAME ON)
 # Is there a target_link_definitions?
 # target_compile_definitions(${PROJECT_NAME} PRIVATE PIC)
