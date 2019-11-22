@@ -127,7 +127,7 @@ namespace gui
       m_kbManager(0),
       m_conf_base_dir(conf_base_dir)
   {
-    setStyleSheet("color: rgb(210, 210, 210);"
+    setStyleSheet("color: rgb(0, 100, 255);"
                   "background-color: rgb(50, 50, 50);"
                   "alternate-background-color: rgb(40, 40, 40);"
                   "selection-background-color: rgb(40, 40, 50);"
@@ -278,7 +278,7 @@ namespace gui
       }
   }
 
-  void VJMainWindow::connectToRealEngine() throw (std::runtime_error)
+  void VJMainWindow::connectToRealEngine()  // throw (std::runtime_error)
   {
     engineWrapper->connect();
     
@@ -293,7 +293,7 @@ namespace gui
     shutDownEngineAction->setEnabled(true);
   }
 
-  void VJMainWindow::disconnectFromRealEngine() throw (std::runtime_error)
+  void VJMainWindow::disconnectFromRealEngine()  // throw (std::runtime_error)
   {
     engineWrapper->disconnect();
     

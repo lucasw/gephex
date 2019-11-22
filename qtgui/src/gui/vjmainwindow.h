@@ -127,8 +127,8 @@ namespace gui
     void unbuildModuleBar(void);
     void clearSceleton(void);
 
-    void connectToRealEngine() throw (std::runtime_error);
-    void disconnectFromRealEngine() throw (std::runtime_error);
+    void connectToRealEngine();  // throw (std::runtime_error);
+    void disconnectFromRealEngine();  // throw (std::runtime_error);
       
     // Actions
     QAction* quitAction;
