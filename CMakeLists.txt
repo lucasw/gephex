@@ -86,14 +86,17 @@ add_subdirectory(types/src/positiontype)
 add_subdirectory(types/src/rgbtype)
 add_subdirectory(types/src/stringtype)
 
-# Modules
+# Module libs
+add_subdirectory(modules/src/libgrid)
 add_subdirectory(modules/src/libscale)
 add_subdirectory(modules/src/libcolorconv)
 add_subdirectory(util/src/libgeo)
 
+# Modules
 add_subdirectory(modules/src/frbinmodule)
 add_subdirectory(modules/src/frboutmodule)
 add_subdirectory(modules/src/imgarithmodule)
 add_subdirectory(modules/src/plasmamodule)
 add_subdirectory(modules/src/signalgenmodule)
 add_subdirectory(modules/src/rotozoommodule)
+add_subdirectory(modules/src/tunnelmodule)
