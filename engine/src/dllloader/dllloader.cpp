@@ -105,6 +105,8 @@ namespace dllloader
               }
           }
       }
+
+    std::sort(fileNames.begin(), fileNames.end());
     return fileNames;
   }
 
