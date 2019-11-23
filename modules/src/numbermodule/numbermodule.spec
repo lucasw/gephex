@@ -5,7 +5,7 @@ mod_numbermodule
     name          = Random
     deterministic = false
     group         = Number
-    xpm           = numbermodule_icon.xpm
+    xpm           = numbermodule.xpm
     author        = Duran Duran
     version       = 0.65-prealpha
 }
