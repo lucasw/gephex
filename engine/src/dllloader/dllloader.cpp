@@ -74,6 +74,7 @@ namespace dllloader
   std::vector<std::string> getFilesInPath(const std::string& dirName,
                                           const std::string& ending)
   {
+    std::cout << "load modules from dir: " << dirName << " " << ending << "\n";
     std::vector<std::string> fileNames;
     
     std::list<utils::DirEntry> entries;
@@ -86,7 +87,9 @@ namespace dllloader
 
         if (name == "." || name == "..")
           continue;
-      
+
+        std::cout << name << "\n";
+
         if (it->getType() == utils::DirEntry::DIRECTORY)
           {
             std::vector<std::string> 
