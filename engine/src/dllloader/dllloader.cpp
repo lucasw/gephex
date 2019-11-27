@@ -313,7 +313,7 @@ void DllLoader::processFrei0rFile(const std::string &fname) {
     }
   } catch (std::runtime_error &e) {
     std::cerr << e.what();
-    m_logger->error("frei0r", e.what());
+    m_logger->error("frei0r '" + fname + "'", e.what());
   }
 }
 

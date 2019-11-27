@@ -22,6 +22,7 @@
 
 #include "frei0r_module_plugin.h"
 
+#include <iostream>
 #include <stdexcept>
 
 #include "frei0r_module_class.h"
@@ -30,6 +31,21 @@
 frei0r_module_plugin::frei0r_module_plugin(utils::SharedLibrary &sl,
                                            NameResolver &resolver) {
   frei0r_funs_t ft;
+
+  std::vector<std::string> sym_names = {"f0r_init",
+                                        "f0r_deinit",
+                                        "f0r_get_plugin_info",
+                                        "f0r_get_param_info",
+                                        "f0r_construct",
+                                        "f0r_destruct",
+                                        "f0r_set_param_value",
+                                        "f0r_get_param_value"};
+
+  for (const auto& sym_name : sym_names) {
+    if (sl.loadSymbol(sym_name) == nullptr) {
+      std::cerr << sym_name << " is missing\n";
+    }
+  }
 
   ft.init = (f0r_init_t)sl.loadSymbol("f0r_init");
   ft.deinit = (f0r_deinit_t)sl.loadSymbol("f0r_deinit");
@@ -49,7 +65,8 @@ frei0r_module_plugin::frei0r_module_plugin(utils::SharedLibrary &sl,
       ft.get_param_info == 0 || ft.construct == 0 || ft.destruct == 0 ||
       ft.set_param_value == 0 || ft.get_param_value == 0 ||
       (ft.update == 0 && ft.update2 == 0)) {
-    throw std::runtime_error("some symbols are missing in frei0r plugin");
+    throw std::runtime_error("some symbols are missing in frei0r plugin- "
+                             "did they get built without extern C around frei0r.h?");
   }
 
   IModuleClass *mc = new Frei0rModuleClass(ft, resolver);
