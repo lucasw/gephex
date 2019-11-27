@@ -2,24 +2,23 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
-
 
 #include <memory.h>
 
@@ -32,67 +31,56 @@
 //#define OPT_INCLUDE_SSE
 //#define OPT_INCLUDE_3DNOW
 
-FastMemCpy::FastMemCpy()
-{
-	detect_mode();
+FastMemCpy::FastMemCpy() { detect_mode(); }
+
+FastMemCpy::~FastMemCpy() {}
+
+void FastMemCpy::detect_mode() {
+  mode = -1;
+  if (cinfo.get_cpuid()) {
+    if (cinfo.get_sse2())
+      mode = 5;
+    else if (cinfo.get_sse())
+      mode = 4;
+    else if (cinfo.get_e3dnow())
+      mode = 3;
+    else if (cinfo.get_3dnow())
+      mode = 2;
+    else if (cinfo.get_mmx())
+      mode = 1;
+    else
+      mode = 0;
+  }
 }
 
-FastMemCpy::~FastMemCpy()
-{
+void FastMemCpy::force_mode(int m) { mode = m; }
+
+int FastMemCpy::get_mode() { return mode; }
+
+int FastMemCpy::copy(void *dst, void *src, int size) {
+  switch (mode) {
+  case 4:
+    return copy_sse(dst, src, size);
+  case 2:
+    return copy_3dnow(dst, src, size);
+  case 1:
+    return copy_mmx(dst, src, size);
+  case 0:
+    return copy_32(dst, src, size);
+  default: {
+    memcpy(dst, src, size);
+    return 1;
+  }
+  }
+  return 0;
 }
 
-void FastMemCpy::detect_mode()
-{
-	mode = -1;
-	if (cinfo.get_cpuid())
-	{
-		if (cinfo.get_sse2()) mode = 5;
-		else if (cinfo.get_sse()) mode = 4;
-		else if (cinfo.get_e3dnow()) mode = 3;
-		else if (cinfo.get_3dnow()) mode = 2;
-		else if (cinfo.get_mmx()) mode = 1;
-		else mode = 0;
-	}
-}
-
-void FastMemCpy::force_mode(int m)
-{
-	mode = m;
-}
-
-int FastMemCpy::get_mode()
-{
-	return mode;
-}
-
-int FastMemCpy::copy(void *dst, void *src, int size)
-{
-	switch (mode)
-	{
-	case 4:
-		return copy_sse(dst, src, size);
-	case 2:
-		return copy_3dnow(dst, src, size);
-	case 1:
-		return copy_mmx(dst, src, size);
-	case 0:
-		return copy_32(dst, src, size);
-	default:
-		{
-			memcpy(dst, src, size);
-			return 1;
-		}
-	}
-	return 0;
-}
-
-int FastMemCpy::copy_32(void *dst, void *src, int size)
-{
-	unsigned int _size = size;
-	unsigned int _size2 = size / 12;
+int FastMemCpy::copy_32(void *dst, void *src, int size) {
+  unsigned int _size = size;
+  unsigned int _size2 = size / 12;
 
 #if defined(COMP_VC) && defined(CPU_I386)
-	_asm{
+  _asm {
 		mov esi, src
 		mov edi, dst
 		mov eax, _size2
@@ -122,19 +110,18 @@ int FastMemCpy::copy_32(void *dst, void *src, int size)
 		jnz loop2
 		end:
 
-	}
+  }
 #else
 #error "Not implemented yet!"
 #endif
-	return 1;
+  return 1;
 }
 
-__inline int FastMemCpy::copy_mmx(void *dst, void *src, int size)
-{
-	unsigned int _size = size;
+__inline int FastMemCpy::copy_mmx(void *dst, void *src, int size) {
+  unsigned int _size = size;
 
 #if defined(COMP_VC) && defined(CPU_I386) && defined(OPT_INCLUDE_MMX)
-	_asm{
+  _asm {
 		mov esi, src
 		mov edi, dst
 		mov eax, _size
@@ -173,19 +160,19 @@ __inline int FastMemCpy::copy_mmx(void *dst, void *src, int size)
 			dec eax
 		jnz loop2
 		end:
-	}
+  }
 #else
 #warning "Not implemented yet!"
 #endif
-	return 1;
+  return 1;
 }
 
-__inline int FastMemCpy::copy_3dnow(void *dst, void *src, int size)
-{
-	unsigned int _size = size;
+__inline int FastMemCpy::copy_3dnow(void *dst, void *src, int size) {
+  unsigned int _size = size;
 
-#if defined(COMP_VC) && /*(_MSC_VER >= 1200) &&*/ defined(CPU_I386) && defined(OPT_INCLUDE_3DNOW)
-	_asm{
+#if defined(COMP_VC) && /*(_MSC_VER >= 1200) &&*/ defined(CPU_I386) &&         \
+    defined(OPT_INCLUDE_3DNOW)
+  _asm {
 		mov esi, src
 		mov edi, dst
 		mov eax, _size
@@ -249,18 +236,18 @@ __inline int FastMemCpy::copy_3dnow(void *dst, void *src, int size)
 			dec eax
 		jnz loop2
 		end:
-	}
+  }
 #endif
-	return 1;
+  return 1;
 }
 
-int FastMemCpy::copy_sse(void *dst, void *src, int size)
-{
-	unsigned int _size = size;
+int FastMemCpy::copy_sse(void *dst, void *src, int size) {
+  unsigned int _size = size;
 
-	// does only compile with vc >= 7?
-#if defined(COMP_VC) /*&& (_MSC_VER >= 1200)*/ && defined(CPU_I386) && defined(OPT_INCLUDE_SSE)
-	_asm{
+  // does only compile with vc >= 7?
+#if defined(COMP_VC) /*&& (_MSC_VER >= 1200)*/ && defined(CPU_I386) &&         \
+    defined(OPT_INCLUDE_SSE)
+  _asm {
 		mov esi, src
 		mov edi, dst
 		mov eax, _size
@@ -330,9 +317,9 @@ int FastMemCpy::copy_sse(void *dst, void *src, int size)
 			dec eax
 		jnz loop2
 		end:
-	}
+  }
 #else
 //#error "Not implemented yet!"
 #endif
-	return 1;
+  return 1;
 }

@@ -14,13 +14,12 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-
 /* DEFINE's by nullset@dookie.net */
-#define RED(n)  ((n>>16) & 0x000000FF)
-#define GREEN(n) ((n>>8) & 0x000000FF)
-#define BLUE(n)  ((n>>0) & 0x000000FF)
-#define RGB(r,g,b) ((0<<24) + (r<<16) + (g <<8) + (b))
-#define INTENSITY(n)	( ( (RED(n)+GREEN(n)+BLUE(n))/3))
+#define RED(n) ((n >> 16) & 0x000000FF)
+#define GREEN(n) ((n >> 8) & 0x000000FF)
+#define BLUE(n) ((n >> 0) & 0x000000FF)
+#define RGB(r, g, b) ((0 << 24) + (r << 16) + (g << 8) + (b))
+#define INTENSITY(n) (((RED(n) + GREEN(n) + BLUE(n)) / 3))
 /*
  * utils.c
  */
@@ -32,7 +31,7 @@ void HSItoRGB(double H, double S, double I, int *r, int *g, int *b);
 extern unsigned int fastrand_val;
 unsigned int fastrand(void);
 void fastsrand(unsigned int);
-#define inline_fastrand() (fastrand_val=fastrand_val*1103515245+12345)
+#define inline_fastrand() (fastrand_val = fastrand_val * 1103515245 + 12345)
 
 /*
  * buffer.c
@@ -80,7 +79,7 @@ extern int VtoR[256], VtoG[256];
 extern int UtoG[256], UtoB[256];
 extern int RtoY[256], RtoU[256], RtoV[256];
 extern int GtoY[256], GtoU[256], GtoV[256];
-extern int BtoY[256],            BtoV[256];
+extern int BtoY[256], BtoV[256];
 
 int yuv_init(void);
 unsigned char yuv_RGBtoY(int);

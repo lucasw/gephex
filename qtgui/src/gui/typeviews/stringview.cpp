@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -23,18 +23,17 @@
 #include "stringview.h"
 
 #include <cstring>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
-#include <QtGui/qvalidator.h>
-#include <QtGui/qlineedit.h>
 #include <QtGui/QHBoxLayout>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qvalidator.h>
 
-#include <utils/structreader.h>
 #include <utils/buffer.h>
+#include <utils/structreader.h>
 
-namespace gui
-{
+namespace gui {
 #if 0
   class StringView: public gui::TypeView
   {
@@ -96,16 +95,13 @@ public slots:
   };
 #endif
 
-  // constructor
+// constructor
 
-  StringViewConstructor::StringViewConstructor()
-    : TypeViewConstructor("text input", "line_edit")
-  {
-  }
+StringViewConstructor::StringViewConstructor()
+    : TypeViewConstructor("text input", "line_edit") {}
 
-  TypeView* StringViewConstructor::construct(QWidget* parent,
-					     const ParamMap& params) const
-  {
-    return new StringView(parent, params);
-  }
+TypeView *StringViewConstructor::construct(QWidget *parent,
+                                           const ParamMap &params) const {
+  return new StringView(parent, params);
 }
+} // namespace gui

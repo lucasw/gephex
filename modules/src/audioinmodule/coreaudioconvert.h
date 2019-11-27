@@ -1,76 +1,59 @@
 #ifndef INCLUDED_COREAUDIO_CONVERT_H
 #define INCLUDED_COREAUDIO_CONVERT_H
 
-#include <CoreAudio/CoreAudio.h>
 #include <AudioToolbox/AudioConverter.h>
+#include <CoreAudio/CoreAudio.h>
 
-class IConverter
-{
- public:
+class IConverter {
+public:
   virtual ~IConverter() = 0;
 
-  virtual OSStatus convert(const unsigned char* input_data,
-			   int num_input_bytes,
-			   unsigned char* output_data,
-			   int& size_output_buffer) = 0;
+  virtual OSStatus convert(const unsigned char *input_data, int num_input_bytes,
+                           unsigned char *output_data,
+                           int &size_output_buffer) = 0;
 };
 
-class StereoFloatToMono16LEPCM : public IConverter
-{
+class StereoFloatToMono16LEPCM : public IConverter {
 public:
-  OSStatus convert(const unsigned char* input_data,
-		   int num_input_bytes,
-		   unsigned char* output_data,
-		   int& size_output_buffer);
+  OSStatus convert(const unsigned char *input_data, int num_input_bytes,
+                   unsigned char *output_data, int &size_output_buffer);
 };
 
-
-class Mono16LEPCMToStereoFloat : public IConverter
-{
+class Mono16LEPCMToStereoFloat : public IConverter {
 public:
-  OSStatus convert(const unsigned char* input_data,
-		   int num_input_bytes,
-		   unsigned char* output_data,
-		   int& size_output_buffer);
+  OSStatus convert(const unsigned char *input_data, int num_input_bytes,
+                   unsigned char *output_data, int &size_output_buffer);
 };
 
-class CoreAudioConverterBase : public IConverter
-{
+class CoreAudioConverterBase : public IConverter {
 public:
-  CoreAudioConverterBase(const AudioStreamBasicDescription& sourceFormat,
-			 const AudioStreamBasicDescription& destFormat);
+  CoreAudioConverterBase(const AudioStreamBasicDescription &sourceFormat,
+                         const AudioStreamBasicDescription &destFormat);
 
   ~CoreAudioConverterBase();
 
 protected:
-  AudioConverterRef           m_converter;
+  AudioConverterRef m_converter;
   AudioStreamBasicDescription m_sourceFormat;
-  AudioStreamBasicDescription m_destFormat;  
+  AudioStreamBasicDescription m_destFormat;
 };
 
-class SimpleConverter : public CoreAudioConverterBase
-{
+class SimpleConverter : public CoreAudioConverterBase {
 public:
-  SimpleConverter(const AudioStreamBasicDescription& sourceFormat,
-		  const AudioStreamBasicDescription& destFormat);
+  SimpleConverter(const AudioStreamBasicDescription &sourceFormat,
+                  const AudioStreamBasicDescription &destFormat);
 
-  OSStatus convert(const unsigned char* input_data,
-		   int num_input_bytes,
-		   unsigned char* output_data,
-		   int& size_output_buffer);
+  OSStatus convert(const unsigned char *input_data, int num_input_bytes,
+                   unsigned char *output_data, int &size_output_buffer);
 };
 
-
-class ComplexConverter : public CoreAudioConverterBase
-{
+class ComplexConverter : public CoreAudioConverterBase {
 public:
-  ComplexConverter(const AudioStreamBasicDescription& sourceFormat,
-		   const AudioStreamBasicDescription& destFormat);
+  ComplexConverter(const AudioStreamBasicDescription &sourceFormat,
+                   const AudioStreamBasicDescription &destFormat);
 
-  OSStatus convert(const unsigned char* input_data,
-		   int num_input_bytes,
-		   unsigned char* output_data,
-		   int& size_output_buffer);
+  OSStatus convert(const unsigned char *input_data, int num_input_bytes,
+                   unsigned char *output_data, int &size_output_buffer);
 };
 
 #endif

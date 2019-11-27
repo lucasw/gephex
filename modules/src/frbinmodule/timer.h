@@ -5,23 +5,19 @@
 
 struct timer_info;
 
-class TimerCallback
-{
+class TimerCallback {
 public:
-	virtual void operator()() = 0;
+  virtual void operator()() = 0;
 };
 
-class Timer
-{
+class Timer {
 public:
-	Timer(unsigned long period_ms, TimerCallback* cb);
-	~Timer();
+  Timer(unsigned long period_ms, TimerCallback *cb);
+  ~Timer();
 
 private:
-	timer_info* m_info;
-	HANDLE m_thread;
-
+  timer_info *m_info;
+  HANDLE m_thread;
 };
-
 
 #endif

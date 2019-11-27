@@ -26,7 +26,7 @@
  * a look at the <a href="frei0r_8h-source.html">frei0r header</a>,
  * which is quite simple.
  *
- * After that, you might want to look at the 
+ * After that, you might want to look at the
  * <a href="frei0r_8h.html">frei0r functions</a> in more detail.
  *
  * When developing a new frei0r effect, you have to choose
@@ -57,7 +57,6 @@
  *   - added new plugin types mixer2 and mixer3
  *   - added section about \ref concurrency
  */
-
 
 /**
  * \addtogroup pluglocations Plugin Locations
@@ -93,7 +92,7 @@
  * installed in system wide directories by placing plugins in their
  * home directory.
  *
- * The order of loading plugins inside each of the directories 
+ * The order of loading plugins inside each of the directories
  * 1, 2, and 3 is not defined.
  */
 
@@ -127,9 +126,9 @@
  * \<icon_path\> can be obtained in the following way:
  *
  * @verbatim
-  <plugin_path>                   |     <icon_path>                   
+  <plugin_path>                   |     <icon_path>
  ----------------------------------------------------------------------------
- $HOME/.frei0r-1/lib/<vendor>     | $HOME/.frei0r-1/icons/<vendor>    
+ $HOME/.frei0r-1/lib/<vendor>     | $HOME/.frei0r-1/icons/<vendor>
  /usr/local/lib/frei0r-1/<vendor> | /usr/local/share/frei0r-1/icons/<vendor>
  /usr/lib/frei0r-1/<vendor>       | /usr/share/frei0r-1/icons/<vendor>
           *                       | <plugin_path>
@@ -167,10 +166,8 @@
  *
  * If a thread is in one of these methods its allowed for another thread to
  * enter one of theses methods for a different effect instance. But for one
- * effect instance only one thread is allowed to execute any of these methods. 
+ * effect instance only one thread is allowed to execute any of these methods.
  */
-
-
 
 /** \file
  * \brief This file defines the frei0r api, version 1.1.
@@ -238,7 +235,7 @@ void f0r_deinit();
  * Note: the color models are endian independent, because the
  * color components are defined by their positon in memory, not
  * by their significance in an uint32_t value.
- * 
+ *
  * For effects that work on the color components,
  * RGBA8888 is the recommended color model for frei0r-1.1 effects.
  * For effects that only work on pixels, PACKED32 is the recommended
@@ -301,7 +298,7 @@ void f0r_deinit();
 /**
  * The f0r_plugin_info_t structure is filled in by the plugin
  * to tell the application about its name, type, number of parameters,
- * and version. 
+ * and version.
  *
  * An application should ignore (i.e. not use) frei0r effects that
  * have unknown values in the plugin_type or color_model field.
@@ -314,29 +311,27 @@ void f0r_deinit();
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_plugin_info
-{
-  const char* name;    /**< The (short) name of the plugin                   */
-  const char* author;  /**< The plugin author                                */
+typedef struct f0r_plugin_info {
+  const char *name;   /**< The (short) name of the plugin                   */
+  const char *author; /**< The plugin author                                */
   /** The plugin type
    * \see PLUGIN_TYPE
    */
-  int plugin_type;    
-  int color_model;     /**< The color model used                             */
-  int frei0r_version;  /**< The frei0r major version this plugin is built for*/
-  int major_version;   /**< The major version of the plugin                  */
-  int minor_version;   /**< The minor version of the plugin                  */
-  int num_params;      /**< The number of parameters of the plugin           */
-  const char* explanation; /**< An optional explanation string               */
+  int plugin_type;
+  int color_model;    /**< The color model used                             */
+  int frei0r_version; /**< The frei0r major version this plugin is built for*/
+  int major_version;  /**< The major version of the plugin                  */
+  int minor_version;  /**< The minor version of the plugin                  */
+  int num_params;     /**< The number of parameters of the plugin           */
+  const char *explanation; /**< An optional explanation string               */
 } f0r_plugin_info_t;
-
 
 /**
  * Is called once after init. The plugin has to fill in the values in info.
  *
  * \param info Pointer to an info struct allocated by the application.
  */
-void f0r_get_plugin_info(f0r_plugin_info_t* info);
+void f0r_get_plugin_info(f0r_plugin_info_t *info);
 
 //---------------------------------------------------------------------------
 
@@ -345,35 +340,34 @@ void f0r_get_plugin_info(f0r_plugin_info_t* info);
  *  @{
  */
 
-
 /**
  * Parameter type for boolean values
  * \see f0r_param_bool
  */
-#define F0R_PARAM_BOOL      0
+#define F0R_PARAM_BOOL 0
 
 /**
  * Parameter type for doubles
  * \see f0r_param_double
  */
-#define F0R_PARAM_DOUBLE    1
+#define F0R_PARAM_DOUBLE 1
 
 /**
  * Parameter type for color
  * \see f0r_param_color
  */
-#define F0R_PARAM_COLOR     2
+#define F0R_PARAM_COLOR 2
 /**
  * Parameter type for position
  * \see f0r_param_position
  */
-#define F0R_PARAM_POSITION  3
+#define F0R_PARAM_POSITION 3
 
 /**
  * Parameter type for string
  * \see f0r_param_string
  */
-#define F0R_PARAM_STRING  4
+#define F0R_PARAM_STRING 4
 
 /**
  * The boolean type. The allowed range of values is [0, 1].
@@ -389,8 +383,7 @@ typedef double f0r_param_double;
 /**
  * The color type. All three color components are in the range [0, 1].
  */
-typedef struct f0r_param_color
-{
+typedef struct f0r_param_color {
   float r; /**< red color component */
   float g; /**< green color component */
   float b; /**< blue color component */
@@ -399,21 +392,18 @@ typedef struct f0r_param_color
 /**
  * The position type. Both position coordinates are in the range [0, 1].
  */
-typedef struct f0r_param_position
-{
+typedef struct f0r_param_position {
   double x; /**< x coordinate */
   double y; /**< y coordinate */
 } f0r_param_position_t;
 
-
 /**
- * The string type. 
+ * The string type.
  * Zero terminated array of 8-bit values in utf-8 encoding
  */
 typedef char f0r_param_string;
 
 /**  @} */
-
 
 /**
  * Similar to f0r_plugin_info_t, this structure is filled by the plugin
@@ -421,11 +411,10 @@ typedef char f0r_param_string;
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_param_info
-{
-  const char* name;         /**<The (short) name of the param */
-  int type;                 /**<The type (see the F0R_PARAM_* defines) */
-  const char* explanation;  /**<Optional explanation (can be 0) */
+typedef struct f0r_param_info {
+  const char *name;        /**<The (short) name of the param */
+  int type;                /**<The type (see the F0R_PARAM_* defines) */
+  const char *explanation; /**<Optional explanation (can be 0) */
 } f0r_param_info_t;
 
 /**
@@ -436,14 +425,14 @@ typedef struct f0r_param_info
  * \param param_index the index of the parameter to be queried (from 0 to
  *   num_params-1)
  */
-void f0r_get_param_info(f0r_param_info_t* info, int param_index);
+void f0r_get_param_info(f0r_param_info_t *info, int param_index);
 
 //---------------------------------------------------------------------------
 
 /**
  * Transparent instance pointer of the frei0r effect.
  */
-typedef void* f0r_instance_t;
+typedef void *f0r_instance_t;
 
 /**
  * Constructor for effect instances. The plugin returns a pointer to
@@ -474,7 +463,7 @@ void f0r_destruct(f0r_instance_t instance);
 /**
  * Transparent parameter handle.
  */
-typedef void* f0r_param_t;
+typedef void *f0r_param_t;
 
 /**
  * This function allows the application to set the parameter values of an
@@ -487,8 +476,8 @@ typedef void* f0r_param_t;
  *
  * \see f0r_get_param_value
  */
-void f0r_set_param_value(f0r_instance_t instance, 
-			 f0r_param_t param, int param_index);
+void f0r_set_param_value(f0r_instance_t instance, f0r_param_t param,
+                         int param_index);
 
 /**
  * This function allows the application to query the parameter values of an
@@ -498,10 +487,10 @@ void f0r_set_param_value(f0r_instance_t instance,
  * \param param pointer to the parameter value
  * \param param_index index of the parameter
  *
-  * \see f0r_set_param_value
+ * \see f0r_set_param_value
  */
-void f0r_get_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+void f0r_get_param_value(f0r_instance_t instance, f0r_param_t param,
+                         int param_index);
 
 //---------------------------------------------------------------------------
 
@@ -530,8 +519,8 @@ void f0r_get_param_value(f0r_instance_t instance,
  *
  * \see f0r_update2
  */
-void f0r_update(f0r_instance_t instance, 
-		double time, const uint32_t* inframe, uint32_t* outframe);
+void f0r_update(f0r_instance_t instance, double time, const uint32_t *inframe,
+                uint32_t *outframe);
 
 //---------------------------------------------------------------------------
 
@@ -541,7 +530,8 @@ void f0r_update(f0r_instance_t instance,
  * method must still be exported for these two effect types. If both are
  * provided the behavior of them must be the same.
  *
- * Effects of type \ref F0R_PLUGIN_TYPE_MIXER2 or \ref F0R_PLUGIN_TYPE_MIXER3 must provide the new \ref f0r_update2 method.
+ * Effects of type \ref F0R_PLUGIN_TYPE_MIXER2 or \ref F0R_PLUGIN_TYPE_MIXER3
+ must provide the new \ref f0r_update2 method.
 
  * \param instance the effect instance
  * \param time the application time in seconds but with subsecond resolution
@@ -551,17 +541,14 @@ void f0r_update(f0r_instance_t instance,
  * \param inframe2 the second incoming video frame
           (can be zero for sources and filters)
  * \param inframe3 the third incoming video frame
-          (can be zero for sources, filters and mixer3) 
+          (can be zero for sources, filters and mixer3)
  * \param outframe the resulting video frame
  *
  * \see f0r_update
  */
-void f0r_update2(f0r_instance_t instance,
-		 double time,
-		 const uint32_t* inframe1,
-		 const uint32_t* inframe2,
-		 const uint32_t* inframe3,
-		 uint32_t* outframe);
+void f0r_update2(f0r_instance_t instance, double time, const uint32_t *inframe1,
+                 const uint32_t *inframe2, const uint32_t *inframe3,
+                 uint32_t *outframe);
 //---------------------------------------------------------------------------
 
 #endif

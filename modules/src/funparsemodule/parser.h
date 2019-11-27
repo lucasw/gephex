@@ -3,6 +3,6 @@
 
 #include "expression.h"
 
-int parse_expression(expression_t* exp, const char *s);
+int parse_expression(expression_t *exp, const char *s);
 
 #endif

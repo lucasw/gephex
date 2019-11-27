@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -25,126 +25,102 @@
 #include <list>
 #include <map>
 
-#include <QtGui/qwidget.h>
 #include <QtGui/QKeyEvent>
+#include <QtGui/qwidget.h>
 
 #include "ikeylistener.h"
 #include "key.h"
 
 namespace gui {
 
-  // < operation for keys
-  struct ltkey
-  {
-    bool operator()(const Key& lhs, const Key& rhs) const
-    {
-      return (lhs.code() < rhs.code() ||
-	      (lhs.code() == rhs.code() &&
-	       lhs.modifierMask() < rhs.modifierMask()));
-    }
-  };
+// < operation for keys
+struct ltkey {
+  bool operator()(const Key &lhs, const Key &rhs) const {
+    return (
+        lhs.code() < rhs.code() ||
+        (lhs.code() == rhs.code() && lhs.modifierMask() < rhs.modifierMask()));
+  }
+};
 
-  class KeyGrabberImpl : public QWidget
-  {
-  public:
-    KeyGrabberImpl() : QWidget(0) { }
+class KeyGrabberImpl : public QWidget {
+public:
+  KeyGrabberImpl() : QWidget(0) {}
 
-    ~KeyGrabberImpl() {};
+  ~KeyGrabberImpl(){};
 
-    void turnOn()
-    {
-      grabKeyboard();
-    }
+  void turnOn() { grabKeyboard(); }
 
-    void turnOff()
-    {
-      releaseKeyboard();
-    }
-  
-    void registerListener(IKeyListener& listener,
-			  const gui::Key& key)
-    {
-      m_listeners[key].push_back(&listener);
-    }
+  void turnOff() { releaseKeyboard(); }
 
-  void removeListener(IKeyListener& listener)
-  {
+  void registerListener(IKeyListener &listener, const gui::Key &key) {
+    m_listeners[key].push_back(&listener);
+  }
+
+  void removeListener(IKeyListener &listener) {
     std::list<gui::Key> emptyList;
 
     for (ListenerMap::iterator it = m_listeners.begin();
-	 it != m_listeners.end(); ++it)
-      {
-	ListenerList& l = it->second;	
-	l.remove(&listener);
-	if (l.empty())
-	  {
-	    emptyList.push_back(it->first);
-	  }
+         it != m_listeners.end(); ++it) {
+      ListenerList &l = it->second;
+      l.remove(&listener);
+      if (l.empty()) {
+        emptyList.push_back(it->first);
       }
+    }
 
     for (std::list<gui::Key>::iterator it2 = emptyList.begin();
-	 it2 != emptyList.end(); ++it2)
-      {
-	m_listeners.erase(*it2);
-      }
+         it2 != emptyList.end(); ++it2) {
+      m_listeners.erase(*it2);
+    }
   }
 
-  protected:
-    void keyPressEvent ( QKeyEvent * e )
-    {
-      gui::Key k = buildKeyFromKeyEvent(*e);
+protected:
+  void keyPressEvent(QKeyEvent *e) {
+    gui::Key k = buildKeyFromKeyEvent(*e);
 
-      //      std::cout << "Key has been pressed: " << k.code() << ","
-      //		<< k.modifierMask() << std::endl;
+    //      std::cout << "Key has been pressed: " << k.code() << ","
+    //		<< k.modifierMask() << std::endl;
 
-      ListenerMap::const_iterator it = m_listeners.find(k);
+    ListenerMap::const_iterator it = m_listeners.find(k);
 
-      if (it == m_listeners.end())
-	{
-	  //	  std::cout << "no listener found" << std::endl;
-	  e->ignore();
-	  return;
-	}
-
-      const ListenerList& l = it->second;
-
-      assert(!l.empty());
-
-      for (ListenerList::const_iterator it2 = l.begin();
-	   it2 != l.end(); ++it2)
-	{
-	  (*it2)->keyPressed(k);
-	}	   
+    if (it == m_listeners.end()) {
+      //	  std::cout << "no listener found" << std::endl;
+      e->ignore();
+      return;
     }
 
-    void keyReleaseEvent ( QKeyEvent * e )
-    {
-      gui::Key k = buildKeyFromKeyEvent(*e);
+    const ListenerList &l = it->second;
 
-      ListenerMap::const_iterator it = m_listeners.find(k);
+    assert(!l.empty());
 
-      if (it == m_listeners.end())
-	{
-	  e->ignore();
-	  return;
-	}
+    for (ListenerList::const_iterator it2 = l.begin(); it2 != l.end(); ++it2) {
+      (*it2)->keyPressed(k);
+    }
+  }
 
-      const ListenerList& l = it->second;
+  void keyReleaseEvent(QKeyEvent *e) {
+    gui::Key k = buildKeyFromKeyEvent(*e);
 
-      assert(!l.empty());
+    ListenerMap::const_iterator it = m_listeners.find(k);
 
-      for (ListenerList::const_iterator it2 = l.begin();
-	   it2 != l.end(); ++it2)
-	{
-	  (*it2)->keyReleased(k);
-	}
+    if (it == m_listeners.end()) {
+      e->ignore();
+      return;
     }
 
-  private:
-    gui::Key buildKeyFromKeyEvent(const QKeyEvent& e)
-    {
-      //TODO: this assumes, that the constants in qnamespace.h and key.h
-      // are exactly the same
+    const ListenerList &l = it->second;
+
+    assert(!l.empty());
+
+    for (ListenerList::const_iterator it2 = l.begin(); it2 != l.end(); ++it2) {
+      (*it2)->keyReleased(k);
+    }
+  }
+
+private:
+  gui::Key buildKeyFromKeyEvent(const QKeyEvent &e) {
+    // TODO: this assumes, that the constants in qnamespace.h and key.h
+    // are exactly the same
 #if 0
       int state = e.state();
       int modifierMask = 0;
@@ -162,45 +138,31 @@ namespace gui {
 
       return gui::Key(e.key(), modifierMask);
 #endif
-      // TODO: not working currently
-      return gui::Key(0, 0);
-    }
-
-  private:
-    typedef std::list<IKeyListener*> ListenerList;
-    typedef std::map<gui::Key, ListenerList, ltkey> ListenerMap;
-    ListenerMap m_listeners;
-  };
-  
-  KeyboardManager::KeyboardManager()
-    : m_impl(new KeyGrabberImpl())
-  {
+    // TODO: not working currently
+    return gui::Key(0, 0);
   }
 
-  KeyboardManager::~KeyboardManager()
-  {
-  }
+private:
+  typedef std::list<IKeyListener *> ListenerList;
+  typedef std::map<gui::Key, ListenerList, ltkey> ListenerMap;
+  ListenerMap m_listeners;
+};
 
-  void KeyboardManager::turnOn()
-  {
-    m_impl->turnOn();
-  }
+KeyboardManager::KeyboardManager() : m_impl(new KeyGrabberImpl()) {}
 
-  void KeyboardManager::turnOff()
-  {
-    m_impl->turnOff();
-  }
-  
-  void KeyboardManager::registerListener(IKeyListener& listener,
-					 const Key& key)
-  {
-    //    std::cout << "Listener has been registered: " << key.code() << ","
-    //	      << key.modifierMask() << std::endl;
-    m_impl->registerListener(listener, key);
-  }
+KeyboardManager::~KeyboardManager() {}
 
-  void KeyboardManager::removeListener(IKeyListener& listener)
-  {
-    m_impl->removeListener(listener);
-  }
+void KeyboardManager::turnOn() { m_impl->turnOn(); }
+
+void KeyboardManager::turnOff() { m_impl->turnOff(); }
+
+void KeyboardManager::registerListener(IKeyListener &listener, const Key &key) {
+  //    std::cout << "Listener has been registered: " << key.code() << ","
+  //	      << key.modifierMask() << std::endl;
+  m_impl->registerListener(listener, key);
 }
+
+void KeyboardManager::removeListener(IKeyListener &listener) {
+  m_impl->removeListener(listener);
+}
+} // namespace gui

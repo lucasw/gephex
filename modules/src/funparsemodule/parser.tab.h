@@ -35,26 +35,26 @@
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     NUMBER = 258,
-     HOCH = 259,
-     TIMES = 260,
-     MODULO = 261,
-     DIV = 262,
-     PLUS = 263,
-     MINUS = 264,
-     EOL = 265,
-     SEMICOLON = 266,
-     KLAUF = 267,
-     KLZU = 268,
-     ID = 269,
-     KOMMA = 270,
-     PIPE = 271,
-     NEGATION = 272
-   };
+#define YYTOKENTYPE
+/* Put the tokens into the symbol table, so that GDB and other debuggers
+   know about them.  */
+enum yytokentype {
+  NUMBER = 258,
+  HOCH = 259,
+  TIMES = 260,
+  MODULO = 261,
+  DIV = 262,
+  PLUS = 263,
+  MINUS = 264,
+  EOL = 265,
+  SEMICOLON = 266,
+  KLAUF = 267,
+  KLZU = 268,
+  ID = 269,
+  KOMMA = 270,
+  PIPE = 271,
+  NEGATION = 272
+};
 #endif
 /* Tokens.  */
 #define NUMBER 258
@@ -73,25 +73,19 @@
 #define PIPE 271
 #define NEGATION 272
 
-
-
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 #line 45 "./parser.y"
 {
-  struct slist_s_t* list;
-  struct expression_s_t* expr;
-  char*        text;
-  double       num;
+  struct slist_s_t *list;
+  struct expression_s_t *expr;
+  char *text;
+  double num;
 }
 /* Line 1529 of yacc.c.  */
 #line 90 "parser.tab.h"
-	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
+YYSTYPE;
+#define yystype YYSTYPE /* obsolescent; will be withdrawn */
+#define YYSTYPE_IS_DECLARED 1
+#define YYSTYPE_IS_TRIVIAL 1
 #endif
-
-
-

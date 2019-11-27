@@ -2,37 +2,36 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "positionview.h"
 
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
-#include <QtGui/qlayout.h>
-#include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtGui/qlayout.h>
 
 #include "utils/buffer.h"
 
-namespace gui
-{
+namespace gui {
 
 #if 0
   class KleinesFeld : public QWidget
@@ -162,86 +161,64 @@ void kleinesfeldChanged(const QPoint& p)
   };
 #endif
 
-  // constructor klass
+// constructor klass
 
-  PositionViewConstructor::PositionViewConstructor():
-    TypeViewConstructor("position input","pos_field")
-  {
-  }
-		
-  TypeView*
-  PositionViewConstructor::construct(QWidget* parent,
-				     const ParamMap& params) const
-  {
-    return new PositionView(parent,params);
-  }
+PositionViewConstructor::PositionViewConstructor()
+    : TypeViewConstructor("position input", "pos_field") {}
 
-
-
-  KleinesFeld::KleinesFeld(QWidget* parent,
-                           const QSize& preferredSize,
-                           const QSize& minimumSize)
-    : QWidget(parent),
-      m_pos(preferredSize.width()/2, preferredSize.height()/2),
-      m_preferredSize(preferredSize),
-      m_minimumSize(minimumSize)
-  {
-    setSizePolicy(QSizePolicy::MinimumExpanding,
-                  QSizePolicy::MinimumExpanding);
-  }
-
-  /**************************************************************************/
-
-  void KleinesFeld::paintEvent(QPaintEvent* /*pe*/)
-  {
-    QPainter mainPainter(this);
-    QPen pen1(Qt::SolidLine);
-    pen1.setColor(QColor(0,0,0));
-    mainPainter.setPen(pen1);
-    drawCuteLittleCross(m_pos,mainPainter);
-  }
-
-
-  void KleinesFeld::mouseMoveEvent(QMouseEvent* e)
-  {
-    setPos(e->pos());
-    // The parent widget must not receive this event
-    // see comment below
-    //QWidget::mouseMoveEvent(e);
-  }
-  
-  /*
-   * These function are overloaded to prevent the default implementation
-   * from propagating the events to the parent widget.
-   * This has happened with qt >= 3.0 (but not 2.3).
-   * TODO: verify this works with qt 2.3
-   */
-  void KleinesFeld::mousePressEvent(QMouseEvent* e)
-  {
-    setPos(e->pos());
-  }
-
-  void KleinesFeld::mouseReleaseEvent(QMouseEvent* /*e*/)
-  {
-  }
-
-  void KleinesFeld::drawCuteLittleCross(const QPoint& p, QPainter& painter)
-  {
-    static const int SIZE = 3;
-    painter.drawLine(p.x()-SIZE, p.y()-SIZE, p.x()+SIZE, p.y()+SIZE);
-    painter.drawLine(p.x()-SIZE, p.y()+SIZE, p.x()+SIZE, p.y()-SIZE);
-  }
-
-  void KleinesFeld::setPos(const QPoint& p)
-  {
-    if (p != m_pos)
-      {
-        m_pos = p;
-
-        emit posChanged(m_pos);
-        update();
-      }
-  }
-
-
+TypeView *PositionViewConstructor::construct(QWidget *parent,
+                                             const ParamMap &params) const {
+  return new PositionView(parent, params);
 }
+
+KleinesFeld::KleinesFeld(QWidget *parent, const QSize &preferredSize,
+                         const QSize &minimumSize)
+    : QWidget(parent),
+      m_pos(preferredSize.width() / 2, preferredSize.height() / 2),
+      m_preferredSize(preferredSize), m_minimumSize(minimumSize) {
+  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+}
+
+/**************************************************************************/
+
+void KleinesFeld::paintEvent(QPaintEvent * /*pe*/) {
+  QPainter mainPainter(this);
+  QPen pen1(Qt::SolidLine);
+  pen1.setColor(QColor(0, 0, 0));
+  mainPainter.setPen(pen1);
+  drawCuteLittleCross(m_pos, mainPainter);
+}
+
+void KleinesFeld::mouseMoveEvent(QMouseEvent *e) {
+  setPos(e->pos());
+  // The parent widget must not receive this event
+  // see comment below
+  // QWidget::mouseMoveEvent(e);
+}
+
+/*
+ * These function are overloaded to prevent the default implementation
+ * from propagating the events to the parent widget.
+ * This has happened with qt >= 3.0 (but not 2.3).
+ * TODO: verify this works with qt 2.3
+ */
+void KleinesFeld::mousePressEvent(QMouseEvent *e) { setPos(e->pos()); }
+
+void KleinesFeld::mouseReleaseEvent(QMouseEvent * /*e*/) {}
+
+void KleinesFeld::drawCuteLittleCross(const QPoint &p, QPainter &painter) {
+  static const int SIZE = 3;
+  painter.drawLine(p.x() - SIZE, p.y() - SIZE, p.x() + SIZE, p.y() + SIZE);
+  painter.drawLine(p.x() - SIZE, p.y() + SIZE, p.x() + SIZE, p.y() - SIZE);
+}
+
+void KleinesFeld::setPos(const QPoint &p) {
+  if (p != m_pos) {
+    m_pos = p;
+
+    emit posChanged(m_pos);
+    update();
+  }
+}
+
+} // namespace gui

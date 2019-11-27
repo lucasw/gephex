@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -32,38 +32,32 @@
 #include <QtGui/qcombobox.h>
 #include <QtGui/qlayout.h>
 
-#include "utils/structreader.h"
 #include "utils/stringtokenizer.h"
+#include "utils/structreader.h"
 
-namespace gui
-{
-  class ComboboxStringView : public gui::TypeView
-  {
-    Q_OBJECT
-  public:
-    ComboboxStringView(QWidget* parent,
-		       const ParamMap& params);
+namespace gui {
+class ComboboxStringView : public gui::TypeView {
+  Q_OBJECT
+public:
+  ComboboxStringView(QWidget *parent, const ParamMap &params);
 
-    void valueChange(const utils::Buffer& newValue);
+  void valueChange(const utils::Buffer &newValue);
 
-  public slots:
-    void comboboxChanged(const QString& s);
+public slots:
+  void comboboxChanged(const QString &s);
 
-  private:
-    typedef std::map<std::string, int> ValueMap;
-    ValueMap m_values;
-    QComboBox* m_box;
-  };
+private:
+  typedef std::map<std::string, int> ValueMap;
+  ValueMap m_values;
+  QComboBox *m_box;
+};
 
-  class ComboboxStringViewConstructor : public TypeViewConstructor
-  {
-  public:
-    ComboboxStringViewConstructor();
-    virtual TypeView* construct(QWidget* parent,
-				const ParamMap& params) const;
-  
-  };
-	
-}
+class ComboboxStringViewConstructor : public TypeViewConstructor {
+public:
+  ComboboxStringViewConstructor();
+  virtual TypeView *construct(QWidget *parent, const ParamMap &params) const;
+};
+
+} // namespace gui
 
 #endif

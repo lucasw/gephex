@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -24,39 +24,38 @@
 #define INCLUDED_SOCKET_ADAPTOR_H
 
 namespace net {
-  class IDataListener;
-  class ISocket;
+class IDataListener;
+class ISocket;
+
+/**
+ * This adaptor turns a socket into a datasender. You can
+ * register a datalistener that receives the data that
+ * arrives on the socket.
+ * It turns the synchronous socket interface into the asynchronous
+ * datalistener interface.
+ */
+class SocketAdaptor {
+public:
+  explicit SocketAdaptor(ISocket *socket = 0, IDataListener *listener = 0);
 
   /**
-   * This adaptor turns a socket into a datasender. You can
-   * register a datalistener that receives the data that
-   * arrives on the socket.
-   * It turns the synchronous socket interface into the asynchronous
-   * datalistener interface.
+   * if socket is 0 then all data is lost
    */
-  class SocketAdaptor
-  {
-  public:
-    explicit SocketAdaptor(ISocket* socket = 0, IDataListener* listener = 0);
+  void setSocket(ISocket *socket);
 
-	/**
-	 * if socket is 0 then all data is lost
-	 */
-    void setSocket(ISocket* socket);
+  void registerDataListener(IDataListener &listener);
 
-    void registerDataListener(IDataListener& listener);
+  /**
+   * Give control to the adaptor. This call is blocking
+   * iff the underlying sockets receive method is blocking.
+   * \returns the number of bytes received
+   */
+  int run();
 
-    /**
-     * Give control to the adaptor. This call is blocking
-     * iff the underlying sockets receive method is blocking.
-	 * \returns the number of bytes received
-     */
-    int run();
-
-  private:
-    ISocket* m_socket;
-    IDataListener* m_listener;
-  };
-}
+private:
+  ISocket *m_socket;
+  IDataListener *m_listener;
+};
+} // namespace net
 
 #endif

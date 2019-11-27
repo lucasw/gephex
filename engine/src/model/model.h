@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -23,223 +23,220 @@
 #ifndef __INCLUDED_MODEL_H__
 #define __INCLUDED_MODEL_H__
 
-#include <string>
-#include <map>
-#include <vector>
 #include "utils/autoptr.h"
+#include <map>
+#include <string>
+#include <vector>
 
 #include "specmap.h"
 
-#include "interfaces/imoduleconstructiondumbsender.h"
-#include "interfaces/imoduleclassspecreceiver.h"
-#include "interfaces/igraphnamesender.h"
-#include "interfaces/imodelcontrolreceiver.h" 
-#include "interfaces/imoduleconstructionsmartsender.h" 
-#include "interfaces/imoduleconstructiondumbsender.h"
-#include "interfaces/imoduledatasender.h"
-#include "interfaces/igraphdatasender.h"
-#include "interfaces/iserializedgraphsender.h"
-#include "interfaces/ismartcontrolvaluereceiver.h"
 #include "interfaces/icontrolvaluesender.h"
-#include "interfaces/irenderercontrolsender.h"
+#include "interfaces/igraphdatasender.h"
+#include "interfaces/igraphnamesender.h"
+#include "interfaces/imodelcontrolreceiver.h"
+#include "interfaces/imodelstatussender.h"
+#include "interfaces/imoduleclassspecreceiver.h"
+#include "interfaces/imoduleconstructiondumbsender.h"
+#include "interfaces/imoduleconstructionsmartsender.h"
+#include "interfaces/imoduledatasender.h"
 #include "interfaces/imodulestatisticssender.h"
 #include "interfaces/imodulestatisticssmartreceiver.h"
-#include "interfaces/imodelstatussender.h"
+#include "interfaces/irenderercontrolsender.h"
+#include "interfaces/iserializedgraphsender.h"
+#include "interfaces/ismartcontrolvaluereceiver.h"
 
 namespace utils {
-  class ILogger;
-  class Buffer;
-}
+class ILogger;
+class Buffer;
+} // namespace utils
 
 class IModuleClassSpec;
 class ISerializedGraphReceiver;
 
+namespace model {
 
-namespace model
-{
+class Graph;
+class GraphFileSystem;
+class ControlValueSet;
 
-  class Graph;
-  class GraphFileSystem;
-  class ControlValueSet;
+class Model : public IModelControlReceiver,
+              public IModuleClassSpecReceiver,
 
-  class Model: 
-    public IModelControlReceiver, 
-    public IModuleClassSpecReceiver,
+              public IModuleConstructionSmartSender,
+              public IModuleConstructionDumbSender,
+              public IGraphNameSender,
+              public IModuleDataSender,
+              public IGraphDataSender,
+              public ISerializedGraphSender,
+              public ISmartControlValueReceiver,
+              public IControlValueSender,
+              public IRendererControlSender,
+              public IModuleStatisticsSmartReceiver,
+              public IModuleStatisticsSender,
+              public IModelStatusSender {
+public:
+  Model(const std::string graph_path, utils::AutoPtr<utils::ILogger> &logger);
 
-    public IModuleConstructionSmartSender, 
-    public IModuleConstructionDumbSender, 
-    public IGraphNameSender,
-    public IModuleDataSender,
-    public IGraphDataSender,
-    public ISerializedGraphSender,
-    public ISmartControlValueReceiver,
-    public IControlValueSender,
-    public IRendererControlSender,
-    public IModuleStatisticsSmartReceiver,
-    public IModuleStatisticsSender,
-    public IModelStatusSender
-    {
-    public:
-      Model(const std::string graph_path,
-            utils::AutoPtr<utils::ILogger>& logger);
+  virtual ~Model();
 
-      virtual ~Model();
+  // from IModelControlReceiver
+  virtual void addModule(const std::string &moduleClassName);
+  virtual void connectModules(int moduleID1, int outputIndex, int moduleID2,
+                              int inputIndex);
+  virtual void disconnectModules(int moduleID, int inputIndex);
+  virtual void deleteModule(int moduleID);
+  virtual void setModuleData(int moduleID, int type, const utils::Buffer &buf);
 
-      // from IModelControlReceiver
-      virtual void addModule(const std::string& moduleClassName) ;
-      virtual void connectModules(int moduleID1,int outputIndex,
-				  int moduleID2,int inputIndex);
-      virtual void disconnectModules(int moduleID,int inputIndex) ;
-      virtual void deleteModule(int moduleID) ;
-      virtual void setModuleData(int moduleID,int type,
-				 const utils::Buffer& buf);
+  virtual void unSetModuleData(int moduleID, int type);
 
-      virtual void unSetModuleData(int moduleID,int type);
+  virtual void setEditGraphData(int type, const utils::Buffer &buf);
+  virtual void unSetEditGraphData(int type);
 
-      virtual void setEditGraphData(int type, const utils::Buffer& buf);
-      virtual void unSetEditGraphData(int type);
+  void newGraphWithID(const std::string &graphName, const std::string &graphID,
+                      bool notifyAndCreate = true);
 
-      void newGraphWithID(const std::string& graphName,
-                          const std::string& graphID,
-                          bool notifyAndCreate = true);
+  virtual void newGraph(const std::string &graphName);
 
-      virtual void newGraph(const std::string& graphName);
+  virtual void renameGraph(const std::string &graphID,
+                           const std::string &newGraphName);
 
-      virtual void renameGraph(const std::string& graphID,
-			       const std::string& newGraphName);
+  virtual void copyGraph(const std::string &srcGraphID,
+                         const std::string &dstGraphName);
 
-      virtual void copyGraph(const std::string& srcGraphID,
-			     const std::string& dstGraphName);
+  virtual void saveGraph(const std::string &graphID);
 
-      virtual void saveGraph(const std::string& graphID);
+  virtual void deleteGraph(const std::string &graphName);
 
-      virtual void deleteGraph(const std::string& graphName);
+  virtual void newControlValueSet(const std::string &graphID,
+                                  const std::string &SetNme);
 
-      virtual void newControlValueSet(const std::string& graphID,
-				       const std::string& SetNme);
+  void newControlValueSetWithID(const std::string &graphID,
+                                const std::string &SetNme,
+                                const std::string &snapID);
 
-      void newControlValueSetWithID(const std::string& graphID,
-                                    const std::string& SetNme,
-                                    const std::string& snapID);
+  virtual void renameControlValueSet(const std::string &graphID,
+                                     const std::string &snapID,
+                                     const std::string &newSnapName);
 
-      virtual void renameControlValueSet(const std::string& graphID,
-                                         const std::string& snapID,
-                                         const std::string& newSnapName);
+  virtual void copyControlValueSet(const std::string &graphID,
+                                   const std::string &snapID,
+                                   const std::string &newSnapName);
 
-      virtual void copyControlValueSet(const std::string& graphID,
-                                       const std::string& snapID,
-                                       const std::string& newSnapName);
+  virtual void deleteControlValueSet(const std::string &graphID,
+                                     const std::string &snapID);
 
-      virtual void deleteControlValueSet(const std::string& graphID,
-                                         const std::string& snapID);
+  // TODO: war mal const
+  virtual void synchronize();
 
-      //TODO: war mal const
-      virtual void synchronize();
+  void sendExistingGraphs();
 
-      void sendExistingGraphs();
+  virtual void changeRenderedGraph(const std::string &graphName,
+                                   const std::string &snapShot);
+  virtual void changeEditGraph(const std::string &graphName,
+                               const std::string &snapShot);
 
-      virtual void changeRenderedGraph(const std::string& graphName, const std::string& snapShot);
-      virtual void changeEditGraph(const std::string& graphName, const std::string& snapShot);
+  virtual void setInputValue(int moduleID, int inputIndex,
+                             const utils::Buffer &buf);
 
-      virtual void setInputValue(int moduleID, int inputIndex,
-				 const utils::Buffer& buf);
+  // TODO: war mal const
+  virtual void syncInputValue(int moduleID, int inputIndex);
 
-      //TODO: war mal const
-      virtual void syncInputValue(int moduleID, int inputIndex);
+  // from IModuleClassSpecReceiver
+  virtual void moduleClassLoaded(const std::string &moduleClassName,
+                                 const IModuleClassSpec &);
+  virtual void moduleClassUnloaded(const std::string &moduleClassName);
 
-      // from IModuleClassSpecReceiver
-      virtual void moduleClassLoaded(const std::string& moduleClassName,const IModuleClassSpec&);
-      virtual void moduleClassUnloaded(const std::string& moduleClassName);
+  virtual void
+  registerModuleConstructionDumbReceiver(IModuleConstructionDumbReceiver &);
+  virtual void
+  registerModuleConstructionSmartReceiver(IModuleConstructionSmartReceiver &);
+  virtual void registerGraphNameReceiver(IGraphNameReceiver &);
+  virtual void registerModuleDataReceiver(IModuleDataReceiver &);
 
-      virtual void registerModuleConstructionDumbReceiver(IModuleConstructionDumbReceiver&);
-      virtual void registerModuleConstructionSmartReceiver(IModuleConstructionSmartReceiver&);
-      virtual void registerGraphNameReceiver(IGraphNameReceiver&);
-      virtual void registerModuleDataReceiver(IModuleDataReceiver&);
+  virtual void registerGraphDataReceiver(IGraphDataReceiver &);
 
-      virtual void registerGraphDataReceiver(IGraphDataReceiver&);
+  virtual void registerSerializedGraphReceiver(ISerializedGraphReceiver &);
+  virtual void registerRendererControlReceiver(IRendererControlReceiver &);
 
-      virtual void registerSerializedGraphReceiver(ISerializedGraphReceiver&);
-      virtual void registerRendererControlReceiver(IRendererControlReceiver&);
+  // from ISmartControlValueReceiver
+  virtual void controlValueChanged(const std::string &graphName, int nodeID,
+                                   int intputIndex,
+                                   const utils::Buffer &newValue);
 
-      // from ISmartControlValueReceiver
-      virtual void controlValueChanged(const std::string& graphName,
-				       int nodeID,int intputIndex,
-				       const utils::Buffer& newValue);
+  virtual void syncInputValuesStarted(const std::string &graphName);
+  virtual void syncInputValuesFinished(const std::string &graphName);
 
-      virtual void syncInputValuesStarted(const std::string& graphName);
-      virtual void syncInputValuesFinished(const std::string& graphName);
+  // from  IControlValueSender
+  virtual void registerControlValueReceiver(IControlValueReceiver &r);
 
-      // from  IControlValueSender
-      virtual void registerControlValueReceiver(IControlValueReceiver& r);
+  virtual void deserializeGraph(const std::string &graphstream);
+  virtual void serializeGraph(const std::string &graphName);
 
-      virtual void deserializeGraph(const std::string& graphstream);
-      virtual void serializeGraph(const std::string& graphName);
+  void updateFileSystem();
 
-      void updateFileSystem();
+  /**
+   * check if a graph with such a ID exists in the model
+   * \param graph_id is the id of the graph to check for
+   * \returns true if it exists
+   */
+  bool check_for_graph_id(const std::string &graph_id);
 
-      /**
-       * check if a graph with such a ID exists in the model
-       * \param graph_id is the id of the graph to check for
-       * \returns true if it exists
-       */
-      bool check_for_graph_id(const std::string& graph_id);
+  /**
+   * check if a snapshot with such a ID exists in the model
+   * \param graph_id is the id of the graph to check for
+   * \param snap_id is the id of the snapshot to check for
+   * \returns true if it exists
+   */
+  bool check_for_snap_id(const std::string &graph_id,
+                         const std::string &snap_id);
 
-      /**
-       * check if a snapshot with such a ID exists in the model
-       * \param graph_id is the id of the graph to check for
-       * \param snap_id is the id of the snapshot to check for
-       * \returns true if it exists
-       */
-      bool check_for_snap_id(const std::string& graph_id,
-			     const std::string& snap_id);
-      
-      virtual void modExecTimeSignal(const std::string& graphName,
-				     int nodeID, double execTime);
+  virtual void modExecTimeSignal(const std::string &graphName, int nodeID,
+                                 double execTime);
 
-      void registerModuleStatisticsReceiver(IModuleStatisticsReceiver& r);
+  void registerModuleStatisticsReceiver(IModuleStatisticsReceiver &r);
 
-      void registerModelStatusReceiver(IModelStatusReceiver& r);
+  void registerModelStatusReceiver(IModelStatusReceiver &r);
 
-      typedef  std::map<std::string,utils::AutoPtr<Graph> > GraphMap;  
-    private:
-      utils::AutoPtr<GraphFileSystem> fileSystem;
+  typedef std::map<std::string, utils::AutoPtr<Graph>> GraphMap;
 
-      // all loaded graphs
-      GraphMap graphs;
+private:
+  utils::AutoPtr<GraphFileSystem> fileSystem;
 
-      // to build a new module
-      SpecMap specs;
+  // all loaded graphs
+  GraphMap graphs;
 
-      utils::AutoPtr<Graph> renderedGraph; // this is shown by the renderer
-      utils::AutoPtr<Graph> editGraph;     // this can be edited by the gui
-      utils::AutoPtr<ControlValueSet> editControlSet;
-      utils::AutoPtr<ControlValueSet> renderedControlSet;
+  // to build a new module
+  SpecMap specs;
 
-      std::map<std::string, bool> knownGraphIDs;
-      std::map<std::string, bool> knownSnapIDs;
+  utils::AutoPtr<Graph> renderedGraph; // this is shown by the renderer
+  utils::AutoPtr<Graph> editGraph;     // this can be edited by the gui
+  utils::AutoPtr<ControlValueSet> editControlSet;
+  utils::AutoPtr<ControlValueSet> renderedControlSet;
 
-      IModuleConstructionDumbReceiver* dumbo;
-      IModuleConstructionSmartReceiver* smartAss;	
-      IGraphNameReceiver* gnr;
-      ISerializedGraphReceiver* serializedGraphReceiver;
-      IRendererControlReceiver* rendererControlReceiver;
-      IModuleDataReceiver* dr;
-      IGraphDataReceiver* gr;
-      IControlValueReceiver* controlValueReceiver;
-      IModuleStatisticsReceiver* moduleStatisticsReceiver;
-      IModelStatusReceiver* modelStatusReceiver;
+  std::map<std::string, bool> knownGraphIDs;
+  std::map<std::string, bool> knownSnapIDs;
 
-      utils::AutoPtr<utils::ILogger> m_logger;
+  IModuleConstructionDumbReceiver *dumbo;
+  IModuleConstructionSmartReceiver *smartAss;
+  IGraphNameReceiver *gnr;
+  ISerializedGraphReceiver *serializedGraphReceiver;
+  IRendererControlReceiver *rendererControlReceiver;
+  IModuleDataReceiver *dr;
+  IGraphDataReceiver *gr;
+  IControlValueReceiver *controlValueReceiver;
+  IModuleStatisticsReceiver *moduleStatisticsReceiver;
+  IModelStatusReceiver *modelStatusReceiver;
 
-      // helper functions
-      void deleteModule(utils::AutoPtr<Graph>, int moduleID);
+  utils::AutoPtr<utils::ILogger> m_logger;
+
+  // helper functions
+  void deleteModule(utils::AutoPtr<Graph>, int moduleID);
 
 #ifndef NDEBUG
-      void checkGraphSerialisation();
+  void checkGraphSerialisation();
 #endif
+};
 
-    };
-
-}
+} // namespace model
 
 #endif

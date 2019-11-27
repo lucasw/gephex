@@ -6,17 +6,17 @@
   modify it under the terms of the GNU General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   GePhex is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   General Public License for more details.
-    
+
   You should have received a copy of the GNU General Public
   License along with GePhex; if not, write to the Free
   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-  02111-1307 USA.  
-      
+  02111-1307 USA.
+
   You can reach me via email: georg.seidel@web.de
 */
 
@@ -44,18 +44,17 @@
 
 class Joystick;
 class JoystickDriverImpl;
-class JoystickDriver
-{
- public:
+class JoystickDriver {
+public:
   /**
    * Valid driver strings are:
    *     "default" for the platforms default driver
    *     "sdl"     for the generic sdl driver
    *
-   * \throws std::invalid_argument if driver is an invalid driver string 
+   * \throws std::invalid_argument if driver is an invalid driver string
    * \throws std::runtime_error if driver initialization fails
    */
-  JoystickDriver(const std::string& driver_name);
+  JoystickDriver(const std::string &driver_name);
   ~JoystickDriver();
 
   /**
@@ -73,25 +72,23 @@ class JoystickDriver
    * \throws std::range_error if id is out of range
    * \throws std::runtime_error if open does not succeed.
    */
-  Joystick* open(int id);
+  Joystick *open(int id);
 
- private:
-  JoystickDriverImpl* m_impl;
+private:
+  JoystickDriverImpl *m_impl;
 
-  JoystickDriver(const JoystickDriver&); // not impl.
-  JoystickDriver& operator=(const JoystickDriver&); // not impl.
+  JoystickDriver(const JoystickDriver &);            // not impl.
+  JoystickDriver &operator=(const JoystickDriver &); // not impl.
 };
 
 class JoystickImpl;
-class Joystick
-{
-  public:
-  Joystick(JoystickImpl* impl);
+class Joystick {
+public:
+  Joystick(JoystickImpl *impl);
   ~Joystick();
 
   int num_axes() const;
   int num_buttons() const;
-
 
   /**
    * Polls the joystick driver for new data.
@@ -109,7 +106,6 @@ class Joystick
    */
   double get_axis(int axis) const;
 
-
   /**
    * Returns a value between 0 (not pressed) and 1 (pressed).
    * If button < 0 || button is >= get_num_buttons(self),
@@ -117,22 +113,17 @@ class Joystick
    */
   bool get_button(int button) const;
 
- private:
-  JoystickImpl* m_impl;
+private:
+  JoystickImpl *m_impl;
 
   std::vector<double> axis;
   std::vector<bool> button;
-	
+
   std::vector<double> axis_min;
   std::vector<double> axis_max;
 
-  Joystick(const Joystick&); // not impl.
-  Joystick& operator=(const Joystick&); // not impl.
+  Joystick(const Joystick &);            // not impl.
+  Joystick &operator=(const Joystick &); // not impl.
 };
 
-
-
-
 #endif
-
-

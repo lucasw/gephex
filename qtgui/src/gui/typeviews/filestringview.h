@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -28,51 +28,43 @@
 #include "gui/typeview.h"
 #include <QtGui/QPushButton>
 
+namespace gui {
 
-namespace gui
-{
+class FileStringView : public gui::TypeView {
+  Q_OBJECT
 
-  class FileStringView: public gui::TypeView
-  {
-    Q_OBJECT
+public:
+  FileStringView(QWidget *parent, const ParamMap &params,
+                 const std::string &media_path);
 
-    public:
-      FileStringView(QWidget* parent,
-          const ParamMap& params,
-          const std::string& media_path);
+  virtual ~FileStringView();
 
-      virtual ~FileStringView();
+  virtual void valueChange(const utils::Buffer &newValue);
 
-      virtual void valueChange(const utils::Buffer& newValue);
+private slots:
+  void userSelectedFile(const QString &name_);
 
-      private slots:
-        void userSelectedFile(const QString& name_);
+  void selectFile();
 
-      void selectFile();
+private:
+  QPushButton *m_select;
+  std::string m_fullMask;
 
-    private:
-      QPushButton* m_select;
-      std::string m_fullMask;
+  typedef std::list<std::string> DirList;
+  DirList m_media_dirs;
 
-      typedef std::list<std::string> DirList;
-      DirList m_media_dirs;
+  bool first_select;
+};
 
-      bool first_select;
-  };
+class FileStringViewConstructor : public TypeViewConstructor {
+public:
+  FileStringViewConstructor(const std::string &media_path);
+  virtual TypeView *construct(QWidget *parent, const ParamMap &params) const;
 
+private:
+  std::string m_media_path;
+};
 
-  class FileStringViewConstructor : public TypeViewConstructor
-  {
-    public:
-      FileStringViewConstructor(const std::string& media_path);
-      virtual TypeView* construct(QWidget* parent,
-          const ParamMap& params) const;
-
-    private:
-      std::string m_media_path;
-
-  };
-
-}
+} // namespace gui
 
 #endif

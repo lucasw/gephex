@@ -2,20 +2,20 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
@@ -32,30 +32,26 @@
 class IType;
 class ITypeClass;
 
-namespace renderer
-{
+namespace renderer {
 
-class TypeRegistry
-{
+class TypeRegistry {
 public:
-  virtual void registerTypeClass(int id,const ITypeClass& typeClass) = 0;
+  virtual void registerTypeClass(int id, const ITypeClass &typeClass) = 0;
 };
 
-class TypeFactory : public ITypeFactory, public TypeRegistry
-{
+class TypeFactory : public ITypeFactory, public TypeRegistry {
 public:
   TypeFactory();
   virtual ~TypeFactory();
-  virtual IType* buildNew(int id) const;
-  
-  virtual void registerTypeClass(int id, const ITypeClass& typeClass);
+  virtual IType *buildNew(int id) const;
+
+  virtual void registerTypeClass(int id, const ITypeClass &typeClass);
 
 private:
-  typedef std::map<int, const ITypeClass* > ClassMap;
+  typedef std::map<int, const ITypeClass *> ClassMap;
   ClassMap typeClasses;
 };
 
-} //end of namespace
+} // namespace renderer
 
 #endif
-

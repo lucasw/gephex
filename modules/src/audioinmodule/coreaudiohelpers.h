@@ -1,17 +1,15 @@
 #ifndef INCLUDED_COREAUDIO_HELPER_H
 #define INCLUDED_COREAUDIO_HELPER_H
 
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 #include <CoreAudio/CoreAudio.h>
 
-template <typename T>
-T my_min(T a, T b) { return a <= b ? a : b; }
+template <typename T> T my_min(T a, T b) { return a <= b ? a : b; }
 
-class MutexPOSIX
-{
- public:
+class MutexPOSIX {
+public:
   MutexPOSIX();
   ~MutexPOSIX();
 
@@ -19,101 +17,78 @@ class MutexPOSIX
 
   void release();
 
-    
- private:
-  MutexPOSIX(const MutexPOSIX&); // not implemented;
-  MutexPOSIX& operator=(const MutexPOSIX&); // not implemented;
+private:
+  MutexPOSIX(const MutexPOSIX &);            // not implemented;
+  MutexPOSIX &operator=(const MutexPOSIX &); // not implemented;
 
-  void* m_mutex;
+  void *m_mutex;
 };
 
-class MutexHolder
-{
- public:
-  MutexHolder(MutexPOSIX& mutex) : m_mutex(mutex)
-    {
-      m_mutex.acquire();
-    }
+class MutexHolder {
+public:
+  MutexHolder(MutexPOSIX &mutex) : m_mutex(mutex) { m_mutex.acquire(); }
 
-    ~MutexHolder()
-      {
-	m_mutex.release();
-      }
+  ~MutexHolder() { m_mutex.release(); }
 
- private:
-    MutexPOSIX& m_mutex;
+private:
+  MutexPOSIX &m_mutex;
 };
 
-typedef void (*logT)(int, const char*);
+typedef void (*logT)(int, const char *);
 
 AudioDeviceID GetDeviceID(logT logger, int dev);
 
-struct print_format
-{
-  print_format(logT logger,
-	       const char* title);
+struct print_format {
+  print_format(logT logger, const char *title);
 
-  void operator()(const AudioStreamBasicDescription& format) const;
+  void operator()(const AudioStreamBasicDescription &format) const;
 
   logT m_logger;
-  const char* m_title;
+  const char *m_title;
 };
 
 template <typename T>
 std::vector<T> get_prop_list(AudioDeviceID devID, AudioDevicePropertyID pID,
-			     bool isInput)
-{
+                             bool isInput) {
   OSStatus err;
   UInt32 propsize;
-  
+
   Boolean outWritable;
-  err = AudioDeviceGetPropertyInfo(devID, 0, isInput,
-				   pID, 
-				   &propsize, &outWritable);
-  if (err != kAudioHardwareNoError)
-    {
-      throw std::runtime_error("Could not property info");
-    }
+  err = AudioDeviceGetPropertyInfo(devID, 0, isInput, pID, &propsize,
+                                   &outWritable);
+  if (err != kAudioHardwareNoError) {
+    throw std::runtime_error("Could not property info");
+  }
 
   std::vector<T> elems(propsize / sizeof(T));
-  err = AudioDeviceGetProperty(devID, 0, isInput,
-			       pID,
-			       &propsize, &elems[0]);
-  if (err != kAudioHardwareNoError)
-    {
-      throw std::runtime_error("Could not read stream infor");
-    }
+  err = AudioDeviceGetProperty(devID, 0, isInput, pID, &propsize, &elems[0]);
+  if (err != kAudioHardwareNoError) {
+    throw std::runtime_error("Could not read stream infor");
+  }
 
   return elems;
 }
 
 template <typename T>
-std::vector<T> get_stream_prop_list(AudioStreamID sID, AudioDevicePropertyID pID)
-{
+std::vector<T> get_stream_prop_list(AudioStreamID sID,
+                                    AudioDevicePropertyID pID) {
   OSStatus err;
   UInt32 propsize;
 
   Boolean outWritable;
-  err = AudioStreamGetPropertyInfo(sID, 0,
-				   pID, 
-				   &propsize, &outWritable);
-  if (err != kAudioHardwareNoError)
-    {
-      throw std::runtime_error("Could not get property info");
-    }
+  err = AudioStreamGetPropertyInfo(sID, 0, pID, &propsize, &outWritable);
+  if (err != kAudioHardwareNoError) {
+    throw std::runtime_error("Could not get property info");
+  }
 
   std::vector<T> elems(propsize / sizeof(T));
-  err = AudioStreamGetProperty(sID, 0,
-			       pID,
-			       &propsize, &elems[0]);
-  if (err != kAudioHardwareNoError)
-    {
-      throw std::runtime_error("Could not read grr");
-    }
+  err = AudioStreamGetProperty(sID, 0, pID, &propsize, &elems[0]);
+  if (err != kAudioHardwareNoError) {
+    throw std::runtime_error("Could not read grr");
+  }
 
   return elems;
 }
-
 
 void print_info(AudioDeviceID devid, logT logger, bool isInput);
 

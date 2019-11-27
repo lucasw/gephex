@@ -2,39 +2,38 @@
 
  Copyright (C) 2001-2004
 
- Georg Seidel <georg@gephex.org> 
- Martin Bayer <martin@gephex.org> 
+ Georg Seidel <georg@gephex.org>
+ Martin Bayer <martin@gephex.org>
  Phillip Promesberger <coma@gephex.org>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "slidernumberview.h"
 
-#include <sstream>
-#include <cmath>
 #include <cassert>
+#include <cmath>
+#include <sstream>
 
-#include <QtGui/QSlider>
-#include <QtGui/QDial>
 #include <QtGui/QBoxLayout>
+#include <QtGui/QDial>
+#include <QtGui/QSlider>
 
 #include "utils/buffer.h"
 #include "utils/structreader.h"
 
-namespace gui
-{
+namespace gui {
 #if 0
   static const int RESOLUTION = 255;
   class SchlonzNumberView : public gui::TypeView
@@ -139,34 +138,30 @@ namespace gui
   };
 #endif
 
-  HSliderNumberViewConstructor::HSliderNumberViewConstructor()
+HSliderNumberViewConstructor::HSliderNumberViewConstructor()
     : TypeViewConstructor("horizontal slider", "hslider") {}
 
-  TypeView*
-  HSliderNumberViewConstructor::construct(QWidget* parent,
-                                          const ParamMap& params) const
-  {
-    return new SchlonzNumberView(parent, Qt::Horizontal, false, params);
-  }
- 
+TypeView *
+HSliderNumberViewConstructor::construct(QWidget *parent,
+                                        const ParamMap &params) const {
+  return new SchlonzNumberView(parent, Qt::Horizontal, false, params);
+}
 
-  VSliderNumberViewConstructor::VSliderNumberViewConstructor()
+VSliderNumberViewConstructor::VSliderNumberViewConstructor()
     : TypeViewConstructor("vertical slider", "vslider") {}
 
-  TypeView*
-  VSliderNumberViewConstructor::construct(QWidget* parent,
-                                          const ParamMap& params) const
-  {
-    return new SchlonzNumberView(parent, Qt::Vertical, false, params);
-  }
+TypeView *
+VSliderNumberViewConstructor::construct(QWidget *parent,
+                                        const ParamMap &params) const {
+  return new SchlonzNumberView(parent, Qt::Vertical, false, params);
+}
 
-  DialNumberViewConstructor::DialNumberViewConstructor()
+DialNumberViewConstructor::DialNumberViewConstructor()
     : TypeViewConstructor("dial", "dial") {}
 
-  TypeView* DialNumberViewConstructor::construct(QWidget* parent,
-                                                 const ParamMap& params) const
-  {
-    return new SchlonzNumberView(parent, Qt::Vertical, true, params);
-  }
-
+TypeView *DialNumberViewConstructor::construct(QWidget *parent,
+                                               const ParamMap &params) const {
+  return new SchlonzNumberView(parent, Qt::Vertical, true, params);
 }
+
+} // namespace gui
