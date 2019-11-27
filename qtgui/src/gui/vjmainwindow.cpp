@@ -127,11 +127,13 @@ namespace gui
       m_kbManager(0),
       m_conf_base_dir(conf_base_dir)
   {
-    setStyleSheet("color: rgb(0, 100, 255);"
-                  "background-color: rgb(50, 50, 50);"
-                  "alternate-background-color: rgb(40, 40, 40);"
-                  "selection-background-color: rgb(40, 40, 50);"
-                  );
+    if (false) {
+      setStyleSheet("color: rgb(0, 100, 255);"
+                    "background-color: rgb(50, 50, 50);"
+                    "alternate-background-color: rgb(40, 40, 40);"
+                    "selection-background-color: rgb(40, 40, 50);"
+                    );
+    }
 
     QCoreApplication::setOrganizationName("gephex");
     QCoreApplication::setOrganizationDomain("gephex.org");
