@@ -95,6 +95,7 @@ add_subdirectory(util/src/misc)
 
 # Modules
 add_subdirectory(modules/src/blurmodule)
+add_subdirectory(modules/src/bwmodule)
 add_subdirectory(modules/src/centermodule)
 add_subdirectory(modules/src/color2numbermodule)
 add_subdirectory(modules/src/frbinmodule)
