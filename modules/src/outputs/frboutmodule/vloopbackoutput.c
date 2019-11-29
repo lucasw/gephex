@@ -36,7 +36,7 @@
 
 
 //TODO: move to common location or similar
-#include "../capturemodule/videodev.h"
+#include "../../sources/capturemodule/videodev.h"
 
 #include "outputdriver.h"
 

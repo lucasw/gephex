@@ -24,7 +24,7 @@
 
 #include <limits.h>
 #include <math.h>
-#include "../libgrid/libgrid.h"
+#include "../../libgrid/libgrid.h"
 
 #define GRIDSIZE_LOG 4
 #define GRIDSIZE (1 << GRIDSIZE_LOG)

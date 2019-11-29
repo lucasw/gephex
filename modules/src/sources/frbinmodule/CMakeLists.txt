@@ -8,13 +8,14 @@ include(${CMAKE_HOME_DIRECTORY}/modules/pluc.cmake)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/numbertype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/positiontype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/stringtype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../util/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
+  ${CMAKE_SOURCE_DIR}/engine/src/engine
+  ${CMAKE_SOURCE_DIR}/types/src/framebuffertype
+  ${CMAKE_SOURCE_DIR}/types/src/numbertype
+  ${CMAKE_SOURCE_DIR}/types/src/positiontype
+  ${CMAKE_SOURCE_DIR}/types/src/stringtype
+  ${CMAKE_SOURCE_DIR}/util/include
+  ${CMAKE_SOURCE_DIR}/util/src/libgeo
+  ${CMAKE_SOURCE_DIR}/modules/src/libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${SDL_INCLUDE_DIR}
 )

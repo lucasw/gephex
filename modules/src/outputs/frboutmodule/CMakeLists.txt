@@ -9,14 +9,14 @@ find_package(SDL_image)
 
 # TODO(lucasw) move these to higher lever cmake file
 add_custom_command(OUTPUT ${PROJECT_NAME}.h
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../pluc.py h ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
+    COMMAND python ${CMAKE_SOURCE_DIR}/modules/pluc.py h ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     COMMENT "generating ${PROJECT_NAME} header"
 )
 
 add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
-    COMMAND python ${CMAKE_CURRENT_LIST_DIR}/../../pluc.py c ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
+    COMMAND python ${CMAKE_SOURCE_DIR}/modules/pluc.py c ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}.spec
     COMMENT "generating ${PROJECT_NAME} header"
@@ -24,15 +24,15 @@ add_custom_command(OUTPUT ${PROJECT_NAME}_auto.c
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_CURRENT_LIST_DIR}/../../../engine/src/engine
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/framebuffertype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/numbertype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/positiontype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/stringtype
-  ${CMAKE_CURRENT_LIST_DIR}/../../../util/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
-  ${CMAKE_CURRENT_LIST_DIR}/../libscale
-  ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
+  ${CMAKE_SOURCE_DIR}/engine/src/engine
+  ${CMAKE_SOURCE_DIR}/types/src/framebuffertype
+  ${CMAKE_SOURCE_DIR}/types/src/numbertype
+  ${CMAKE_SOURCE_DIR}/types/src/positiontype
+  ${CMAKE_SOURCE_DIR}/types/src/stringtype
+  ${CMAKE_SOURCE_DIR}/util/include
+  ${CMAKE_SOURCE_DIR}/util/src/libgeo
+  ${CMAKE_CURRENT_LIST_DIR}/../../libscale
+  ${CMAKE_CURRENT_LIST_DIR}/../../libcolorconv
   ${SDL_INCLUDE_DIR}
 )
 
