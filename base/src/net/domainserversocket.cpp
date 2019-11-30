@@ -84,11 +84,11 @@ DomainServerSocket::~DomainServerSocket() {
   SocketUtils::closeSocket(m_socket);
 }
 
-void DomainServerSocket::listen() throw(std::runtime_error) {
+void DomainServerSocket::listen() { // throw(std::runtime_error) {
   ::listen(m_socket, 1);
 }
 
-ISocket *DomainServerSocket::accept() throw(std::runtime_error) {
+ISocket *DomainServerSocket::accept() { // throw(std::runtime_error) {
   sockaddr_un remote;
 #if defined(OS_POSIX) && !defined(OS_CYGWIN)
   unsigned

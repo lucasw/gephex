@@ -23,8 +23,8 @@
 #ifndef __INCLUDED_MODEL_H__
 #define __INCLUDED_MODEL_H__
 
-#include "utils/autoptr.h"
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -75,7 +75,7 @@ class Model : public IModelControlReceiver,
               public IModuleStatisticsSender,
               public IModelStatusSender {
 public:
-  Model(const std::string graph_path, utils::AutoPtr<utils::ILogger> &logger);
+  Model(const std::string graph_path, std::shared_ptr<utils::ILogger> &logger);
 
   virtual ~Model();
 
@@ -197,10 +197,10 @@ public:
 
   void registerModelStatusReceiver(IModelStatusReceiver &r);
 
-  typedef std::map<std::string, utils::AutoPtr<Graph>> GraphMap;
+  typedef std::map<std::string, std::shared_ptr<Graph>> GraphMap;
 
 private:
-  utils::AutoPtr<GraphFileSystem> fileSystem;
+  std::shared_ptr<GraphFileSystem> fileSystem;
 
   // all loaded graphs
   GraphMap graphs;
@@ -208,10 +208,10 @@ private:
   // to build a new module
   SpecMap specs;
 
-  utils::AutoPtr<Graph> renderedGraph; // this is shown by the renderer
-  utils::AutoPtr<Graph> editGraph;     // this can be edited by the gui
-  utils::AutoPtr<ControlValueSet> editControlSet;
-  utils::AutoPtr<ControlValueSet> renderedControlSet;
+  std::shared_ptr<Graph> renderedGraph; // this is shown by the renderer
+  std::shared_ptr<Graph> editGraph;     // this can be edited by the gui
+  std::shared_ptr<ControlValueSet> editControlSet;
+  std::shared_ptr<ControlValueSet> renderedControlSet;
 
   std::map<std::string, bool> knownGraphIDs;
   std::map<std::string, bool> knownSnapIDs;
@@ -227,10 +227,10 @@ private:
   IModuleStatisticsReceiver *moduleStatisticsReceiver;
   IModelStatusReceiver *modelStatusReceiver;
 
-  utils::AutoPtr<utils::ILogger> m_logger;
+  std::shared_ptr<utils::ILogger> m_logger;
 
   // helper functions
-  void deleteModule(utils::AutoPtr<Graph>, int moduleID);
+  void deleteModule(std::shared_ptr<Graph>, int moduleID);
 
 #ifndef NDEBUG
   void checkGraphSerialisation();

@@ -40,8 +40,8 @@ public:
    * TODO: make defaultValue a static IType that is shared
    * among all modules of the same kind.
    */
-  CInput(int _typeID, bool _const, bool _strong, std::shared_ptr<IModule> cmod, int index,
-         const ITypeFactory &factory_, const TypeAttributes *attr,
+  CInput(int _typeID, bool _const, bool _strong, std::shared_ptr<IModule> cmod,
+         int index, const ITypeFactory &factory_, const TypeAttributes *attr,
          IType &defaultValue, const CInputVTable &vtable, void *instance);
 
   virtual ~CInput();
@@ -53,7 +53,7 @@ public:
   //	virtual bool hasChanged() const;
 
   virtual void
-  plugIn(utils::AutoPtr<IOutputPlug> &oPlug) throw(std::runtime_error);
+  plugIn(std::shared_ptr<IOutputPlug> oPlug); // throw(std::runtime_error);
 
   virtual void unPlug();
 
@@ -80,7 +80,7 @@ private:
   const IType
       *data; // pointer to the valid value this is returned to the module
   IType *internalData;
-  utils::AutoPtr<IOutputPlug> oPlug;
+  std::shared_ptr<IOutputPlug> oPlug;
   int typeID;
   bool _isConst;
   bool _isStrong;

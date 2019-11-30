@@ -23,7 +23,6 @@
 #ifndef INCLUDED_RUNTIMESYSTEM_H
 #define INCLUDED_RUNTIMESYSTEM_H
 
-#include "utils/autoptr.h"
 #include <list>
 #include <map>
 #include <memory>
@@ -51,7 +50,7 @@ class IModuleFactory;
 class RuntimeSystem {
 public:
   RuntimeSystem(const IModuleFactory &, const ITypeFactory &,
-                utils::AutoPtr<utils::ILogger> &logger);
+                std::shared_ptr<utils::ILogger> &logger);
   virtual ~RuntimeSystem();
 
   virtual void connect(int m1, int outputIndex, int m2, int inputIndex);
@@ -63,7 +62,8 @@ public:
 
   virtual void deleteModule(int);
 
-  virtual void addModule(const std::string &moduleClassName, const int moduleID);
+  virtual void addModule(const std::string &moduleClassName,
+                         const int moduleID);
 
   virtual void setInputValue(int moduleID, int inputIndex,
                              const utils::Buffer &buf,
@@ -74,20 +74,22 @@ public:
 
   virtual void synchronizeInputValues(IControlValueReceiver *cvr) const;
 
-  // typedef std::shared_ptr<ModuleControlBlock> std::shared_ptr<ModuleControlBlock>;
+  // typedef std::shared_ptr<ModuleControlBlock>
+  // std::shared_ptr<ModuleControlBlock>;
   typedef std::map<int, std::shared_ptr<ModuleControlBlock>> ControlBlockMap;
 
 private:
-  ControlBlockMap m_modules;                // ID -> IModule*
+  ControlBlockMap m_modules;                              // ID -> IModule*
   std::list<std::shared_ptr<ModuleControlBlock>> m_sinks; // Liste aller Senken
   int m_time;
   int frameCount;
 
-  std::shared_ptr<ModuleControlBlock> getControlBlock(std::shared_ptr<IModule> mod);
+  std::shared_ptr<ModuleControlBlock>
+  getControlBlock(std::shared_ptr<IModule> mod);
 
   const IModuleFactory &moduleFactory;
   const ITypeFactory &typeFactory;
-  utils::AutoPtr<utils::ILogger> &m_logger;
+  std::shared_ptr<utils::ILogger> &m_logger;
 };
 
 } // end of namespace renderer

@@ -23,7 +23,9 @@
 #ifndef INCLUDED_DLLLOADER_H
 #define INCLUDED_DLLLOADER_H
 
+#include <cassert>
 #include <list>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -34,7 +36,6 @@
 #include "interfaces/itypeclasssender.h"
 
 #include "nameresolver.h"
-#include "utils/autoptr.h"
 
 namespace utils {
 class SharedLibrary;
@@ -69,7 +70,7 @@ public:
    * \param type_path search loactions for the type plugins
    * \param frei0r_path search loactions for the frei0r plugins
    */
-  DllLoader(utils::AutoPtr<utils::ILogger> &logger,
+  DllLoader(std::shared_ptr<utils::ILogger> &logger,
             IModuleClassInfoReceiver &infoReceiver,
             IModuleClassSpecReceiver &specReceiver,
             IModuleClassReceiver &classReceiver,
@@ -102,13 +103,13 @@ public:
 
 private:
   /** hold shared libraries during lifetime of the object */
-  std::list<utils::AutoPtr<utils::SharedLibrary>> m_shared_libraries;
+  std::list<std::shared_ptr<utils::SharedLibrary>> m_shared_libraries;
 
   /** hold types during lifetime of the dllloader */
-  std::list<utils::AutoPtr<CTypeClass>> m_gephex_types;
+  std::list<std::shared_ptr<CTypeClass>> m_gephex_types;
 
   /** hold plugins during lifetime of the dllloader */
-  std::list<utils::AutoPtr<IModulePlugin>> m_module_plugins;
+  std::list<std::shared_ptr<IModulePlugin>> m_module_plugins;
 
   /** for unique ids */
   NameResolver resolver;
@@ -118,7 +119,7 @@ private:
   IModuleClassSpecReceiver &m_specReceiver;
   ITypeClassReceiver &m_typeClassReceiver;
 
-  utils::AutoPtr<utils::ILogger> m_logger;
+  std::shared_ptr<utils::ILogger> m_logger;
 
   void processModFile(const std::string &);
   void processFrei0rFile(const std::string &);

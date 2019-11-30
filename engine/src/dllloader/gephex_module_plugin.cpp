@@ -105,13 +105,14 @@ gephex_module_plugin::gephex_module_plugin(utils::SharedLibrary &sl,
   CModuleFunctionTable ft(loadModule(sl));
 
   // construct new module class
-  IModuleClass *cm = new CModuleClass(ft, resolver);
+  auto cm = std::make_shared<CModuleClass>(ft, resolver);
 
   m_module_classes.push_back(cm);
 }
 
 gephex_module_plugin::~gephex_module_plugin() {}
 
-std::list<IModuleClass *> &gephex_module_plugin::get_module_classes() {
+std::list<std::shared_ptr<IModuleClass>> &
+gephex_module_plugin::get_module_classes() {
   return m_module_classes;
 }

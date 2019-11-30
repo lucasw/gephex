@@ -28,8 +28,6 @@
 #include <memory>
 #include <string>
 
-#include "utils/autoptr.h"
-
 class IModule;
 class IModuleClass;
 class ITypeFactory;
@@ -38,8 +36,8 @@ namespace renderer {
 
 class IModuleFactory {
 public:
-  virtual std::shared_ptr<IModule> buildNewModule(const std::string &className,
-                                                  const ITypeFactory &) const = 0;
+  virtual std::shared_ptr<IModule>
+  buildNewModule(const std::string &className, const ITypeFactory &) const = 0;
 };
 
 class ModuleRegistry {

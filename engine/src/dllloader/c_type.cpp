@@ -21,10 +21,10 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "c_type.h"
+#include <cassert>
 
 #include "c_typetables.h"
 
-#include "utils/autoptr.h"
 #include "utils/buffer.h"
 
 CType::CType(void *instance_, const CTypeVTable &ftab, bool isOwner)

@@ -29,24 +29,24 @@ class IType;
 
 class COutputPlug : public IOutputPlug {
 public:
-  COutputPlug(IOutput &, IInput &);
+  COutputPlug(std::shared_ptr<IOutput>, std::shared_ptr<IInput>);
   virtual ~COutputPlug();
 
   virtual void setData(const IType *data);
 
   virtual const IType *getData() const;
 
-  virtual IOutput *getOutput() const;
+  virtual std::shared_ptr<IOutput> getOutput(); // const;
 
-  virtual std::shared_ptr<IModule> getModule() const;
+  virtual std::shared_ptr<IModule> getModule(); // const;
 
-  virtual IInput *getInput() const;
+  virtual std::shared_ptr<IInput> getInput(); // const;
 
   virtual bool isConst() const;
 
 private:
-  IOutput *output;
-  IInput *input;
+  std::shared_ptr<IOutput> output;
+  std::shared_ptr<IInput> input;
   const IType *data;
 };
 

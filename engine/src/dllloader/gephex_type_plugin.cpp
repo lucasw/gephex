@@ -20,11 +20,11 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
-#include "gephex_type_plugin.h"
-
-#include "utils/autoptr.h"
-#include "utils/sharedlibrary.h"
+#include <memory>
 #include <stdexcept>
+
+#include "gephex_type_plugin.h"
+#include "utils/sharedlibrary.h"
 
 namespace dllloader {
 
@@ -51,10 +51,10 @@ void DdeSerialize(const char *, int, void *) {}
 } // namespace
 
 CTypeFunctionTable
-extract_type_functions(utils::AutoPtr<utils::SharedLibrary> sl) {
+extract_type_functions(std::shared_ptr<utils::SharedLibrary> sl) {
   // this table stores all resolved symbols from shared library
   // The pointers can only be used as long the lib is not deleted.
-  // This is the reason why it holds a autoptr to sl
+  // This is the reason why it holds a shared ptr to sl
   CTypeFunctionTable ft(sl);
 
   // load all symbols into the struct

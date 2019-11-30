@@ -82,8 +82,8 @@ bool StructReader::find(const std::string &name, std::string &value) const {
 
 std::string StructReader::getName() const { return m_name; }
 
-bool StructReader::getBoolValue(const std::string &name) const
-    throw(std::runtime_error) {
+bool StructReader::getBoolValue(const std::string &name) const {
+  // throw(std::runtime_error) {
   std::string value;
   bool found = this->find(name, value);
   if (!found)
@@ -100,8 +100,8 @@ bool StructReader::getBoolValue(const std::string &name) const
   }
 }
 
-double StructReader::getDoubleValue(const std::string &name) const
-    throw(std::runtime_error) {
+double StructReader::getDoubleValue(const std::string &name) const {
+  // throw(std::runtime_error)
   std::string value;
   bool found = this->find(name, value);
   if (!found)
@@ -120,8 +120,8 @@ double StructReader::getDoubleValue(const std::string &name) const
   return val;
 }
 
-int StructReader::getIntValue(const std::string &name) const
-    throw(std::runtime_error) {
+int StructReader::getIntValue(const std::string &name) const {
+  // throw(std::runtime_error) {
   std::string value;
   bool found = this->find(name, value);
   if (!found)
@@ -140,8 +140,8 @@ int StructReader::getIntValue(const std::string &name) const
   return val;
 }
 
-std::string StructReader::getStringValue(const std::string &name) const
-    throw(std::runtime_error) {
+std::string StructReader::getStringValue(const std::string &name) const {
+  // throw(std::runtime_error) {
   std::string value;
   bool found = this->find(name, value);
   if (!found)

@@ -24,6 +24,7 @@
 #define INCLUDED_I_MODULE_PLUGIN_H
 
 #include <list>
+#include <memory>
 
 class IModuleClass;
 
@@ -42,7 +43,7 @@ public:
    * get the module classes of the plugin
    * \returns a list of pointers to module classes
    */
-  virtual std::list<IModuleClass *> &get_module_classes() = 0;
+  virtual std::list<std::shared_ptr<IModuleClass>> &get_module_classes() = 0;
 };
 
 #endif

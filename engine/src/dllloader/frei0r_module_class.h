@@ -24,11 +24,11 @@
 #define INCLUDED_FREI0R_MODULE_CLASS_H
 
 #include "interfaces/imoduleclass.h"
+#include <memory>
 
 #include "c_moduletables.h"
 #include "frei0r_module_plugin.h"
 #include "moduleclassspec.h"
-#include "utils/autoptr.h"
 #include "utils/buffer.h"
 
 class CModuleFunctionTable;
@@ -108,7 +108,8 @@ public:
    * \param tFactory this factory is needed to set the default values
    *                 of the inputs
    */
-  virtual std::shared_ptr<IModule> buildInstance(const ITypeFactory &tFactory) const;
+  virtual std::shared_ptr<IModule>
+  buildInstance(const ITypeFactory &tFactory) const;
 
   /**
    * call deinit functions of the frei0r plugin
@@ -127,7 +128,7 @@ private:
   std::string m_name;
   int m_frei0r_plugin_type;
   utils::Buffer m_info;
-  utils::AutoPtr<ModuleClassSpec> m_spec;
+  std::shared_ptr<ModuleClassSpec> m_spec;
 };
 
 #endif

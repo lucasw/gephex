@@ -59,7 +59,7 @@ public:
   utils::Buffer consume(int num_bytes);
 
 private:
-  std::auto_ptr<utils::CircularBuffer> m_buffer;
+  std::shared_ptr<utils::CircularBuffer> m_buffer;
   bool m_enabled;
 };
 

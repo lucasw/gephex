@@ -37,7 +37,6 @@
 #include <string>
 
 // helpers
-#include "utils/autoptr.h"
 #include "utils/buffer.h"
 #include "utils/filesystem.h"
 #include "utils/ilogger.h"
@@ -122,9 +121,10 @@ std::vector<std::string> getFilesInPathList(const std::string &pathList,
   return files;
 }
 
-utils::AutoPtr<utils::SharedLibrary> loadDll(const std::string &filename) {
+std::shared_ptr<utils::SharedLibrary> loadDll(const std::string &filename) {
   try {
-    utils::AutoPtr<utils::SharedLibrary> sl(new utils::SharedLibrary(filename));
+    std::shared_ptr<utils::SharedLibrary> sl =
+        std::make_shared<utils::SharedLibrary>(filename);
 #if (ENGINE_VERBOSITY > 1)
     std::cout << "Loaded Library '" << filename << "'" << std::endl;
 #endif
@@ -145,7 +145,7 @@ void moduleLog(int level, const char *sender, const char *msg);
 };
 
 // TODO: ugly
-static utils::AutoPtr<utils::ILogger> s_logger(0);
+static std::shared_ptr<utils::ILogger> s_logger(0);
 
 void moduleLog(int level, const char *sender, const char *msg) {
   if (!s_logger)
@@ -163,7 +163,7 @@ void moduleLog(int level, const char *sender, const char *msg) {
   }
 }
 
-DllLoader::DllLoader(utils::AutoPtr<utils::ILogger> &logger,
+DllLoader::DllLoader(std::shared_ptr<utils::ILogger> &logger,
                      IModuleClassInfoReceiver &infoReceiver,
                      IModuleClassSpecReceiver &specReceiver,
                      IModuleClassReceiver &classReceiver,
@@ -224,13 +224,11 @@ void DllLoader::synchronize() {
 
   m_infoReceiver.syncStarted();
   // announce all modules
-  for (std::list<utils::AutoPtr<IModulePlugin>>::iterator it2 =
+  for (std::list<std::shared_ptr<IModulePlugin>>::iterator it2 =
            m_module_plugins.begin();
        it2 != m_module_plugins.end(); ++it2) {
-    for (std::list<IModuleClass *>::iterator it =
-             (*it2)->get_module_classes().begin();
-         it != (*it2)->get_module_classes().end(); ++it) {
-      m_infoReceiver.moduleClassLoaded((*it)->name(), (*it)->info());
+    for (auto &mc : (*it2)->get_module_classes()) {
+      m_infoReceiver.moduleClassLoaded(mc->name(), mc->info());
     }
   }
 
@@ -240,12 +238,12 @@ void DllLoader::synchronize() {
 void DllLoader::processTypeFile(const std::string &filename) {
   try {
     // load the shared library
-    utils::AutoPtr<utils::SharedLibrary> shared_library(loadDll(filename));
+    std::shared_ptr<utils::SharedLibrary> shared_library(loadDll(filename));
 
     // extract the type plugin functions
     const CTypeFunctionTable ft(extract_type_functions(shared_library));
     // create the new type class
-    utils::AutoPtr<CTypeClass> tc(new CTypeClass(ft));
+    std::shared_ptr<CTypeClass> tc = std::make_shared<CTypeClass>(ft);
 
     // register the typename and get a unique id
     const int id = resolver.registerObject(tc->getName());
@@ -265,24 +263,23 @@ void DllLoader::processTypeFile(const std::string &filename) {
 void DllLoader::processModFile(const std::string &filename) {
   try {
     // load the shared library
-    utils::AutoPtr<utils::SharedLibrary> sl(loadDll(filename));
+    std::shared_ptr<utils::SharedLibrary> sl(loadDll(filename));
 
-    utils::AutoPtr<IModulePlugin> plugin(
-        new gephex_module_plugin(*sl, resolver));
+    std::shared_ptr<IModulePlugin> plugin =
+        std::make_shared<gephex_module_plugin>(*sl, resolver);
 
     // keep gephex plugin in memory
     m_module_plugins.push_back(plugin);
     // keep the shared library in memory
     m_shared_libraries.push_back(sl);
 
-    std::list<IModuleClass *> mcs = plugin->get_module_classes();
+    auto mcs = plugin->get_module_classes();
 
     // anounce new modules
-    for (std::list<IModuleClass *>::iterator it = mcs.begin(); it != mcs.end();
-         ++it) {
-      m_infoReceiver.moduleClassLoaded((*it)->name(), (*it)->info());
-      m_classReceiver.moduleClassLoaded((*it)->name(), (*(*it)));
-      m_specReceiver.moduleClassLoaded((*it)->name(), (*it)->spec());
+    for (auto &mc : mcs) {
+      m_infoReceiver.moduleClassLoaded(mc->name(), mc->info());
+      m_classReceiver.moduleClassLoaded(mc->name(), *mc);
+      m_specReceiver.moduleClassLoaded(mc->name(), mc->spec());
     }
 
   } catch (std::runtime_error &e) {
@@ -292,24 +289,23 @@ void DllLoader::processModFile(const std::string &filename) {
 
 void DllLoader::processFrei0rFile(const std::string &fname) {
   try {
-    utils::AutoPtr<utils::SharedLibrary> sl(loadDll(fname));
+    std::shared_ptr<utils::SharedLibrary> sl(loadDll(fname));
 
-    utils::AutoPtr<IModulePlugin> plugin(
-        new frei0r_module_plugin(*sl, resolver));
+    std::shared_ptr<IModulePlugin> plugin =
+        std::make_shared<frei0r_module_plugin>(*sl, resolver);
 
     // keep frei0r plugin in memory
     m_module_plugins.push_back(plugin);
     // keep the shared library in memory
     m_shared_libraries.push_back(sl);
 
-    std::list<IModuleClass *> mcs = plugin->get_module_classes();
+    auto mcs = plugin->get_module_classes();
 
     // anounce new modules
-    for (std::list<IModuleClass *>::iterator it = mcs.begin(); it != mcs.end();
-         ++it) {
-      m_infoReceiver.moduleClassLoaded((*it)->name(), (*it)->info());
-      m_classReceiver.moduleClassLoaded((*it)->name(), (*(*it)));
-      m_specReceiver.moduleClassLoaded((*it)->name(), (*it)->spec());
+    for (auto &mc : mcs) {
+      m_infoReceiver.moduleClassLoaded(mc->name(), mc->info());
+      m_classReceiver.moduleClassLoaded(mc->name(), *mc);
+      m_specReceiver.moduleClassLoaded(mc->name(), mc->spec());
     }
   } catch (std::runtime_error &e) {
     std::cerr << e.what();

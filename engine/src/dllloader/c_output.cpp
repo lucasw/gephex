@@ -27,8 +27,8 @@
 
 #include "c_moduletables.h"
 
-COutput::COutput(std::shared_ptr<IModule> mod, int _typeID, IType *_data, int index,
-                 const COutputVTable &vtable, void *instance)
+COutput::COutput(std::shared_ptr<IModule> mod, int _typeID, IType *_data,
+                 int index, const COutputVTable &vtable, void *instance)
     : m_module(mod), /*isChanged(true),*/ m_typeID(_typeID), m_plugs(),
       m_data(_data), m_patchedInput(0), m_index(index), m_vtable(&vtable),
       m_instance(instance) {
@@ -50,17 +50,17 @@ COutput::~COutput() { delete m_data; }
 
 std::shared_ptr<IModule> COutput::getModule() const { return m_module; }
 
-utils::AutoPtr<IOutputPlug> COutput::plugIn(IInput &in) {
-  IOutputPlugPtr plug(new COutputPlug(*this, in));
+std::shared_ptr<IOutputPlug> COutput::plugIn(std::shared_ptr<IInput> in) {
+  auto plug = std::make_shared<COutputPlug>(shared_from_this(), in);
   m_plugs.push_back(plug);
   plug->setData(m_data);
   return plug;
 }
 
-void COutput::unPlug(IInput &in) {
+void COutput::unPlug(std::shared_ptr<IInput> in) {
   for (PlugList::iterator it = m_plugs.begin(); it != m_plugs.end(); ++it) {
     IOutputPlugPtr current = *it;
-    if (current->getInput() == &in) {
+    if (current->getInput() == in) {
       m_plugs.erase(it);
       break;
     }
@@ -69,21 +69,21 @@ void COutput::unPlug(IInput &in) {
 
 int COutput::getType() const { return m_typeID; }
 
-std::list<IInput *> COutput::getConnectedInputs() const {
-  std::list<IInput *> inputs;
+std::list<std::shared_ptr<IInput>> COutput::getConnectedInputs() const {
+  std::list<std::shared_ptr<IInput>> inputs;
 
-  for (PlugList::const_iterator it = m_plugs.begin(); it != m_plugs.end();
-       ++it) {
-    IOutputPlugPtr current = *it;
-    inputs.push_back(current->getInput());
+  for (auto &plug : m_plugs) {
+    inputs.push_back(plug->getInput());
   }
 
   return inputs;
 }
 
-IInput *COutput::getPatchedInput() const { return m_patchedInput; }
+std::shared_ptr<IInput> COutput::getPatchedInput() const {
+  return m_patchedInput;
+}
 
-void COutput::setPatchedInput(IInput *in) {
+void COutput::setPatchedInput(std::shared_ptr<IInput> in) {
   m_patchedInput = in;
   for (PlugList::iterator it = m_plugs.begin(); it != m_plugs.end(); ++it) {
     (*it)->setData(in->getData());
@@ -93,8 +93,8 @@ void COutput::setPatchedInput(IInput *in) {
 }
 
 void COutput::unPatch() {
-  if (m_patchedInput != 0) {
-    m_patchedInput = 0;
+  if (m_patchedInput) {
+    m_patchedInput = nullptr;
     for (PlugList::iterator it = m_plugs.begin(); it != m_plugs.end(); ++it) {
       (*it)->setData(m_data);
     }

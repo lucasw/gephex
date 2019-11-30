@@ -87,7 +87,7 @@ private:
   std::string m_graphID;
 };
 
-Renderer::Renderer(utils::AutoPtr<utils::ILogger> &logger)
+Renderer::Renderer(std::shared_ptr<utils::ILogger> &logger)
     : isStarted(false), activeGraph(0), cvr(0), msr(0),
       rendererStatusReceiver(0), moduleFactory(new ModuleFactory()),
       typeFactory(new TypeFactory()), m_logger(logger) {}
@@ -113,7 +113,7 @@ void Renderer::newGraphCreated(const std::string &graphID) {
   if (it != graphs.end())
     throw std::runtime_error("name already exists "
                              "(Renderer::newGraphCreated)");
-  graphs[graphID] = utils::AutoPtr<RuntimeSystem>(
+  graphs[graphID] = std::shared_ptr<RuntimeSystem>(
       new RuntimeSystem(*moduleFactory, *typeFactory, m_logger));
 }
 
@@ -153,7 +153,7 @@ void Renderer::graphDeleted(const std::string &graphID) {
   }
 
   if (activeGraphName == graphID) {
-    activeGraph = utils::AutoPtr<RuntimeSystem>(0);
+    activeGraph = std::shared_ptr<RuntimeSystem>(0);
     activeGraphName = "";
   }
 
@@ -198,7 +198,8 @@ void Renderer::stop() {
   isStarted = false;
 }
 
-utils::AutoPtr<RuntimeSystem> Renderer::find(const std::string &graphID) const {
+std::shared_ptr<RuntimeSystem>
+Renderer::find(const std::string &graphID) const {
   RuntimeSystemMap::const_iterator it = graphs.find(graphID);
   if (it == graphs.end())
     throw std::runtime_error("unknown GraphName(Renderer::find)");

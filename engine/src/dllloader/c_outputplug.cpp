@@ -22,8 +22,9 @@
 
 #include "c_outputplug.h"
 
-COutputPlug::COutputPlug(IOutput &out, IInput &in)
-    : output(&out), input(&in), data(0) {}
+COutputPlug::COutputPlug(std::shared_ptr<IOutput> out,
+                         std::shared_ptr<IInput> in)
+    : output(out), input(in), data(0) {}
 
 COutputPlug::~COutputPlug() {
   //	output->unPlug(*this->getInput());
@@ -33,11 +34,18 @@ void COutputPlug::setData(const IType *_data) { data = _data; }
 
 const IType *COutputPlug::getData() const { return data; }
 
-IOutput *COutputPlug::getOutput(void) const { return output; }
+// std::shared_ptr<IOutput> COutputPlug::getOutput(void) const { return output;
+// }
+std::shared_ptr<IOutput> COutputPlug::getOutput(void) { return output; }
 
-std::shared_ptr<IModule> COutputPlug::getModule(void) const { return output->getModule(); }
+// std::shared_ptr<IModule> COutputPlug::getModule(void) const { return
+// output->getModule(); }
+std::shared_ptr<IModule> COutputPlug::getModule(void) {
+  return output->getModule();
+}
 
-IInput *COutputPlug::getInput(void) const { return input; }
+// std::shared_ptr<IInput> COutputPlug::getInput(void) const { return input; }
+std::shared_ptr<IInput> COutputPlug::getInput(void) { return input; }
 
 /*bool COutputPlug::hasChanged() const
 {

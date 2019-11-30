@@ -28,13 +28,11 @@
 
 #include "interfaces/imodule.h"
 
-#include "utils/autoptr.h"
-
 class COutputPlug;
 
 class COutputVTable;
 
-class COutput : public IOutput {
+class COutput : public IOutput, public std::enable_shared_from_this<COutput> {
 public:
   COutput(std::shared_ptr<IModule> mod, int _typeID, IType *data, int index,
           const COutputVTable &vtable, void *instance);
@@ -44,29 +42,29 @@ public:
 
   virtual std::shared_ptr<IModule> getModule() const;
 
-  virtual utils::AutoPtr<IOutputPlug> plugIn(IInput &);
+  virtual std::shared_ptr<IOutputPlug> plugIn(std::shared_ptr<IInput>);
 
-  virtual void unPlug(IInput &);
+  virtual void unPlug(std::shared_ptr<IInput>);
 
   virtual int getType() const;
 
-  virtual std::list<IInput *> getConnectedInputs() const;
+  virtual std::list<std::shared_ptr<IInput>> getConnectedInputs() const;
 
-  virtual IInput *getPatchedInput() const;
+  virtual std::shared_ptr<IInput> getPatchedInput() const;
 
-  virtual void setPatchedInput(IInput *in);
+  virtual void setPatchedInput(std::shared_ptr<IInput> in);
 
   virtual void unPatch();
 
 private:
   std::shared_ptr<IModule> m_module;
   int m_typeID;
-  typedef utils::AutoPtr<IOutputPlug> IOutputPlugPtr;
+  typedef std::shared_ptr<IOutputPlug> IOutputPlugPtr;
   typedef std::list<IOutputPlugPtr> PlugList;
   PlugList m_plugs;
   IType *m_data;
 
-  IInput *m_patchedInput;
+  std::shared_ptr<IInput> m_patchedInput;
 
   int m_index;
   const COutputVTable *m_vtable;

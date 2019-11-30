@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "graphserial.h"
 
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -259,7 +260,7 @@ static void graph_from_syntax(const gparser::SGraph &sg, model::Graph &graph,
                               const SpecMap &specMap, utils::ILogger &logger,
                               bool nodummy) {
   graph.clear();
-  typedef std::map<int, utils::AutoPtr<IModuleClassSpec>> IDMap;
+  typedef std::map<int, std::shared_ptr<IModuleClassSpec>> IDMap;
   IDMap moduleSpecs;
 
   std::map<int, bool> module_valid;
@@ -333,8 +334,8 @@ static void graph_from_syntax(const gparser::SGraph &sg, model::Graph &graph,
            << "' - ignoring connection";
         logger.warning("Model::GraphSerial", os.str());
       } else {
-        utils::AutoPtr<IModuleClassSpec> spec1 = it1->second;
-        utils::AutoPtr<IModuleClassSpec> spec2 = it2->second;
+        std::shared_ptr<IModuleClassSpec> spec1 = it1->second;
+        std::shared_ptr<IModuleClassSpec> spec2 = it2->second;
 
         try {
           int outputIndex = spec1->indexFromOutputID(outplug);
@@ -372,7 +373,7 @@ static void graph_from_syntax(const gparser::SGraph &sg, model::Graph &graph,
         if (it == moduleSpecs.end())
           throw std::runtime_error("Invalid moduleID at snapshot");
 
-        utils::AutoPtr<IModuleClassSpec> spec = it->second;
+        std::shared_ptr<IModuleClassSpec> spec = it->second;
 
         try {
           graph.setControlValue(snap.id(), moduleID,

@@ -29,8 +29,6 @@
 #include <string>
 #include <vector>
 
-#include "utils/autoptr.h"
-
 class IModule;
 class IOutputPlug;
 class IType;
@@ -43,7 +41,7 @@ class Buffer;
 /**
  * Kapselt die Funktionalität eines Inputpins.
  */
-class IInput {
+class IInput : public std::enable_shared_from_this<IInput> {
 public:
   virtual ~IInput(){}; // TODO
 
@@ -63,7 +61,7 @@ public:
    *                               mit einem Output verbunden ist.
    */
   virtual void
-  plugIn(utils::AutoPtr<IOutputPlug> &p) throw(std::runtime_error) = 0;
+  plugIn(std::shared_ptr<IOutputPlug> p) = 0; // throw(std::runtime_error) = 0;
 
   /**
    * Löst die Verbindung des Inputs.
@@ -131,14 +129,14 @@ public:
    * OutputPlug erzeugt.
    * @param i Der Input der mit dem Output verbunden wird.
    */
-  virtual utils::AutoPtr<IOutputPlug> plugIn(IInput &i) = 0;
+  virtual std::shared_ptr<IOutputPlug> plugIn(std::shared_ptr<IInput> i) = 0;
 
   /**
    * Entfernt einen OutputPlug und damit die Verbindung zum
    * entsprechenden Input.
    * @param plug Der OutputPlug der entfernt werden soll.
    */
-  virtual void unPlug(IInput &plug) = 0;
+  virtual void unPlug(std::shared_ptr<IInput> plug) = 0;
 
   /**
    * Liefert die TypID des Outputs zurück.
@@ -146,7 +144,7 @@ public:
    */
   virtual int getType() const = 0;
 
-  virtual std::list<IInput *> getConnectedInputs() const = 0;
+  virtual std::list<std::shared_ptr<IInput>> getConnectedInputs() const = 0;
 
   /**
    * Returns the patched Input of this Output.
@@ -158,7 +156,7 @@ public:
    * @return A pointer to the this output is patched to, or 0 if
    *         the output is not patched.
    */
-  virtual IInput *getPatchedInput() const = 0;
+  virtual std::shared_ptr<IInput> getPatchedInput() const = 0;
 
   /**
    * Tells this output, what its patched input is.
@@ -167,7 +165,7 @@ public:
    * @param in The input that is patched directly to this output.
    *           Must not be 0.
    */
-  virtual void setPatchedInput(IInput *in) = 0;
+  virtual void setPatchedInput(std::shared_ptr<IInput> in) = 0;
 
   /**
    * Tells this output, that it is no longer patched.
@@ -196,19 +194,21 @@ public:
    * Gibt den Output zurück an dem dieser Stecker hängt.
    * @return den zugeordneten Output.
    */
-  virtual IOutput *getOutput() const = 0;
+  virtual std::shared_ptr<IOutput> getOutput() = 0;
 
   /**
    * Gibt das zugeordnete Modul zurück.
    * @return das Modul dem der zugeordnete Output gehört.
    */
-  virtual std::shared_ptr<IModule> getModule() const = 0;
+  // virtual std::shared_ptr<IModule> getModule() const = 0;
+  virtual std::shared_ptr<IModule> getModule() = 0;
 
   /**
    * Gibt den Input zurück an dem dieser Stecker hängt.
    * @return den zugeordneten Input.
    */
-  virtual IInput *getInput() const = 0;
+  // virtual std::shared_ptr<IInput> getInput() const = 0;
+  virtual std::shared_ptr<IInput> getInput() = 0;
 
   /**
    * Gibt an ob die Daten des zugeordneten Inputs vom Modul bei
@@ -224,8 +224,8 @@ public:
  */
 class IModule {
 public:
-  typedef utils::AutoPtr<IInput> IInputPtr;
-  typedef utils::AutoPtr<IOutput> IOutputPtr;
+  typedef std::shared_ptr<IInput> IInputPtr;
+  typedef std::shared_ptr<IOutput> IOutputPtr;
 
   IModule(int id) : m_id(id) {}
 
@@ -240,13 +240,13 @@ public:
    * Gibt alle Inputs des Moduls zurück.
    * @return std::vector mit den Inputs.
    */
-  virtual const std::vector<IInputPtr> &getInputs() const = 0;
+  virtual const std::vector<IInputPtr> &getInputs() = 0;
 
   /**
    * Gibt alle Outputs des Moduls zurück.
    * @return std::vector mit den Outputs.
    */
-  virtual const std::vector<IOutputPtr> &getOutputs() const = 0;
+  virtual const std::vector<IOutputPtr> &getOutputs() = 0;
 
   /**
    * Das ist nicht die Berechnungsfunktion. Sie wird von der Engine so
@@ -261,7 +261,7 @@ public:
    * @param l Liste der Inputs, die vom Modul im nächsten Rechenschritt
    *        benötigt werden.
    */
-  virtual IInput *dependencies() = 0;
+  virtual std::shared_ptr<IInput> dependencies() = 0;
 
   /**
    * Das ist die Berechnungsfunktion.

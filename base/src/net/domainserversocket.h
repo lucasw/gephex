@@ -50,9 +50,9 @@ public:
 
   virtual ~DomainServerSocket();
 
-  void listen() throw(std::runtime_error);
+  void listen(); // throw(std::runtime_error);
 
-  ISocket *accept() throw(std::runtime_error);
+  ISocket *accept(); // throw(std::runtime_error);
 
 private:
   int m_localPort;

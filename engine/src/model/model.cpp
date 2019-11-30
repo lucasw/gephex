@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 #include <algorithm>
 #include <cassert>
 #include <list>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 
@@ -35,7 +36,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 #include "graphnode.h"
 #include "graphserial.h"
 
-#include "utils/autoptr.h"
 #include "utils/ilogger.h"
 
 #include "interfaces/igraphdatareceiver.h"
@@ -202,10 +202,10 @@ Model::GraphMap::iterator
 lookForGraph(const std::string &graphID, Model::GraphMap &graphs,
              const SpecMap &specs, GraphFileSystem &fileSystem,
              IModuleConstructionSmartReceiver *smartAss,
-             utils::AutoPtr<utils::ILogger> &m_logger) {
+             std::shared_ptr<utils::ILogger> &m_logger) {
   Model::GraphMap::iterator it = graphs.find(graphID);
   if (it == graphs.end()) {
-    utils::AutoPtr<Graph> graph(new Graph("noid", "noname"));
+    std::shared_ptr<Graph> graph(new Graph("noid", "noname"));
     try {
       fileSystem.loadGraph(graphID, *graph, specs);
     } catch (std::exception &e) {
@@ -250,11 +250,11 @@ void sendSnapShotNames(const std::string &graphID, const std::string &graphName,
 } // namespace
 
 Model::Model(const std::string graph_path,
-             utils::AutoPtr<utils::ILogger> &logger)
+             std::shared_ptr<utils::ILogger> &logger)
     : dumbo(0), smartAss(0), gnr(0), serializedGraphReceiver(0), dr(0),
       controlValueReceiver(0), m_logger(logger) {
-  fileSystem = utils::AutoPtr<GraphFileSystem>(
-      new GraphFileSystem(graph_path, m_logger));
+  fileSystem =
+      std::make_shared<GraphFileSystem>(GraphFileSystem(graph_path, m_logger));
 }
 
 typedef std::pair<std::pair<std::string, std::string>,
@@ -337,7 +337,7 @@ void Model::addModule(const std::string &moduleClassName) {
     throw std::runtime_error("ModulClassName '" + moduleClassName +
                              "'is not registered (Model::addModule)");
 
-  utils::AutoPtr<IModuleClassSpec> spec = it->second;
+  std::shared_ptr<IModuleClassSpec> spec = it->second;
   // add new node in graph and use the spec the iterator points to
   int moduleID = editGraph->addModule(*spec);
 
@@ -485,7 +485,7 @@ void Model::newGraphWithID(const std::string &graphName,
                              " already exists (Model::newGraph)");
 
   // create new graph und register it
-  utils::AutoPtr<Graph> newGraph(new Graph(graphID, graphName));
+  std::shared_ptr<Graph> newGraph = std::make_shared<Graph>(graphID, graphName);
   graphs.insert(std::make_pair(graphID, newGraph));
 
   if (isDirectoryName(graphName)) { // a directory has no real snapshots
@@ -539,7 +539,7 @@ void Model::renameGraph(const std::string &graphID,
   GraphMap::iterator it =
       lookForGraph(graphID, graphs, specs, *fileSystem, smartAss, m_logger);
 
-  utils::AutoPtr<Graph> graph = it->second;
+  std::shared_ptr<Graph> graph = it->second;
   const Graph::ValueSetMap &valueSets = graph->getValueSetMap();
 
   graph->setName(newGraphName);
@@ -563,7 +563,8 @@ void Model::renameGraph(const std::string &graphID,
 }
 
 void Model::deserializeGraph(const std::string &graphstream) {
-  utils::AutoPtr<Graph> deserializedGraph(new Graph("noIDYet", "noNameYet"));
+  std::shared_ptr<Graph> deserializedGraph =
+      std::make_shared<Graph>("noIDYet", "noNameYet");
   std::istringstream ist(graphstream);
   model::deserializeGraph(ist, *deserializedGraph, specs, *m_logger);
   // ist >> (*deserializedGraph);
@@ -618,7 +619,7 @@ void Model::synchronize() // editgraph
 void Model::sendExistingGraphs() {
   // first send those graphs that are in memory
   for (GraphMap::const_iterator it = graphs.begin(); it != graphs.end(); ++it) {
-    utils::AutoPtr<Graph> current = it->second;
+    std::shared_ptr<Graph> current = it->second;
     std::string graphID = current->getID();
     std::string graphName = current->getName();
 
@@ -678,7 +679,7 @@ void Model::moduleClassLoaded(const std::string &moduleClassName,
     throw std::runtime_error(
         "modulclassname already exists(Model::moduleClassLoaded)");
 
-  specs[moduleClassName] = utils::AutoPtr<IModuleClassSpec>(spec.clone());
+  specs[moduleClassName] = std::shared_ptr<IModuleClassSpec>(spec.clone());
 
 #if (ENGINE_VERBOSITY > 0)
   std::cout << "loaded moduleclass: " << moduleClassName << std::endl;
@@ -694,12 +695,12 @@ void Model::moduleClassUnloaded(const std::string &moduleClassName) {
   // alle Module dieser Klasse in allen Graphen löschen
   for (GraphMap::const_iterator graphIt = graphs.begin();
        graphIt != graphs.end(); ++graphIt) {
-    utils::AutoPtr<Graph> current = graphIt->second;
+    std::shared_ptr<Graph> current = graphIt->second;
 
     Graph::GraphNodeList nodes = current->nodes();
     for (Graph::GraphNodeList::const_iterator nodeIt = nodes.begin();
          nodeIt != nodes.end(); ++nodeIt) {
-      utils::AutoPtr<GraphNode> node = *nodeIt;
+      std::shared_ptr<GraphNode> node = *nodeIt;
       if (node->spec().moduleClassName() == moduleClassName) {
         this->deleteModule(current, node->moduleID());
       }
@@ -912,7 +913,7 @@ void Model::deleteControlValueSet(const std::string &graphID,
   }
 }
 
-void Model::deleteModule(utils::AutoPtr<Graph> current, int moduleID) {
+void Model::deleteModule(std::shared_ptr<Graph> current, int moduleID) {
   const Graph::ConnectionMap &connections = current->connections();
 
   Graph::ConnectionMap::const_iterator it = connections.begin();
@@ -920,7 +921,7 @@ void Model::deleteModule(utils::AutoPtr<Graph> current, int moduleID) {
   std::list<std::pair<int, int>> delList;
 
   while (it != connections.end()) {
-    utils::AutoPtr<GraphConnection> conn = it->second;
+    std::shared_ptr<GraphConnection> conn = it->second;
     if (conn->id1() == moduleID || conn->id2() == moduleID) {
       delList.push_back(it->first);
     }
@@ -1006,10 +1007,10 @@ void Model::deleteGraph(const std::string &graphID) {
   {
     if (editGraph->getID() == graphID) {
       sendGraphDestruction(*editGraph, *dumbo, *dr, *gr);
-      editGraph = utils::AutoPtr<Graph>(0);
+      editGraph = std::shared_ptr<Graph>(0);
     }
 
-    utils::AutoPtr<Graph> g = it->second;
+    std::shared_ptr<Graph> g = it->second;
     graphs.erase(it);
 
     smartAss->graphDeleted(graphID);

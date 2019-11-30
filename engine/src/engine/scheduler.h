@@ -24,9 +24,8 @@
 #define INCLUDED_SCHEDULER_H
 
 #include <list>
+#include <memory>
 #include <stdexcept>
-
-#include "utils/autoptr.h"
 
 class ITask;
 
@@ -104,15 +103,16 @@ public:
 
   virtual void run();
 
-  virtual void killTask(ITask &task) throw(std::runtime_error);
+  virtual void killTask(ITask &task); // throw(std::runtime_error);
 
-  virtual void changeTaskTime(ITask &task,
-                              int newTimeInMillis) throw(std::runtime_error);
+  virtual void
+  changeTaskTime(ITask &task,
+                 int newTimeInMillis); // throw(std::runtime_error);
 
   virtual void stop();
 
 private:
-  typedef utils::AutoPtr<TaskControlBlock> TaskControlBlockPtr;
+  typedef std::shared_ptr<TaskControlBlock> TaskControlBlockPtr;
   typedef std::list<TaskControlBlockPtr> TaskList;
   TaskList tasks;
 

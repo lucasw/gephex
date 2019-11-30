@@ -90,11 +90,11 @@ TCPServerSocket::~TCPServerSocket() {
   SocketUtils::shutDownNetwork();
 }
 
-void TCPServerSocket::listen() throw(std::runtime_error) {
+void TCPServerSocket::listen() { // throw(std::runtime_error) {
   ::listen(m_socket, 1);
 }
 
-ISocket *TCPServerSocket::accept() throw(std::runtime_error) {
+ISocket *TCPServerSocket::accept() { // throw(std::runtime_error) {
   sockaddr accept_sin;
 #if defined(OS_POSIX) && !defined(OS_CYGWIN)
   unsigned

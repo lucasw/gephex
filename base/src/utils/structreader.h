@@ -87,7 +87,8 @@ public:
    *         vorkommt. Dann existiert entweder die Variable gar nicht in
    *         der c-struct oder sie hat einen anderen Typ (int oder string).
    */
-  bool getBoolValue(const std::string &name) const throw(std::runtime_error);
+  bool
+  getBoolValue(const std::string &name) const; // throw(std::runtime_error);
 
   /**
    * Gibt den Wert der Variablen mit Namen name als bool zurueck.
@@ -107,8 +108,8 @@ public:
    * @throw std::runtime_error Falls die Variable nicht in der c-struct
    *         existiert oder keinen Zahlenwert hat.
    */
-  double getDoubleValue(const std::string &name) const
-      throw(std::runtime_error);
+  double getDoubleValue(const std::string &name) const;
+  //    throw(std::runtime_error);
 
   /**
    * Gibt den Wert der Variablen mit Namen name als double zurueck.
@@ -126,7 +127,7 @@ public:
    * @throw std::runtime_error Falls die Variable nicht in der c-struct
    *         existiert oder keinen Zahlenwert hat.
    */
-  int getIntValue(const std::string &name) const throw(std::runtime_error);
+  int getIntValue(const std::string &name) const; // throw(std::runtime_error);
 
   /**
    * Gibt den Wert der Variablen mit Namen name als int zurueck.
@@ -144,8 +145,8 @@ public:
    * @throw std::runtime_error Falls die Variable nicht in der c-struct
    *         vorkommt.
    */
-  std::string getStringValue(const std::string &name) const
-      throw(std::runtime_error);
+  std::string getStringValue(const std::string &name) const;
+  //    throw(std::runtime_error);
 
   /**
    * Gibt den Wert der Variablen mit Namen name als string zurueck.

@@ -50,7 +50,6 @@
 #include "netinterfaces/modelcontrolsendernet.h"
 #include "netinterfaces/renderercontrolsendernet.h"
 
-#include "autoptr.h"
 #include "dllloader/dllloader.h"
 #include "model/model.h"
 #include "renderer/renderer.h"
@@ -94,6 +93,7 @@ public:
   bool run();
 
 private:
+  // std::shared_ptr<net::ISocket> m_socket;
   net::ISocket *m_socket;
   net::IDataListener &m_listener;
   BufferedSender *m_buffered_sender;
@@ -141,15 +141,15 @@ private:
   PortTagger portTagger14;
   PortTagger portTagger15;
 
-  utils::AutoPtr<net::IServerSocket> m_serverSocket;
+  std::shared_ptr<net::IServerSocket> m_serverSocket;
 
   PortDispatcher portDispatcher;
   PortTagger portTagger;
   net::Protocol protocol;
 
   net::ISocket *socket;
-  utils::AutoPtr<Acceptor> acceptor;
-  utils::AutoPtr<BufferedSender> bufferedSender;
+  std::shared_ptr<Acceptor> acceptor;
+  std::shared_ptr<BufferedSender> bufferedSender;
 
   bool connection_down;
   NetPoller netPoller;
@@ -172,14 +172,14 @@ private:
   ModelStatusReceiverNet modelStatusReceiver;
   RendererStatusReceiverNet rendererStatusReceiver;
 
-  utils::AutoPtr<utils::ILogger> logger;
+  std::shared_ptr<utils::ILogger> logger;
 
   model::Model pModel;
 
-  utils::AutoPtr<dllloader::DllLoader> pDllLoader;
+  std::shared_ptr<dllloader::DllLoader> pDllLoader;
   renderer::Renderer pRenderer;
 
-  utils::AutoPtr<synced_tasks> augmented_render_task;
+  std::shared_ptr<synced_tasks> augmented_render_task;
   engine::Scheduler scheduler;
 
   bool first_time;

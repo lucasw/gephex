@@ -680,9 +680,9 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
   m_info = dllloader::ModuleInfo::enrichInfo(&data[0], bufLen, m_name,
                                              inputNames, outputNames);
 
-  m_spec = utils::AutoPtr<ModuleClassSpec>(
-      new ModuleClassSpec(m_name, m_attributes.inputs, defaultVals, inputIDs,
-                          m_attributes.outputs, outputIDs));
+  m_spec = std::make_shared<ModuleClassSpec>(m_name, m_attributes.inputs,
+                                             defaultVals, inputIDs,
+                                             m_attributes.outputs, outputIDs);
 }
 
 const std::string &Frei0rModuleClass::name() const { return m_name; }
@@ -695,7 +695,8 @@ Frei0rModuleClass::~Frei0rModuleClass() {
   // call the destructor method of plugin
 }
 
-std::shared_ptr<IModule> Frei0rModuleClass::buildInstance(const ITypeFactory &tFactory) const
+std::shared_ptr<IModule>
+Frei0rModuleClass::buildInstance(const ITypeFactory &tFactory) const
 
 {
   void *instance;
@@ -731,9 +732,9 @@ std::shared_ptr<IModule> Frei0rModuleClass::buildInstance(const ITypeFactory &tF
     }
   }
 
-  std::shared_ptr<IModule> module;
-  module = std::make_shared<frei0r_module>(instance, (CModuleVTable &)m_functionTable,
-                                           m_attributes, tFactory, m_defaultInputValues, m_name,
-                                           m_frei0r);
+  auto module = std::make_shared<frei0r_module>(
+      instance, (CModuleVTable &)m_functionTable, m_attributes.isDeterministic,
+      m_name, m_frei0r);
+  module->init(m_attributes, tFactory, m_defaultInputValues);
   return module;
 }

@@ -23,13 +23,13 @@
 #ifndef INCLUDED_CMODULE_CLASS_H
 #define INCLUDED_CMODULE_CLASS_H
 
+#include <memory>
 #include <vector>
 
 #include "interfaces/imoduleclass.h"
 #include "moduleclassspec.h"
 
 #include "c_moduletables.h"
-#include "utils/autoptr.h"
 #include "utils/buffer.h"
 
 class CModuleFunctionTable;
@@ -50,7 +50,8 @@ public:
   virtual const ModuleClassSpec &spec() const;
   virtual ~CModuleClass();
 
-  virtual std::shared_ptr<IModule> buildInstance(const ITypeFactory &tFactory) const;
+  virtual std::shared_ptr<IModule>
+  buildInstance(const ITypeFactory &tFactory) const;
 
 private:
   const CModuleFunctionTable m_functionTable;
@@ -58,7 +59,7 @@ private:
   mutable std::vector<IType *> m_defaultInputValues;
   std::string m_name;
   utils::Buffer m_info;
-  utils::AutoPtr<ModuleClassSpec> m_spec;
+  std::shared_ptr<ModuleClassSpec> m_spec;
 };
 
 #endif

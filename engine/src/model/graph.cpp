@@ -43,7 +43,7 @@ void Graph::addModule(const IModuleClassSpec &spec, int moduleID) {
   if (moduleID > m_maxModuleID)
     m_maxModuleID = moduleID;
 
-  utils::AutoPtr<GraphNode> newNode(new GraphNode(spec, moduleID));
+  std::shared_ptr<GraphNode> newNode(new GraphNode(spec, moduleID));
 
   m_nodes.push_back(newNode);
 
@@ -60,8 +60,8 @@ void Graph::addModule(const IModuleClassSpec &spec, int moduleID) {
 void Graph::connectModules(int moduleID1, int outputIndex, int moduleID2,
                            int inputIndex) {
   // get GraphNodes from ID
-  utils::AutoPtr<GraphNode> gn1(0); // no sender yet found
-  utils::AutoPtr<GraphNode> gn2(0); // no receiver yet found
+  std::shared_ptr<GraphNode> gn1(0); // no sender yet found
+  std::shared_ptr<GraphNode> gn2(0); // no receiver yet found
   for (GraphNodeList::iterator i = m_nodes.begin(); i != m_nodes.end(); ++i) {
     if ((*i)->moduleID() == moduleID1) // found sender
       gn1 = (*i);
@@ -86,7 +86,7 @@ void Graph::connectModules(int moduleID1, int outputIndex, int moduleID2,
   if (it != m_connections.end())
     throw std::runtime_error("Input ist schon verbunden bei connect!");
 
-  utils::AutoPtr<GraphConnection> newConnection(
+  std::shared_ptr<GraphConnection> newConnection(
       new GraphConnection(moduleID1, outputIndex, moduleID2, inputIndex));
 
   m_connections[std::make_pair(moduleID2, inputIndex)] = newConnection;
@@ -152,7 +152,7 @@ std::list<int> Graph::moduleDataList(int moduleID) const {
        ++i) {
     if ((*i)->moduleID() == moduleID) // found
     {
-      utils::AutoPtr<GraphNode> node = *i;
+      std::shared_ptr<GraphNode> node = *i;
       return node->moduleDataList();
     }
   }
@@ -192,8 +192,8 @@ void Graph::newControlValueSet(const std::string &id, const std::string &name) {
     throw std::runtime_error("snapshot with that name already exists "
                              "(Graph::newControlValueSet)");
 
-  utils::AutoPtr<ControlValueSet> newSet =
-      utils::AutoPtr<ControlValueSet>(new ControlValueSet(id, name));
+  std::shared_ptr<ControlValueSet> newSet =
+      std::make_shared<ControlValueSet>(id, name);
 
   valueSets[id] = newSet;
   // every module
@@ -250,8 +250,8 @@ void Graph::copyControlValueSet(const std::string &snapID,
                              "Graph::copyControlValueSet()");
   */
 
-  utils::AutoPtr<ControlValueSet> copySet =
-      utils::AutoPtr<ControlValueSet>(new ControlValueSet(newID, newName));
+  std::shared_ptr<ControlValueSet> copySet =
+      std::make_shared<ControlValueSet>(newID, newName);
   valueSets[newID] = copySet;
 
   for (ControlValueSet::const_iterator it3 = it->second->begin();
@@ -284,7 +284,7 @@ std::string Graph::getOutputID(int moduleID, int outputIndex) const {
        ++i) {
     if ((*i)->moduleID() == moduleID) // found
     {
-      utils::AutoPtr<GraphNode> node = *i;
+      auto node = *i;
       return node->spec().outputID(outputIndex);
     }
   }
@@ -296,7 +296,7 @@ std::string Graph::getInputID(int moduleID, int inputIndex) const {
        ++i) {
     if ((*i)->moduleID() == moduleID) // found
     {
-      utils::AutoPtr<GraphNode> node = *i;
+      auto node = *i;
       return node->spec().inputID(inputIndex);
     }
   }

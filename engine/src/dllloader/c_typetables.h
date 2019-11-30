@@ -24,7 +24,6 @@
 #define INCLUDED_TYPE_TABLES_H
 
 #include "c_functiontypes.h"
-#include "utils/autoptr.h"
 #include "utils/sharedlibrary.h"
 
 /**
@@ -32,7 +31,7 @@
  */
 class CTypeVTable {
 public:
-  CTypeVTable(utils::AutoPtr<utils::SharedLibrary> sl_) : sl(sl_){};
+  CTypeVTable(std::shared_ptr<utils::SharedLibrary> sl_) : sl(sl_){};
   newInstanceT newInstance;
   deSerializeT deSerialize;
 
@@ -45,7 +44,7 @@ public:
   convertTypeT convertType;
 
 private:
-  utils::AutoPtr<utils::SharedLibrary> sl;
+  std::shared_ptr<utils::SharedLibrary> sl;
 };
 
 /**
@@ -54,7 +53,7 @@ private:
  */
 class CTypeFunctionTable : public CTypeVTable {
 public:
-  CTypeFunctionTable(utils::AutoPtr<utils::SharedLibrary> sl_)
+  CTypeFunctionTable(std::shared_ptr<utils::SharedLibrary> sl_)
       : CTypeVTable(sl_){};
   initT init;
   shutDownT shutDown;

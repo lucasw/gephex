@@ -110,7 +110,7 @@ Controller::Controller(const utils::ConfigManager &config_)
 
       pModel(config.get_string_param("graph_path"), logger), pRenderer(logger),
       first_time(true), ttl(config.get_int_param("ttl")), auto_stop(this, ttl) {
-  net::IServerSocket *serverSocket;
+  std::shared_ptr<net::IServerSocket> serverSocket;
 
   std::string ipcType = config.get_string_param("ipc_type");
 
@@ -119,7 +119,7 @@ Controller::Controller(const utils::ConfigManager &config_)
     std::cout << "IPC type: inet" << std::endl;
     std::cout << "Opening serverSocket on port " << m_port << std::endl;
 #endif
-    serverSocket = new net::TCPServerSocket(m_port);
+    serverSocket = std::make_shared<net::TCPServerSocket>(m_port);
   }
 #if defined(OS_POSIX)
   else if (ipcType == "unix") {
@@ -130,7 +130,8 @@ Controller::Controller(const utils::ConfigManager &config_)
     std::cout << "Opening serverSocket on " << nodePrefix << ", "
               << "port = " << m_port << std::endl;
 #endif
-    serverSocket = new net::DomainServerSocket(nodePrefix, m_port);
+    serverSocket =
+        std::make_shared<net::DomainServerSocket>(nodePrefix, m_port);
   }
 #elif defined(OS_WIN32)
   else if (ipcType == "namedpipe") {
@@ -138,18 +139,18 @@ Controller::Controller(const utils::ConfigManager &config_)
     std::cout << "IPC type: namedpipe" << std::endl;
     std::cout << "Opening serverSocket on port " << m_port << std::endl;
 #endif
-    serverSocket = new net::NamedPipeServerSocket(m_port);
+    serverSocket = std::make_shared<net::NamedPipeServerSocket>(m_port);
   }
 #endif
   else {
     throw std::runtime_error("Unsupported or missing ipc type");
   }
 
-  m_serverSocket = utils::AutoPtr<net::IServerSocket>(serverSocket);
+  m_serverSocket = serverSocket;
 
-  acceptor = utils::AutoPtr<Acceptor>(new Acceptor(*m_serverSocket, socket));
+  acceptor = std::make_shared<Acceptor>(*m_serverSocket, socket);
 
-  bufferedSender = utils::AutoPtr<BufferedSender>(new BufferedSender());
+  bufferedSender = std::make_shared<BufferedSender>();
   protocol.registerSender(&*bufferedSender);
   netPoller.set_sender(&*bufferedSender);
 
@@ -195,17 +196,16 @@ Controller::Controller(const utils::ConfigManager &config_)
   t_list.push_back(&auto_stop);
   t_list.push_back(&pRenderer);
 
-  augmented_render_task =
-      utils::AutoPtr<synced_tasks>(new synced_tasks(t_list));
+  augmented_render_task = std::make_shared<synced_tasks>(synced_tasks(t_list));
 
   scheduler.addTask(*augmented_render_task, rendererInterval);
 
   // load plugins
-  pDllLoader = utils::AutoPtr<dllloader::DllLoader>(new dllloader::DllLoader(
-      logger, moduleClassInfoReceiver, pModel, pRenderer, pRenderer,
-      config.get_string_param("module_path"),
-      config.get_string_param("type_path"),
-      config.get_string_param("frei0r_path")));
+  pDllLoader = std::make_shared<dllloader::DllLoader>(
+      dllloader::DllLoader(logger, moduleClassInfoReceiver, pModel, pRenderer,
+                           pRenderer, config.get_string_param("module_path"),
+                           config.get_string_param("type_path"),
+                           config.get_string_param("frei0r_path")));
 
 #if (ENGINE_VERBOSITY > 0)
   std::cout << "Reading graphs...";
@@ -333,7 +333,7 @@ bool Acceptor::run() {
 }
 
 NetPoller::NetPoller(net::IDataListener &listener, bool &connection_down)
-    : m_socket(0), m_listener(listener), m_buffered_sender(0),
+    : m_socket(nullptr), m_listener(listener), m_buffered_sender(0),
       m_connection_down(connection_down) {
   m_connection_down = false;
 }
@@ -347,7 +347,7 @@ void NetPoller::set_sender(BufferedSender *bsender) {
 static int min_(int a, int b) { return (a < b) ? a : b; }
 
 bool NetPoller::run() {
-  if (m_connection_down || m_socket == 0)
+  if (m_connection_down || m_socket == nullptr)
     return true;
 
   try {

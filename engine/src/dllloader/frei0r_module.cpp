@@ -22,6 +22,7 @@
 
 #include "frei0r_module.h"
 
+#include <cassert>
 #include <ctime>
 #include <stdexcept>
 
@@ -33,32 +34,34 @@
 #include "interfaces/itypefactory.h"
 
 frei0r_module::frei0r_module(void *instance, const CModuleVTable &vtable,
-                             const CModuleAttributes &attributes,
-                             const ITypeFactory &tfactory_,
-                             const std::vector<IType *> &defaultInputTypes,
+                             const bool is_deterministic,
                              const std::string &module_class_name,
                              const frei0r_funs_t &frei0r)
     : IModule(-1), m_instance(instance), m_vtable(&vtable),
-      inputs(attributes.inputs.size()), outputs(attributes.outputs.size()),
-      _isDeterministic(attributes.isDeterministic),
-      m_module_class_name(module_class_name), m_frei0r(frei0r)
+      _isDeterministic(is_deterministic),
+      m_module_class_name(module_class_name), m_frei0r(frei0r) {}
 
-{
+void frei0r_module::init(const CModuleAttributes &attributes,
+                         const ITypeFactory &tfactory_,
+                         const std::vector<IType *> &defaultInputTypes) {
+  m_inputs.resize(attributes.inputs.size());
+  m_outputs.resize(attributes.outputs.size());
   for (unsigned int i = 0; i < attributes.inputs.size(); ++i) {
-    inputs[i] =
-        IInputPtr(new CInput(attributes.inputs[i], attributes.isConstInput[i],
-                             attributes.isStrongDependency[i], shared_from_this(), i,
-                             tfactory_, attributes.fixedAttributes[i],
-                             *defaultInputTypes[i], *m_vtable, m_instance));
+    m_inputs[i] = std::make_shared<CInput>(
+        attributes.inputs[i], attributes.isConstInput[i],
+        attributes.isStrongDependency[i], shared_from_this(), i, tfactory_,
+        attributes.fixedAttributes[i], *defaultInputTypes[i], *m_vtable,
+        m_instance);
     // add dependecy for the first update
-    m_deps.push_back(&*inputs[i]);
+    m_deps.push_back(m_inputs[i]);
   }
 
   for (unsigned int j = 0; j < attributes.outputs.size(); ++j) {
     IType *type = tfactory_.buildNew(attributes.outputs[j]);
 
-    outputs[j] = IOutputPtr(new COutput(shared_from_this(), attributes.outputs[j], type, j,
-                                        *m_vtable, m_instance));
+    m_outputs[j] =
+        std::make_shared<COutput>(shared_from_this(), attributes.outputs[j],
+                                  type, j, *m_vtable, m_instance);
   }
 }
 
@@ -68,13 +71,12 @@ std::string frei0r_module::module_class_name() const {
   return m_module_class_name;
 }
 
-const std::vector<frei0r_module::IInputPtr> &frei0r_module::getInputs() const {
-  return inputs;
+const std::vector<frei0r_module::IInputPtr> &frei0r_module::getInputs() {
+  return m_inputs;
 }
 
-const std::vector<frei0r_module::IOutputPtr> &
-frei0r_module::getOutputs() const {
-  return outputs;
+const std::vector<frei0r_module::IOutputPtr> &frei0r_module::getOutputs() {
+  return m_outputs;
 }
 
 bool frei0r_module::isDeterministic() const {
@@ -82,17 +84,16 @@ bool frei0r_module::isDeterministic() const {
   return false;
 }
 
-IInput *frei0r_module::dependencies() {
+std::shared_ptr<IInput> frei0r_module::dependencies() {
   if (m_deps.empty()) {
     // update all inputs
-    for (std::vector<IModule::IInputPtr>::iterator it = inputs.begin();
-         it != inputs.end(); ++it) {
-      (*it)->update();
+    for (auto &input : m_inputs) {
+      input->update();
     }
 
     return 0;
   } else {
-    IInput *in = m_deps.front();
+    auto in = m_deps.front();
     m_deps.pop_front();
     return in;
   }
@@ -104,7 +105,7 @@ void frei0r_module::update() {
   m_vtable->update(m_instance);
 
   // refill dependecy list for next update
-  for (unsigned int i = 0; i < inputs.size(); ++i) {
-    m_deps.push_back(&*inputs[i]);
+  for (unsigned int i = 0; i < m_inputs.size(); ++i) {
+    m_deps.push_back(m_inputs[i]);
   }
 }

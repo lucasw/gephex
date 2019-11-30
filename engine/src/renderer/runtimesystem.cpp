@@ -31,8 +31,8 @@
 #include <stdexcept>
 
 #include <algorithm>
-
 #include <iostream>
+#include <memory>
 #include <sstream>
 
 #include "interfaces/icontrolvaluereceiver.h"
@@ -100,7 +100,7 @@ public:
   /**
    * Destroys the ModuleControlBlock and its Module
    */
-  ~ModuleControlBlock() { }
+  ~ModuleControlBlock() {}
 
   /**
    * Get a pointer to the managed module
@@ -206,7 +206,7 @@ public:
 
 RuntimeSystem::RuntimeSystem(const IModuleFactory &factory,
                              const ITypeFactory &tFactory,
-                             utils::AutoPtr<utils::ILogger> &logger)
+                             std::shared_ptr<utils::ILogger> &logger)
     : m_modules(), m_sinks(), m_time(0), frameCount(0), moduleFactory(factory),
       typeFactory(tFactory), m_logger(logger) {}
 
@@ -267,11 +267,10 @@ void RuntimeSystem::connect(int i1, int outputNumber, int i2, int inputNumber) {
     throw std::runtime_error("Type mismatch!");
   }
 
-  IModule::IOutputPtr out = m1->getOutputs()[outputNumber];
-  IModule::IInputPtr in = m2->getInputs()[inputNumber];
-
-  utils::AutoPtr<IOutputPlug> plug = out->plugIn(*in);
-  in->plugIn(plug);
+  auto output = m1->getOutputs()[outputNumber];
+  auto input = m2->getInputs()[inputNumber];
+  auto plug = output->plugIn(input);
+  input->plugIn(plug);
 
   it2->second->setChanged(inputNumber);
 
@@ -313,12 +312,9 @@ void sendInputValues(std::shared_ptr<ModuleControlBlock> block,
   for (std::vector<IModule::IOutputPtr>::const_iterator it = outs.begin();
        it != outs.end(); ++it) {
     IModule::IOutputPtr current = *it;
-    std::list<IInput *> ins = current->getConnectedInputs();
+    std::list<std::shared_ptr<IInput>> inputs = current->getConnectedInputs();
 
-    for (std::list<IInput *>::const_iterator jz = ins.begin(); jz != ins.end();
-         ++jz) {
-      IInput *in = *jz;
-
+    for (auto &in : inputs) {
       int moduleID = in->getModule()->getID();
       int inputIndex = in->getIndex();
 
@@ -330,10 +326,8 @@ void sendInputValues(std::shared_ptr<ModuleControlBlock> block,
       b->setChanged(inputIndex);
     }
   }
-  const std::vector<IModule::IInputPtr> &ins = m->getInputs();
-  for (std::vector<IModule::IInputPtr>::const_iterator it = ins.begin();
-       it != ins.end(); ++it) {
-    IModule::IInputPtr current = *it;
+  const std::vector<IModule::IInputPtr> &inputs = m->getInputs();
+  for (auto &current : inputs) {
     int inputIndex = current->getIndex();
 
     if (!block->hasChanged(inputIndex))
@@ -359,7 +353,7 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
   // push the sinks (modules with no output) on the stack
   // for (std::list<ModuleControlBlockPtr>::iterator sink = m_sinks.begin();
   //     sink != m_sinks.end(); ++sink) {
-  for (auto& sink : m_sinks) {
+  for (auto &sink : m_sinks) {
     sink->activate();
     stack.push(sink);
   }
@@ -381,7 +375,7 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
     std::cout << "On Stack: " << m->getID() << "\n";
 #endif
 
-    IInput *dep = m->dependencies();
+    std::shared_ptr<IInput> dep = m->dependencies();
 
     // is there a not satisfied dependency left?
     if (dep != nullptr) {
@@ -534,7 +528,7 @@ void RuntimeSystem::deleteModule(int moduleID) {
     m_sinks.remove(block);
 
   // remove it from the module set
-  // the module control block should be deleted here by its autoptr
+  // the module control block should be deleted here by its shared_ptr
   m_modules.erase(it);
 
 #if (ENGINE_VERBOSITY > 0)

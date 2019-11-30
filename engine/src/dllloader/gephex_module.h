@@ -28,32 +28,31 @@
 
 #include "interfaces/imodule.h"
 
-#include "utils/autoptr.h"
-
 class CModuleVTable;
 class CModuleAttributes;
 class UpdateStrategy;
 class ITypeFactory;
 
-class CModule : public IModule, std::enable_shared_from_this<CModule> {
+class CModule : public IModule, public std::enable_shared_from_this<CModule> {
 public:
-  typedef utils::AutoPtr<IType> ITypePtr;
+  typedef std::shared_ptr<IType> ITypePtr;
 
 public:
-  CModule(void *instance, const CModuleVTable &,
-          const CModuleAttributes &attributes, const ITypeFactory &,
-          const std::vector<IType *> &defaultInputTypes,
+  CModule(void *instance, const CModuleVTable &, const bool is_deterministic,
           const std::string &module_class_name);
 
   virtual ~CModule();
 
+  void init(const CModuleAttributes &attributes, const ITypeFactory &tfactory_,
+            const std::vector<IType *> &defaultInputTypes);
+
   std::string module_class_name() const;
 
-  virtual const std::vector<IInputPtr> &getInputs() const;
+  virtual const std::vector<IInputPtr> &getInputs();
 
-  virtual const std::vector<IOutputPtr> &getOutputs() const;
+  virtual const std::vector<IOutputPtr> &getOutputs();
 
-  virtual IInput *dependencies();
+  virtual std::shared_ptr<IInput> dependencies();
 
   virtual void update();
 
@@ -65,14 +64,14 @@ private:
   void *m_instance;
   const CModuleVTable *m_vtable;
 
-  std::vector<IInputPtr> inputs;
-  std::vector<IOutputPtr> outputs;
+  std::vector<IInputPtr> m_inputs;
+  std::vector<IOutputPtr> m_outputs;
 
   bool _isDeterministic;
-  typedef utils::AutoPtr<UpdateStrategy> UpdateStrategyPtr;
+  typedef std::shared_ptr<UpdateStrategy> UpdateStrategyPtr;
   UpdateStrategyPtr us;
 
-  std::list<IInput *> m_deps;
+  std::list<std::shared_ptr<IInput>> m_deps;
 
   std::string m_module_class_name;
 

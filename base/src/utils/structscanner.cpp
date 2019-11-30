@@ -165,8 +165,8 @@ StructScanner::findNextClosingBracket(const std::string &content,
   return std::string::npos;
 }
 
-void StructScanner::scan(const std::string &text) const
-    throw(std::runtime_error) {
+void StructScanner::scan(const std::string &text) const {
+  // throw(std::runtime_error) {
   std::string name;
   std::string content;
 

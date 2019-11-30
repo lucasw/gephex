@@ -54,7 +54,7 @@ public:
    * get the module classes of the frei0r plugin
    * \returns a list of pointers to module classes
    */
-  std::list<IModuleClass *> &get_module_classes();
+  std::list<std::shared_ptr<IModuleClass>> &get_module_classes();
 
 private:
   // not implemented
@@ -62,7 +62,7 @@ private:
   frei0r_module_plugin &operator=(const frei0r_module_plugin &);
 
   // stores the module classes of the plugin
-  std::list<IModuleClass *> m_module_classes;
+  std::list<std::shared_ptr<IModuleClass>> m_module_classes;
 };
 
 #endif

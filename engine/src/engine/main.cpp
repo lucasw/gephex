@@ -143,140 +143,146 @@ static std::string get_cfile_name() {
 
 int main(int argc, const char *argv[]) {
   printWelcome();
+#if 0
   try {
+#else
+  {
+#endif
 #if defined(OS_POSIX)
-    Signals signals;
-    signals.setSignal(SIGINT, signal_handler);
-    signals.setSignal(SIGTERM, signal_handler);
-    signals.setSignal(SIGABRT, signal_handler);
-    signals.setSignal(SIGPIPE, signal_handler);
+  Signals signals;
+  signals.setSignal(SIGINT, signal_handler);
+  signals.setSignal(SIGTERM, signal_handler);
+  signals.setSignal(SIGABRT, signal_handler);
+  signals.setSignal(SIGPIPE, signal_handler);
 #elif defined(OS_WIN32) && defined(COMP_VC)
     _set_se_translator(my_se_translator);
     if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)signal_handler, TRUE) == 0)
       throw std::runtime_error("Could not set control handler!");
 #endif
 
-    using namespace utils;
+  using namespace utils;
 
-    ConfigManager::ParamList params;
+  ConfigManager::ParamList params;
 
-    config_param_t::ParamValue def;
+  config_param_t::ParamValue def;
 
-    params.push_back(config_param_t("media_path", config_param_t::STRING_PARAM,
-                                    "common",
-                                    "List of directories that contain "
-                                    "videos, images and fonts "
-                                    "(separated by ';')",
-                                    0));
+  params.push_back(config_param_t("media_path", config_param_t::STRING_PARAM,
+                                  "common",
+                                  "List of directories that contain "
+                                  "videos, images and fonts "
+                                  "(separated by ';')",
+                                  0));
 
-    params.push_back(config_param_t("graph_path", config_param_t::STRING_PARAM,
-                                    "engine",
-                                    "List of directories that contain "
-                                    "gephex graph files (separated by ';')",
-                                    0));
+  params.push_back(config_param_t("graph_path", config_param_t::STRING_PARAM,
+                                  "engine",
+                                  "List of directories that contain "
+                                  "gephex graph files (separated by ';')",
+                                  0));
 
-    params.push_back(
-        config_param_t("module_path", config_param_t::STRING_PARAM, "engine",
-                       "Directory that contains gephex modules", 0));
+  params.push_back(config_param_t("module_path", config_param_t::STRING_PARAM,
+                                  "engine",
+                                  "Directory that contains gephex modules", 0));
 
-    def.s = "";
-    params.push_back(
-        config_param_t("frei0r_path", config_param_t::STRING_PARAM, "engine",
-                       "Directory that contains frei0r effects", &def));
+  def.s = "";
+  params.push_back(
+      config_param_t("frei0r_path", config_param_t::STRING_PARAM, "engine",
+                     "Directory that contains frei0r effects", &def));
 
-    params.push_back(config_param_t("type_path", config_param_t::STRING_PARAM,
-                                    "engine",
-                                    "Directory that contains gephex types", 0));
+  params.push_back(config_param_t("type_path", config_param_t::STRING_PARAM,
+                                  "engine",
+                                  "Directory that contains gephex types", 0));
 
-    params.push_back(config_param_t("ipc_type", config_param_t::STRING_PARAM,
-                                    "engine",
-                                    "Communication mechanism (inet, unix, or "
-                                    "namedpipe)",
-                                    0));
+  params.push_back(config_param_t("ipc_type", config_param_t::STRING_PARAM,
+                                  "engine",
+                                  "Communication mechanism (inet, unix, or "
+                                  "namedpipe)",
+                                  0));
 
-    params.push_back(config_param_t("ipc_port", config_param_t::INT_PARAM,
-                                    "engine",
-                                    "Port on which the engine listens for the "
-                                    "gui",
-                                    0));
+  params.push_back(config_param_t("ipc_port", config_param_t::INT_PARAM,
+                                  "engine",
+                                  "Port on which the engine listens for the "
+                                  "gui",
+                                  0));
 
-    params.push_back(config_param_t("renderer_interval",
-                                    config_param_t::INT_PARAM, "engine",
-                                    "The interval between two updates of the "
-                                    "rendered graph (in ms)",
-                                    0));
+  params.push_back(config_param_t("renderer_interval",
+                                  config_param_t::INT_PARAM, "engine",
+                                  "The interval between two updates of the "
+                                  "rendered graph (in ms)",
+                                  0));
 
-    params.push_back(config_param_t("net_interval", config_param_t::INT_PARAM,
-                                    "engine",
-                                    "The interval between polling the "
-                                    "connection the gui (in ms)",
-                                    0));
+  params.push_back(config_param_t("net_interval", config_param_t::INT_PARAM,
+                                  "engine",
+                                  "The interval between polling the "
+                                  "connection the gui (in ms)",
+                                  0));
 
-    def.s = "/tmp/gephex_socket";
-    params.push_back(config_param_t("ipc_unix_node_prefix",
-                                    config_param_t::STRING_PARAM, "engine",
-                                    "Path and prefix of the unix nodes "
-                                    "in the filesystem (unix only)",
-                                    &def));
+  def.s = "/tmp/gephex_socket";
+  params.push_back(config_param_t("ipc_unix_node_prefix",
+                                  config_param_t::STRING_PARAM, "engine",
+                                  "Path and prefix of the unix nodes "
+                                  "in the filesystem (unix only)",
+                                  &def));
 
-    def.b = false;
-    params.push_back(config_param_t("autostart", config_param_t::BOOL_PARAM,
-                                    "engine",
-                                    "Automatically start the "
-                                    "rendering",
-                                    &def));
+  def.b = false;
+  params.push_back(config_param_t("autostart", config_param_t::BOOL_PARAM,
+                                  "engine",
+                                  "Automatically start the "
+                                  "rendering",
+                                  &def));
 
-    def.s = "default";
-    params.push_back(config_param_t("render_graph_id",
-                                    config_param_t::STRING_PARAM, "engine",
-                                    "The graph that is initially "
-                                    "loaded",
-                                    &def));
+  def.s = "default";
+  params.push_back(config_param_t("render_graph_id",
+                                  config_param_t::STRING_PARAM, "engine",
+                                  "The graph that is initially "
+                                  "loaded",
+                                  &def));
 
-    params.push_back(config_param_t("render_snap_id",
-                                    config_param_t::STRING_PARAM, "engine",
-                                    "The snapshot that is initially "
-                                    "active",
-                                    &def));
+  params.push_back(config_param_t("render_snap_id",
+                                  config_param_t::STRING_PARAM, "engine",
+                                  "The snapshot that is initially "
+                                  "active",
+                                  &def));
 
-    def.i = 0; // no timeout
-    params.push_back(config_param_t("ttl", config_param_t::INT_PARAM, "engine",
-                                    "Timeout", &def));
+  def.i = 0; // no timeout
+  params.push_back(config_param_t("ttl", config_param_t::INT_PARAM, "engine",
+                                  "Timeout", &def));
 
-    utils::ConfigManager config(get_cfile_name(), argc, argv, params);
+  utils::ConfigManager config(get_cfile_name(), argc, argv, params);
 
-    // If the help message was requested, we simply return
-    if (config.help_requested())
-      return 0;
+  // If the help message was requested, we simply return
+  if (config.help_requested())
+    return 0;
 
-    // This is a hack to communicate the media path to
-    // loaded modules.
-    static const char *GEPHEX_MEDIA_PATH = "GEPHEX_MEDIA_PATH";
-    std::string media_path = config.get_string_param("media_path");
+  // This is a hack to communicate the media path to
+  // loaded modules.
+  static const char *GEPHEX_MEDIA_PATH = "GEPHEX_MEDIA_PATH";
+  std::string media_path = config.get_string_param("media_path");
 
 #if defined(OS_POSIX)
-    int ret = setenv(GEPHEX_MEDIA_PATH, media_path.c_str(), 1);
-    if (ret == -1)
+  int ret = setenv(GEPHEX_MEDIA_PATH, media_path.c_str(), 1);
+  if (ret == -1)
 #elif defined(OS_WIN32)
     BOOL ret = SetEnvironmentVariable(GEPHEX_MEDIA_PATH, media_path.c_str());
     if (ret == 0)
 #endif
-      throw std::runtime_error("Could not set GEPHEX_MEDIA_PATH");
+    throw std::runtime_error("Could not set GEPHEX_MEDIA_PATH");
 
-    engine::Controller ctrl(config);
-    s_controller = &ctrl; // publish for signalhandling
-    ctrl.start();
+  engine::Controller ctrl(config);
+  s_controller = &ctrl; // publish for signalhandling
+  ctrl.start();
+#if 0
   } catch (std::exception &e) {
     s_controller = 0;
-    std::cerr << "catched known exception: " << e.what() << std::endl;
+    std::cerr << "caught known exception: " << e.what() << std::endl;
     return -1;
   } catch (...) {
     s_controller = 0;
-    std::cerr << "catched unknown exception." << std::endl;
+    std::cerr << "caught unknown exception." << std::endl;
     return -1;
-  }
-  s_controller = 0;
-  return 0;
+#endif
+}
+s_controller = 0;
+return 0;
 }
 
 // vc structured exception stuff

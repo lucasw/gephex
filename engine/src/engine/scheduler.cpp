@@ -52,7 +52,7 @@ void Scheduler::addTask(ITask &task, int timeInMillis) {
       TaskControlBlockPtr(new TaskControlBlock(&task, timeInMillis)));
 }
 
-void Scheduler::killTask(ITask &task) throw(std::runtime_error) {
+void Scheduler::killTask(ITask &task) { // throw(std::runtime_error) {
   for (TaskList::iterator i = tasks.begin(); i != tasks.end(); ++i) {
     if ((*i)->task == &task) {
       tasks.remove(*i);
@@ -63,8 +63,9 @@ void Scheduler::killTask(ITask &task) throw(std::runtime_error) {
   throw std::runtime_error("No such task at Scheduler::killTask()");
 }
 
-void Scheduler::changeTaskTime(ITask &task,
-                               int newTimeInMillis) throw(std::runtime_error) {
+void Scheduler::changeTaskTime(
+    ITask &task,
+    int newTimeInMillis) { // throw(std::runtime_error) {
   for (TaskList::iterator i = tasks.begin(); i != tasks.end(); ++i) {
     if ((*i)->task == &task) {
       (*i)->interval = newTimeInMillis;

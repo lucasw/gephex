@@ -43,7 +43,7 @@
 namespace model {
 
 GraphFileSystem::GraphFileSystem(const std::string &graph_path,
-                                 utils::AutoPtr<utils::ILogger> &logger)
+                                 std::shared_ptr<utils::ILogger> &logger)
     : m_logger(logger) {
   utils::StringTokenizer st(graph_path);
   std::string dir;
@@ -228,7 +228,7 @@ GraphFileSystem::IDNameList GraphFileSystem::getNames(const SpecMap &specMap) {
         graphNames2fileNames[graph.getID()] = *graph_it;
 
         ValueSetList valueSetNames;
-        typedef std::map<const std::string, utils::AutoPtr<ControlValueSet>>
+        typedef std::map<const std::string, std::shared_ptr<ControlValueSet>>
             ValueSetMap;
 
         for (ValueSetMap::const_iterator it = graph.getValueSetMap().begin();

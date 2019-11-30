@@ -26,10 +26,10 @@
 #include <iosfwd>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
-#include "utils/autoptr.h"
 #include "utils/buffer.h"
 
 class IModuleClassSpec;
@@ -43,10 +43,10 @@ class Graph {
 public:
   typedef const std::string ControlValueSetID;
   typedef int ModuleID;
-  typedef utils::AutoPtr<ControlValueSet> ControlValueSetPtr;
+  typedef std::shared_ptr<ControlValueSet> ControlValueSetPtr;
   typedef std::map<ControlValueSetID, ControlValueSetPtr> ValueSetMap;
-  typedef utils::AutoPtr<GraphConnection> ConnectionPtr;
-  typedef utils::AutoPtr<GraphNode> NodePtr;
+  typedef std::shared_ptr<GraphConnection> ConnectionPtr;
+  typedef std::shared_ptr<GraphNode> NodePtr;
   typedef std::list<NodePtr> GraphNodeList;
 
   typedef std::map<std::pair<int, int>, ConnectionPtr> ConnectionMap;

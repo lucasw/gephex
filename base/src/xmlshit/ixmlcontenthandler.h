@@ -45,7 +45,8 @@ public:
   virtual bool characters(const std::string &ch) = 0;
   // virtual bool ignorableWhitespace ( const std::string & ch )
   // virtual bool processingInstruction ( const std::string & target, const
-  // std::string & data ) virtual bool skippedEntity ( const std::string & name )
+  // std::string & data ) virtual bool skippedEntity ( const std::string & name
+  // )
   virtual std::string errorString() = 0;
 };
 

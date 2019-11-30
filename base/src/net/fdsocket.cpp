@@ -56,8 +56,8 @@ FDSocket::~FDSocket() {
   SocketUtils::shutDownNetwork();
 }
 
-int FDSocket::send(const utils::Buffer &data)
-/*const throw (IOException,UnknownHostException)*/
+int FDSocket::send(const utils::Buffer &data) // const
+/*throw (IOException,UnknownHostException)*/
 {
 #if defined(OS_LINUX)
   static const int SEND_FLAGS = MSG_NOSIGNAL;
@@ -99,7 +99,7 @@ int FDSocket::send(const utils::Buffer &data)
   return sent;
 }
 
-bool FDSocket::receive(utils::Buffer &b) throw(IOException) {
+bool FDSocket::receive(utils::Buffer &b) { // throw(IOException) {
   static const int MAX_MSG_LEN = 1024;
   static unsigned char buf[MAX_MSG_LEN];
 

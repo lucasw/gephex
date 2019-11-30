@@ -24,14 +24,13 @@
 #define INCLUDED_SPEC_MAP_H
 
 #include <map>
+#include <memory>
 #include <string>
-
-#include "utils/autoptr.h"
 
 class IModuleClassSpec;
 
 namespace model {
-typedef std::map<std::string, utils::AutoPtr<IModuleClassSpec>> SpecMap;
+typedef std::map<std::string, std::shared_ptr<IModuleClassSpec>> SpecMap;
 }
 
 #endif

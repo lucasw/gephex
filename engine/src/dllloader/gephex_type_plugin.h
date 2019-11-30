@@ -27,7 +27,8 @@
 #include <string>
 
 namespace dllloader {
-CTypeFunctionTable extract_type_functions(utils::AutoPtr<utils::SharedLibrary>);
+CTypeFunctionTable
+    extract_type_functions(std::shared_ptr<utils::SharedLibrary>);
 }
 
 #endif

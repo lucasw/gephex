@@ -36,10 +36,10 @@ public:
   FDSocket(int fd, int localPort);
   virtual ~FDSocket();
 
-  virtual int send(const utils::Buffer &data)
-      /*const throw (IOException,SocketException)*/;
+  virtual int send(const utils::Buffer &data); // const;
+  /*throw (IOException,SocketException)*/;
 
-  virtual bool receive(utils::Buffer &b) throw(IOException);
+  virtual bool receive(utils::Buffer &b); // throw(IOException);
 
   virtual bool connected() const;
 

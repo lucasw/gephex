@@ -25,10 +25,10 @@
 
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 
 #include "specmap.h"
-#include "utils/autoptr.h"
 
 namespace utils {
 class ILogger;
@@ -59,7 +59,7 @@ public:
    * \param basepath This is the root directory for graph hierarchy.
    */
   GraphFileSystem(const std::string &graph_path,
-                  utils::AutoPtr<utils::ILogger> &logger);
+                  std::shared_ptr<utils::ILogger> &logger);
 
   /**
    * Destroys the Object
@@ -114,7 +114,7 @@ public:
   bool graphExists(const std::string &graphName) const;
 
 private:
-  utils::AutoPtr<utils::ILogger> m_logger;
+  std::shared_ptr<utils::ILogger> m_logger;
   typedef std::list<std::string> DirList;
   DirList m_dirs;
 

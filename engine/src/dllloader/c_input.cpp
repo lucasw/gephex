@@ -23,6 +23,7 @@
 #include "c_input.h"
 
 #include <cassert>
+#include <iostream>
 
 //#include "c_module.h"
 
@@ -31,18 +32,22 @@
 
 #include "c_moduletables.h"
 
-CInput::CInput(int _typeID, bool _const, bool _strong, std::shared_ptr<IModule> cmod, int index,
+CInput::CInput(int _typeID, bool _const, bool _strong,
+               std::shared_ptr<IModule> cmod, int index,
                const ITypeFactory &factory_, const TypeAttributes *attr,
                IType &defaultValue, const CInputVTable &vtable,
                void *instance)
     : m_isConnected(false), // not connected use default value
       m_defaultValue(0), oPlug(0), typeID(_typeID), _isConst(_const),
-      _isStrong(_strong), mod(cmod),
-      m_index(index), factory(&factory_),
+      _isStrong(_strong), mod(cmod), m_index(index), factory(&factory_),
       m_attr(attr), m_vtable(&vtable), m_instance(instance) {
   // set input to default value
   {
-
+#if 0
+    std::cout << __FUNCTION__ << " " << _typeID << std::endl;
+    std::cout << _typeID << " " << index << " " << cmod << " " << m_instance
+              << std::endl;
+#endif
     // create default value buffer
     m_defaultValue = factory->buildNew(typeID);
 
@@ -76,8 +81,8 @@ std::shared_ptr<IModule> CInput::getConnectedModule() const {
     return 0;
 }
 
-void CInput::plugIn(utils::AutoPtr<IOutputPlug> &newOPlug) throw(
-    std::runtime_error) {
+void CInput::plugIn(std::shared_ptr<IOutputPlug> newOPlug) {
+  // throw(std::runtime_error) {
   assert(!m_isConnected); // TODO
   assert(oPlug == 0);     // TODO
 
@@ -102,8 +107,8 @@ void CInput::unPlug() {
     } else
       internalData->assign(connectedData);
 
-    oPlug->getOutput()->unPlug(*this);
-    oPlug = utils::AutoPtr<IOutputPlug>(0);
+    oPlug->getOutput()->unPlug(shared_from_this());
+    oPlug = std::shared_ptr<IOutputPlug>(0);
 
     data = internalData;
     m_isConnected = false;

@@ -27,7 +27,6 @@
 #include <map>
 
 #include "interfaces/itypefactory.h"
-#include "utils/autoptr.h"
 
 class IType;
 class ITypeClass;

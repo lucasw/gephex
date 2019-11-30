@@ -21,6 +21,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
 #include "gephex_module_class.h"
+#include <iostream>
 
 #include "gephex_module.h"
 #include "moduleinfoutils.h"
@@ -192,9 +193,9 @@ CModuleClass::CModuleClass(const CModuleFunctionTable &ft,
   m_info = dllloader::ModuleInfo::enrichInfo(&data[0], bufLen, m_name,
                                              inputNames, outputNames);
 
-  m_spec = utils::AutoPtr<ModuleClassSpec>(
-      new ModuleClassSpec(m_name, m_attributes.inputs, defaultVals, inputIDs,
-                          m_attributes.outputs, outputIDs));
+  m_spec = std::make_shared<ModuleClassSpec>(m_name, m_attributes.inputs,
+                                             defaultVals, inputIDs,
+                                             m_attributes.outputs, outputIDs);
 }
 
 const std::string &CModuleClass::name() const { return m_name; }
@@ -205,7 +206,8 @@ const ModuleClassSpec &CModuleClass::spec() const { return *m_spec; }
 
 CModuleClass::~CModuleClass() {}
 
-std::shared_ptr<IModule> CModuleClass::buildInstance(const ITypeFactory &tFactory) const {
+std::shared_ptr<IModule>
+CModuleClass::buildInstance(const ITypeFactory &tFactory) const {
   void *instance = m_functionTable.newInstance();
 
   if (instance == 0) {
@@ -229,9 +231,12 @@ std::shared_ptr<IModule> CModuleClass::buildInstance(const ITypeFactory &tFactor
     }
   }
 
-  std::shared_ptr<IModule> module;
-  module = std::make_shared<CModule>(instance, (CModuleVTable &)m_functionTable,
-                                     m_attributes,
-                                     tFactory, m_defaultInputValues, m_name);
+  auto module =
+      std::make_shared<CModule>(instance, (CModuleVTable &)m_functionTable,
+                                m_attributes.isDeterministic, m_name);
+  module->init(m_attributes, tFactory, m_defaultInputValues);
   return module;
+  // auto rv = std::dynamic_pointer_cast<IModule>(module);
+  // std::cout << module << " -> " << rv << std::endl;
+  // return rv;
 }

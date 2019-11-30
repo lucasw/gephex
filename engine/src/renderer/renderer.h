@@ -24,6 +24,7 @@
 #define INCLUDED_RENDERER_H
 
 #include <map>
+#include <memory>
 #include <string>
 
 // TODO: only necessary because the forward declarations are missing in the
@@ -41,7 +42,6 @@ class ITypeClass;
 #include "interfaces/ismartcontrolvaluesender.h"
 
 #include "interfaces/itask.h"
-#include "utils/autoptr.h"
 //#include "runtimesystem.h"
 
 namespace utils {
@@ -64,7 +64,7 @@ class Renderer : public IRendererControlReceiver,
                  public IRendererStatusSender,
                  public ITask {
 public:
-  Renderer(utils::AutoPtr<utils::ILogger> &logger);
+  Renderer(std::shared_ptr<utils::ILogger> &logger);
 
   virtual ~Renderer();
 
@@ -131,18 +131,18 @@ private:
   IModuleStatisticsSmartReceiver *msr;
   IRendererStatusReceiver *rendererStatusReceiver;
 
-  utils::AutoPtr<ModuleFactory> moduleFactory;
-  utils::AutoPtr<TypeFactory> typeFactory;
+  std::shared_ptr<ModuleFactory> moduleFactory;
+  std::shared_ptr<TypeFactory> typeFactory;
 
-  utils::AutoPtr<RuntimeSystem> find(const std::string &graphID) const;
+  std::shared_ptr<RuntimeSystem> find(const std::string &graphID) const;
 
-  utils::AutoPtr<utils::ILogger> m_logger;
+  std::shared_ptr<utils::ILogger> m_logger;
 
-  typedef std::map<const std::string, utils::AutoPtr<RuntimeSystem>>
+  typedef std::map<const std::string, std::shared_ptr<RuntimeSystem>>
       RuntimeSystemMap;
   RuntimeSystemMap graphs;
 
-  utils::AutoPtr<RuntimeSystem> activeGraph;
+  std::shared_ptr<RuntimeSystem> activeGraph;
 };
 
 } // namespace renderer

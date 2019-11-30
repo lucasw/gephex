@@ -59,7 +59,7 @@ public:
    * @exception std::runtime_error Wird geschmissen wenn text
    *             Syntaxfehler enthaelt.
    */
-  void scan(const std::string &text) const throw(std::runtime_error);
+  void scan(const std::string &text) const; // throw(std::runtime_error);
 };
 
 } // end of namespace utils

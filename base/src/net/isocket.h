@@ -66,8 +66,8 @@ public:
    * @throw BrokenPipeException: is thrown if the remote side
    *            closed the connection
    */
-  virtual int send(const utils::Buffer &data)
-      /*const throw (IOException,SocketException,BrokenPipeException)*/
+  virtual int send(const utils::Buffer &data) // const
+      /* throw (IOException,SocketException,BrokenPipeException)*/
       = 0;
 
   /**
@@ -80,7 +80,7 @@ public:
    *
    * @throw IOException if there is an IO Error
    */
-  virtual bool receive(utils::Buffer &b) throw(IOException) = 0;
+  virtual bool receive(utils::Buffer &b) = 0; // throw(IOException) = 0;
 
   /**
    * Get the (local) port number to which the socket is bound.
