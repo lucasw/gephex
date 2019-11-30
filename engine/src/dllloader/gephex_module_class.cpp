@@ -205,7 +205,7 @@ const ModuleClassSpec &CModuleClass::spec() const { return *m_spec; }
 
 CModuleClass::~CModuleClass() {}
 
-IModule *CModuleClass::buildInstance(const ITypeFactory &tFactory) const {
+std::shared_ptr<IModule> CModuleClass::buildInstance(const ITypeFactory &tFactory) const {
   void *instance = m_functionTable.newInstance();
 
   if (instance == 0) {
@@ -229,6 +229,9 @@ IModule *CModuleClass::buildInstance(const ITypeFactory &tFactory) const {
     }
   }
 
-  return new CModule(instance, (CModuleVTable &)m_functionTable, m_attributes,
-                     tFactory, m_defaultInputValues, m_name);
+  std::shared_ptr<IModule> module;
+  module = std::make_shared<CModule>(instance, (CModuleVTable &)m_functionTable,
+                                     m_attributes,
+                                     tFactory, m_defaultInputValues, m_name);
+  return module;
 }

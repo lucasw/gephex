@@ -27,9 +27,9 @@
 
 #include "c_moduletables.h"
 
-COutput::COutput(IModule &mod, int _typeID, IType *_data, int index,
+COutput::COutput(std::shared_ptr<IModule> mod, int _typeID, IType *_data, int index,
                  const COutputVTable &vtable, void *instance)
-    : m_module(&mod), /*isChanged(true),*/ m_typeID(_typeID), m_plugs(),
+    : m_module(mod), /*isChanged(true),*/ m_typeID(_typeID), m_plugs(),
       m_data(_data), m_patchedInput(0), m_index(index), m_vtable(&vtable),
       m_instance(instance) {
   m_vtable->setOutput(m_instance, m_index, m_data->getPointer());
@@ -48,7 +48,7 @@ COutput::~COutput() { delete m_data; }
         //TODO set data of all outputplugs and copy if needed
 }*/
 
-IModule *COutput::getModule() const { return m_module; }
+std::shared_ptr<IModule> COutput::getModule() const { return m_module; }
 
 utils::AutoPtr<IOutputPlug> COutput::plugIn(IInput &in) {
   IOutputPlugPtr plug(new COutputPlug(*this, in));

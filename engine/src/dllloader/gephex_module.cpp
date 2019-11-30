@@ -187,7 +187,9 @@ CModule::CModule(void *instance, const CModuleVTable &vtable,
   for (unsigned int i = 0; i < attributes.inputs.size(); ++i) {
     inputs[i] =
         IInputPtr(new CInput(attributes.inputs[i], attributes.isConstInput[i],
-                             attributes.isStrongDependency[i], *this, i,
+                             attributes.isStrongDependency[i],
+                             shared_from_this(),
+                             i,
                              tfactory_, attributes.fixedAttributes[i],
                              *defaultInputTypes[i], *m_vtable, m_instance));
   }
@@ -195,7 +197,7 @@ CModule::CModule(void *instance, const CModuleVTable &vtable,
   for (unsigned int j = 0; j < attributes.outputs.size(); ++j) {
     IType *type = tfactory_.buildNew(attributes.outputs[j]);
 
-    outputs[j] = IOutputPtr(new COutput(*this, attributes.outputs[j], type, j,
+    outputs[j] = IOutputPtr(new COutput(shared_from_this(), attributes.outputs[j], type, j,
                                         *m_vtable, m_instance));
   }
 

@@ -23,6 +23,7 @@
 #ifndef INCLUDED_GEPHEX_MODULE_H
 #define INCLUDED_GEPHEX_MODULE_H
 
+#include <memory>
 #include <vector>
 
 #include "interfaces/imodule.h"
@@ -34,7 +35,7 @@ class CModuleAttributes;
 class UpdateStrategy;
 class ITypeFactory;
 
-class CModule : public IModule {
+class CModule : public IModule, std::enable_shared_from_this<CModule> {
 public:
   typedef utils::AutoPtr<IType> ITypePtr;
 

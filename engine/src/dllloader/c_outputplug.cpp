@@ -35,7 +35,7 @@ const IType *COutputPlug::getData() const { return data; }
 
 IOutput *COutputPlug::getOutput(void) const { return output; }
 
-IModule *COutputPlug::getModule(void) const { return output->getModule(); }
+std::shared_ptr<IModule> COutputPlug::getModule(void) const { return output->getModule(); }
 
 IInput *COutputPlug::getInput(void) const { return input; }
 

@@ -23,6 +23,7 @@
 #ifndef INCLUDED_IMODULE_CLASS_H
 #define INCLUDED_IMODULE_CLASS_H
 
+#include <memory>
 #include <string>
 
 class IModule;
@@ -39,7 +40,7 @@ public:
   virtual const std::string &name() const = 0;
   virtual const utils::Buffer &info() const = 0;
   virtual const ModuleClassSpec &spec() const = 0;
-  virtual IModule *buildInstance(const ITypeFactory &tFactory) const = 0;
+  virtual std::shared_ptr<IModule> buildInstance(const ITypeFactory &tFactory) const = 0;
 };
 
 #endif

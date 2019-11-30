@@ -31,13 +31,14 @@
 
 #include "c_moduletables.h"
 
-CInput::CInput(int _typeID, bool _const, bool _strong, IModule &cmod, int index,
+CInput::CInput(int _typeID, bool _const, bool _strong, std::shared_ptr<IModule> cmod, int index,
                const ITypeFactory &factory_, const TypeAttributes *attr,
                IType &defaultValue, const CInputVTable &vtable,
                void *instance)
     : m_isConnected(false), // not connected use default value
       m_defaultValue(0), oPlug(0), typeID(_typeID), _isConst(_const),
-      _isStrong(_strong), mod(&cmod), m_index(index), factory(&factory_),
+      _isStrong(_strong), mod(cmod),
+      m_index(index), factory(&factory_),
       m_attr(attr), m_vtable(&vtable), m_instance(instance) {
   // set input to default value
   {
@@ -68,7 +69,7 @@ CInput::~CInput() {
 
 const IType *CInput::getData() const { return data; }
 
-IModule *CInput::getConnectedModule() const {
+std::shared_ptr<IModule> CInput::getConnectedModule() const {
   if (oPlug != 0)
     return oPlug->getModule();
   else
@@ -134,7 +135,7 @@ void CInput::setValue(const utils::Buffer &serializedData) {
 
 int CInput::getIndex() const { return m_index; }
 
-IModule *CInput::getModule() const { return mod; }
+std::shared_ptr<IModule> CInput::getModule() const { return mod; }
 
 const TypeAttributes *CInput::getTypeAttributes() const { return m_attr; }
 

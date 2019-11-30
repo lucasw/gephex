@@ -60,7 +60,7 @@ private:
    * Pointer to the module instance. The object is managed by the
    * ModuleControlBlock
    */
-  IModule *m_module;
+  std::shared_ptr<IModule> m_module;
 
   /**
    * This flag is used by the renderer algorithm, to indicate that the
@@ -91,7 +91,7 @@ public:
    * Creates a new ModuleContrlBlock.
    * @param module Pointer to the module. It is now managed by this class.
    */
-  ModuleControlBlock(IModule *module)
+  ModuleControlBlock(std::shared_ptr<IModule> module)
       : m_module(module), m_active(false), m_activationCount(0),
         m_times(AVG_LEN), m_lastTime(0),
         m_inputHasChanged(module->getInputs().size(), true), m_lastUpdated(-1) {
@@ -100,13 +100,13 @@ public:
   /**
    * Destroys the ModuleControlBlock and its Module
    */
-  ~ModuleControlBlock() { delete m_module; }
+  ~ModuleControlBlock() { }
 
   /**
    * Get a pointer to the managed module
    * \returns pointer to the module
    */
-  IModule *module() { return m_module; }
+  std::shared_ptr<IModule> module() { return m_module; }
 
   /**
    * Sets the changed flag for one input of the module
@@ -212,8 +212,8 @@ RuntimeSystem::RuntimeSystem(const IModuleFactory &factory,
 
 RuntimeSystem::~RuntimeSystem() {}
 
-RuntimeSystem::ModuleControlBlockPtr
-RuntimeSystem::getControlBlock(IModule *mod) {
+std::shared_ptr<ModuleControlBlock>
+RuntimeSystem::getControlBlock(std::shared_ptr<IModule> mod) {
   ControlBlockMap::iterator i = m_modules.find(mod->getID());
   if (i == m_modules.end())
     throw std::runtime_error("modulecontrollBlock does not exist "
@@ -223,12 +223,12 @@ RuntimeSystem::getControlBlock(IModule *mod) {
 }
 
 void RuntimeSystem::addModule(const std::string &moduleClassName,
-                              int moduleID) {
-  IModule *newModule =
+                              const int moduleID) {
+  std::shared_ptr<IModule> newModule =
       moduleFactory.buildNewModule(moduleClassName, typeFactory);
   newModule->setID(moduleID);
 
-  ModuleControlBlockPtr newBlock(new ModuleControlBlock(newModule));
+  auto newBlock = std::make_shared<ModuleControlBlock>(newModule);
 
   m_modules[moduleID] = newBlock;
 
@@ -249,8 +249,8 @@ void RuntimeSystem::connect(int i1, int outputNumber, int i2, int inputNumber) {
     throw std::runtime_error("module does not exist.");
   }
 
-  IModule *m1 = it1->second->module();
-  IModule *m2 = it2->second->module();
+  auto m1 = it1->second->module();
+  auto m2 = it2->second->module();
 
   if (outputNumber < 0 ||
       static_cast<unsigned int>(outputNumber) >= m1->getOutputs().size())
@@ -288,7 +288,7 @@ void RuntimeSystem::disconnect(int moduleID, int inputNumber) {
     throw std::runtime_error("module does not exist "
                              "(RuntimeSystem::disconnect)");
 
-  IModule *m = i->second->module();
+  auto m = i->second->module();
 
   // TODO: input number is unchecked
   IModule::IInputPtr in = m->getInputs()[inputNumber];
@@ -302,12 +302,12 @@ namespace {
 // wird aufgerufen nachdem das zu block gehoerende modul
 // vollständig berechnet wurde
 // setzt auch die verbundenen inputs auf changed
-void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
+void sendInputValues(std::shared_ptr<ModuleControlBlock> block,
                      IControlValueReceiver *cvr,
                      const RuntimeSystem::ControlBlockMap &blocks,
                      int /*frameCount*/) {
   //  int moduleID = m->getID();
-  IModule *m = block->module();
+  auto m = block->module();
   const std::vector<IModule::IOutputPtr> &outs = m->getOutputs();
 
   for (std::vector<IModule::IOutputPtr>::const_iterator it = outs.begin();
@@ -326,7 +326,7 @@ void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
 
       assert(kt != blocks.end());
 
-      RuntimeSystem::ModuleControlBlockPtr b = kt->second;
+      auto b = kt->second;
       b->setChanged(inputIndex);
     }
   }
@@ -343,7 +343,7 @@ void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
     utils::Buffer buf;
     bool success = t->serialize(buf);
     // TODO: catch exceptions!!!!!
-    if (success && cvr != 0 /*&& (frameCount & 7) == 7*/) {
+    if (success && cvr != nullptr /*&& (frameCount & 7) == 7*/) {
       int moduleID = current->getModule()->getID();
       cvr->controlValueChanged(moduleID, inputIndex, buf);
     }
@@ -354,13 +354,14 @@ void sendInputValues(RuntimeSystem::ModuleControlBlockPtr block,
 
 void RuntimeSystem::update(IControlValueReceiver *cvr,
                            IModuleStatisticsReceiver *msr) {
-  std::stack<ModuleControlBlockPtr> stack;
+  std::stack<std::shared_ptr<ModuleControlBlock>> stack;
 
   // push the sinks (modules with no output) on the stack
-  for (std::list<ModuleControlBlockPtr>::iterator sink = m_sinks.begin();
-       sink != m_sinks.end(); ++sink) {
-    (*sink)->activate();
-    stack.push(*sink);
+  // for (std::list<ModuleControlBlockPtr>::iterator sink = m_sinks.begin();
+  //     sink != m_sinks.end(); ++sink) {
+  for (auto& sink : m_sinks) {
+    sink->activate();
+    stack.push(sink);
   }
 
 #if (ENGINE_VERBOSITY > 2)
@@ -370,9 +371,9 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
 #endif
 
   while (!stack.empty()) {
-    ModuleControlBlockPtr block = stack.top();
+    auto block = stack.top();
 
-    IModule *m = block->module();
+    auto m = block->module();
 
     assert(block->isActive());
 
@@ -383,16 +384,16 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
     IInput *dep = m->dependencies();
 
     // is there a not satisfied dependency left?
-    if (dep != 0) {
-      IModule *temp = dep->getConnectedModule();
+    if (dep != nullptr) {
+      auto temp = dep->getConnectedModule();
 
       // is the input connected to an other module?
-      if (temp != 0) {
+      if (temp != nullptr) {
 #if (ENGINE_VERBOSITY > 3)
         std::cout << "   Following connection to " << temp->getID() << "\n";
 #endif
         // check that module
-        ModuleControlBlockPtr current = getControlBlock(temp);
+        auto current = getControlBlock(temp);
 
         // 1. in case the module is on the stack we detected a cycle
         // the solution is to use the old value of that output
@@ -447,7 +448,7 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
         // should we send the statistic data?
         // is there a receiver?
         // is it the right time?
-        if (msr != 0 && (frameCount & 7) == 7) {
+        if (msr != nullptr && (frameCount & 7) == 7) {
           // send statistic data
           msr->modExecTimeSignal(m->getID(), block->avgTime());
         }
@@ -491,25 +492,25 @@ void RuntimeSystem::deleteModule(int moduleID) {
   // a module with that id must exist
   assert(it != m_modules.end());
 
-  ModuleControlBlockPtr block = it->second;
-  IModule *n = block->module();
+  auto block = it->second;
+  auto module_to_delete = block->module();
 
   // disconnect all modules that are connected to an output
   for (ControlBlockMap::iterator i = m_modules.begin(); i != m_modules.end();
        ++i) {
     // is this possible?
     // if (i->second == 0) continue;
-    assert(i->second != 0);
+    assert(i->second != nullptr);
 
-    ModuleControlBlockPtr block = i->second;
-    IModule *m = block->module();
+    auto block = i->second;
+    auto connected_module = block->module();
 
     // check all inputs of that module
-    for (unsigned int j = 0; j < m->getInputs().size(); ++j) {
-      IModule::IInputPtr in = m->getInputs()[j];
+    for (unsigned int j = 0; j < connected_module->getInputs().size(); ++j) {
+      IModule::IInputPtr in = connected_module->getInputs()[j];
 
       // is it connected?
-      if (in->getConnectedModule() == n) {
+      if (in->getConnectedModule() == module_to_delete) {
         // yes, the unplug it
         in->unPlug();
         // and signal change
@@ -519,16 +520,17 @@ void RuntimeSystem::deleteModule(int moduleID) {
   }
 
   // disconnect all modules that are connected to an input
-  for (unsigned int j = 0; j < n->getInputs().size(); ++j) {
-    IModule::IInputPtr in = n->getInputs()[j];
+  for (unsigned int j = 0; j < module_to_delete->getInputs().size(); ++j) {
+    IModule::IInputPtr in = module_to_delete->getInputs()[j];
 
-    if (in->getConnectedModule() != 0)
+    if (in->getConnectedModule() != nullptr)
       in->unPlug();
   }
 
   // remove the module from the sink list
 
-  if (n->getOutputs().size() == 0 || !n->isDeterministic())
+  if ((module_to_delete->getOutputs().size() == 0) ||
+      !module_to_delete->isDeterministic())
     m_sinks.remove(block);
 
   // remove it from the module set
@@ -549,8 +551,8 @@ void RuntimeSystem::setInputValue(int moduleID, int inputIndex,
                              "RuntimeSystem::setInputValue()");
   }
 
-  ModuleControlBlockPtr block = it->second;
-  IModule *n = block->module();
+  auto block = it->second;
+  auto n = block->module();
 
   if (inputIndex < 0 ||
       static_cast<unsigned int>(inputIndex) >= n->getInputs().size()) {
@@ -564,7 +566,7 @@ void RuntimeSystem::setInputValue(int moduleID, int inputIndex,
 
   in->setValue(buf);
 
-  if (cvr != 0)
+  if (cvr != nullptr)
     cvr->controlValueChanged(moduleID, inputIndex, buf);
 }
 
@@ -586,7 +588,7 @@ private:
 
 void RuntimeSystem::syncInputValue(int moduleID, int inputIndex,
                                    IControlValueReceiver *cvr) const {
-  if (!cvr)
+  if (cvr == nullptr)
     return;
 
   ControlBlockMap::const_iterator it = m_modules.find(moduleID);
@@ -597,9 +599,9 @@ void RuntimeSystem::syncInputValue(int moduleID, int inputIndex,
 
   DoSync sync(cvr);
 
-  ModuleControlBlockPtr block = it->second;
+  auto block = it->second;
 
-  IModule *n = block->module();
+  auto n = block->module();
 
   IModule::IInputPtr in = n->getInputs()[inputIndex];
 
@@ -610,11 +612,11 @@ namespace {
 struct DoAllSync {
   DoAllSync(IControlValueReceiver *cvr_) : cvr(cvr_){};
   void
-  operator()(const std::pair<int, RuntimeSystem::ModuleControlBlockPtr> &p) {
+  operator()(const std::pair<int, std::shared_ptr<ModuleControlBlock>> &p) {
     if (cvr) {
-      RuntimeSystem::ModuleControlBlockPtr block = p.second;
+      auto block = p.second;
 
-      IModule *n = block->module();
+      auto n = block->module();
 
       std::for_each(n->getInputs().begin(), n->getInputs().end(), DoSync(cvr));
     }

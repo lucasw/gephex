@@ -32,8 +32,8 @@ ModuleFactory::ModuleFactory() : moduleClasses() {}
 
 ModuleFactory::~ModuleFactory() {}
 
-IModule *ModuleFactory::buildNewModule(const std::string &name,
-                                       const ITypeFactory &tFactory) const {
+std::shared_ptr<IModule> ModuleFactory::buildNewModule(const std::string &name,
+                                                       const ITypeFactory &tFactory) const {
   ClassMap::const_iterator i = moduleClasses.find(name);
   if (i == moduleClasses.end()) {
     throw std::runtime_error("Ungültige Modulklassen ID");

@@ -26,6 +26,7 @@
 #include "utils/autoptr.h"
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 
 class ITypeFactory;
@@ -62,7 +63,7 @@ public:
 
   virtual void deleteModule(int);
 
-  virtual void addModule(const std::string &moduleClassName, int moduleID);
+  virtual void addModule(const std::string &moduleClassName, const int moduleID);
 
   virtual void setInputValue(int moduleID, int inputIndex,
                              const utils::Buffer &buf,
@@ -73,16 +74,16 @@ public:
 
   virtual void synchronizeInputValues(IControlValueReceiver *cvr) const;
 
-  typedef utils::AutoPtr<ModuleControlBlock> ModuleControlBlockPtr;
-  typedef std::map<int, ModuleControlBlockPtr> ControlBlockMap;
+  // typedef std::shared_ptr<ModuleControlBlock> std::shared_ptr<ModuleControlBlock>;
+  typedef std::map<int, std::shared_ptr<ModuleControlBlock>> ControlBlockMap;
 
 private:
   ControlBlockMap m_modules;                // ID -> IModule*
-  std::list<ModuleControlBlockPtr> m_sinks; // Liste aller Senken
+  std::list<std::shared_ptr<ModuleControlBlock>> m_sinks; // Liste aller Senken
   int m_time;
   int frameCount;
 
-  ModuleControlBlockPtr getControlBlock(IModule *);
+  std::shared_ptr<ModuleControlBlock> getControlBlock(std::shared_ptr<IModule> mod);
 
   const IModuleFactory &moduleFactory;
   const ITypeFactory &typeFactory;

@@ -40,7 +40,7 @@ public:
    * TODO: make defaultValue a static IType that is shared
    * among all modules of the same kind.
    */
-  CInput(int _typeID, bool _const, bool _strong, IModule &, int index,
+  CInput(int _typeID, bool _const, bool _strong, std::shared_ptr<IModule> cmod, int index,
          const ITypeFactory &factory_, const TypeAttributes *attr,
          IType &defaultValue, const CInputVTable &vtable, void *instance);
 
@@ -48,7 +48,7 @@ public:
 
   virtual const IType *getData() const;
 
-  virtual IModule *getConnectedModule() const;
+  virtual std::shared_ptr<IModule> getConnectedModule() const;
 
   //	virtual bool hasChanged() const;
 
@@ -67,7 +67,7 @@ public:
 
   virtual int getIndex() const;
 
-  virtual IModule *getModule() const;
+  virtual std::shared_ptr<IModule> getModule() const;
 
   virtual const TypeAttributes *getTypeAttributes() const;
 
@@ -84,7 +84,7 @@ private:
   int typeID;
   bool _isConst;
   bool _isStrong;
-  IModule *mod;
+  std::shared_ptr<IModule> mod;
   int m_index;
   //	mutable bool changed;
   const ITypeFactory *factory;

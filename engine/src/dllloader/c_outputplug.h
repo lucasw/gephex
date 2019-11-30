@@ -38,7 +38,7 @@ public:
 
   virtual IOutput *getOutput() const;
 
-  virtual IModule *getModule() const;
+  virtual std::shared_ptr<IModule> getModule() const;
 
   virtual IInput *getInput() const;
 

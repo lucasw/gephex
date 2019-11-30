@@ -25,6 +25,7 @@
 
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 
 #include "utils/autoptr.h"
@@ -37,8 +38,8 @@ namespace renderer {
 
 class IModuleFactory {
 public:
-  virtual IModule *buildNewModule(const std::string &className,
-                                  const ITypeFactory &) const = 0;
+  virtual std::shared_ptr<IModule> buildNewModule(const std::string &className,
+                                                  const ITypeFactory &) const = 0;
 };
 
 class ModuleRegistry {
@@ -55,8 +56,8 @@ class ModuleFactory : public IModuleFactory,
 public:
   ModuleFactory();
   virtual ~ModuleFactory();
-  virtual IModule *buildNewModule(const std::string &className,
-                                  const ITypeFactory &) const;
+  virtual std::shared_ptr<IModule> buildNewModule(const std::string &className,
+                                                  const ITypeFactory &) const;
 
   virtual void registerModuleClass(const std::string &className,
                                    const IModuleClass &moduleClass);

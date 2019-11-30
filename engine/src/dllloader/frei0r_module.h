@@ -23,6 +23,7 @@
 #ifndef INCLUDED_FREI0R_MODULE_H
 #define INCLUDED_FREI0R_MODULE_H
 
+#include <memory>
 #include <vector>
 
 #include "interfaces/imodule.h"
@@ -34,7 +35,8 @@ class CModuleAttributes;
 class ITypeFactory;
 class frei0r_funs_t;
 
-class frei0r_module : public IModule {
+// TODO(lucasw) just enable shared ptr in IModule?
+class frei0r_module : public IModule, std::enable_shared_from_this<frei0r_module> {
 public:
   typedef utils::AutoPtr<IType> ITypePtr;
 

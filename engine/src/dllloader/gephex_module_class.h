@@ -50,7 +50,7 @@ public:
   virtual const ModuleClassSpec &spec() const;
   virtual ~CModuleClass();
 
-  virtual IModule *buildInstance(const ITypeFactory &tFactory) const;
+  virtual std::shared_ptr<IModule> buildInstance(const ITypeFactory &tFactory) const;
 
 private:
   const CModuleFunctionTable m_functionTable;

@@ -108,7 +108,7 @@ public:
    * \param tFactory this factory is needed to set the default values
    *                 of the inputs
    */
-  virtual IModule *buildInstance(const ITypeFactory &tFactory) const;
+  virtual std::shared_ptr<IModule> buildInstance(const ITypeFactory &tFactory) const;
 
   /**
    * call deinit functions of the frei0r plugin

@@ -695,7 +695,7 @@ Frei0rModuleClass::~Frei0rModuleClass() {
   // call the destructor method of plugin
 }
 
-IModule *Frei0rModuleClass::buildInstance(const ITypeFactory &tFactory) const
+std::shared_ptr<IModule> Frei0rModuleClass::buildInstance(const ITypeFactory &tFactory) const
 
 {
   void *instance;
@@ -731,7 +731,9 @@ IModule *Frei0rModuleClass::buildInstance(const ITypeFactory &tFactory) const
     }
   }
 
-  return new frei0r_module(instance, (CModuleVTable &)m_functionTable,
-                           m_attributes, tFactory, m_defaultInputValues, m_name,
-                           m_frei0r);
+  std::shared_ptr<IModule> module;
+  module = std::make_shared<frei0r_module>(instance, (CModuleVTable &)m_functionTable,
+                                           m_attributes, tFactory, m_defaultInputValues, m_name,
+                                           m_frei0r);
+  return module;
 }

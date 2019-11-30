@@ -24,6 +24,7 @@
 #define INCLUDED_MODULE_H
 
 #include <list>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -52,7 +53,7 @@ public:
    * Liefert das Modul zurück, das an diesem Input "haengt".
    * @return Das über diesen Input verbundene Modul.
    */
-  virtual IModule *getConnectedModule() const = 0;
+  virtual std::shared_ptr<IModule> getConnectedModule() const = 0;
 
   /**
    * Verbindet den Input mit einem OutputPlug.
@@ -93,7 +94,7 @@ public:
 
   virtual int getIndex() const = 0;
 
-  virtual IModule *getModule() const = 0;
+  virtual std::shared_ptr<IModule> getModule() const = 0;
 
   virtual const TypeAttributes *getTypeAttributes() const = 0;
 
@@ -122,7 +123,7 @@ public:
    * @return Das Modul das diesen Output besitzt. Wird für
    *         IInput.getConnectedModule() benötigt.
    */
-  virtual IModule *getModule() const = 0;
+  virtual std::shared_ptr<IModule> getModule() const = 0;
 
   /**
    * Verbindet den Output mit einem neuen Input. Der Output kann mit
@@ -201,7 +202,7 @@ public:
    * Gibt das zugeordnete Modul zurück.
    * @return das Modul dem der zugeordnete Output gehört.
    */
-  virtual IModule *getModule() const = 0;
+  virtual std::shared_ptr<IModule> getModule() const = 0;
 
   /**
    * Gibt den Input zurück an dem dieser Stecker hängt.

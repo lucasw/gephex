@@ -24,6 +24,7 @@
 #define INCLUDED_OUTPUT_H
 
 #include <list>
+#include <memory>
 
 #include "interfaces/imodule.h"
 
@@ -35,13 +36,13 @@ class COutputVTable;
 
 class COutput : public IOutput {
 public:
-  COutput(IModule &mod, int _typeID, IType *data, int index,
+  COutput(std::shared_ptr<IModule> mod, int _typeID, IType *data, int index,
           const COutputVTable &vtable, void *instance);
   virtual ~COutput();
 
   // virtual void setData(const IType* data); //TODO: remove?
 
-  virtual IModule *getModule() const;
+  virtual std::shared_ptr<IModule> getModule() const;
 
   virtual utils::AutoPtr<IOutputPlug> plugIn(IInput &);
 
@@ -58,7 +59,7 @@ public:
   virtual void unPatch();
 
 private:
-  IModule *m_module;
+  std::shared_ptr<IModule> m_module;
   int m_typeID;
   typedef utils::AutoPtr<IOutputPlug> IOutputPlugPtr;
   typedef std::list<IOutputPlugPtr> PlugList;
