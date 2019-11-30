@@ -44,6 +44,6 @@ public:
 
 private:
   class Impl;
-  std::auto_ptr<Impl> m_impl;
+  std::shared_ptr<Impl> m_impl;
 };
 #endif

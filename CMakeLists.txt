@@ -120,6 +120,7 @@ add_subdirectory(modules/src/position/centermodule)
 add_subdirectory(modules/src/position/numposmodule)
 add_subdirectory(modules/src/position/posnummodule)
 
+add_subdirectory(modules/src/sources/capturemodule)
 add_subdirectory(modules/src/sources/frbinmodule)
 add_subdirectory(modules/src/sources/isingnoizemodule)
 add_subdirectory(modules/src/sources/noisemodule)

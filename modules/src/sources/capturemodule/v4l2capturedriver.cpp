@@ -25,6 +25,8 @@
 #include "v4l2capturedriver.h"
 
 #include <algorithm>
+#include <cstring>
+#include <errno.h>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>

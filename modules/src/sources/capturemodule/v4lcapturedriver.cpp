@@ -24,9 +24,12 @@
 
 #include "stdint.h"
 #include <algorithm>
+#include <errno.h>
 #include <sstream>
 #include <stdexcept>
+#include <stdio.h>
 #include <string>
+#include <string.h>
 #include <vector>
 
 #include <cassert>
@@ -85,7 +88,7 @@ public:
 
     try {
 
-      vd = std::auto_ptr<v4l1_device>(new v4l1_device(device_name));
+      vd = std::make_shared<v4l1_device>(device_name);
 
       // get capture dimensions
       video_window videoWindow;
@@ -146,7 +149,7 @@ public:
       m_tmp_img = new uint32_t[m_width * m_height];
 
     } catch (std::runtime_error &e) {
-      vd.release();
+      vd = nullptr;
       throw e;
     }
   }
@@ -205,13 +208,15 @@ private:
   void *m_mmapBase;
   unsigned int m_mmapSize;
   std::vector<uint32_t *> m_frame_ptr;
-  std::auto_ptr<v4l1_device> vd;
+  std::shared_ptr<v4l1_device> vd;
   uint32_t *m_tmp_img;
 };
 
 //----------------------------------------------------------------------
 
-V4LCaptureDriver::V4LCaptureDriver() : m_impl(new Impl()) {}
+V4LCaptureDriver::V4LCaptureDriver() {
+  m_impl = std::make_shared<Impl>();
+}
 
 V4LCaptureDriver::~V4LCaptureDriver() {}
 
