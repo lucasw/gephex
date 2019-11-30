@@ -215,13 +215,15 @@ struct video_code {
   __u8 *data;
 };
 
-#define VIDIOCGCAP _IOR('v', 1, struct video_capability) /* Get capabilities   \
-                                                          */
+#define VIDIOCGCAP                                                             \
+  _IOR('v', 1, struct video_capability) /* Get capabilities                    \
+                                         */
 #define VIDIOCGCHAN                                                            \
   _IOWR('v', 2, struct video_channel) /* Get channel info (sources) */
 #define VIDIOCSCHAN _IOW('v', 3, struct video_channel) /* Set channel 	*/
-#define VIDIOCGTUNER _IOWR('v', 4, struct video_tuner) /* Get tuner abilities  \
-                                                        */
+#define VIDIOCGTUNER                                                           \
+  _IOWR('v', 4, struct video_tuner) /* Get tuner abilities                     \
+                                     */
 #define VIDIOCSTUNER                                                           \
   _IOW('v', 5, struct video_tuner) /* Tune the tuner for the current channel   \
                                     */
@@ -253,10 +255,12 @@ struct video_code {
 #define VIDIOCGMBUF                                                            \
   _IOR('v', 20, struct video_mbuf) /* Memory map buffer info */
 #define VIDIOCGUNIT _IOR('v', 21, struct video_unit) /* Get attached units */
-#define VIDIOCGCAPTURE _IOR('v', 22, struct video_capture) /* Get subcapture   \
-                                                            */
-#define VIDIOCSCAPTURE _IOW('v', 23, struct video_capture) /* Set subcapture   \
-                                                            */
+#define VIDIOCGCAPTURE                                                         \
+  _IOR('v', 22, struct video_capture) /* Get subcapture                        \
+                                       */
+#define VIDIOCSCAPTURE                                                         \
+  _IOW('v', 23, struct video_capture) /* Set subcapture                        \
+                                       */
 #define VIDIOCSPLAYMODE                                                        \
   _IOW('v', 24, struct video_play_mode)     /* Set output video mode/feature */
 #define VIDIOCSWRITEMODE _IOW('v', 25, int) /* Set write mode */
@@ -265,10 +269,12 @@ struct video_code {
                                     */
 #define VIDIOCSMICROCODE                                                       \
   _IOW('v', 27, struct video_code) /* Load microcode into hardware */
-#define VIDIOCGVBIFMT _IOR('v', 28, struct vbi_format) /* Get VBI information  \
-                                                        */
-#define VIDIOCSVBIFMT _IOW('v', 29, struct vbi_format) /* Set VBI information  \
-                                                        */
+#define VIDIOCGVBIFMT                                                          \
+  _IOR('v', 28, struct vbi_format) /* Get VBI information                      \
+                                    */
+#define VIDIOCSVBIFMT                                                          \
+  _IOW('v', 29, struct vbi_format) /* Set VBI information                      \
+                                    */
 
 #define BASE_VIDIOCPRIVATE 192 /* 192-255 are private */
 

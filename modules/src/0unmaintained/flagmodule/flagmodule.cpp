@@ -317,8 +317,8 @@ void update(void *instance) {
 
   // DrawDibDraw (my->hdd, my->hdc, 0, 0, 256, 256, &my->bmih,
   // inst->source->framebuffer, 0, 0, inst->source->xsize, inst->source->ysize,
-  // 0); Das ist schweinelangsam....aber weiss halt net, wie man das sonst machen
-  // sollte hier....
+  // 0); Das ist schweinelangsam....aber weiss halt net, wie man das sonst
+  // machen sollte hier....
 
   glBegin(GL_QUADS);
 
