@@ -87,7 +87,9 @@ std::string readVector(const std::string &array,
   stmp >> size;
 
   if (size != types.size()) {
-    throw std::runtime_error("Falsche Arraygroesse bei getInfo.");
+    std::stringstream ss;
+    ss << "readVector size mismatch " << size << " " << types.size() << ", " << array.size();
+    throw std::runtime_error(ss.str());
   }
 
   for (std::string::size_type i = 0; i < size; ++i) {

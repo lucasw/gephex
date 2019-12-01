@@ -233,8 +233,13 @@ void RuntimeSystem::addModule(const std::string &moduleClassName,
   m_modules[moduleID] = newBlock;
 
   // no output or notdeterministic => module is a sink
-  if ((newModule->getOutputs().size() == 0) || (!newModule->isDeterministic()))
+  const size_t num_outputs = newModule->getOutputs().size();
+  if ((num_outputs == 0) || (!newModule->isDeterministic())) {
+    std::cout << "adding sink: " << moduleID << " " << moduleClassName <<
+        ", num_outputs: " << num_outputs
+        << ", is deterministic: " << newModule->isDeterministic() << "\n";
     m_sinks.push_front(newBlock);
+  }
 
 #if (ENGINE_VERBOSITY > 0)
   std::cout << "Added new Module (id " << moduleID << ") of Class "
@@ -350,14 +355,15 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
                            IModuleStatisticsReceiver *msr) {
   std::stack<std::shared_ptr<ModuleControlBlock>> stack;
 
-  // push the sinks (modules with no output) on the stack
-  std::cout << "sinks: ";
+  // push the sinks (modules with no gephex output or otherwise that need to be
+  // updated every frame) on the stack
+  // std::cout << "sinks: ";
   for (auto &sink : m_sinks) {
-    std::cout << sink << " " << sink->module()->module_class_name() << " ";
+    // std::cout << sink << " " << sink->module()->module_class_name() << " ";
     sink->activate();
     stack.push(sink);
   }
-  std::cout << "\n";
+  // std::cout << "\n";
 
 #if (ENGINE_VERBOSITY > 2)
   std::cout << " ***** update begins\n";

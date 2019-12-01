@@ -382,6 +382,18 @@ frei0r_create_in_param_spec(const f0r_plugin_info_t &f0r_info,
   default:
     throw std::runtime_error("unknown frei0r effect type");
   }
+#if 0
+  index -= 1;
+  if (index == -1) {
+    param_name = "deterministic";
+
+    os << "typ_NumberType "
+       << "id=frei0r_" << param_name << " const=true strong_dependency=true } ";
+
+    return os.str();
+  }
+#endif
+
   // the last input is time
   if (index == f0r_info.num_params) {
     param_name = "time";
@@ -525,19 +537,21 @@ void frei0r_check_plugin_info(const f0r_plugin_info_t &f0r_info) {
 }
 
 int frei0r_num_inputs(const f0r_plugin_info &f0r_info) {
+  // add 1 time and 1 deterministic
+  int base_num = f0r_info.num_params + 1;  // + 1;
   switch (f0r_info.plugin_type) {
   case F0R_PLUGIN_TYPE_SOURCE:
     // +2 for size, +1 for time
-    return 2 + f0r_info.num_params + 1;
+    return 2 + base_num;
   case F0R_PLUGIN_TYPE_FILTER:
     // +1 for input frame, +1 for time
-    return 1 + f0r_info.num_params + 1;
+    return 1 + base_num;
   case F0R_PLUGIN_TYPE_MIXER2:
     // +2 for input frames, +1 for time
-    return 2 + f0r_info.num_params + 1;
+    return 2 + base_num;
   case F0R_PLUGIN_TYPE_MIXER3:
     // +3 for input frames, +1 for time
-    return 3 + f0r_info.num_params + 1;
+    return 3 + base_num;
   default:
     throw std::runtime_error("unknown frei0r effect type");
   }
@@ -612,7 +626,7 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
 
   numInputs = spec.getIntValue("number_of_inputs");
   numOutputs = spec.getIntValue("number_of_outputs");
-  isDeterministic = spec.getBoolValue("deterministic", false);
+  isDeterministic = spec.getBoolValue("deterministic", true);
 
   std::vector<int> inputs(numInputs);
   m_defaultInputValues.resize(numInputs);
@@ -627,6 +641,11 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
 
   std::vector<f0r_param_info_t> f0r_param_infos;
 
+  m_name = spec.getStringValue("name");
+
+  std::cout << "frei0r '" << m_name << "': " << isDeterministic
+      << " " << numInputs << "\n";
+  std::cout << "  inputs:\n";
   for (int i = 0; i < numInputs; ++i) {
     std::string inSpec;
     std::string param_name;
@@ -653,6 +672,14 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
     isStrong[i] = (inputSpec.getBoolValue("strong_dependency"));
     fixedAttributes[i] =
         static_cast<TypeAttributes *>(m_functionTable.getInputAttributes(i));
+
+    std::cout << "    " << inputNames[i]
+        << ", id " << inputIDs[i]
+        << ", input " << inputs[i]
+        << ", const " << isConst[i]
+        << ", strong " << isStrong[i]
+        // << ", default " << defaultVals[i]
+        << ", fixed " << fixedAttributes[i] << "\n";
   }
 
   std::vector<int> outputs(numOutputs);
@@ -671,8 +698,6 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
   m_attributes.isStrongDependency = isStrong;
   m_attributes.isDeterministic = isDeterministic;
   m_attributes.fixedAttributes = fixedAttributes;
-
-  m_name = spec.getStringValue("name");
 
   std::vector<char> data = frei0r_create_info(f0r_info, f0r_param_infos);
   int bufLen = data.size();
