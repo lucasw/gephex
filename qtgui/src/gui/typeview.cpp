@@ -32,7 +32,7 @@ namespace gui {
 TypeView::TypeView(QWidget *parent, const ParamMap &params)
     : QWidget(parent, 0), m_params(params) {
   setFocusPolicy(Qt::ClickFocus);
-  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+  // setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
   m_layout = new QHBoxLayout(this);
   m_layout->setMargin(0);

@@ -102,6 +102,7 @@ EditorWidget::EditorWidget(
   connect(graphEditor, SIGNAL(deleteControl(int, int)), controlEditor,
           SLOT(deleteControl(int, int)));
 
+#if 0
   QSizePolicy policy = geWindow->sizePolicy();
   policy.setHorizontalStretch(1);
   policy.setVerticalStretch(2);
@@ -111,7 +112,7 @@ EditorWidget::EditorWidget(
   policy.setHorizontalStretch(1);
   policy.setVerticalStretch(1);
   ceWindow->setSizePolicy(policy);
-
+#endif
   addWidget(geWindow);
   addWidget(ceWindow);
 

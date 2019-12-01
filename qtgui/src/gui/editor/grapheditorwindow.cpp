@@ -35,7 +35,7 @@ GraphEditorWindow::GraphEditorWindow(
   m_graphEditor = new GraphEditor(this, graphModel, base, dispatcher, mod,
                                   kbManager, log, media_path);
 
-  m_graphEditor->setMinimumSize(4000, 4000);
+  m_graphEditor->setMinimumSize(2000, 1600);
 
   setWidget(m_graphEditor);
   setWidgetResizable(true);

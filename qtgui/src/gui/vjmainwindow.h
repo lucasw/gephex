@@ -114,10 +114,10 @@ private:
   void createActions(void);
   void buildMenuBar(void);
   void buildModuleBar(void);
-  void buildSceleton(void);
+  void buildSkeleton(void);
 
   void unbuildModuleBar(void);
-  void clearSceleton(void);
+  void clearSkeleton(void);
 
   void connectToRealEngine();      // throw (std::runtime_error);
   void disconnectFromRealEngine(); // throw (std::runtime_error);

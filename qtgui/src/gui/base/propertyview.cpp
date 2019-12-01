@@ -68,6 +68,7 @@ void PropertyView::displayProperties(const IPropertyDescription &desc) {
   table->setHorizontalHeaderLabels(headerLabels);
 
   table->setShowGrid(false);
+  table->setColumnWidth(1, 45);
 
   int rowIndex = 0;
   for (std::list<PropertyEntry>::const_iterator it = entries.begin();

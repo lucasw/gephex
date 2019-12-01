@@ -42,7 +42,7 @@ QColor color_from_type(const std::string &type) {
 }
 
 QColor free_color(const QColor &col) {
-  return QColor(col.red() * 0.65, col.green() * 0.65, col.blue() * 0.65);
+  return QColor(col.red() * 0.7, col.green() * 0.7, col.blue() * 0.7);
 }
 
 } // namespace

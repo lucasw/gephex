@@ -34,7 +34,7 @@ ControlEditorWindow::ControlEditorWindow(
   m_controlEditor =
       new ControlEditor(this, controlModel, model, disp, media_path);
 
-  m_controlEditor->setMinimumSize(1000, 2000);
+  m_controlEditor->setMinimumSize(1000, 1500);
 
   setWidget(m_controlEditor);
   setWidgetResizable(true);

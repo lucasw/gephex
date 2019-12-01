@@ -162,7 +162,8 @@ QPoint pmax(const QPoint &a, const QPoint &b) {
 } // namespace
 
 void VJMainWindow::writeSettings() {
-  QSettings settings;
+  // This goes into ~/.config/gephex.ini.conf
+  QSettings settings("gephex.ini");
   settings.setValue("pos", pos());
   settings.setValue("size", size());
 
@@ -185,7 +186,7 @@ void VJMainWindow::writeSettings() {
 }
 
 void VJMainWindow::readSettings() {
-  QSettings settings;
+  QSettings settings("gephex.ini");
   QPoint position = settings.value("pos", QPoint(200, 200)).toPoint();
   QSize size = settings.value("size", QSize(640, 480)).toSize();
 
@@ -195,15 +196,15 @@ void VJMainWindow::readSettings() {
   m_winState = settings.value("mainWindowState").toByteArray();
 
   m_propDockFloating = settings.value("propertyDockFloating").toBool();
-  m_propDockSize = settings.value("propertyDockSize", QSize(100, 400)).toSize();
+  m_propDockSize = settings.value("propertyDockSize", QSize(80, 400)).toSize();
   m_propDockPos = settings.value("propertyDockPos", QPoint(0, 0)).toPoint();
 
   m_graphDockFloating = settings.value("graphDockFloating").toBool();
-  m_graphDockSize = settings.value("graphDockSize", QSize(100, 400)).toSize();
+  m_graphDockSize = settings.value("graphDockSize", QSize(80, 200)).toSize();
   m_graphDockPos = settings.value("graphDockPos", QPoint(0, 0)).toPoint();
 
   m_logDockFloating = settings.value("logDockFloating").toBool();
-  m_logDockSize = settings.value("logDockSize", QSize(100, 400)).toSize();
+  m_logDockSize = settings.value("logDockSize", QSize(100, 50)).toSize();
   m_logDockPos = settings.value("logDockPos", QPoint(0, 0)).toPoint();
 
   m_logDockHidden = settings.value("logDockHidden", false).toBool();
@@ -401,13 +402,14 @@ void VJMainWindow::unbuildModuleBar() {
   effectMenue->clear();
 }
 
-void VJMainWindow::buildSceleton() {
-  m_graphDock = new QDockWidget("Graphs", this);
+void VJMainWindow::buildSkeleton() {
+  m_graphDock = new QDockWidget("Graph", this);
   m_graphDock->setObjectName("graphDock");
   graphNameView = new GraphNameView(
       m_graphDock, engineWrapper->modelControlReceiver(), *logWindow);
   m_graphDock->setWidget(graphNameView->widget());
 
+  m_graphDock->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
   m_graphDock->setFeatures(QDockWidget::DockWidgetMovable |
                            QDockWidget::DockWidgetFloatable);
 
@@ -424,6 +426,8 @@ void VJMainWindow::buildSceleton() {
   propertyView = new PropertyView(m_propDock);
   m_propDock->setWidget(propertyView);
 
+  // m_propDock->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+  m_propDock->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
   m_propDock->setFeatures(QDockWidget::DockWidgetMovable |
                           QDockWidget::DockWidgetFloatable);
 
@@ -457,6 +461,7 @@ void VJMainWindow::buildSceleton() {
 
   engineWrapper->graphNameSender().registerGraphNameReceiver(*graphNameView);
 
+  // Where the NodeWidgets are drawn
   editorWidget = new EditorWidget(
       this, engineWrapper->graphModel(), engineWrapper->modelControlReceiver(),
       engineWrapper->controlModel(), *moduleClassView,
@@ -466,6 +471,10 @@ void VJMainWindow::buildSceleton() {
       m_config.get_string_param("media_path"));
 
   editorWidget->setObjectName("editorWidget");
+  // TODO(lucasw) can't seem to get the dock widgets to take up minimal size
+  // while the editorWidget is everything left over, the dock widgets always expand.
+  editorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  editorWidget->setMinimumSize(400, 400);
 
   connect(editorWidget, SIGNAL(statusText(const std::string &)), this,
           SLOT(displayStatusText(const std::string &)));
@@ -494,7 +503,7 @@ void VJMainWindow::buildSceleton() {
   restoreState(m_winState);
 }
 
-void VJMainWindow::clearSceleton() { delete graphNameView; }
+void VJMainWindow::clearSkeleton() { delete graphNameView; }
 
 void VJMainWindow::newGraph() {
   const std::string newGraphName = NewGraphDialog::open("newGraph");
@@ -515,7 +524,7 @@ void VJMainWindow::connectToEngine() {
     statusBar()->showMessage("connecting to the engine ...");
 
     buildModuleBar();
-    buildSceleton();
+    buildSkeleton();
 
     try {
       this->connectToRealEngine();
@@ -567,7 +576,7 @@ void VJMainWindow::connectToEngine() {
     displayErrorMessage(e.what());
     connectToEngineAction->setEnabled(true);
     utils::Timing::sleep(1000);
-    // this->clearSceleton();
+    // this->clearSkeleton();
     this->unbuildModuleBar();
   }
 }
@@ -581,7 +590,7 @@ void VJMainWindow::disconnectFromEngine(void) {
 
   this->disconnectFromRealEngine();
 
-  this->clearSceleton();
+  this->clearSkeleton();
   this->unbuildModuleBar();
 
   statusBar()->showMessage("disconnected");

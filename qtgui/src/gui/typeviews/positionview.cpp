@@ -176,7 +176,7 @@ KleinesFeld::KleinesFeld(QWidget *parent, const QSize &preferredSize,
     : QWidget(parent),
       m_pos(preferredSize.width() / 2, preferredSize.height() / 2),
       m_preferredSize(preferredSize), m_minimumSize(minimumSize) {
-  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+  // setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 /**************************************************************************/
