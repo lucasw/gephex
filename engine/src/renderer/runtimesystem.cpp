@@ -351,12 +351,13 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
   std::stack<std::shared_ptr<ModuleControlBlock>> stack;
 
   // push the sinks (modules with no output) on the stack
-  // for (std::list<ModuleControlBlockPtr>::iterator sink = m_sinks.begin();
-  //     sink != m_sinks.end(); ++sink) {
+  std::cout << "sinks: ";
   for (auto &sink : m_sinks) {
+    std::cout << sink << " " << sink->module()->module_class_name() << " ";
     sink->activate();
     stack.push(sink);
   }
+  std::cout << "\n";
 
 #if (ENGINE_VERBOSITY > 2)
   std::cout << " ***** update begins\n";
@@ -366,6 +367,7 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
 
   while (!stack.empty()) {
     auto block = stack.top();
+    // std::cout << block->module()->module_class_name() << " ";
 
     auto m = block->module();
 
@@ -463,6 +465,7 @@ void RuntimeSystem::update(IControlValueReceiver *cvr,
       block->updated(frameCount);
     }
   }
+  // std::cout << "\n";
 
   // all sinks are uptodate we can finish now
   // increase the timestamp
