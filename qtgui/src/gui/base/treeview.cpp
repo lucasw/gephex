@@ -55,6 +55,8 @@ TreeViewImpl::TreeViewImpl(QWidget *parent, const std::string &name,
     headerNames.append(columnNames[i].c_str());
 
   this->setHeaderLabels(headerNames);
+  this->setColumnWidth(0, 180);
+  this->setColumnWidth(1, 15);
 
   connect(this, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
           SLOT(itemClickedSlot(QTreeWidgetItem *, int)));
