@@ -40,7 +40,8 @@ public:
   InputPlugWidget(QWidget *parent, const QPixmap &free_, const QPixmap &busy_,
                   const std::string &name, const std::string &type,
                   const ParamMap &params, int _index, int _ID,
-                  bool _inPropertyDialog);
+                  bool _inPropertyDialog,
+                  const size_t width, const size_t height);
 
   void setVisible();
   void setInvisible();

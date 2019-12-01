@@ -29,8 +29,9 @@ namespace gui {
 OutputPlugWidget::OutputPlugWidget(QWidget *parent, const QPixmap &free_,
                                    const QPixmap &busy_,
                                    const std::string &name,
-                                   const std::string &type, int index, int ID)
-    : PlugWidget(parent, name, type, index, ID, free_, busy_) {
+                                   const std::string &type, int index, int ID,
+                                   const size_t width, const size_t height)
+    : PlugWidget(parent, name, type, index, ID, free_, busy_, width, height) {
   std::string toolTipText = name + ":" + type;
   setToolTip(toolTipText.c_str());
 }

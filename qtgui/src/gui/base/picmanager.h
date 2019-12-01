@@ -9,7 +9,8 @@ namespace gui {
 class PicManager {
 public:
   QPixmap node_pic() const;
-  QPixmap plug_pic(const std::string &type, bool connected) const;
+  QPixmap plug_pic(const std::string &type, bool connected,
+      const size_t width, const size_t height) const;
 };
 } // namespace gui
 

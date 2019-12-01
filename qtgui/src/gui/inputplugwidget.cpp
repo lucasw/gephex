@@ -30,8 +30,8 @@ InputPlugWidget::InputPlugWidget(QWidget *parent, const QPixmap &free_,
                                  const QPixmap &busy_, const std::string &name,
                                  const std::string &type,
                                  const ParamMap &params, int index, int ID,
-                                 bool inP)
-    : PlugWidget(parent, name, type, index, ID, free_, busy_),
+                                 bool inP, const size_t width, const size_t height)
+    : PlugWidget(parent, name, type, index, ID, free_, busy_, width, height),
       inPropertyDialog(inP), m_params(params) {
   std::string toolTipText = name + ":" + type;
   setToolTip(toolTipText.c_str());

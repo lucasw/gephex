@@ -42,7 +42,7 @@ protected:
 public:
   OutputPlugWidget(QWidget *parent, const QPixmap &free_, const QPixmap &busy_,
                    const std::string &name, const std::string &type, int _index,
-                   int _ID);
+                   int _ID, const size_t width, const size_t height);
 
 signals:
   void connectionRequestFromOutput(const OutputPlugWidget *, const QPoint &to);

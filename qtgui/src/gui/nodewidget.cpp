@@ -206,6 +206,9 @@ NodeWidget::NodeWidget(QWidget *parent, Qt::WFlags fl, int _id,
   outputLayout->setMargin(0);
   outputLayout->setSpacing(0);
 
+  const size_t wd = 10;
+  const size_t ht = wd;
+
   for (unsigned int i = 0; i < _info.getInputs().size(); ++i) {
     utils::StructReader sr(_info.getInputs()[i].params);
 
@@ -220,11 +223,11 @@ NodeWidget::NodeWidget(QWidget *parent, Qt::WFlags fl, int _id,
     bool inPropertyDialog = sr.getBoolValue("hidden", false);
 
     std::string type = _info.getInputs()[i].type;
-    QPixmap inplug_free = m_pictures.plug_pic(type, false);
-    QPixmap inplug_busy = m_pictures.plug_pic(type, true);
+    QPixmap inplug_free = m_pictures.plug_pic(type, false, wd, ht);
+    QPixmap inplug_busy = m_pictures.plug_pic(type, true, wd, ht);
     utils::AutoPtr<InputPlugWidget> newInput(new InputPlugWidget(
         this, inplug_free, inplug_busy, _info.getInputs()[i].name, type,
-        _info.getInputs()[i].params, i, id, inPropertyDialog));
+        _info.getInputs()[i].params, i, id, inPropertyDialog, wd, ht));
 
     inputs.push_back(newInput);
 
@@ -258,11 +261,11 @@ NodeWidget::NodeWidget(QWidget *parent, Qt::WFlags fl, int _id,
 
   for (unsigned int j = 0; j < _info.getOutputs().size(); j++) {
     std::string type = _info.getOutputs()[j].type;
-    QPixmap outplug_free = m_pictures.plug_pic(type, false);
-    QPixmap outplug_busy = m_pictures.plug_pic(type, true);
+    QPixmap outplug_free = m_pictures.plug_pic(type, false, wd, ht);
+    QPixmap outplug_busy = m_pictures.plug_pic(type, true, wd, ht);
     utils::AutoPtr<OutputPlugWidget> newOutput(
         new OutputPlugWidget(this, outplug_free, outplug_busy,
-                             _info.getOutputs()[j].name, type, j, id));
+                             _info.getOutputs()[j].name, type, j, id, wd, ht));
     outputs.push_back(newOutput);
     outputLayout->addWidget(&*outputs[j]);
     outputs[j]->show();

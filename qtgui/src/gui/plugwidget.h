@@ -36,7 +36,8 @@ public:
   enum PlugStatus { PLUG_FREE, PLUG_CONNECTED };
 
   PlugWidget(QWidget *parent, const std::string &name, const std::string &type,
-             int index, int ID, const QPixmap &free_, const QPixmap &busy_);
+             int index, int ID, const QPixmap &free_, const QPixmap &busy_,
+             const size_t width, const size_t height);
 
   std::string getType() const { return m_type; }
   int getIndex() const { return m_index; }

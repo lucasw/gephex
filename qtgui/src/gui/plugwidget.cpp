@@ -28,11 +28,12 @@
 namespace gui {
 PlugWidget::PlugWidget(QWidget *parent, const std::string &name,
                        const std::string &type, int index, int ID,
-                       const QPixmap &free_, const QPixmap &busy_)
+                       const QPixmap &free_, const QPixmap &busy_,
+                       const size_t width, const size_t height)
     : QWidget(parent), m_name(name), m_type(type), m_index(index), m_ID(ID),
       m_status(PLUG_FREE), m_lineDrawMode(false), m_freePic(free_),
       m_busyPic(busy_), m_pixmap(free_) {
-  this->setFixedSize(8, 8);
+  this->setFixedSize(width, height);
   this->setMouseTracking(true);
 }
 
