@@ -305,7 +305,11 @@ std::string frei0r_create_spec(const f0r_plugin_info_t &f0r_info) {
   int num_inputs = frei0r_num_inputs(f0r_info);
 
   os << "mod_spec { name=[mod_" << f0r_info.name << "] number_of_inputs=["
-     << num_inputs << "] number_of_outputs=[1] deterministic=[true] } ";
+     << num_inputs << "] number_of_outputs=[1] ";
+  os << "deterministic=[";
+  os << "true";
+  // os <<"false";
+  os << "] } ";
 
   return os.str();
 }
@@ -626,7 +630,7 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
 
   numInputs = spec.getIntValue("number_of_inputs");
   numOutputs = spec.getIntValue("number_of_outputs");
-  isDeterministic = spec.getBoolValue("deterministic", true);
+  isDeterministic = true;  // spec.getBoolValue("deterministic", true);
 
   std::vector<int> inputs(numInputs);
   m_defaultInputValues.resize(numInputs);
@@ -643,8 +647,8 @@ Frei0rModuleClass::Frei0rModuleClass(const frei0r_funs_t &frei0r,
 
   m_name = spec.getStringValue("name");
 
-  std::cout << "frei0r '" << m_name << "': " << isDeterministic
-      << " " << numInputs << "\n";
+  std::cout << "frei0r '" << m_name << "' is deterministic: " << isDeterministic
+      << ", num inputs: " << numInputs << "\n";
   std::cout << "  inputs:\n";
   for (int i = 0; i < numInputs; ++i) {
     std::string inSpec;
