@@ -19,8 +19,11 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../types/src/stringtype
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
   ${CMAKE_CURRENT_LIST_DIR}/..
+  ${CMAKE_HOME_DIRECTORY}/base/src
   ${CMAKE_HOME_DIRECTORY}/base/src/interfaces
   ${CMAKE_HOME_DIRECTORY}/util/include
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/editor
 )
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/dialogs)

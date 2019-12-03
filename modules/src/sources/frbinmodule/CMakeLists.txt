@@ -8,6 +8,7 @@ include(${CMAKE_HOME_DIRECTORY}/modules/pluc.cmake)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}/engine/src/engine
   ${CMAKE_SOURCE_DIR}/types/src/framebuffertype
   ${CMAKE_SOURCE_DIR}/types/src/numbertype
