@@ -268,3 +268,26 @@ Important note:
 
 For documentation, please have a look at doc/documentation.html
 or http://www.gephex.org.
+
+
+# Docker
+
+```
+cd gephex_docker/src/gephex
+docker build . -t gephex
+```
+
+```
+cd gephex_docker
+docker run -it -v ${PWD}:/other -e "DISPLAY=$DISPLAY" -v "$HOME/.Xauthority:/root/.Xauthority:ro" --network host --ipc host gephex
+cd build/gephex
+cmake ../../src/gephex -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$DEST -DCMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES=/usr/include/x86_64-linux-gnu/qt5
+make install
+```
+
+TODO(lucasw) map in graphs and config dir
+
+```
+docker run -it -v ${PWD}:/other -e "DISPLAY=$DISPLAY" -v "$HOME/.Xauthority:/root/.Xauthority:ro" --network host --ipc host gephex
+gephex
+```
