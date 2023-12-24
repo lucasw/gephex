@@ -1,12 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(guibase)
 
-if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
-  find_package(Qt5Widgets REQUIRED)
-else()
-  find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-  include(${QT_USE_FILE})
-endif()
+find_package(Qt5Widgets REQUIRED)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/..
@@ -21,11 +16,7 @@ set(HDRS
   ${CMAKE_CURRENT_LIST_DIR}/treeview.h
 )
 
-if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
-  qt5_wrap_cpp(${PROJECT_NAME}_MOCS ${HDRS})
-else()
-  qt4_wrap_cpp(${PROJECT_NAME}_MOCS ${HDRS})
-endif()
+qt5_wrap_cpp(${PROJECT_NAME}_MOCS ${HDRS})
 
 include(${CMAKE_HOME_DIRECTORY}/base/src/interfaces/interfaces.cmake)
 
