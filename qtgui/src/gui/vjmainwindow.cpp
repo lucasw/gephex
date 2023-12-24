@@ -28,7 +28,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/qtimer.h>
 #include <QtGui/QCloseEvent>
-#include <QtGui/QDockWidget>
+#include <QtWidgets/QDockWidget>
 #include <QtWidgets/qlayout.h>
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qsplitter.h>
