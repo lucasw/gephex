@@ -71,3 +71,20 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+add_executable(nettest
+  ${CMAKE_CURRENT_LIST_DIR}/testmain.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/CompositeTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/LeafTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/Tester.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/easytest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/domainsockettest.cpp
+  # windows only
+  # ${CMAKE_CURRENT_LIST_DIR}/namedpipeserversocket.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/namedpipesockettest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/protocoltest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/tagdispatchertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/taggertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/tcpsockettest.cpp
+)
+
+target_link_libraries(nettest ${PROJECT_NAME} utils)

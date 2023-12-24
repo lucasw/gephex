@@ -22,6 +22,7 @@
 
 #include "taggertest.h"
 
+#include <cstring>
 #include <sstream>
 
 #include "isender.h"

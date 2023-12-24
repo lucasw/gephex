@@ -20,6 +20,8 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
+#include <cstring>
+
 #include "domainsockettest.h"
 #include "idatalistener.h"
 
@@ -51,7 +53,7 @@ public:
     ;
     m_data = new char[m_len];
 
-    memcpy(m_data, buf.getPtr(), m_len);
+    std::memcpy(m_data, buf.getPtr(), m_len);
 
     _ready = true;
   }
