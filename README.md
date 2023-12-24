@@ -8,20 +8,59 @@ CMake Build
 -----------
 
 ```
-sudo apt install libqt4-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
-mkdir build_gephex
-cd build_gephex
-cmake ../gephex -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$HOME/other/install
+export DEST=$HOME/other/install
+# also put DEST/bin on PATH
+```
+
+```
+sudo apt install qtbase5-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+mkdir -p ~/other/src
+cd ~/other/src
+git clone git@github.com:lucasw/gephex --branch ubuntu_23_04
+mkdir -p ~/other/build/gephex
+cd ~/other/build/gephex
+cmake ../../src/gephex -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$DEST
 make
 make install
 ```
 
-The binary will be in `engine/src/engine`
+The binary in the build dir will be in `engine/src/engine`, the installed location will be $DEST/bin
+
+Then run for first time:
+```
+$ gephex
+You started gephex for the first time!
+Creating /home/lucasw/.gephex/0.4...
+Copying and adapting default config file...
+Copying example graphs...
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/example1': No such file or directory
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/example2': No such file or directory
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/example3': No such file or directory
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/noise': No such file or directory
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/fzcam4': No such file or directory
+cp: cannot stat '/home/lucasw/other/install/share/gephex//graphs/kaleidoskop': No such file or directory
+...done!
+Everything is set up.
+Starting GePhex, have fun.
+/home/lucasw/.gephex/0.4/run_in_terminal.sh does not exist, copying default one...
+...done!
+  media_path	= /home/lucasw/other/install/share/gephex
+  ipc_type	= inet
+  ipc_inet_hostname	= localhost
+  ipc_namedpipe_servername	= .
+  ipc_unix_node_prefix	= /tmp/gephex_socket_
+  ipc_port	= 6666
+  engine_binary	= /home/lucasw/other/install/bin/gephex-engine
+protocol.cpp, dataReceived of listener throwed: could not scan tag
+```
+
+(`/home/lucasw` will be your equivalent)
+
 
 gephex.conf
 -----------
 
-There needs to be a ~/.gephex/0.4/gephex.conf file of the form:
+`~/.gephex/0.4/gephex.conf` will be created, it'll look like this, and can be manually edited to have different paths:
 
 ```
 common {
