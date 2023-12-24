@@ -129,7 +129,7 @@ VJMainWindow::VJMainWindow(QWidget *parent, const utils::ConfigManager &config,
 
   buildMenuBar();
 
-  switcher = new PicSwitch(statusBar(), roter_mann, gruener_mann);
+  switcher = new PicSwitch(statusBar(), QPixmap(roter_mann), QPixmap(gruener_mann));
 
   statusBar()->addPermanentWidget(switcher);
 
