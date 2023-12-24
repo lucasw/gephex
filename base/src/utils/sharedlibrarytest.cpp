@@ -37,9 +37,9 @@ void SharedLibraryTest::pre() throw(std::runtime_error) {}
 
 void SharedLibraryTest::run() throw(std::runtime_error) {
 #if defined(OS_WIN32)
-  const std::string LIB_NAME = "addmodule.dll";
+  const std::string LIB_NAME = "numarithmodule.dll";
 #elif defined(OS_POSIX)
-  const std::string LIB_NAME = "addmodule.so";
+  const std::string LIB_NAME = "modules/src/number/numarithmodule/numarithmodule.so";
 #endif
 
   utils::SharedLibrary *sl;

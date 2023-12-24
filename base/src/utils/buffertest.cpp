@@ -23,6 +23,7 @@
 #include "buffertest.h"
 
 #include <iostream>
+#include <string.h>
 
 #include "block.h"
 #include "buffer.h"

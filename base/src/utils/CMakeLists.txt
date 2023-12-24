@@ -66,3 +66,23 @@ target_link_libraries(${PROJECT_NAME} dl)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+add_executable(utilstest
+  ${CMAKE_CURRENT_LIST_DIR}/testmain.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/CompositeTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/LeafTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/Tester.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/easytest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/autoptrtest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/bufferstreamtest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/buffertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/circularbuffertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/filesystemtest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/sharedlibrarytest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/streamtokenizertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/stringtokenizertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/structreadertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/structscannertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/testmain.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/xmlutilstest.cpp
+)
+target_link_libraries(utilstest ${PROJECT_NAME})
