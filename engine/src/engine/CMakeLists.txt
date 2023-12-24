@@ -24,8 +24,7 @@ include(${CMAKE_HOME_DIRECTORY}/base/src/netinterfaces/interfaces.cmake)
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(${PROJECT_NAME}
-  ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+add_library(${PROJECT_NAME}lib STATIC
   ${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
   ${CMAKE_CURRENT_LIST_DIR}/netlogger.cpp
   ${CMAKE_CURRENT_LIST_DIR}/netlogger.h
@@ -74,7 +73,7 @@ add_executable(${PROJECT_NAME}
   netinterfaces/renderercontrolsendernet.h
   netinterfaces/enginecontrolsendernet.h
 )
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}lib
   dllloader
   model
   renderer
@@ -82,6 +81,9 @@ target_link_libraries(${PROJECT_NAME}
   netinterfaces
   utils
 )
+
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/main.cpp)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}lib)
 
 # set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
@@ -97,3 +99,14 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
 #     ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME} \
 #     )"
 # )
+
+add_executable(enginetest
+  ${CMAKE_CURRENT_LIST_DIR}/testmain.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../base/src/TestFramework/CompositeTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../base/src/TestFramework/LeafTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../base/src/TestFramework/Tester.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../../../base/src/TestFramework/easytest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/schedulertest.cpp
+)
+
+target_link_libraries(enginetest ${PROJECT_NAME}lib utils)
