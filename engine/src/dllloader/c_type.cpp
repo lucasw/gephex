@@ -22,6 +22,7 @@
 
 #include "c_type.h"
 #include <cassert>
+#include <stdexcept>
 
 #include "c_typetables.h"
 
