@@ -1,23 +1,24 @@
 #!/usr/bin/python
 #TODO: in der receiver implementierung reicht es wohl, buffer forward zu dekl.
 import string, sys, os
+from functools import reduce
 
 def startsWith(s, pattern):
-	return string.find(s,pattern) == 0
+	return s.find(pattern) == 0
 
 def endsWith(s, pattern):
 	if len(s) < len(pattern):
 		return 0
-	return string.find(s,pattern) == len(s)-len(pattern)
+	return s.find(pattern) == len(s)-len(pattern)
 
 def readComment(file):
 	commentLines = []
 	line = ' '
 	while line != '':
 		line = file.readline()
-		if string.strip(line) == '':
+		if line.strip() == '':
 			pass
-		elif startsWith(string.strip(line),'/*'):
+		elif startsWith(line.strip(),'/*'):
 			break
 		else:
 			sys.stderr.write("Unexpected line: " + line)
@@ -29,7 +30,7 @@ def readComment(file):
 	
 	while line != '':
 		commentLines.append(line)
-		if endsWith(string.strip(line),'*/'):
+		if endsWith(line.strip(),'*/'):
 			break
 		line = file.readline()
 
@@ -38,7 +39,7 @@ def readComment(file):
 def readToken(s, delim):
 	p1 = -1
 	for i in range(0,len(s)):
-		if string.find(delim,s[i]) == -1:
+		if delim.find(s[i]) == -1:
 			p1 = i
 			break
 	if p1 == -1:
@@ -46,7 +47,7 @@ def readToken(s, delim):
 
 	p2 = len(s)
 	for i in range(p1,len(s)):
-		if string.find(delim,s[i]) != -1:
+		if delim.find(s[i]) != -1:
 			p2 = i
 			break
 	
@@ -57,17 +58,17 @@ def tokenize(s, delims):
 	if s == '':
 		return []
 	else:
-	   s = string.strip(s)
+	   s = s.strip()
 	   token = readToken(s,delims)
 	   return [token] + tokenize(s[len(token)+1:],delims)
 
 def varTokenToVarDecl(token):
-	i = string.rfind(token,' ')
-	return (string.strip(token[:i]),string.strip(token[i+1:]))
+	i = token.rfind(' ')
+	return (token[:i].strip(), token[i+1:].strip())
 
 def readArgList(argListString):
 	argList = []
-	tokenList = map(string.strip,tokenize(argListString,','))
+	tokenList = [t.strip() for t in tokenize(argListString,',')]
 	
 	return map(varTokenToVarDecl,tokenList)
 		
@@ -75,12 +76,12 @@ def readDef(file):
 	line = ' '
 	while line != '':
 		line = file.readline()
-		if string.strip(line) == '':
+		if line.strip() == '':
 			pass
 		else:
 			break
 
-	line = string.strip(line)
+	line = line.strip()
 
 	if line == '':
 		return None
@@ -94,12 +95,13 @@ def readDef(file):
 def readHeader(file):
 	line = ' '	
 	while line != '':
+		print(line)
 		line = file.readline()
-		sline = string.strip(line)
+		sline = line.strip()
 		if sline == '':
 			pass
 		elif startsWith(sline,'name:'):
-			name = string.strip(sline[5:])
+			name = sline[5:].strip()
 			return {'name':name}
 		else:
 			sys.stderr.write("Error: expected name:")
@@ -142,7 +144,8 @@ def definition2Decl(definition, className = ''):
 	if argList != []:
 		cArgList = map(lambda x: typeToCTypeDecl(x[0]) + ' ' + x[1],
 			        argList)
-		cArgs = reduce(lambda x, y: x + ', ' + y,cArgList)
+		cArgs = ", ".join(list(cArgList))  # reduce(lambda x, y: x + ', ' + y,cArgList)
+		# print(f"{list(cArgList)} -> {list(cArgs)}")
 	else:
 		cArgs = ''
 
@@ -163,7 +166,7 @@ def createIfaceRecHeader(file,name_,comment,interface):
 		return reduce(lambda x, y: x + y, methodCDefs)
 
 	name = 'I' + name_ + 'Receiver'
-	includeGuard = 'INCLUDED_' + string.upper(name) + '_H\n'
+	includeGuard = 'INCLUDED_' + name.upper() + '_H\n'
 	file.write('#ifndef ' + includeGuard)
 	file.write('#define ' + includeGuard)
 
@@ -182,7 +185,7 @@ def createIfaceRecHeader(file,name_,comment,interface):
 
 def createIfaceSendHeader(file,name_):
 	name = 'I' + name_ + 'Sender'
-	includeGuard = 'INCLUDED_' + string.upper(name) + '_H\n'
+	includeGuard = 'INCLUDED_' + name.upper() + '_H\n'
 	file.write('#ifndef ' + includeGuard)
 	file.write('#define ' + includeGuard)
 	template = """class IX_NAME_XReceiver;
@@ -195,7 +198,7 @@ class IX_NAME_XSender
 #endif
 """
 
-	file.write(string.replace(template,'X_NAME_X',name_))
+	file.write(template.replace('X_NAME_X',name_))
 
 
 
@@ -208,11 +211,11 @@ def createNetIfaceRecHeader(file, name_,interface):
 		return reduce(lambda x, y: x + y, methodCDefs)
 
 	name = name_ + 'ReceiverNet'
-	includeGuard = 'INCLUDED_' + string.upper(name) + '_H\n'
+	includeGuard = 'INCLUDED_' + name.upper() + '_H\n'
 	file.write('#ifndef ' + includeGuard)
 	file.write('#define ' + includeGuard + '\n')
 
-	file.write('#include "interfaces/i' + string.lower(name_) 
+	file.write('#include "interfaces/i' + name_.lower() 
 		   + 'receiver.h"\n\n')
 
 	file.write('namespace net {\n\ttemplate <typename Key>\n\tclass ITagger;\n}\n\n')
@@ -252,14 +255,14 @@ private:
 #endif
 """
 
-	temp1 = string.replace(template,'XXX_BIGNAME_XXX',string.upper(name_))
-	temp2 = string.replace(temp1,'XXX_LITTLENAME_XXX',string.lower(name_))
-	temp3 = string.replace(temp2,'XXX_NAME_XXX',name_)
+	temp1 = template.replace('XXX_BIGNAME_XXX',name_.upper())
+	temp2 = temp1.replace('XXX_LITTLENAME_XXX',name_.lower())
+	temp3 = temp2.replace('XXX_NAME_XXX',name_)
 	file.write(temp3)
 
 def createCommandName(methodNames):
 
-	print commandNames
+	print(commandNames)
 
 def stringShit(pair):
 	(type, var) = pair;
@@ -272,10 +275,11 @@ def stringShit(pair):
 def createRecMethodBody(signature):
 #	pre = '\tutils::OutByteStream bs;\n'
 	(methodName,argList,commandName) = signature
-
+    
+	argList = list(argList)
 	if len(argList) > 0:
-		maxLengthHint = `len(argList)*16`
-		pre = '\tutils::Buffer temp_buf_(' + maxLengthHint + ');\n' \
+		maxLengthHint = len(argList)*16
+		pre = '\tutils::Buffer temp_buf_(' + str(maxLengthHint) + ');\n' \
 		      '\tutils::OBufferStream bs(temp_buf_);\n'
 	else:
 		pre = '\tutils::Buffer temp_buf_((unsigned char*) "",1);\n'
@@ -295,11 +299,11 @@ def createRecMethodBody(signature):
 
 	return pre + serCode + post
 
-def expand24Digits(str):
-	return '0000'[len(str):] + str
+def expand24Digits(text):
+	return '0000'[len(text):] + text
 
 def number24string(i):
-	istr = `i`
+	istr = str(i)
 	return expand24Digits(istr)
 	
 def insertCommandNames(methodDefs):		
@@ -340,8 +344,8 @@ def createNetIfaceRecImpl(file, name_,interface):
 #		      '#include "utils/outbytestreamutils.h"\n\n' \
 
 
-	file.write(string.replace(string.replace(preTemplate,'X_SMALLNAME_X',
-				  		 string.lower(className)),
+	file.write(preTemplate.replace('X_SMALLNAME_X',
+				  		 className.lower()).replace(
 				  'X_NAME_X',className))
 
 	newInterface = insertCommandNames(interface)
@@ -349,7 +353,8 @@ def createNetIfaceRecImpl(file, name_,interface):
 
 def createSendCode(signature):
 	(methodName, argList, commandName) = signature[1]
-
+	
+	argList = list(argList)
 	if len(argList) > 0:	
 		decls = map(lambda x: '\t\t' + typeToCType(x[0]) + ' ' + x[1]
 		    + ';\n',argList)
@@ -399,8 +404,8 @@ def createNetIfaceSendImpl(file, name_, interface):
 #		   '#include "utils/inbytestream.h"\n' \
 #		   '#include "utils/inbytestreamutils.h"\n\n' \
 
-	temp1 = string.replace(string.replace(template,'X_NAME_X',name_),
-			       'X_LITTLENAME_X',string.lower(name_))
+	temp1 = template.replace('X_NAME_X',name_).replace(
+			       'X_LITTLENAME_X',name_.lower())
 
 	newInterface = insertCommandNames(interface)
 	sendCodes = map(lambda x: createSendCode(x), newInterface)
@@ -413,7 +418,7 @@ def createNetIfaceSendImpl(file, name_, interface):
 		   '\t\tstream.flush();\n' \
 		   '\t\tthrow std::runtime_error(stream.str().c_str());'\
 		   '\n\t }\n'
-	file.write(string.replace(string.replace(temp1,'X_CODE_X',sendCode),
+	file.write(temp1.replace('X_CODE_X',sendCode).replace(
                'X_NAME_X', name_))
 
 def printUsage():
@@ -446,7 +451,7 @@ if not cmd in ['ir','is','nrh','nrc','nsh','nsc','iam','nam']:
 	sys.exit(-1)
 
 
-file = open(interfaceFilename,"r")
+file = open(interfaceFilename,"r",encoding="ISO-8859-1")
 (header,comment,interface) = readInterface(file)
 baseName = header['name']
 
@@ -461,44 +466,44 @@ baseName = header['name']
 
 if cmd == 'ir':
 	filename = os.path.join(path,
-				'i' + string.lower(baseName) + 'receiver.h')
+				'i' + baseName.lower() + 'receiver.h')
 	file = open(filename,'w')
-	print "Writing interface receiver file to " + filename
+	print("Writing interface receiver file to " + filename)
 	createIfaceRecHeader(file,baseName,comment,interface)
 	file.close()
 elif cmd == 'is':
 	filename = os.path.join(path,
-				'i' + string.lower(baseName) + 'sender.h')
+				'i' + baseName.lower() + 'sender.h')
 	file = open(filename,'w')
-	print "Writing interface receiver file to " + filename
+	print("Writing interface receiver file to " + filename)
 	createIfaceSendHeader(file,baseName)
 	file.close()
 elif cmd == 'nrh':
 	filename = os.path.join(path,
-				string.lower(baseName) + 'receivernet.h')
+				baseName.lower() + 'receivernet.h')
 	file = open(filename,'w')
-	print "Writing net interface receiver header file to " + filename
+	print("Writing net interface receiver header file to " + filename)
 	createNetIfaceRecHeader(file,baseName,interface)
 	file.close()
 elif cmd == 'nsh':
 	filename = os.path.join(path,
-				string.lower(baseName) + 'sendernet.h')
+				baseName.lower() + 'sendernet.h')
 	file = open(filename,'w')
-	print "Writing net interface sender header file to " + filename
+	print("Writing net interface sender header file to " + filename)
 	createNetIfaceSendHeader(file,baseName)
 	file.close()
 elif cmd == 'nrc':
 	filename = os.path.join(path,
-				string.lower(baseName) + 'receivernet.cpp')
+				baseName.lower() + 'receivernet.cpp')
 	file = open(filename,'w')
-	print "Writing net interface receiver c++ file to " + filename
+	print("Writing net interface receiver c++ file to " + filename)
 	createNetIfaceRecImpl(file,baseName,interface)
 	file.close()
 elif cmd == 'nsc':
 	filename = os.path.join(path,
-				string.lower(baseName) + 'sendernet.cpp')
+				baseName.lower() + 'sendernet.cpp')
 	file = open(filename,'w')
-	print "Writing net interface sender c++ file to " + filename
+	print("Writing net interface sender c++ file to " + filename)
 	createNetIfaceSendImpl(file,baseName,interface)
 	file.close()
 elif cmd == 'iam':
@@ -507,10 +512,9 @@ elif cmd == 'iam':
 		   'iX_NAME_Xsender.h: X_NAME_X.if\n' \
 		   '\tpython $(top_builddir)/nic.py is . X_NAME_X.if\n'
 
-	print 'Appending build rules to Makefile.am...'
+	print('Appending build rules to Makefile.am...')
 	file = open('Makefile.am','a')
-	file.write(string.replace(template,'X_NAME_X',
-				  string.lower(baseName)))
+	file.write(template.replace('X_NAME_X', baseName.lower()))
 
 
 elif cmd == 'nam':
@@ -527,10 +531,9 @@ X_NAME_Xsendernet.h: ../interfaces/X_NAME_X.if
 X_NAME_Xsendernet.cpp: ../interfaces/X_NAME_X.if X_NAME_Xsendernet.h
 	python $(top_builddir)/nic.py nsc . ../interfaces/X_NAME_X.if"""
 
-	print 'Appending build rules to Makefile.am...'
+	print('Appending build rules to Makefile.am...')
 	file = open('Makefile.am','a')
-	file.write(string.replace(template,'X_NAME_X',
-				  string.lower(baseName)))
+	file.write(template.replace('X_NAME_X', baseName.lower()))
 
 
 
