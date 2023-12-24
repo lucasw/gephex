@@ -133,20 +133,23 @@ Iterator leafTag(Iterator begin, Iterator end, const std::string &tag_name,
 
 void checktag(std::istream &s, const std::string &giventag) {
 #ifndef NDEBUG
-  // std::cout << "checktag :" << giventag << std::endl;
+  std::cout << "checktag :" << giventag << std::endl;
 #endif
   std::string tag; // empty string
   char c;
   if (!s.get(c)) {
-    throw std::runtime_error("could not scan tag");
+    throw std::runtime_error("could not scan tag, get()");
     // todo fehler behandlung
   }
 
-  while (s && (c == ' ' || c == '\t' || c == '\n'))
+  while (s && (c == ' ' || c == '\t' || c == '\n')) {
+    std::cout << "'" << c << "'\n";
     s.get(c);
+  }
 
   if (c != '<') {
-    throw std::runtime_error("could not scan tag");
+    std::cerr << "'" << int(c) << " " << c << "'\n";
+    throw std::runtime_error("could not scan tag, < " + tag);
     // todo fehler behandlung
   }
 
@@ -164,7 +167,7 @@ void checktag(std::istream &s, const std::string &giventag) {
   }
   // std::cout << "found :" << tag << std::endl;
   if (giventag != tag) {
-    throw std::runtime_error("could not scan tag");
+    throw std::runtime_error("could not scan tag " + giventag + " != " + tag);
   }
 }
 
@@ -174,7 +177,7 @@ bool checktagloop(std::istream &s, const std::string &looptag,
   std::string tag; // empty string
   char c;
   if (!s.get(c)) {
-    throw std::runtime_error("could not scan tag (loop)");
+    throw std::runtime_error("could not scan tag (loop), get");
     // todo fehler behandlung
   }
 
@@ -182,7 +185,7 @@ bool checktagloop(std::istream &s, const std::string &looptag,
     s.get(c);
 
   if (c != '<') {
-    throw std::runtime_error("could not scan tag (loop)");
+    throw std::runtime_error("could not scan tag (loop), " + std::string(1, c) + " != <");
     // todo fehler behandlung
   }
   tag += c;
@@ -199,7 +202,7 @@ bool checktagloop(std::istream &s, const std::string &looptag,
   }
 
   if (!(tag == looptag || tag == exittag)) {
-    std::string msg = "could not scan tag (loop): " + tag;
+    std::string msg = "could not scan tag (loop): " + tag + " " + looptag + " " + exittag;
     throw std::runtime_error(msg.c_str());
   }
 
