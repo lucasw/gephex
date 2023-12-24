@@ -26,7 +26,7 @@
 #include <iostream>
 
 #include <QtGui/QMouseEvent>
-#include <QtGui/qlabel.h>
+#include <QtWidgets/qlabel.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qpainter.h>
 
@@ -180,7 +180,7 @@ static void removeKeyListeners(KeyListenerList &ll,
   }
 }
 
-NodeWidget::NodeWidget(QWidget *parent, Qt::WFlags fl, int _id,
+NodeWidget::NodeWidget(QWidget *parent, Qt::WindowFlags fl, int _id,
                        const ModuleInfo &_info, const PicManager &picz,
                        const utils::AutoPtr<ControlValueDispatcher> &dispatcher,
                        IModelControlReceiver &mcr, KeyboardManager *kbManager,

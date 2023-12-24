@@ -106,7 +106,7 @@ signals:
   void error(const std::string &errorText);
 
 public:
-  NodeWidget(QWidget *parent, Qt::WFlags fl, int id, const ModuleInfo &_info,
+  NodeWidget(QWidget *parent, Qt::WindowFlags fl, int id, const ModuleInfo &_info,
              const PicManager &picz,
              const utils::AutoPtr<ControlValueDispatcher> &,
              IModelControlReceiver &, KeyboardManager *kbManager,

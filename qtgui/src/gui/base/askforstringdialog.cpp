@@ -23,11 +23,11 @@
 #include "askforstringdialog.h"
 
 #include <QtCore/qvariant.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qtooltip.h>
-#include <QtGui/qwhatsthis.h>
+#include <QtWidgets/qlabel.h>
+#include <QtWidgets/qlineedit.h>
+#include <QtWidgets/qpushbutton.h>
+#include <QtWidgets/qtooltip.h>
+#include <QtWidgets/qwhatsthis.h>
 
 namespace gui {
 

@@ -35,8 +35,8 @@
 #include <QtGui/qframe.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qmessagebox.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qwhatsthis.h>
+#include <QtWidgets/qpushbutton.h>
+#include <QtWidgets/qwhatsthis.h>
 
 #include "guimodel/controlvaluedispatcher.h"
 #include "guimodel/graphmodel.h"

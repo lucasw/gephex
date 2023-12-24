@@ -38,7 +38,7 @@ protected:
   virtual void mousePressEvent(QMouseEvent *);
 
 public:
-  ModuleButton(int id, QWidget *parent, Qt::WFlags fl = 0);
+  ModuleButton(int id, QWidget *parent, Qt::WindowFlags fl = 0);
 
   void setController(Controller *);
 

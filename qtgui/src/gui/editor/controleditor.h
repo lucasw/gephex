@@ -27,7 +27,7 @@
 #include <map>
 #include <string>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 #include "guimodel/icontrolview.h"
 #include "guimodel/point.h"

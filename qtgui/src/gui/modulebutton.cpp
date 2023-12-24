@@ -22,7 +22,7 @@
 
 #include "modulebutton.h"
 
-ModuleButton::ModuleButton(int _id, QWidget *parent, Qt::WFlags fl)
+ModuleButton::ModuleButton(int _id, QWidget *parent, Qt::WindowFlags fl)
     : QToolButton(parent), id(_id), m_controller(0) {}
 
 void ModuleButton::mousePressEvent(QMouseEvent *e) {

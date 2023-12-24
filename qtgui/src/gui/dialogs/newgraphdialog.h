@@ -23,7 +23,7 @@
 #ifndef INCLUDED_NEW_GRAPH_DIALOG_H
 #define INCLUDED_NEW_GRAPH_DIALOG_H
 
-#include <QtGui/qdialog.h>
+#include <QtWidgets/qdialog.h>
 #include <string>
 
 class QLabel;

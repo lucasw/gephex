@@ -23,7 +23,7 @@
 #ifndef _INCLUDED_NODE_PROPERTY_H__
 #define _INCLUDED_NODE_PROPERTY_H__
 
-#include <QtGui/qdialog.h>
+#include <QtWidgets/qdialog.h>
 #include <map>
 #include <string>
 #include <vector>

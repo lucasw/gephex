@@ -42,7 +42,7 @@ class PropertyWidget : public QWidget, public IControlValueReceiver {
   Q_OBJECT
 public:
   typedef std::map<std::string, std::string> ParamMap;
-  PropertyWidget(QWidget *parent, Qt::WFlags fl, int nodeID, int inIndex,
+  PropertyWidget(QWidget *parent, Qt::WindowFlags fl, int nodeID, int inIndex,
                  int controlID, IModelControlReceiver &, const ParamMap &params,
                  const TypeViewConstructor &con);
 

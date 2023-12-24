@@ -32,7 +32,7 @@
 #define snprintf _snprintf
 #endif
 
-AboutDialog::AboutDialog(QWidget *parent, bool modal, Qt::WFlags fl)
+AboutDialog::AboutDialog(QWidget *parent, bool modal, Qt::WindowFlags fl)
     : QDialog(parent, fl) {
   setModal(modal);
   setupUi(this);

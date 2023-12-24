@@ -27,7 +27,7 @@
 
 class AboutDialog : public QDialog, public Ui_AboutDialog {
 public:
-  AboutDialog(QWidget *parent = 0, bool modal = FALSE, Qt::WFlags fl = 0);
+  AboutDialog(QWidget *parent = 0, bool modal = false, Qt::WindowFlags fl = 0);
 };
 
 #endif

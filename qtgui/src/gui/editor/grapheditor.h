@@ -27,7 +27,7 @@
 #include <map>
 #include <string>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 #include "interfaces/imodelstatusreceiver.h"
 #include "interfaces/imodulestatisticsreceiver.h"

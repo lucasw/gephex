@@ -24,7 +24,7 @@
 
 #include "typeview.h"
 #include <QtGui/QMouseEvent>
-#include <QtGui/qlabel.h>
+#include <QtWidgets/qlabel.h>
 #include <QtGui/qlayout.h>
 
 namespace gui {

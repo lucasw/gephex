@@ -22,8 +22,8 @@
 
 #include "propertywidget.h"
 
-#include <QtGui/QWidget>
-//#include <QtGui/qtooltip.h>
+#include <QtWidgets/QWidget>
+//#include <QtWidgets/qtooltip.h>
 #include <QtGui/QBoxLayout>
 
 #include "interfaces/imodelcontrolreceiver.h"
@@ -32,7 +32,7 @@
 
 namespace gui {
 
-PropertyWidget::PropertyWidget(QWidget *parent, Qt::WFlags fl, int nodeID,
+PropertyWidget::PropertyWidget(QWidget *parent, Qt::WindowFlags fl, int nodeID,
                                int inIndex, int controlID,
                                IModelControlReceiver &mcr_,
                                const ParamMap &params,

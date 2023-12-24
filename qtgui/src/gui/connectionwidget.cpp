@@ -25,7 +25,7 @@
 #include <math.h>
 
 #include <QtGui/QPainter>
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 #include "inputplugwidget.h"
 #include "outputplugwidget.h"

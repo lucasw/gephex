@@ -29,7 +29,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-ChangesDialog::ChangesDialog(QWidget *parent, bool modal, Qt::WFlags fl)
+ChangesDialog::ChangesDialog(QWidget *parent, bool modal, Qt::WindowFlags fl)
     : QDialog(parent, fl) {
   setModal(modal);
   setupUi(this);
