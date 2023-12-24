@@ -26,7 +26,7 @@
 #include <string>
 
 #include "gui/typeview.h"
-#include <QtGui/QPushButton>
+#include <QtWidgets/QPushButton>
 
 namespace gui {
 

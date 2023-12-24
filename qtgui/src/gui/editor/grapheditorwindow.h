@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include <QtGui/QScrollArea>
+#include <QtWidgets/QScrollArea>
 
 #include "utils/autoptr.h"
 

@@ -27,9 +27,9 @@
 
 #include <sstream>
 
-#include <QtGui/QBoxLayout>
-#include <QtGui/QFontDialog>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QBoxLayout>
+#include <QtWidgets/QFontDialog>
+#include <QtWidgets/QPushButton>
 
 #include "utils/stringtokenizer.h"
 

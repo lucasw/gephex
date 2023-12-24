@@ -25,7 +25,7 @@
 #include <cmath>
 #include <sstream>
 
-#include <QtGui/QHBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/qlineedit.h>
 #include <QtGui/qvalidator.h>
 

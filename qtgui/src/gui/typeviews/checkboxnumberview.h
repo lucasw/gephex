@@ -26,10 +26,10 @@
 #include "gui/typeview.h"
 #include "utils/stringtokenizer.h"
 #include "utils/structreader.h"
-#include <QtGui/QButtonGroup>
-#include <QtGui/QGroupBox>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlayout.h>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/qcheckbox.h>
+#include <QtWidgets/qlayout.h>
 #include <cmath>
 #include <sstream>
 #include <vector>

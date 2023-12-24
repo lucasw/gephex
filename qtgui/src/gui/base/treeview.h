@@ -23,7 +23,7 @@
 #ifndef INCLUDED_TREE_VIEW_H
 #define INCLUDED_TREE_VIEW_H
 
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <string>
 #include <vector>
 

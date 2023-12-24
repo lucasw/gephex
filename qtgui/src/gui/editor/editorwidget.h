@@ -23,11 +23,11 @@
 #ifndef EDITORWIDGET_H
 #define EDITORWIDGET_H
 
-#include <QtGui/qwidget.h>
+#include <QtWidgets/qwidget.h>
 #include <string>
-//#include <QtGui/qworkspace.h>
-//#include <QtGui/qtabwidget.h>
-#include <QtGui/qsplitter.h>
+//#include <QtWidgets/qworkspace.h>
+//#include <QtWidgets/qtabwidget.h>
+#include <QtWidgets/qsplitter.h>
 
 // class QWidget;
 

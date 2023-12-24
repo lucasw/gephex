@@ -28,7 +28,7 @@
 #include <vector>
 
 #include <QtGui/qpixmap.h>
-#include <QtGui/qwidget.h>
+#include <QtWidgets/qwidget.h>
 
 #include "utils/autoptr.h"
 

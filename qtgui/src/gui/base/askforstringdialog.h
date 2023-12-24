@@ -24,7 +24,7 @@
 #define ASKFORSTRINGDIALOG_H
 
 #include <string>
-//#include <QtGui/qvariant.h>
+//#include <QtWidgets/qvariant.h>
 #include <QtWidgets/qdialog.h>
 
 class QLabel;

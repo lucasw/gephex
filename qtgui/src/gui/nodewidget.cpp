@@ -27,7 +27,7 @@
 
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/qlabel.h>
-#include <QtGui/qlayout.h>
+#include <QtWidgets/qlayout.h>
 #include <QtGui/qpainter.h>
 
 #include "nodeproperty.h"

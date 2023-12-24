@@ -27,8 +27,8 @@
 #include <string>
 #include <vector>
 
-#include <QtGui/qmenubar.h>
-#include <QtGui/qtoolbar.h>
+#include <QtWidgets/qmenubar.h>
+#include <QtWidgets/qtoolbar.h>
 
 #include "guimodel/imoduleclassview.h"
 #include "imoduleinfobasestation.h"

@@ -26,11 +26,11 @@
 #include <sstream>
 #include <vector>
 
-#include <QtGui/QButtonGroup>
-#include <QtGui/QGroupBox>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlayout.h>
-//#include <QtGui/qmessagebox.h>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/qcheckbox.h>
+#include <QtWidgets/qlayout.h>
+//#include <QtWidgets/qmessagebox.h>
 
 #include "utils/stringtokenizer.h"
 #include "utils/structreader.h"

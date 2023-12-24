@@ -26,7 +26,7 @@
 #include <vector>
 
 #include <QtGui/QPixmap>
-#include <QtGui/QToolButton>
+#include <QtWidgets/QToolButton>
 
 namespace gui {
 

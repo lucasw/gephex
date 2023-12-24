@@ -26,8 +26,8 @@
 #include <map>
 #include <string>
 
-//#include <QtGui/qframe.h>
-#include <QtGui/qwidget.h>
+//#include <QtWidgets/qframe.h>
+#include <QtWidgets/qwidget.h>
 
 #include "utils/buffer.h"
 

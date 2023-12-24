@@ -27,7 +27,7 @@
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
-#include <QtGui/qlayout.h>
+#include <QtWidgets/qlayout.h>
 
 #include "utils/buffer.h"
 

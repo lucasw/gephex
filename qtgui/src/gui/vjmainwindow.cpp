@@ -29,11 +29,11 @@
 #include <QtCore/qtimer.h>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QDockWidget>
-#include <QtGui/qlayout.h>
-#include <QtGui/qmenubar.h>
-#include <QtGui/qsplitter.h>
-#include <QtGui/qstatusbar.h>
-#include <QtGui/qtabwidget.h>
+#include <QtWidgets/qlayout.h>
+#include <QtWidgets/qmenubar.h>
+#include <QtWidgets/qsplitter.h>
+#include <QtWidgets/qstatusbar.h>
+#include <QtWidgets/qtabwidget.h>
 
 #include "base/keyboardmanager.h"
 #include "base/logwindow.h"

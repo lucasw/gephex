@@ -24,7 +24,7 @@
 
 #include <map>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 
 #include "treeviewitem.h"

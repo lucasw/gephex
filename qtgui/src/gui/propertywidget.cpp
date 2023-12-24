@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QWidget>
 //#include <QtWidgets/qtooltip.h>
-#include <QtGui/QBoxLayout>
+#include <QtWidgets/QBoxLayout>
 
 #include "interfaces/imodelcontrolreceiver.h"
 

@@ -23,7 +23,7 @@
 #ifndef _INCLUDED_MODULE_BUTTON_H_
 #define _INCLUDED_MODULE_BUTTON_H_
 
-#include <QtGui/qtoolbutton.h>
+#include <QtWidgets/qtoolbutton.h>
 #include <string>
 
 class Controller;

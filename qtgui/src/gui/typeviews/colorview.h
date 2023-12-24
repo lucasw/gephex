@@ -28,10 +28,10 @@
 #include <cmath>
 #include <sstream>
 
-#include <QtGui/QLayout>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QPushButton>
 
-#include <QtGui/QColorDialog>
+#include <QtWidgets/QColorDialog>
 
 namespace gui {
 class ColorView : public gui::TypeView {

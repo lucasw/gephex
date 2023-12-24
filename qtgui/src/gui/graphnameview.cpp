@@ -30,8 +30,8 @@
 #include <vector>
 
 #include <QtGui/QPalette>
-#include <QtGui/qmenu.h>
-#include <QtGui/qmessagebox.h>
+#include <QtWidgets/qmenu.h>
+#include <QtWidgets/qmessagebox.h>
 
 #include "interfaces/ierrorreceiver.h"
 #include "interfaces/imodelcontrolreceiver.h"

@@ -26,7 +26,7 @@
 #include <map>
 
 #include <QtGui/QKeyEvent>
-#include <QtGui/qwidget.h>
+#include <QtWidgets/qwidget.h>
 
 #include "ikeylistener.h"
 #include "key.h"

@@ -28,7 +28,7 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QIcon>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QPixmap>
 
 #ifdef OS_WIN32

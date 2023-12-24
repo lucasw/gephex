@@ -29,10 +29,10 @@
 #include <list>
 #include <sstream>
 
-#include <QtGui/QPushButton>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/qmessagebox.h>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/qfiledialog.h>
+#include <QtWidgets/qlayout.h>
+#include <QtWidgets/qmessagebox.h>
 
 #include "utils/stringtokenizer.h"
 #include "utils/structreader.h"

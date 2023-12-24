@@ -23,9 +23,9 @@
 
 #include "frameview.h"
 
-#include <QtGui/QBoxLayout>
+#include <QtWidgets/QBoxLayout>
 #include <QtGui/QImage>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 #include <QtGui/QPixmap>
 
 namespace gui {

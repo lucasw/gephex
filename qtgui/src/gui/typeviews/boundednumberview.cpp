@@ -25,8 +25,8 @@
 #include <cmath>
 #include <sstream>
 
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/qlayout.h>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/qlayout.h>
 
 #include "utils/structreader.h"
 

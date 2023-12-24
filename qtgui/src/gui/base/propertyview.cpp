@@ -22,8 +22,8 @@
 
 #include "propertyview.h"
 
-#include <QtGui/QLayout>
-#include <QtGui/QTableWidget>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTableWidget>
 
 #include "ipropertydescription.h"
 #include "iwidgetconstructor.h"

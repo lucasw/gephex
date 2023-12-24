@@ -24,7 +24,7 @@
 
 #include <cassert>
 
-#include <QtGui/qtoolbutton.h>
+#include <QtWidgets/qtoolbutton.h>
 
 namespace gui {
 

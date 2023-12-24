@@ -24,8 +24,8 @@
 #include <iostream>
 #include <stdio.h>
 
-#include <QtGui/qcombobox.h>
-#include <QtGui/qlayout.h>
+#include <QtWidgets/qcombobox.h>
+#include <QtWidgets/qlayout.h>
 
 #include "utils/stringtokenizer.h"
 #include "utils/structreader.h"

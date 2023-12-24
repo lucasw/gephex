@@ -26,8 +26,8 @@
 #include <cmath>
 #include <sstream>
 
-#include <QtGui/qlayout.h>
-#include <QtGui/qradiobutton.h>
+#include <QtWidgets/qlayout.h>
+#include <QtWidgets/qradiobutton.h>
 
 #include "utils/structreader.h"
 

@@ -23,7 +23,7 @@
 #ifndef INCLUDED_LOG_WINDOW_H
 #define INCLUDED_LOG_WINDOW_H
 
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QTextEdit>
 
 #include "interfaces/ierrorreceiver.h"
 

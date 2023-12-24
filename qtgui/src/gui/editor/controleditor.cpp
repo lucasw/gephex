@@ -26,8 +26,8 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <QtGui/QMenu>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QMouseEvent>
 
 #include "mouseover.h"

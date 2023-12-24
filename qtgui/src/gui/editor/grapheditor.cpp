@@ -28,13 +28,13 @@
 
 #include <QtCore/qtimer.h>
 #include <QtCore/qvariant.h>
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPalette>
-#include <QtGui/qframe.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/qmessagebox.h>
+#include <QtWidgets/qframe.h>
+#include <QtWidgets/qlayout.h>
+#include <QtWidgets/qmessagebox.h>
 #include <QtWidgets/qpushbutton.h>
 #include <QtWidgets/qwhatsthis.h>
 
