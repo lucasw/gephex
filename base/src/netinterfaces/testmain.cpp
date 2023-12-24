@@ -24,14 +24,14 @@
 
 #include "TestFramework/CompositeTest.h"
 #include "TestFramework/Tester.h"
-#include "classinfotest.h"
+// #include "classinfotest.h"
 #include "nodelcontrolreceivertest.h"
 
 void doTests() {
   CompositeTest AllTests("Utils Tests", "");
 
-  ClassInfoTest cit;
-  AllTests.addTest(cit);
+  // ClassInfoTest cit;
+  // AllTests.addTest(cit);
 
   NodelControlReceiverTest ncrt;
   AllTests.addTest(ncrt);

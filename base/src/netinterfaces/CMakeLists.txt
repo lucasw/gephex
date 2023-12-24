@@ -12,6 +12,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
+  ${CMAKE_CURRENT_LIST_DIR}/../utils
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -78,3 +79,15 @@ add_library(${PROJECT_NAME} STATIC
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+# the two tests are missing files
+# add_executable(netinterfacestest
+  # ${CMAKE_CURRENT_LIST_DIR}/testmain.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/CompositeTest.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/LeafTest.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/Tester.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/easytest.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/classinfotest.cpp
+  # ${CMAKE_CURRENT_LIST_DIR}/nodelcontrolreceivertest.cpp
+# )
+
+# target_link_libraries(netinterfacestest ${PROJECT_NAME} utils)

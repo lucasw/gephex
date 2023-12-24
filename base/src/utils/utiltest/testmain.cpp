@@ -20,7 +20,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.*/
 
-#include <conio.h>
+// #include <conio.h>
 #include <iostream>
 
 #include "../TestFramework/CompositeTest.h"
@@ -69,6 +69,6 @@ int main(int /*argc*/, char * /*argv[]*/) {
 
   doTests();
 
-  getch();
+  // getch();
   return 0;
 }

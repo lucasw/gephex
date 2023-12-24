@@ -12,6 +12,8 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/../../../util/src/libgeo
   ${CMAKE_CURRENT_LIST_DIR}/../libscale
   ${CMAKE_CURRENT_LIST_DIR}/../libcolorconv
+  ${CMAKE_CURRENT_LIST_DIR}/../../../qtgui/src/guimodel
+  ${CMAKE_CURRENT_LIST_DIR}/../../../base/src/xmlshit
   ${CMAKE_BINARY_DIR}
 )
 
@@ -86,3 +88,19 @@ add_executable(utilstest
   ${CMAKE_CURRENT_LIST_DIR}/xmlutilstest.cpp
 )
 target_link_libraries(utilstest ${PROJECT_NAME})
+
+# TODO(lucasw) don't think these test were up-to-date, are missing a lot needed to compile
+if (false)
+add_executable(utiltest
+  ${CMAKE_CURRENT_LIST_DIR}/utiltest/testmain.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/CompositeTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/LeafTest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/Tester.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../TestFramework/easytest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/utiltest/xmllistenertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/utiltest/xmlreadertest.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/utiltest/xmlscannertest.cpp
+)
+
+target_link_libraries(utiltest ${PROJECT_NAME} utils)
+endif()
