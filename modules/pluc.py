@@ -3,6 +3,7 @@
 #      die ganzen checks
 
 import re, sys, string, os
+from functools import reduce
 
 #
 # regular expressions for scanning:
@@ -25,7 +26,7 @@ emptyline = re.compile(r"\s*");
 
 def removeComment(s):
         " Entfernt alles ab einem '#' Zeichen aus dem String s"
-        p = string.find(s,'#')
+        p = s.find('#')
         if p != -1:
                 return s[:p]
         else:
@@ -70,8 +71,8 @@ def readBlock(file):
                 strippedLine = removeComment(line)
                 m = assignment.match(strippedLine)
                 if m:
-                        name  = string.strip(m.group('name'))
-                        value = string.strip(m.group('value'))
+                        name  = m.group('name').strip()
+                        value = m.group('value').strip()
                         pairs[name] = value
                 elif endblock.match(strippedLine):
                         matchedEndBlock = 1
@@ -80,7 +81,7 @@ def readBlock(file):
                         continue;
                 else:
                         sys.stderr.write("Error: " + line + " at line " \
-                                         + `1` + "\n");
+                                         + repr(1) + "\n");
                         
         if matchedEndBlock == 0:
               sys.stderr.write("Error: missing }\n");
@@ -139,7 +140,7 @@ def checkMapForKeys(map,keys):
         if len(keys) == 0:
                 return ""
         else:
-           if not map.has_key(keys[0]):
+           if not keys[0] in map:
                 return keys[0]
            else:
                 return checkMapForKeys(map,keys[1:])
@@ -198,25 +199,25 @@ def usesAttributesFeature(inputs):
         if inputs == []:
                 return 0
         
-        list = map(lambda x: x[1].has_key('attributes'), inputs)        
+        list = map(lambda x: 'attributes' in x[1], inputs)        
         uses = reduce(lambda x, y: x or y, list)
         
         return uses
 
 def usesPatchFeature(options):
-        return options.has_key('enablePatching') and options['enablePatching'] == 'true'
+        return 'enablePatching' in options and options['enablePatching'] == 'true'
                 
 
 
 def createModuleSpec(id, options, numberOfInputs, numberOfOutputs):
         return "mod_spec { " + "name=[" + id \
-                + "] number_of_inputs=[" +  `numberOfInputs`  \
-                + "] number_of_outputs=[" + `numberOfOutputs` \
+                + "] number_of_inputs=[" +  repr(numberOfInputs)  \
+                + "] number_of_outputs=[" + repr(numberOfOutputs) \
                 + "] deterministic=[" + options['deterministic'] + "] }"
 
 def createInputSpec(input):
         (id,options) = input
-        if options.has_key('default'):
+        if 'default' in options:
                 default = 'default=['+options['default']+']'
         else:
                 default = ''
@@ -250,7 +251,7 @@ def createOutputSpecs(outputs):
         return specs
 
 def getTypeName(typeID):
-        return string.replace(typeID,'typ_','')
+        return typeID.replace('typ_','')
 
 def getInputVarName(input):
         id, options = input
@@ -292,7 +293,7 @@ def createEnums(inputs, outputs):
                    prelog = "enum Inputs { "
                    numbers = range(0,len(inputs))
                    names = map(getInputVarName,inputs)
-                   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
+                   enumList = map(lambda a, b: a + ' = ' + repr(b),names, numbers)
                    enumContent = reduce(lambda a, b: a + ', ' + b ,enumList)
                    inputEnum = prelog + enumContent + ' };\n'
                                   
@@ -303,7 +304,7 @@ def createEnums(inputs, outputs):
                    prelog = "enum Outputs { "
                    numbers = range(0,len(outputs))
                    names = map(getOutputVarName,outputs)
-                   enumList = map(lambda a, b: a + ' = ' + `b`,names, numbers)
+                   enumList = map(lambda a, b: a + ' = ' + repr(b),names, numbers)
                    enumContent = reduce(lambda a, b: a + ', ' +  b ,enumList)
                    outputEnum = prelog + enumContent + ' };\n'
                                   
@@ -313,23 +314,17 @@ def createEnums(inputs, outputs):
 
         return inputEnum + outputEnum
 
-
-def putInDict(dict, x):
-        dict[x] = 1
-
-def make_unique(list):
-        dict = {}
-        map(lambda x, d=dict: putInDict(d,x), list)
-        return dict.keys()
+def make_unique(list0):
+        return set(list0)
 
 def createUsedTypes(inputs, outputs):
-        typelist = make_unique(map(lambda x: x[1]['type'],inputs+outputs))
-        return typelist
+        typelist = map(lambda x: x[1]['type'],inputs+outputs)
+        typelist = make_unique(typelist)
+        return list(typelist)
 
-def createTypeIncludes(inputs,outputs):
-        typelist = map(lambda x: string.lower(string.replace(x,'typ_','')),
+def createTypeIncludes(inputs,outputs) -> str:
+        typelist = map(lambda x: x.replace('typ_','').lower(),
                        createUsedTypes(inputs,outputs))
-
 
         typeincludes = reduce(lambda a,b: a+ b,
                                map(lambda x: '#include "' + x + '.h"\n',
@@ -352,7 +347,7 @@ static void logger(int level, const char* msg)
       s_log_function(level, \"XXX_MODULE_CLASS_NAME_XXX\", msg);
 }
 """
-        logstuff = string.replace(logstuffr,'XXX_MODULE_CLASS_NAME_XXX', id)
+        logstuff = logstuffr.replace('XXX_MODULE_CLASS_NAME_XXX', id)
 
 
         return structinclude + stdincludes + '#include "' + xpmfile + '"\n' + logstuff
@@ -368,7 +363,7 @@ def createSetInput(inputs):
         caseList = []
         for i in range(0,len(inputs)):
                 input = inputs[i]
-                caseList.append("  case " + `i` + ":\n   inst->" + \
+                caseList.append("  case " + repr(i) + ":\n   inst->" + \
                                 getInputVarName(input) + \
                                 ' = (' + getTypeName(input[1]['type']) + \
                                 ' *) typePointer;\n  break;\n')
@@ -391,7 +386,7 @@ def createSetOutput(outputs):
         caseList = []
         for i in range(0,len(outputs)):
                 output = outputs[i]
-                caseList.append("  case " + `i` + ":\n   inst->" + \
+                caseList.append("  case " + repr(i) + ":\n   inst->" + \
                                 getOutputVarName(output) + \
                                 ' = (' + getTypeName(output[1]['type']) \
                                 + '* ) typePointer;\n  break;\n')
@@ -412,7 +407,7 @@ def createSpecFunctions(module_spec, input_specs, output_specs):
 
         caseList = []
         for i in range(0,len(input_specs)):
-                caseList.append("  case " + `i` + ':\n    return "' + \
+                caseList.append("  case " + repr(i) + ':\n    return "' + \
                                 input_specs[i] + '";\n  break;\n')
 
         if caseList != []:
@@ -426,7 +421,7 @@ def createSpecFunctions(module_spec, input_specs, output_specs):
                           + ' switch(index) {\n '
         caseList = []
         for i in range(0,len(output_specs)):
-                caseList.append("  case " + `i` + ':\n    return "' + \
+                caseList.append("  case " + repr(i) + ':\n    return "' + \
                                 output_specs[i] + '";\n  break;\n')
 
         if caseList != []:
@@ -446,8 +441,8 @@ def isExtraOutputArgument(name):
 
 def inputToInfo(input):
         id,options = input
-        filteredOptions = filter(lambda x: isExtraInputArgument(x[0]),
-                                 options.items())
+        filteredOptions = list(filter(lambda x: isExtraInputArgument(x[0]),
+                                      options.items()))
 
         if len(filteredOptions) > 0:
           args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
@@ -459,8 +454,8 @@ def inputToInfo(input):
 
 def outputToInfo(output):
         id,options = output
-        filteredOptions = filter(lambda x: isExtraOutputArgument(x[0]),
-                                 options.items())
+        filteredOptions = list(filter(lambda x: isExtraOutputArgument(x[0]),
+                                      options.items()))
  
         if len(filteredOptions) > 0:
           args = reduce(lambda x, y: x + y,map(lambda x: x[0]+'=['+x[1]+'] ',
@@ -475,14 +470,14 @@ def createInputInfoArray(inputs):
                 return '0'
         else:
                 entries = reduce(lambda x, y: x + y,map(inputToInfo,inputs))
-                return `len(inputs)` + ' ' + entries
+                return repr(len(inputs)) + ' ' + entries
 
 def createOutputInfoArray(outputs):
         if len(outputs) == 0:
                 return '0'
         else:
                 entries = reduce(lambda x, y: x + y,map(outputToInfo,outputs))
-                return `len(outputs)` + ' ' + entries
+                return repr(len(outputs)) + ' ' + entries
 
 
 def createGetInfo(options,inputs,outputs):
@@ -525,10 +520,9 @@ int getInfo(char* buf,int bufLen)
         infoString = '"info { name=[' + options['name'] + '] group=[' \
                      + options['group'] + '] inputs=[' + inputArray + \
                      '] outputs=[' + outputArray + '] type=xpm } "'
-        xpmName = string.replace(options['xpm'],'.xpm','_xpm');
-        return string.replace(string.replace(template,
-                                             'XXX_XPMNAME_XXX', xpmName),
-                              'XXX_INFOSTRING_XXX',infoString)
+        xpmName = options['xpm'].replace('.xpm','_xpm');
+        return template.replace('XXX_XPMNAME_XXX', xpmName).replace(
+                                    'XXX_INFOSTRING_XXX',infoString)
 
 def createCtorDtor(static):
         template = """void* newInstance()
@@ -605,13 +599,13 @@ void deleteInstance(void* instance)
 }
 """
 
-        if string.lower(static) == 'true':
+        if static.lower() == 'true':
                 return templateStatic
         else:
                 return template
                 
         
-def createStrongDepFunc(inputs):
+def createStrongDepFunc(inputs: list[tuple]) -> str:
         template = """void strongDependenciesCalculated(void* instance,int** neededInputs)
 {
   InstancePtr inst = (InstancePtr) instance;
@@ -626,18 +620,20 @@ X_INI_LIST_X
 }
 """
         names = map(getInputVarName,inputs)
-        list = []
-        for i in range(0,len(inputs)):
-                if inputs[i][1]['strong_dependency'] == 'true':
+        names = list(names)
+        list0 = []
+        for i in range(len(inputs)):
+                input_i = inputs[i]
+                name_i = names[i]
+                if input_i[1]['strong_dependency'] == 'true':
                         val = '0;\n'
                 else:
                         val = '1;\n'
-                list.append('\tneededIns[' + names[i] + '] = ' + val)
+                list0.append('\tneededIns[' + name_i + '] = ' + val)
 
-        iniList = reduce(lambda x,y: x + y, list)
-        return string.replace(string.replace(template,'X_NUMINS_X',
-                                             `len(inputs)`),
-                              'X_INI_LIST_X',iniList)
+        iniList = ''.join(list0)
+        return template.replace('X_NUMINS_X', repr(len(inputs))
+                                ).replace('X_INI_LIST_X',iniList)
 
 def createPatchFunc(outputs):
         template = """void getPatchLayout(void* instance,int** out2in)
@@ -653,19 +649,18 @@ X_INI_LIST_X
   patchLayout(inst, out2in_);
 }
 """
-        names = map(getOutputVarName,outputs)
-        list = []
-        for i in range(0,len(outputs)):         
-                list.append('\tout2in_[' + names[i] + '] = -1;')
+        names = list(map(getOutputVarName,outputs))
+        list0 = []
+        for i in range(len(names)):         
+                list0.append('\tout2in_[' + names[i] + '] = -1;')
 
-        iniList = reduce(lambda x,y: x + y, list)
-        return string.replace(string.replace(template,'X_NUMOUTS_X',
-                                             `len(outputs)`),
-                              'X_INI_LIST_X',iniList)
+        iniList = reduce(lambda x,y: x + y, list0)
+        return template.replace('X_NUMOUTS_X',
+                                repr(len(outputs))).replace('X_INI_LIST_X',iniList)
 
 
 def typeName2AttributeStruct(name):
-        return string.replace(string.replace(name,'Type','Attributes'),'typ_','')
+        return name.replace('Type','Attributes').replace('typ_','')
 
 def createAttribDecls(inputs):
         'creates declaration code for all fixed attributes'
@@ -675,17 +670,17 @@ def createAttribDecls(inputs):
 
         decls = []
         for i in range(0,len(inputs)):          
-                if inputs[i][1].has_key('attributes'):
+                if 'attributes' in inputs[i][1]:
                         decls.append('static ' + typeName2AttributeStruct(inputs[i][1]['type'])\
-                                                 + ' attr' + `i` + ';\n')
+                                                 + ' attr' + repr(i) + ';\n')
 
         return reduce(lambda x, y: x + y, decls)
 
 
 def createAttribBlock(val, name):
         'creates init code for one fixed attribute'
-        code_ = string.replace(val,'~','=')
-        code = string.replace(code_,'a$', name)
+        code_ = val.replace('~','=')
+        code = code_.replace('a$', name)
 
         return code + '\n'
 
@@ -694,9 +689,9 @@ def createAttribBlocks(inputs):
         
         code = []
         for i in range(0,len(inputs)):
-                if inputs[i][1].has_key('attributes'):
-                        code.append(createAttribBlock(inputs[i][1]['attributes'], 'attr' + `i`))
-                        code.append('\tattributes[' + `i` + '] = &attr' + `i` + ';'); 
+                if 'attributes' in inputs[i][1]:
+                        code.append(createAttribBlock(inputs[i][1]['attributes'], 'attr' + repr(i)))
+                        code.append('\tattributes[' + repr(i) + '] = &attr' + repr(i) + ';'); 
                 else:
                         code.append('')
 
@@ -736,7 +731,7 @@ int initSO(log2T log_function)
         return init(logger);
 }
 """
-        initFunc = string.replace(initTemplate, 'XXX_ATTRIB_CODE', attributeInitCode)
+        initFunc = initTemplate.replace('XXX_ATTRIB_CODE', attributeInitCode)
 
         file.write(prelog)
         file.write('\n')
@@ -788,11 +783,11 @@ void* getInputAttributes(int index)
                 decls = createAttribDecls(inputs)
                 blocks = createAttribBlocks(inputs)
                 attributesCode__ = \
-                        string.replace(fixedAttributesTemplate,'XXX_NUMINPUTS_XXX',`len(inputs)`)
+                        fixedAttributesTemplate.replace('XXX_NUMINPUTS_XXX',repr(len(inputs)))
                 attributesCode_ =  \
-                        string.replace(attributesCode__,'XXX_BLOCKS_XXX',blocks)
+                        attributesCode__.replace('XXX_BLOCKS_XXX',blocks)
                 attributesCode = \
-                        string.replace(attributesCode_,'XXX_DECLS_XXX',decls)
+                        attributesCode_.replace('XXX_DECLS_XXX',decls)
                 
 
                 file.write(attributesCode)
@@ -808,7 +803,7 @@ def createHFile(inputs,outputs,file,filename):
         struct = createStruct(inputs,outputs)
         enums = createEnums(inputs, outputs)
 
-        macroName = string.upper(string.replace(filename,'.','_'))
+        macroName = filename.replace('.','_').upper()
 
         file.write('#ifndef INCLUDED_' + macroName + '\n')
         file.write('#define INCLUDED_' + macroName + '\n')
@@ -941,17 +936,17 @@ DISTCLEANFILES = XXX_NAME_XXX.h XXX_NAME_XXX_auto.c
 
 """
         usedtypes = createUsedTypes(inputs,outputs)
-        typedirs = map(lambda y: string.replace(y,'typ_',''),
+        typedirs = map(lambda y: y.replace('typ_',''),
                        usedtypes)
 
         typeinclude = ''
 
         typeincludes = map(lambda x: '           -I@srcdir@/../../../types/src/' + 
-                           string.lower(x) +' ', typedirs)
+                           x.lower() +' ', typedirs)
         typeinclude = reduce(lambda x,y: x + '\\\n' + y,typeincludes)
 
 
-        am = string.replace(string.replace(template,'XXX_NAME_XXX',fileprefix),
+        am = template.replace('XXX_NAME_XXX',fileprefix).replace(
                             'XXX_TYPE_INCLUDES_XXX',typeinclude)
 
         file.write(am)
@@ -974,8 +969,7 @@ EXPORTS
  shutDown @11
 """
 
-        content = string.replace(template,'XXX_NAME_XXX',
-                                  string.upper(fileprefix)) 
+        content = template.replace('XXX_NAME_XXX',fileprefix.upper())
         file.write(content)
 
         if usesStrongDepFeature(inputs):
@@ -1189,22 +1183,22 @@ SOURCE=.\X_NAME_X.xpm
 """
         name = fileprefix       
 
-        content = string.replace(template,'X_NAME_X',name)
+        content = template.replace('X_NAME_X',name)
 
         usedtypes = createUsedTypes(inputs,outputs)
-        typedirs = map(lambda y: string.replace(y,'typ_',''),
+        typedirs = map(lambda y: y.replace('typ_',''),
                        usedtypes)
         typeincludes = map(lambda x: '/I "../../../types/src/' + 
-                           string.lower(x) +'" ',
+                           x.lower() +'" ',
                            typedirs)
         typeinclude = reduce(lambda x,y: x + y,typeincludes)
 
-        content = string.replace(content,'X_TYPEINCLUDES_X',typeinclude)
+        content = content.replace('X_TYPEINCLUDES_X',typeinclude)
 
         file.write(content)
 
 def removeExtension(filename):
-        p = string.rfind(filename,'.')
+        p = filename.rfind('.')
         if p != -1:
                 return filename[:p]
         else:
@@ -1239,7 +1233,7 @@ if not cmd in ['c','h','skel','am','def','dsp']:
         sys.exit(-1)
 
 try:
-        specFile = open(specfileName,'r')
+        specFile = open(specfileName,'r',encoding="ISO-8859-1")
 except IOError:
         sys.stderr.write('Error, couldnt open ' + specfileName + '\n')
         sys.exit(-1)
@@ -1257,13 +1251,13 @@ fileprefix = removeExtension(filename_ext)
 if cmd == 'c':
         filename = fileprefix + '_auto.c'
         file = open(filename,'w')
-        print "Writing cfile to " + filename
+        print("Writing cfile to " + filename)
         createCFile(id,options,inputs,outputs,file,fileprefix)
         file.close()
 elif cmd == 'h':
         filename = fileprefix + '.h'
         file = open(filename,'w')
-        print "Writing header to " + filename
+        print("Writing header to " + filename)
         createHFile(inputs,outputs,file, filename)
         file.close()
 elif cmd == 'skel':
@@ -1272,25 +1266,25 @@ elif cmd == 'skel':
                 sys.stderr.write(filename + ' already exists! aborting.\n')
                 sys.exit(-1)
         file = open(filename,'w')
-        print "Writing skel to " + filename
+        print("Writing skel to " + filename)
         createSkelFile(file, fileprefix,inputs)
         file.close()
 elif cmd == 'am':
         filename = 'Makefile.am'
         file = open(filename,'w')
-        print "Writing  Makefile to  " + filename
+        print("Writing  Makefile to  " + filename)
         createAMFile(file, fileprefix, inputs, outputs)
         file.close()
 elif cmd == 'def':
         filename = fileprefix + '.def'  
         file = open(filename,'w')
-        print "Writing def file to  " + filename
+        print("Writing def file to  " + filename)
         createDefFile(file, fileprefix,inputs,options)
         file.close()
 elif cmd == 'dsp':
         filename = fileprefix + '.dsp'
         file = open(filename,'w')
-        print "Writing dsp file to  " + filename
+        print("Writing dsp file to  " + filename)
         createDspFile(file, fileprefix)
         file.close()
         
