@@ -113,6 +113,7 @@ std::string ProtocolTest::getDescription() const { return ""; }
 void ProtocolTest::pre() throw(std::runtime_error) {}
 
 static void test1() {
+  std::cout << "test1\n";
   protocol_test::TestSender sender;
   protocol_test::TestInterpreter tip;
   net::Protocol np(tip);
@@ -136,9 +137,11 @@ static void test1() {
       std::cerr.flush();
     }
   }
+  std::cout << "test1 done\n";
 }
 
 static void test2() {
+  std::cout << "test2\n";
   protocol_test::TestInterpreter tip;
   protocol_test::TestSender2 sender;
   net::Protocol np(tip);
@@ -155,6 +158,7 @@ static void test2() {
   memcpy(ptr, buf.getPtr(), buf.getLen());
 
   unsigned int *header_thingy = (unsigned int *)ptr;
+  // TODO(lucasw) this throws it out of sync on purpose?
   *header_thingy += 7;
 
   utils::Buffer mod_buf(ptr, buf.getLen());
@@ -165,6 +169,7 @@ static void test2() {
   const char *text = (const char *)tip.m_data;
   if (strcmp(text, "Test") != 0)
     throw std::runtime_error("sync failed");
+  std::cout << "test2 done\n";
 }
 
 void ProtocolTest::run() throw(std::runtime_error) {
