@@ -451,7 +451,13 @@ if not cmd in ['ir','is','nrh','nrc','nsh','nsc','iam','nam']:
 	sys.exit(-1)
 
 
-file = open(interfaceFilename,"r",encoding="ISO-8859-1")
+try:
+    # python3
+    file = open(interfaceFilename,"r",encoding="ISO-8859-1")
+except:
+    # python2
+    file = open(interfaceFilename,"r")
+
 (header,comment,interface) = readInterface(file)
 baseName = header['name']
 

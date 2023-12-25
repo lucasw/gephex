@@ -322,7 +322,7 @@ def createUsedTypes(inputs, outputs):
         typelist = make_unique(typelist)
         return list(typelist)
 
-def createTypeIncludes(inputs,outputs) -> str:
+def createTypeIncludes(inputs,outputs):  # -> str:
         typelist = map(lambda x: x.replace('typ_','').lower(),
                        createUsedTypes(inputs,outputs))
 
@@ -605,7 +605,7 @@ void deleteInstance(void* instance)
                 return template
                 
         
-def createStrongDepFunc(inputs: list[tuple]) -> str:
+def createStrongDepFunc(inputs):  # : list[tuple]) -> str:
         template = """void strongDependenciesCalculated(void* instance,int** neededInputs)
 {
   InstancePtr inst = (InstancePtr) instance;
@@ -1234,9 +1234,11 @@ if not cmd in ['c','h','skel','am','def','dsp']:
 
 try:
         specFile = open(specfileName,'r',encoding="ISO-8859-1")
-except IOError:
-        sys.stderr.write('Error, couldnt open ' + specfileName + '\n')
-        sys.exit(-1)
+except:
+        specFile = open(specfileName,'r')
+# except IOError:
+#         sys.stderr.write('Error, couldnt open ' + specfileName + '\n')
+#         sys.exit(-1)
         
         
 ((id,options),inputs,outputs) = scanSpecfile(specFile)
