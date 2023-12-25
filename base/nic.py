@@ -70,26 +70,25 @@ def readArgList(argListString):
 	argList = []
 	tokenList = [t.strip() for t in tokenize(argListString,',')]
 	
-	return map(varTokenToVarDecl,tokenList)
+	return list(map(varTokenToVarDecl,tokenList))
 		
 def readDef(file):
 	line = ' '
 	while line != '':
-		line = file.readline()
-		if line.strip() == '':
+		line = file.readline().strip()
+		if line == '':
 			pass
 		else:
 			break
 
-	line = line.strip()
-
 	if line == '':
 		return None
 
+	print(f"line: {line}")
 	name = readToken(line,' \t\n')
 	argListString = line[len(name)+1:]
 	argList = readArgList(argListString)
-	
+	print(f"argList: {argList}")
 	return (name,argList)
 
 def readHeader(file):
@@ -109,16 +108,17 @@ def readHeader(file):
 def readInterface(file):
 	header = readHeader(file)
 	globalComment = readComment(file)
-	list = []
+	list0 = []
 	while 1:
 		comment = readComment(file)
 		definition = readDef(file)
 
 		if definition == None:
-		       break
-		list.append((comment,definition))
+			   break
+		print(f"definition list: {definition[1]}")
+		list0.append((comment,definition))
 
-	return (header,globalComment,list)
+	return (header,globalComment,list0)
 
 
 def typeToCType(type):
@@ -275,8 +275,6 @@ def stringShit(pair):
 def createRecMethodBody(signature):
 #	pre = '\tutils::OutByteStream bs;\n'
 	(methodName,argList,commandName) = signature
-    
-	argList = list(argList)
 	if len(argList) > 0:
 		maxLengthHint = len(argList)*16
 		pre = '\tutils::Buffer temp_buf_(' + str(maxLengthHint) + ');\n' \
@@ -454,6 +452,7 @@ if not cmd in ['ir','is','nrh','nrc','nsh','nsc','iam','nam']:
 try:
     # python3
     file = open(interfaceFilename,"r",encoding="ISO-8859-1")
+    print("using encoding")
 except:
     # python2
     file = open(interfaceFilename,"r")
