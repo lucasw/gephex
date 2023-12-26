@@ -1,0 +1,88 @@
+name: Ubuntu 20.04 Noetic
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-ros-noetic:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [20.04, 22.04]
+
+    runs-on: ubuntu-${{ matrix.build_type }}
+
+    env:
+      ACCEPT_EULA: true
+      ROSCONSOLE_FORMAT: '[${severity}] [${time} ${node} ${shortfile}:${line}]: ${message}'
+      ROS_DISTRO: noetic
+      ROS_CI_DESKTOP: "`lsb_release -cs`"  # e.g. [trusty|xenial|...]
+      DEST: /home/runner/work/other/gephex/gephex/other/install
+
+    steps:
+
+      - name: git clone this repo
+        uses: actions/checkout@v4
+        with:
+          path: src/gephex
+
+      - name: find files with trailing whitespace
+        run: |
+          ls -l
+          # TODO(lucasw) actually fix all these and remove the || true
+          ! find * -type f -regextype posix-extended -regex '.*\.(cpp|csv|h|hpp|json|launch|md|msg|perspective|py|rviz|sh|test|txt|urdf|xacro|xml|yaml)' -exec egrep -l " +$" {} \; | grep . || true
+
+      - name: find files with windows line endings
+        run: |
+          cd src/gephex
+          ! grep -IUr --exclude-dir='.*' --color $'\r' -l .
+
+      - name: install packages missing from container
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install -yqq git
+          sudo apt-get install -yqq unzip
+          sudo apt-get install -yqq wget
+          sudo apt-get install -yqq libgtest-dev
+
+          sudo apt-get install -yqq qtbase5-dev libsdl-image1.2-dev libsdl-ttf2.0-dev
+          sudo apt-get install -yqq cmake
+          sudo apt-get install -yqq build-essential
+          sudo apt-get install -yqq libxv-dev
+
+          sudo apt-get install -yqq python3
+          sudo apt-get install -yqq python-is-python3
+
+      - name: cmake setup & build
+        run: |
+          mkdir $DEST -p
+          mkdir build/gephex -p
+          cd build/gephex
+          cmake ../../src/gephex -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$DEST -DCMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES=/usr/include/x86_64-linux-gnu/qt5 -DCMAKE_CXX_STANDARD=11
+          make install
+
+      - name: run tests
+        run: |
+          export PATH=$PATH:$DEST/bin
+          which gephex
+          which gephex-engine-real
+          which gephex-gui-real
+          cd build/gephex
+          ./base/src/utils/utilstest
+          ./base/src/net/nettest
+          ./engine/src/engine/enginetest
+          # TODO(lucasw) need a test that fires up the whole thing for a short time,
+          # makes sure no communication issues
+
+      - name: tar up install_catkin_ws
+        run: |
+          tar cvzf gephex.tgz $DEST
+          ls -l
+
+      - name: update gephex.tgz
+        uses: actions/upload-artifact@v2
+        with:
+          name: gephex
+          path: gephex.tgz
